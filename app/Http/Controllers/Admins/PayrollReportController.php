@@ -765,14 +765,14 @@ class PayrollReportController extends Controller
             $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
         }
         if (Auth::user()->RolePermission == 'Employee') {
-            $DataNSSF = DB::table('national_social_security_funds')
-            ->leftJoin('users','national_social_security_funds.employee_id', '=', 'users.id')
+            $DataNSSF = DB::table('preview_national_social_security_funds')
+            ->leftJoin('users','preview_national_social_security_funds.employee_id', '=', 'users.id')
             ->leftJoin('positions','positions.id','=','users.position_id')
             ->leftJoin('branchs','branchs.id','=','users.branch_id')
             ->leftJoin('departments','departments.id','=','users.department_id')
             ->leftJoin('options','options.id','=','users.gender')
             ->select(
-                'national_social_security_funds.*',
+                'preview_national_social_security_funds.*',
                 'users.branch_id',
                 'users.department_id',
                 'users.number_employee',
@@ -791,18 +791,18 @@ class PayrollReportController extends Controller
                 'departments.name_khmer as depart_name_kh',
                 'departments.name_english as depart_name_en'
             )
-            ->where('national_social_security_funds.employee_id',Auth::user()->id)
-            ->where('national_social_security_funds.number_employee',Auth::user()->number_employee)
+            ->where('preview_national_social_security_funds.employee_id',Auth::user()->id)
+            ->where('preview_national_social_security_funds.number_employee',Auth::user()->number_employee)
             ->get();
         } else {
-            $DataNSSF = DB::table('national_social_security_funds')
-            ->leftJoin('users','national_social_security_funds.employee_id', '=', 'users.id')
+            $DataNSSF = DB::table('preview_national_social_security_funds')
+            ->leftJoin('users','preview_national_social_security_funds.employee_id', '=', 'users.id')
             ->leftJoin('positions','positions.id','=','users.position_id')
             ->leftJoin('branchs','branchs.id','=','users.branch_id')
             ->leftJoin('departments','departments.id','=','users.department_id')
             ->leftJoin('options','options.id','=','users.gender')
             ->select(
-                'national_social_security_funds.*',
+                'preview_national_social_security_funds.*',
                 'users.branch_id',
                 'users.department_id',
                 'users.number_employee',
@@ -844,12 +844,12 @@ class PayrollReportController extends Controller
                 }
             })
             ->when($startOfLastMonth, function ($query, $startOfLastMonth) {
-                $query->whereBetween('national_social_security_funds.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth]);
+                $query->whereBetween('preview_national_social_security_funds.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth]);
             })
             ->when($Monthly, function ($query, $Monthly) {
-                $query->whereMonth('national_social_security_funds.payment_date', $Monthly);
+                $query->whereMonth('preview_national_social_security_funds.payment_date', $Monthly);
             })->when($yearLy, function ($query, $yearLy) {
-                $query->whereYear('national_social_security_funds.payment_date', $yearLy);
+                $query->whereYear('preview_national_social_security_funds.payment_date', $yearLy);
             })->whereIn('users.emp_status',['Probation','1','10','2'])->get();
         }
         return view('NSSFs.index',compact('DataNSSF','branch'));

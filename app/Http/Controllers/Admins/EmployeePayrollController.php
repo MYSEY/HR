@@ -497,7 +497,7 @@ class EmployeePayrollController extends Controller
                             $totalBasicSalary = $item->basic_salary;
                         } else {
                             if ($startMonth == 02 && $startendMonth == 28 || $startendMonth == 29) {
-                                if ($toDays == 20 || $toDays == 21) {
+                                if ($toDays == 21) {
                                     $totalBasicSalary = $item->basic_salary;
                                 } else {
                                     $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
@@ -514,7 +514,7 @@ class EmployeePayrollController extends Controller
                         if ($item->emp_status == 1) {
                             $joinPassProbation = Carbon::createFromDate($item->fdc_date)->format('d');
                             if($joinPassProbation == 1){
-                                $totalBasicSalary = $item->basic_salary + $adjustmentIncludeTaxe;
+                                $totalBasicSalary = $item->basic_salary;
                             }else{
                                 $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
                                 $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
@@ -534,19 +534,19 @@ class EmployeePayrollController extends Controller
                                     $totalOldDay = $totalDayInMonth - $totalNewDays;
                                     //old salary
                                     $oldSalary = ($item->pre_salary * $totalOldDay) / $totalDayInMonth;
+
                                     $newSalary = 0;
                                     if ($totalOldDay) {
                                         $newSalary = ($item->basic_salary * $totalNewDays) / $totalDayInMonth;
                                     }
-                                    // dd($oldSalary);
-                                    $totalBaseSalaryRecived = $oldSalary + $newSalary + $adjustmentIncludeTaxe;
+                                    $totalBaseSalaryRecived = round($oldSalary,2) + round($newSalary,2);
                                     $totalFirstSeverancPay = round($oldSalary,2);
                                 }else{
-                                    $totalBasicSalary = $item->basic_salary + $adjustmentIncludeTaxe;
+                                    $totalBasicSalary = $item->basic_salary;
                                 }
                             }
                         }else{
-                            $totalBasicSalary = $item->basic_salary + $adjustmentIncludeTaxe;
+                            $totalBasicSalary = $item->basic_salary;
                         }
                     }
                     //fuction check Monthly/Quarterly Incentive
@@ -672,11 +672,10 @@ class EmployeePayrollController extends Controller
                     $type_fdc1 = null;
                     $type_fdc2 = null;
                     $type_udc = null;
-                    $totalBasicSalaryFrist = null;
                     $totalSeverancyPaySalary = $totalBaseSalaryRecived != 0 ? $totalBaseSalaryRecived : $totalBasicSalary;
-                    $totalSalarySeverancyPay = $totalSeverancyPaySalary + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                    $totalSalarySeverancyPay = $totalSeverancyPaySalary + $adjustmentIncludeTaxe + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                     $totalSeverancePay = $totalFirstSeverancPay != 0 ? $totalFirstSeverancPay : $totalBasicSalary;
-                    $totalOtherBenefit = $totalSeverancePay + $monthlyQuarterlyIncentive + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                    $totalOtherBenefit = $totalSeverancePay + $adjustmentIncludeTaxe + $monthlyQuarterlyIncentive + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                     //function difinde day end FDC
                     if ($item->emp_status == 1 || $item->emp_status == 10) {
                         $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
@@ -695,7 +694,9 @@ class EmployeePayrollController extends Controller
                             $totalOldDay = $totalDayInMonth - $totalNewDays;
                             $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
                             $type_fdc2 = 'FDC-2';
-                            $type_fdc1 = 'FDC-1';
+                            if ($item->emp_status == 10) {
+                                $type_fdc1 = 'FDC-1';
+                            }
                             $type_udc = 'UDC';
                             $totalSeniority = $totalSalarySeverancyPay;
                             $basic1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
@@ -708,7 +709,7 @@ class EmployeePayrollController extends Controller
                     $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
                     $totalSeverancePay2 = $SeverancePay2;
                     $totalBasicSalaryLast = $totalBaseSalaryRecived != 0 ? $totalBaseSalaryRecived : $totalBasicSalary;
-                    $totalSalaryNetPay = (round($totalSeverancyPaySalary,2) + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance);
+                    $totalGrossSalary = (round($totalSeverancyPaySalary,2) + $adjustmentIncludeTaxe + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance);
                     //function check severanc pay
                     if($item->emp_status == 1){
                         $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
@@ -744,7 +745,7 @@ class EmployeePayrollController extends Controller
                         'employee_id'               => $item->id,
                         'number_employee'           => $item->number_employee,
                         'basic_salary'              => $item->basic_salary,
-                        'total_gross_salary'        => round($totalSalaryNetPay,2),
+                        'total_gross_salary'        => round($totalGrossSalary,2),
                         'total_fdc1'                => round($totalSeverancePay1,2),
                         'total_fdc2'                => round($totalSeverancePay2,2),
                         'total_seniority'           => round($totalSeniority,2),
@@ -812,9 +813,9 @@ class EmployeePayrollController extends Controller
                     }
 
                     if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
-                        $totalGrossSalary = $totalSalaryNetPay + $totaltaxableSalary;
+                        $totalGrossSalaryBeforpension = $totalGrossSalary + $totaltaxableSalary;
                     }else{
-                        $totalGrossSalary = $dataGrossSalary->total_gross_salary + $totaltaxableSalary;
+                        $totalGrossSalaryBeforpension = $dataGrossSalary->total_gross_salary + $totaltaxableSalary;
                     }
                     
                     // function get age employee <= 60 National Social Security Fund (NSSF) Formula
@@ -822,7 +823,7 @@ class EmployeePayrollController extends Controller
                     if($item->is_type_nssf != 1){
                         $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
                         if ($exchangNSSF) {
-                            $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalary,2);
+                            $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalaryBeforpension,2);
                             if ($totalExchangeRielPreTax) {
                                 if ($totalExchangeRielPreTax >= 1200000) {
                                     $averageWage    = 1200000;
@@ -847,7 +848,7 @@ class EmployeePayrollController extends Controller
                             $dataNSSF = PreviewNationalSocialSecurityFund::create([
                                 'employee_id'                   => $item->id,
                                 'number_employee'               => $item->number_employee,
-                                'total_pre_tax_salary_usd'      => round($totalGrossSalary,2),
+                                'total_pre_tax_salary_usd'      => round($totalGrossSalaryBeforpension,2),
                                 'total_pre_tax_salary_riel'     => $totalExchangeRielPreTax,
                                 'total_average_wage'            => $averageWage,
                                 'total_occupational_risk'       => round($occupationalRisk,0),
@@ -862,12 +863,11 @@ class EmployeePayrollController extends Controller
                         }
                         $pension_contribution = round($dataNSSF->pension_contribution_riel,2);
                     }
-                   
-                    // dd($totalGrossSalary);
+
                     //function ដក​ pensin fund
-                    $baseSalaryReceivedUsd = $totalGrossSalary - $pension_contribution;
+                    $totalGrossAfterPension = $totalGrossSalaryBeforpension - $pension_contribution;
                     // functin exchange riel rate gross salary after tax
-                    $totalExchangeRiel = round($baseSalaryReceivedUsd, 2) * $request->exchange_rate;
+                    $totalExchangeRiel = round($totalGrossAfterPension, 2) * $request->exchange_rate;
                     //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
                     $totalChargesReducedChild = $childrenAllowance->reduced_burden_children;
                     $totalChargesReducedSpouse = $childrenAllowance->spouse_allowance;
@@ -949,7 +949,7 @@ class EmployeePayrollController extends Controller
                         $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
 
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                        $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     } else if($number_of_children == 1 && $item->spouse == 0) {
                         if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
                             $totalTax = 0;
@@ -979,7 +979,7 @@ class EmployeePayrollController extends Controller
                         $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
     
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                        $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 0 && $item->spouse == 1) {
                         if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
                             $totalTax = 0;
@@ -1008,7 +1008,7 @@ class EmployeePayrollController extends Controller
                         $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
     
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                        $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 1 && $item->spouse == 1) {
                         if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
                             $totalTax = 0;
@@ -1036,7 +1036,7 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                        $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 2 && $item->spouse == 0){
                         if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
                             $totalTax = 0;
@@ -1064,7 +1064,7 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                        $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 2 && $item->spouse == 1){
                         if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
                             $totalTax = 0;
@@ -1092,7 +1092,7 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                        $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 3 && $item->spouse == 0){
                         if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
                             $totalTax = 0;
@@ -1121,7 +1121,7 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                        $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 3 && $item->spouse == 1){
                         if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
                             $totalTax = 0;
@@ -1149,7 +1149,7 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                        $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 4 && $item->spouse == 0){
                         if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
                             $totalTax = 0;
@@ -1177,7 +1177,7 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                        $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 4 && $item->spouse == 1){
                         if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
                             $totalTax = 0;
@@ -1205,7 +1205,7 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                        $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     }
                     //function Severance Pay ti 1
                     $totalSeverancePay = 0;
@@ -1260,9 +1260,9 @@ class EmployeePayrollController extends Controller
                     $data['other_benefits']                 = $otherBenefit;
                     $data['total_severance_pay']            = round($totalSeverancePay,3);
                     $data['seniority_pay_included_tax']     = $seniorityPayableTax;
-                    $data['total_gross']                    = $totalGrossSalary;
+                    $data['total_gross']                    = $totalGrossSalaryBeforpension;
                     $data['total_pension_fund']             = $pension_contribution;
-                    $data['base_salary_received_usd']       = $baseSalaryReceivedUsd;
+                    $data['base_salary_received_usd']       = $totalGrossAfterPension;
                     $data['base_salary_received_riel']      = round($totalExchangeRiel, 3);
                     $data['total_tax_base_riel']            = round($totalTtaxBbaseRiel, 3);
                     $data['total_charges_reduced']          = $totalChargesReduced;

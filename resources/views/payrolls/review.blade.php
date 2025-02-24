@@ -133,10 +133,6 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.adjustment_include_taxe')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">@lang('lang.base_salary_received')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -166,6 +162,10 @@
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">@lang('lang.seniority_pay') (@lang('lang.included_tax'))
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.adjustment_include_taxe')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
@@ -804,7 +804,6 @@
                 },
                 { data: 'date_of_commencement', name: 'date_of_commencement' },
                 { data: 'basic_salary', name: 'basic_salary' },
-                { data: 'adjustment_include_taxe', name: 'adjustment_include_taxe' },
                 { data: 'total_gross_salary', name: 'total_gross_salary' },
                 { data: 'total_child_allowance', name: 'total_child_allowance' },
                 { data: 'phone_allowance', name: 'phone_allowance' },
@@ -813,6 +812,7 @@
                 { data: 'annual_incentive_bonus', name: 'annual_incentive_bonus' },
                 { data: 'other_benefits', name: 'other_benefits' },
                 { data: 'seniority_pay_included_tax', name: 'seniority_pay_included_tax' },
+                { data: 'adjustment_include_taxe', name: 'adjustment_include_taxe' },
                 { data: 'total_gross', name: 'total_gross' },
                 { data: 'total_pension_fund', name: 'total_pension_fund' },
                 { data: 'base_salary_received_usd', name: 'base_salary_received_usd' },

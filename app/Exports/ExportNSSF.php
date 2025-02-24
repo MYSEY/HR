@@ -6,7 +6,7 @@ use App\Helpers\Helper;
 use Carbon\Carbon;
 use KhmerDateTime\KhmerDateTime;
 use Maatwebsite\Excel\Events\AfterSheet;
-use App\Models\NationalSocialSecurityFund;
+use App\Models\PreviewNationalSocialSecurityFund;
 use App\Repositories\Admin\EmployeeRepository;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -43,10 +43,10 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
             $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
         }
         $nssf=[];
-        $datas = NationalSocialSecurityFund::with("users")
-        ->join('users', 'national_social_security_funds.employee_id', '=', 'users.id')
+        $datas = PreviewNationalSocialSecurityFund::with("users")
+        ->join('users', 'preview_national_social_security_funds.employee_id', '=', 'users.id')
         ->select(
-            'national_social_security_funds.*',
+            'preview_national_social_security_funds.*',
             'users.number_employee',
             'users.employee_name_en',
             'users.employee_name_kh',
@@ -90,13 +90,13 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
             $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
         })
         ->when($startOfLastMonth, function ($query, $startOfLastMonth) {
-            $query->whereBetween('national_social_security_funds.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth]);
+            $query->whereBetween('preview_national_social_security_funds.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth]);
         })
         ->when($Monthly, function ($query, $Monthly) {
-            $query->whereMonth('national_social_security_funds.payment_date', $Monthly);
+            $query->whereMonth('preview_national_social_security_funds.payment_date', $Monthly);
         })
         ->when($yearLy, function ($query, $yearLy) {
-            $query->whereYear('national_social_security_funds.payment_date', $yearLy);
+            $query->whereYear('preview_national_social_security_funds.payment_date', $yearLy);
         })->whereIn('users.emp_status',['Probation','1','10','2'])->get();
         $i = 0;
         foreach ($datas as $key => $value) {
