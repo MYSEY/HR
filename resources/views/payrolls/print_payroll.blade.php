@@ -79,7 +79,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="border-0 text-nowrap">@lang('lang.gross_salary')</td>
+                            <td class="border-0 text-nowrap">@lang('lang.basic_salary_received')</td>
                             <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->total_gross_salary}}</span></td>
                             <td class="border-0 text-nowrap">@lang('lang.personal_tax')</td>
                             <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->total_salary_tax_usd}}</span></td>
@@ -124,7 +124,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="border-0 text-nowrap">Adjustment(+/-)</td>
+                            <td class="border-0 text-nowrap">Adjustment Included Tax(+/-)</td>
+                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->adjustment_include_taxe == null ? '0.00' : $payslip->adjustment_include_taxe}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="border-0 text-nowrap">Adjustment Excluded Tax(+/-)</td>
                             <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->adjustment == null ? '0.00' : $payslip->adjustment}}</span></td>
                         </tr>
                         {{-- <tr>

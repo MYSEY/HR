@@ -99,9 +99,9 @@
                                         
                                         <tbody>
                                             <tr>
-                                                <td>@lang('lang.gross_salary')</td>
+                                                <td>@lang('lang.basic_salary_received')</td>
                                                 <td>
-                                                    <span class="float-end">${{$payslip->total_gross_salary}}</span>
+                                                    <span class="float-end">${{$payslip->basic_salary}}</span>
                                                 </td>
                                                 <td>@lang('lang.personal_tax')</td>
                                                 <td>
@@ -112,7 +112,7 @@
                                             <tr>
                                                 <td>@lang('lang.increasment')</td>
                                                 <td>
-                                                    <span class="float-end">${{$payslip->users->salary_increas == null ? "0.00" : $payslip->users->salary_increas}}</span>
+                                                    <span class="float-end">${{$payslip->users->salary_increas != null ? "0.00" : $payslip->users->salary_increas}}</span>
                                                 </td>
                                                 <td>@lang('lang.pension_fund')</td>
                                                 <td>
@@ -158,7 +158,13 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Adjustment(+/-)</td>
+                                                <td>Adjustment Included Tax(+/-)</td>
+                                                <td>
+                                                    <span class="float-end">${{$payslip->adjustment_include_taxe == null ? '0.00' : $payslip->adjustment_include_taxe}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Adjustment Excluded Tax(+/-)</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->adjustment == null ? '0.00' : $payslip->adjustment}}</span>
                                                 </td>
