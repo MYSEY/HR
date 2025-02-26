@@ -663,9 +663,18 @@
                     if (total_date_birthday == 0) {
                         $("#btn-more").hide();
                     }
-                    const sortedAsc = data_birthday.sort(
-                        (objA, objB) => Number(moment(objA.date_of_birth).format("DD")) - Number(moment(objB.date_of_birth).format("DD")),
-                    );
+                    const sortedAsc = data_birthday.sort((objA, objB) => {
+                        const monthA = Number(moment(objA.date_of_birth).format("MM"));
+                        const dayA = Number(moment(objA.date_of_birth).format("DD"));
+                        const monthB = Number(moment(objB.date_of_birth).format("MM"));
+                        const dayB = Number(moment(objB.date_of_birth).format("DD"));
+
+                        return monthA - monthB || dayA - dayB; // Sort by month first, then by day
+                    });
+
+                    // const sortedAsc = data_birthday.sort(
+                    //     (objA, objB) => Number(moment(objA.date_of_birth).format("DD")) - Number(moment(objB.date_of_birth).format("DD")),
+                    // );
                     var div = ""; 
                     // var film = sortedAsc.filter((emp, idx) => idx < 3).map(emp => {
                     var film = sortedAsc.map(emp => {
