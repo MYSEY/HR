@@ -1102,4 +1102,47 @@ class UserController extends Controller
         }
     }
 
+    public function userNotLogged(){
+        $data = User::leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->select(
+            'users.id',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'users.date_of_commencement',
+            'positions.name_khmer as position_name_kh',
+            'positions.name_english as position_name_en',
+            'departments.name_khmer as depart_name_kh',
+            'departments.name_english as depart_name_en',
+            'branchs.branch_name_kh',
+            'branchs.branch_name_en',
+        )
+        ->where('p_status',0)
+        ->whereIn('emp_status',['Probation','1','10','2'])->get();
+        return view('user_log.not_logged',compact('data'));
+    }
+    public function userLogged(){
+        $data = User::leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->select(
+            'users.id',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'users.updated_at',
+            'users.date_of_commencement',
+            'positions.name_khmer as position_name_kh',
+            'positions.name_english as position_name_en',
+            'departments.name_khmer as depart_name_kh',
+            'departments.name_english as depart_name_en',
+            'branchs.branch_name_kh',
+            'branchs.branch_name_en',
+        )
+        ->where('p_status',1)
+        ->whereIn('emp_status',['Probation','1','10','2'])->get();
+        return view('user_log.logged',compact('data'));
+    }
 }

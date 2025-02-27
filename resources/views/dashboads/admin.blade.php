@@ -270,17 +270,19 @@
 <link href="{{ asset('admin/css/style_dashboard.css') }}" rel="stylesheet" type="text/css">
 @section('content')
     <div class="">
-        <div class="page-header">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h3 class="page-title">@lang("lang.welcome") {{Helper::getLang() == 'en' ? Auth::user()->employee_name_en :  Auth::user()->employee_name_kh}}!</h3>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item active">@lang('lang.dashboard')</li>
-                    </ul>
+        <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
+            <div class="my-auto mb-2">
+                <h3 class="page-title">@lang("lang.welcome") {{Helper::getLang() == 'en' ? Auth::user()->employee_name_en :  Auth::user()->employee_name_kh}}!</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item active">@lang('lang.dashboard')</li>
+                </ul>
+            </div>
+            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+                <div class="ms-2 head-icons">
+                    <p>User logged <span class="text-primary"><a href="{{url('user/logged')}}">{{$userLoggedIn}}</a></span> And <a href="{{url('user/not/logged')}}"><span class="text-primary">{{$userNotLoggedIn}}</span></a> User not login In system HRMS</p>
                 </div>
             </div>
         </div>
-        
         <div class="row">
             @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_leave"] == "1")
                 <div class="col-md-12 col-lg-6 col-xl-4 d-flex">

@@ -221,6 +221,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/import/update/employee', [UserController::class, 'importUpdateEmployee']);
     Route::post('users/update/role', [UserController::class, 'updateRole']);
 
+    //user log
+    Route::get('user/not/logged', [UserController::class, 'userNotLogged']);
+    Route::get('user/logged', [UserController::class, 'userLogged']);
+    
     //Employee Payroll
     Route::get('payroll',[EmployeePayrollController::class,'index']);
     Route::post('payroll-search',[EmployeePayrollController::class,'search']);

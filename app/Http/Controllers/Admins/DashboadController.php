@@ -37,6 +37,8 @@ class DashboadController extends Controller
         $dataUpComming = '';
         $dataProbation = '';
         $dataShortList = '';
+        $userLoggedIn = '';
+        $userNotLoggedIn = '';
         if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer') {
             $dataShortList = DB::table('candidate_resumes')->select('candidate_resumes.*')
             ->where(DB::raw("(DATE_FORMAT(candidate_resumes.interviewed_date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
@@ -44,12 +46,16 @@ class DashboadController extends Controller
             $dataContract = CandidateResume::where('contract_date',Carbon::now()->format('Y-m-d'))->where('status','4')->get()->count();
             $dataUpComming = User::where('date_of_commencement',Carbon::now()->format('Y-m-d'))->where('emp_status','Upcoming')->get()->count();
             $dataProbation = User::where('fdc_date',Carbon::now()->format('Y-m-d'))->where('emp_status','Probation')->get()->count();
+            $userLoggedIn = User::where('p_status',1)->whereIn('emp_status',['Probation','1','10','2'])->count();
+            $userNotLoggedIn = User::where('p_status',0)->whereIn('emp_status',['Probation','1','10','2'])->count();
         }
         return view('dashboads.admin',compact(
             'dataUpComming',
             'dataProbation',
             'dataShortList',
-            'dataContract'
+            'dataContract',
+            'userLoggedIn',
+            'userNotLoggedIn',
         ));
         // return view('dashboads.admin');
     }
