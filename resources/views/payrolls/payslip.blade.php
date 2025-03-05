@@ -200,10 +200,10 @@
                                                 </td>
                                             </tr>
                                             @php
-                                                $TotalEarnings = $payslip->total_gross
+                                                $TotalEarnings = $payslip->total_gross + $payslip->total_amount_car;
                                             @endphp
                                             @php
-                                                $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund + $payslip->loan_amount + $payslip->total_staff_book + $payslip->total_amount_car;
+                                                $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund + $payslip->loan_amount + $payslip->total_staff_book;
                                             @endphp
                                             @php
                                                 $totalNetPay = $TotalEarnings - $TotalDeductions - $payslip->loan_amount - $payslip->total_staff_book;
