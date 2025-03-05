@@ -80,7 +80,7 @@ class EmployeeRepository extends BaseRepository
                 })
                 ->when($request->employee_name, function ($query, $employee_name) {
                     $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-                    $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+                    // $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
                 })
                 ->when($request->emp_status, function ($query, $emp_status) {
                     if (Auth::user()->RolePermission == 'HOD') {

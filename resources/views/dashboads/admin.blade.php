@@ -267,7 +267,7 @@
     }
 </style>
 {{-- style_dashboard.css --}}
-<link href="{{ asset('admin/css/style_dashboard.css') }}" rel="stylesheet" type="text/css">
+{{-- <link href="{{ asset('admin/css/style_dashboard.css') }}" rel="stylesheet" type="text/css"> --}}
 @section('content')
     <div class="">
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
@@ -505,11 +505,11 @@
             <div id="showNotyfication" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                        {{-- <div class="modal-header">
+                        <div class="modal-header">
                             <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                        </div> --}}
+                        </div>
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-lg-12 col-xl-12">

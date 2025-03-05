@@ -443,8 +443,25 @@ class UserController extends Controller
         ->with("currentvillage")
         ->with("recruitment")
         ->first();
+        $branch = Branchs::where("abbreviations","HQ")
+            ->leftJoin('users', 'branchs.direct_manager_id', '=', 'users.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->select(
+                'branchs.*',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.line_manager',
+                'users.department_id',
+                'users.branch_id',
+                'users.position_id',
+                'positions.name_english',
+                'positions.name_khmer',
+            )
+            ->first();
         return response()->json([
             'success'=>$data,
+            'branch'=>$branch,
         ]);
     }
 
