@@ -60,7 +60,7 @@ class PayrollRepository extends BaseRepository
                 'branchs.branch_name_en',
                 'departments.name_khmer as depart_name_kh',
                 'departments.name_english as depart_name_en',
-            )->where('payrolls.employee_id',Auth::user()->id)->get();
+            )->where('payrolls.employee_id',Auth::user()->id)->orderBy('payrolls.payment_date','desc')->get();
         } else {
             return DB::table('payrolls')
             ->leftJoin('users','payrolls.employee_id','=','users.id')

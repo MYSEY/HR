@@ -674,6 +674,7 @@
                                 remark: $("#remark").val(),
                             }).then(function(response) {
                                 var data = response.data.dataEmployee;
+                                var branch = response.data.branch;
                                 var date_of_birth = new Date(data.date_of_birth);
                                 var date_of_commencement = new Date(data.join_date);
                                 var fdc_date = new Date(data.fdc_date);
@@ -699,6 +700,9 @@
                                         $("#pr_mr_or_mrs").text("លោក ");
                                         $("#pr_gender").text("ប្រុស ");
                                     }
+                                    $(".pr_ceo").text(branch.employee_name_kh);
+                                    $(".pr_position").text(branch.name_khmer);
+
                                     $(".pr_name").text(data.name_kh +" ");
                                     $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
                                     $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");

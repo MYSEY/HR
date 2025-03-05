@@ -24,7 +24,7 @@ class BranchController extends Controller
         if (permissionAccess("m9-s3","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $employee = User::whereIn("emp_status", ["1", "2", "10"])->get();
+        $employee = User::whereIn("emp_status", ["Probation","1", "2", "10"])->get();
         $data = Branchs::with("branchholder")->get();
         return view('branchs.index',compact('data', 'employee'));
     }

@@ -580,6 +580,22 @@ class CandidateResumeController extends Controller
     public function createemp(Request $request)
     {
         try {
+            $branch = Branchs::where("abbreviations","HQ")
+            ->leftJoin('users', 'branchs.direct_manager_id', '=', 'users.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->select(
+                'branchs.*',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.line_manager',
+                'users.department_id',
+                'users.branch_id',
+                'users.position_id',
+                'positions.name_english',
+                'positions.name_khmer',
+            )
+            ->first();
             if ($request->status == "Upcoming") {
                 $candidate = CandidateResume::where("id", $request->id) ->first();
                 $emp_data = [
@@ -620,6 +636,7 @@ class CandidateResumeController extends Controller
                     'remark' => $request->remark,
                     'spouse' => 0,
                     'is_loan' => 0,
+                    'status' => "Active",
                     'password' => Hash::make("Camma@123"),
                     'created_by' => Auth::user()->id,
                 ];
@@ -628,7 +645,7 @@ class CandidateResumeController extends Controller
                 DB::commit();
                 $dataProcessing = CandidateResume::where("status",'4')->count();
                 $totalUpcomings = User::where('emp_status','Upcoming')->count();
-                return response()->json(['message' => 'successfull', "dataProcessing"=>$dataProcessing, "totalUpcomings"=>$totalUpcomings]);
+                return response()->json(['message' => 'successfull', "dataProcessing"=>$dataProcessing, "totalUpcomings"=>$totalUpcomings, "branch"=>$branch]);
             }else{
                 if ($request->number_employee_old) {
                     GenerateIdEmployee::where("number_employee",$request->number_employee_old)->delete();
@@ -684,7 +701,7 @@ class CandidateResumeController extends Controller
                     ->with("currentcommune")
                     ->with("currentvillage")
                     ->first();
-                return response()->json(['dataEmployee'=>$datas]);
+                return response()->json(['dataEmployee'=>$datas, "branch"=>$branch]);
             }
         } catch (\Exception $exp) {
             DB::rollBack();

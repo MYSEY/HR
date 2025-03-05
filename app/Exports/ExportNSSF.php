@@ -113,7 +113,7 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
             $nssf[]=[
                 $i,
                 $value->users == null ? '' : $value->users->number_employee,
-                $value->users == null ? '' : $value->users->employee_name_en,
+                $value->users == null ? '' : $value->users->employee_name_kh,
                 $value->users == null ? '' : $value->users->EmployeeGender,
                 $value->users == null ? '' : $value->users->EmployeePosition,
                 $value->users == null ? '' : $value->users->joinOfDate,

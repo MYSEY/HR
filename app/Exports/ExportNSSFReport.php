@@ -78,7 +78,7 @@ class ExportNSSFReport implements FromCollection, WithColumnWidths, WithHeadings
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('national_social_security_funds.payment_date', $yearLy);
-        })->get();
+        })->orderBy('national_social_security_funds.number_employee', 'ASC')->get();
         $i = 0;
         foreach ($datas as $key => $value) {
             $i++;

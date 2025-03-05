@@ -20,7 +20,7 @@
             <div style="width: 487%;">
                 <table style="width:100%">
                     <tr><td class="table_tr">
-                        <strong>គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត</strong> អាស័យដ្ឋានផ្ទះលេខ ១០១A ផ្លូវ ២៨៩ សង្កាត់បឹងកក់ទី១ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ និងអាជ្ញាប័ណ្ណលេខ ២៤ ម.ហ (M.F 24) ចុះថ្ងៃទី ២៦ ខែវិច្ឆិកា ឆ្នាំ២០១២  តំណាងដោយ លោក <span style="font-weight: bold; font-family:  Khmer OS Muol Light, serif;"> លី ឈាង </span> តួនាទីអគ្គនាយកប្រតិបតិ្តស្តីទី ដែលតទៅនេះហៅថា <strong>«និយោជក»</strong>។
+                        <strong>គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត</strong> អាស័យដ្ឋានផ្ទះលេខ ១០១A ផ្លូវ ២៨៩ សង្កាត់បឹងកក់ទី១ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ និងអាជ្ញាប័ណ្ណលេខ ២៤ ម.ហ (M.F 24) ចុះថ្ងៃទី ២៦ ខែវិច្ឆិកា ឆ្នាំ២០១២  តំណាងដោយ លោក <span style="font-weight: bold; font-family:  Khmer OS Muol Light, serif;" class="pr_ceo">  </span> តួនាទី <span class="pr_position"></span> ដែលតទៅនេះហៅថា <strong>«និយោជក»</strong>។
                     </td></tr>
                 </table>
                 <div style="text-align: center;">
