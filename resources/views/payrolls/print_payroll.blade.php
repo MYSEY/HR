@@ -161,7 +161,7 @@
                             $TotalEarnings = $payslip->total_gross
                         @endphp
                         @php
-                            $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund + $payslip->loan_amount + $payslip->total_staff_book;
+                            $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund + $payslip->loan_amount + $payslip->total_staff_book + $payslip->total_amount_car;
                         @endphp
                         @php
                             $totalNetPay = $TotalEarnings - $TotalDeductions - $payslip->loan_amount - $payslip->total_staff_book;

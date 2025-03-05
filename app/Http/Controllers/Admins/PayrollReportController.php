@@ -137,7 +137,7 @@ class PayrollReportController extends Controller
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->get();
+        })->orderBy('payment_date','DESC')->orderBy('id','ASC')->get();
         
         return response()->json([
             'success'=>$payroll,
@@ -244,7 +244,7 @@ class PayrollReportController extends Controller
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->get();
+        })->orderBy('national_social_security_funds.payment_date','DESC')->orderBy('national_social_security_funds.id','ASC')->get();
         return response()->json([
             'success'=>$nssf,
         ]);
@@ -423,7 +423,7 @@ class PayrollReportController extends Controller
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->get();
+        })->orderBy('payment_date','DESC')->orderBy('id','ASC')->get();
         
         return response()->json([
             'success'=>$taxReport,

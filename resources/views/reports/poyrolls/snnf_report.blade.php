@@ -262,7 +262,6 @@
             dataType: "JSON",
             success: function(response) {
                 let data =  response.success;
-                console.log(data);
                 $(".btn-Search").prop('disabled', false);
                 $(".btn-txt").show();
                 $(".loading-icon").css('display', 'none')
