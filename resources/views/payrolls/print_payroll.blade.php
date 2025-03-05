@@ -103,7 +103,7 @@
                             <td class="border-0 text-nowrap">@lang('lang.allowance')(@lang('lang.annual/PB/KNY'))</td>
                             <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->total_kny_phcumben}}</span></td>
                             <td class="border-0 text-nowrap">@lang('lang.other_deduction')</td>
-                            <td><span class="float-end">${{$payslip->total_staff_book}}</span></td>
+                            <td><span class="float-end">${{$payslip->total_staff_book == 0 ? '0.00' : $payslip->total_staff_book}}</span></td>
                         </tr>
                         <tr>
                             <td>@lang('lang.seniority_pay') (@lang('lang.included_tax'))</td>
@@ -149,6 +149,12 @@
                             <td>@lang('lang.parking_allowance')</td>
                             <td>
                                 <span class="float-end">${{$payslip->total_amount_car == 0 ? '0.00' : $payslip->total_amount_car}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@lang('lang.other_benefits')</td>
+                            <td>
+                                <span class="float-end">${{$payslip->other_benefits == 0 ? '0.00' : $payslip->other_benefits}}</span>
                             </td>
                         </tr>
                         @php

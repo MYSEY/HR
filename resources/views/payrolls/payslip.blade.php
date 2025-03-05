@@ -136,7 +136,7 @@
                                                 </td>
                                                 <td>@lang('lang.other_deduction')</td>
                                                 <td>
-                                                    <span class="float-end">${{$payslip->total_staff_book}}</span>
+                                                    <span class="float-end">${{$payslip->total_staff_book == 0 ? '0.00' : $payslip->total_staff_book}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -196,7 +196,7 @@
                                             <tr>
                                                 <td>@lang('lang.other_benefits')</td>
                                                 <td>
-                                                    <span class="float-end">${{$payslip->other_benefits}}</span>
+                                                    <span class="float-end">${{$payslip->other_benefits == 0 ? '0.00' : $payslip->other_benefits}}</span>
                                                 </td>
                                             </tr>
                                             @php
