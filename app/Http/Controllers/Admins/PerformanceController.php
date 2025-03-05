@@ -49,7 +49,7 @@ class PerformanceController extends Controller
      */
     public function create()
     {
-        $employee = User::where('line_manager',Auth::user()->line_manager)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
+        $employee = User::where('line_manager',Auth::user()->line_manager)->where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
         return view('performances.create',compact('employee'));
     }
 

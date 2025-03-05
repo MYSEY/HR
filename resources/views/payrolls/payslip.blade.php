@@ -126,7 +126,7 @@
                                                 </td>
                                                 <td>@lang('lang.staff_loan')</td>
                                                 <td>
-                                                    <span class="float-end">${{$payslip->loan_amount}}</span>
+                                                    <span class="float-end">${{$payslip->loan_amount == 0 ? "0.00" : $payslip->loan_amount}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -160,13 +160,13 @@
                                             <tr>
                                                 <td>Adjustment Included Tax(+/-)</td>
                                                 <td>
-                                                    <span class="float-end">${{$payslip->adjustment_include_taxe == null ? '0.00' : $payslip->adjustment_include_taxe}}</span>
+                                                    <span class="float-end">${{$payslip->adjustment_include_taxe == 0 ? '0.00' : $payslip->adjustment_include_taxe}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Adjustment Excluded Tax(+/-)</td>
                                                 <td>
-                                                    <span class="float-end">${{$payslip->adjustment == null ? '0.00' : $payslip->adjustment}}</span>
+                                                    <span class="float-end">${{$payslip->adjustment == 0 ? '0.00' : $payslip->adjustment}}</span>
                                                 </td>
                                             </tr>
                                             {{-- <tr>
@@ -185,6 +185,12 @@
                                                 <td>@lang('lang.child_allowance')</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->total_child_allowance}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@lang('lang.parking_allowance')</td>
+                                                <td>
+                                                    <span class="float-end">${{$payslip->total_amount_car == 0 ? '0.00' : $payslip->total_amount_car}}</span>
                                                 </td>
                                             </tr>
                                             <tr>

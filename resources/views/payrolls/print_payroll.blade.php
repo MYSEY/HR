@@ -97,7 +97,7 @@
                                 <span class="float-end">${{$payslip->monthly_quarterly_bonuses}}</span>
                             </td>
                             <td class="border-0 text-nowrap">@lang('lang.staff_loan')</td>
-                            <td><span class="float-end">${{$payslip->loan_amount}}</span></td>
+                            <td><span class="float-end">${{$payslip->loan_amount == 0 ? '0.00' : $payslip->loan_amount}}</span></td>
                         </tr>
                         <tr>
                             <td class="border-0 text-nowrap">@lang('lang.allowance')(@lang('lang.annual/PB/KNY'))</td>
@@ -125,11 +125,11 @@
                         </tr>
                         <tr>
                             <td class="border-0 text-nowrap">Adjustment Included Tax(+/-)</td>
-                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->adjustment_include_taxe == null ? '0.00' : $payslip->adjustment_include_taxe}}</span></td>
+                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->adjustment_include_taxe == 0 ? '0.00' : $payslip->adjustment_include_taxe}}</span></td>
                         </tr>
                         <tr>
                             <td class="border-0 text-nowrap">Adjustment Excluded Tax(+/-)</td>
-                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->adjustment == null ? '0.00' : $payslip->adjustment}}</span></td>
+                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->adjustment == 0 ? '0.00' : $payslip->adjustment}}</span></td>
                         </tr>
                         {{-- <tr>
                             <td class="border-0 text-nowrap">Leaves  (+/-)</td>
@@ -145,7 +145,12 @@
                                 <span class="float-end">${{$payslip->total_child_allowance}}</span>
                             </td>
                         </tr>
-
+                        <tr>
+                            <td>@lang('lang.parking_allowance')</td>
+                            <td>
+                                <span class="float-end">${{$payslip->total_amount_car == 0 ? '0.00' : $payslip->total_amount_car}}</span>
+                            </td>
+                        </tr>
                         @php
                             $TotalEarnings = $payslip->total_gross
                         @endphp
