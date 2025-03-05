@@ -112,7 +112,7 @@
                                             <tr>
                                                 <td>@lang('lang.increasment')</td>
                                                 <td>
-                                                    <span class="float-end">${{$payslip->users->salary_increas != null ? "0.00" : $payslip->users->salary_increas}}</span>
+                                                    <span class="float-end">${{$payslip->users->salary_increas}}</span>
                                                 </td>
                                                 <td>@lang('lang.pension_fund')</td>
                                                 <td>
