@@ -41,7 +41,7 @@
                                         @foreach ($data as $item)
                                             <tr class="odd">
                                                 <td class="ids stuck-scroll-4">{{$item->id}}</td>
-                                                <td class="stuck-scroll-4"><a href="">{{$item->number_employee}}</a></td>
+                                                <td class="stuck-scroll-4"><a href="{{url("performance",$item->employee_id)}}">{{$item->number_employee}}</a></td>
                                                 <td class="stuck-scroll-4"><a href="">{{$item->employee_name_en}}</a></td>
                                                 <td>{{$item->branch_name_en}}</td>
                                                 <td>{{$item->dep_name}}</td>

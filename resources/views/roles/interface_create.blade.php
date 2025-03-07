@@ -702,6 +702,86 @@
                     </div>
                 </div>
                 <hr>
+                {{-- block Performance management  --}}
+                <div class="row">
+                    <div class="col-md-2">
+                        <label style="font-weight: bold;">@lang('lang.performance_management')</label>
+                    </div>
+                    <div class="col-md-10">
+                        <label class="container-checkbox">@lang('lang.all')
+                            <input type="checkbox" id="performace_all" name="performace_all"><span class="checkmark"></span>
+                        </label>
+                    </div>
+                    {{-- block performance --}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.performance')
+                                    <input type="checkbox" class="performance_checkbox" id="performance" name="performance"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="performance_checkbox p_checkbox" id="p_view"><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="performance_checkbox p_checkbox" id="p_add"><span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="performance_checkbox p_checkbox" id="p_edit"><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="performance_checkbox p_checkbox" id="p_delete"><span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="performance_checkbox p_checkbox" id="p_approve"><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="performance_checkbox p_checkbox" id="p_export"><span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- block performance Review--}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.performance_review')
+                                    <input type="checkbox" class="performance_review_checkbox" id="performance_review" name="performance_review"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="performance_review_checkbox pr_checkbox" id="pr_view"><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="performance_review_checkbox pr_checkbox" id="pr_add"><span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="performance_review_checkbox pr_checkbox" id="pr_edit"><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="performance_review_checkbox pr_checkbox" id="pr_delete"><span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="performance_review_checkbox pr_checkbox" id="pr_approve"><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="performance_review_checkbox pr_checkbox" id="pr_export"><span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 {{-- block Motor Rentals --}}
                 <div class="row">
                     <div class="col-md-2">

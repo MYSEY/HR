@@ -521,6 +521,40 @@ $(function(){
         }
     });
 
+    $("#performace_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".performance_checkbox").val(1);
+        }
+    });
+    $("#performance").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".performance_checkbox").val(1);
+        }
+    });
+    $("#performance_review").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".pr_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".pr_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".pr_checkbox").val(1);
+        }
+    });
+
     $(document).ready(function(){
         let g_checkbox = $('.g_checkbox');
         g_checkbox.change(function(){

@@ -422,7 +422,7 @@ var dataPermission = function () {
             ]
         })
     }
-   
+
     //block motor rentals 
     let motor_rentals_checkbox = $('.motor_rentals_checkbox').filter(':checked').length;
     let adjustment_mt_checkbox = $('.adjustment_mt_checkbox').filter(':checked').length;
@@ -1233,6 +1233,63 @@ var dataPermission = function () {
                 },  
             ]
         });
+    }
+
+
+    //block performance managermant 
+    let p_checkbox = $('.p_checkbox').filter(':checked').length;
+    let pr_checkbox = $('.pr_checkbox').filter(':checked').length;
+    let performace_all = $('.performance_checkbox').filter(':checked').length;
+    if (performace_all) {
+        data.push({
+           name: "Performance Management",
+            permission: [
+                {
+                   "menu_id":"12",
+                   "icon":"la la-school",
+                   "name":"lang.performance_management",
+                   "is_all": $("#performace_all").val(),
+                },
+            ]
+        });
+    }
+    if (p_checkbox) {
+        data.push({
+            name: "performance",
+            permission: [
+                {
+                   "name":"lang.performance",
+                   "sub_menu_id":"12",
+                   "menu_id":"m12-s1",
+                   "url":"performance",
+                   "is_view": $("#p_view").val(),
+                   "is_create": $("#p_add").val(),
+                   "is_update": $("#p_edit").val(),
+                   "is_approve": $("#p_approve").val(),
+                   "is_delete": $("#p_delete").val(),
+                   "is_export": $("#p_export").val()
+                }
+            ]
+        })
+    }
+    if (pr_checkbox) {
+        data.push({
+            name: "performance reveiw",
+            permission: [
+                {
+                   "name":"lang.performance_review",
+                   "sub_menu_id":"12",
+                   "menu_id":"m12-s1",
+                   "url":"performance/review",
+                   "is_view": $("#pr_view").val(),
+                   "is_create": $("#pr_add").val(),
+                   "is_update": $("#pr_edit").val(),
+                   "is_approve": $("#pr_approve").val(),
+                   "is_delete": $("#pr_delete").val(),
+                   "is_export": $("#pr_export").val()
+                }
+            ]
+        })
     }
     return data;
 }

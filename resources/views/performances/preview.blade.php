@@ -3,10 +3,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col">
-                <h3 class="page-title">@lang('lang.review_performance')</h3>
+                <h3 class="page-title">@lang('lang.performance_review')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.review_performance')</li>
+                    <li class="breadcrumb-item active">@lang('lang.performance_review')</li>
                 </ul>
             </div>
         </div>
@@ -59,23 +59,25 @@
                                 <thead>
                                     <tr>
                                         <th style="min-width: 350px;">(KPI)</th>
-                                        <th style="min-width: 350px;">Action Plan</th>
-                                        <th style="min-width: 350px;">Goal</th>
-                                        <th style="min-width: 150px;">% Weight</th>
-                                        <th style="min-width: 150px;">Score achieved</th>
-                                        <th style="min-width: 150px;">Score</th>
+                                        <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
+                                        <th style="min-width: 350px;">គោលដៅ (Goal)</th>
+                                        <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
+                                        <th style="min-width: 150px;">ពិន្ទុសម្រេចបាន (Score achieved)</th>
+                                        <th style="min-width: 150px;">ពិន្ទុ (Score)</th>
                                         <th style="min-width: 150px;">បុគ្គលិកផ្ទាល់</th>
                                         <th style="min-width: 150px;">ប្រធានផ្ទាល់</th>
                                         <th style="min-width: 350px;">កត្តាដែលងាយស្រួល និងលំបាក</th>
                                         <th style="min-width: 350px;">យោបល់/កំណត់សម្គាល់</th>
                                     </tr>
                                 </thead>
+                                @dd($data)
+
                                 <tbody id="tbl_performance">
                                     @foreach ($data as $item)
-                                        @foreach ($item->performanceDetail as $item)
+                                        @foreach ($item->title as $itemTitle)
                                             <tr>
                                                 <td colspan="2" class="text-center">
-                                                    <input type="text" class="form-control" value="{{$item->title}}" required>
+                                                    <input type="text" class="form-control" value="{{$itemTitle->title}}" required>
                                                 </td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>

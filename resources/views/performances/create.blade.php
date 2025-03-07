@@ -3,10 +3,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col">
-                <h3 class="page-title">@lang('lang.add_performance')</h3>
+                <h3 class="page-title">@lang('lang.performance')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.add_performance')</li>
+                    <li class="breadcrumb-item active">@lang('lang.performance')</li>
                 </ul>
             </div>
         </div>
@@ -54,9 +54,9 @@
                                 <thead>
                                     <tr>
                                         <th style="min-width: 350px;">(KPI)</th>
-                                        <th style="min-width: 350px;">Action Plan</th>
-                                        <th style="min-width: 350px;">Goal</th>
-                                        <th style="min-width: 150px;">% Weight</th>
+                                        <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
+                                        <th style="min-width: 250px;">គោលដៅ (Goal)</th>
+                                        <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
                                         <th>@lang('lang.action')</th>
                                     </tr>
                                 </thead>
@@ -64,7 +64,7 @@
                                     <div>
                                         <tr>
                                             <td colspan="2" class="text-center">
-                                                <input type="text" class="form-control" id="title" name="title[]" placeholder="ក. កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}" required>
+                                                <input type="text" class="form-control" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}" required>
                                             </td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
@@ -89,8 +89,16 @@
                                                     <td class="text-center">
                                                         <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required>{{ old('action_plan') }}</textarea>
                                                     </td>
-                                                    <td class="text-center">
-                                                        <textarea rows="3" class="form-control" name="goal[]" placeholder="Enter text here" spellcheck="false" required>{{ old('goal') }}</textarea>
+                                                    <td class="">
+                                                        <select class="form-control hr-select2-option" id="goal[]" name="goal[]" required>
+                                                            <option selected disabled value=""> -- @lang('lang.select') --</option>
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                        </select>
+                                                        {{-- <textarea rows="3" class="form-control" name="goal[]" placeholder="Enter text here" spellcheck="false" required>{{ old('goal') }}</textarea> --}}
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" name="weight[]" id="weight" placeholder="%" value="{{old('weight')}}" required>
@@ -195,61 +203,29 @@
         $(document).on('click', '#btnCreatePerformance', function(e) {
             e.preventDefault(); // Prevent the form from submitting the traditional way
 
-            // $('#tbl_performance tbody tr').each(function() {
-            //     let data = {
-            //         title: $(this).find('[name="title[]"]').val(),
-            //         purpose: $(this).find('[name="purpose[]"]').val(),
-            //         key_kpi: $(this).find('[name="key_kpi[]"]').val(),
-            //         action_plan: $(this).find('[name="action_plan[]"]').val(),
-            //         goal: $(this).find('[name="goal[]"]').val(),
-            //         weight: $(this).find('[name="weight[]"]').val(),
-            //     }
-            //     dataKeyKpi.push(data);
-            // });
-
-
-            let formData = {
-                employee_id: $("#employee_id").val(),
-                from_date: $("#from_date").val(),
-                to_date: $("#to_date").val(),
-                performanceDetail: []
-            };
-
-            // Iterate over each row (Each row represents a Title)
+            var dataKeyKpi = [];
             $('#tbl_performance tbody tr').each(function() {
-                let $row = $(this); // The current row
-                let title = $row.find('[name="title[]"]').val();
-                
-                let dataTitle = {
-                    title: title,
-                    dataPurpose: []
-                };
-
-                // Iterate over purpose[] inside this row
-                $row.find('[name="purpose[]"]').each(function() {
-                    let $purpose = $(this); // The current purpose input
-                    let $purposeRow = $purpose.closest('tr'); // Find the closest row (if nested)
-
-                    let purposeData = {
-                        purpose: $purpose.val(),
-                        key_kpi: $purposeRow.find('[name="key_kpi[]"]').val(),
-                        action_plan: $purposeRow.find('[name="action_plan[]"]').val(),
-                        goal: $purposeRow.find('[name="goal[]"]').val(),
-                        weight: $purposeRow.find('[name="weight[]"]').val()
-                    };
-                    dataTitle.dataPurpose.push(purposeData);
-                });
-
-                // Push to performanceDetail
-                formData.performanceDetail.push(dataTitle);
+                let data = {
+                    title: $(this).find('[name="title[]"]').val(),
+                    purpose: $(this).find('[name="purpose[]"]').val(),
+                    key_kpi: $(this).find('[name="key_kpi[]"]').val(),
+                    action_plan: $(this).find('[name="action_plan[]"]').val(),
+                    goal: $(this).find('[name="goal[]"]').val(),
+                    weight: $(this).find('[name="weight[]"]').val(),
+                }
+                dataKeyKpi.push(data);
             });
 
-            console.log(formData);
+            console.log(dataKeyKpi);
             $.ajax({
                 type: "POST",
                 url: "{{ url('performance/store') }}",
                 data: {
-                    data: JSON.stringify(formData),
+                    employee_id : $("#employee_id").val(),
+                    from_date : $("#from_date").val(),
+                    to_date : $("#to_date").val(),
+                    data: dataKeyKpi,
+                    // data: JSON.stringify(formData),
                 },
                 dataType: "JSON",
                 success: function (response) {
@@ -283,8 +259,15 @@
             <td class="text-center">
                 <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required></textarea>
             </td>
-            <td class="text-center">
-                <textarea rows="3" class="form-control" name="goal[]" placeholder="Enter text here" spellcheck="false" required></textarea>
+            <td class="">
+                <select class="form-control hr-select2-option" id="goal[]" name="goal[]" required>
+                    <option selected disabled value=""> -- @lang('lang.select') --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight" id="weight" placeholder="%" required></td>
             <td class="text-center">
@@ -302,7 +285,14 @@
                 <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required>{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control" name="goal[]" placeholder="Enter text here" spellcheck="false" required>{{ old('goal') }}</textarea>
+                <select class="form-control hr-select2-option" id="goal[]" name="goal[]" required>
+                    <option selected disabled value=""> -- @lang('lang.select') --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control" placeholder="%" min="0" value="{{old('weight')}}" required></td>
             <td class="text-center">
@@ -313,7 +303,7 @@
     function addMoreRow() {
         return `<tr class=''>
             <td colspan="2" class="text-center">
-                <input type="text" class="form-control" name="title[]" placeholder="ក. កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}" required>
+                <input type="text" class="form-control" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}" required>
             </td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
@@ -338,8 +328,15 @@
             <td class="text-center">
                 <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required>{{ old('action_plan') }}</textarea>
             </td>
-            <td class="text-center">
-                <textarea rows="3" class="form-control" name="goal[]" placeholder="Enter text here" spellcheck="false" required>{{ old('goal') }}</textarea>
+            <td class="">
+                <select class="form-control hr-select2-option" id="goal[]" name="goal[]" required>
+                    <option selected disabled value=""> -- @lang('lang.select') --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control" placeholder="%" min="0" value="{{old('weight')}}" required></td>
             <td class="text-center">

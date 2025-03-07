@@ -49,7 +49,8 @@ class PerformanceController extends Controller
      */
     public function create()
     {
-        $employee = User::where('line_manager',Auth::user()->line_manager)->where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
+        $employee = User::where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
+        // $employee = User::where('line_manager',Auth::user()->line_manager)->where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
         return view('performances.create',compact('employee'));
     }
 
@@ -61,50 +62,93 @@ class PerformanceController extends Controller
      */
     public function store(Request $request)
     {
-        $title = $request->all();
-        dd($title);
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'purpose' => 'required|string|max:255',
+        //     'key_kpi' => 'required|string',
+        //     'action_plan' => 'required|string',
+        //     'goal' => 'required|string',
+        //     'weight' => 'required|numeric|min:0|max:100',
+        // ]);
+       
         // try {
             // DB::beginTransaction();
-
             $data = $request->all();
             $data['created_by'] = Auth::id();
             $performance = Performance::create($data);
 
-            if ($request->input('title')) {
-                $title = $request->input('title');
-                foreach ($title as $item) {
+            foreach ($request->data as $item) {
+                // Check if the item is a title
+                if (isset($item['title'])) {
                     $title = Title::create([
                         'employee_id' => $request->employee_id,
-                        'title'       => $item['title'] ?? '',
+                        'title'       => $item['title'],
                     ]);
                 }
-            }
-            
-            if ($request->input('purpose')) {
-                $purpose = $request->input('purpose');
-                foreach ($purpose as $item) {
+        
+                // Check if the item is a purpose
+                elseif (isset($item['purpose'])) {
+                    if (!isset($title)) continue; // Skip if no title exists
+        
                     $purpose = Purpose::create([
                         'employee_id' => $request->employee_id,
                         'title_id'    => $title->id,
-                        'name'        => $item['purpose'] ?? '',
+                        'name'        => $item['purpose'],
                     ]);
                 }
-            }
-            if ($request->input('keyKpi')) {
-                $keyKpi = $request->input('keyKpi');
-                foreach ($keyKpi as $item) {
+        
+                // Check if the item is a KPI
+                elseif (isset($item['key_kpi'])) {
+                    if (!isset($title) || !isset($purpose)) continue; // Skip if no title or purpose exists
+        
                     PerformanceDetail::create([
                         'performance_id' => $performance->id,
                         'title_id'       => $title->id,
                         'purpose_id'     => $purpose->id,
-                        'key_kpi'        => $item['key_kpi'] ?? '',
-                        'action_plan'    => $item['action_plan'] ?? '',
-                        'goal'           => $item['goal'] ?? '',
-                        'weight'         => $item['weight'] ?? '',
+                        'key_kpi'        => $item['key_kpi'],
+                        'action_plan'    => $item['action_plan'],
+                        'goal'           => $item['goal'],
+                        'weight'         => $item['weight'],
                         'created_by'     => Auth::id(),
                     ]);
                 }
             }
+
+
+            // if ($request->data) {
+            //     foreach ($title as $item) {
+            //         $title = Title::create([
+            //             'employee_id' => $request->employee_id,
+            //             'title'       => $item['title'] ?? '',
+            //         ]);
+            //     }
+            // }
+            
+            // if ($request->input('purpose')) {
+            //     $purpose = $request->input('purpose');
+            //     foreach ($purpose as $item) {
+            //         $purpose = Purpose::create([
+            //             'employee_id' => $request->employee_id,
+            //             'title_id'    => $title->id,
+            //             'name'        => $item['purpose'] ?? '',
+            //         ]);
+            //     }
+            // }
+            // if ($request->input('keyKpi')) {
+            //     $keyKpi = $request->input('keyKpi');
+            //     foreach ($keyKpi as $item) {
+            //         PerformanceDetail::create([
+            //             'performance_id' => $performance->id,
+            //             'title_id'       => $title->id,
+            //             'purpose_id'     => $purpose->id,
+            //             'key_kpi'        => $item['key_kpi'] ?? '',
+            //             'action_plan'    => $item['action_plan'] ?? '',
+            //             'goal'           => $item['goal'] ?? '',
+            //             'weight'         => $item['weight'] ?? '',
+            //             'created_by'     => Auth::id(),
+            //         ]);
+            //     }
+            // }
 
             // foreach ($request->key_kpi as $key => $item) :
             //     if (!empty($item)) :
@@ -182,7 +226,7 @@ class PerformanceController extends Controller
      */
     public function show($id)
     {
-        $data = Performance::with('performanceDetail')->where('employee_id',$id)->get();
+        $data = Performance::with(['title','purpose','performanceDetail'])->where('employee_id',$id)->get();
         // dd($data);
         return view('performances.preview',compact('data'));
     }
