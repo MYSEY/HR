@@ -782,6 +782,52 @@
                     </div>
                 </div>
                 <hr>
+                {{-- block Exspanse  --}}
+                <div class="row">
+                    <div class="col-md-2">
+                        <label style="font-weight: bold;">@lang('lang.exspanse_management')</label>
+                    </div>
+                    <div class="col-md-10">
+                        <label class="container-checkbox">@lang('lang.all')
+                            <input type="checkbox" id="exspanse_management_all" name="exspanse_management_all"><span class="checkmark"></span>
+                        </label>
+                    </div>
+                    {{-- block exspanse_request --}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.exspanse_request') (FND-002)
+                                    <input type="checkbox" class="exspanse_request_checkbox" id="exspanse_request" name="exspanse_request"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_view"><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_add"><span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_edit"><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_delete"><span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_approve"><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_export"><span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 {{-- block Motor Rentals --}}
                 <div class="row">
                     <div class="col-md-2">

@@ -520,41 +520,6 @@ $(function(){
             $(this).val(1)
         }
     });
-
-    $("#performace_all").on("click", function(){
-        if (!$(this).prop("checked")) {
-            $(".performance_checkbox").prop("checked", false);
-            $(this).val(0)
-        }
-        if ($(this).prop("checked")) {
-            $(".performance_checkbox").prop("checked", true);
-            $(this).val(1)
-            $(".performance_checkbox").val(1);
-        }
-    });
-    $("#performance").on("click", function(){
-        if (!$(this).prop("checked")) {
-            $(".performance_checkbox").prop("checked", false);
-            $(this).val(0)
-        }
-        if ($(this).prop("checked")) {
-            $(".performance_checkbox").prop("checked", true);
-            $(this).val(1)
-            $(".performance_checkbox").val(1);
-        }
-    });
-    $("#performance_review").on("click", function(){
-        if (!$(this).prop("checked")) {
-            $(".pr_checkbox").prop("checked", false);
-            $(this).val(0)
-        }
-        if ($(this).prop("checked")) {
-            $(".pr_checkbox").prop("checked", true);
-            $(this).val(1)
-            $(".pr_checkbox").val(1);
-        }
-    });
-
     $(document).ready(function(){
         let g_checkbox = $('.g_checkbox');
         g_checkbox.change(function(){
@@ -645,6 +610,101 @@ $(function(){
             };
         });
     });
+
+    // blcok performac
+    $("#performace_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".performance_checkbox").val(1);
+        }
+    });
+    $("#performance").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".performance_checkbox").val(1);
+        }
+    });
+    $("#performance_review").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".pr_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".pr_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".pr_checkbox").val(1);
+        }
+    });
+
+    // block exspanse management
+    $("#exspanse_management_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".exspanse_request_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".exspanse_request_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".exspanse_request_checkbox").val(1);
+        }
+    });
+    $("#exspanse_request").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".exspanse_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".exspanse_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".exspanse_checkbox").val(1);
+        }
+    });
+    $(".exspanse_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let exspanse_checkbox = $('.exspanse_checkbox');
+        exspanse_checkbox.change(function(){
+            let countAllCheckboxes = exspanse_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.exspanse_checkbox').length) {
+                $("#exspanse_request").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.exspanse_checkbox').length) {
+                $("#exspanse_request").prop("checked", false);
+            };
+        });
+        let exspanse_request_checkbox = $('.exspanse_request_checkbox');
+        exspanse_request_checkbox.change(function(){
+            let countCheckedCheckboxes = exspanse_request_checkbox.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.exspanse_request_checkbox').length) {
+                $("#exspanse_management_all").prop("checked", true);
+                $("#exspanse_management_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.exspanse_request_checkbox').length) {
+                $("#exspanse_management_all").prop("checked", false);
+                $("#exspanse_management_all").val(0)
+            };
+        });
+    });
+
+    
 
     // blcok motor rental
     $("#motor_rental_check_all").on("click", function(){

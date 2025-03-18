@@ -9,6 +9,7 @@ use App\Models\permissions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\CategoryPermission;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
@@ -22,7 +23,7 @@ class RoleConroller extends Controller
      */
     public function index(Request $request)
     {
-        $permission = permissions::where('role_id',Auth::user()->role_id)->where("name", "lang.role_permission")->first();
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "role")->first();
         if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
@@ -57,7 +58,8 @@ class RoleConroller extends Controller
         return response()->json(['role'=>$role]);
     }
     public function formCreate() {
-        return view('roles.form_create');
+        $permission = CategoryPermission::get();
+        return view('roles.form_create', compact('permission'));
     }
 
     public function detail(Request $request) {
@@ -90,6 +92,101 @@ class RoleConroller extends Controller
                         }
                         $per['parent_id'] = $request->parent_id;
                         $per['role_id'] = $role->id;
+                        $per['is_active'] = 1;
+                        permissions::create($per);
+                    }
+                }
+            }
+            DB::commit();
+            return response()->json([
+                'message'=>"successfully",
+                'status'=>200
+            ]);
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()], 500);
+        } 
+    }
+
+    public function createPermission(Request $request) {
+        DB::beginTransaction();
+        try{
+            Activity::all()->last();
+            $role = Role::create([
+                'role_name'     => $request->role_name,
+                'role_type'     => $request->role_type,
+                'status'        => 1,
+                'created_by'    => Auth::user()->id
+            ]);
+           
+            if ($request->role_permission) {
+                
+                foreach ($request->role_permission as $key => $item) {
+                    
+                    foreach ($item["permission"] as $key => $per) {
+                        $menuPermission =  permissions::where("role_id", $role->id)->where("sub_menu_id", $per["sub_menu_id"])->count();
+                        $permissionTypes =  DB::table("permission_types")->where("menu_id", $per["sub_menu_id"])->first();
+                        if ($menuPermission == 0) {
+                            $menuData["name"] = $permissionTypes->name;
+                            $menuData["menu_id"] = $permissionTypes->menu_id;
+                            $menuData["icon"] = $permissionTypes->icon;
+                            $menuData["is_all"] = $permissionTypes->is_all;
+                            $menuData['role_id'] = $role->id;
+                            $menuData['is_active'] = 1;
+                            $menuData['parent_id'] = $request->parent_id;
+                            permissions::create($menuData);
+                        }
+                        if ($per["url"] == "dashboad/admin") {
+                            $per['is_dashboard'] = json_encode($per);
+                        }
+                        $per['parent_id'] = $request->parent_id;
+                        $per['role_id'] = $role->id;
+                        $per['is_active'] = 1;
+                        permissions::create($per);
+                    }
+                }
+            }
+            DB::commit();
+            return response()->json([
+                'message'=>"successfully",
+                'status'=>200
+            ]);
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()], 500);
+        } 
+    }
+    public function updatePermission(Request $request) {
+        DB::beginTransaction();
+        try{
+            Activity::all()->last();
+            $data = Role::find($request->id);
+            $data['role_name']     = $request->role_name;
+            $data['role_type']     = $request->role_type;
+            $data['updated_by']    = Auth::user()->id;
+            $data->save();
+            permissions::where('role_id',$request->id)->delete();
+           
+            if ($request->role_permission) {
+                foreach ($request->role_permission as $key => $item) {
+                    foreach ($item["permission"] as $key => $per) {
+                        $menuPermission =  permissions::where("role_id", $request->id)->where("sub_menu_id", $per["sub_menu_id"])->count();
+                        $permissionTypes =  DB::table("permission_types")->where("menu_id", $per["sub_menu_id"])->first();
+                        if ($menuPermission == 0) {
+                            $menuData["name"] = $permissionTypes->name;
+                            $menuData["menu_id"] = $permissionTypes->menu_id;
+                            $menuData["icon"] = $permissionTypes->icon;
+                            $menuData["is_all"] = $permissionTypes->is_all;
+                            $menuData['role_id'] = $request->id;
+                            $menuData['is_active'] = 1;
+                            $menuData['parent_id'] = $request->parent_id;
+                            permissions::create($menuData);
+                        }
+                        if ($per["url"] == "dashboad/admin") {
+                            $per['is_dashboard'] = json_encode($per);
+                        }
+                        $per['parent_id'] = $request->parent_id;
+                        $per['role_id'] = $request->id;
                         $per['is_active'] = 1;
                         permissions::create($per);
                     }
@@ -159,11 +256,12 @@ class RoleConroller extends Controller
     {
         $role=Role::where('id',$request->id)->first();
         $permissions = permissions::where("role_id", $request->id)->get()->toArray();
+        $categoryPermission = CategoryPermission::get();
         $arrayPermissions = [];
         foreach ($permissions as $row) {
             $arrayPermissions[$row["name"]] = $row;
         }
-        return view('roles.form_edit', compact('role','arrayPermissions'));
+        return view('roles.form_edit', compact('role','arrayPermissions', 'categoryPermission'));
     }
 
     public function updateRole(Request $request)

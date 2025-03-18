@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-class permissions extends Model
+class CategoryPermission extends Model
 {
     use HasFactory;
     use LogsActivity;
     
-    protected $table = 'permissions';
+    protected $table = 'category_permissions';
     protected $guarded = ['id'];
 
     protected $fillable = [
@@ -43,7 +43,6 @@ class permissions extends Model
         'is_access',
         'is_view_report',
         'is_operation',
-        'is_sort',
         'created_by',
         'updated_by',
         'deleted_at',
@@ -54,6 +53,10 @@ class permissions extends Model
         ->logOnly(['*'])
         ->logOnlyDirty()
         ->dontSubmitEmptyLogs();
+    }
+    public function menu()
+    {
+        return $this->belongsTo(PermissionType::class, 'sub_menu_id', 'menu_id');
     }
     public function createdBy()
     {

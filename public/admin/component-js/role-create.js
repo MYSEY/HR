@@ -102,7 +102,6 @@ var dataPermission = function () {
         })
     }
   
-
     // block leave
     let leave_all = $('#leave_all').filter(':checked').length;
     let leaves_employee_checkbox = $('.leaves_employee_checkbox').filter(':checked').length;
@@ -421,6 +420,44 @@ var dataPermission = function () {
                 }
             ]
         })
+    }
+
+    // block exspansce management
+    let exspanse_request_checkbox = $('.exspanse_request_checkbox').filter(':checked').length;
+    let exspanse_checkbox = $('.exspanse_checkbox').filter(':checked').length;
+
+    if (exspanse_request_checkbox) {
+        data.push({
+            name: "exspanse_management",
+            permission: [
+                {
+                    "menu_id":"13",
+                    "icon":"la la-money-bill",
+                    "name":"lang.exspanse_management",
+                    "is_all": $("#exspanse_management_all").val(),
+                },
+            ]
+        });
+    }
+    if (exspanse_checkbox) {
+        data.push({
+            name: "exspanse_request",
+            permission: [
+                {
+                    "name":"lang.exspanse_request",
+                    "sub_menu_id":"13",
+                    "menu_id":"m13-s1",
+                    "url":"exspanse_request/list",
+                    "is_view": $("#exspanse_view").val(),
+                    "is_create": $("#exspanse_add").val(),
+                    "is_update": $("#exspanse_edit").val(),
+                    "is_delete": $("#exspanse_delete").val(),
+                    "is_approve": $("#exspanse_approve").val(),
+                    "is_print": $("#exspanse_print").val(),
+                    "is_export": $("#exspanse_export").val(),
+                },
+            ]
+        });
     }
 
     //block motor rentals 

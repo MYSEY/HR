@@ -1174,6 +1174,73 @@
                     </div>
                 </div>
                 <hr>
+                {{-- block Exspanse  --}}
+                <div class="row">
+                    <div class="col-md-2">
+                        <label style="font-weight: bold;">@lang('lang.exspanse_management')</label>
+                    </div>
+                    <div class="col-md-10">
+                        <label class="container-checkbox">@lang('lang.all')
+                            <input type="checkbox" id="exspanse_management_all" name="exspanse_management_all"
+                            {{SetCheckbox($arrayPermissions,"lang.exspanse_management","is_all")->checkbox}}
+                            value="{{SetCheckbox($arrayPermissions,"lang.exspanse_management","is_all")->value}}"
+                            ><span class="checkmark"></span>
+                        </label>
+                    </div>
+                    {{-- block exspanse_request --}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.exspanse_request') (FND-002)
+                                    <input type="checkbox" class="exspanse_request_checkbox" id="exspanse_request" name="exspanse_request"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_view"
+                                    {{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_view")->value}}"
+                                    ><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_add"
+                                     {{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_create")->value}}"
+                                    ><span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_edit" 
+                                    {{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_update")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_update")->value}}"
+                                    ><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_delete"
+                                    {{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_delete")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_delete")->value}}"
+                                    ><span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_approve"
+                                    {{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_approve")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_approve")->value}}"
+                                    ><span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="exspanse_request_checkbox exspanse_checkbox" id="exspanse_export"
+                                    {{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_export")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.exspanse_request","is_export")->value}}"
+                                    ><span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 {{-- block Motor Rentals --}}
                 <div class="row">
                     <div class="col-md-2">

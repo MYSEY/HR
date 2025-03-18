@@ -8,13 +8,13 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * php artisan migrate:refresh --path=database/migrations/2023_03_03_025701_create_permissions_table.php
+     * php artisan migrate:refresh --path=database/migrations/2025_03_11_140356_create_category_permissions_table.php
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('category_permissions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('menu_id')->nullable();
@@ -42,7 +42,6 @@ return new class extends Migration
             $table->boolean('is_access')->nullable();
             $table->boolean('is_view_report')->nullable();
             $table->boolean('is_operation')->nullable();
-            $table->integer('is_sort')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
@@ -57,6 +56,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('category_permissions');
     }
 };
