@@ -35,6 +35,7 @@ use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\VillageAddressController;
 use App\Http\Controllers\Admins\CandidateResumeController;
+use App\Http\Controllers\Admins\CategoryPermissionController;
 use App\Http\Controllers\Admins\ConmmuneAddressController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
@@ -171,6 +172,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('role/create', [RoleConroller::class,'formCreate']);
     Route::get('role/edit/{id}', [RoleConroller::class,'edit']);
     Route::post('role/create', [RoleConroller::class,'create']);
+    Route::post('role/createPermission', [RoleConroller::class,'createPermission']);
+    Route::post('role/updatePermission', [RoleConroller::class,'updatePermission']);
     Route::post('role/store', [RoleConroller::class,'store']);
     Route::post('role/update', [RoleConroller::class,'update']);
     Route::post('role/update-role', [RoleConroller::class,'updateRole']);
@@ -179,6 +182,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('role/status', [RoleConroller::class,'processing']);
     Route::Resource('permission', PermissionController::class);
     Route::get('role/show', [RoleConroller::class,'show']);
+
+    // *** **** //
+    Route::get('category-permission', [CategoryPermissionController::class,'index']);
+    Route::get('category-permission/show', [CategoryPermissionController::class,'show']);
+    Route::post('category-permission/store', [CategoryPermissionController::class,'store']);
+    Route::post('category-permission/update', [CategoryPermissionController::class,'update']);
+    Route::post('category-permission/delete', [CategoryPermissionController::class,'destroy']);
 
     Route::get('/department', [DepartmentController::class,'index']);
     Route::post('/department/store', [DepartmentController::class,'store']);
