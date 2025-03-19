@@ -22,14 +22,14 @@ class ExportNSSFReview implements FromCollection, WithColumnWidths, WithHeadings
     protected $num;
     protected $export_datas;
 
-    protected $totalPreTaxSalaryUsd;
-    protected $totalPreTaxSalaryRiel;
-    protected $totalAverageWage;
-    protected $totalOccupationalRisk;
-    protected $totalHealthCare;
-    protected $pensionContributionUsd;
-    protected $pensionContributionRiel;
-    protected $corporateContribution;
+    protected $totalPreTaxSalaryUsd = 0;
+    protected $totalPreTaxSalaryRiel = 0;
+    protected $totalAverageWage = 0;
+    protected $totalOccupationalRisk = 0;
+    protected $totalHealthCare = 0;
+    protected $pensionContributionUsd = 0;
+    protected $pensionContributionRiel = 0;
+    protected $corporateContribution = 0;
 
     public function __construct($request)
     {
@@ -58,7 +58,7 @@ class ExportNSSFReview implements FromCollection, WithColumnWidths, WithHeadings
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })->when($request->employee_name, function ($query, $employee_name) {
             $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-        })->get();
+        })->orderBy('payment_date','DESC')->orderBy('id','ASC')->get();
         $i = 0;
         foreach ($datas as $value) {
             $i++;
@@ -78,14 +78,14 @@ class ExportNSSFReview implements FromCollection, WithColumnWidths, WithHeadings
                 $value->users == null ? '' : $value->users->EmployeeGender,
                 $value->users == null ? '' : $value->users->EmployeePosition,
                 $value->users == null ? '' : $value->users->joinOfDate,
-                $value->total_pre_tax_salary_usd,
+                round($value->total_pre_tax_salary_usd,2),
                 round($value->total_pre_tax_salary_riel,2),
-                $value->total_average_wage,
+                round($value->total_average_wage,2),
                 round($value->total_occupational_risk,2),
                 round($value->total_health_care,2),
-                $value->pension_contribution_usd,
+                round($value->pension_contribution_usd,2),
                 round($value->pension_contribution_riel,2),
-                $value->corporate_contribution
+                round($value->corporate_contribution,2)
             ];
         }
         $this->export_datas = $nssf;
