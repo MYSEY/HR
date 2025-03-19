@@ -211,7 +211,7 @@
                 employee_name: $("#employee_name").val(),
                 filter_month: $("#filter_month").val()
             };
-            var url = "{{URL::to('nssf-export')}}?" + $.param(query)
+            var url = "{{URL::to('nssf-export-review')}}?" + $.param(query)
             window.location = url;
         });
         $(".btn_print").on("click", function() {

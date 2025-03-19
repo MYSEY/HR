@@ -132,7 +132,7 @@ class ExportTax implements FromCollection, WithColumnWidths, WithHeadings, WithC
 
             $payroll[]=[
                 $i,
-                $pay->users == null ? '' : intval($pay->users->number_employee),
+                $pay->users->number_employee,
                 Helper::getLang() == 'en' ? $pay->users->employee_name_en : $pay->users->employee_name_kh,
                 $pay->users == null ? '' : $pay->users->EmployeeDepartment,
                 $pay->users == null ? '' : $pay->users->EmployeePosition,

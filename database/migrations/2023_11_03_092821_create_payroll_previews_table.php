@@ -44,6 +44,8 @@ return new class extends Migration
             $table->decimal('total_severance_pay',50,2)->default(0);
             $table->float('loan_amount',50,2)->nullable();
             $table->float('total_amount_car',50,2)->nullable();
+            $table->decimal('other_benefits',50,2)->default(0);
+            $table->decimal('total_staff_book',50,2)->default(0);
             $table->decimal('total_salary',50,2)->default(0);
             $table->string('exchange_rate')->nullable();
             $table->string('adjustment')->nullable();

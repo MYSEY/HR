@@ -44,6 +44,7 @@ use App\Http\Controllers\Admins\ProvinceAddressController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\DistrictsAddressController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
+use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
 
 /*
 |--------------------------------------------------------------------------
@@ -360,9 +361,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/reports/payroll-report', [PayrollReportController::class,'filter']);
     Route::get('/reports/payroll-export', [PayrollReportController::class,'payrollExport']);
 
-    Route::get('/import-nssf', [PayrollReportController::class,'ImportIndex']);
+    // Route::get('/import-nssf', [PayrollReportController::class,'ImportIndex']);
     Route::get('/nssf-export', [PayrollReportController::class,'nssfExport']);
     Route::post('/import-nssf', [PayrollReportController::class,'ImportNSSF']);
+    //NSSF
+    Route::resource('/import-nssf', NationalSocialSecurityFundController::class);
+    Route::get('/nssf-export-review', [NationalSocialSecurityFundController::class,'NssfExportReview']);
+    
     //Report nssf
     Route::get('/reports/nssf-report', [PayrollReportController::class,'reportNssf']);
     Route::post('/reports/nssf-report', [PayrollReportController::class,'nssfFilter']);
