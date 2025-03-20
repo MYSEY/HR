@@ -81,10 +81,10 @@ class ExportNSSFReview implements FromCollection, WithColumnWidths, WithHeadings
                 round($value->total_pre_tax_salary_usd,2),
                 round($value->total_pre_tax_salary_riel,2),
                 round($value->total_average_wage,2),
-                round($value->total_occupational_risk,2),
-                round($value->total_health_care,2),
+                $this->custom_round($value->total_occupational_risk),
+                $this->custom_round($value->total_health_care),
                 round($value->pension_contribution_usd,2),
-                round($value->pension_contribution_riel,2),
+                $this->custom_round($value->pension_contribution_riel),
                 round($value->corporate_contribution,2)
             ];
         }
@@ -188,31 +188,42 @@ class ExportNSSFReview implements FromCollection, WithColumnWidths, WithHeadings
                 $sheet->getDelegate()->getStyle("H".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("H".$rows);
                 $event->sheet->getDelegate()->getStyle("H".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue I
-                $sheet->setCellValue("I".$rows, round($this->totalAverageWage,2));
+                $sheet->setCellValue("I".$rows, $this->totalAverageWage);
                 $sheet->getDelegate()->getStyle("I".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("I".$rows);
                 $event->sheet->getDelegate()->getStyle("I".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue J
-                $sheet->setCellValue("J".$rows, round($this->totalOccupationalRisk,2));
+                $sheet->setCellValue("J".$rows, $this->custom_round($this->totalOccupationalRisk));
                 $sheet->getDelegate()->getStyle("J".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("J".$rows);
                 $event->sheet->getDelegate()->getStyle("J".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue K
-                $sheet->setCellValue("K".$rows, round($this->totalHealthCare,2));
+                $sheet->setCellValue("K".$rows, $this->custom_round($this->totalHealthCare));
                 $sheet->getDelegate()->getStyle("K".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("K".$rows);
                 $event->sheet->getDelegate()->getStyle("K".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue L
-                $sheet->setCellValue("L".$rows, round($this->pensionContributionUsd));
+                $sheet->setCellValue("L".$rows, $this->pensionContributionUsd);
                 $sheet->getDelegate()->getStyle("L".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("L".$rows);
                 $event->sheet->getDelegate()->getStyle("L".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue M
-                $sheet->setCellValue("M".$rows, round($this->pensionContributionRiel,2));
+                $sheet->setCellValue("M".$rows, $this->custom_round($this->pensionContributionRiel,2));
                 $sheet->getDelegate()->getStyle("M".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("M".$rows);
                 $event->sheet->getDelegate()->getStyle("M".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue N
-                $sheet->setCellValue("N".$rows, round($this->corporateContribution,2));
+                $sheet->setCellValue("N".$rows, $this->corporateContribution);
                 $sheet->getDelegate()->getStyle("N".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("N".$rows);
                 $event->sheet->getDelegate()->getStyle("N".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             },
         ];
+    }
+
+    public function custom_round($number) {
+        // Get the decimal part of the number
+        $decimalPart = $number - floor($number);
+        // If the decimal part is 0.50 or below, round down (use floor)
+        if ($decimalPart <= 0.50) {
+            return floor($number);
+        }
+        // Otherwise, round up (use ceil)
+        return ceil($number);
     }
 
     public function getKhmerMonths(){
