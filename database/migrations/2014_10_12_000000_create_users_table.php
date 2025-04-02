@@ -92,6 +92,7 @@ class CreateUsersTable extends Migration
             $table->boolean('p_status')->default(0);
             $table->boolean('is_loan')->nullable();
             $table->string('type')->nullable();
+            $table->integer('under_approve')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

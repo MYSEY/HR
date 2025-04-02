@@ -1252,21 +1252,42 @@ var dataPermission = function () {
 
     // block roles
     let role_checkbox = $('.role_checkbox').filter(':checked').length;
+    let category_permission = $('.category_permission').filter(':checked').length;
+    if (category_permission) {
+        data.push({
+            name: "role_type",
+            permission: [
+                {
+                    "name":"lang.role_type",
+                    "sub_menu_id":"14",
+                    "menu_id":"m14-s1",
+                    "url":"role-type",
+                },  
+            ]
+        });
+    }
+    if (category_permission) {
+        data.push({
+            name: "Category Permission",
+            permission: [
+                {
+                    "name":"lang.category_permission",
+                    "sub_menu_id":"14",
+                    "menu_id":"m14-s2",
+                    "url":"category-permission",
+                },  
+            ]
+        });
+    }
     if (role_checkbox) {
         data.push({
             name: "role Permission",
             permission: [
                 {
-                    "icon":"la la-key",
                     "name":"lang.role_permission",
+                    "sub_menu_id":"14",
+                    "menu_id":"m14-s3",
                     "url":"role",
-                    "is_all": $("#role_check_all").val(),
-                    "is_view": $("#role_check_view").val(),
-                    "is_create": $("#role_check_add").val(),
-                    "is_update": $("#role_check_edit").val(),
-                    "is_delete": $("#role_check_delete").val(),
-                    "is_print": $("#role_check_print").val(),
-                    "is_export": $("#role_check_export").val(),
                 },  
             ]
         });

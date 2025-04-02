@@ -140,6 +140,14 @@
                             </div>
                         </div>
                     @endif
+                    {{-- <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label >Delegation Discerptions</label>
+                                <textarea class="form-control" id="delegation_discerption" name="delegate_discerption"></textarea>
+                            </div>
+                        </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">

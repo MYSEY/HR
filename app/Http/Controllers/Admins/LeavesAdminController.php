@@ -145,7 +145,7 @@ class LeavesAdminController extends Controller
     }
 
     public function detail(Request $request) {
-        $leave_requests = LeaveRequest::with("leaveType")->with("employee")->where("employee_id", $request->employee_id)->get();
+        $leave_requests = LeaveRequest::with("leaveType")->with("employee")->with("approvedby")->where("employee_id", $request->employee_id)->get();
         return view('leaves_admin.leave_detail', compact('leave_requests'));
     }
 

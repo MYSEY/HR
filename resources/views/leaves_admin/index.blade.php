@@ -187,7 +187,7 @@
                                                                             {{-- @elseif ($request->status == "pending")
                                                                                 <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by Line Manager</span> --}}
                                                                             @elseif ($request->status == "approved_lm" || $request->status == "pending")
-                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>
+                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by CEO/Head/BM</span>
                                                                             @elseif ($request->status == "approved_hod")
                                                                                 <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                                                 {{-- <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span> --}}
@@ -283,7 +283,7 @@
                                                                             <td>{{ $request->Approve ? $request->Approve : ""}}</td>
                                                                             <td>
                                                                                 @if($request->status == "pending_cancel")
-                                                                                    <span class="badge bg-inverse-danger" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>
+                                                                                    <span class="badge bg-inverse-danger" style="font-size: 13px;">Waiting Approve by CEO/Head/BM</span>
                                                                                 @elseif($request->status == "cancel_hod" || $request->status == "cancel")
                                                                                     <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
                                                                                 @endif
@@ -679,7 +679,7 @@
                                     status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>'; 
                                 }
                                 if (row.status == "pending_cancel") {
-                                    status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>'; 
+                                    status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Waiting Approve by CEO/Head/BM</span>'; 
                                 }
                                
                             }
@@ -694,7 +694,7 @@
                             // }else if (row.status == "pending"){
                             //     status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by Line Manager</span>';
                             }else if (row.status == "approved_lm" || row.status == "pending"){
-                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>';
+                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by CEO/Head/BM</span>';
                             }else if (row.status == "approved_hod"){
                                 status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
                                 // status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span>';

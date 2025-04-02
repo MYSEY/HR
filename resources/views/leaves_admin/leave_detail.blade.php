@@ -42,6 +42,8 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="request_by: activate to sort column ascending">@lang('lang.request_by')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                aria-label="request_by: activate to sort column ascending">@lang('lang.approved_by')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
                                             <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                     aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
@@ -67,6 +69,7 @@
                                                     <td>{{$request->handover ? $request->handover->employee_name_en : ""}}</td>
                                                     <td>{{$request->Delegated}}</td>
                                                     <td>{{$request->createdBy->employee_name_en}}</td>
+                                                    <td>{{$request->approvedby ? $request->approvedby->employee_name_en : ""}}</td>
                                                     <td>{{$request->reason}}</td>
                                                     <td>{{$request->remark}}</td>
                                                     <td>
@@ -81,7 +84,7 @@
                                                         @elseif ($request->status == "rejected_hod")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by ACEO/Head/BM</span>
                                                         @elseif ($request->status == "approved_lm" || $request->status == "pending")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by CEO/Head/BM</span>
                                                         @elseif ($request->status == "approved_hod")
                                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @elseif($request->status == "approved")

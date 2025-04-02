@@ -115,6 +115,15 @@ class LeaveRequest extends Model
             'number_employee',
         ]);
     }
+    public function approvedby(){
+        return $this->belongsTo(User::class,'approved_by')
+        ->select([
+            'id', 
+            'employee_name_en',
+            'employee_name_kh',
+            'number_employee',
+        ]);
+    }
     public function getApproveAttribute(){
         $approved_by = explode(',',$this->next_approver);
         $approve_name = '';

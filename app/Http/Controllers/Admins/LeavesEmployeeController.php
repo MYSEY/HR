@@ -275,9 +275,18 @@ class LeavesEmployeeController extends Controller
             // $manager = User::where("id", Auth::user()->line_manager)->first();
             $dataBranch = Branchs::where("id", Auth::user()->branch->id)->first();
             if($dataBranch->abbreviations == "HQ"){
-                $data['next_approver'] = Auth::user()->department->direct_manager_id;
+                if(Auth::user()->under_approve){
+                    $data['next_approver'] = Auth::user()->under_approve;
+                }else{
+                    $data['next_approver'] = Auth::user()->department->direct_manager_id;
+                }
+                
             }else{
-                $data['next_approver'] = Auth::user()->branch->direct_manager_id;
+                if(Auth::user()->under_approve){
+                    $data['next_approver'] = Auth::user()->under_approve;
+                }else{
+                    $data['next_approver'] = Auth::user()->branch->direct_manager_id;
+                }  
             }
             $data['status'] = "pending";
             if(Auth::user()->RolePermission == "BOD") {
@@ -382,36 +391,36 @@ class LeavesEmployeeController extends Controller
             $line_manager2 = User::where("id", $data['next_approver'])->first();
             $staff_request = User::where("id", Auth::user()->id)->with("position")->with("branch")->first();
 
-            $mail_message = ModelsMail::first();
-            if ($line_manager2 && $mail_message) {
-                if ($line_manager2) {
-                    $datasSendEmail['mail_message'] = $mail_message;
-                    $datasSendEmail['staff_request'] = $staff_request;
-                    if ($manager1) {
-                        $recipients = [$manager1->email, $line_manager2->email];
-                        if ($manager1->email != $line_manager2->email) {
-                            foreach ($recipients as $email) {
-                                $btn_approve = false;
-                                if($email != $manager1->email){
-                                    $btn_approve = true;
-                                }
-                                if($email){
-                                    Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
-                                }
-                            }
-                        }else{
-                            if($line_manager2->email){
-                                Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
-                            }
-                        }
-                    }else{
-                        if($line_manager2->email){
-                            Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
-                        }
-                    }
+            // $mail_message = ModelsMail::first();
+            // if ($line_manager2 && $mail_message) {
+            //     if ($line_manager2) {
+            //         $datasSendEmail['mail_message'] = $mail_message;
+            //         $datasSendEmail['staff_request'] = $staff_request;
+            //         if ($manager1) {
+            //             $recipients = [$manager1->email, $line_manager2->email];
+            //             if ($manager1->email != $line_manager2->email) {
+            //                 foreach ($recipients as $email) {
+            //                     $btn_approve = false;
+            //                     if($email != $manager1->email){
+            //                         $btn_approve = true;
+            //                     }
+            //                     if($email){
+            //                         Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
+            //                     }
+            //                 }
+            //             }else{
+            //                 if($line_manager2->email){
+            //                     Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
+            //                 }
+            //             }
+            //         }else{
+            //             if($line_manager2->email){
+            //                 Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
+            //             }
+            //         }
 
-                }
-            }
+            //     }
+            // }
             DB::commit();
             return response()->json([
                 'success'=>'leave_request_created_successfully',
