@@ -139,7 +139,7 @@ return new class extends Migration
                 ],
                 [
                     'menu_id'=>'13',
-                    'name'=>'lang.exspanse_management',
+                    'name'=>'lang.expense_management',
                     'icon'=>'la la-money-bill',
                     'is_all'=>'1',
                     'status'=>1,

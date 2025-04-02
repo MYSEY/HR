@@ -181,7 +181,7 @@
                                                         {{-- @elseif ($request->status == "pending")
                                                             <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by Line Manager</span> --}}
                                                         @elseif ($request->status == "approved_lm" || $request->status == "pending")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by CEO/Head/BM</span>
                                                         @elseif ($request->status == "approved_hod")
                                                             <span class="badge bg-inverse-info" style="font-size: 13px;">Approved</span>
                                                         @elseif($request->status == "approved")

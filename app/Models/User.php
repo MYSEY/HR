@@ -118,6 +118,7 @@ class User extends Authenticatable
         'p_status',
         'is_loan',
         'type',
+        'under_approve',
         'created_by',
         'updated_by',
     ];

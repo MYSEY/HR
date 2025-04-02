@@ -2,8 +2,10 @@
 
 namespace App\Traits;
 
+use App\Models\FnRegularExspense;
 use Carbon\Carbon;
 use App\Models\GenerateIdEmployee;
+use App\Models\GenerateIdExpense;
 
 trait GeneratingCode
 {
@@ -38,4 +40,70 @@ trait GeneratingCode
             'number_employee' => $eployeeId
         ];
     }
+    //*** Generate Expense
+    public function generateExpenseCode($date)
+     {
+         $count = 0;
+         $expDate = Carbon::parse($date);
+         $lastInId = GenerateIdExpense::orderBy('tracking_id', 'DESC')->get();
+         if (!empty($lastInId)) {
+             for ($i = 0; $i < count($lastInId); $i++) {
+                 $current = (int) substr(strrchr($lastInId[$i]->tracking_id, "-"), 1);
+                 if ($i + 1 < count($lastInId)) {
+                     $next = (int) substr(strrchr($lastInId[$i + 1]->tracking_id, "-"), 1);
+                 }
+                 if (isset($next) && $current + 1 != $next) {
+                     $count = (int) substr(strrchr($lastInId[$i]->tracking_id, "-"), 1);
+                     break;
+                 } else {
+                     $count = (int) substr(strrchr($lastInId[$i]->tracking_id, "-"), 1);
+                 }
+             }
+         }
+         
+         do {
+            $year = $expDate->format('y');
+            $month = $expDate->format('m');
+            $day = $expDate->format('d');
+             $expId =  "FND".$year.$month.$day. str_pad(($count + 1), 3, "0", STR_PAD_LEFT);
+             $alreadyExist = GenerateIdExpense::select('tracking_id')->where('tracking_id', $expId)->first()->tracking_id ?? null;
+             $count++;
+         } while ($alreadyExist);
+         return [
+             'tracking_id' => $expId
+         ];
+     }
+    //*** Generate Serialef
+    public function generateSerialCode($date)
+     {
+         $count = 0;
+         $expDate = Carbon::parse($date);
+         $lastInId = FnRegularExspense::orderBy('serialref', 'DESC')->get();
+         if (!empty($lastInId)) {
+             for ($i = 0; $i < count($lastInId); $i++) {
+                 $current = (int) substr(strrchr($lastInId[$i]->serialref, "-"), 1);
+                 if ($i + 1 < count($lastInId)) {
+                     $next = (int) substr(strrchr($lastInId[$i + 1]->serialref, "-"), 1);
+                 }
+                 if (isset($next) && $current + 1 != $next) {
+                     $count = (int) substr(strrchr($lastInId[$i]->serialref, "-"), 1);
+                     break;
+                 } else {
+                     $count = (int) substr(strrchr($lastInId[$i]->serialref, "-"), 1);
+                 }
+             }
+         }
+         
+         do {
+            $year = $expDate->format('y');
+            $month = $expDate->format('m');
+            $day = $expDate->format('d');
+             $expId =  "REF".$year.$month.$day. str_pad(($count + 1), 3, "0", STR_PAD_LEFT);
+             $alreadyExist = FnRegularExspense::select('serialref')->where('serialref', $expId)->first()->serialref ?? null;
+             $count++;
+         } while ($alreadyExist);
+         return [
+             'serialref' => $expId
+         ];
+     }
 }
