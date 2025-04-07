@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportLeaveEmployee;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Mail\SendEmail;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LeavesEmployeeController extends Controller
 {
@@ -448,9 +450,19 @@ class LeavesEmployeeController extends Controller
             $userRequest = User::where("id", $request->employee_id)->with("department")->with("branch")->with("role")->first();
             $data['line_manager_id'] = $userRequest->line_manager;
             if($userRequest->branch->abbreviations == "HQ"){
-                $data['next_approver'] = $userRequest->department->direct_manager_id;
+                // $data['next_approver'] = $userRequest->department->direct_manager_id;
+                if($userRequest->under_approve){
+                    $data['next_approver'] = $userRequest->under_approve;
+                }else{
+                    $data['next_approver'] = $userRequest->department->direct_manager_id;
+                }
             }else{
-                $data['next_approver'] = $userRequest->branch->direct_manager_id;
+                if($userRequest->under_approve){
+                    $data['next_approver'] = $userRequest->under_approve;
+                }else{
+                    $data['next_approver'] = $userRequest->branch->direct_manager_id;
+                }  
+                // $data['next_approver'] = $userRequest->branch->direct_manager_id;
             }
 
             // *** approve by head or branch *** //
@@ -969,5 +981,17 @@ class LeavesEmployeeController extends Controller
             Toastr::error('Cancel fail.','Error');
             return redirect()->back();
         }
+    }
+    public function Export(Request $request) {
+        $dataLeaveType = LeaveType::get();
+        $LeaveAllocation = LeaveAllocation::where("employee_id", $request->id)->first();
+        $dataLeaveRequest = LeaveRequest::with("leaveType")->with("employee")->where("employee_id", $request->id)->get();
+        $data = [
+            "dataLeaveType"=> $dataLeaveType,
+            "LeaveAllocation"=> $LeaveAllocation,
+            "dataLeaveRequest"=> $dataLeaveRequest
+        ];
+        $export = new ExportLeaveEmployee($data);
+        return Excel::download($export, 'Leave Employee.xlsx');
     }
 }

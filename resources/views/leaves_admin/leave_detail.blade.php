@@ -12,6 +12,11 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     <a class="btn btn-outline-secondary" href="{{ url('/leaves/admin') }}">Back</a>
+                    @if (permissionAccess("m10-s1","is_export")->value == "1")
+                        @if (count($leave_requests) > 0)
+                            <a href="#" class="btn btn btn-outline-secondary btn_excel" data-id="{{$leave_requests[0]->employee_id}}"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i> @lang('lang.export')</a>
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>
@@ -210,6 +215,14 @@
                     });
                 }
             });
+        });
+        $(".btn_excel").on("click", function () {
+        let id = $(this).data("id");
+            var query = {
+                id:id
+            }
+            var url = "{{URL::to('leaves/employee/export')}}?" + $.param(query)
+            window.location = url;
         });
         $(document).on('click','.btn-rejected', function(){
             let id = $(this).data("id");
