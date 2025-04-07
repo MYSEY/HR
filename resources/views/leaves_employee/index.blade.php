@@ -91,7 +91,7 @@
         </div>
         {{-- @if (Auth::user()->RolePermission=="Employee") --}}
             <div class="page-header">
-                <div class="row align-items-center">
+                <div class="row align-items-center" style="display: flow;">
                     <div class="col">
                         <h4>@lang('lang.carried_forward_leave')</h4>
                         <ul class="breadcrumb">
@@ -99,7 +99,13 @@
                             <li class="breadcrumb-item">@lang('lang.year_2') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_2 : 0}}</span> @lang('lang.days')</li>
                             <li class="breadcrumb-item">@lang('lang.year_3') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_3 : 0}}</span> @lang('lang.days')</li>
                         </ul>
+                        
                     </div>
+                    @if (permissionAccess("m10-s2","is_export")->value == "1")
+                        <div style="text-align: end;">
+                            <a href="#" class="btn btn btn-outline-secondary btn_excel" data-id="{{Auth::user()->id}}"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i> @lang('lang.export')</a>
+                        </div>
+                    @endif
                 </div>
             </div>
         {{-- @endif --}}
@@ -424,6 +430,14 @@
                     });
                 }
             });
+        });
+        $(".btn_excel").on("click", function () {
+        let id = $(this).data("id");
+            var query = {
+                id:id
+            }
+            var url = "{{URL::to('leaves/employee/export')}}?" + $.param(query)
+            window.location = url;
         });
     });
     function print_pdf() {

@@ -84,109 +84,113 @@
             </div>
         </div>
     </div>
-
-
-    {{-- new create role permission --}}
-    <form  method="POST" enctype="multipart/form-data">
-        <input type="text" hidden name="parent_id" id="parent_id" value="{{Auth::user()->role_id}}">
-        @csrf
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="">@lang('lang.name') <span class="text-danger">*</span></label>
-                    <input class="form-control role_required @error('name') is-invalid @enderror" type="text"
-                        id="role_name" required name="role_name" value="{{ old('role_name') }}">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group hr-form-group-select2">
-                    <label class="">@lang('lang.type') <span class="text-danger">*</span></label>
-                    <select class="form-control hr-select2-option role_required" id="role_type" name="role_type" required>
-                        <option selected disabled value=""> -- @lang('lang.select') --</option>
-                        <option value="admin">Admin</option>
-                        <option value="developer">Developer</option>
-                        <option value="BOD">Board of Director</option>
-                        <option value="CEO">Chief Executive Officer</option>
-                        <option value="HRAdmin">HR Admin</option>
-                        <option value="HR">HR</option>
-                        <option value="HOD">Head of Department</option>
-                        <option value="DHOD">D-Head of Department</option>
-                        <option value="BM">Branch Manager</option>
-                        <option value="DBM">Deputy Branch Manager</option>
-                        <option value="Employee">Employee</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="">@lang('lang.remark')</label>
-                    <textarea style="height: 44px;" type="text" rows="3" class="form-control" name="remark" id="remark" value="{{ old('remark') }}"></textarea>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <label for="">Permission</label>
-        <div class="row">
-            @foreach ($permission as $per)
-                <div class="col-md-3 mb-2">
+    <div class="content">
+        {{-- new create role permission --}}
+        <form  method="POST" enctype="multipart/form-data">
+            <input type="text" hidden name="parent_id" id="parent_id" value="{{Auth::user()->role_id}}">
+            @csrf
+            <div class="row">
+                <div class="col-md-3">
                     <div class="form-group">
-                        <div class="card border-success draggable" draggable="true">
-                            <div class="card-header border-success">@lang($per->name)</div>
-                            <div class="card-body">
-                                <div class="mb-1 permission_all" data-id="{{$per->id}}"
-                                    data-name="{{$per->name}}"
-                                    data-subid="{{$per->sub_menu_id}}"
-                                    data-url="{{$per->url}}"
-                                    data-menu="{{$per->menu_id}}"
-                                    >
-                                    @if ($per->url == "dashboad/admin")
-                                        @php
-                                            $dashboardData = json_decode($per->is_dashboard, true);
-                                            $dashboardData = Arr::except($dashboardData, ['name', 'sub_menu_id', 'menu_id', 'url']);
-                                        @endphp
-                                        @foreach ($dashboardData as $key => $value)
-                                            <div class="custom-control custom-checkbox custom-control-inline">
-                                                <label class="container-checkbox">
-                                                    <input type="checkbox" class="dashboad_all_admin{{ $per->id }}" name="{{ $key }}" data-subid="{{$per->sub_menu_id}}">
-                                                    <span class="checkmark"></span> {{ ucfirst(str_replace('is_', ' ', $key)) }}
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    @else
-                                    <div class="custom-control custom-checkbox custom-control-inline">
-                                        @php
-                                            $pers = Arr::except($per, ['is_all', 'is_active']);
-                                        @endphp
-                                        @foreach ($pers->toArray() as $field => $value)
-                                            @if ($value == 1 && Str::startsWith($field, 'is_'))
-                                                <label class="container-checkbox">
-                                                    @if ($field == "is_create")
-                                                        @lang('lang.' . $field)
-                                                    @elseif($field == "is_access")
-                                                        @lang('lang.view_all_staff')
-                                                    @else
-                                                        @lang('lang.' . str_replace('is_', '', $field))
-                                                    @endif
-                                                    <input type="checkbox" class="dashboad_all_admin{{ $per->id }}" name="{{ $field }}" data-subid="{{$per->sub_menu_id}}">
-                                                    <span class="checkmark"></span>
-                                                </label>
-                                            @endif
-                                        @endforeach
+                        <label class="">@lang('lang.name') <span class="text-danger">*</span></label>
+                        <input class="form-control role_required @error('name') is-invalid @enderror" type="text"
+                            id="role_name" required name="role_name" value="{{ old('role_name') }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group hr-form-group-select2">
+                        <label class="">@lang('lang.type') <span class="text-danger">*</span></label>
+                        <select class="form-control hr-select2-option role_required" id="role_type" name="role_type" required>
+                            <option selected disabled value=""> -- @lang('lang.select') --</option>
+                            <option value="admin">Admin</option>
+                            <option value="developer">Developer</option>
+                            <option value="BOD">Board of Director</option>
+                            <option value="CEO">Chief Executive Officer</option>
+                            <option value="HRAdmin">HR Admin</option>
+                            <option value="HR">HR</option>
+                            <option value="HOD">Head of Department</option>
+                            <option value="DHOD">D-Head of Department</option>
+                            <option value="BM">Branch Manager</option>
+                            <option value="DBM">Deputy Branch Manager</option>
+                            <option value="Employee">Employee</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="">@lang('lang.remark')</label>
+                        <textarea style="height: 44px;" type="text" rows="3" class="form-control" name="remark" id="remark" value="{{ old('remark') }}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <label for="">Permission</label>
+            <div class="row">
+                @foreach ($permission as $per)
+                    <div class="col-md-3 mb-2">
+                        <div class="form-group">
+                            <div class="card border-success draggable" draggable="true">
+                                <div class="card-header border-success">@lang($per->name)</div>
+                                <div class="card-body">
+                                    <div class="mb-1 permission_all" data-id="{{$per->id}}"
+                                        data-name="{{$per->name}}"
+                                        data-subid="{{$per->sub_menu_id}}"
+                                        data-url="{{$per->url}}"
+                                        data-menu="{{$per->menu_id}}"
+                                        >
+                                        @if ($per->url == "dashboad/admin")
+                                            @php
+                                                $dashboardData = json_decode($per->is_dashboard, true);
+                                                $dashboardData = Arr::except($dashboardData, ['name', 'sub_menu_id', 'menu_id', 'url']);
+                                            @endphp
+                                            @foreach ($dashboardData as $key => $value)
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <label class="container-checkbox">
+                                                        <input type="checkbox" class="dashboad_all_admin{{ $per->id }}" name="{{ $key }}" data-subid="{{$per->sub_menu_id}}">
+                                                        <span class="checkmark"></span> {{ ucfirst(str_replace('is_', ' ', $key)) }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                            @php
+                                                $pers = Arr::except($per, ['is_all', 'is_active']);
+                                            @endphp
+                                            @foreach ($pers->toArray() as $field => $value)
+                                                @if ($value == 1 && Str::startsWith($field, 'is_'))
+                                                    <label class="container-checkbox">
+                                                        @if ($field == "is_create")
+                                                            @lang('lang.' . $field)
+                                                        @elseif($field == "is_access")
+                                                            @lang('lang.view_all_staff')
+                                                        @else
+                                                            @lang('lang.' . str_replace('is_', '', $field))
+                                                        @endif
+                                                        <input type="checkbox" class="dashboad_all_admin{{ $per->id }}" name="{{ $field }}" data-subid="{{$per->sub_menu_id}}">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        @endif
                                     </div>
-                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
-        <hr>
-        <div class="text-right">
-            <button type="button" class="btn btn-danger waves-effect waves-themed btn-submit">Submit</button>
-            <a class="btn btn-secondary waves-effect waves-themed"  href="{{url('role')}}"  type="button">Cancel</a>
-        </div>
-    </form>
+                @endforeach
+            </div>
+            <hr>
+
+            <div class="text-right" style="float: right">
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                    <button type="button" class="btn btn-danger waves-effect waves-themed btn-submit">Submit</button>
+                @endif
+                <a class="btn btn-secondary waves-effect waves-themed"  href="{{url('role')}}"  type="button">Cancel</a>
+            </div>
+        </form>
+    </div>
+    
 
     {{-- ****** old create role permission  ***** --}}
     {{-- @include('roles.interface_create') --}}
