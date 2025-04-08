@@ -1298,12 +1298,81 @@ class EmployeePayrollController extends Controller
         if (permissionAccess("m4-s7","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $data = $this->payrollRepo->getAllPayrollStaffResign($request);
+        // $data = $this->payrollRepo->getAllPayrollStaffResign($request);
+        $yearLy = Carbon::now()->format('Y');
+
+        if (request()->ajax()) {
+            // Define the base query
+            $query = ParyllStaffResign::leftJoin('users', 'paryll_staff_resigns.employee_id', '=', 'users.id')
+            ->leftJoin('positions','users.position_id','=','positions.id')
+            ->leftJoin('departments','users.department_id','=','departments.id')
+            ->leftJoin('branchs','users.branch_id','=','branchs.id')
+            ->select(
+                'paryll_staff_resigns.*',
+                'users.position_id',
+                'users.department_id',
+                'users.branch_id',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.date_of_commencement',
+                'users.basic_salary',
+                'positions.name_khmer as post_name_kh',
+                'positions.name_english as post_name_en',
+                'departments.name_khmer as depart_name_kh',
+                'departments.name_english as depart_name_en',
+                'branchs.branch_name_kh',
+                'branchs.branch_name_en',
+            )->whereYear('payment_date','=',$yearLy);
+            $query ->when($request->employee_name, function ($query, $employee_name) {
+                return $query->where('users.employee_name_en', 'LIKE', "%$employee_name%");
+            })
+            ->when($request->number_employee, function ($query, $number_employee) {
+                return $query->where('users.number_employee', $number_employee);
+            })
+            ->when($request->branch_id, function ($query, $branch_id) {
+                return $query->where('users.branch_id', $branch_id);
+            })
+            ->when($request->filter_month, function ($query, $filter_month) {
+                return $query->whereMonth('paryll_staff_resigns.payment_date', date('m', strtotime($filter_month)));
+            })->orderBy('users.number_employee', 'ASC');
+
+            // **Search Handling**
+            // $searchValue = request()->input('search.value');
+            // if (!empty($searchValue)) {
+            //     $query->where(function ($q) use ($searchValue) {
+            //         $q->where('payroll_previews.id', 'like', "%{$searchValue}%")
+            //         ->orWhere('payroll_previews.number_employee', 'like', "%{$searchValue}%")
+            //         ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
+            //         ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+            //         ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+            //         ->orWhere('departments.name_english', 'like', "%{$searchValue}%")
+            //         ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%");
+            //     });
+            // }
+
+            // Fetch paginated data
+            $recordsTotal = ParyllStaffResign::where('id', $request->id)->count();
+            $recordsFiltered = $query->count();
+            // Apply pagination for the actual data retrieval
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+            $data = $query->offset($start)->limit($limit)->get();
+
+            // Return JSON response
+            return response()->json([
+                'draw' => intval($request->input('draw')),  // Optional: for client-side tracking
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
+
         $staffResign = User::whereIn('emp_status',['3','4','5','6','7','8','9'])->get();
         $branch = Branchs::all();
         $exChangeRateSalary= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
         $exChangeRateNSSF= ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
-        return view('payrolls.payroll_staff_resign',compact('data','staffResign','branch','exChangeRateSalary','exChangeRateNSSF'));
+        return view('payrolls.payroll_staff_resign',compact('staffResign','branch','exChangeRateSalary','exChangeRateNSSF'));
     }
     public function payrollStaffResignCreate(Request $request){
         try{

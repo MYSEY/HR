@@ -147,7 +147,7 @@
                                                             @else
                                                                 <td>{{ $item->users->status_nssf ? $item->users->status_nssf == 1 ? 'កំពុងធ្វើការ' : 'មិនធ្វើការ' : ""}}</td>
                                                             @endif
-                                                            <td>$ {{$item->total_gross}}</td>
+                                                            <td>$ {{$item->base_salary_received_riel}}</td>
                                                             <td>{{ \Carbon\Carbon::parse($item->payment_date)->format('d-M-Y')}}</td>
                                                         </tr>
                                                     @endforeach

@@ -24,7 +24,7 @@ class ExportEForm implements FromCollection, WithColumnWidths, WithHeadings, Wit
         $dataExport = [];
         foreach ($export_data as $value) {
             $i++;
-            $this->totalBaseSalaryReceived += $value["total_gross"];
+            $this->totalBaseSalaryReceived += $value["base_salary_received_riel"];
             $joinOfDate = Carbon::createFromDate($value["users"]->date_of_commencement)->format('d-m-Y');
             $date_of_birth = Carbon::createFromDate($value["users"]->date_of_birth)->format('d-m-Y');
             $dataExport[] = [
@@ -44,7 +44,7 @@ class ExportEForm implements FromCollection, WithColumnWidths, WithHeadings, Wit
                 "position"                      => $value["users"] == null ? '' : $value["users"]->position->position_range,
                 "type_of_employees_nssf"        => $value["users"]->type_of_employees_nssf,
                 "status_nssf"                   => $value["users"]->status_nssf,
-                "total_gross"                   => $value["total_gross"],
+                "total_gross"                   => $value["base_salary_received_riel"],
                 "payment_date"                  => Carbon::parse($value["payment_date"])->format('d-M-Y'),
             ];
         }
@@ -136,24 +136,24 @@ class ExportEForm implements FromCollection, WithColumnWidths, WithHeadings, Wit
     public function headings(): array
     {
         return [
-                "ល.រ*",
-                "អត្ត.នៅសហគ្រាស",
-                "លេខអត្ត.ប.ស.ស",
-                "អត្ត.ប្រជាពលរដ្ឋ",
-                "គោតនាម",
-                "នាម",
-                "គោតនាមឡាតាំង",
-                "នាមឡាតាំង",
-                "ភេទ*",
-                "ថ្ងៃខែឆ្នាំកំណើត*",
-                "សញ្ជាតិ*",
-                "កាលបរិ.ចូលធ្វើការ",
-                "ក្រុម",
-                "តួនាទី",
-                "ប្រភេទនិយោជិត",
-                "ស្ថានភាព",
-                "ប្រាក់បៀវត្ស(រៀល/ដុល្លា)",
-                "កាលបរិច្ឆេទទូទាត់",
+            "ល.រ*",
+            "អត្ត.នៅសហគ្រាស",
+            "លេខអត្ត.ប.ស.ស",
+            "អត្ត.ប្រជាពលរដ្ឋ",
+            "គោតនាម",
+            "នាម",
+            "គោតនាមឡាតាំង",
+            "នាមឡាតាំង",
+            "ភេទ*",
+            "ថ្ងៃខែឆ្នាំកំណើត*",
+            "សញ្ជាតិ*",
+            "កាលបរិ.ចូលធ្វើការ",
+            "ក្រុម",
+            "តួនាទី",
+            "ប្រភេទនិយោជិត",
+            "ស្ថានភាព",
+            "ប្រាក់បៀវត្ស(រៀល/ដុល្លា)",
+            "កាលបរិច្ឆេទទូទាត់",
         ];
     }
 }
