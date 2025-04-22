@@ -186,7 +186,9 @@
             </div>
             <hr>
             <div class="text-right" style="float: right">
-                <button type="button" class="btn btn-danger waves-effect waves-themed btn-submit">Submit</button>
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                    <button type="button" class="btn btn-danger waves-effect waves-themed btn-submit">Submit</button>
+                @endif
                 <a class="btn btn-secondary waves-effect waves-themed"  href="{{url('role')}}"  type="button">Cancel</a>
             </div>
         </form>
