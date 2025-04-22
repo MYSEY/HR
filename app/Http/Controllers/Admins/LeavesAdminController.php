@@ -476,8 +476,9 @@ class LeavesAdminController extends Controller
                 ->whereIn('id', $request->ids)
                 ->update([
                     'status'        => "approved",
-                    'approved_date' => Carbon::now(),
-                    'approved_by'   => Auth::user()->id,
+                    // 'approved_date' => Carbon::now(),
+                    // 'approved_by'   => Auth::user()->id,
+                    'updated_by'   => Auth::user()->id,
             ]);
             DB::commit();
             return response()->json([
