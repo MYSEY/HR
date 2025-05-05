@@ -491,7 +491,7 @@
                             <input type="hidden" name="id" class="e_id" value="">
                             <div class="row">
                                 <div class="submit-section" style="text-align: center">
-                                    <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                    <button type="submit" class="btn btn-primary me-2">@lang('lang.delete')</button>
                                     <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
                                 </div>
                             </div>
