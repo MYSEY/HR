@@ -64,6 +64,7 @@ return[
 	"approved"=>"បានអនុម័ត",
 	"approved_by"=>"បានអនុម័តដោយ",
 	"approve_by"=>"បានអនុម័តដោយ",
+    "approval_date_must_be_greater_than_or_equal_to_request_date"=>"កាលបរិច្ឆេទអនុម័តត្រូវតែធំឬស្មើនឹងសំណើកាលបរិច្ឆេទ",
 	"apps"=>"កម្មវិធី",
 	"archive"=>"Archive-ឈប់ប្រើប្រាស់",
 	"are"=>"គឺ",
