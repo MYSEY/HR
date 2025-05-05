@@ -315,6 +315,7 @@ return[
     "expense_report"=>"Expense Reports",
     "general_request"=>"General Expense",
     "exchange_rate_created_successfully"=>"Exchange rate created successfully",
+    "exspanse_management"=>"Expense Management",
     "en"=>"EN",
     "effective_date"=>"Effective Date",
     "end_date"=>"End Date",
