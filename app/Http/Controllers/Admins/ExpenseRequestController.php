@@ -15,6 +15,7 @@ use App\Models\FnRegularExspense;
 use App\Models\FnTaxRate;
 use App\Models\GenerateIdExpense;
 use App\Models\permissions;
+use App\Models\User;
 use App\Traits\GeneratingCode;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -37,25 +38,35 @@ class ExpenseRequestController extends Controller
         if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-
         $datas = ExpenseRequest::with(["requestBy","approveBy","locationDetails","departments", "createdBy"])->where("created_by", Auth::user()->id)->orderBy('id', 'DESC')->get();
-        $dataAsign = ExpenseRequest::with(["requestBy", "approveBy", "locationDetails", "departments", "createdBy"])
-            ->when(Auth::user()->RolePermission, function ($queryA, $RolePermission) {
-                if (in_array($RolePermission, ['BOD', 'CEO', 'HOD','BM','DHOD','DBM'])){
-                    $queryA->where(function ($query) {
-                        $query->where('approve_by', Auth::user()->id)
-                            ->where('status', "pending_approve");
-                    });
-                }else{
-                    $queryA->where(function ($query) {
-                        $query->whereNot('created_by', Auth::user()->id)
-                            ->whereJsonContains('position_review', Auth::user()->position_id);
-                    });
-                }
+        $user = Auth::user();
+        $dataAsign = ExpenseRequest::with(['requestBy', 'approveBy', 'locationDetails', 'departments', 'createdBy'])
+            ->leftJoin('users', 'expense_requests.request_by', '=', 'users.id')
+            ->select(
+                'expense_requests.*',
+                'users.line_manager',
+                'users.department_id',
+                'users.branch_id',
+            )
+            ->where('expense_requests.status', '!=', "rejected")
+            ->whereNot('expense_requests.created_by', $user->id)
+            ->where(function ($query) use ($user) {
+                $query->where(function ($q) use ($user) {
+                    $q->where('expense_requests.status', 'pending_approve')
+                    ->where('expense_requests.approve_by', $user->id);
+                })->orWhere(function ($q) use ($user) {
+                    if($user->branch->abbreviations == "HQ"){
+                        $q->where('expense_requests.status', '!=', 'pending_approve')
+                        ->where('users.department_id', $user->department_id)
+                        ->whereJsonContains('expense_requests.position_review', $user->position_id);
+                    }else{
+                        $q->where('expense_requests.status', '!=', 'pending_approve')
+                        ->where('users.branch_id', $user->branch_id)
+                        ->whereJsonContains('expense_requests.position_review', $user->position_id);
+                    }
+                });
             })
-            ->whereNot('created_by', Auth::user()->id)
-            ->where('status', '!=', "rejected")
-            ->orderBy('id', 'DESC')
+            ->orderBy('expense_requests.id', 'DESC')
             ->get();
         return view('FN_ExpenseRequests.index',compact(['permission','datas', 'dataAsign']));
     }
