@@ -91,7 +91,7 @@
                                         {{ Str::limit($item->subject, 30, '...') }}
                                     </td>
                                     <td>{{$item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i') : ''}}</td>
-                                    <td>{{$item->date_approve ? \Carbon\Carbon::parse($item->date_approve)->format('d-M-Y H:i') : ''}}</td>
+                                    <td>{{$item->date_approve ? \Carbon\Carbon::parse($item->date_approve)->format('d-M-Y') : ''}}</td>
 
                                     @php
                                         $locations = "";
@@ -137,6 +137,7 @@
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{asset('/admin/js/convertNumberToWordsExp.js')}}"></script>
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
+<script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script>
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip({ 
@@ -164,6 +165,18 @@
             $(".p_payment_term").text(datas.payment_term);
             $(".p_approved_by").text(datas.approve_by.employee_name_kh);
             $(".p_request_by").text(datas.request_by.employee_name_kh);
+            let day = ".......";
+            let month = ".......";
+            let year = ".......";
+            if (datas.date_approve) {
+                let date_approve = new Date(datas.date_approve);
+                day = formatDate( date_approve, 'km', format_date={day: true});
+                month = formatDate( date_approve, 'km', format_date={month: true});
+                year = formatDate( date_approve, 'km', format_date={year: true});
+            }
+            $(".p_day").text(day);
+            $(".p_month").text(month);
+            $(".p_year").text(year);
             let tr_a = "";
             let tr_b = "";
             if (datas.location_details.length === 1) {

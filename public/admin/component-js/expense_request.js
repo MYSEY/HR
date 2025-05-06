@@ -372,7 +372,7 @@ $(document).ready(function() {
                     if(response.status == 404){
                         new Noty({
                             title: "",
-                            text: 'Please to set up lovel review request expense',
+                            text: 'Please to set up level review request expense',
                             type: "error",
                             timeout: 3000,
                             icon: true

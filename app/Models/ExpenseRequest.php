@@ -131,7 +131,7 @@ class ExpenseRequest extends Model
             'personal_phone_number',
         )->with("position");
     }
-    public function getPositionReviewAttribute()
+    public function getPositionReviewsAttribute()
     {
         if (is_array($this->attributes['position_review'] ?? null)) {
             $ids = $this->attributes['position_review'];
@@ -144,10 +144,42 @@ class ExpenseRequest extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'position_id',
+            'branch_id',
+            'department_id',
+            'gender',
+            'date_of_commencement',
+            'personal_phone_number',
+        );
     }
     public function upldatedBy()
     {
-        return $this->belongsTo(User::class ,'updated_by');
+        return $this->belongsTo(User::class ,'updated_by')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'position_id',
+            'branch_id',
+            'department_id',
+            'gender',
+            'date_of_commencement',
+            'personal_phone_number',
+        );
     }
 }

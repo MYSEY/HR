@@ -74,54 +74,66 @@
                 <div class="style-table">
                         <table style="width:100%">
                             <tr>
-                                <td class="table_tr_">១ ថ្លៃសម្ភារៈចំនួន</td>
+                                <td class="table_tr_" colspan="2">១ ថ្លៃសម្ភារៈចំនួន</td>
                             </tr>
                             <tr>
-                                <td class="table_tr_">២ ថ្លៃពលកម្ម/ជួល/សេវា/ផ្សេងៗ</td>
+                                <td class="table_tr_" colspan="2">២ ថ្លៃពលកម្ម/ជួល/សេវា/ផ្សេងៗ</td>
                             </tr>
                             <tr>
-                                <td class="table_tr_">៣ សរុបចំណាយ (១+២)</td>
+                                <td class="table_tr_" colspan="2">៣ សរុបចំណាយ (១+២)</td>
                             </tr>
                             <tr>
-                                <td class="table_tr_">៤ ពន្ធកាត់ទុក</td>
+                                <td class="table_tr_" colspan="2">៤ ពន្ធកាត់ទុក</td>
                             </tr>
                             <tr>
-                                <td class="table_tr_">៥ អាករជំនួស (VAT Reverse Charge) ១០% </td>
+                                <td class="table_tr_" colspan="2">៥ អាករជំនួស (VAT Reverse Charge) ១០% </td>
                             </tr>
                             <tr>
-                                <td class="table_tr_">៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))</td>
+                                <td class="table_tr_" colspan="2">៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))</td>
                             </tr>
                             <tr>
-                                <td class="table_tr_">- បើកជូនអ្នកផ្គត់ផ្គង់ជាអក្សរ</td>
+                                <td class="table_tr_" colspan="2">- បើកជូនអ្នកផ្គត់ផ្គង់ជាអក្សរ (ដុល្លារអាមេរិក)</td>
                             </tr>
                             <tr>
-                                <td class="table_tr_">- លក្ខខណ្ឌទូទាត់</td>
+                                <td class="table_tr_" colspan="2">- បើកជូនអ្នកផ្គត់ផ្គង់ជាអក្សរ (រៀល)</td>
+                            </tr>
+                            <tr>
+                                <td class="table_tr_" colspan="2">- លក្ខខណ្ឌទូទាត់</td>
                             </tr>
                         </table>
                         <table style="width:100%">
                             <tr>
                                 <td class="table_tr">: $ <span class="p_ge_cost_material_usd"></span></td>
+                                <td class="table_tr">៛ <span class="p_ge_cost_material_kh"></span></td>
                             </tr>
                             <tr>
                                 <td class="table_tr">: $ <span class="p_ge_cost_lso_usd"></span></td>
+                                <td class="table_tr">៛ <span class="p_ge_cost_lso_kh"></span></td>
                             </tr>
                             <tr>
                                 <td class="table_tr">: $ <span class="p_ge_total_cost_usd"></span></td>
+                                <td class="table_tr">៛ <span class="p_ge_total_cost_kh"></span></td>
                             </tr>
                             <tr>
                                 <td class="table_tr">: $ <span class="p_ge_tax_usd"></span></td>
+                                <td class="table_tr">៛ <span class="p_ge_tax_kh"></span></td>
                             </tr>
                             <tr>
                                 <td class="table_tr">: $ <span class="p_ge_vat_reverse_charge_usd"></span></td>
+                                <td class="table_tr">៛ <span class="p_ge_vat_reverse_charge_kh"></span></td>
                             </tr>
                             <tr>
                                 <td class="table_tr">: $ <span class="p_ge_total_amount_usd"></span></td>
+                                <td class="table_tr">៛ <span class="p_ge_total_amount_kh"></span></td>
                             </tr>
                             <tr>
-                                <td class="table_tr">: <span class="p_convertNumberDollar"></span></td>
+                                <td class="table_tr" colspan="2">: <span class="p_convertNumberDollar"></span></td>
                             </tr>
                             <tr>
-                                <td class="table_tr">: <span class="p_payment_term"></span></td>
+                                <td class="table_tr" colspan="2">: <span class="p_convertNumberRiel"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="table_tr" colspan="2">: <span class="p_payment_term"></span></td>
                             </tr>
                         </table>
                 </div>
@@ -131,7 +143,7 @@
                     </td></tr>
                 </table>
                 <div style="float: right">
-                    <label style="font-size: 16px;">ភ្នំពេញ, ថ្ងៃទី......... ខែ........ ឆ្នាំ២០.......</label>
+                    <label style="font-size: 16px;">ភ្នំពេញ, ថ្ងៃទី <span class="p_day"></span> ខែ <span class="p_month"></span> ឆ្នាំ <span class="p_year"></span></label>
                 </div>
             </div>
         </div><br>

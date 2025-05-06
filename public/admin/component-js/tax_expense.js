@@ -301,18 +301,44 @@ $(document).ready(function() {
                 contentType: false,  // Set content type to false (for file upload)
                 dataType: "JSON",
                 success: function(response) {
-                    if (response.message) {
+                    if (response.status == 200) {
                         $("." + buttonSubmit).attr('disabled',false);
                         $(".loading-icon").css("display", "none");
                         $(".btn-txt").css("display", "block");
                         new Noty({
                             title: "",
-                            text: '@lang("lang.create_new_role_successfully")',
+                            text: 'Create successfully',
                             type: "success",
                             icon: true
                         }).show();
                         window.location.replace(expenseRequestListUrl);
                     }
+                    if(response.status == 404){
+                        new Noty({
+                            title: "",
+                            text: 'Please to set up level review request expense',
+                            type: "error",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                        setTimeout(function () {
+                            $("." + buttonSubmit).attr('disabled',false);
+                            $(".loading-icon").css("display", "none");
+                            $(".btn-txt").css("display", "block");
+                        }, 500);
+                    }
+                    // if (response.message) {
+                    //     $("." + buttonSubmit).attr('disabled',false);
+                    //     $(".loading-icon").css("display", "none");
+                    //     $(".btn-txt").css("display", "block");
+                    //     new Noty({
+                    //         title: "",
+                    //         text: '@lang("lang.create_new_role_successfully")',
+                    //         type: "success",
+                    //         icon: true
+                    //     }).show();
+                    //     window.location.replace(expenseRequestListUrl);
+                    // }
                 }
             });
         }
