@@ -30,7 +30,7 @@
                     <div class="row">
                         <label class="col-sm-2 col-form-label" style="font-weight: bold;">យោង៖</label>
                         <div class="col-sm-10">
-                            <label class="col-form-label" id="v_reference"></label>
+                            <div class="col-form-label" id="v_reference"></div>
                         </div>
                     </div>
                     <div class="row">

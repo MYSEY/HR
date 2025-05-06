@@ -41,9 +41,9 @@
                                     @php
                                         $positionReviews = "";
                                         if ($item->status == "pending" ) {
-                                            if (count($item->PositionReview)>0) {
+                                            if (count($item->PositionReviews)>0) {
                                                 $num = 1;
-                                                foreach ($item->PositionReview as $key => $position) {
+                                                foreach ($item->PositionReviews as $key => $position) {
                                                     $positionReviews .= $num . ". " . $position->name_english . "\n";
                                                     $num++;
                                                 }

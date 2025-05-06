@@ -6,6 +6,9 @@
         max-width: 300px !important; 
         /* word-wrap: break-word !important; */
     }
+    #v_reference {
+        white-space: normal;
+    }
 </style>
 @section('content')
     <div class="">
@@ -89,6 +92,7 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{asset('/admin/js/convertNumberToWordsExp.js')}}"></script>
+<script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script>
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip({ 
@@ -99,6 +103,8 @@
     $(function() {
         $(".btn-review").on("click", function () {
             var datas = $(this).data('datas');
+            var reference = $(this).attr('data-reference');
+            $("#v_reference").html(reference);
             $('#v-btn-reject').data('id', datas.id);
             $('#v-btn-approve').data('id', datas.id);
             $('#v-btn-approve').data('daterequest', datas.date_request);
@@ -130,7 +136,6 @@
 
             $("#v_kind_regard").val(datas.kind_regard);
             $("#v_subject").val(datas.subject);
-            $("#v_reference").text(datas.reference);
             $("#v_reason_subject").val(datas.reason_subject);
             $("#v_payment_term").text(datas.payment_term);
             $("#v_cost_material_usd").text("$ "+datas.ge_cost_material_usd);
@@ -348,17 +353,37 @@
             $(".p_reference").text(datas.reference);
             $(".p_reason_subject").text(datas.reason_subject);
             $(".p_ge_cost_material_usd").text(datas.ge_cost_material_usd);
+            $(".p_ge_cost_material_kh").text(datas.ge_cost_material_riel);
             $(".p_ge_cost_lso_usd").text(datas.ge_cost_lso_usd);
+            $(".p_ge_cost_lso_kh").text(datas.ge_cost_lso_riel);
             $(".p_ge_total_cost_usd").text(datas.ge_total_cost_usd);
+            $(".p_ge_total_cost_kh").text(datas.ge_total_cost_riel);
             $(".p_ge_tax_usd").text(datas.ge_tax_usd);
+            $(".p_ge_tax_kh").text(datas.tax_riel);
             $(".p_ge_vat_reverse_charge_usd").text(datas.ge_vat_reverse_charge_usd);
+            $(".p_ge_vat_reverse_charge_kh").text(datas.vat_reverse_charge_riel);
             $(".p_ge_total_amount_usd").text(datas.ge_total_amount_usd);
+            $(".p_ge_total_amount_kh").text(datas.ge_total_amount_riel);
             let convertNumber = convertNumberToWordsExp(datas.ge_total_amount_usd,"dollar");
+            let convertNumberRiel = convertNumberToWordsExp(datas.ge_total_amount_riel,"rial");
             $(".p_convertNumberDollar").text(convertNumber);
+            $(".p_convertNumberRiel").text(convertNumberRiel);
             document.getElementById("GEXP_remark").innerHTML = nl2brWithIndent(datas.remark);
             $(".p_payment_term").text(datas.payment_term);
             $(".p_approved_by").text(datas.approve_by.employee_name_kh);
             $(".p_request_by").text(datas.request_by.employee_name_kh);
+            let day = ".......";
+            let month = ".......";
+            let year = ".......";
+            if (datas.date_approve) {
+                let date_approve = new Date(datas.date_approve);
+                day = formatDate( date_approve, 'km', format_date={day: true});
+                month = formatDate( date_approve, 'km', format_date={month: true});
+                year = formatDate( date_approve, 'km', format_date={year: true});
+            }
+            $(".p_day").text(day);
+            $(".p_month").text(month);
+            $(".p_year").text(year);
             let tr_a = "";
             let tr_b = "";
             if (datas.location_details.length === 1) {
@@ -389,24 +414,44 @@
             print_pdf("print_expense")
         });
         $('.btn-TEXP-print').on('click', function() {
+            $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
-            console.log("datas: ", datas);
             $(".p_kind_regard").text(datas.kind_regard);
             $(".p_subject").text(datas.subject);
             $(".p_reference").text(datas.reference);
             $(".p_reason_subject").text(datas.reason_subject);
+            $(".p_ge_cost_material_usd").text(datas.ge_cost_material_usd);
             $(".p_ge_cost_material_riel").text(datas.ge_cost_material_riel);
+            $(".p_ge_cost_lso_usd").text(datas.ge_cost_lso_usd);
             $(".p_ge_cost_lso_riel").text(datas.ge_cost_lso_riel);
+            $(".p_te_tax_usd").text(datas.ge_tax_usd);
             $(".p_te_tax_income").text(datas.te_tax_income);
+            $(".p_ge_total_cost_usd").text(datas.ge_total_cost_usd);
             $(".p_ge_total_cost_riel").text(datas.ge_total_cost_riel);
+            $(".p_vat_reverse_charge_usd").text(datas.ge_vat_reverse_charge_usd);
             $(".p_vat_reverse_charge_riel").text(datas.vat_reverse_charge_riel);
+            $(".p_te_total_usd").text(datas.ge_total_amount_usd);
             $(".p_te_total_tax").text(datas.te_total_tax);
-            let convertNumber = convertNumberToWordsExp(datas.te_total_tax,"rial");
+            let convertNumberRiel = convertNumberToWordsExp(datas.te_total_tax,"rial");
+            let convertNumber = convertNumberToWordsExp(datas.ge_total_amount_usd,"dollar");
+            $(".p_convertNumberRiel").text(convertNumberRiel);
             $(".p_convertNumberDollar").text(convertNumber);
             document.getElementById("TEXP_remark").innerHTML = nl2brWithIndent(datas.remark);
             $(".p_payment_term").text(datas.payment_term);
             $(".p_approved_by").text(datas.approve_by.employee_name_kh);
             $(".p_request_by").text(datas.request_by.employee_name_kh);
+            let day = ".......";
+            let month = ".......";
+            let year = ".......";
+            if (datas.date_approve) {
+                let date_approve = new Date(datas.date_approve);
+                day = formatDate( date_approve, 'km', format_date={day: true});
+                month = formatDate( date_approve, 'km', format_date={month: true});
+                year = formatDate( date_approve, 'km', format_date={year: true});
+            }
+            $(".p_day").text(day);
+            $(".p_month").text(month);
+            $(".p_year").text(year);
             // let tr_a = "";
             // let tr_b = "";
             // if (datas.departments.length === 1) {
