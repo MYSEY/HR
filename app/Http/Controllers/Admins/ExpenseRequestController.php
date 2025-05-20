@@ -41,32 +41,25 @@ class ExpenseRequestController extends Controller
         $datas = ExpenseRequest::with(["requestBy","approveBy","locationDetails","departments", "createdBy"])->where("created_by", Auth::user()->id)->orderBy('id', 'DESC')->get();
         $user = Auth::user();
         $dataAsign = ExpenseRequest::with(['requestBy', 'approveBy', 'locationDetails', 'departments', 'createdBy'])
-            ->leftJoin('users', 'expense_requests.request_by', '=', 'users.id')
-            ->select(
-                'expense_requests.*',
-                'users.line_manager',
-                'users.department_id',
-                'users.branch_id',
-            )
-            ->where('expense_requests.status', '!=', "rejected")
-            ->whereNot('expense_requests.created_by', $user->id)
+            ->where('status', '!=', "rejected")
+            ->whereNot('created_by', $user->id)
             ->where(function ($query) use ($user) {
                 $query->where(function ($q) use ($user) {
-                    $q->where('expense_requests.status', 'pending_approve')
-                    ->where('expense_requests.approve_by', $user->id);
+                    $q->where('status', 'pending_approve')
+                    ->where('approve_by', $user->id);
                 })->orWhere(function ($q) use ($user) {
                     if($user->branch->abbreviations == "HQ"){
-                        $q->where('expense_requests.status', '!=', 'pending_approve')
-                        ->where('users.department_id', $user->department_id)
-                        ->whereJsonContains('expense_requests.position_review', $user->position_id);
+                        $q->where('status', '!=', 'pending_approve')
+                        ->where('location_review', $user->department_id)
+                        ->whereJsonContains('position_review', $user->position_id);
                     }else{
-                        $q->where('expense_requests.status', '!=', 'pending_approve')
-                        ->where('users.branch_id', $user->branch_id)
-                        ->whereJsonContains('expense_requests.position_review', $user->position_id);
+                        $q->where('status', '!=', 'pending_approve')
+                        ->where('location_review', $user->branch_id)
+                        ->whereJsonContains('position_review', $user->position_id);
                     }
                 });
             })
-            ->orderBy('expense_requests.id', 'DESC')
+            ->orderBy('id', 'DESC')
             ->get();
         return view('FN_ExpenseRequests.index',compact(['permission','datas', 'dataAsign']));
     }
@@ -106,16 +99,26 @@ class ExpenseRequestController extends Controller
         ]));
     }
 
-    function lovelReview($by_location, $request_type, $type, $amount){
-        $positionReview = FnLevelReviewer::where("from_location", $by_location)
-        ->where("request_type", $request_type)
-        ->where("type",$type)
-        ->when($amount, function ($query, $total_amount_usd) {
-            $query->where('from_amount', '<', $total_amount_usd);
-        })
-        ->when($amount, function ($query, $total_amount_usd) {
-            $query->where('to_amount','>=', $total_amount_usd);
-        })->orderBy('id', 'DESC')->first();
+    function lovelReview($dataLevelView){
+
+        $positionReview = FnLevelReviewer::where("from_location", $dataLevelView["by_location"])
+            ->where("type", $dataLevelView["type"])
+            ->when(isset($dataLevelView["request_type"]), function ($query) use ($dataLevelView) {
+                $request_type = $dataLevelView["request_type"];
+                $query->where('request_type', $request_type);
+
+                if (!in_array($request_type, [1, 2])) {
+                    $query->where('reference_type', $dataLevelView["reference_type"]);
+                }
+            })
+            ->when(isset($dataLevelView["amount"]), function ($query) use ($dataLevelView) {
+                $total_amount_usd = $dataLevelView["amount"];
+                $query->where('from_amount', '<', $total_amount_usd)
+                    ->where('to_amount', '>=', $total_amount_usd);
+            })
+            ->orderBy('id', 'DESC')
+            ->first();
+
         return $positionReview;
     }
 
@@ -129,10 +132,19 @@ class ExpenseRequestController extends Controller
     {
         DB::beginTransaction();
         try {
+            $dataCheckLevelView = [
+                "by_location"=> 2,
+                "request_type"=> $request->type,
+                "reference_type"=> $request->expense_type,
+                "type"=> 1,
+                "amount"=> $request->ge_total_amount_usd,
+            ];
+
             if(Auth::user()->branch->abbreviations == "HQ"){
-                $positionReview = self::lovelReview(2, $request->type, 1, $request->ge_total_amount_usd);
+                $positionReview = self::lovelReview($dataCheckLevelView);
             }else{
-                $positionReview = self::lovelReview(1, $request->type, 1, $request->ge_total_amount_usd);
+                $dataCheckLevelView["by_location"] = 1;
+                $positionReview = self::lovelReview($dataCheckLevelView);
             }
             $data = $request->all();
             if ($request->hasFile('fn_invoice')) {
@@ -153,30 +165,34 @@ class ExpenseRequestController extends Controller
             $data['tracking_id']        = $this->generateExpenseCode(Carbon::today())['tracking_id'];
             $data['payment_term']       = $request->paymentTerms;
 
-            if ($request->expense_type == 1) {
+            // if ($request->expense_type == 1) {
                 //** Rrgular Expense **//
-                $data['status']             = 'pending_approve';
-            }else{
+            //     $data['status']             = 'pending_approve';
+            // }else{
                 //** Irrgular Expense **//
-                if(!$positionReview){
-                    return response()->json([
-                        'error'=>'lang.please_to_set_up_lovel_review_request_expense',
-                        'status'=>404,
-                    ]);
-                }
+                // if(!$positionReview){
+                //     return response()->json([
+                //         'error'=>'lang.please_to_set_up_lovel_review_request_expense',
+                //         'status'=>404,
+                //     ]);
+                // }
                 $data['status']             = 'pending';
+                if (Auth::user()->branch->abbreviations != "HQ") {
+                    $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
+                }else{
+                    $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
+                }
                 $data['position_review']    = json_encode($positionReview->id_positions);
                 $data['review_type']        = $positionReview->type;
-            }
-           
+            // }   
 
             $data['request_by']         = Auth::user()->id;
             $data['date_request']       = Carbon::createFromDate()->format('Y-m-d H:i');
             $data['created_by']         = Auth::user()->id;
-            GenerateIdExpense::create([
-                'tracking_id' => $data['tracking_id'],
-                'created_by'  => Auth::user()->id,
-            ]);
+            // GenerateIdExpense::create([
+            //     'tracking_id' => $data['tracking_id'],
+            //     'created_by'  => Auth::user()->id,
+            // ]);
             unset($data['fn_invoice']);
             $expense = ExpenseRequest::create($data);
             $locations = [];
@@ -191,8 +207,16 @@ class ExpenseRequestController extends Controller
             }
             if (!empty($locations)) {
                 FnDetailLocation::insert($locations);
+            }else{
+                if (Auth::user()->branch->abbreviations != "HQ"){
+                    FnDetailLocation::create([
+                        'expense_request_id' => $expense->id,
+                        'location_id'        => Auth::user()->branch_id,
+                        'amount_usd'         => $request->ge_total_amount_usd,
+                        'amount_riel'        => $request->ge_total_amount_riel,
+                    ]);
+                }
             }
-
             DB::commit();
             return response()->json(['message' => 'The process has been successfully.', 'status'=>200]);
         } catch (\Exception $e) {
@@ -276,15 +300,22 @@ class ExpenseRequestController extends Controller
     {
         DB::beginTransaction();
         try{
-            // $positionReview = self::lovelReview($request->type, 1, $request->ge_total_amount_usd);
+            $dataCheckLevelView = [
+                "by_location"=> 2,
+                "request_type"=> $request->type,
+                "reference_type"=> $request->expense_type,
+                "type"=> 1,
+                "amount"=> $request->ge_total_amount_usd,
+            ];
             if(Auth::user()->branch->abbreviations == "HQ"){
-                $positionReview = self::lovelReview(2, $request->type, 1, $request->ge_total_amount_usd);
+                $positionReview = self::lovelReview($dataCheckLevelView);
             }else{
-                $positionReview = self::lovelReview(1, $request->type, 1, $request->ge_total_amount_usd);
+                $dataCheckLevelView["by_location"] = 1;
+                $positionReview = self::lovelReview($dataCheckLevelView);
             }
             $data = ExpenseRequest::find($request->id);
              // ***  block create history *** //
-            if ($data->status == "rejected") {
+            // if ($data->status == "rejected") {
                 $oldId = ExpenseRequestHistory::where("expense_id", $request->id)->count();
                 $dataHistory = $data->toArray();
                 $dataHistory['expense_id'] = $data->id;
@@ -292,7 +323,7 @@ class ExpenseRequestController extends Controller
                 unset($dataHistory['id']);
                 ExpenseRequestHistory::create($dataHistory);
                 $data['status']             = 'pending';
-            }
+            // }
             
             // ***  block update reference or add new reference *** //
             if ($request->e_fn_invoice) {
@@ -340,87 +371,98 @@ class ExpenseRequestController extends Controller
                 }
             }
             // ***  block update locations or add new locations *** //
-            $locations = [];
-            $locationArrays = json_decode($request->locations, true) ?? [];
-            $totalLocations = FnDetailLocation::where('expense_request_id', $request->id)->count();
-            $locationCount = count($locationArrays); // Store the count once
-            
-            if ($locationCount > $totalLocations) {
-                foreach ($locationArrays as $location) {
-                    $dataLocation = FnDetailLocation::where('expense_request_id', $request->id)
-                        ->where('location_id', $location['id'])
-                        ->first();
-            
-                    if ($dataLocation) {
-                        // Update existing location
-                        $dataLocation->amount_usd = $location['amount_usd'];
-                        $dataLocation->amount_riel = $location['amount_kh'];
-                        $dataLocation->save();
-                    } else {
-                        // Prepare for batch insert if not found
-                        $locations[] = [
-                            'expense_request_id' => $request->id,
-                            'location_id'        => $location['id'],
-                            'amount_usd'         => $location['amount_usd'],
-                            'amount_riel'        => $location['amount_kh'],
-                        ];
+            if (Auth::user()->branch->abbreviations != "HQ"){
+                $detailLocation = FnDetailLocation::where("expense_request_id", $request->id)->first();
+                $detailLocation["amount_usd"] = $request->ge_total_amount_usd;
+                $detailLocation["amount_riel"] = $request->ge_total_amount_riel;
+                $detailLocation->save();
+            }else{
+                $locations = [];
+                $locationArrays = json_decode($request->locations, true) ?? [];
+                $totalLocations = FnDetailLocation::where('expense_request_id', $request->id)->count();
+                $locationCount = count($locationArrays); // Store the count once
+                if ($locationCount > $totalLocations) {
+                    foreach ($locationArrays as $location) {
+                        $dataLocation = FnDetailLocation::where('expense_request_id', $request->id)
+                            ->where('location_id', $location['id'])
+                            ->first();
+                
+                        if ($dataLocation) {
+                            // Update existing location
+                            $dataLocation->amount_usd = $location['amount_usd'];
+                            $dataLocation->amount_riel = $location['amount_kh'];
+                            $dataLocation->save();
+                        } else {
+                            // Prepare for batch insert if not found
+                            $locations[] = [
+                                'expense_request_id' => $request->id,
+                                'location_id'        => $location['id'],
+                                'amount_usd'         => $location['amount_usd'],
+                                'amount_riel'        => $location['amount_kh'],
+                            ];
+                        }
                     }
-                }
-            
-                if (!empty($locations)) {
-                    FnDetailLocation::insert($locations);
-                }
-            } else{
-                // Get all location IDs that exist in the database but not in the new array for deletion
-                $existingLocations = FnDetailLocation::where('expense_request_id', $request->id)
-                    ->whereNotIn('location_id', array_column($locationArrays, 'id'))
-                    ->get();
-                foreach ($existingLocations as $existingLocation) {
-                    // Delete locations that are no longer present
-                    $existingLocation->delete();
-                }
-                // Now proceed with adding new locations or updating existing ones
-                foreach ($locationArrays as $location) {
-                    $dataLocation = FnDetailLocation::where('expense_request_id', $request->id)
-                        ->where('location_id', $location['id'])
-                        ->first();
-            
-                    if ($dataLocation) {
-                        // Update existing location
-                        $dataLocation->amount_usd = $location['amount_usd'];
-                        $dataLocation->amount_riel = $location['amount_kh'];
-                        $dataLocation->save();
-                    } else {
-                        // Prepare for batch insert
-                        $locations[] = [
-                            'expense_request_id' => $request->id,
-                            'location_id'        => $location['id'],
-                            'amount_usd'         => $location['amount_usd'],
-                            'amount_riel'        => $location['amount_kh'],
-                        ];
+                
+                    if (!empty($locations)) {
+                        FnDetailLocation::insert($locations);
                     }
-                }
-            
-                if (!empty($locations)) {
-                    FnDetailLocation::insert($locations);
+                } else{
+                    // Get all location IDs that exist in the database but not in the new array for deletion
+                    $existingLocations = FnDetailLocation::where('expense_request_id', $request->id)
+                        ->whereNotIn('location_id', array_column($locationArrays, 'id'))
+                        ->get();
+                    foreach ($existingLocations as $existingLocation) {
+                        // Delete locations that are no longer present
+                        $existingLocation->delete();
+                    }
+                    // Now proceed with adding new locations or updating existing ones
+                    foreach ($locationArrays as $location) {
+                        $dataLocation = FnDetailLocation::where('expense_request_id', $request->id)
+                            ->where('location_id', $location['id'])
+                            ->first();
+                
+                        if ($dataLocation) {
+                            // Update existing location
+                            $dataLocation->amount_usd = $location['amount_usd'];
+                            $dataLocation->amount_riel = $location['amount_kh'];
+                            $dataLocation->save();
+                        } else {
+                            // Prepare for batch insert
+                            $locations[] = [
+                                'expense_request_id' => $request->id,
+                                'location_id'        => $location['id'],
+                                'amount_usd'         => $location['amount_usd'],
+                                'amount_riel'        => $location['amount_kh'],
+                            ];
+                        }
+                    }
+                
+                    if (!empty($locations)) {
+                        FnDetailLocation::insert($locations);
+                    }
                 }
             }
-            if ($request->expense_type == 1) {
-                //** Rrgular Expense **//
-                $data['status']             = 'pending_approve';
-                $data['position_review']    = [];
-                $data['review_type']        = null;
-            }else{
+           //** Rrgular Expense **//
+            // if ($request->expense_type == 1) {
+                // $data['status']             = 'pending';
+            //     $data['position_review']    = [];
+            //     $data['review_type']        = null;
+            // }else{
                 //** Irrrgular Expense **//
-                if(!$positionReview){
-                    return response()->json([
-                        'error'=>'lang.please_to_set_up_lovel_review_request_expense',
-                        'status'=>404,
-                    ]);
+                // if(!$positionReview){
+                //     return response()->json([
+                //         'error'=>'lang.please_to_set_up_lovel_review_request_expense',
+                //         'status'=>404,
+                //     ]);
+                // }
+                if (Auth::user()->branch->abbreviations != "HQ") {
+                    $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
+                }else{
+                    $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
                 }
                 $data['position_review']    = json_encode($positionReview->id_positions);
                 $data['review_type']        = $positionReview->type;
-            }
+            // }
 
             $data["approve_by"]                     = $request->approve_by;
             $data["type"]                           = $request->type;
@@ -458,11 +500,18 @@ class ExpenseRequestController extends Controller
     {
         DB::beginTransaction();
         try{
-            // $positionReview = self::lovelReview(2, 1, $request->ge_total_amount_usd);
+             $dataCheckLevelView = [
+                "by_location"=> 2,
+                "request_type"=> 2,
+                "reference_type"=> 1,
+                "type"=> 1,
+                "amount"=> $request->ge_total_amount_usd,
+            ];
             if(Auth::user()->branch->abbreviations == "HQ"){
-                $positionReview = self::lovelReview(2, 2, 1, $request->ge_total_amount_usd);
+                $positionReview = self::lovelReview($dataCheckLevelView);
             }else{
-                $positionReview = self::lovelReview(1, 2, 1, $request->ge_total_amount_usd);
+                $dataCheckLevelView["by_location"] = 1;
+                $positionReview = self::lovelReview($dataCheckLevelView);
             }
             if(!$positionReview){
                 return response()->json([
@@ -473,7 +522,7 @@ class ExpenseRequestController extends Controller
             $data = ExpenseRequest::find($request->id);
 
             // ***  block create history *** //
-            if ($data->status == "rejected") {
+            // if ($data->status == "rejected") {
                 $oldId = ExpenseRequestHistory::where("expense_id", $request->id)->count();
                 $dataHistory = $data->toArray();
                 $dataHistory['expense_id'] = $data->id;
@@ -481,7 +530,7 @@ class ExpenseRequestController extends Controller
                 unset($dataHistory['id']);
                 ExpenseRequestHistory::create($dataHistory);
                 $data['status']             = 'pending';
-            }
+            // }
             
             // ***  block update reference or add new reference *** //
             if ($request->e_fn_invoice) {
@@ -594,6 +643,7 @@ class ExpenseRequestController extends Controller
                     FnDetailLocation::insert($locations);
                 }
             }
+            $data['location_review']                = ($positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id);
             $data["approve_by"]                     = $request->approve_by;
             $data["kind_regard"]                    = $request->kind_regard;
             $data["subject"]                        = $request->subject;
@@ -642,13 +692,27 @@ class ExpenseRequestController extends Controller
                 $data['status']             = 'approved';
                 $data['date_approve']       = ($request->approve_date ? $request->approve_date : Carbon::createFromDate()->format('Y-m-d H:i'));
             }else{
-                // $lovelReview  = self::lovelReview($data->type, $type, $data->ge_total_amount_usd);
+                $dataCheckLevelView = [
+                    "by_location"=> 2,
+                    "request_type"=> $data->type,
+                    "reference_type"=> $data->expense_type,
+                    "type"=> $type,
+                    "amount"=> $data->ge_total_amount_usd,
+                ];
+                
                 if(Auth::user()->branch->abbreviations == "HQ"){
-                    $lovelReview = self::lovelReview(2, $data->type, $type, $data->ge_total_amount_usd);
+                    $lovelReview = self::lovelReview($dataCheckLevelView);
                 }else{
-                    $lovelReview = self::lovelReview(1, $data->type, $type, $data->ge_total_amount_usd);
+                    $dataCheckLevelView["by_location"] = 1;
+                    $lovelReview = self::lovelReview($dataCheckLevelView);
                 };
+
                 if ($lovelReview) {
+                    if (Auth::user()->branch->abbreviations != "HQ") {
+                        $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : Auth::user()->branch_id;
+                    }else{
+                        $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : Auth::user()->department_id;
+                    }
                     $data['status']             = 'pending';
                     $data['position_review']    = $lovelReview->id_positions;
                     $data['review_type']        = $lovelReview->type;
@@ -680,19 +744,24 @@ class ExpenseRequestController extends Controller
             $dataHistory['expense_id'] = $data->id;
             $dataHistory['tracking_id'] = $data->tracking_id . "@".$oldId;
             unset($dataHistory['id']);
-            // $lovelReview  = self::lovelReview($data->type, 1, $data->ge_total_amount_usd);
+            $dataCheckLevelView = [
+                "by_location"=> 2,
+                "request_type"=> $data->type,
+                "reference_type"=> $data->expense_type,
+                "type"=> 1,
+                "amount"=> $data->ge_total_amount_usd,
+            ];
             if(Auth::user()->branch->abbreviations == "HQ"){
-                $lovelReview = self::lovelReview(2, $data->type, 1, $data->ge_total_amount_usd);
+                $lovelReview = self::lovelReview($dataCheckLevelView);
             }else{
-                $lovelReview = self::lovelReview(1, $data->type, 1, $data->ge_total_amount_usd);
+                 $dataCheckLevelView["by_location"] = 1;
+                $lovelReview = self::lovelReview($dataCheckLevelView);
             };
             ExpenseRequestHistory::create($dataHistory);
+            $data['status']             = 'rejected';
             if ($lovelReview) {
-                $data['status']             = 'rejected';
                 $data['position_review']    = $lovelReview->id_positions;
                 $data['review_type']        = $lovelReview->type;
-            }else{
-                $data['status']             = 'pending';
             }
             $data["reason"]                 = $request->remark;
             $data['updated_by']             = Auth::user()->id;

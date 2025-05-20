@@ -17,7 +17,7 @@
                             <th>@lang('lang.description')</th>
                             {{-- <th>@lang('lang.request_date')</th> --}}
                             {{-- <th>@lang('lang.approved_date')</th> --}}
-                            <th>@lang('lang.department')/@lang('lang.branch')</th>
+                            <th>@lang('lang.location')</th>
                             {{-- <th>@lang('lang.request_by')</th> --}}
                             {{-- <th>@lang('lang.review')</th> --}}
                             <th>@lang('lang.reason')</th>
@@ -64,7 +64,7 @@
                                         @elseif($item->status == "pending_approve")
                                             <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending') @lang('lang.approved')</span>
                                         @elseif ($item->status == "rejected")
-                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">@lang('lang.reject')</span>
+                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected {{$item->review_type ? "review ".$item->review_type : "by Approved"}}</span>
                                         @elseif($item->status == "approved")
                                             <span class="badge bg-inverse-success" style="font-size: 13px;">@lang('lang.approved')</span>
                                         @endif
@@ -163,7 +163,7 @@
                             {{-- <th>@lang('lang.serialref')</th> --}}
                             <th>@lang('lang.description')</th>
                             <th>@lang('lang.request_date')</th>
-                            <th>@lang('lang.department')/@lang('lang.branch')</th>
+                            <th>@lang('lang.location')</th>
                             {{-- <th>@lang('lang.request_by')</th> --}}
                             <th>@lang('lang.action')</th>
                         </tr>
@@ -207,7 +207,7 @@
                                         @elseif($item->status == "pending_approve")
                                             <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending') @lang('lang.approved')</span>
                                         @elseif ($item->status == "rejected")
-                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected {{$item->review_type ? "review ".$item->review_type : "by Approved"}}</span>
                                         @elseif($item->status == "approved")
                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                         @endif

@@ -112,6 +112,7 @@ class FnLevelReviewerController extends Controller
             $data['from_amount'] = $request->from_amount;
             $data['to_amount'] = $request->to_amount;
             $data['request_type'] = $request->request_type;
+            $data['reference_type'] = $request->reference_type;
             $data['type'] = $request->type;
             $data['from_location'] = $request->from_location;
             $data['department_review'] = $request->department_review;

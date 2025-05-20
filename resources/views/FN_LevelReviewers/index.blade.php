@@ -33,8 +33,9 @@
                             <tr>
                                 <th>@lang('lang.from_amount')</th>
                                 <th>@lang('lang.to_amount')</th>
-                                <th>@lang('lang.type')</th>
                                 <th>@lang('lang.request_type')</th>
+                                <th>@lang('lang.reference') @lang('lang.type')</th>
+                                <th>@lang('lang.review') @lang('lang.type')</th>
                                 <th>@lang('lang.from_location')</th>
                                 <th>@lang('lang.position_review')</th>
                                 <th>@lang('lang.department_review')</th>
@@ -76,6 +77,14 @@
                                         <td>{{$item->from_amount}}</td>
                                         <td>{{$item->to_amount}}</td>
                                         <td>{{ $type[$item->request_type]}}</td>
+                                        <td>
+                                            @if ($item->reference_type == 1)
+                                                @lang('lang.regular_expense')
+                                            @endif
+                                            @if ($item->reference_type == 2)
+                                                @lang('lang.irregular_expense')
+                                            @endif
+                                        </td>
                                         <td>{{ $requestType[$item->type]." ".$item->type}}</td>
                                         <td>{{$item->from_location =="1" ? "Branch" : "Department"}}</td>
                                         <td data-toggle="tooltip" data-html="true" title="{!! $positionViews !!}">{{$item->positionReview[0]->name_english}}...</td>
@@ -131,6 +140,16 @@
                                     <option value="2">@lang('lang.tax_expense')</option>
                                     <option value="1">@lang('lang.special_expense')</option>
                                 </select>
+                            </div>
+                            <div class="reference_type" style="display: none">
+                                <div class="form-group">
+                                    <label>@lang('lang.reference') @lang('lang.type') <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="reference_type" name="reference_type">
+                                        <option value="" selected> </option>
+                                        <option value="1">@lang('lang.regular_expense')</option>
+                                        <option value="2">@lang('lang.irregular_expense')</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>@lang('lang.type') <span class="text-danger">*</span></label>
@@ -227,6 +246,13 @@
                                 <select class="form-control @error('request_type') is-invalid @enderror" id="e_request_type" name="request_type" required>
                                 </select>
                             </div>
+                            <div class="e_reference_type" style="display: none">
+                                <div class="form-group">
+                                    <label>@lang('lang.reference') @lang('lang.type') <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="e_reference_type" name="reference_type">
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label>@lang('lang.type') <span class="text-danger">*</span></label>
                                 <select class="form-control @error('type') is-invalid @enderror" id="e_type" name="type" required>
@@ -309,6 +335,15 @@
             event.preventDefault(); // Prevent default form submission
             // Get form elements
             let positionsReview = document.getElementById('id_positions');
+            let requestType = document.getElementById('request_type');
+            let referenceType = document.getElementById('reference_type');
+            
+            if (requestType.value === "0" && referenceType.value === "") {
+                $("#reference_type").css("border-color", "#dc3545");
+                return;
+            } else {
+               $("#reference_type").css("border-color","#198754");
+            }
 
             if (positionsReview.value === '') {
                 $(".hr-form-group-select2").each(function(){
@@ -325,7 +360,16 @@
             event.preventDefault(); // Prevent default form submission
             // Get form elements
             let positionsReview = document.getElementById('e_id_positions');
+            let requestType = document.getElementById('e_request_type');
+            let referenceType = document.getElementById('e_reference_type');
             
+            if (requestType.value === "0" && referenceType.value === "") {
+                $("#e_reference_type").css("border-color", "#dc3545");
+                return;
+            } else {
+               $("#e_reference_type").css("border-color","#198754");
+
+            }
             if (positionsReview.value === '') {
                 $(".hr-form-group-select2").each(function(){
                     let formGroup = $(this);
@@ -344,7 +388,27 @@
                 container: 'tr'
             });
         });
+        $("#request_type").on("change", function() {
+            let value = $(this).find("option:selected").val();
+            if (value == "0") {
+                $(".reference_type").css("display","block");
+            } else {
+                $("#reference_type").val("");
+                $(".reference_type").css("display","none");
+            }
+        });
+        $("#e_request_type").on("change", function() {
+            let value = $(this).find("option:selected").val();
+            if (value == "0") {
+                $(".e_reference_type").css("display","block");
+            } else {
+                $("#e_reference_type").val("");
+                $(".e_reference_type").css("display","none");
+            }
+        });
+        
         $('.update').on('click', function() {
+            $(".e_reference_type").css("display","none");
             let id = $(this).data("id");
             $('#e_request_type').html("");
             $('#e_type').html("");
@@ -373,6 +437,15 @@
                                 selected: item.id == response.data.request_type ? true : false
                             }));
                         });
+                        if (response.data.request_type == 0) {
+                            $(".e_reference_type").css("display","block");
+                        }
+                        $('#e_reference_type').html('<option >  </option>');
+                        if (response.data.reference_type == 1) {
+                            $("#e_reference_type").append('<option value="1" selected>@lang("lang.regular_expense")</option> <option value="2">@lang("lang.irregular_expense")</option>');
+                        } else {
+                            $("#e_reference_type").append('<option value="1" >@lang("lang.regular_expense")</option> <option value="2" selected>@lang("lang.irregular_expense")</option>');
+                        }
                         let type = [
                             {"id": 1, "value": "{{ __('lang.review') }} 1"},
                             {"id": 2, "value": "{{ __('lang.review') }} 2"},
@@ -404,7 +477,7 @@
                                 '<option selected value="2">@lang("lang.department")</option> <option value="1">@lang("lang.branch")</option>'
                             );
                         };
-                        $('#e_department_review').html('');
+                        $('#e_department_review').html('<option value=""> </option>');
                         if (response.data.department_review !="") {
                             $.each(response.departments, function(i, item) {
                                 $('#e_department_review').append($('<option>', {

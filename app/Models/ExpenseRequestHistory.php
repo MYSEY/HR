@@ -47,6 +47,7 @@ class ExpenseRequestHistory extends Model
         "te_total_tax",
         "special",
         "status",
+        "location_review",
         "position_review",
         "review_type",
         "request_by",

@@ -209,9 +209,10 @@ $(document).ready(function() {
         if (expense_type == 1) {
             $("#IrregularFileName").css("border-color","#198754");
             fn_reference = $("#fn_reference").val();
-            if (fn_reference == "" || fn_reference == null) {
+            if ((fn_reference == "" || fn_reference == null) && ($("#IrregularFileName").val() == "" || $("#IrregularFileName").val() == null)) {
                 num_miss++;
                 $("#fn_reference").css("border-color","#dc3545");
+                $("#IrregularFileName").css("border-color","#dc3545");
             }else{
                 $("#fn_reference").css("border-color","#198754");
                 form_data.append("fn_reference", fn_reference);
