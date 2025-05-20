@@ -566,6 +566,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     
     // Block Exspense report
     Route::get('/fn/expense/report', [ExpenseReportController::class,'index']);
+    Route::post('/fn/expense/search', [ExpenseReportController::class,'filter']);
 
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);

@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\ExpenseRequest;
 use App\Models\FnRegularExspense;
 use Carbon\Carbon;
 use App\Models\GenerateIdEmployee;
@@ -45,7 +46,7 @@ trait GeneratingCode
      {
          $count = 0;
          $expDate = Carbon::parse($date);
-         $lastInId = GenerateIdExpense::orderBy('tracking_id', 'DESC')->get();
+         $lastInId = ExpenseRequest::orderBy('tracking_id', 'DESC')->get();
          if (!empty($lastInId)) {
              for ($i = 0; $i < count($lastInId); $i++) {
                  $current = (int) substr(strrchr($lastInId[$i]->tracking_id, "-"), 1);
@@ -66,7 +67,7 @@ trait GeneratingCode
             $month = $expDate->format('m');
             $day = $expDate->format('d');
              $expId =  "FND".$year.$month.$day. str_pad(($count + 1), 3, "0", STR_PAD_LEFT);
-             $alreadyExist = GenerateIdExpense::select('tracking_id')->where('tracking_id', $expId)->first()->tracking_id ?? null;
+             $alreadyExist = ExpenseRequest::select('tracking_id')->where('tracking_id', $expId)->first()->tracking_id ?? null;
              $count++;
          } while ($alreadyExist);
          return [

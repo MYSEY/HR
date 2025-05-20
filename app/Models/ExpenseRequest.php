@@ -16,6 +16,7 @@ class ExpenseRequest extends Model
     use LogsActivity;
     protected $table = 'expense_requests';
     protected $guarded = ['id'];
+    protected $appends = ['references'];
 
     protected $fillable = [
         "tracking_id",
@@ -52,6 +53,7 @@ class ExpenseRequest extends Model
         "te_total_tax",
         "special",
         "status",
+        "location_review",
         "position_review",
         "review_type",
         "request_by",
@@ -109,7 +111,7 @@ class ExpenseRequest extends Model
             'gender',
             'date_of_commencement',
             'personal_phone_number',
-        );
+        )->with(["department","branch"]);
     }
     public function approveBy()
     {

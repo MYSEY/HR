@@ -50,6 +50,7 @@ return new class extends Migration
             $table->decimal('te_total_tax',50,2)->default(0);
             $table->string('status')->nullable();
             $table->string('special')->nullable();
+            $table->string('location_review')->nullable();
             $table->json('position_review')->nullable();
             $table->integer('review_type')->nullable();
             $table->integer('request_by');

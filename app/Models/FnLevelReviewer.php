@@ -19,6 +19,7 @@ class FnLevelReviewer extends Model
         'from_amount',
         'to_amount',
         'request_type',
+        'reference_type',
         'type',
         'from_location',
         'department_review',

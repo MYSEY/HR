@@ -32,6 +32,7 @@
                                 <th>@lang('lang.amount') @lang('lang.usd')</th>
                                 <th>@lang('lang.amount') @lang('lang.kh')</th>
                                 <th>@lang('lang.request_date')</th>
+                                <th>@lang('lang.request_by') @lang('lang.location')</th>
                                 <th>@lang('lang.review') or @lang('lang.approve')</th>
                             </tr>
                         </thead>
@@ -65,14 +66,20 @@
                                             @elseif($item->status == "pending_approve")
                                                 <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending') @lang('lang.approved')</span>
                                             @elseif ($item->status == "rejected")
-                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">@lang('lang.reject')</span>
+                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected {{$item->review_type ? "review ".$item->review_type : "by Approved"}}</span>
                                             @elseif($item->status == "approved")
                                                 <span class="badge bg-inverse-success" style="font-size: 13px;">@lang('lang.approved')</span>
                                             @endif
                                         </td>
-                                        <td >{{$item->ge_total_amount_usd}}</td>
-                                        <td>{{$item->ge_total_amount_riel}}</td>
+                                        <td>$ {{$item->ge_total_amount_usd}}</td>
+                                        <td>៛ {{$item->type == "2" ? $item->te_total_tax : $item->ge_total_amount_riel}}</td>
                                         <td>{{$item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i') : ''}}</td>
+                                        <td >
+                                            {{
+                                                $item->requestBy->department->name_english." / ".$item->requestBy->branch->branch_name_en
+
+                                            }}
+                                        </td>
                                         <td data-toggle="tooltip" data-html="true" title="{!! $positionReviews !!}" >
                                             {{ Str::limit($positionReviews, 30, '...') }}
                                         </td>
