@@ -945,31 +945,39 @@ class LeavesEmployeeController extends Controller
     {
         try{
             $data = LeaveRequest::with("leaveType")->where("id", $request->id)->first();
-            // $LeaveAllocation = LeaveAllocation::where("employee_id", $data->employee_id)->first();
-            
-            // if ($data->leaveType->type == "annual_leave") {
-            //     $current_annual_leave = $LeaveAllocation->total_annual_leave + $request->number_of_day;
-            //     $LeaveAllocation->total_annual_leave =  $current_annual_leave > $LeaveAllocation->default_annual_leave ? $LeaveAllocation->default_annual_leave : $current_annual_leave;
-            // }else if($data->leaveType->type == "sick_leave"){
-            //     $current_sick_leave = $LeaveAllocation->total_sick_leave + $request->number_of_day;
-            //     $LeaveAllocation->total_sick_leave = $current_sick_leave > $LeaveAllocation->default_sick_leave ? $LeaveAllocation->default_sick_leave : $current_sick_leave;
-            // }else if($data->leaveType->type == "special_leave") {
-            //     $current_special_leave = $LeaveAllocation->total_special_leave + $request->number_of_day;
-            //     $LeaveAllocation->total_special_leave = $current_special_leave > $LeaveAllocation->default_special_leave ? $LeaveAllocation->default_special_leave : $current_special_leave;
-            // }else if($data->leaveType->type == "unpaid_leave"){
-            //     $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave + $request->number_of_day;
-            //     $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
-            // }else if($data->leaveType->type == "long_sick_leave"){
-            //     $current_long_sick_leave = $LeaveAllocation->total_long_sick_leave + $request->number_of_day;
-            //     $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave > $LeaveAllocation->default_long_sick_leave ? $LeaveAllocation->default_long_sick_leave : $current_long_sick_leave;
-            // }
-            // $LeaveAllocation->save();
-
-            // DelegateLeave::where('requester_id', $data->employee_id)->where("start_date",$data->start_date)->where("end_date",$data->end_date)->delete();
+            $dataBranch = Branchs::where("id", Auth::user()->branch->id)->first();
+            if($dataBranch->abbreviations == "HQ"){
+                if(Auth::user()->under_approve){
+                    $data['next_approver'] = Auth::user()->under_approve;
+                }else{
+                    $data['next_approver'] = Auth::user()->department->direct_manager_id;
+                }
+            }else{
+                if(Auth::user()->under_approve){
+                    $data['next_approver'] = Auth::user()->under_approve;
+                }else{
+                    $data['next_approver'] = Auth::user()->branch->direct_manager_id;
+                }  
+            }
+            if(Auth::user()->RolePermission == "BOD") {
+                $data['next_approver'] = "Null";
+            }else if (Auth::user()->RolePermission == "CEO") {
+                $data['next_approver'] = Auth::user()->line_manager;
+            }elseif (Auth::user()->RolePermission == "HOD" && Auth::user()->id == Auth::user()->department->direct_manager_id) {
+                $data['next_approver'] = Auth::user()->line_manager;
+            }elseif(Auth::user()->RolePermission == "DHOD" && Auth::user()->id == Auth::user()->department->direct_manager_id){
+                $data['next_approver'] = Auth::user()->line_manager;
+            }else if(Auth::user()->RolePermission == "BM" && Auth::user()->id == Auth::user()->branch->direct_manager_id){
+                $data['next_approver'] = Auth::user()->line_manager;
+            }elseif(Auth::user()->RolePermission == "DBM" && Auth::user()->id == Auth::user()->branch->direct_manager_id){
+                $data['next_approver'] = Auth::user()->line_manager;
+            }elseif(Auth::user()->RolePermission == "HRAdmin" && Auth::user()->id == Auth::user()->department->direct_manager_id){
+                $data['next_approver'] = Auth::user()->line_manager;
+            }
 
             $data['status'] = "pending_cancel";
             $data['remark'] = $request->remark;
-            $data['next_approver'] = $data->approved_by;
+            // $data['next_approver'] = $data->approved_by;
             $data['updated_by'] = Auth::user()->id;
 
             $data->save();

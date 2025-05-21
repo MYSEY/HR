@@ -44,13 +44,15 @@ use App\Http\Controllers\Admins\ProvinceAddressController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\DistrictsAddressController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
+use App\Http\Controllers\Admins\ExpenseAdminController;
+use App\Http\Controllers\Admins\ExpenseReportController;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
-// use App\Http\Controllers\Admins\ExpenseRequestController;
-// use App\Http\Controllers\Admins\FnApprovalController;
-// use App\Http\Controllers\Admins\FnLevelReviewerController;
-// use App\Http\Controllers\Admins\FnPaymentTermController;
-// use App\Http\Controllers\Admins\FnRegularExspenseController;
-// use App\Http\Controllers\Admins\FNTaxController;
+use App\Http\Controllers\Admins\ExpenseRequestController;
+use App\Http\Controllers\Admins\FnApprovalController;
+use App\Http\Controllers\Admins\FnLevelReviewerController;
+use App\Http\Controllers\Admins\FnPaymentTermController;
+use App\Http\Controllers\Admins\FnRegularExspenseController;
+use App\Http\Controllers\Admins\FNTaxController;
 use App\Http\Controllers\Admins\SpecialController;
 
 /*
@@ -513,45 +515,58 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/special/approve/delete/employee', [SpecialController::class,'destroyEmploee']);
     Route::get('/special/approve/edit', [SpecialController::class,'edit']);
     
-    // // Block FN Taxes
-    // Route::get('/fn/taxe', [FNTaxController::class,'index']);
-    // Route::post('/fn/taxe', [FNTaxController::class,'store']);
-    // Route::post('/fn/taxe/update', [FNTaxController::class,'update']);
-    // Route::post('/fn/taxe/delete', [FNTaxController::class,'destroy']);
-    // Route::get('/fn/taxe/edit', [FNTaxController::class,'edit']);
-    // // Block FN Approvals
-    // Route::get('/fn/approval', [FnApprovalController::class,'index']);
-    // Route::post('/fn/approval', [FNApprovalController::class,'store']);
-    // Route::post('/fn/approval/update', [FNApprovalController::class,'update']);
-    // Route::post('/fn/approval/delete', [FNApprovalController::class,'destroy']);
-    // Route::get('/fn/approval/edit', [FNApprovalController::class,'edit']);
-    // // Block FN Payment Terms
-    // Route::get('/fn/paymnet-term', [FnPaymentTermController::class,'index']);
-    // Route::post('/fn/paymnet-term', [FNPaymentTermController::class,'store']);
-    // Route::post('/fn/paymnet-term/update', [FNPaymentTermController::class,'update']);
-    // Route::post('/fn/paymnet-term/delete', [FNPaymentTermController::class,'destroy']);
-    // Route::get('/fn/paymnet-term/edit', [FNPaymentTermController::class,'edit']);
-    // Route::post('/fn/paymnet-term/processing', [FNPaymentTermController::class,'processing']);
-    // // Block FN  Level Reviewer
-    // Route::get('/fn/level-reviewer', [FnLevelReviewerController::class,'index']);
-    // Route::post('/fn/level-reviewer', [FnLevelReviewerController::class,'store']);
-    // Route::post('/fn/level-reviewer/update', [FnLevelReviewerController::class,'update']);
-    // Route::post('/fn/level-reviewer/delete', [FnLevelReviewerController::class,'destroy']);
-    // Route::get('/fn/level-reviewer/edit', [FnLevelReviewerController::class,'edit']);
-    // // Block FN RegularExspense
-    // Route::get('/fn/regular-exspense', [FnRegularExspenseController::class,'index']);
-    // Route::post('/fn/regular-exspense', [FnRegularExspenseController::class,'store']);
-    // Route::post('/fn/regular-exspense/update', [FnRegularExspenseController::class,'update']);
-    // Route::post('/fn/regular-exspense/delete', [FnRegularExspenseController::class,'destroy']);
-    // Route::get('/fn/regular-exspense/edit', [FnRegularExspenseController::class,'edit']);
-    // Route::post('/fn/regular-exspense/processing', [FnRegularExspenseController::class,'processing']);
-    // // Block FN RegularExspense
-    // Route::get('/expense-request/list', [ExpenseRequestController::class,'index']);
-    // Route::get('/fn/expense-request/create', [ExpenseRequestController::class,'create']);
-    // Route::post('/fn/expense-request', [ExpenseRequestController::class,'store']);
-    // Route::post('/fn/expense-request/update', [ExpenseRequestController::class,'update']);
-    // Route::post('/fn/expense-request/delete', [ExpenseRequestController::class,'destroy']);
-    // Route::get('/fn/expense-request/edit', [ExpenseRequestController::class,'edit']);
-    // Route::post('/fn/expense-request/processing', [ExpenseRequestController::class,'processing']);
+    // Block FN Taxes
+    Route::get('/fn/taxe', [FNTaxController::class,'index']);
+    Route::post('/fn/taxe', [FNTaxController::class,'store']);
+    Route::post('/fn/taxe/update', [FNTaxController::class,'update']);
+    Route::post('/fn/taxe/delete', [FNTaxController::class,'destroy']);
+    Route::get('/fn/taxe/edit', [FNTaxController::class,'edit']);
+    // Block FN Approvals
+    Route::get('/fn/approval', [FnApprovalController::class,'index']);
+    Route::post('/fn/approval', [FNApprovalController::class,'store']);
+    Route::post('/fn/approval/update', [FNApprovalController::class,'update']);
+    Route::post('/fn/approval/delete', [FNApprovalController::class,'destroy']);
+    Route::get('/fn/approval/edit', [FNApprovalController::class,'edit']);
+    // Block FN Payment Terms
+    Route::get('/fn/payment-term', [FnPaymentTermController::class,'index']);
+    Route::post('/fn/payment-term', [FNPaymentTermController::class,'store']);
+    Route::post('/fn/payment-term/update', [FNPaymentTermController::class,'update']);
+    Route::post('/fn/payment-term/delete', [FNPaymentTermController::class,'destroy']);
+    Route::get('/fn/payment-term/edit', [FNPaymentTermController::class,'edit']);
+    Route::post('/fn/payment-term/processing', [FNPaymentTermController::class,'processing']);
+    // Block FN  Level Reviewer
+    Route::get('/fn/level-reviewer', [FnLevelReviewerController::class,'index']);
+    Route::post('/fn/level-reviewer', [FnLevelReviewerController::class,'store']);
+    Route::post('/fn/level-reviewer/update', [FnLevelReviewerController::class,'update']);
+    Route::post('/fn/level-reviewer/delete', [FnLevelReviewerController::class,'destroy']);
+    Route::get('/fn/level-reviewer/edit', [FnLevelReviewerController::class,'edit']);
+    // Block FN RegularExspense
+    Route::get('/fn/regular-expense', [FnRegularExspenseController::class,'index']);
+    Route::post('/fn/regular-expense', [FnRegularExspenseController::class,'store']);
+    Route::post('/fn/regular-expense/update', [FnRegularExspenseController::class,'update']);
+    Route::post('/fn/regular-expense/delete', [FnRegularExspenseController::class,'destroy']);
+    Route::get('/fn/regular-expense/edit', [FnRegularExspenseController::class,'edit']);
+    Route::post('/fn/regular-expense/processing', [FnRegularExspenseController::class,'processing']);
+    // Block FN Exspense Request
+    Route::get('/expense-request/list', [ExpenseRequestController::class,'index']);
+    Route::post('/fn/expense-request', [ExpenseRequestController::class,'store']);
+    Route::get('/fn/expense-request/create', [ExpenseRequestController::class,'create']);
+    Route::post('/fn/expense-request/update', [ExpenseRequestController::class,'update']);
+    Route::post('/fn/expense-request/delete', [ExpenseRequestController::class,'destroy']);
+    Route::get('/fn/expense-request/edit/{id}', [ExpenseRequestController::class,'edit']);
+    Route::post('/fn/expense-request/processing', [ExpenseRequestController::class,'processing']);
+    Route::post('/fn/expense-request/reject', [ExpenseRequestController::class,'reject']);
+    // Block FN Tax Exspense
+    Route::get('/fn/tax-expense/create', [ExpenseRequestController::class,'createTax']);
+    Route::get('/fn/tax-expense/edit/{id}', [ExpenseRequestController::class,'editTax']);
+    Route::post('/fn/tax-expense/update', [ExpenseRequestController::class,'updateTax']);
+
+    // Block FN Exspense Admin
+    Route::get('/admin-expense/list', [ExpenseAdminController::class,'index']);
+    
+    // Block Exspense report
+    Route::get('/fn/expense/report', [ExpenseReportController::class,'index']);
+    Route::post('/fn/expense/search', [ExpenseReportController::class,'filter']);
+
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);
