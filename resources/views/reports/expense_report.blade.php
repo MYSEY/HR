@@ -213,8 +213,8 @@
                                         @endforeach
                                     @endif
                                 </tbody>
-                                {!! $datas->withQueryString()->links('pagination::bootstrap-5') !!}
                             </table>
+                            {!! $datas->withQueryString()->links('pagination::bootstrap-5') !!}
                         </div>
                     </div>
                 </div>
@@ -409,8 +409,6 @@
             dataType: 'JSON',
             success: function(response){
                 let datas = response.data;
-                console.log("datas:", datas);
-                
                 var tr = "";
                 let num = 0;
                 let status = "";

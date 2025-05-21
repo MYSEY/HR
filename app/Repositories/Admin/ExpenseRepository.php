@@ -36,12 +36,40 @@ class ExpenseRepository extends BaseRepository
 
     public function getDataByLocation($request){
         $datasDetails = FnDetailLocation::with(["expenseRequest", "location", "department"])
+        
         ->leftJoin('expense_requests', 'fn_detail_locations.expense_request_id', '=', 'expense_requests.id')
-            ->select(
-                'fn_detail_locations.*', 
-                'expense_requests.*',
-            )
-        ->where('expense_requests.status', "approved")
+        ->leftJoin('users', 'expense_requests.request_by', '=', 'users.id')
+        ->select(
+            'fn_detail_locations.*', 
+            'expense_requests.*',
+            'users.number_employee',
+            'users.position_id',
+            'users.branch_id',
+            'users.department_id',
+            'users.line_manager',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if (permissionAccess("m13-s3","is_access")->value == 1) {
+                $query->where('expense_requests.status', "approved");
+            }else{
+                if (in_array($RolePermission, ['HOD', 'BM', 'HRAdmin'])) {
+                    $query->where('expense_requests.status', "approved");
+                    $query->where("users.department_id", Auth::user()->department_id)
+                        ->where("users.branch_id", Auth::user()->branch_id);
+                } elseif (in_array($RolePermission, ['DHOD', 'DBM'])) {
+                    $query->where('expense_requests.status', "approved");
+                    $query->where("expense_requests.request_by", Auth::user()->id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
+                } elseif ($RolePermission == "Employee") {
+                    $query->where('expense_requests.status', "approved");
+                    $query->where("expense_requests.request_by", Auth::user()->id);
+                } elseif ($RolePermission == 'HR') {
+                    $query->where('expense_requests.status', "approved");
+                    $query->where("expense_requests.request_by", Auth::user()->id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
+                }
+            }
+        })
         ->when($request->tracking_id, function ($query, $tracking_id) {
             $query->where('expense_requests.tracking_id', $tracking_id);
         })
@@ -64,6 +92,7 @@ class ExpenseRepository extends BaseRepository
         ->when($request->location_id, function ($query, $location_id) {
             $query->where('fn_detail_locations.location_id', $location_id);
         })
+        ->where('expense_requests.status', "approved")
         ->orderBy('expense_requests.id', 'DESC');
 
          $perPage = $request->get('per_page', 10);
