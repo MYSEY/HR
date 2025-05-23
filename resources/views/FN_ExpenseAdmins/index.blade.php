@@ -34,11 +34,13 @@
                                 <th>@lang('lang.request_date')</th>
                                 <th>@lang('lang.request_by') @lang('lang.location')</th>
                                 <th>@lang('lang.review') or @lang('lang.approve')</th>
+                                <th>@lang('lang.asign_to')</th>
+                                <th>@lang('lang.action')</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (count($datas)>0)
-                                @foreach ($datas as $key=>$item)
+                                @foreach ($datas as $inx=>$item)
                                     @php
                                         $positionReviews = "";
                                         if ($item->status == "pending" ) {
@@ -58,7 +60,7 @@
                                         
                                     @endphp
                                     <tr class="odd">
-                                        <td class="stuck-scroll-3">{{$key+1}}</td>
+                                        <td class="stuck-scroll-3">{{$inx+1}}</td>
                                         <td class="stuck-scroll-3"><a href="#">{{$item->tracking_id}}</a></td>
                                         <td class="stuck-scroll-3"> 
                                             @if ($item->status == "" || $item->status == "pending")
@@ -83,6 +85,26 @@
                                         <td data-toggle="tooltip" data-html="true" title="{!! $positionReviews !!}" >
                                             {{ Str::limit($positionReviews, 30, '...') }}
                                         </td>
+                                        <td >
+                                           @if ($permission->is_update == "1")
+                                                <a class="btn btn-white btn-sm btn-rounded btn-emp-role" data-id="{{$item->id}}" data-positionold="{{$positionReviews}}" href="#" aria-expanded="false">
+                                                    <i class="fa fa-dot-circle-o text-success"></i>
+                                                    <span >@lang('lang.asign_to')</span>
+                                                </a>
+                                            @else
+                                                <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                    <i class="fa fa-dot-circle-o text-danger"></i> <span>You can't asign</span>
+                                                </a>
+                                            @endif
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <div class="dropdown dropdown-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="{{url("admin-expense/histories",$item->id)}}" ><i class="fa fa-eye m-r-5"></i> @lang('lang.view_history')</a>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif
@@ -92,6 +114,7 @@
             </div>
         </div>
     </div>
+    @include('components.loading-modal')
 @endsection
 @include('includs.script')
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
@@ -102,6 +125,104 @@
         $('[data-toggle="tooltip"]').tooltip({ 
             html: true,
             container: 'tr' 
+        });
+    });
+    $(function(){
+        $('body').on('click', '.btn-emp-role', function() {
+            var expense_id = $(this).data("id");
+            var position_old = $(this).data("positionold");
+            $.confirm({
+                title: '@lang("lang.asign_to_position")',
+                contentClass: 'text-center',
+                // backgroundDismiss: 'cancel',
+                content: ''+
+                    '<form id="add-style" style="height: 25em;">'+
+                        '<p class="text-danger">Old position review: </p> <p>'+position_old+'</p>'+
+                        '<div class="form-group">'+
+                            '<label>@lang("lang.position") <span class="text-danger">*</span></label>'+
+                            '<select class="form-control hr-select2-option-emp-role form-select position_id" id="position_id">'+
+                            
+                            '</select>'+
+                        '</div>'+
+                    '</form>',
+                buttons: {
+                    confirm: {
+                        text: 'Submit',
+                        btnClass: 'add-btn-status',
+                        action: function() {
+                            var position_id = this.$content.find('.position_id').val();
+
+                            if (!position_id) {
+                                $.alert({
+                                    title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                    content: 'Please select position for asign!',
+                                });
+                                return false;
+                            }
+                            $('#modal-loading').modal('show');
+                            axios.post('{{ URL('admin-expense/asign') }}', {
+                                'id': expense_id,
+                                'position_id': position_id
+                            }).then(function(response) {
+                                $('#modal-loading').modal('hide');
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.the_process_has_been_successfully")',
+                                    type: "success",
+                                    icon: true
+                                }).show();
+                            window.location.replace("{{ URL('admin-expense/list') }}");
+                            }).catch(function(error) {
+                                $('#modal-loading').modal('hide');
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                    type: "error",
+                                    icon: true
+                                }).show();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'Cancel',
+                        btnClass: 'btn-secondary btn-sm',
+                    },
+                },
+                onContentReady: function() {
+                    var jc = this;
+                    this.$content.find('form').on('submit', function(e) {
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click');
+                    });
+                }
+            });
+            $(document).ready(function(){
+                $('.hr-select2-option-emp-role').each(function() {
+                    $(this).select2({
+                        width: '100%',
+                        dropdownParent: $(this).parent(),
+                    })
+                });
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/position/show') }}",
+                    data: {},
+                    dataType: "JSON",
+                    success: function(response) {
+                        let datas = response.datas;
+                        
+                        $('#position_id').html('<option selected value=""> -- @lang("lang.select") --</option>');
+                        if (datas != '') {
+                            $.each(datas, function(i, item) {
+                                $('#position_id').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english
+                                }));
+                            });
+                        }
+                    }
+                });
+            });
         });
     });
 </script>

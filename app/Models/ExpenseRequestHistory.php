@@ -10,6 +10,7 @@ class ExpenseRequestHistory extends Model
     use HasFactory;
     protected $table = 'expense_request_histories';
     protected $guarded = ['id'];
+    protected $appends = ['references'];
 
     protected $fillable = [
         "expense_id",
@@ -62,4 +63,113 @@ class ExpenseRequestHistory extends Model
         "updated_by",
         "deleted_at",
     ];
+
+    public function getReferencesAttribute()
+    {
+        if (empty($this->reference)) {
+            return collect(); // Return an empty collection
+        }
+        $items = explode(',', $this->reference);
+        return FnRegularExspense::whereIn("serialref", $items)->get();
+    }
+    public function locationDetails()
+    {
+        return $this->hasMany(FnDetailLocation::class, 'expense_request_id', 'expense_id')->with("location");
+       
+    }
+    public function departments()
+    {
+        return $this->hasMany(FnDetailLocation::class, 'expense_request_id', 'expense_id')->with("department");
+    }
+    public function requestBy()
+    {
+        return $this->belongsTo(User::class, 'request_by')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'position_id',
+            'branch_id',
+            'department_id',
+            'gender',
+            'date_of_commencement',
+            'personal_phone_number',
+        )->with(["department","branch"]);
+    }
+    public function approveBy()
+    {
+        return $this->belongsTo(User::class, 'approve_by')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'position_id',
+            'branch_id',
+            'department_id',
+            'gender',
+            'date_of_commencement',
+            'personal_phone_number',
+        )->with("position");
+    }
+    public function getPositionReviewsAttribute()
+    {
+        if (is_array($this->attributes['position_review'] ?? null)) {
+            $ids = $this->attributes['position_review'];
+        } else {
+            $ids = json_decode($this->attributes['position_review'] ?? '[]', true);
+        }
+    
+        return Position::whereIn('id', $ids)->get();
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'position_id',
+            'branch_id',
+            'department_id',
+            'gender',
+            'date_of_commencement',
+            'personal_phone_number',
+        );
+    }
+    public function upldatedBy()
+    {
+        return $this->belongsTo(User::class ,'updated_by')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'position_id',
+            'branch_id',
+            'department_id',
+            'gender',
+            'date_of_commencement',
+            'personal_phone_number',
+        );
+    }
 }
