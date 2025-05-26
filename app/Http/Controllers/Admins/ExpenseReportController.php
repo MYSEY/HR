@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportExpense;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\ExpenseRequest;
@@ -10,6 +11,7 @@ use App\Models\permissions;
 use App\Repositories\Admin\ExpenseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ExpenseReportController extends Controller
 {
@@ -50,6 +52,14 @@ class ExpenseReportController extends Controller
         return response()->json([
             'data' => $datas,
         ]);
+    }
+
+    public function reportExport(Request $request)
+    {
+        $datas = $this->dataRequests->getDataByLocation($request);
+        $name_file = "CAMMA-FND-002-Report.xlsx";
+        $export = new ExportExpense($datas, $request);
+        return Excel::download($export, $name_file);
     }
 
 }

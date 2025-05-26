@@ -207,6 +207,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/department/update', [DepartmentController::class,'update']);
 
     Route::get('/position', [PositionController::class,'index']);
+    Route::get('/position/show', [PositionController::class,'show']);
     Route::post('/position/store', [PositionController::class,'store']);
     Route::get('/position/edit', [PositionController::class,'edit']);
     Route::post('/position/update', [PositionController::class,'update']);
@@ -563,10 +564,14 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // Block FN Exspense Admin
     Route::get('/admin-expense/list', [ExpenseAdminController::class,'index']);
+    Route::post('/admin-expense/asign', [ExpenseAdminController::class,'asign']);
+    Route::get('/admin-expense/histories/{id}', [ExpenseAdminController::class,'histories']);
+    Route::get('/admin-expense/histories-export', [ExpenseAdminController::class,'historiesExport']);
     
     // Block Exspense report
     Route::get('/fn/expense/report', [ExpenseReportController::class,'index']);
     Route::post('/fn/expense/search', [ExpenseReportController::class,'filter']);
+    Route::get('/fn/expense/report/export', [ExpenseReportController::class,'reportExport']);
 
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);

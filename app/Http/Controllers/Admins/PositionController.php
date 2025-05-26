@@ -69,9 +69,12 @@ class PositionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $data = Position::all();
+         return response()->json([
+            'datas'=>$data,
+        ]);
     }
 
     /**
