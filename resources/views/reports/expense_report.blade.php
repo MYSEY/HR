@@ -76,12 +76,12 @@
                     <span class="btn-txt"><i class="fa fa-search"></i></span>
                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                 </button>
-                {{-- @if (permissionAccess("m7-s2","is_export")->value == "1") --}}
-                    {{-- <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                @if ($permission->is_export == "1")
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
                         <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
                         <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                    </button> --}}
-                {{-- @endif --}}
+                    </button>
+                @endif
                 <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                     <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                     <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -191,7 +191,7 @@
                                                 </td>
                                                 <td>{{$item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i') : ''}}</td>
                                                 <td>{{$item->date_approve ? \Carbon\Carbon::parse($item->date_approve)->format('d-M-Y') : ''}}</td>
-                                                <td>{{$item->location->branch_name_en}}</td>
+                                                <td>{{$item->type == "2" ?  $item->department->name_english : $item->location->branch_name_en}}</td>
                                                 <td>
                                                     {{
                                                         $item->expenseRequest->requestBy->department->name_english." / ".$item->expenseRequest->requestBy->branch->branch_name_en
@@ -261,6 +261,21 @@
                 per_page: currentPage,
             };
             showdatas(param);
+        });
+        $(".btn_excel").on("click", function () {
+            let currentPage = $(".per_page").val();
+            let query = {
+                "_token": "{{ csrf_token() }}",
+                tracking_id:     $("#tracking_id").val(),
+                date_request:    $("#request_date").val(),
+                date_approve:    $("#approved_date").val(),
+                type:            $("#type").val(),
+                expense_type:    $("#type_of_expense").val(),
+                location_id:     $("#branch_id").val(),
+                per_page: currentPage,
+            };
+            var url = "{{URL::to('fn/expense/report/export')}}?" + $.param(query)
+            window.location = url;
         });
         $(document).on('click','.btn-GEXP-print', function() {
             $('#modal-loading').modal('show');
