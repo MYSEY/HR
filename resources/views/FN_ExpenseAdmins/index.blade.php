@@ -87,7 +87,7 @@
                                         </td>
                                         <td >
                                            @if ($permission->is_update == "1")
-                                                <a class="btn btn-white btn-sm btn-rounded btn-emp-role" data-id="{{$item->id}}" data-positionold="{{$positionReviews}}" href="#" aria-expanded="false">
+                                                <a class="btn btn-white btn-sm btn-rounded btn-asign" data-id="{{$item->id}}" data-positionold="{{$positionReviews}}" href="#" aria-expanded="false">
                                                     <i class="fa fa-dot-circle-o text-success"></i>
                                                     <span >@lang('lang.asign_to')</span>
                                                 </a>
@@ -128,7 +128,7 @@
         });
     });
     $(function(){
-        $('body').on('click', '.btn-emp-role', function() {
+        $('body').on('click', '.btn-asign', function() {
             var expense_id = $(this).data("id");
             var position_old = $(this).data("positionold");
             $.confirm({

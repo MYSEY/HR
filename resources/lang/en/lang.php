@@ -422,7 +422,7 @@ return[
     "generate_pay_motor"=>"Generate Pay",
     "generat_leaves"=>"Generat Leaves",
     "generate_leave_all_employee"=>"Generate Leave All Employee",
-    "general_expense"=>"Generate Exspense",
+    "general_expense"=>"General Exspense",
     "hello"=>"Hello",
     "health_care"=>"Health Care",
     "head_of_hr_and_admin_department"=>"Head of HR and Admin Department",
