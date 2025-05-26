@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Title;
+use App\Models\Purpose;
 use App\Models\Performance;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,7 +32,11 @@ class PerformanceDetail extends Model
         'updated_by',
     ];
 
-    public function performance(){
-        return $this->belongsTo(Performance::class,'performance_id');
+    public function title() {
+        return $this->belongsTo(Title::class, 'title_id');
+    }
+    
+    public function purpose() {
+        return $this->belongsTo(Purpose::class, 'purpose_id');
     }
 }

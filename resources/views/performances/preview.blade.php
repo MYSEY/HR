@@ -16,7 +16,7 @@
             <form action="{{ url('users/create') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
                 <div class="row">
-                    <div class="col-sm-4 m-b-20">
+                    <div class="col-sm-4">
                         <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" class="inv-logo" alt="">
                     </div>
                     <div class="col-md-4">
@@ -24,30 +24,42 @@
                         <h5 class="payslip-title">ប្រចាំឆ្នាំ៖ ២០២២</h5>
                     </div>
                 </div>
-                
+                <div class="row" style="text-align: center;justify-content: center;justify-items: center;">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label><strong>(ពីថ្ងៃខែឆ្នាំ៖ 05/12/2022</strong></label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label><strong>ដល់ថ្ងៃខែឆ្នាំ៖ 05/03/2023)</strong></label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>@lang('lang.employee_id')</label>
-                            <input type="text" class="form-control" value="220-413" min="">
+                            <input type="text" class="form-control" value="{{$data->number_employee}}">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>@lang('lang.employee')</label>
-                            <input type="text" class="form-control" value="មី សី" min="">
+                            <input type="text" class="form-control" value="{{$data->employee_name_kh}}">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>@lang('lang.location')</label>
-                            <input type="text" class="form-control" value="Head Quarter" min="">
+                            <input type="text" class="form-control" value="{{$data->branch_name_en}}">
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>@lang('lang.department')</label>
-                            <input type="text" class="form-control" value="IT Department" min="">
+                            <input type="text" class="form-control" value="{{$data->dep_name}}">
                         </div>
                     </div>
                 </div>
@@ -70,14 +82,26 @@
                                         <th style="min-width: 350px;">យោបល់/កំណត់សម្គាល់</th>
                                     </tr>
                                 </thead>
-                                @dd($data)
 
                                 <tbody id="tbl_performance">
-                                    @foreach ($data as $item)
-                                        @foreach ($item->title as $itemTitle)
+                                    @foreach ($data->titles as $item)
+                                        <tr>
+                                            <td colspan="2" class="text-center">
+                                                <input type="text" class="form-control" value="{{ $item->title ?? '' }}" required>
+                                            </td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                        </tr>
+                                        @foreach ($item->purposes as $purposeItem)
                                             <tr>
                                                 <td colspan="2" class="text-center">
-                                                    <input type="text" class="form-control" value="{{$itemTitle->title}}" required>
+                                                    <input type="text" class="form-control" value="{{ $purposeItem->name ?? '' }}" required>
                                                 </td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
@@ -88,68 +112,56 @@
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
                                             </tr>
-                                            <tr>
-                                                <td colspan="2" class="text-center">
-                                                    <input type="text" class="form-control" value="{{$item->purpose}}" required>
-                                                </td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                            </tr>
-                                        
-                                            <tr>
-                                                <td class="text-center">
-                                                    <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$item->key_kpi}}</textarea>
-                                                </td>
-                                                <td class="text-center">
-                                                    <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$item->action_plan}}</textarea>
-                                                </td>
-                                                <td class="text-center">
-                                                    <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$item->goal}}</textarea>
-                                                </td>
-                                                <td class="text-center">
-                                                    <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$item->weight}}" id="weight" required>
-                                                </td>
-                                                <td class="text-center">
-                                                    <input type="number" step="any" class="form-control score_achieved" placeholder="0" id="score_achieved">
-                                                </td>
-                                                <td class="text-center">
-                                                    <input type="number" step="any" class="form-control score" placeholder="0" min="0" id="score" readonly>
-                                                </td>
-                                                <td class="text-center">
-                                                    <input type="number" step="any" class="form-control personnel_score" placeholder="0" min="0" id="personnel_score" readonly>
-                                                </td>
-                                                <td class="text-center">
-                                                    <input type="number" step="any" class="form-control direct_chairman" placeholder="0" min="0" id="direct_chairman" readonly>
-                                                </td>
-                                                <td class="text-center">
-                                                    <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false"></textarea>
-                                                </td>
-                                                <td class="text-center">
-                                                    <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false"></textarea>
-                                                </td>
-                                            </tr>
-                                            
-                                            <tr class="total">
-                                                <td colspan="5" class="text-center">សរុប = </td>
-                                                <td colspan="1" class="text-center">
-                                                    <input type="text" class="form-control tr_score" placeholder="0" id="tr_score" value="" readonly>
-                                                </td>
-                                                <td colspan="1" class="text-center">
-                                                    <input type="text" class="form-control tr_personnel_score" placeholder="0" id="tr_personnel_score" value="" readonly>
-                                                </td>
-                                                <td colspan="1" class="text-center">
-                                                    <input type="text" class="form-control tr_direct_chairman" placeholder="0" id="tr_direct_chairman" value="" readonly>
-                                                </td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                            </tr>
+                                            @foreach ($purposeItem->performanceDetail as $Detailitem)
+                                                <tr>
+                                                    <td class="text-center">
+                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$Detailitem->key_kpi}}</textarea>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$Detailitem->action_plan}}</textarea>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$Detailitem->goal}}</textarea>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" required>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="number" step="any" class="form-control score_achieved" placeholder="0" id="score_achieved">
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="number" step="any" class="form-control score" placeholder="0" min="0" id="score" readonly>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="number" step="any" class="form-control personnel_score" placeholder="0" min="0" id="personnel_score" readonly>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="number" step="any" class="form-control direct_chairman" placeholder="0" min="0" id="direct_chairman" readonly>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false"></textarea>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false"></textarea>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         @endforeach
+                                        
+                                        <tr class="total">
+                                            <td colspan="5" class="text-center">សរុប = </td>
+                                            <td colspan="1" class="text-center">
+                                                <input type="text" class="form-control tr_score" placeholder="0" id="tr_score" value="" readonly>
+                                            </td>
+                                            <td colspan="1" class="text-center">
+                                                <input type="text" class="form-control tr_personnel_score" placeholder="0" id="tr_personnel_score" value="" readonly>
+                                            </td>
+                                            <td colspan="1" class="text-center">
+                                                <input type="text" class="form-control tr_direct_chairman" placeholder="0" id="tr_direct_chairman" value="" readonly>
+                                            </td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                                 <tbody>

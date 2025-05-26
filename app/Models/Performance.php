@@ -25,17 +25,14 @@ class Performance extends Model
         'total_score_direct_chairman',
         'overall_results',
         'score_level',
+        'status',
+        'type',
         'created_by',
         'updated_by',
     ];
 
-    public function title(){
-        return $this->belongsTo(Title::class,'title_id');
-    }
-    public function purpose(){
-        return $this->belongsTo(Purpose::class,'purpose_id');
-    }
-    public function performanceDetail(){
-        return $this->hasMany(PerformanceDetail::class,'performance_id','id');
+    public function titles()
+    {
+        return $this->hasMany(Title::class, 'performance_id');
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Title;
+use App\Models\PerformanceDetail;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Purpose extends Model
 {
@@ -12,10 +14,19 @@ class Purpose extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-        'employee_id',
+        'performance_id',
         'title_id',
         'name',
         'created_by',
         'updated_by',
     ];
+    public function title()
+    {
+        return $this->belongsTo(Title::class, 'title_id');
+    }
+
+    public function performanceDetail()
+    {
+        return $this->hasMany(PerformanceDetail::class, 'purpose_id');
+    }
 }

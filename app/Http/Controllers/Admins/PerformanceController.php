@@ -71,151 +71,52 @@ class PerformanceController extends Controller
         //     'weight' => 'required|numeric|min:0|max:100',
         // ]);
        
-        // try {
+        try {
             // DB::beginTransaction();
             $data = $request->all();
             $data['created_by'] = Auth::id();
-            $performance = Performance::create($data);
 
-            foreach ($request->data as $item) {
-                // Check if the item is a title
-                if (isset($item['title'])) {
-                    $title = Title::create([
-                        'employee_id' => $request->employee_id,
-                        'title'       => $item['title'],
-                    ]);
-                }
-        
-                // Check if the item is a purpose
-                elseif (isset($item['purpose'])) {
-                    if (!isset($title)) continue; // Skip if no title exists
-        
+            // Create main performance record
+            $performance = Performance::create($data);
+            foreach ($request->data as $titleItem) {
+                // Create Title
+                $title = Title::create([
+                    'performance_id' => $performance->id,
+                    'title' => $titleItem['title'],
+                ]);
+
+                // Loop through each purpose under this title
+                foreach ($titleItem['dataPurpose'] as $purposeItem) {
                     $purpose = Purpose::create([
-                        'employee_id' => $request->employee_id,
-                        'title_id'    => $title->id,
-                        'name'        => $item['purpose'],
-                    ]);
-                }
-        
-                // Check if the item is a KPI
-                elseif (isset($item['key_kpi'])) {
-                    if (!isset($title) || !isset($purpose)) continue; // Skip if no title or purpose exists
-        
-                    PerformanceDetail::create([
                         'performance_id' => $performance->id,
-                        'title_id'       => $title->id,
-                        'purpose_id'     => $purpose->id,
-                        'key_kpi'        => $item['key_kpi'],
-                        'action_plan'    => $item['action_plan'],
-                        'goal'           => $item['goal'],
-                        'weight'         => $item['weight'],
-                        'created_by'     => Auth::id(),
+                        'title_id'    => $title->id,
+                        'name'        => $purposeItem['purpose'],
                     ]);
+
+                    // Loop through each KPI under this purpose
+                    foreach ($purposeItem['dataKPi'] as $kpiItem) {
+                        PerformanceDetail::create([
+                            'performance_id' => $performance->id,
+                            'title_id'       => $title->id,
+                            'purpose_id'     => $purpose->id,
+                            'key_kpi'        => $kpiItem['key_kpi'],
+                            'action_plan'    => $kpiItem['action_plan'],
+                            'goal'           => $kpiItem['goal'],
+                            'weight'         => $kpiItem['weight'],
+                            'created_by'     => Auth::id(),
+                        ]);
+                    }
                 }
             }
 
-
-            // if ($request->data) {
-            //     foreach ($title as $item) {
-            //         $title = Title::create([
-            //             'employee_id' => $request->employee_id,
-            //             'title'       => $item['title'] ?? '',
-            //         ]);
-            //     }
-            // }
-            
-            // if ($request->input('purpose')) {
-            //     $purpose = $request->input('purpose');
-            //     foreach ($purpose as $item) {
-            //         $purpose = Purpose::create([
-            //             'employee_id' => $request->employee_id,
-            //             'title_id'    => $title->id,
-            //             'name'        => $item['purpose'] ?? '',
-            //         ]);
-            //     }
-            // }
-            // if ($request->input('keyKpi')) {
-            //     $keyKpi = $request->input('keyKpi');
-            //     foreach ($keyKpi as $item) {
-            //         PerformanceDetail::create([
-            //             'performance_id' => $performance->id,
-            //             'title_id'       => $title->id,
-            //             'purpose_id'     => $purpose->id,
-            //             'key_kpi'        => $item['key_kpi'] ?? '',
-            //             'action_plan'    => $item['action_plan'] ?? '',
-            //             'goal'           => $item['goal'] ?? '',
-            //             'weight'         => $item['weight'] ?? '',
-            //             'created_by'     => Auth::id(),
-            //         ]);
-            //     }
-            // }
-
-            // foreach ($request->key_kpi as $key => $item) :
-            //     if (!empty($item)) :
-            //         PerformanceDetail::create([
-            //             'Performance_id'   => $performance->id,
-            //             'key_kpi'   => $item,
-            //             'action_plan'=> $request->action_plan[$key] ?? '',
-            //             'goal'  => $request->goal[$key] ?? '',
-            //             'weight'    => $request->weight[$key] ?? '',
-            //             'created_by'    => Auth::id(),
-            //         ]);
-            //     endif;
-            // endforeach;
-
-            // $dataTitle = $request->title;
-
-            // if (is_array($dataTitle) && count($dataTitle)) {
-            //     foreach ($dataTitle as $titleItem) {
-            //         // Create or retrieve a Title record for this employee and title
-            //         $title = Title::firstOrCreate([
-            //             'employee_id' => $request->employee_id,
-            //             'title'       => $titleItem,
-            //             'created_by'  => Auth::id()
-            //         ]);
-
-            //         // Ensure that purposes align with the current title
-            //         if (isset($request->purpose) && is_array($request->purpose)) {
-            //             foreach ($request->purpose as $purposeItem) {
-            //                 $purpose = Purpose::firstOrCreate([
-            //                     'employee_id' => $request->employee_id,
-            //                     'title_id'    => $title->id,
-            //                     'name'        => $purposeItem,
-            //                     'created_by'  => Auth::id(),
-            //                 ]);
-            //             }
-            //         }
-            //         // Process KPIs associated with each purpose for the current title
-            //         if (isset($request->key_kpi)) {
-            //             foreach ($request->key_kpi as $key => $kpiItem) {
-            //                 if (!empty($kpiItem)) {
-            //                     Performance::firstOrCreate([
-            //                         'employee_id'  => $request->employee_id,
-            //                         'title_id'     => $title->id,
-            //                         'purpose_id'   => $purpose->id,
-            //                         'key_kpi'      => $kpiItem,
-            //                         'from_date'    => $request->from_date,
-            //                         'to_date'      => $request->to_date,
-            //                         'action_plan'  => $request->action_plan[$key] ?? '',
-            //                         'goal'         => $request->goal[$key] ?? '',
-            //                         'weight'       => $request->weight[$key] ?? '',
-            //                         'created_by'   => Auth::id(),
-            //                     ]);
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-            
-            
             DB::commit();
             return response()->json(['message' => 'Data saved successfully!']);
             // Toastr::success('Performance created successfully.','Success');
             // return redirect('performance');
-        // } catch (\Throwable $exp) {
-        //     DB::rollback();
-        //     Toastr::error('Performance created fail.','Error');
-        // }
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Performance created fail.','Error');
+        }
     }
 
     /**
@@ -226,7 +127,21 @@ class PerformanceController extends Controller
      */
     public function show($id)
     {
-        $data = Performance::with(['title','purpose','performanceDetail'])->where('employee_id',$id)->get();
+        $data = Performance::with(['titles.purposes.performanceDetail'])
+        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->select(
+            'performances.*',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'departments.name_english as dep_name',
+            'positions.name_english as positions_name',
+            'branchs.branch_name_en',
+            'branchs.branch_name_kh',
+        )->where('performances.employee_id',$id)->first();
         // dd($data);
         return view('performances.preview',compact('data'));
     }

@@ -20,7 +20,7 @@
                     <div class="col-md-4 hr-form-group-select2">
                         <div class="form-group">
                             <label>@lang('lang.employee')</label>
-                            <select class="form-control hr-select2-option" id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
+                            <select class="form-control hr-select2-option required" id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
                                 <option selected value=""> -- @lang('lang.select')--</option>
                                 @foreach ($employee as $item)
                                     <option data-id="{{ $item->id }}" value="{{ $item->id }}">
@@ -34,7 +34,7 @@
                         <div class="form-group">
                             <label>@lang('lang.from_date')</label>
                             <div class="cal-icon">
-                                <input class="form-control datetimepicker" type="text" id="from_date" name="from_date" value="{{old('from_date')}}" required>
+                                <input class="form-control datetimepicker required" type="text" id="from_date" name="from_date" value="{{old('from_date')}}" required>
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                         <div class="form-group">
                             <label>@lang('lang.to_date')</label>
                             <div class="cal-icon">
-                                <input class="form-control datetimepicker" type="text" id="to_date" name="to_date" value="{{old('to_date')}}" required>
+                                <input class="form-control datetimepicker required" type="text" id="to_date" name="to_date" value="{{old('to_date')}}" required>
                             </div>
                         </div>
                     </div>
@@ -62,18 +62,18 @@
                                 </thead>
                                 <tbody>
                                     <div>
-                                        <tr>
+                                        <tr class="title-group">
                                             <td colspan="2" class="text-center">
-                                                <input type="text" class="form-control" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}" required>
+                                                <input type="text" class="form-control required" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}">
                                             </td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
                                         <div>
-                                            <tr>
+                                            <tr class="purpose-group">
                                                 <td colspan="2" class="text-center">
-                                                    <input type="text" class="form-control" id="purpose" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}" required>
+                                                    <input type="text" class="form-control" id="purpose" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
                                                 </td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
@@ -82,26 +82,18 @@
                                                 </td>
                                             </tr>
                                             <div>
-                                                <tr>
+                                                <tr class="kpi-group">
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" name="key_kpi[]" placeholder="Enter text here" spellcheck="false" required>{{ old('key_kpi') }}</textarea>
+                                                        <textarea rows="3" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required>{{ old('action_plan') }}</textarea>
+                                                        <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
                                                     </td>
                                                     <td class="">
-                                                        <select class="form-control hr-select2-option" id="goal[]" name="goal[]" required>
-                                                            <option selected disabled value=""> -- @lang('lang.select') --</option>
-                                                            <option value="1">1</option>
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option>
-                                                            <option value="4">4</option>
-                                                            <option value="5">5</option>
-                                                        </select>
-                                                        {{-- <textarea rows="3" class="form-control" name="goal[]" placeholder="Enter text here" spellcheck="false" required>{{ old('goal') }}</textarea> --}}
+                                                        <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false">{{ old('goal') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="number" step="any" class="form-control weight" name="weight[]" id="weight" placeholder="%" value="{{old('weight')}}" required>
+                                                        <input type="number" step="any" class="form-control required" name="weight[]" id="weight" placeholder="%" value="{{old('weight')}}">
                                                     </td>
                                                     <td class="text-center">
                                                         <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
@@ -202,49 +194,86 @@
         });
         $(document).on('click', '#btnCreatePerformance', function(e) {
             e.preventDefault(); // Prevent the form from submitting the traditional way
-
-            var dataKeyKpi = [];
-            $('#tbl_performance tbody tr').each(function() {
-                let data = {
-                    title: $(this).find('[name="title[]"]').val(),
-                    purpose: $(this).find('[name="purpose[]"]').val(),
-                    key_kpi: $(this).find('[name="key_kpi[]"]').val(),
-                    action_plan: $(this).find('[name="action_plan[]"]').val(),
-                    goal: $(this).find('[name="goal[]"]').val(),
-                    weight: $(this).find('[name="weight[]"]').val(),
-                }
-                dataKeyKpi.push(data);
+            let numRequired = 0;
+            $(".required").each(function(e){
+                if($(this).val()==""){ numRequired++;}
             });
 
-            console.log(dataKeyKpi);
-            $.ajax({
-                type: "POST",
-                url: "{{ url('performance/store') }}",
-                data: {
-                    employee_id : $("#employee_id").val(),
-                    from_date : $("#from_date").val(),
-                    to_date : $("#to_date").val(),
-                    data: dataKeyKpi,
-                    // data: JSON.stringify(formData),
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    alert('Form submitted successfully!');
-                    $('#performanceForm').trigger("reset");
-                },
-                error: function(xhr, status, error) {
-                    // Handle errors
-                    alert('An error occurred. Please try again.');
+            let dataKeyKpi = [];
+            let $rows = $('#tbl_performance tbody tr');
+            let i = 0;
+            while (i < $rows.length) {
+                let $titleRow = $($rows[i]);
+                let title = $titleRow.find('input[name="title[]"]').val();
+                i++;
+                let dataPurpose = [];
+                // Process all purpose rows until the next title or end
+                while (i < $rows.length && !$($rows[i]).hasClass('title-group')) {
+                    if ($($rows[i]).hasClass('purpose-group')) {
+                        let purpose = $($rows[i]).find('input[name="purpose[]"]').val();
+                        i++;
+                        let dataKPi = [];
+                        // Process all KPI rows until next purpose or title or end
+                        while (i < $rows.length && !$($rows[i]).hasClass('title-group') && !$($rows[i]).hasClass('purpose-group')) {
+                            let $kpiRow = $($rows[i]);
+                            let key_kpi = $kpiRow.find('textarea[name="key_kpi[]"]').val();
+                            let action_plan = $kpiRow.find('textarea[name="action_plan[]"]').val();
+                            let goal = $kpiRow.find('textarea[name="goal[]"]').val();
+                            let weight = $kpiRow.find('input[name="weight[]"]').val();
+
+                            dataKPi.push({ key_kpi, action_plan, goal, weight });
+                            i++;
+                        }
+
+                        dataPurpose.push({ purpose, dataKPi });
+                    } else {
+                        i++; // just in case of stray rows
+                    }
                 }
-            });
+                dataKeyKpi.push({ title, dataPurpose });
+            }
+            if (numRequired>0) {
+                toastr.warning("@lang('lang.input_required')", "@lang('lang.message_title')");
+                $(".required").each(function(){
+                    if($(this).val()==""){
+                        $(this).css("border-color","red");
+                    }
+                });
+            }else{
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('performance/store') }}",
+                    data: {
+                        employee_id : $("#employee_id").val(),
+                        from_date : $("#from_date").val(),
+                        to_date : $("#to_date").val(),
+                        data: dataKeyKpi,
+                    },
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response.message) {
+                            toastr.success(response.message, 'Success');
+                            setTimeout(function() {
+                                window.location.href = "{{ url('performance') }}";
+                            }, 2000);
+                        } else {
+                            toastr.error('An error occurred while saving the performance data.', 'Error');
+                        }
+                        $('#performanceForm').trigger("reset");
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error('An error occurred. Please try again.', 'Error');
+                    }
+                });
+            }
         });
     });
 
     // Function to create a new purpose row
     function addPurposeRow() {
-        return `<tr class='section-purpose' style='text-align: center'>
+        return `<tr class='section-purpose purpose-group' style='text-align: center'>
             <td colspan="2" class="text-center">
-                <input type="text" class="form-control" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}" required>
+                <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
@@ -252,24 +281,17 @@
                 <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
             </td>
         </tr>
-        <tr class='section-purpose' style='text-align: center'>
+        <tr class='section-purpose kpi-group' style='text-align: center'>
             <td class="text-center">
-                <textarea rows="3" class="form-control" name="key_kpi[]" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
             <td class="">
-                <select class="form-control hr-select2-option" id="goal[]" name="goal[]" required>
-                    <option selected disabled value=""> -- @lang('lang.select') --</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+                <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight" id="weight" placeholder="%" required></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight required" id="weight" placeholder="%"></td>
             <td class="text-center">
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
@@ -277,33 +299,26 @@
     }
     // Function to create a new record row
     function addNewRecord() {
-        return `<tr class='section-purpose' style='text-align: center'>
+        return `<tr class='section-purpose kpi-group' style='text-align: center'>
             <td class="text-center">
-                <textarea rows="3" class="form-control" name="key_kpi[]" placeholder="Enter text here" spellcheck="false" required>{{ old('key_kpi') }}</textarea>
+                <textarea rows="3" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required>{{ old('action_plan') }}</textarea>
+                <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <select class="form-control hr-select2-option" id="goal[]" name="goal[]" required>
-                    <option selected disabled value=""> -- @lang('lang.select') --</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+                <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control" placeholder="%" min="0" value="{{old('weight')}}" required></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
             </td>
         </tr>`;
     }
     function addMoreRow() {
-        return `<tr class=''>
+        return `<tr class='title-group'>
             <td colspan="2" class="text-center">
-                <input type="text" class="form-control" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}" required>
+                <input type="text" class="form-control required" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}">
             </td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
@@ -311,9 +326,9 @@
                 <a class="btn btn-danger btn-sm btnRemoveMore"><i class="fa fa-plus-circle"></i>Remove More</a>
             </td>
         </tr>
-        <tr class='' style='text-align: center'>
+        <tr class='purpose-group' style='text-align: center'>
             <td colspan="2" class="text-center">
-                <input type="text" class="form-control" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}" required>
+                <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
@@ -321,24 +336,17 @@
                 <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i>Add Purpose</button>
             </td>
         </tr>
-        <tr class='' style='text-align: center'>
+        <tr class='kpi-group' style='text-align: center'>
             <td class="text-center">
-                <textarea rows="3" class="form-control" name="key_kpi[]" placeholder="Enter text here" spellcheck="false" required>{{ old('key_kpi') }}</textarea>
+                <textarea rows="3" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required>{{ old('action_plan') }}</textarea>
+                <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="">
-                <select class="form-control hr-select2-option" id="goal[]" name="goal[]" required>
-                    <option selected disabled value=""> -- @lang('lang.select') --</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+                <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control" placeholder="%" min="0" value="{{old('weight')}}" required></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
