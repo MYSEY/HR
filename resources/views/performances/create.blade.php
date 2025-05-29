@@ -233,7 +233,7 @@
                 dataKeyKpi.push({ title, dataPurpose });
             }
             if (numRequired>0) {
-                toastr.warning("@lang('lang.input_required')", "@lang('lang.message_title')");
+                toastr.error("@lang('lang.input_required')", "@lang('lang.message_title')");
                 $(".required").each(function(){
                     if($(this).val()==""){
                         $(this).css("border-color","red");
@@ -256,10 +256,10 @@
                             setTimeout(function() {
                                 window.location.href = "{{ url('performance') }}";
                             }, 2000);
+                            $('#performanceForm').trigger("reset");
                         } else {
-                            toastr.error('An error occurred while saving the performance data.', 'Error');
+                            toastr.error(response.message || 'សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%', 'Error');
                         }
-                        $('#performanceForm').trigger("reset");
                     },
                     error: function(xhr, status, error) {
                         toastr.error('An error occurred. Please try again.', 'Error');

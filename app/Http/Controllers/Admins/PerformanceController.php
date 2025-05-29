@@ -62,57 +62,70 @@ class PerformanceController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'title' => 'required|string|max:255',
-        //     'purpose' => 'required|string|max:255',
-        //     'key_kpi' => 'required|string',
-        //     'action_plan' => 'required|string',
-        //     'goal' => 'required|string',
-        //     'weight' => 'required|numeric|min:0|max:100',
-        // ]);
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'purpose' => 'required|string|max:255',
+            'key_kpi' => 'required|string',
+            'action_plan' => 'required|string',
+            'goal' => 'required|string',
+            'weight' => 'required|numeric|min:0|max:100',
+        ]);
        
         try {
-            // DB::beginTransaction();
-            $data = $request->all();
-            $data['created_by'] = Auth::id();
-
-            // Create main performance record
-            $performance = Performance::create($data);
+            DB::beginTransaction();
+            $totalWeight = 0;
             foreach ($request->data as $titleItem) {
-                // Create Title
-                $title = Title::create([
-                    'performance_id' => $performance->id,
-                    'title' => $titleItem['title'],
-                ]);
-
-                // Loop through each purpose under this title
                 foreach ($titleItem['dataPurpose'] as $purposeItem) {
-                    $purpose = Purpose::create([
-                        'performance_id' => $performance->id,
-                        'title_id'    => $title->id,
-                        'name'        => $purposeItem['purpose'],
-                    ]);
-
-                    // Loop through each KPI under this purpose
-                    foreach ($purposeItem['dataKPi'] as $kpiItem) {
-                        PerformanceDetail::create([
-                            'performance_id' => $performance->id,
-                            'title_id'       => $title->id,
-                            'purpose_id'     => $purpose->id,
-                            'key_kpi'        => $kpiItem['key_kpi'],
-                            'action_plan'    => $kpiItem['action_plan'],
-                            'goal'           => $kpiItem['goal'],
-                            'weight'         => $kpiItem['weight'],
-                            'created_by'     => Auth::id(),
-                        ]);
+                    foreach ($purposeItem['dataKPi'] as $kpi) {
+                        $totalWeight += (int) $kpi['weight'];
                     }
                 }
             }
-
-            DB::commit();
-            return response()->json(['message' => 'Data saved successfully!']);
-            // Toastr::success('Performance created successfully.','Success');
-            // return redirect('performance');
+            if ($totalWeight == 100) {
+                $data = $request->all();
+                $data['created_by'] = Auth::id();
+                $data['status'] = "pending";
+                // Create main performance record
+                $performance = Performance::create($data);
+                foreach ($request->data as $titleItem) {
+                    // Create Title
+                    $title = Title::create([
+                        'performance_id' => $performance->id,
+                        'title' => $titleItem['title'],
+                    ]);
+    
+                    // Loop through each purpose under this title
+                    foreach ($titleItem['dataPurpose'] as $purposeItem) {
+                        $purpose = Purpose::create([
+                            'performance_id' => $performance->id,
+                            'title_id'    => $title->id,
+                            'name'        => $purposeItem['purpose'],
+                        ]);
+    
+                        // Loop through each KPI under this purpose
+                        foreach ($purposeItem['dataKPi'] as $kpiItem) {
+                            PerformanceDetail::create([
+                                'performance_id' => $performance->id,
+                                'title_id'       => $title->id,
+                                'purpose_id'     => $purpose->id,
+                                'key_kpi'        => $kpiItem['key_kpi'],
+                                'action_plan'    => $kpiItem['action_plan'],
+                                'goal'           => $kpiItem['goal'],
+                                'weight'         => $kpiItem['weight'],
+                                'created_by'     => Auth::id(),
+                            ]);
+                        }
+                    }
+                }
+                DB::commit();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data saved successfully!',
+                    'status'  => 200
+                ], 200);
+            } else {
+                return response()->json(['error' => 'The total weight of all KPIs must equal 100%.']);
+            }
         } catch (\Throwable $exp) {
             DB::rollback();
             Toastr::error('Performance created fail.','Error');
@@ -141,8 +154,7 @@ class PerformanceController extends Controller
             'positions.name_english as positions_name',
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
-        )->where('performances.employee_id',$id)->first();
-        // dd($data);
+        )->where('performances.id',$id)->first();
         return view('performances.preview',compact('data'));
     }
 
@@ -154,8 +166,23 @@ class PerformanceController extends Controller
      */
     public function edit($id)
     {
-        $employee = User::where('line_manager',Auth::user()->line_manager)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
-        return view('performances.edit',compact('employee'));
+        $data = Performance::with(['titles.purposes.performanceDetail'])
+        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->select(
+            'performances.*',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'departments.name_english as dep_name',
+            'positions.name_english as positions_name',
+            'branchs.branch_name_en',
+            'branchs.branch_name_kh',
+        )->where('performances.id',$id)->first();
+        $employee = User::where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
+        return view('performances.edit',compact('employee','data'));
     }
 
     /**
@@ -165,9 +192,92 @@ class PerformanceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'purpose' => 'required|string|max:255',
+        //     'key_kpi' => 'required|string',
+        //     'action_plan' => 'required|string',
+        //     'goal' => 'required|string',
+        //     'weight' => 'required|numeric|min:0|max:100',
+        // ]);
+    
+        try {
+            DB::beginTransaction();
+    
+            $totalWeight = 0;
+            foreach ($request->data as $titleItem) {
+                foreach ($titleItem['dataPurpose'] as $purposeItem) {
+                    foreach ($purposeItem['dataKPi'] as $kpi) {
+                        $totalWeight += (int) $kpi['weight'];
+                    }
+                }
+            }
+    
+            if ($totalWeight !== 100) {
+                return response()->json(['error' => 'The total weight of all KPIs must equal 100%.']);
+            }
+    
+            // Find existing performance
+            $performance = Performance::findOrFail($request->performance_id);
+    
+            // Update main performance data
+            $performance->update([
+                'employee_id' => $request->employee_id,
+                'from_date' => $request->from_date,
+                'to_date' => $request->to_date,
+                'created_by' => Auth::id()
+            ]);
+    
+            // Delete old related data
+            Title::where('performance_id', $request->performance_id)->delete();
+            Purpose::where('performance_id', $request->performance_id)->delete();
+            PerformanceDetail::where('performance_id', $request->performance_id)->delete();
+    
+            // Re-insert updated related data
+            foreach ($request->data as $titleItem) {
+                $title = Title::create([
+                    'performance_id' => $performance->id,
+                    'title' => $titleItem['title'],
+                ]);
+    
+                foreach ($titleItem['dataPurpose'] as $purposeItem) {
+                    $purpose = Purpose::create([
+                        'performance_id' => $performance->id,
+                        'title_id'    => $title->id,
+                        'name'        => $purposeItem['purpose'],
+                    ]);
+    
+                    foreach ($purposeItem['dataKPi'] as $kpiItem) {
+                        PerformanceDetail::create([
+                            'performance_id' => $performance->id,
+                            'title_id'       => $title->id,
+                            'purpose_id'     => $purpose->id,
+                            'key_kpi'        => $kpiItem['key_kpi'],
+                            'action_plan'    => $kpiItem['action_plan'],
+                            'goal'           => $kpiItem['goal'],
+                            'weight'         => $kpiItem['weight'],
+                            'created_by'     => Auth::id(),
+                        ]);
+                    }
+                }
+            }
+    
+            DB::commit();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Data updated successfully!',
+                'status'  => 200
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollBack();
+            return response()->json([
+                'error' => 'Performance update failed.',
+                'exception' => $exp->getMessage()
+            ], 500);
+        }
     }
 
     /**

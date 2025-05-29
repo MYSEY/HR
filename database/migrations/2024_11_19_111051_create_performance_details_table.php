@@ -29,6 +29,7 @@ return new class extends Migration
             $table->decimal('score_direct_chairman')->nullable();
             $table->decimal('easy_difficult_factors')->nullable();
             $table->string('comment')->nullable();
+            $table->boolean('is_lock')->default(false);
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

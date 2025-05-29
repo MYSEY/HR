@@ -17,15 +17,14 @@ return new class extends Migration
         Schema::create('performances', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id');
-            $table->date('from_date')->nullable();
-            $table->date('to_date')->nullable();
-            $table->decimal('overall_results')->nullable();
-            $table->decimal('score_level')->nullable();
-            $table->decimal('total_weight')->nullable();
-            $table->decimal('total_score_achieved')->nullable();
-            $table->decimal('total_score')->nullable();
-            $table->decimal('total_score_live_staff')->nullable();
-            $table->decimal('total_score_direct_chairman')->nullable();
+            $table->date('from_date');
+            $table->date('to_date');
+            $table->decimal('total_score')->default(0);
+            $table->decimal('total_score_achieved')->default(0);
+            $table->decimal('overall_results')->default(0);
+            $table->decimal('total_score_live_staff')->default(0);
+            $table->decimal('total_score_direct_chairman')->default(0);
+            $table->string('type')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

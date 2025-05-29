@@ -28,6 +28,7 @@ class PerformanceDetail extends Model
         'score_direct_chairman',
         'easy_difficult_factors',
         'comment',
+        'is_lock',
         'created_by',
         'updated_by',
     ];

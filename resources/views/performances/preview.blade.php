@@ -73,11 +73,11 @@
                                         <th style="min-width: 350px;">(KPI)</th>
                                         <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 350px;">គោលដៅ (Goal)</th>
-                                        <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
-                                        <th style="min-width: 150px;">ពិន្ទុសម្រេចបាន (Score achieved)</th>
-                                        <th style="min-width: 150px;">ពិន្ទុ (Score)</th>
-                                        <th style="min-width: 150px;">បុគ្គលិកផ្ទាល់</th>
-                                        <th style="min-width: 150px;">ប្រធានផ្ទាល់</th>
+                                        <th>ទម្ងន់ (Weight %)</th>
+                                        <th style="min-width: 100px;">ពិន្ទុសម្រេចបាន (Score achieved)</th>
+                                        <th>ពិន្ទុ (Score)</th>
+                                        <th>បុគ្គលិកផ្ទាល់</th>
+                                        <th>ប្រធានផ្ទាល់</th>
                                         <th style="min-width: 350px;">កត្តាដែលងាយស្រួល និងលំបាក</th>
                                         <th style="min-width: 350px;">យោបល់/កំណត់សម្គាល់</th>
                                     </tr>
@@ -115,19 +115,19 @@
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
                                                 <tr>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$Detailitem->key_kpi}}</textarea>
+                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$Detailitem->action_plan}}</textarea>
+                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$Detailitem->goal}}</textarea>
+                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->goal}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" required>
+                                                        <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="number" step="any" class="form-control score_achieved" placeholder="0" id="score_achieved">
+                                                        <input type="number" step="any" class="form-control score_achieved" placeholder="0" id="score_achieved" min="0" max="5">
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control score" placeholder="0" min="0" id="score" readonly>
@@ -139,10 +139,10 @@
                                                         <input type="number" step="any" class="form-control direct_chairman" placeholder="0" min="0" id="direct_chairman" readonly>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false"></textarea>
+                                                        <textarea rows="3" class="form-control" placeholder="Enter text here"></textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false"></textarea>
+                                                        <textarea rows="3" class="form-control" placeholder="Enter text here"></textarea>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -218,135 +218,95 @@
 @include('includs.script')
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
-    $(function() {
-        $(document).on('input', '.score_achieved', function() {
-            let value = parseFloat($(this).val());
-            // Handle case when the input is empty
-            if (isNaN(value)) {
-                $(this).val(''); // Clear the input if not a number
-                return;
-            }
-            // Custom validation range (0 to 5)
-            if (value < 0) {
-                $(this).val(0); // Set to 0 if below 0
-            } else if (value > 5) {
-                $(this).val(5); // Set to 5 if above 5
-            }
-        });
-        $(document).ready(function() {
-            // Attach event listeners to inputs with class .weight and .score_achieved
-            $('#tbl_performance').on('input', '.weight, .score_achieved', function () {
-                var row = $(this).closest('tr');
-                var weightInput = row.find('.weight');
-                // Validate weight input
-                var weightValue = parseFloat(weightInput.val());
-                // Check if weightValue is NaN or out of range
-                if (isNaN(weightValue) || weightValue < 0 || weightValue > 100) {
-                    weightInput.val(10); // Reset to a default value or keep it empty
-                    toastr.error('Please enter a weight between 0 and 100.', 'Error');
-                }
-                calculateRowTotals(row);
-            });
-            // Initial calculation on page load
-            calculateTotals();
-        });
-        $(document).ready(function () {
-            $('#tbl_performance').on('input', '.score_achieved, .weight', function () {
-                var row = $(this).closest('tr');
-                calculateRowTotals(row);
-                calculateTotals();
+    $(document).ready(function () {
+        document.querySelectorAll('.score_achieved').forEach(input => {
+            input.addEventListener('input', function () {
+                let val = parseFloat(this.value);
+                if (val > 5) this.value = 5;
+                if (val < 0) this.value = 0;
             });
         });
-    });
-    function calculateRowTotals(row) {
-        var weight = parseFloat(row.find(".weight").val()) || 0;
-        var scoreAchieved = parseFloat(row.find(".score_achieved").val()) || 0;
-        // Constrain weight to be within 0 and 100
-        if (weight < 0) weight = 0;
-        if (weight > 100) weight = 100;
-        row.find(".weight").val(weight); // Update the input field to reflect valid weight
 
-        if (scoreAchieved < 0) scoreAchieved = 0;
-        if (scoreAchieved > 5) scoreAchieved = 5;
-        if (scoreAchieved <= 5) {
-            var totalWeight = weight / 100;
-            var score = totalWeight * scoreAchieved;
-            row.find(".score").val(score.toFixed(1));
-            row.find(".personnel_score").val(score.toFixed(2));
-            row.find(".direct_chairman").val(score.toFixed(2));
-            var totalRow = row.next(".total");
-            totalRow.find(".tr_score").val(score.toFixed(1));
-            totalRow.find(".tr_personnel_score").val(score.toFixed(2));
-            totalRow.find(".tr_direct_chairman").val(score.toFixed(2));   
-        }
-    }
-    function calculateTotals() {
-        let totalTrScore = 0;
-        // Sum up all row scores to calculate the total
-        $('#tbl_performance .tr_score').each(function () {
-            const trScore = parseFloat($(this).val()) || 0;
-            totalTrScore += trScore;
+        // Trigger sum calculation when any score_achieved is changed
+        $(document).on('input', '.score_achieved', function () {
+            let $row = $(this).closest('tr');
+            let weight = parseFloat($row.find('.weight').val()) || 0;
+            let achieved = parseFloat($(this).val()) || 0;
+
+            // Calculate and update scores
+            let score = (weight * achieved) / 100;
+            $row.find('.score').val(score.toFixed(2));
+            $row.find('.personnel_score').val(score.toFixed(2));
+            $row.find('.direct_chairman').val(score.toFixed(2));
+
+            // Recalculate subtotals
+            calculateSubtotals();
+            calculateGrandTotals();
         });
-        // Check if totalScore exceeds 5
-        if (totalTrScore >= 5) {
-            // Optionally, set total_score to 5 or limit further input
-            totalTrScore = 5; // This can be changed based on how you want to handle it
+
+        function calculateSubtotals() {
+            $('#tbl_performance').find('tr.total').each(function () {
+                let $totalRow = $(this);
+                let $rows = $totalRow.prevUntil('tr.total, tr:has(td[colspan="2"] input[type="text"])');
+
+                let sumScore = 0, sumPersonnel = 0, sumChairman = 0;
+                $rows.each(function () {
+                    sumScore += parseFloat($(this).find('.score').val()) || 0;
+                    sumPersonnel += parseFloat($(this).find('.personnel_score').val()) || 0;
+                    sumChairman += parseFloat($(this).find('.direct_chairman').val()) || 0;
+                });
+
+                $totalRow.find('.tr_score').val(sumScore.toFixed(2));
+                $totalRow.find('.tr_personnel_score').val(sumPersonnel.toFixed(2));
+                $totalRow.find('.tr_direct_chairman').val(sumChairman.toFixed(2));
+            });
         }
-        // Set the total score
-        $('#total_score').val(totalTrScore.toFixed(2));
-        $('#total_personnel_score').val(totalTrScore.toFixed(2));
-        $('#total_direct_chairman').val(totalTrScore.toFixed(2));
-        updateOverallResults(totalTrScore);
-        calculateTotalWeight();
-    }
-    function updateOverallResults(totalScore) {
-        var overallResults = '';
-        var color = '';
-        if (totalScore === 0) {
-            overallResults = '';
-        } else if (totalScore < 2) {
-            overallResults = 'ខ្សោយ_(ក្រោមផែនការ២០%)';
-            color = 'red';
-        } else if (totalScore <= 2.99) {
-            overallResults = 'ត្រូវកែលម្អ_(ក្រោមផែនការ១០%)';
-            color = 'orange';
-        } else if (totalScore <= 3.99) {
-            overallResults = 'ធម្យម_(អនុវត្តន៍ការងារគ្រប់ផែនការងារ)';
-            color = 'info';
-        } else if (totalScore <= 4.99) {
-            overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
-            color = 'lightgreen';
-        } else {
-            overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
-            color = 'green';
+
+        function calculateGrandTotals() {
+            let totalScore = 0, totalPersonnel = 0, totalChairman = 0, totalWeight = 0;
+
+            $('.score').each(function () {
+                totalScore += parseFloat($(this).val()) || 0;
+            });
+            $('.personnel_score').each(function () {
+                totalPersonnel += parseFloat($(this).val()) || 0;
+            });
+            $('.direct_chairman').each(function () {
+                totalChairman += parseFloat($(this).val()) || 0;
+            });
+            $('.weight').each(function () {
+                totalWeight += parseFloat($(this).val()) || 0;
+            });
+
+            $('#total_score').val(totalScore.toFixed(2));
+            $('#total_personnel_score').val(totalPersonnel.toFixed(2));
+            $('#total_direct_chairman').val(totalChairman.toFixed(2));
+            $('#total-weight').val(totalWeight.toFixed(2));
+            updateOverallResults(totalScore);
         }
-        $('#overall_results').val(overallResults).css('color', color);
-    }
-    function calculateTotalWeight() {
-        let totalWeight = 0;
-        // Sum the weights from all input fields
-        $('#tbl_performance .weight').each(function () {
-            const weight = parseFloat($(this).val()) || 0;
-            totalWeight += weight;
-        });
-        // Check if totalWeight exceeds 100
-        if (totalWeight > 100) {
-            // Optionally alert the user or adjust weights
-            // toastr.error('Total weight cannot exceed 100%. Please adjust the values.', 'Error');
-            totalWeight = 100; // You can set it back to 100 or any logic you prefer
-        }
-        // Update the total weight display
-        $('#total-weight').val(totalWeight + '%');
-        // Optionally, if you want to adjust individual weights to meet the limit
-        $('#tbl_performance .weight').each(function () {
-            const weightInput = $(this);
-            const weight = parseFloat(weightInput.val()) || 0;
-            // If total weight is 100, make sure to not allow further input
-            if (totalWeight === 100) {
-                weightInput.prop('max', weight); // Set max to current value
+
+        function updateOverallResults(totalScore) {
+            var overallResults = '';
+            var color = '';
+            if (totalScore === 0) {
+                overallResults = '';
+            } else if (totalScore < 2) {
+                overallResults = 'ខ្សោយ_(ក្រោមផែនការ២០%)';
+                color = 'red';
+            } else if (totalScore <= 2.99) {
+                overallResults = 'ត្រូវកែលម្អ_(ក្រោមផែនការ១០%)';
+                color = 'orange';
+            } else if (totalScore <= 3.99) {
+                overallResults = 'ធម្យម_(អនុវត្តន៍ការងារគ្រប់ផែនការងារ)';
+                color = 'info';
+            } else if (totalScore <= 4.99) {
+                overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
+                color = 'lightgreen';
             } else {
-                weightInput.prop('max', 100 - (totalWeight - weight)); // Adjust max based on remaining capacity
+                overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
+                color = 'green';
             }
-        });
-    }
+            $('#overall_results').val(overallResults).css('color', color);
+        }
+    });
 </script>
