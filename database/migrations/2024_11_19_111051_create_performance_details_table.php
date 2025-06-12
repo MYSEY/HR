@@ -19,8 +19,8 @@ return new class extends Migration
             $table->integer('performance_id');
             $table->string('title_id');
             $table->string('purpose_id');
-            $table->string('key_kpi');
-            $table->string('action_plan');
+            $table->longText('key_kpi');
+            $table->longText('action_plan');
             $table->string('goal');
             $table->string('weight');
             $table->decimal('score_achieved')->nullable();

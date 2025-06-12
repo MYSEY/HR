@@ -275,6 +275,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('performance/{id}', [PerformanceController::class,'show']);
     Route::get('performance/{id}/edit', [PerformanceController::class,'edit']);
     Route::post('performance/update', [PerformanceController::class,'update']);
+    Route::get('performance/status/{id}', [PerformanceController::class,'status']);
 
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);

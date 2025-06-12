@@ -56,64 +56,87 @@
                                         <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 250px;">គោលដៅ (Goal)</th>
                                         <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
+                                        <th style="min-width: 150px;">Is Lock</th>
                                         <th>@lang('lang.action')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($data->titles as $item)
-                                        <div>
-                                            <tr class="title-group">
+                                        <tr class="title-group">
+                                            <td colspan="2" class="text-center">
+                                                <input type="text" class="form-control required" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{ $item->title ?? '' }}">
+                                            </td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                        </tr>
+                                        @foreach ($item->purposes as $purposeItem)
+                                            <tr class='section-purpose purpose-group' style='text-align: center'>
                                                 <td colspan="2" class="text-center">
-                                                    <input type="text" class="form-control required" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{ $item->title ?? '' }}">
+                                                    <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{ $purposeItem->name ?? '' }}">
                                                 </td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center">
-                                                    <a class="btn btn-danger btn-sm btnRemoveMore"><i class="fa fa-plus-circle"></i>Remove More</a>
+                                                <td colspan="1" class="text-center"></td>
+                                                <td class="text-center">
+                                                    @if ($loop->index == 0)
+                                                        <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
+                                                    @else
+                                                        <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
+                                                    @endif
                                                 </td>
                                             </tr>
-                                            @foreach ($item->purposes as $purposeItem)
-                                                <div>
-                                                    <tr class="purpose-group">
-                                                        <td colspan="2" class="text-center">
-                                                            <input type="text" class="form-control" id="purpose" name="purpose[]" placeholder="គោលបំណង" value="{{ $purposeItem->name ?? '' }}">
-                                                        </td>
-                                                        <td colspan="1" class="text-center"></td>
-                                                        <td colspan="1" class="text-center"></td>
-                                                        <td colspan="1" class="text-center">
-                                                            <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
-                                                        </td>
-                                                    </tr>
-                                                    @foreach ($purposeItem->performanceDetail as $Detailitem)
-                                                        <div>
-                                                            <tr class="kpi-group">
-                                                                <td class="text-center">
-                                                                    <textarea rows="3" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{$Detailitem->key_kpi}}</textarea>
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{$Detailitem->action_plan}}</textarea>
-                                                                </td>
-                                                                <td class="">
-                                                                    <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false">{{$Detailitem->goal}}</textarea>
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    <input type="number" step="any" class="form-control required" name="weight[]" id="weight" placeholder="%" value="{{$Detailitem->weight}}">
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
-                                                                    {{-- <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button> --}}
-                                                                </td>
-                                                            </tr>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
+                                            @foreach ($purposeItem->performanceDetail as $Detailitem)
+                                                <tr class="section-purpose kpi-group">
+                                                    <td class="text-center">
+                                                        <textarea rows="3" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false"
+                                                            {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->key_kpi }}
+                                                        </textarea>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"
+                                                            {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->action_plan }}
+                                                        </textarea>
+                                                    </td>
+                                                    <td class="">
+                                                        <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"
+                                                            {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->goal }}
+                                                        </textarea>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="number" step="any" class="form-control required weight" name="weight[]" id="weight" placeholder="%" value="{{ $Detailitem->weight }}" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <select class="form-control" name="is_lock[]" id="is_lock" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                            <option value="0" {{ $Detailitem->is_lock == 0 ? 'selected' : '' }}>No</option>
+                                                            <option value="1" {{ $Detailitem->is_lock == 1 ? 'selected' : '' }}>Yes</option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if ($loop->index == 0)
+                                                            <button type="button" class="btn btn-success btn-sm addRecord">
+                                                                <i class="fa fa-plus"></i>
+                                                            </button>
+                                                        @else
+                                                            @if ($Detailitem->is_lock == 1)
+                                                                <button type="button" class="btn btn-secondary btn-sm" disabled><i class="fa fa-lock"></i></button>
+                                                            @else
+                                                                <button type="button" class="btn btn-danger me-1 btn-sm removeRecord">
+                                                                    <i class="fa fa-trash-o"></i>
+                                                                </button>
+                                                            @endif
+                                                        @endif
+                                                    </td>
+                                                </tr>
                                             @endforeach
-                                        </div>
+                                        @endforeach
                                     @endforeach
                                 </tbody>
                                 <tbody>
                                     <tr>
                                         <td colspan="2" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center">
@@ -146,34 +169,57 @@
 <script>
     $(function() {
         let dataKeyKpi = [];
-
-        // Event to add a new purpose
-        $(document).on('click',".addNewPurpose",function() {
-            $("#tbl_performance").append(addPurposeRow());
-            // $(this).closest('tr').before(addPurposeRow());
+        $(document).on('click', ".addNewPurpose", function () {
+            let currentPurposeRow = $(this).closest('tr');
+            // Find the nearest .title-group above this purpose
+            let titleRow = currentPurposeRow.prevAll('.title-group').first();
+            // Find all rows under this title group until the next title
+            let rowsUnderTitle = titleRow.nextUntil('.title-group');
+            // Find the last row of the current title group
+            let lastRowInGroup = rowsUnderTitle.last();
+            // Build new rows
+            let newPurposeRow = $(addPurposeRow());
+            // Insert them after the last row of the title group
+            lastRowInGroup.after(newPurposeRow);
         });
         $(document).on('click',".addMore", function() {
             $("#tbl_performance").append(addMoreRow());
         });
 
         // Event to add a new record
-        $(document).on('click', '.addRecord', function() {
-            // Append a new record row to the last purpose section
-            // $(this).closest('tr').before(addNewRecord());
-            $("#tbl_performance").append(addNewRecord());
+        $(document).on('click', '.addRecord', function () {
+            let currentTr = $(this).closest('tr');
+            let purposeHeader = currentTr.prevAll('.purpose-group').first(); // Locate the related purpose row
+            let rowsUnderPurpose = purposeHeader.nextUntil('.purpose-group, .title-group'); // All rows under this purpose
+            let lastKpiRow = rowsUnderPurpose.filter('.kpi-group').last(); // Get last KPI row
+            let newRow = currentTr.clone();
+            // Reset fields
+            newRow.find('textarea').val('');
+            newRow.find('input[type=number]').val('').prop('disabled', false);
+            newRow.find('select[name="is_lock[]"]').val('0').prop('disabled', false);
+            // Replace buttons
+            newRow.find('.addRecord').replaceWith(
+                `<button type="button" class="btn btn-danger me-1 btn-sm removeRecord">
+                    <i class="fa fa-trash-o"></i>
+                </button>`
+            );
+            // Insert new row after last KPI row
+            lastKpiRow.after(newRow);
         });
+
         // Event delegation for dynamically added Remove buttons in records
         $(document).on('click', '.removeRecord', function() {
             $(this).closest('tr').remove(); // Remove the clicked row
         });
 
-        // Event delegation for dynamically added Remove buttons in purposes
-        $(document).on('click', '.btnRemovePurpose', function() {
-            // Find all rows with the class 'section-purpose' starting from the clicked button's row
+        $(document).on('click', '.btnRemovePurpose', function () {
             let currentRow = $(this).closest('tr');
-            // Remove the current row and the next row(s) associated with the purpose section
-            currentRow.nextUntil('tr:not(.section-purpose)').addBack().remove();
+            // Select all rows until the next .purpose-group or .title-group
+            let rowsToRemove = currentRow.nextUntil('.purpose-group, .title-group');
+            // Include current purpose row too
+            currentRow.add(rowsToRemove).remove();
         });
+
         $(document).on('click', '.btnRemoveMore', function() {
            // Remove the current tr and all subsequent tr elements
             $(this).closest('tr').nextAll().remove();
@@ -201,6 +247,7 @@
         $(".weight").on('focusout',function(){
             $(this).css("border-color","#d8d2d2");
         });
+        
         $(document).on('click', '#btnCreatePerformance', function(e) {
             e.preventDefault(); // Prevent the form from submitting the traditional way
             let numRequired = 0;
@@ -229,8 +276,9 @@
                             let action_plan = $kpiRow.find('textarea[name="action_plan[]"]').val();
                             let goal = $kpiRow.find('textarea[name="goal[]"]').val();
                             let weight = $kpiRow.find('input[name="weight[]"]').val();
+                            let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
 
-                            dataKPi.push({ key_kpi, action_plan, goal, weight });
+                            dataKPi.push({ key_kpi, action_plan, goal, weight,is_lock });
                             i++;
                         }
 
@@ -290,6 +338,7 @@
             </td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
+            <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center">
                 <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
             </td>
@@ -305,6 +354,12 @@
                 <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight required" id="weight" placeholder="%"></td>
+            <td class="text-center">
+                <select class="form-control" name="is_lock[]" id="is_lock" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </td>
             <td class="text-center">
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
@@ -324,6 +379,12 @@
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
+                <select class="form-control" name="is_lock[]" id="is_lock" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </td>
+            <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
             </td>
         </tr>`;
@@ -333,6 +394,7 @@
             <td colspan="2" class="text-center">
                 <input type="text" class="form-control required" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}">
             </td>
+            <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center">
@@ -346,7 +408,7 @@
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center">
-                <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i>Add Purpose</button>
+                <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
             </td>
         </tr>
         <tr class='kpi-group' style='text-align: center'>
@@ -360,6 +422,12 @@
                 <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
+            <td class="text-center">
+                <select class="form-control" name="is_lock[]" id="is_lock" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </td>
             <td class="text-center">
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>

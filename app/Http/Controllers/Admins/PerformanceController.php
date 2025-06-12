@@ -7,6 +7,7 @@ use App\Models\Title;
 use App\Models\Purpose;
 use App\Models\Performance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\PerformanceDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -62,14 +63,14 @@ class PerformanceController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'purpose' => 'required|string|max:255',
-            'key_kpi' => 'required|string',
-            'action_plan' => 'required|string',
-            'goal' => 'required|string',
-            'weight' => 'required|numeric|min:0|max:100',
-        ]);
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'purpose' => 'required|string|max:255',
+        //     'key_kpi' => 'required|string',
+        //     'action_plan' => 'required|string',
+        //     'goal' => 'required|string',
+        //     'weight' => 'required|numeric|min:0|max:100',
+        // ]);
        
         try {
             DB::beginTransaction();
@@ -81,39 +82,44 @@ class PerformanceController extends Controller
                     }
                 }
             }
+            
             if ($totalWeight == 100) {
-                $data = $request->all();
-                $data['created_by'] = Auth::id();
-                $data['status'] = "pending";
-                // Create main performance record
-                $performance = Performance::create($data);
-                foreach ($request->data as $titleItem) {
+                foreach ($request->employee_id as $empId) {
+                    $data = $request->all();
+                    $data['created_by'] = Auth::id();
+                    $data['employee_id'] = $empId;
+                    $data['status'] = 'prepar';
+                    // Create main performance record
+                    $performance = Performance::create($data);
+
                     // Create Title
-                    $title = Title::create([
-                        'performance_id' => $performance->id,
-                        'title' => $titleItem['title'],
-                    ]);
-    
-                    // Loop through each purpose under this title
-                    foreach ($titleItem['dataPurpose'] as $purposeItem) {
-                        $purpose = Purpose::create([
+                    foreach ($request->data as $titleItem) {
+                        $title = Title::create([
                             'performance_id' => $performance->id,
-                            'title_id'    => $title->id,
-                            'name'        => $purposeItem['purpose'],
+                            'title' => $titleItem['title'],
                         ]);
-    
-                        // Loop through each KPI under this purpose
-                        foreach ($purposeItem['dataKPi'] as $kpiItem) {
-                            PerformanceDetail::create([
+        
+                        // Loop through each purpose under this title
+                        foreach ($titleItem['dataPurpose'] as $purposeItem) {
+                            $purpose = Purpose::create([
                                 'performance_id' => $performance->id,
-                                'title_id'       => $title->id,
-                                'purpose_id'     => $purpose->id,
-                                'key_kpi'        => $kpiItem['key_kpi'],
-                                'action_plan'    => $kpiItem['action_plan'],
-                                'goal'           => $kpiItem['goal'],
-                                'weight'         => $kpiItem['weight'],
-                                'created_by'     => Auth::id(),
+                                'title_id'    => $title->id,
+                                'name'        => $purposeItem['purpose'],
                             ]);
+        
+                            // Loop through each KPI under this purpose
+                            foreach ($purposeItem['dataKPi'] as $kpiItem) {
+                                PerformanceDetail::create([
+                                    'performance_id' => $performance->id,
+                                    'title_id'       => $title->id,
+                                    'purpose_id'     => $purpose->id,
+                                    'key_kpi'        => $kpiItem['key_kpi'],
+                                    'action_plan'    => $kpiItem['action_plan'],
+                                    'goal'           => $kpiItem['goal'],
+                                    'weight'         => $kpiItem['weight'],
+                                    'created_by'     => Auth::id(),
+                                ]);
+                            }
                         }
                     }
                 }
@@ -202,7 +208,7 @@ class PerformanceController extends Controller
         //     'goal' => 'required|string',
         //     'weight' => 'required|numeric|min:0|max:100',
         // ]);
-    
+        
         try {
             DB::beginTransaction();
     
@@ -221,7 +227,6 @@ class PerformanceController extends Controller
     
             // Find existing performance
             $performance = Performance::findOrFail($request->performance_id);
-    
             // Update main performance data
             $performance->update([
                 'employee_id' => $request->employee_id,
@@ -258,14 +263,13 @@ class PerformanceController extends Controller
                             'action_plan'    => $kpiItem['action_plan'],
                             'goal'           => $kpiItem['goal'],
                             'weight'         => $kpiItem['weight'],
+                            'is_lock'        => $kpiItem['is_lock'],
                             'created_by'     => Auth::id(),
                         ]);
                     }
                 }
             }
-    
             DB::commit();
-    
             return response()->json([
                 'success' => true,
                 'message' => 'Data updated successfully!',
@@ -279,7 +283,27 @@ class PerformanceController extends Controller
             ], 500);
         }
     }
-
+    public function status($id){
+        try {
+            $performance = Performance::findOrFail($id);
+            $performance->update([
+                'status'      => 'approve',
+                'updated_by'  => Auth::id(),
+            ]);
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Updated performance status successfully!',
+                'status'  => 200
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollBack();
+            return response()->json([
+                'error' => 'Updated performance status failed.',
+                'exception' => $exp->getMessage()
+            ], 500);
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *

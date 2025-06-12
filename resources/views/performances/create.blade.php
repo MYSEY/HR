@@ -20,8 +20,8 @@
                     <div class="col-md-4 hr-form-group-select2">
                         <div class="form-group">
                             <label>@lang('lang.employee')</label>
-                            <select class="form-control hr-select2-option required" id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
-                                <option selected value=""> -- @lang('lang.select')--</option>
+                            <select class="elect form-control hr-select2-option required" id="employee_id" name="employee_id" value="{{ old('employee_id') }}" multiple>
+                                <option value=""> -- @lang('lang.select')--</option>
                                 @foreach ($employee as $item)
                                     <option data-id="{{ $item->id }}" value="{{ $item->id }}">
                                         {{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}
@@ -57,6 +57,7 @@
                                         <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 250px;">គោលដៅ (Goal)</th>
                                         <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
+                                        <th style="min-width: 150px;">Is Lock</th>
                                         <th>@lang('lang.action')</th>
                                     </tr>
                                 </thead>
@@ -69,12 +70,14 @@
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
                                         </tr>
                                         <div>
                                             <tr class="purpose-group">
                                                 <td colspan="2" class="text-center">
-                                                    <input type="text" class="form-control" id="purpose" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
+                                                    <input type="text" class="form-control required" id="purpose" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
                                                 </td>
+                                                <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center">
@@ -89,11 +92,28 @@
                                                     <td class="text-center">
                                                         <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
                                                     </td>
-                                                    <td class="">
+                                                    {{-- <td class="text-center">
                                                         <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false">{{ old('goal') }}</textarea>
+                                                    </td> --}}
+                                                    <td class="text-center">
+                                                        <select class="form-control goal-type-select" name="goal_type[]">
+                                                            <option value="number">Number</option>
+                                                            <option value="date">Date</option>
+                                                            <option value="currency">Currency</option>
+                                                            <option value="percent">Percent</option>
+                                                        </select>
+                                                        <div class="goal-input-wrapper mt-1">
+                                                            <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter number" spellcheck="false">{{ old('goal') }}</textarea>
+                                                        </div>
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control required" name="weight[]" id="weight" placeholder="%" value="{{old('weight')}}">
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <select class="form-control" name="is_lock[]" id="is_lock" required>
+                                                            <option value="0">No</option>
+                                                            <option value="1">Yes</option>
+                                                        </select>
                                                     </td>
                                                     <td class="text-center">
                                                         <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
@@ -106,6 +126,7 @@
                                 <tbody>
                                     <tr>
                                         <td colspan="2" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center">
@@ -138,6 +159,30 @@
     $(function() {
         let dataKeyKpi = [];
 
+        $(document).on('change', '.goal-type-select', function () {
+            const $select = $(this);
+            const type = $select.val();
+            const $wrapper = $select.siblings('.goal-input-wrapper');
+
+            let input = '';
+            switch (type) {
+                case 'number':
+                    input = '<textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter number">{{ old("goal") }}</textarea>';
+                    break;
+                case 'date':
+                    input = '<textarea rows="3" class="form-control required" name="goal[]" placeholder="YYYY-MM-DD">{{ old("goal") }}</textarea>';
+                    break;
+                case 'currency':
+                    input = '<textarea rows="3" class="form-control required" name="goal[]" placeholder="$0.00">{{ old("goal") }}</textarea>';
+                    break;
+                case 'percent':
+                    input = '<textarea rows="3" class="form-control required" name="goal[]" placeholder="%">{{ old("goal") }}</textarea>';
+                    break;
+            }
+
+            $wrapper.html(input);
+        });
+        
         // Event to add a new purpose
         $(document).on('click',".addNewPurpose",function() {
             $("#tbl_performance").append(addPurposeRow());
@@ -220,8 +265,9 @@
                             let action_plan = $kpiRow.find('textarea[name="action_plan[]"]').val();
                             let goal = $kpiRow.find('textarea[name="goal[]"]').val();
                             let weight = $kpiRow.find('input[name="weight[]"]').val();
+                            let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
 
-                            dataKPi.push({ key_kpi, action_plan, goal, weight });
+                            dataKPi.push({ key_kpi, action_plan, goal, weight,is_lock });
                             i++;
                         }
 
@@ -277,6 +323,7 @@
             </td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
+            <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center">
                 <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
             </td>
@@ -292,6 +339,12 @@
                 <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight required" id="weight" placeholder="%"></td>
+            <td class="text-center">
+                <select class="form-control" name="is_lock[]" id="is_lock" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </td>
             <td class="text-center">
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
@@ -311,6 +364,12 @@
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
+                <select class="form-control" name="is_lock[]" id="is_lock" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </td>
+            <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
             </td>
         </tr>`;
@@ -322,6 +381,7 @@
             </td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
+            <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center">
                 <a class="btn btn-danger btn-sm btnRemoveMore"><i class="fa fa-plus-circle"></i>Remove More</a>
             </td>
@@ -330,6 +390,7 @@
             <td colspan="2" class="text-center">
                 <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
+            <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center">
@@ -347,6 +408,12 @@
                 <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
+            <td class="text-center">
+                <select class="form-control" name="is_lock[]" id="is_lock" required>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+            </td>
             <td class="text-center">
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>

@@ -35,6 +35,7 @@
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Total Score</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Total Score achieved</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Overall Results</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.status')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
@@ -51,6 +52,21 @@
                                                 <td>{{$item->total_score}}</td>
                                                 <td>{{$item->total_score_achieved}}</td>
                                                 <td>{{$item->overall_results}}</td>
+                                                <td>
+                                                    <div class="dropdown action-label">
+                                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fa fa-dot-circle-o text-warning"></i>
+                                                            <span>{{ $item->status == 'prepare' ? 'Prepare' : 'Approved' }}</span>
+                                                        </a>
+
+                                                        <div class="dropdown-menu dropdown-menu-right" id="btnStatus">
+                                                            <a class="dropdown-item" data-id="{{$item->id}}" href="#">
+                                                                <i class="fa fa-dot-circle-o text-success"></i>                                                             <span>{{ $item->status == 'prepare' ? 'Prepare' : '' }}</span>
+                                                                <span>{{ $item->status == 'approve' ? 'Approved' : '' }}</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
@@ -73,3 +89,28 @@
         </div>
     </div>
 @endsection
+@include('includs.script')
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#btnStatus a').on('click', function(e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+                $.ajax({
+                    url: "{{ url('performance/status') }}/" + id,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                            location.reload();
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        toastr.error(xhr.responseJSON.message);
+                    }
+                });
+            });
+        });
+    </script>

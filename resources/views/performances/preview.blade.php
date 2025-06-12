@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>@lang('lang.employee')</label>
+                            <label>@lang('lang.employee_name')</label>
                             <input type="text" class="form-control" value="{{$data->employee_name_kh}}">
                         </div>
                     </div>
@@ -82,7 +82,9 @@
                                         <th style="min-width: 350px;">យោបល់/កំណត់សម្គាល់</th>
                                     </tr>
                                 </thead>
-
+                                @php
+                                    $totalWeight = 0;
+                                @endphp
                                 <tbody id="tbl_performance">
                                     @foreach ($data->titles as $item)
                                         <tr>
@@ -98,6 +100,7 @@
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
+                                        
                                         @foreach ($item->purposes as $purposeItem)
                                             <tr>
                                                 <td colspan="2" class="text-center">
@@ -112,7 +115,11 @@
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
                                             </tr>
+                                            
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
+                                                @php
+                                                    $totalWeight += (float) $Detailitem->weight;
+                                                @endphp
                                                 <tr>
                                                     <td class="text-center">
                                                         <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
@@ -168,7 +175,7 @@
                                     <tr>
                                         <td colspan="3" class="text-center">សរុបរួម</td>
                                         <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control" id="total-weight" placeholder="%" value="" readonly>
+                                            <input type="text" class="form-control" id="total-weight" placeholder="%" value="{{$totalWeight}}" readonly>
                                         </td>
                                         <td colspan="1" class="text-center">
                                             <input type="text" class="form-control" placeholder="លទ្ធផលរួម =" value="" readonly>
@@ -281,7 +288,6 @@
             $('#total_score').val(totalScore.toFixed(2));
             $('#total_personnel_score').val(totalPersonnel.toFixed(2));
             $('#total_direct_chairman').val(totalChairman.toFixed(2));
-            $('#total-weight').val(totalWeight.toFixed(2));
             updateOverallResults(totalScore);
         }
 
