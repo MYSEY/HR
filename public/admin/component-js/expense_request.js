@@ -275,20 +275,40 @@ $(document).ready(function() {
         // costs include required
         let costs_requiredA = 0;
         let costs_requiredB = 0;
-        if (($(".1costs_include_requiredKh").val() == "" || $(".1costs_include_requiredKh").val() == 0) && ($(".1costs_include_requiredEn").val() == "" || $(".1costs_include_requiredEn").val() == 0)) {
-            costs_requiredA = 1;
-        }
-        if (($(".2costs_include_requiredKh").val() == "" || $(".2costs_include_requiredKh").val() == 0) && ($(".2costs_include_requiredKh").val() == "" || $(".2costs_include_requiredKh").val() == 0)) {
-            costs_requiredB = 1;
-        }
-        if (costs_requiredA == 1 && costs_requiredB == 1) {
+        let costs_required = 0;
+        $(".costs_include_required").each(function () {
+            let value = $(this).val();
+            if (!value || value==0) {
+                costs_required = 1;
+            } else {
+                costs_required = 0;
+                return false;
+            }
+        });
+
+        if (costs_required === 1) {
             $(".costs_include_required").css("border-color","#dc3545");
             $("#include_required").css("display","block");
             num_miss++;
-        }else{
+        } else {
             $(".costs_include_required").css("border-color","#198754");
             $("#include_required").css("display","none");
         }
+
+        // if (($(".1costs_include_requiredKh").val() == "" || $(".1costs_include_requiredKh").val() == 0) && ($(".1costs_include_requiredEn").val() == "" || $(".1costs_include_requiredEn").val() == 0)) {
+        //     costs_requiredA = 1;
+        // }
+        // if (($(".2costs_include_requiredKh").val() == "" || $(".2costs_include_requiredKh").val() == 0) && ($(".2costs_include_requiredKh").val() == "" || $(".2costs_include_requiredKh").val() == 0)) {
+        //     costs_requiredB = 1;
+        // }
+        // if (costs_requiredA == 1 && costs_requiredB == 1) {
+        //     $(".costs_include_required").css("border-color","#dc3545");
+        //     $("#include_required").css("display","block");
+        //     num_miss++;
+        // }else{
+        //     $(".costs_include_required").css("border-color","#198754");
+        //     $("#include_required").css("display","none");
+        // }
 
         // Get payment terms
         let paymentTerms = '';

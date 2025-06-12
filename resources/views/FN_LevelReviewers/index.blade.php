@@ -390,19 +390,19 @@
         });
         $("#request_type").on("change", function() {
             let value = $(this).find("option:selected").val();
+            $("#reference_type").val("");
             if (value == "0") {
                 $(".reference_type").css("display","block");
             } else {
-                $("#reference_type").val("");
                 $(".reference_type").css("display","none");
             }
         });
         $("#e_request_type").on("change", function() {
+            $("#e_reference_type").val("");
             let value = $(this).find("option:selected").val();
             if (value == "0") {
                 $(".e_reference_type").css("display","block");
             } else {
-                $("#e_reference_type").val("");
                 $(".e_reference_type").css("display","none");
             }
         });

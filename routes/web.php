@@ -49,6 +49,7 @@ use App\Http\Controllers\Admins\ExpenseReportController;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
 use App\Http\Controllers\Admins\ExpenseRequestController;
 use App\Http\Controllers\Admins\FnApprovalController;
+use App\Http\Controllers\Admins\FNExchangeRateController;
 use App\Http\Controllers\Admins\FnLevelReviewerController;
 use App\Http\Controllers\Admins\FnPaymentTermController;
 use App\Http\Controllers\Admins\FnRegularExspenseController;
@@ -550,6 +551,16 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/fn/regular-expense/delete', [FnRegularExspenseController::class,'destroy']);
     Route::get('/fn/regular-expense/edit', [FnRegularExspenseController::class,'edit']);
     Route::post('/fn/regular-expense/processing', [FnRegularExspenseController::class,'processing']);
+    
+    // route exchange rate
+    Route::get('/fn/exchange-rate/list', [FNExchangeRateController::class,'index']);
+    Route::post('/fn/exchange-rate/store', [FNExchangeRateController::class,'store']);
+    Route::post('/fn/exchange-rate/create', [FNExchangeRateController::class,'create']);
+    Route::post('/fn/exchange-rate/update', [FNExchangeRateController::class,'update']);
+    Route::get('/fn/exchange-rate/edit', [FNExchangeRateController::class,'edit']);
+    Route::post('/fn/exchange-rate/delete', [FNExchangeRateController::class,'destroy']);
+    Route::post('/fn/exchange-rate/status', [FNExchangeRateController::class,'processing']);
+
     // Block FN Exspense Request
     Route::get('/expense-request/list', [ExpenseRequestController::class,'index']);
     Route::post('/fn/expense-request', [ExpenseRequestController::class,'store']);
