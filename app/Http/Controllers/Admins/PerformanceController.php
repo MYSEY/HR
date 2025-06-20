@@ -85,10 +85,17 @@ class PerformanceController extends Controller
             
             if ($totalWeight == 100) {
                 foreach ($request->employee_id as $empId) {
+                    $user = User::where('id',$empId)->select('id','number_employee','employee_name_kh','employee_name_en','emp_status')->first();
+                    if ($user->emp_status == 'Probation') {
+                        $type = 'KPI Probation'.' '.Carbon::parse($request->from_date)->format('Y');
+                    }else {
+                        $type = 'KPI Form'.' '.Carbon::parse($request->from_date)->format('Y');
+                    }
                     $data = $request->all();
                     $data['created_by'] = Auth::id();
                     $data['employee_id'] = $empId;
                     $data['status'] = 'prepar';
+                    $data['type'] = $type;
                     // Create main performance record
                     $performance = Performance::create($data);
 
@@ -227,12 +234,18 @@ class PerformanceController extends Controller
     
             // Find existing performance
             $performance = Performance::findOrFail($request->performance_id);
+            $user = User::select('id', 'number_employee', 'employee_name_kh', 'employee_name_en', 'emp_status')->findOrFail($request->employee_id);
+
+            // Determine performance type based on employee status
+            $year = Carbon::parse($request->from_date)->format('Y');
+            $type = ($user->emp_status === 'KPI Probation') ? "Probation $year" : "KPI Form $year";
             // Update main performance data
             $performance->update([
                 'employee_id' => $request->employee_id,
                 'from_date' => $request->from_date,
                 'to_date' => $request->to_date,
-                'created_by' => Auth::id()
+                'type' => $type,
+                'created_by' => Auth::id(),
             ]);
     
             // Delete old related data
