@@ -24,11 +24,58 @@
                 </div>
             </div>
         </div>
+        <form>
+            {{-- @csrf --}}
+            <div class="row filter-btn"> 
+                <div class="col-sm-9 col-md-9"> 
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <select class="select form-control" id="department_id" data-select2-id="select2-data-2" name="department_id">
+                                    <option value="" data-select2-id="select2-data-2-"> All @lang('lang.department')</option>
+                                    @foreach ($departments as $item)
+                                        <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group" id="col-branch">
+                                <select class="select form-control" id="location_id" data-select2-id="select2-data-2-c0n2" name="location_id">
+                                    <option value="" data-select2-id="select2-data-2-c0n2">All @lang('lang.location')</option>
+                                    <option value="1">@lang('lang.branch')</option>
+                                    <option value="2">@lang('lang.department')</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-sm-3 col-md-3">
+                    <div style="display: flex" class="float-end">
+                    <button type="button" class="btn btn-sm btn-outline-secondary submit-btn btn-research me-2" data-dismiss="modal" id="icon-search-download-reload">
+                            <span class="btn-txt"><i class="fa fa-search"></i></span>
+                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                        {{-- @if ($permission->is_export == "1") --}}
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                                <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
+                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            </button>
+                        {{-- @endif --}}
+                        <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                            <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
-                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer table-hover" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer table-hover tbl-level-review" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                         <thead>
                             <tr>
                                 <th>@lang('lang.from_amount')</th>
@@ -388,6 +435,21 @@
                 container: 'tr'
             });
         });
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('/fn/level-reviewer') }}"); 
+        });
+        $(".btn_excel").on("click", function () {
+            let query = {
+                "_token": "{{ csrf_token() }}",
+                department_id: $("#department_id").val(),
+                location_id:     $("#location_id").val(),
+            };
+            var url = "{{URL::to('fn/level-reviewer/export')}}?" + $.param(query)
+            window.location = url;
+        });
         $("#request_type").on("change", function() {
             let value = $(this).find("option:selected").val();
             $("#reference_type").val("");
@@ -516,5 +578,117 @@
             var _this = $(this).data('id');
             $('.e_id').val(_this);
         });
+        $(".btn-research").on("click", function () {
+            $(this).prop('disabled', true);
+            $(".btn-txt").hide();
+            $(".loading-icon").css('display', 'block');
+            let param = {
+                "_token": "{{ csrf_token() }}",
+                department_id: $("#department_id").val(),
+                location_id:     $("#location_id").val(),
+            };
+            showdatas(param);
+        });
     });
+    function showdatas(param) {
+        $.ajax({
+            url: "{{ url('fn/level-reviewer/search') }}",
+            type: 'POST',
+            data: param,
+            dataType: 'JSON',
+            success: function(response) {
+                let datas = response.data;
+                let permission = response.permission;
+                console.log(datas);
+                
+                let tr = "";
+
+                // Translations (these must match your backend translations or be prefilled in JS)
+                let requestType = {
+                    "1": "Review",
+                    "2": "Review",
+                    "3": "Review",
+                    "4": "Review",
+                    "5": "Review",
+                    "6": "Review",
+                    "7": "Review",
+                    "8": "Review",
+                    "9": "Review",
+                    "10": "Review"
+                };
+
+                let type = {
+                    "0": "General Expense",
+                    "2": "Tax Expense",
+                    "1": "Special Expense"
+                };
+
+                if (datas.length > 0) {
+                    datas.forEach(item => {
+                        // Position views
+                        let positionViews = "";
+                        if (item.position_review && item.position_review.length > 0) {
+                            item.position_review.forEach((pos, index) => {
+                                positionViews += (index + 1) + ". " + pos.name_english + "<br>";
+                            });
+                        }
+
+                        // Determine request type label
+                        let requestTypeLabel = requestType[item.type] + " " + item.type;
+
+                        // Determine expense reference type
+                        let referenceTypeLabel = "";
+                        if (item.reference_type == 1) {
+                            referenceTypeLabel = "Regular Expense";
+                        } else if (item.reference_type == 2) {
+                            referenceTypeLabel = "Irregular Expense";
+                        }
+
+                        // Determine location
+                        let fromLocationLabel = item.from_location == "1" ? "Branch" : "Department";
+
+                        // First reviewer
+                        let reviewer = item.position_review && item.position_review.length > 0
+                            ? item.position_review[0].name_english + "..."
+                            : "";
+
+                        // Department
+                        let department = item.department_view ? item.department_view.name_english : "";
+
+                        // Action buttons (adjust based on permission object or server-returned flags)
+                        let actionButtons = "";
+                        if (permission.is_update == "1") {
+                            actionButtons += `<a class="btn btn-success update" data-toggle="modal" data-id="${item.id}" data-target="#edit_fn_lovel"><i class="fa fa-edit"></i></a> `;
+                        }
+                        if (permission.is_delete == "1") {
+                            actionButtons += `<a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="${item.id}" data-target="#delete_level"><i class="fa fa-trash-o m-r-5"></i></a>`;
+                        }
+
+                        // Build row
+                        tr += `
+                            <tr class="odd">
+                                <td>${item.from_amount}</td>
+                                <td>${item.to_amount}</td>
+                                <td>${type[item.request_type]}</td>
+                                <td>${referenceTypeLabel}</td>
+                                <td>${requestTypeLabel}</td>
+                                <td>${fromLocationLabel}</td>
+                                <td data-toggle="tooltip" data-html="true" title="${positionViews}">${reviewer}</td>
+                                <td>${department}</td>
+                                <td>${item.description ? item.description : ""}</td>
+                                <td style="text-align: center;">${actionButtons}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                $(".tbl-level-review tbody").html(tr);
+                $('[data-toggle="tooltip"]').tooltip(); // Reinitialize tooltips
+                $(".btn-research").prop('disabled', false);
+                $(".btn-txt").show();
+                $(".loading-icon").css('display', 'none');
+            }
+        });
+    }
+
 </script>

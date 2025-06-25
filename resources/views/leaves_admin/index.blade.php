@@ -210,6 +210,8 @@
                                                                                         data-endhalfday="{{$request->end_half_day}}"
                                                                                         data-handover="{{ $request->handover ? $request->handover->employee_name_en : ''}}"
                                                                                         data-reason="{{$request->reason}}"
+                                                                                        data-leavetype="{{$request->leaveType->type}}"
+                                                                                        data-leaveallocation="{{$request->LeaveAllocation}}"
                                                                                     >@if (permissionAccess("m10-s1","is_approve")->value == "1")@lang('lang.approve')@endif @if (permissionAccess("m10-s1","is_reject")->value == "1")/ @lang('lang.reject')@endif</button>
                                                                                 @endif
                                                                             @endif
@@ -786,6 +788,20 @@
             let endhalfday = $(this).data("endhalfday") ? '  half day ( '+ $(this).data("endhalfday")+" )" : "";
             let handover = $(this).data("handover");
             let reason = $(this).data("reason");
+            let leaveType = $(this).data("leavetype");
+            let LeaveAllocation = $(this).data("leaveallocation");
+            let leave_balance = 0;
+            if (leaveType == "annual_leave") {
+                leave_balance = LeaveAllocation.total_annual_leave;
+            }else if(leaveType == "sick_leave"){
+                leave_balance = LeaveAllocation.total_sick_leave;
+            }else if(leaveType == "special_leave"){
+                leave_balance = LeaveAllocation.total_special_leave;
+            }else if(leaveType == "unpaid_leave"){
+                leave_balance = LeaveAllocation.total_unpaid_leave;
+            }else if(leaveType == "long_sick_leave"){
+                leave_balance = LeaveAllocation.total_long_sick_leave;
+            }
             let description = "@lang('lang.are_you_sure_want_to_approve') or @lang('lang.reject')?";
             let text_label = "";
             let button_ok = "";
@@ -880,6 +896,7 @@
                         '<p>@lang("lang.employee_name"): '+employeename+'</p>'+
                         '<p>@lang("lang.from"): '+startdate+starthalfday+'</p>'+
                         '<p>@lang("lang.to"): '+enddate+endhalfday+'</p>'+
+                        '<p>@lang("lang.leave_balance"): <span style="font-weight: bold">'+leave_balance+' @lang("lang.day")</span></p>'+
                         '<p>@lang("lang.handover_staff"): '+handover+'</p>'+
                         '<label>@lang("lang.reason"):</label>'+
                         '<textarea disabled class="form-control">'+reason+'</textarea>'+

@@ -354,9 +354,13 @@ class MotorRentelController extends Controller
                 $adjust_amount_kh = 0;
                 $adjust_amount_engine_oil = 0;
                 $adjusts = MotorAdjustment::where('employee_id',$motor->employee_id)
-                ->whereMonth('adjustment_date', $month)
-                ->whereYear('adjustment_date', $year)
+                ->where('adjustment_date', '<=', $request->to_date)
+                ->where('adjustment_date', '>=', $request->from_date)
+
+                // ->whereMonth('adjustment_date', $month)
+                // ->whereYear('adjustment_date', $year)
                 ->first();
+                
                 if ($adjusts) {
                     $adjust_amount_kh =  $adjusts->amount_kh;
                     $adjust_amount_engine_oil = $adjusts->amount_engine_oil;

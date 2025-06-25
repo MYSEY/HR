@@ -35,7 +35,7 @@ class ExportSeniorityPay implements FromCollection, WithColumnWidths, WithHeadin
             $this->totalAverageSalary += $value->total_average_salary;
             $this->totalSalaryReceive += $value->total_salary_receive;
             $this->totalTaxExemptionSalary += $value->tax_exemption_salary;
-            $this->totalTaxableSalary += $value->taxable_salary;
+            $this->totalTaxableSalary += round($value->taxable_salary,2);
 
 
 
@@ -59,7 +59,7 @@ class ExportSeniorityPay implements FromCollection, WithColumnWidths, WithHeadin
                 $value->total_average_salary,
                 $value->total_salary_receive,
                 $value->tax_exemption_salary,
-                $value->taxable_salary,
+                round($value->taxable_salary,2),
             ];
             // Show data for  gross seniority 1
             if ($value->gross_seniority_1 && count($value->gross_seniority_1) > 0) {
@@ -222,10 +222,9 @@ class ExportSeniorityPay implements FromCollection, WithColumnWidths, WithHeadin
                 $sheet->getDelegate()->getStyle("Q".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("Q".$rows);
                 $event->sheet->getDelegate()->getStyle("Q".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue J
-                $sheet->setCellValue("R".$rows, $this->totalTaxableSalary);
+                $sheet->setCellValue("R".$rows, number_format($this->totalTaxableSalary,2));
                 $sheet->getDelegate()->getStyle("R".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("R".$rows);
                 $event->sheet->getDelegate()->getStyle("R".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-
             },
         ];
     }

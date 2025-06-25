@@ -135,7 +135,7 @@ class ExpenseRequestController extends Controller
         // Fallback: if we tried with dept and found nothing, try null department_review
         if (!$positionReview && !empty($dataLevelView["department_review"])) {
             $positionReview = $baseQuery
-                ->whereNull("department_review")
+                // ->whereNull("department_review")
                 ->orderBy("id", "DESC")
                 ->first();
         }

@@ -277,11 +277,13 @@
                     <li class="breadcrumb-item active">@lang('lang.dashboard')</li>
                 </ul>
             </div>
-            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-                <div class="ms-2 head-icons">
-                    <p>User logged <span class="text-primary"><a href="{{url('user/logged')}}">{{$userLoggedIn}}</a></span> And <a href="{{url('user/not/logged')}}"><span class="text-primary">{{$userNotLoggedIn}}</span></a> User not login In system HRMS</p>
+            @if (Auth::user()->RolePermission == 'HRAdmin')
+                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+                    <div class="ms-2 head-icons">
+                        <p>User logged <span class="text-primary"><a href="{{url('user/logged')}}">{{$userLoggedIn}}</a></span> And <a href="{{url('user/not/logged')}}"><span class="text-primary">{{$userNotLoggedIn}}</span></a> User not login In system HRMS</p>
+                    </div>
                 </div>
-            </div>
+            @endif
         </div>
         <div class="row">
             @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_leave"] == "1")

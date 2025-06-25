@@ -538,10 +538,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/fn/payment-term/processing', [FNPaymentTermController::class,'processing']);
     // Block FN  Level Reviewer
     Route::get('/fn/level-reviewer', [FnLevelReviewerController::class,'index']);
+    Route::post('/fn/level-reviewer/search', [FnLevelReviewerController::class,'filter']);
     Route::post('/fn/level-reviewer', [FnLevelReviewerController::class,'store']);
     Route::post('/fn/level-reviewer/update', [FnLevelReviewerController::class,'update']);
     Route::post('/fn/level-reviewer/delete', [FnLevelReviewerController::class,'destroy']);
     Route::get('/fn/level-reviewer/edit', [FnLevelReviewerController::class,'edit']);
+    Route::get('/fn/level-reviewer/export', [FnLevelReviewerController::class,'export']);
     // Block FN RegularExspense
     Route::get('/fn/regular-expense', [FnRegularExspenseController::class,'index']);
     Route::post('/fn/regular-expense', [FnRegularExspenseController::class,'store']);
