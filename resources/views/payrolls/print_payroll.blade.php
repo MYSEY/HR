@@ -87,7 +87,7 @@
                         
                         <tr>
                             <td class="border-0 text-nowrap">@lang('lang.increasment')</td>
-                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->salary_increas ?? '0.00'}}</span></td>
+                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->users->salary_increas ?? '0.00'}}</span></td>
                             <td class="border-0 text-nowrap">@lang('lang.pension_fund')</td>
                             <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->total_pension_fund}}</span></td>
                         </tr>

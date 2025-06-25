@@ -339,8 +339,8 @@
         </div>
     </div>
 @endsection
-@include('leaves_employee.templet_print_delegate')
-@include('leaves_employee.template_print_delegate_CEO')
+{{-- @include('leaves_employee.templet_print_delegate')
+@include('leaves_employee.template_print_delegate_CEO') --}}
 @include('motor_rentels.print_signed_contract')
 @include('includs.script')
 <script>

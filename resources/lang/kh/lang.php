@@ -485,6 +485,7 @@ return[
 	"leaves_all_request"=>"ឈប់សម្រាកទាំងអស់",
     "log_name"=>"ឈ្មោះកំណត់ហេតុ",
     "leave"=>"ឈប់សម្រាក",
+	"leave_balance"=>"ចំនួនច្បាប់នៅសល់",
 	"leave_allocation"=>"Leave Allocation",
     "leave_type"=>"ប្រភេទការឈប់សម្រាក",
 	"leave_requests"=>"ការស្នើសុំឈប់សម្រាក",

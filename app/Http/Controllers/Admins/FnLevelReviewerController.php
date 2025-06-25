@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportFnLevelReview;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\Department;
@@ -13,6 +14,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Activitylog\Models\Activity;
 
 class FnLevelReviewerController extends Controller
@@ -35,6 +37,24 @@ class FnLevelReviewerController extends Controller
         $departments = Department::get();
         $positions = Position::get();
         return view('FN_LevelReviewers.index',compact(['datas','permission', 'positions','departments']));
+    }
+    public function filter(Request $request)
+    {
+         $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/level-reviewer")->first();
+        $datas = FnLevelReviewer::with(["departmentView"])
+        ->when($request->department_id, function ($query, $department_id) {
+            $query->where('department_review', $department_id);
+        })
+        ->when($request->location_id, function ($query, $location_id) {
+            $query->where('from_location', $location_id);
+        })
+        ->orderBy('type', 'ASC')
+        ->orderBy('request_type', 'ASC')
+        ->get();
+        return response()->json([
+            'permission' => $permission,
+            'data' => $datas,
+        ]);
     }
 
     /**
@@ -127,6 +147,22 @@ class FnLevelReviewerController extends Controller
             Toastr::error('Updated fail.','Error');
             return redirect()->back();
         }
+    }
+
+    public function export(Request $request)
+    {
+        $datas = FnLevelReviewer::with(["departmentView"])
+        ->when($request->department_id, function ($query, $department_id) {
+            $query->where('department_review', $department_id);
+        })
+        ->when($request->location_id, function ($query, $location_id) {
+            $query->where('from_location', $location_id);
+        })
+        ->orderBy('type', 'ASC')
+        ->orderBy('request_type', 'ASC')
+        ->get();
+        $export = new ExportFnLevelReview($datas, $request);
+        return Excel::download($export, 'FN_Review.xlsx');
     }
 
     /**

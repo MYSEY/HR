@@ -84,10 +84,20 @@
                             </div>
                         </div>
                         <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                            <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;">
+                            {{-- <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;">
                                 <label class="container-checkbox">
                                     <input type="checkbox" id="Pro-Rate" > <span class="checkmark"></span>
                                     Pro-Rate
+                                </label>
+                            </label> --}}
+                            <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px; display: flex;">
+                                <label class="container-checkbox me-4">
+                                    <input type="checkbox" id="Pro-Rate" > <span class="checkmark"></span>
+                                    Pro-Rate
+                                </label>
+                                <label class="container-checkbox">
+                                    <input type="checkbox" id="Responsible-Lending" > <span class="checkmark"></span>
+                                    Responsible Lending
                                 </label>
                             </label>
                         </div>
@@ -391,6 +401,7 @@
             $("#department_id").html('<option selected disabled value="">--@lang("lang.select") --</option>');
             $("#pr_supporting_or_field_staff").text("");
             $("#Pro-Rate").prop("checked", false);
+            $("#Responsible-Lending").prop("checked", false);
             $(".clear_data").val("");
             $("#remark").text("");
             let id = $(this).data("id");
@@ -538,6 +549,9 @@
                         if (response.success.pro_rate == "1") {
                             $("#Pro-Rate").prop("checked", true);
                         };
+                        if (response.success.condition_other == "1") {
+                            $("#Responsible-Lending").prop("checked", true);
+                        };
                         $("#candidate_id").val(id);
                         $(".number_employee_edit").val(response.success.number_employee);
                         // $(".number_employee").val(response.autoEmpId);
@@ -639,6 +653,10 @@
                             if ($("#Pro-Rate").prop("checked") == true) {
                                 pro_rate = "1";
                             }
+                            let condition_other = "0";
+                            if ($("#Responsible-Lending").prop("checked") == true) {
+                                condition_other = "1";
+                            }
                             axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
                                 candidate_id: $("#candidate_id").val(),
                                 number_employee: $("#number_employee").val(),
@@ -657,6 +675,7 @@
                                 personal_phone_number: $("#personal_phone_number").val(),
                                 position_type: $("#emp_position option:checked").attr('data-id'),
                                 pro_rate: pro_rate,
+                                condition_other: condition_other,
                                 basic_salary: $("#basic_salary").val(),
                                 salary_increas: $("#salary_to_increase").val(),
                                 current_province: $("#current_province").val(),
@@ -734,7 +753,12 @@
                                     $("#pr_basic_salary").text(data.basic_salary);
                                     $("#pr_salary_increase").text($("#salary_to_increase").val());
                                     if ($("#Pro-Rate").prop("checked") == true) {
-                                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
+                                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនឹងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
+                                    }
+                                    if ($("#Responsible-Lending").prop("checked") == true) {
+                                        $(".Responsible-Lending").css("display","block");
+                                    }else{
+                                        $(".Responsible-Lending").css("display","none");
                                     }
                                     if (btn_action == 1) {
                                         print_pdf();

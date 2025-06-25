@@ -79,7 +79,7 @@ class LeavesAdminController extends Controller
         //     }
         // })->get();
 
-        $dataLeaveRequest = LeaveRequest::with("employee")->with("handover")->with("createdBy")->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"])
+        $dataLeaveRequest = LeaveRequest::with(["employee", "handover", "createdBy", "leaveType","LeaveAllocation"])->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"])
             ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
             ->select(
                 'leave_requests.*',

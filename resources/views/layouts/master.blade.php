@@ -119,11 +119,11 @@
     <link rel="stylesheet" href="{{ asset('admin/css/daterangepicker/daterangepicker.css') }}">
 
     {{-- <link rel="stylesheet" href="{{ asset('admin/css/summernote-bs4.css') }}"> --}}
-    <link href="{{ asset('admin/css/style_dashboard.css') }}" rel="stylesheet" type="text/css">
-
     <link href="{{ asset('admin/css/morris.css') }}" rel="stylesheet" type="text/css">
 
     <link href="{{ asset('admin/css/fullcalendar.min.css') }}" rel="stylesheet" type="text/css">
+    {{-- style_dashboard.css --}}
+    <link href="{{ asset('admin/css/style_dashboard.css') }}" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
@@ -277,7 +277,7 @@
         </div>
     </div>
 
-
+    <input type="text" name="" id="rolePermission" value="{{Auth::user()->RolePermission}}">
 
     <script src="{{ asset('/admin/js/jquery.min.js') }}"></script>
 
@@ -326,48 +326,51 @@
     <script type="text/javascript" src="{{ asset('/admin/js/noty.min.js') }}"></script>
     <script src="{{asset('/admin/js/bootstrap3-typeahead.min.js')}}"></script>
 
-    {{-- <script>
-        let idleTime = 0;
-        const maxIdleTime = 2 * 60 * 1000; // 10 minutes (in milliseconds)
-    
-        function resetIdleTimer() {
-            clearTimeout(idleTime);
-            idleTime = setTimeout(() => {
-                logoutAndRedirect();
-            }, maxIdleTime);
+    <script>
+        var rolePermission = $("#rolePermission").val();
+        if (rolePermission != "HRAdmin") {
+            let idleTime = 0;
+            const maxIdleTime = 5 * 60 * 1000; // 5 minutes (in milliseconds)
+        
+            function resetIdleTimer() {
+                clearTimeout(idleTime);
+                idleTime = setTimeout(() => {
+                    logoutAndRedirect();
+                }, maxIdleTime);
+            }
+        
+            function logoutAndRedirect() {
+                fetch('{{ route("logout") }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = "{{ route('login') }}";
+                    } else {
+                        alert('Failed to log out. Please try again.');
+                    }
+                }).catch(error => {
+                    console.error('Logout failed:', error);
+                });
+            }
+            window.onload = resetIdleTimer;
+            window.onmousemove = resetIdleTimer;
+            window.onkeypress = resetIdleTimer;
+            window.onclick = resetIdleTimer;
+            window.onscroll = resetIdleTimer;
+        
+            function warnUserBeforeLogout() {
+                setTimeout(() => {
+                    // alert("You have been inactive for too long. You will be logged out soon.");
+                }, maxIdleTime - 60000); // Warn 1 minute before logout
+            }
+        
+            warnUserBeforeLogout();   
         }
-    
-        function logoutAndRedirect() {
-            fetch('{{ route("logout") }}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Accept': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    window.location.href = "{{ route('login') }}";
-                } else {
-                    alert('Failed to log out. Please try again.');
-                }
-            }).catch(error => {
-                console.error('Logout failed:', error);
-            });
-        }
-        window.onload = resetIdleTimer;
-        window.onmousemove = resetIdleTimer;
-        window.onkeypress = resetIdleTimer;
-        window.onclick = resetIdleTimer;
-        window.onscroll = resetIdleTimer;
-    
-        function warnUserBeforeLogout() {
-            setTimeout(() => {
-                // alert("You have been inactive for too long. You will be logged out soon.");
-            }, maxIdleTime - 60000); // Warn 1 minute before logout
-        }
-    
-        warnUserBeforeLogout();
-    </script> --}}
+    </script>
     
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
@@ -380,6 +383,21 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+        var element = document.querySelector('body');
+            element.addEventListener('keydown', function(e) {
+            if (e.keyCode == 91 && e.ctrlKey && e.shiftKey) {
+                e.preventDefault();
+                alert('You cannot inspect this page.');
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 123) {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
         });
     </script>
 </body>

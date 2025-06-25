@@ -60,7 +60,8 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
         }
         $payroll = Payroll::with("users")
-        ->join('users', 'payrolls.employee_id', '=', 'users.id')
+        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
+        ->leftJoin('options', 'users.gender', '=', 'options.id')
         ->select(
             'payrolls.*',
             'users.number_employee',
@@ -68,6 +69,8 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             'users.employee_name_kh',
             'users.branch_id',
             'users.department_id',
+            'options.name_english',
+            'options.name_khmer',
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'HOD') {
@@ -143,6 +146,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "no" => $i,
                 "employee_id"       => $value->users->number_employee,
                 "name"              => Helper::getLang() == 'en' ? $value->users->employee_name_en : $value->users->employee_name_kh,
+                "Gender"             => $value->name_khmer,
                 "position"          => $value->users->EmployeePosition,
                 "department"        => $value->users->EmployeeDepartment,
                 "location"          => $value->users->EmployeeBranch,
@@ -227,6 +231,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             'AE' => 20,
             'AF' => 20,
             'AG' => 15,
+            'AH' => 15,
         ];
     }
     public function registerEvents(): array {
@@ -240,7 +245,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $event->sheet->getDelegate()->getStyle('A3')->getFont()->getColor()->setARGB('0000CC');
                 $event->sheet->getDelegate()->getStyle('A4')->getFont()->getColor()->setARGB('3923A9');
                 
-                $event->sheet->getStyle('A5:AG5')->applyFromArray([
+                $event->sheet->getStyle('A5:AH5')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -252,7 +257,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 if ($this->num > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':AG'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':AH'.$n)->applyFromArray([
                             'borders' => [
                                 'allBorders' => [
                                     'borderStyle' => Border::BORDER_THIN,
@@ -263,7 +268,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                     }
                 }
 
-                $event->sheet->getStyle('A'.$rows.':AG'.$rows)->applyFromArray([
+                $event->sheet->getStyle('A'.$rows.':AH'.$rows)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -271,9 +276,9 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                         ],
                     ],
                 ]);
-                $sheet->getDelegate()->getStyle('A5:AG5')->getFont()->getColor()->setARGB('3923A9');
-                $sheet->getDelegate()->getStyle('A5:AG5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
-                $event->sheet->getDelegate()->getStyle('A5:AG5')->getAlignment()
+                $sheet->getDelegate()->getStyle('A5:AH5')->getFont()->getColor()->setARGB('3923A9');
+                $sheet->getDelegate()->getStyle('A5:AH5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
+                $event->sheet->getDelegate()->getStyle('A5:AH5')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -299,116 +304,119 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $event->sheet->getDelegate()->getStyle('A4:AF4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 //footer
-                // dd('A'.$rows.':G'.$rows);
-                $sheet->mergeCells('A'.$rows.':G'.$rows);
+                $sheet->mergeCells('A'.$rows.':H'.$rows);
                 $sheet->setCellValue('A'.$rows, "សរុប");
-                $sheet->getDelegate()->getStyle("A".$rows.':G'.$rows)->getFont()->setName('Khmer OS Muol Light')->setSize(9);
-                $event->sheet->getDelegate()->getStyle("A".$rows.':G'.$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                $sheet->getDelegate()->getStyle("A".$rows.':H'.$rows)->getFont()->setName('Khmer OS Muol Light')->setSize(9);
+                $event->sheet->getDelegate()->getStyle("A".$rows.':H'.$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 //total setCellValue H
-                $sheet->setCellValue("H".$rows, number_format($this->totalAmountBasicSalary, 2));
                 $sheet->getDelegate()->getStyle("H".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("H".$rows);
                 $event->sheet->getDelegate()->getStyle("H".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
                 //total setCellValue I
-                $sheet->setCellValue("I".$rows, number_format($this->totalBaseSalaryReceived, 2));
+                $sheet->setCellValue("I".$rows, number_format($this->totalAmountBasicSalary, 2));
                 $sheet->getDelegate()->getStyle("I".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("I".$rows);
                 $event->sheet->getDelegate()->getStyle("I".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue J
-                $sheet->setCellValue("J".$rows, number_format($this->totalChildAllowance, 2));
+                $sheet->setCellValue("J".$rows, number_format($this->totalBaseSalaryReceived, 2));
                 $sheet->getDelegate()->getStyle("J".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("J".$rows);
                 $event->sheet->getDelegate()->getStyle("J".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue K
-                $sheet->setCellValue("K".$rows, number_format($this->totalPhoneAllowance, 2));
+                $sheet->setCellValue("K".$rows, number_format($this->totalChildAllowance, 2));
                 $sheet->getDelegate()->getStyle("K".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("K".$rows);
                 $event->sheet->getDelegate()->getStyle("K".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                //total setCellValue K
-                $sheet->setCellValue("L".$rows, number_format($this->totalMonthlyQuarterlyBonuses, 2));
+                //total setCellValue L
+                $sheet->setCellValue("L".$rows, number_format($this->totalPhoneAllowance, 2));
                 $sheet->getDelegate()->getStyle("L".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("L".$rows);
-                $event->sheet->getDelegate()->getStyle("L".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                $event->sheet->getDelegate()->getStyle("K".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue M
-                $sheet->setCellValue("M".$rows, number_format($this->totalKnyPhcumben, 2));
+                $sheet->setCellValue("M".$rows, number_format($this->totalMonthlyQuarterlyBonuses, 2));
                 $sheet->getDelegate()->getStyle("M".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("M".$rows);
                 $event->sheet->getDelegate()->getStyle("M".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue N
-                $sheet->setCellValue("N".$rows, number_format($this->totalAnnualIncentiveBonus, 2));
+                $sheet->setCellValue("N".$rows, number_format($this->totalKnyPhcumben, 2));
                 $sheet->getDelegate()->getStyle("N".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("N".$rows);
                 $event->sheet->getDelegate()->getStyle("N".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue O
-                $sheet->setCellValue("O".$rows, number_format($this->totalSeniorityPayIncludedTax, 2));
+                $sheet->setCellValue("O".$rows, number_format($this->totalAnnualIncentiveBonus, 2));
                 $sheet->getDelegate()->getStyle("O".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("O".$rows);
                 $event->sheet->getDelegate()->getStyle("O".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue P
-                $sheet->setCellValue("P".$rows, number_format($this->totalGrossIncludeTax, 2));
+                $sheet->setCellValue("P".$rows, number_format($this->totalSeniorityPayIncludedTax, 2));
                 $sheet->getDelegate()->getStyle("P".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("P".$rows);
                 $event->sheet->getDelegate()->getStyle("P".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Q
-                $sheet->setCellValue("Q".$rows, number_format($this->totalPensionFund, 2));
+                $sheet->setCellValue("Q".$rows, number_format($this->totalGrossIncludeTax, 2));
                 $sheet->getDelegate()->getStyle("Q".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Q".$rows);
                 $event->sheet->getDelegate()->getStyle("Q".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue R
-                $sheet->setCellValue("R".$rows, number_format($this->TotalBaseSalaryReceivedUsd, 2));
+                $sheet->setCellValue("R".$rows, number_format($this->totalPensionFund, 2));
                 $sheet->getDelegate()->getStyle("R".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("R".$rows);
                 $event->sheet->getDelegate()->getStyle("R".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue S
-                $sheet->setCellValue("S".$rows, number_format($this->totalBaseSalaryReceivedRiel));
+                $sheet->setCellValue("S".$rows, number_format($this->TotalBaseSalaryReceivedUsd, 2));
                 $sheet->getDelegate()->getStyle("S".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("S".$rows);
                 $event->sheet->getDelegate()->getStyle("S".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue T
-                $sheet->setCellValue("T".$rows, number_format($this->totalSpouse, 2));
+                $sheet->setCellValue("T".$rows, number_format($this->totalBaseSalaryReceivedRiel));
                 $sheet->getDelegate()->getStyle("T".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("T".$rows);
                 $event->sheet->getDelegate()->getStyle("T".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue U
-                $sheet->setCellValue("U".$rows, number_format($this->totalChildren, 2));
+                $sheet->setCellValue("U".$rows, number_format($this->totalSpouse, 2));
                 $sheet->getDelegate()->getStyle("U".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("U".$rows);
                 $event->sheet->getDelegate()->getStyle("U".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue V
-                $sheet->setCellValue("V".$rows, number_format($this->totalChargesReduced));
+                $sheet->setCellValue("V".$rows, number_format($this->totalChildren, 2));
                 $sheet->getDelegate()->getStyle("V".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("V".$rows);
                 $event->sheet->getDelegate()->getStyle("V".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                //total setCellValue V
-                $sheet->setCellValue("W".$rows, number_format($this->totalTaxBaseRiel));
+                //total setCellValue W
+                $sheet->setCellValue("W".$rows, number_format($this->totalChargesReduced));
                 $sheet->getDelegate()->getStyle("W".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("W".$rows);
                 $event->sheet->getDelegate()->getStyle("W".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue X
-                $sheet->setCellValue("X".$rows, number_format($this->totalRate, 2));
+                $sheet->setCellValue("X".$rows, number_format($this->totalTaxBaseRiel));
                 $sheet->getDelegate()->getStyle("X".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("X".$rows);
                 $event->sheet->getDelegate()->getStyle("X".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Y
-                $sheet->setCellValue("Y".$rows, number_format($this->totalSalaryTaxUsd, 2));
+                $sheet->setCellValue("Y".$rows, number_format($this->totalRate, 2));
                 $sheet->getDelegate()->getStyle("Y".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Y".$rows);
                 $event->sheet->getDelegate()->getStyle("Y".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Z
-                $sheet->setCellValue("Z".$rows, number_format($this->totalSalaryTaxRiel));
+                $sheet->setCellValue("Z".$rows, number_format($this->totalSalaryTaxUsd, 2));
                 $sheet->getDelegate()->getStyle("Z".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Z".$rows);
                 $event->sheet->getDelegate()->getStyle("Z".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AA
-                $sheet->setCellValue("AA".$rows, number_format($this->totalSeniorityPayExcludedTax, 2));
+                $sheet->setCellValue("AA".$rows, number_format($this->totalSalaryTaxRiel));
                 $sheet->getDelegate()->getStyle("AA".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AA".$rows);
                 $event->sheet->getDelegate()->getStyle("AA".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AB
-                $sheet->setCellValue("AB".$rows, number_format($this->totalSeniorityBackford, 2));
+                $sheet->setCellValue("AB".$rows, number_format($this->totalSeniorityPayExcludedTax, 2));
                 $sheet->getDelegate()->getStyle("AB".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AB".$rows);
                 $event->sheet->getDelegate()->getStyle("AB".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AC
-                $sheet->setCellValue("AC".$rows, number_format($this->totalSeverancePay, 2));
-                $sheet->getDelegate()->getStyle("AC".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AB".$rows);
+                $sheet->setCellValue("AC".$rows, number_format($this->totalSeniorityBackford, 2));
+                $sheet->getDelegate()->getStyle("AC".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AC".$rows);
                 $event->sheet->getDelegate()->getStyle("AC".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AD
-                $sheet->setCellValue("AD".$rows, number_format($this->totalLoanAmount, 2));
+                $sheet->setCellValue("AD".$rows, number_format($this->totalSeverancePay, 2));
                 $sheet->getDelegate()->getStyle("AD".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AD".$rows);
                 $event->sheet->getDelegate()->getStyle("AD".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                //total setCellValue AD
-                $sheet->setCellValue("AE".$rows, number_format($this->totalStaffBook, 2));
+                //total setCellValue AE
+                $sheet->setCellValue("AE".$rows, number_format($this->totalLoanAmount, 2));
                 $sheet->getDelegate()->getStyle("AE".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AE".$rows);
                 $event->sheet->getDelegate()->getStyle("AE".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                //total setCellValue AE
-                $sheet->setCellValue("AF".$rows, number_format($this->totalAmountCar, 2));
+                //total setCellValue AF
+                $sheet->setCellValue("AF".$rows, number_format($this->totalStaffBook, 2));
                 $sheet->getDelegate()->getStyle("AF".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AF".$rows);
                 $event->sheet->getDelegate()->getStyle("AF".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                //total setCellValue AF
-                $sheet->setCellValue("AG".$rows, number_format(abs($this->totalSalaryNetPay), 2));
+                //total setCellValue AG
+                $sheet->setCellValue("AG".$rows, number_format($this->totalAmountCar, 2));
                 $sheet->getDelegate()->getStyle("AG".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AG".$rows);
                 $event->sheet->getDelegate()->getStyle("AG".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                //total setCellValue AH
+                $sheet->setCellValue("AH".$rows, number_format(abs($this->totalSalaryNetPay), 2));
+                $sheet->getDelegate()->getStyle("AH".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AH".$rows);
+                $event->sheet->getDelegate()->getStyle("AH".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             },
         ];
     }
@@ -428,6 +436,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             "ល.រ",
             "ប័ណ្ណ ការងារ",
             "នាម និង គោត្តនាម",
+            "ភេទ",
             "មុខងារ",
             "នាយកដ្ឋាន",
             "ទីតាំងការងារ",

@@ -14,6 +14,7 @@ class FnLevelReviewer extends Model
     use HasFactory;
     protected $table = 'fn_level_reviewers';
     protected $guarded = ['id'];
+    protected $appends = ['position_review'];
 
     protected $fillable = [
         'from_amount',

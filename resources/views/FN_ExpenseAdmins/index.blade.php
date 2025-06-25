@@ -43,7 +43,7 @@
                                 @foreach ($datas as $inx=>$item)
                                     @php
                                         $positionReviews = "";
-                                        if ($item->status != "approved") {
+                                        if ($item->status != "pending_approve") {
                                             if (count($item->PositionReviews)>0) {
                                                 $num = 1;
                                                 foreach ($item->PositionReviews as $key => $position) {
