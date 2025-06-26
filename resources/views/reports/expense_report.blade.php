@@ -97,7 +97,8 @@
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            @if ($datas->total() > 9)
+                             @if (method_exists($datas, 'total') && $datas->total() > 9)
+                            {{-- @if ($datas->total() > 9) --}}
                                 <form method="GET" class="mb-3">
                                     <label>Show 
                                         <select name="per_page" onchange="this.form.submit()" class="per_page">
@@ -162,8 +163,8 @@
                                                     @endif
                                                 </td>
                                                 <td >{{$item->expense_type == "1" ? "Regular Expense": "Irregular Expense"}}</td>
-                                                <td >$ {{$item->amount_usd}}</td>
-                                                <td>៛ {{$item->amount_riel}}</td>
+                                                <td >$ {{number_format($item->amount_usd, 2)}}</td>
+                                                <td>៛ {{number_format($item->amount_riel, 2)}}</td>
                                                 <td>{{$item->payment_term}}</td>
                                                 @if(count($item->expenseRequest->References) <= 1)
                                                     <td>
@@ -214,7 +215,10 @@
                                     @endif
                                 </tbody>
                             </table>
-                            {!! $datas->withQueryString()->links('pagination::bootstrap-5') !!}
+                            @if ($datas instanceof \Illuminate\Contracts\Pagination\Paginator)
+                             {!! $datas->withQueryString()->links('pagination::bootstrap-5') !!}
+                            @endif
+                            
                         </div>
                     </div>
                 </div>
@@ -491,8 +495,8 @@
                             '<td class="stuck-scroll-3">'+ status +'</td>'+
                             '<td >'+ type +'</td>'+
                             '<td >'+(item.expense_type == "1" ? "Regular Expense": "Irregular Expense")+'</td>'+
-                            '<td >$ '+item.amount_usd+'</td>'+
-                            '<td>៛​​ '+item.amount_riel+'</td>'+
+                            '<td >$ '+formatNumber(item.amount_usd)+'</td>'+
+                            '<td>៛​​ '+formatNumber(item.amount_riel)+'</td>'+
                             '<td>'+item.payment_term+'</td>'+
                             referenceTd+
                             '<td data-toggle="tooltip" data-html="true" title="'+ item.subject +'">'+
@@ -519,6 +523,14 @@
                 $(".loading-icon").css('display', 'none');
             }
         });
+    }
+     function formatNumber(amount) {
+        let number = parseFloat(amount); 
+        let result = number.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        return result;
     }
     function strLimit(str, limit = 30, end = '...') {
         return str.length > limit ? str.substring(0, limit) + end : str;

@@ -81,8 +81,8 @@
                                         @endif
                                     </td>
                                     <td >{{$item->expense_type == "1" ? "Regular Expense": "Irregular Expense"}}</td>
-                                    <td >{{$item->ge_total_amount_usd}}</td>
-                                    <td>{{$item->type == "2" ? $item->te_total_tax : $item->ge_total_amount_riel}}</td>
+                                    <td >{{number_format($item->ge_total_amount_usd, 2)}}</td>
+                                    <td>{{$item->type == "2" ? number_format($item->te_total_tax ,2) : number_format($item->ge_total_amount_riel, 2)}}</td>
                                     @if(count($item->References) <= 1)
                                         <td>
                                             @if(isset($item->References[0]->file_upload))
@@ -212,8 +212,10 @@
                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                         @endif
                                     </td>
-                                    <td >{{$item->ge_total_amount_usd}}</td>
-                                    <td>{{$item->type == "2" ? $item->te_total_tax : $item->ge_total_amount_riel}}</td>
+                                    <td>$ {{ number_format($item->ge_total_amount_usd, 2) }}</td>
+                                    <td>
+                                        {{ $item->type == "2" ? '$ ' . number_format($item->te_total_tax, 2) : '៛ ' . number_format($item->ge_total_amount_riel, 2) }}
+                                    </td>
 
                                     @if(count($item->References) <= 1 && isset($item->References[0]->file_upload))
                                         @php

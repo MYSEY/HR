@@ -121,52 +121,82 @@
                 $("#v_expense_type").text("ចំណាយប្រកាសពន្ធ");
                 $("#v_total_cost_text").text("សរុបចំណាយ (១+២)");
                 $("#block_fringe_benefit").css("display","none");
-                $("#v_tax_riel").text("៛ "+datas.te_tax_income);
-                $("#v_total_amount_riel").text("៛ "+datas.te_total_tax);
+                $("#v_tax_riel").text("៛ "+formatNumber(datas.te_tax_income));
+                $("#v_total_amount_riel").text("៛ "+formatNumber(datas.te_total_tax));
             }else{
                 $("#v_expense_type").text("សរុបចំណាយ (១+២)");
                 $("#v_total_cost_text").text("ពន្ធកាត់ទុក");
                 convertNumberKH = convertNumberToWordsExp(datas.ge_total_amount_riel,"rial");
                 $("#block_fringe_benefit").css("display","block");
-                $("#v_tax_fringe_benefit_usd").text("$ "+datas.ge_tax_fringe_benefit_usd);
-                $("#v_tax_fringe_benefit_riel").text("៛ "+datas.tax_fringe_benefit_riel);
-                $("#v_tax_riel").text("៛ "+datas.tax_riel);
-                $("#v_total_amount_riel").text("៛ "+datas.ge_total_amount_riel);
+                $("#v_tax_fringe_benefit_usd").text("$ "+formatNumber(datas.ge_tax_fringe_benefit_usd));
+                $("#v_tax_fringe_benefit_riel").text("៛ "+formatNumber(datas.tax_fringe_benefit_riel));
+                $("#v_tax_riel").text("៛ "+formatNumber(datas.tax_riel));
+                $("#v_total_amount_riel").text("៛ "+formatNumber(datas.ge_total_amount_riel));
             }
 
             $("#v_kind_regard").val(datas.kind_regard);
             $("#v_subject").val(datas.subject);
             $("#v_reason_subject").val(datas.reason_subject);
             $("#v_payment_term").text(datas.payment_term);
-            $("#v_cost_material_usd").text("$ "+datas.ge_cost_material_usd);
-            $("#v_cost_material_riel").text("៛ "+datas.ge_cost_material_riel);
-            $("#v_cost_lso_usd").text("$ "+datas.ge_cost_lso_usd);
-            $("#v_cost_lso_riel").text("៛ "+datas.ge_cost_lso_riel);
-            $("#v_total_cost_usd").text("$ "+datas.ge_total_cost_usd);
-            $("#v_total_cost_riel").text("៛ "+datas.ge_total_cost_riel);
-            $("#v_tax_usd").text("$ "+datas.ge_tax_usd);
-            $("#v_vat_reverse_charge_usd").text("$ "+datas.ge_vat_reverse_charge_usd);
-            $("#v_vat_reverse_charge_riel").text("៛ "+datas.vat_reverse_charge_riel);
-            $("#v_total_amount_usd").text("$ "+datas.ge_total_amount_usd);
+            $("#v_cost_material_usd").text("$ "+formatNumber(datas.ge_cost_material_usd));
+            $("#v_cost_material_riel").text("៛ "+formatNumber(datas.ge_cost_material_riel));
+            $("#v_cost_lso_usd").text("$ "+formatNumber(datas.ge_cost_lso_usd));
+            $("#v_cost_lso_riel").text("៛ "+formatNumber(datas.ge_cost_lso_riel));
+            $("#v_total_cost_usd").text("$ "+formatNumber(datas.ge_total_cost_usd));
+            $("#v_total_cost_riel").text("៛ "+formatNumber(datas.ge_total_cost_riel));
+            $("#v_tax_usd").text("$ "+formatNumber(datas.ge_tax_usd));
+            $("#v_vat_reverse_charge_usd").text("$ "+formatNumber(datas.ge_vat_reverse_charge_usd));
+            $("#v_vat_reverse_charge_riel").text("៛ "+formatNumber(datas.vat_reverse_charge_riel));
+            $("#v_total_amount_usd").text("$ "+formatNumber(datas.ge_total_amount_usd));
             $("#v_convert_money_dollar").text(convertNumberUSA);
             $("#v_convert_money_rial").text(convertNumberKH);
             $("#v_remark").val(datas.remark);
             let tr_a = "";
             let tr_b = "";
+            let amountUSD = '';
+            let amountRiel = '';
             if (datas.location_details.length === 1) {
+                let detail = datas.location_details[0];
+
+                if (detail.amount_usd) {
+                    amountUSD = ' $ ' + formatNumber(detail.amount_usd);
+                }
+
+                if (detail.amount_riel) {
+                    amountRiel = ' ៛' + formatNumber(detail.amount_riel);
+                }
+
+                let currencyText = amountUSD;
+                if (amountUSD && amountRiel) currencyText += '&nbsp;&nbsp;';
+                currencyText += amountRiel;
+
                 tr_a = '<tr>' +
-                        '<td class="table_tr_">' +  "- " + datas.location_details[0].location.branch_name_kh +
-                        'ចំនួនទឹកប្រាក់​ $ ' + datas.location_details[0].amount_usd + '</td>' +
-                    '</tr>';
+                    '<td class="table_tr_">- ' + detail.location.branch_name_kh + currencyText + '</td>' +
+                '</tr>';
+
             } else {
                 let mid = Math.ceil(datas.location_details.length / 2);
 
                 for (let index = 0; index < datas.location_details.length; index++) {
                     let detail = datas.location_details[index];
+                    let amountUSD = '';
+                    let amountRiel = '';
+
+                    if (detail.amount_usd > 0) {
+                        amountUSD = ' $ ' + formatNumber(detail.amount_usd);
+                    }
+
+                    if (detail.amount_riel > 0) {
+                        amountRiel = ' ៛' + formatNumber(detail.amount_riel);
+                    }
+
+                    let currencyText = amountUSD;
+                    if (amountUSD && amountRiel) currencyText += '&nbsp;&nbsp;';
+                    currencyText += amountRiel;
+
                     let row = '<tr>' +
-                                '<td class="table_tr_">' + "- " + detail.location.branch_name_kh +
-                                'ចំនួនទឹកប្រាក់​ $ ' + detail.amount_usd + '</td>' +
-                            '</tr>';
+                        '<td class="table_tr_">- ' + detail.location.branch_name_kh + currencyText + '</td>' +
+                    '</tr>';
 
                     if (index < mid) {
                         tr_a += row;
@@ -175,6 +205,7 @@
                     }
                 }
             }
+
             $(".v_locations_a tr").html(tr_a);
             $(".v_locations_b tr").html(tr_b);
             $('#view_information_expense').modal('show');
@@ -352,18 +383,19 @@
             $(".p_subject").text(datas.subject);
             $(".p_reference").text(datas.reference);
             $(".p_reason_subject").text(datas.reason_subject);
-            $(".p_ge_cost_material_usd").text(datas.ge_cost_material_usd);
-            $(".p_ge_cost_material_kh").text(datas.ge_cost_material_riel);
-            $(".p_ge_cost_lso_usd").text(datas.ge_cost_lso_usd);
-            $(".p_ge_cost_lso_kh").text(datas.ge_cost_lso_riel);
-            $(".p_ge_total_cost_usd").text(datas.ge_total_cost_usd);
-            $(".p_ge_total_cost_kh").text(datas.ge_total_cost_riel);
-            $(".p_ge_tax_usd").text(datas.ge_tax_usd);
-            $(".p_ge_tax_kh").text(datas.tax_riel);
-            $(".p_ge_vat_reverse_charge_usd").text(datas.ge_vat_reverse_charge_usd);
-            $(".p_ge_vat_reverse_charge_kh").text(datas.vat_reverse_charge_riel);
-            $(".p_ge_total_amount_usd").text(datas.ge_total_amount_usd);
-            $(".p_ge_total_amount_kh").text(datas.ge_total_amount_riel);
+            $(".p_ge_cost_material_usd").text(formatNumber(datas.ge_cost_material_usd));
+            $(".p_ge_cost_material_kh").text(formatNumber(datas.ge_cost_material_riel));
+            $(".p_ge_cost_lso_usd").text(formatNumber(datas.ge_cost_lso_usd));
+            $(".p_ge_cost_lso_kh").text(formatNumber(datas.ge_cost_lso_riel));
+            $(".p_ge_total_cost_usd").text(formatNumber(datas.ge_total_cost_usd));
+            $(".p_ge_total_cost_kh").text(formatNumber(datas.ge_total_cost_riel));
+            $(".p_ge_tax_usd").text(formatNumber(datas.ge_tax_usd));
+            $(".p_ge_tax_kh").text(formatNumber(datas.tax_riel));
+            $(".p_ge_vat_reverse_charge_usd").text(formatNumber(datas.ge_vat_reverse_charge_usd));
+            $(".p_ge_vat_reverse_charge_kh").text(formatNumber(datas.vat_reverse_charge_riel));
+            $(".p_ge_total_amount_usd").text(formatNumber(datas.ge_total_amount_usd));
+            $(".p_ge_total_amount_kh").text(formatNumber(datas.ge_total_amount_riel));
+
             let convertNumber = convertNumberToWordsExp(datas.ge_total_amount_usd,"dollar");
             let convertNumberRiel = convertNumberToWordsExp(datas.ge_total_amount_riel,"rial");
             $(".p_convertNumberDollar").text(convertNumber);
@@ -386,20 +418,50 @@
             $(".p_year").text(year);
             let tr_a = "";
             let tr_b = "";
+            let amountUSD = '';
+            let amountRiel = '';
             if (datas.location_details.length === 1) {
+                let detail = datas.location_details[0];
+
+                if (detail.amount_usd) {
+                    amountUSD = ' $ ' + formatNumber(detail.amount_usd);
+                }
+
+                if (detail.amount_riel) {
+                    amountRiel = ' ៛' + formatNumber(detail.amount_riel);
+                }
+
+                let currencyText = amountUSD;
+                if (amountUSD && amountRiel) currencyText += '&nbsp;&nbsp;';
+                currencyText += amountRiel;
+
                 tr_a = '<tr>' +
-                        '<td class="table_tr_">' + datas.location_details[0].location.branch_name_kh +
-                        'ចំនួនទឹកប្រាក់​ $ ' + datas.location_details[0].amount_usd + '</td>' +
-                    '</tr>';
+                    '<td class="table_tr_">- ' + detail.location.branch_name_kh + currencyText + '</td>' +
+                '</tr>';
+
             } else {
                 let mid = Math.ceil(datas.location_details.length / 2);
 
                 for (let index = 0; index < datas.location_details.length; index++) {
                     let detail = datas.location_details[index];
+                    let amountUSD = '';
+                    let amountRiel = '';
+
+                    if (detail.amount_usd > 0) {
+                        amountUSD = ' $ ' + formatNumber(detail.amount_usd);
+                    }
+
+                    if (detail.amount_riel > 0) {
+                        amountRiel = ' ៛' + formatNumber(detail.amount_riel);
+                    }
+
+                    let currencyText = amountUSD;
+                    if (amountUSD && amountRiel) currencyText += '&nbsp;&nbsp;';
+                    currencyText += amountRiel;
+
                     let row = '<tr>' +
-                                '<td class="table_tr_">' + detail.location.branch_name_kh +
-                                'ចំនួនទឹកប្រាក់​ $ ' + detail.amount_usd + '</td>' +
-                            '</tr>';
+                        '<td class="table_tr_">- ' + detail.location.branch_name_kh + currencyText + '</td>' +
+                    '</tr>';
 
                     if (index < mid) {
                         tr_a += row;
@@ -420,18 +482,19 @@
             $(".p_subject").text(datas.subject);
             $(".p_reference").text(datas.reference);
             $(".p_reason_subject").text(datas.reason_subject);
-            $(".p_ge_cost_material_usd").text(datas.ge_cost_material_usd);
-            $(".p_ge_cost_material_riel").text(datas.ge_cost_material_riel);
-            $(".p_ge_cost_lso_usd").text(datas.ge_cost_lso_usd);
-            $(".p_ge_cost_lso_riel").text(datas.ge_cost_lso_riel);
-            $(".p_te_tax_usd").text(datas.ge_tax_usd);
-            $(".p_te_tax_income").text(datas.te_tax_income);
-            $(".p_ge_total_cost_usd").text(datas.ge_total_cost_usd);
-            $(".p_ge_total_cost_riel").text(datas.ge_total_cost_riel);
-            $(".p_vat_reverse_charge_usd").text(datas.ge_vat_reverse_charge_usd);
-            $(".p_vat_reverse_charge_riel").text(datas.vat_reverse_charge_riel);
-            $(".p_te_total_usd").text(datas.ge_total_amount_usd);
-            $(".p_te_total_tax").text(datas.te_total_tax);
+            $(".p_ge_cost_material_usd").text(formatNumber(datas.ge_cost_material_usd));
+            $(".p_ge_cost_material_riel").text(formatNumber(datas.ge_cost_material_riel));
+            $(".p_ge_cost_lso_usd").text(formatNumber(datas.ge_cost_lso_usd));
+            $(".p_ge_cost_lso_riel").text(formatNumber(datas.ge_cost_lso_riel));
+            $(".p_te_tax_usd").text(formatNumber(datas.ge_tax_usd));
+            $(".p_te_tax_income").text(formatNumber(datas.te_tax_income));
+            $(".p_ge_total_cost_usd").text(formatNumber(datas.ge_total_cost_usd));
+            $(".p_ge_total_cost_riel").text(formatNumber(datas.ge_total_cost_riel));
+            $(".p_vat_reverse_charge_usd").text(formatNumber(datas.ge_vat_reverse_charge_usd));
+            $(".p_vat_reverse_charge_riel").text(formatNumber(datas.vat_reverse_charge_riel));
+            $(".p_te_total_usd").text(formatNumber(datas.ge_total_amount_usd));
+            $(".p_te_total_tax").text(formatNumber(datas.te_total_tax));
+
             let convertNumberRiel = convertNumberToWordsExp(datas.te_total_tax,"rial");
             let convertNumber = convertNumberToWordsExp(datas.ge_total_amount_usd,"dollar");
             $(".p_convertNumberRiel").text(convertNumberRiel);
@@ -493,6 +556,14 @@
                 }
             })
             .join('');
+    }
+    function formatNumber(amount) {
+        let number = parseFloat(amount); 
+        let result = number.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        return result;
     }
     function print_pdf(className) {
         $("#"+ className).show();
