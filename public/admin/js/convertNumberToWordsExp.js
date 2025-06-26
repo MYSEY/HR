@@ -19,7 +19,6 @@ function convertNumberToWordsExp(n,exchange) {
     function translate(n) {
         n = Math.trunc(n);
         let word = '';
-
         if (n < 10) {
             word = single_digit[n];
         } else if (n < 20) {
@@ -31,8 +30,10 @@ function convertNumberToWordsExp(n,exchange) {
             word = single_digit[Math.floor(n / 100)] + 'រយ' + (n % 100 !== 0 ? '' + translate(n % 100) : '');
         } else if (n < 10000) {
             word = single_digit[Math.floor(n / 1000)] + 'ពាន់' + (n % 1000 !== 0 ? '' + translate(n % 1000) : '');
+       } else if (n < 100000) {
+            word = translate(Math.floor(n / 1000)) + 'ពាន់' + (n % 10000 !== 0 ? '' + translate(n % 1000) : '');
         } else if (n < 1000000) {
-            word = translate(Math.floor(n / 10000)) + 'មុឺន' + (n % 10000 !== 0 ? '' + translate(n % 10000) : '');
+            word = translate(Math.floor(n / 1000)) + 'ពាន់' + (n % 100000 !== 0 ? '' + translate(n % 1000) : '');
         } else if (n < 1000000000) {
             word = translate(Math.floor(n / 1000000)) + 'លាន' + (n % 1000000 !== 0 ? '' + translate(n % 1000000) : '');
         } else {

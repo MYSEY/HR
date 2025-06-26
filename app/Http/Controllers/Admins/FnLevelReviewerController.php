@@ -24,36 +24,52 @@ class FnLevelReviewerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/level-reviewer")->first();
         if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-        $datas = FnLevelReviewer::with(["departmentView"])
+        $filteredDatas = FnLevelReviewer::with(["departmentView"])
         ->orderBy('type', 'ASC')
-        ->orderBy('request_type', 'ASC')
-        ->get();
+        ->orderBy('request_type', 'ASC');
+        $perPage = $request->get('per_page', 10);
+
+        if ($perPage === 'all') {
+            $datas = $filteredDatas->get();
+        } else {
+            $datas = $filteredDatas->paginate($perPage);
+        }
         $departments = Department::get();
         $positions = Position::get();
         return view('FN_LevelReviewers.index',compact(['datas','permission', 'positions','departments']));
     }
     public function filter(Request $request)
     {
-         $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/level-reviewer")->first();
-        $datas = FnLevelReviewer::with(["departmentView"])
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/level-reviewer")->first();
+        $filteredDatas = FnLevelReviewer::with(["departmentView"])
         ->when($request->department_id, function ($query, $department_id) {
             $query->where('department_review', $department_id);
         })
         ->when($request->location_id, function ($query, $location_id) {
             $query->where('from_location', $location_id);
         })
+        ->when($request->request_type, function ($query, $request_type) {
+            $query->where('request_type', $request_type);
+        })
         ->orderBy('type', 'ASC')
-        ->orderBy('request_type', 'ASC')
-        ->get();
+        ->orderBy('request_type', 'ASC');
+
+        $perPage = $request->get('per_page', 10);
+
+        if ($perPage === 'all') {
+            $datas = $filteredDatas->get();
+        } else {
+            $datas = $filteredDatas->paginate($perPage);
+        }
         return response()->json([
             'permission' => $permission,
-            'data' => $datas,
+            'success' => $datas,
         ]);
     }
 
@@ -151,7 +167,7 @@ class FnLevelReviewerController extends Controller
 
     public function export(Request $request)
     {
-        $datas = FnLevelReviewer::with(["departmentView"])
+        $filteredDatas = FnLevelReviewer::with(["departmentView"])
         ->when($request->department_id, function ($query, $department_id) {
             $query->where('department_review', $department_id);
         })
@@ -159,8 +175,15 @@ class FnLevelReviewerController extends Controller
             $query->where('from_location', $location_id);
         })
         ->orderBy('type', 'ASC')
-        ->orderBy('request_type', 'ASC')
-        ->get();
+        ->orderBy('request_type', 'ASC');
+         $perPage = $request->get('per_page', 10);
+
+        if ($perPage === 'all') {
+            $datas = $filteredDatas->get();
+        } else {
+            $datas = $filteredDatas->paginate($perPage);
+        }
+        // ->get();
         $export = new ExportFnLevelReview($datas, $request);
         return Excel::download($export, 'FN_Review.xlsx');
     }

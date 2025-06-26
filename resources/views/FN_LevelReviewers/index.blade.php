@@ -30,21 +30,32 @@
                 <div class="col-sm-9 col-md-9"> 
                     <div class="row">
                         <div class="col-4">
+                            <div class="form-group" id="col-branch">
+                                <select class="select form-control" id="location_id" data-select2-id="select2-data-2-c0n2" name="location_id">
+                                    <option value="" data-select2-id="select2-data-2-c0n2">All @lang('lang.location')</option>
+                                    <option value="1">@lang('lang.branch')</option>
+                                    <option value="2">@lang('lang.department')</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
                             <div class="form-group">
-                                <select class="select form-control" id="department_id" data-select2-id="select2-data-2" name="department_id">
-                                    <option value="" data-select2-id="select2-data-2-"> All @lang('lang.department')</option>
+                                <select class="select form-control" id="department_id" data-select2-id="select2-data-2" name="department_id" disabled>
+                                    <option value="" data-select2-id="select2-data-2-">-- @lang('lang.select') --</option>
                                     @foreach ($departments as $item)
                                         <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
+                        
                         <div class="col-4">
-                            <div class="form-group" id="col-branch">
-                                <select class="select form-control" id="location_id" data-select2-id="select2-data-2-c0n2" name="location_id">
-                                    <option value="" data-select2-id="select2-data-2-c0n2">All @lang('lang.location')</option>
-                                    <option value="1">@lang('lang.branch')</option>
-                                    <option value="2">@lang('lang.department')</option>
+                            <div class="form-group">
+                                <select class="form-control request_type">
+                                    <option value=""> All @lang('lang.request_type')</option>
+                                    <option value="0">@lang('lang.general_expense')</option>
+                                    <option value="2">@lang('lang.tax_expense')</option>
+                                    <option value="1">@lang('lang.special_expense')</option>
                                 </select>
                             </div>
                         </div>
@@ -75,7 +86,24 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
-                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer table-hover tbl-level-review" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                    @if (method_exists($datas, 'total') && $datas->total() > 9)
+                        <form method="GET" class="mb-3">
+                            <label>Show 
+                                <select name="per_page" onchange="this.form.submit()" class="per_page">
+                                    <?php
+                                        for ($i = 10; $i <= $datas->total(); $i *= 2) {
+                                            echo '<option value="'.$i.'" '.(request('per_page') == $i ? 'selected' : '').'>'.$i.'</option>';
+                                        }
+                                        if ($datas->total() > $i / 2) {
+                                            echo '<option value="'.$datas->total().'" '.(request('per_page') == $datas->total() ? 'selected' : '').'>'.$datas->total().'</option>';
+                                        }
+                                    ?>
+                                    <option value="all" {{ request('per_page') == 'all' ? 'selected' : '' }}>All</option>
+                                </select> entries
+                            </label>
+                        </form>
+                    @endif
+                    <table class="table table-striped custom-table mb-0 no-footer tbl-level-review" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                         <thead>
                             <tr>
                                 <th>@lang('lang.from_amount')</th>
@@ -150,6 +178,9 @@
                             @endif
                         </tbody>
                     </table>
+                    @if ($datas instanceof \Illuminate\Contracts\Pagination\Paginator)
+                        {!! $datas->withQueryString()->links('pagination::bootstrap-5') !!}
+                    @endif
                 </div>
             </div>
         </div>
@@ -441,11 +472,28 @@
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('/fn/level-reviewer') }}"); 
         });
+        // $("#location_id").on("change", function() {
+        //     let location_type = $("#location_id option:checked").attr('data-id');
+        //     if (location_type == 1) {
+        //         $('#location_id').find('option').each(function(){
+        //             if ($(this).attr('data-id') == "Supporting Staff") {
+        //                 $("#position_type").val($(this).val());
+        //             }
+        //         }); 
+        //     }else{
+        //         $('#position_type').find('option').each(function(){
+        //             if ($(this).attr('data-id') == "Field Staff") {
+        //                 $("#position_type").val($(this).val());
+        //             }
+        //         });
+        //     }
+        // });
         $(".btn_excel").on("click", function () {
             let query = {
                 "_token": "{{ csrf_token() }}",
                 department_id: $("#department_id").val(),
                 location_id:     $("#location_id").val(),
+                request_type:     $(".request_type").val(),
             };
             var url = "{{URL::to('fn/level-reviewer/export')}}?" + $.param(query)
             window.location = url;
@@ -469,7 +517,8 @@
             }
         });
         
-        $('.update').on('click', function() {
+        $(document).on('click','.update', function(){
+        // $('.update').on('click', function() {
             $(".e_reference_type").css("display","none");
             let id = $(this).data("id");
             $('#e_request_type').html("");
@@ -574,7 +623,8 @@
                 }
             });
         });
-        $('.delete').on('click', function() {
+        $(document).on('click','.delete', function(){
+        // $('.delete').on('click', function() {
             var _this = $(this).data('id');
             $('.e_id').val(_this);
         });
@@ -582,10 +632,13 @@
             $(this).prop('disabled', true);
             $(".btn-txt").hide();
             $(".loading-icon").css('display', 'block');
+            let currentPage = $(".per_page").val();
             let param = {
-                "_token": "{{ csrf_token() }}",
-                department_id: $("#department_id").val(),
-                location_id:     $("#location_id").val(),
+                "_token":       "{{ csrf_token() }}",
+                department_id:  $("#department_id").val(),
+                location_id:    $("#location_id").val(),
+                request_type:    $(".request_type").val(),
+                per_page:       currentPage,
             };
             showdatas(param);
         });
@@ -597,7 +650,7 @@
             data: param,
             dataType: 'JSON',
             success: function(response) {
-                let datas = response.data;
+                let datas = response.success.data;
                 let permission = response.permission;
                 console.log(datas);
                 
