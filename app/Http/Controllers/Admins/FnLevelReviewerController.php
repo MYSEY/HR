@@ -19,6 +19,38 @@ use Spatie\Activitylog\Models\Activity;
 
 class FnLevelReviewerController extends Controller
 {
+
+    function getDatas($request){
+
+       $filteredDatas = FnLevelReviewer::with(["departmentView"])
+        ->when($request->department_id, function ($query, $department_id) {
+            $query->where('department_review', $department_id);
+        })
+        ->when($request->location_id, function ($query, $location_id) {
+            $query->where('from_location', $location_id);
+        })
+        ->when($request->request_type, function ($query, $request_type) {
+            if ( $request_type =="gr0") {
+               $query->where('request_type', "0");
+            }else{
+                $query->where('request_type', $request_type);
+            }
+          
+        })
+        ->orderBy('type', 'ASC')
+        ->orderBy('request_type', 'ASC');
+
+        $perPage = $request->get('per_page', 10);
+
+        if ($perPage === 'all') {
+            $datas = $filteredDatas->get();
+        } else {
+            $datas = $filteredDatas->paginate($perPage);
+        }
+
+        return $datas;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,46 +62,17 @@ class FnLevelReviewerController extends Controller
         if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-        $filteredDatas = FnLevelReviewer::with(["departmentView"])
-        ->orderBy('type', 'ASC')
-        ->orderBy('request_type', 'ASC');
-        $perPage = $request->get('per_page', 10);
-
-        if ($perPage === 'all') {
-            $datas = $filteredDatas->get();
-        } else {
-            $datas = $filteredDatas->paginate($perPage);
-        }
         $departments = Department::get();
         $positions = Position::get();
+        $datas = self::getDatas($request);
         return view('FN_LevelReviewers.index',compact(['datas','permission', 'positions','departments']));
     }
     public function filter(Request $request)
     {
         $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/level-reviewer")->first();
-        $filteredDatas = FnLevelReviewer::with(["departmentView"])
-        ->when($request->department_id, function ($query, $department_id) {
-            $query->where('department_review', $department_id);
-        })
-        ->when($request->location_id, function ($query, $location_id) {
-            $query->where('from_location', $location_id);
-        })
-        ->when($request->request_type, function ($query, $request_type) {
-            $query->where('request_type', $request_type);
-        })
-        ->orderBy('type', 'ASC')
-        ->orderBy('request_type', 'ASC');
-
-        $perPage = $request->get('per_page', 10);
-
-        if ($perPage === 'all') {
-            $datas = $filteredDatas->get();
-        } else {
-            $datas = $filteredDatas->paginate($perPage);
-        }
         return response()->json([
             'permission' => $permission,
-            'success' => $datas,
+            'success' => self::getDatas($request),
         ]);
     }
 
@@ -167,23 +170,7 @@ class FnLevelReviewerController extends Controller
 
     public function export(Request $request)
     {
-        $filteredDatas = FnLevelReviewer::with(["departmentView"])
-        ->when($request->department_id, function ($query, $department_id) {
-            $query->where('department_review', $department_id);
-        })
-        ->when($request->location_id, function ($query, $location_id) {
-            $query->where('from_location', $location_id);
-        })
-        ->orderBy('type', 'ASC')
-        ->orderBy('request_type', 'ASC');
-         $perPage = $request->get('per_page', 10);
-
-        if ($perPage === 'all') {
-            $datas = $filteredDatas->get();
-        } else {
-            $datas = $filteredDatas->paginate($perPage);
-        }
-        // ->get();
+        $datas = $datas = self::getDatas($request);
         $export = new ExportFnLevelReview($datas, $request);
         return Excel::download($export, 'FN_Review.xlsx');
     }

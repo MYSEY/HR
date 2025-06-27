@@ -1,10 +1,11 @@
 @extends('layouts.master')
 <style>
     .tooltip-inner {
-    white-space: pre-line; /* Ensures new lines appear */
-    text-align: left !important;
-    max-width: 300px; /* Adjust width if needed */
-}
+        white-space: normal !important;
+        text-align: left !important;
+        max-width: 300px !important; 
+        word-wrap: break-word !important;
+    }
 </style>
 @section('content')
     <div class="">
@@ -30,8 +31,8 @@
                 <div class="col-sm-9 col-md-9"> 
                     <div class="row">
                         <div class="col-4">
-                            <div class="form-group" id="col-branch">
-                                <select class="select form-control" id="location_id" data-select2-id="select2-data-2-c0n2" name="location_id">
+                            <div class="form-group">
+                                <select class="select form-control" id="location_id" data-select2-id="select2-data-2-c0n2">
                                     <option value="" data-select2-id="select2-data-2-c0n2">All @lang('lang.location')</option>
                                     <option value="1">@lang('lang.branch')</option>
                                     <option value="2">@lang('lang.department')</option>
@@ -40,7 +41,7 @@
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <select class="select form-control" id="department_id" data-select2-id="select2-data-2" name="department_id" disabled>
+                                <select class="select form-control" id="department_id" data-select2-id="select2-data-2" disabled>
                                     <option value="" data-select2-id="select2-data-2-">-- @lang('lang.select') --</option>
                                     @foreach ($departments as $item)
                                         <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
@@ -48,12 +49,11 @@
                                 </select>
                             </div>
                         </div>
-                        
                         <div class="col-4">
                             <div class="form-group">
                                 <select class="form-control request_type">
                                     <option value=""> All @lang('lang.request_type')</option>
-                                    <option value="0">@lang('lang.general_expense')</option>
+                                    <option value="gr0">@lang('lang.general_expense')</option>
                                     <option value="2">@lang('lang.tax_expense')</option>
                                     <option value="1">@lang('lang.special_expense')</option>
                                 </select>
@@ -458,36 +458,35 @@
             this.submit();
         });
     });
-    
-    $(function() {
-        $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip({ 
-                html: true,
-                container: 'tr'
-            });
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip({ 
+            html: true,
+            container: 'tr' 
         });
+    });
+    $(function() {
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('/fn/level-reviewer') }}"); 
         });
-        // $("#location_id").on("change", function() {
-        //     let location_type = $("#location_id option:checked").attr('data-id');
-        //     if (location_type == 1) {
-        //         $('#location_id').find('option').each(function(){
-        //             if ($(this).attr('data-id') == "Supporting Staff") {
-        //                 $("#position_type").val($(this).val());
-        //             }
-        //         }); 
-        //     }else{
-        //         $('#position_type').find('option').each(function(){
-        //             if ($(this).attr('data-id') == "Field Staff") {
-        //                 $("#position_type").val($(this).val());
-        //             }
-        //         });
-        //     }
-        // });
+        $(document).on('change', '#location_id', function () {
+            let location_type = $("#location_id").val();
+            if (location_type == 1) {
+                $('#department_id')
+                    .prop('disabled', true)
+                    .addClass('disabled-style')
+                    .val('');
+                    $('#department_id').trigger('change.select2');
+            } else {
+                $('#department_id')
+                    .prop('disabled', false)
+                    .removeClass('disabled-style')
+                    .val('');
+                $('#department_id').trigger('change.select2');
+            }
+        });
         $(".btn_excel").on("click", function () {
             let query = {
                 "_token": "{{ csrf_token() }}",
@@ -518,7 +517,6 @@
         });
         
         $(document).on('click','.update', function(){
-        // $('.update').on('click', function() {
             $(".e_reference_type").css("display","none");
             let id = $(this).data("id");
             $('#e_request_type').html("");
@@ -624,7 +622,6 @@
             });
         });
         $(document).on('click','.delete', function(){
-        // $('.delete').on('click', function() {
             var _this = $(this).data('id');
             $('.e_id').val(_this);
         });
@@ -652,11 +649,7 @@
             success: function(response) {
                 let datas = response.success.data;
                 let permission = response.permission;
-                console.log(datas);
-                
                 let tr = "";
-
-                // Translations (these must match your backend translations or be prefilled in JS)
                 let requestType = {
                     "1": "Review",
                     "2": "Review",
@@ -682,9 +675,10 @@
                         let positionViews = "";
                         if (item.position_review && item.position_review.length > 0) {
                             item.position_review.forEach((pos, index) => {
-                                positionViews += (index + 1) + ". " + pos.name_english + "<br>";
+                                positionViews += (index + 1) + ". " + pos.name_english;
                             });
                         }
+                        
 
                         // Determine request type label
                         let requestTypeLabel = requestType[item.type] + " " + item.type;
@@ -702,7 +696,7 @@
 
                         // First reviewer
                         let reviewer = item.position_review && item.position_review.length > 0
-                            ? item.position_review[0].name_english + "..."
+                            ? item.position_review[0].name_english
                             : "";
 
                         // Department
@@ -711,37 +705,42 @@
                         // Action buttons (adjust based on permission object or server-returned flags)
                         let actionButtons = "";
                         if (permission.is_update == "1") {
-                            actionButtons += `<a class="btn btn-success update" data-toggle="modal" data-id="${item.id}" data-target="#edit_fn_lovel"><i class="fa fa-edit"></i></a> `;
+                            actionButtons += '<a class="btn btn-success update" data-toggle="modal" data-id="'+item.id+'" data-target="#edit_fn_lovel"><i class="fa fa-edit"></i></a> ';
                         }
                         if (permission.is_delete == "1") {
-                            actionButtons += `<a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="${item.id}" data-target="#delete_level"><i class="fa fa-trash-o m-r-5"></i></a>`;
+                            actionButtons += '<a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="'+item.id+'" data-target="#delete_level"><i class="fa fa-trash-o m-r-5"></i></a>';
                         }
 
                         // Build row
-                        tr += `
-                            <tr class="odd">
-                                <td>${item.from_amount}</td>
-                                <td>${item.to_amount}</td>
-                                <td>${type[item.request_type]}</td>
-                                <td>${referenceTypeLabel}</td>
-                                <td>${requestTypeLabel}</td>
-                                <td>${fromLocationLabel}</td>
-                                <td data-toggle="tooltip" data-html="true" title="${positionViews}">${reviewer}</td>
-                                <td>${department}</td>
-                                <td>${item.description ? item.description : ""}</td>
-                                <td style="text-align: center;">${actionButtons}</td>
-                            </tr>
-                        `;
+                        tr += '<tr class="odd">'+
+                                '<td>'+item.from_amount+'</td>'+
+                                '<td>'+item.to_amount+'</td>'+
+                                '<td>'+(type[item.request_type])+'</td>'+
+                                '<td>'+referenceTypeLabel+'</td>'+
+                                '<td>'+requestTypeLabel+'</td>'+
+                                '<td>'+fromLocationLabel+'</td>'+
+                                '<td data-toggle="tooltip" data-html="true" title="'+positionViews+'">'+
+                                    strLimit(reviewer, 30, '...')+
+                                '</td>'+
+                                '<td>'+(department)+'</td>'+
+                                '<td>'+(item.description ? item.description : "")+'</td>'+
+                                '<td style="text-align: center;">'+(actionButtons)+'</td>'+
+                            '</tr>';
                     });
                 }
-
                 $(".tbl-level-review tbody").html(tr);
-                $('[data-toggle="tooltip"]').tooltip(); // Reinitialize tooltips
+                 $('[data-toggle="tooltip"]').tooltip({ 
+                    html: true,
+                    container: 'tr' 
+                });
                 $(".btn-research").prop('disabled', false);
                 $(".btn-txt").show();
                 $(".loading-icon").css('display', 'none');
             }
         });
+    }
+    function strLimit(str, limit = 30, end = '...') {
+        return str.length > limit ? str.substring(0, limit) + end : str;
     }
 
 </script>
