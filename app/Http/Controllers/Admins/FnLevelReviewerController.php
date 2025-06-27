@@ -22,7 +22,7 @@ class FnLevelReviewerController extends Controller
 
     function getDatas($request){
 
-       $filteredDatas = FnLevelReviewer::with(["departmentView"])
+       $filteredDatas = FnLevelReviewer::with(["departmentView", "modelReview"])
         ->when($request->department_id, function ($query, $department_id) {
             $query->where('department_review', $department_id);
         })
@@ -154,6 +154,7 @@ class FnLevelReviewerController extends Controller
             $data['reference_type'] = $request->reference_type;
             $data['type'] = $request->type;
             $data['from_location'] = $request->from_location;
+            $data['model_review'] = $request->model_review;
             $data['department_review'] = $request->department_review;
             $data['id_positions'] = $request->id_positions;
             $data['description'] = $request->description;

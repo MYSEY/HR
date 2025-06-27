@@ -112,8 +112,9 @@
                                 <th>@lang('lang.reference') @lang('lang.type')</th>
                                 <th>@lang('lang.review') @lang('lang.type')</th>
                                 <th>@lang('lang.from_location')</th>
-                                <th>@lang('lang.position_review')</th>
+                                <th>@lang('lang.model_review')</th>
                                 <th>@lang('lang.department_review')</th>
+                                <th>@lang('lang.position_review')</th>
                                 <th>@lang('lang.description')</th>
                                 <th style="text-align: center;">@lang('lang.action')</th>
                             </tr>
@@ -162,8 +163,10 @@
                                         </td>
                                         <td>{{ $requestType[$item->type]." ".$item->type}}</td>
                                         <td>{{$item->from_location =="1" ? "Branch" : "Department"}}</td>
-                                        <td data-toggle="tooltip" data-html="true" title="{!! $positionViews !!}">{{$item->positionReview[0]->name_english}}...</td>
+                                        <td>{{$item->modelReview ? $item->modelReview->name_english : ""}}</td>
                                         <td>{{$item->departmentView ? $item->departmentView->name_english : ""}}</td>
+                                        <td data-toggle="tooltip" data-html="true" title="{!! $positionViews !!}">{{$item->positionReview[0]->name_english}}...</td>
+                                        
                                         <td>{{$item->description}}</td>
                                         <td style="text-align: center;">
                                             @if ($permission->is_update == "1")
@@ -185,7 +188,7 @@
             </div>
         </div>
         <div id="add_level" class="modal custom-modal fade hr-modal-select2" role="dialog" data-bs-backdrop="static">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered " role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">@lang('lang.level_review')</h5>
@@ -254,6 +257,25 @@
                                 </select>
                             </div>
 
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.model_review') <span class="text-danger">*</span></label>
+                                <select class="select form-control hr-select2-option" id="model_review" name="model_review" required>
+                                    <option value="" selected> </option>
+                                    @foreach ($departments as $item)
+                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.department_review')</label>
+                                <select class="select form-control hr-select2-option" id="department_review" name="department_review">
+                                    <option value="" selected> </option>
+                                    @foreach ($departments as $item)
+                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="position_review">
                                 <div class="form-group hr-form-group-select2">
                                     <label>@lang('lang.position_review') <span class="text-danger">*</span></label>
@@ -266,16 +288,6 @@
                                 </div>
                             </div>
 
-                            <div class="form-group hr-form-group-select2">
-                                <label>@lang('lang.department_review')</label>
-                                <select class="select form-control hr-select2-option" id="department_review" name="department_review">
-                                    <option value="" selected> </option>
-                                    @foreach ($departments as $item)
-                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            
                             <div class="form-group">
                                 <label>@lang('lang.description')</label>
                                 <textarea type="text" rows="3" class="form-control" name="description" id="description" value="{{old('description')}}"></textarea>
@@ -345,6 +357,20 @@
                                 </select>
                             </div>
 
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.model_reviews') <span class="text-danger">*</span></label>
+                                <select class="select form-control hr-select2-option" id="e_model_review" name="model_review" required>
+                                    <option value="" selected> </option>
+                                    @foreach ($departments as $item)
+                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.department_review')</label>
+                                <select class="select form-control hr-select2-option" id="e_department_review" name="department_review">
+                                </select>
+                            </div>
                             <div class="position_review">
                                 <div class="form-group hr-form-group-select2">
                                     <label>@lang('lang.position_review') <span class="text-danger">*</span></label>
@@ -352,12 +378,6 @@
                                         
                                     </select>
                                 </div>
-                            </div>
-
-                            <div class="form-group hr-form-group-select2">
-                                <label>@lang('lang.department_review')</label>
-                                <select class="select form-control hr-select2-option" id="e_department_review" name="department_review">
-                                </select>
                             </div>
                             <div class="form-group">
                                 <label>@lang('lang.description')</label>
@@ -586,6 +606,16 @@
                                 '<option selected value="2">@lang("lang.department")</option> <option value="1">@lang("lang.branch")</option>'
                             );
                         };
+                        $('#e_model_review').html('<option value=""> </option>');
+                        if (response.data.department_review !="") {
+                            $.each(response.departments, function(i, item) {
+                                $('#e_model_review').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english,
+                                    selected: item.id == response.data.model_review ? true : false
+                                }));
+                            });
+                        }
                         $('#e_department_review').html('<option value=""> </option>');
                         if (response.data.department_review !="") {
                             $.each(response.departments, function(i, item) {
@@ -701,6 +731,7 @@
 
                         // Department
                         let department = item.department_view ? item.department_view.name_english : "";
+                        let model_review = item.model_review ? item.model_review.name_english : "";
 
                         // Action buttons (adjust based on permission object or server-returned flags)
                         let actionButtons = "";
@@ -719,11 +750,14 @@
                                 '<td>'+referenceTypeLabel+'</td>'+
                                 '<td>'+requestTypeLabel+'</td>'+
                                 '<td>'+fromLocationLabel+'</td>'+
+                                '<td>'+(model_review)+'</td>'+
+                                '<td>'+(department)+'</td>'+
                                 '<td data-toggle="tooltip" data-html="true" title="'+positionViews+'">'+
                                     strLimit(reviewer, 30, '...')+
                                 '</td>'+
-                                '<td>'+(department)+'</td>'+
-                                '<td>'+(item.description ? item.description : "")+'</td>'+
+                                '<td data-toggle="tooltip" data-html="true" title="'+item.description+'">'+
+                                    (item.description ? strLimit(item.description, 30, '...') : "")+
+                                '</td>'+
                                 '<td style="text-align: center;">'+(actionButtons)+'</td>'+
                             '</tr>';
                     });
