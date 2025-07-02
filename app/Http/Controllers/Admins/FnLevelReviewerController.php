@@ -50,6 +50,10 @@ class FnLevelReviewerController extends Controller
 
         return $datas;
     }
+    function groutId(){
+       $lastInId = FnLevelReviewer::orderBy('group_id', 'DESC')->first();
+        return $lastInId;
+    }
 
     /**
      * Display a listing of the resource.
@@ -76,14 +80,55 @@ class FnLevelReviewerController extends Controller
         ]);
     }
 
+    public function formCreate() {
+        $departments = Department::get();
+        $positions = Position::get();
+        return view('FN_LevelReviewers.form_create', compact(['positions','departments']));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+            Activity::all()->last();
+            if(self::groutId()){
+                $group_id = self::groutId()->group_id + 1;
+            }else{
+                $group_id = 1;
+            }
+            if (count($request->levels) > 0) {
+                foreach ($request->levels as $key => $value) {
+                    $data['group_id']           = $group_id;
+                    $data['from_amount']        = $request->from_amount;
+                    $data['to_amount']          = $request->to_amount;
+                    $data['request_type']       = $request->request_type;
+                    $data['reference_type']     = $request->reference_type;
+                    $data['type']               = $value["type"];
+                    $data['from_location']      = $request->from_location;
+                    $data['model_review']       = $request->model_review;
+                    $data['department_review']  = $value["department_review"];
+                    $data['id_positions']       = $value["id_positions"];
+                    $data['description']        = $request->description;
+                    $data['created_by']         = Auth::user()->id;
+                    FnLevelReviewer::create($data);
+                }
+            }
+            Toastr::success('Created successfully.','Success');
+            DB::commit();
+            return response()->json([
+                'message' => 'Created successfully.',
+                'status' => 200,
+            ]);
+            return redirect()->back();
+        } catch (\Throwable $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage(), 'status' => 500], 500);
+        }
     }
 
     /**

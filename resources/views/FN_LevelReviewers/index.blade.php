@@ -19,8 +19,9 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
+                    
                     @if ($permission->is_create == "1")
-                        <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_level"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                        <a href="{{url('fn/level-reviewer/create')}}" class="btn add-btn"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>

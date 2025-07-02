@@ -539,7 +539,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Block FN  Level Reviewer
     Route::get('/fn/level-reviewer', [FnLevelReviewerController::class,'index']);
     Route::post('/fn/level-reviewer/search', [FnLevelReviewerController::class,'filter']);
+    Route::get('/fn/level-reviewer/create', [FnLevelReviewerController::class,'formCreate']);
     Route::post('/fn/level-reviewer', [FnLevelReviewerController::class,'store']);
+    Route::post('/fn/level-reviewer/create', [FnLevelReviewerController::class,'create']);
     Route::post('/fn/level-reviewer/update', [FnLevelReviewerController::class,'update']);
     Route::post('/fn/level-reviewer/delete', [FnLevelReviewerController::class,'destroy']);
     Route::get('/fn/level-reviewer/edit', [FnLevelReviewerController::class,'edit']);
