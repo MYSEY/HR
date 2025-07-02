@@ -540,12 +540,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/fn/level-reviewer', [FnLevelReviewerController::class,'index']);
     Route::post('/fn/level-reviewer/search', [FnLevelReviewerController::class,'filter']);
     Route::get('/fn/level-reviewer/create', [FnLevelReviewerController::class,'formCreate']);
-    Route::post('/fn/level-reviewer', [FnLevelReviewerController::class,'store']);
+    Route::get('/fn/level-reviewer/view/{id}', [FnLevelReviewerController::class,'view']);
+    Route::get('/fn/level-reviewer/edit/{id}', [FnLevelReviewerController::class,'formEdit']);
     Route::post('/fn/level-reviewer/create', [FnLevelReviewerController::class,'create']);
     Route::post('/fn/level-reviewer/update', [FnLevelReviewerController::class,'update']);
     Route::post('/fn/level-reviewer/delete', [FnLevelReviewerController::class,'destroy']);
-    Route::get('/fn/level-reviewer/edit', [FnLevelReviewerController::class,'edit']);
     Route::get('/fn/level-reviewer/export', [FnLevelReviewerController::class,'export']);
+    Route::get('/fn/level-reviewer/export/details', [FnLevelReviewerController::class,'exportDetails']);
     // Block FN RegularExspense
     Route::get('/fn/regular-expense', [FnRegularExspenseController::class,'index']);
     Route::post('/fn/regular-expense', [FnRegularExspenseController::class,'store']);

@@ -129,7 +129,7 @@
                                                     @else
                                                         <a class="dropdown-item update" href="{{url("fn/expense-request/edit",$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                     @endif
-                                                    <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-numberday="{{$item->number_of_day}}" data-target="#delete_ER"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                    <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_ER"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                 @endif
                                                 {{-- @if ($item->status == "approved" || ($item->expense_type == 1 && $item->status == "pending_approve")) --}}
                                                     <a class="dropdown-item {{ $item->type == '2' ? 'btn-TEXP-print' : 'btn-GEXP-print'}}" href="#" data-datas="{{$item}}"><i class="fa fa-print fa-lg m-r-5"></i> @lang('lang.print')</a>

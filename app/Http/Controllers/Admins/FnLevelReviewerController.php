@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportFnLevelDetail;
 use App\Exports\ExportFnLevelReview;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
@@ -22,23 +23,24 @@ class FnLevelReviewerController extends Controller
 
     function getDatas($request){
 
-       $filteredDatas = FnLevelReviewer::with(["departmentView", "modelReview"])
-        ->when($request->department_id, function ($query, $department_id) {
-            $query->where('department_review', $department_id);
-        })
-        ->when($request->location_id, function ($query, $location_id) {
-            $query->where('from_location', $location_id);
-        })
-        ->when($request->request_type, function ($query, $request_type) {
-            if ( $request_type =="gr0") {
-               $query->where('request_type', "0");
-            }else{
-                $query->where('request_type', $request_type);
-            }
-          
-        })
-        ->orderBy('type', 'ASC')
-        ->orderBy('request_type', 'ASC');
+        $filteredIds = FnLevelReviewer::select(DB::raw('MIN(id) as id'))
+            ->when($request->department_id, function ($query, $department_id) {
+                $query->where('department_review', $department_id);
+            })
+            ->when($request->location_id, function ($query, $location_id) {
+                $query->where('from_location', $location_id);
+            })
+            ->when($request->request_type, function ($query, $request_type) {
+                if ($request_type == "gr0") {
+                    $query->where('request_type', "0");
+                } else {
+                    $query->where('request_type', $request_type);
+                }
+            })
+            ->groupBy('group_id');
+
+        $filteredDatas = FnLevelReviewer::with(['departmentView', 'modelReview'])
+            ->whereIn('id', $filteredIds->pluck('id'));
 
         $perPage = $request->get('per_page', 10);
 
@@ -49,6 +51,41 @@ class FnLevelReviewerController extends Controller
         }
 
         return $datas;
+
+    }
+    function getDataDtails($request){
+
+        $filteredIds = FnLevelReviewer::
+            when($request->group_id, function ($query, $group_id) {
+                $query->where('group_id', $group_id);
+            })
+            ->when($request->department_id, function ($query, $department_id) {
+                $query->where('department_review', $department_id);
+            })
+            ->when($request->location_id, function ($query, $location_id) {
+                $query->where('from_location', $location_id);
+            })
+            ->when($request->request_type, function ($query, $request_type) {
+                if ($request_type == "gr0") {
+                    $query->where('request_type', "0");
+                } else {
+                    $query->where('request_type', $request_type);
+                }
+            });
+
+        $filteredDatas = FnLevelReviewer::with(['departmentView', 'modelReview'])
+            ->whereIn('id', $filteredIds->pluck('id'));
+
+        $perPage = $request->get('per_page', 10);
+
+        if ($perPage === 'all') {
+            $datas = $filteredDatas->get();
+        } else {
+            $datas = $filteredDatas->paginate($perPage);
+        }
+
+        return $datas;
+
     }
     function groutId(){
        $lastInId = FnLevelReviewer::orderBy('group_id', 'DESC')->first();
@@ -71,6 +108,11 @@ class FnLevelReviewerController extends Controller
         $datas = self::getDatas($request);
         return view('FN_LevelReviewers.index',compact(['datas','permission', 'positions','departments']));
     }
+    public function view(Request $request)
+    {
+        $datas = FnLevelReviewer::where('group_id', $request->id)->get();
+        return view('FN_LevelReviewers.view',compact(['datas']));
+    }
     public function filter(Request $request)
     {
         $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/level-reviewer")->first();
@@ -84,6 +126,12 @@ class FnLevelReviewerController extends Controller
         $departments = Department::get();
         $positions = Position::get();
         return view('FN_LevelReviewers.form_create', compact(['positions','departments']));
+    }
+    public function formEdit(Request $request) {
+        $departments = Department::get();
+        $positions = Position::get();
+        $datas = FnLevelReviewer::where('group_id', $request->id)->get();
+        return view('FN_LevelReviewers.form_edit', compact(['datas','positions','departments']));
     }
 
     /**
@@ -118,10 +166,9 @@ class FnLevelReviewerController extends Controller
                     FnLevelReviewer::create($data);
                 }
             }
-            Toastr::success('Created successfully.','Success');
             DB::commit();
             return response()->json([
-                'message' => 'Created successfully.',
+                'message' => '@lang("lang.created_successfully")',
                 'status' => 200,
             ]);
             return redirect()->back();
@@ -129,57 +176,6 @@ class FnLevelReviewerController extends Controller
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage(), 'status' => 500], 500);
         }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        try {
-            Activity::all()->last();
-            $data = $request->all();
-            $data['created_by'] = Auth::user()->id;
-            FnLevelReviewer::create($data);
-            Toastr::success('Created successfully.','Success');
-            DB::commit();
-            return redirect()->back();
-        } catch (\Throwable $exp) {
-            DB::rollback();
-            Toastr::error('Created fail.','Error');
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request)
-    {
-        $data = FnLevelReviewer::where('id',$request->id)->first();
-        $departments = Department::get();
-        $positions = Position::get();
-        return response()->json([
-            'data'=>$data,
-            'departments'=>$departments,
-            'positions'=>$positions,
-        ]);
     }
 
     /**
@@ -191,27 +187,61 @@ class FnLevelReviewerController extends Controller
      */
     public function update(Request $request)
     {
-        try{
-            $data = FnLevelReviewer::find($request->id);
-            $data['from_amount'] = $request->from_amount;
-            $data['to_amount'] = $request->to_amount;
-            $data['request_type'] = $request->request_type;
-            $data['reference_type'] = $request->reference_type;
-            $data['type'] = $request->type;
-            $data['from_location'] = $request->from_location;
-            $data['model_review'] = $request->model_review;
-            $data['department_review'] = $request->department_review;
-            $data['id_positions'] = $request->id_positions;
-            $data['description'] = $request->description;
-            $data['updated_by'] = Auth::user()->id;
-            $data->save();
-            Toastr::success('Updated successfully.','Success');
-            return redirect()->back();
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Updated fail.','Error');
-            return redirect()->back();
+        try {
+            DB::beginTransaction();
+            // Remove records no longer present
+            $levelIds = collect($request->levels)->pluck('id')->filter()->toArray();
+            FnLevelReviewer::where('group_id', $request->group_id)
+                ->whereNotIn('id', $levelIds)
+                ->delete();
+
+            foreach ($request->levels as $value) {
+                if (!empty($value['id'])) {
+                    $data = FnLevelReviewer::find($value['id']);
+                    if ($data) {
+                        // Update
+                        $data->from_amount        = $request->from_amount;
+                        $data->to_amount          = $request->to_amount;
+                        $data->request_type       = $request->request_type;
+                        $data->reference_type     = $request->reference_type;
+                        $data->type               = $value["type"];
+                        $data->from_location      = $request->from_location;
+                        $data->model_review       = $request->model_review;
+                        $data->department_review  = $value["department_review"];
+                        $data->id_positions       = $value["id_positions"];
+                        $data->description        = $request->description;
+                        $data->updated_by         = Auth::user()->id;
+                        $data->save();
+                        continue;
+                    }
+                }
+
+                // Create new if no id or id not found
+                FnLevelReviewer::create([
+                    'group_id'           => $request->group_id,
+                    'from_amount'        => $request->from_amount,
+                    'to_amount'          => $request->to_amount,
+                    'request_type'       => $request->request_type,
+                    'reference_type'     => $request->reference_type,
+                    'type'               => $value["type"],
+                    'from_location'      => $request->from_location,
+                    'model_review'       => $request->model_review,
+                    'department_review'  => $value["department_review"],
+                    'id_positions'       => $value["id_positions"],
+                    'description'        => $request->description,
+                    'created_by'         => Auth::user()->id,
+                ]);
+            }
+            DB::commit();
+            return response()->json([
+                'message' => '@lang("lang.updated_successfully")',
+                'status' => 200,
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage(), 'status' => 500], 500);
         }
+
     }
 
     public function export(Request $request)
@@ -219,6 +249,12 @@ class FnLevelReviewerController extends Controller
         $datas = $datas = self::getDatas($request);
         $export = new ExportFnLevelReview($datas, $request);
         return Excel::download($export, 'FN_Review.xlsx');
+    }
+    public function exportDetails(Request $request)
+    {
+        $datas = $datas = self::getDataDtails($request);
+        $export = new ExportFnLevelDetail($datas, $request);
+        return Excel::download($export, 'FN_Review_Details.xlsx');
     }
 
     /**
@@ -230,7 +266,7 @@ class FnLevelReviewerController extends Controller
     public function destroy(Request $request)
     {
         try{
-            FnLevelReviewer::destroy($request->id);
+            FnLevelReviewer::where('group_id', $request->id)->delete();
             Toastr::success('Deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
