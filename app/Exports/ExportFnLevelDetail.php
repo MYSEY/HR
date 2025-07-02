@@ -2,10 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\FnLevelReviewer;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -15,7 +12,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
-class ExportFnLevelReview implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
+class ExportFnLevelDetail implements FromCollection,  WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
 
     protected $export_datas;
@@ -64,27 +61,31 @@ class ExportFnLevelReview implements FromCollection, WithColumnWidths, WithHeadi
             }
 
             $dataExport[] = [
-                "number"                => $i,
+                "number" => $i,
                 "From Amount"           =>  "\t" .$item->from_amount,
                 "To Amount"             =>  "\t" .$item->to_amount,
                 "From Location"         =>  $item->from_location =="1" ? "Branch" : "Department",
                 "Model Review"          =>  $item->modelReview ? $item->modelReview->name_english : "",
                 "Request Type"          =>  $type[$item->request_type],
                 "Reference Type"        =>  $reference_type,
+                "Review Type"           =>  $requestType[$item->type]." ".$item->type,
+                "Review Cross Department"     =>  $item->departmentView ? $item->departmentView->name_english : "",
+                "Position Review"       =>  $positionViews,
                 
             ];
         }
         $this->export_datas = $dataExport;
     }
+
+
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return new Collection([
+         return new Collection([
             $this->export_datas,
         ]);
-        // return FnLevelReviewer::all();
     }
     public function startCell(): string
     {
@@ -103,6 +104,7 @@ class ExportFnLevelReview implements FromCollection, WithColumnWidths, WithHeadi
             'G' => 20,      
             'H' => 40,      
             'I' => 40,
+            'J' => 40,
         ];
     }
 
@@ -118,12 +120,12 @@ class ExportFnLevelReview implements FromCollection, WithColumnWidths, WithHeadi
                 $drawing->setDescription('Camma Logo');
                 $drawing->setPath(public_path('admin/img/logo/commalogo1.png')); // Correct path
                 $drawing->setHeight(100); // Adjust size as needed
-                $drawing->setCoordinates('B1'); // Cell position
+                $drawing->setCoordinates('D1'); // Cell position
                 $drawing->setWorksheet($sheet->getDelegate()); // Bind to sheet
 
-                $sheet->getDelegate()->getStyle('A6:G6')->getFont()->setName('Khmer OS Battambang')
-                ->setSize(9)->setBold('A6:G6');
-                $event->sheet->getStyle('A6:G6')->applyFromArray([
+                $sheet->getDelegate()->getStyle('A6:J6')->getFont()->setName('Khmer OS Battambang')
+                ->setSize(9)->setBold('A6:J6');
+                $event->sheet->getStyle('A6:J6')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -136,7 +138,7 @@ class ExportFnLevelReview implements FromCollection, WithColumnWidths, WithHeadi
                 if ($this->totalRecord > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':G'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':J'.$n)->applyFromArray([
                             'borders' => [
                                 'allBorders' => [
                                     'borderStyle' => Border::BORDER_THIN,
@@ -148,26 +150,26 @@ class ExportFnLevelReview implements FromCollection, WithColumnWidths, WithHeadi
                 }
 
                 // block merge cells 
-                $sheet->mergeCells('A2:G2');
+                $sheet->mergeCells('A2:J2');
                 $sheet->setCellValue('A2', "ខេមា​ មីក្រូហិរញ្ញវត្ថុ លីមីតធីត");
-                $sheet->getDelegate()->getStyle('A2:G2')->getFont()
+                $sheet->getDelegate()->getStyle('A2:J2')->getFont()
                 ->setName('Khmer OS Muol Light')
                 ->setSize(12)
                 ->getColor()->setARGB('FFFF0000'); 
-                $event->sheet->getDelegate()->getStyle('A2:G2')
+                $event->sheet->getDelegate()->getStyle('A2:J2')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A3:G3');
+                $sheet->mergeCells('A3:J3');
                 $sheet->setCellValue('A3', "CAMMA-FND-002 Level Review ");
-                $sheet->getDelegate()->getStyle('A3:G3')->getFont()->setName('Khmer OS Muol Light')
+                $sheet->getDelegate()->getStyle('A3:J3')->getFont()->setName('Khmer OS Muol Light')
                 ->setSize(12);
                 $event->sheet->getDelegate()->getStyle('A3:Z3')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                
-                $event->sheet->getDelegate()->getStyle('A6:G6')
+                $event->sheet->getDelegate()->getStyle('A6:J6')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             },
@@ -184,6 +186,9 @@ class ExportFnLevelReview implements FromCollection, WithColumnWidths, WithHeadi
                 "Model Review",
                 "Request Type",
                 "Reference Type",
+                "Review Type",
+                "Review Cross Department",
+                "Position Review",
         ];
     }
 }
