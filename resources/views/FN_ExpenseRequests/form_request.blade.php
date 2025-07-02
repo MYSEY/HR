@@ -90,9 +90,9 @@
                 <div class="card card_background_color">
                     <div class="card-body">
                         <form>
-                            <label class="container-checkbox">Special Expense
+                            {{-- <label class="container-checkbox">Special Expense
                                 <input type="checkbox" id="exp-type" name="type"> <span class="checkmark"></span>
-                            </label><br>
+                            </label><br> --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label">សូមគោរពជូន <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
@@ -117,6 +117,9 @@
                             <div class="row">
                                 <label class="col-sm-2 col-form-label">យោង៖ <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
+                                    <label class="container-checkbox">Special Expense
+                                        <input type="checkbox" id="exp-type" name="type"> <span class="checkmark"></span>
+                                    </label>
                                     <label class="container-checkbox">Regular Expense
                                         <input type="checkbox" class="checkbox-group" name="selected_item" value="1"> <span class="checkmark"></span>
                                     </label>

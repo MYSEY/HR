@@ -17,6 +17,7 @@ class FnLevelReviewer extends Model
     protected $appends = ['position_review'];
 
     protected $fillable = [
+        'group_id',
         'from_amount',
         'to_amount',
         'request_type',

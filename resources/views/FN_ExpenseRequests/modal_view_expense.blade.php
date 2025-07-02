@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">@lang('lang.view_information_request_expense')</h5>
+                <h5 class="modal-title">@lang('lang.view_information') <span class="type_request_expense"></span></h5>
                 <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     @csrf
-                    <label style="display: none" class="v_type_exp" style="font-weight: bold;">Special Expense</label><br>
+                    {{-- <label style="display: none" class="v_type_exp" style="font-weight: bold;">Special Expense</label><br> --}}
                     <div class="row">
                         <label class="col-sm-2 col-form-label" style="font-weight: bold;">សូមគោរពជូន</label>
                         <div class="col-sm-10">

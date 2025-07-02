@@ -133,7 +133,14 @@
                 $("#v_tax_riel").text("៛ "+formatNumber(datas.tax_riel));
                 $("#v_total_amount_riel").text("៛ "+formatNumber(datas.ge_total_amount_riel));
             }
-
+            let text_expense_type = "";
+            if (datas.expense_type == "1") {
+                text_expense_type = "Regular Expense";
+            }
+            if (datas.expense_type == "2") {  
+                text_expense_type = "Irregular Expense";
+            }
+            $(".type_request_expense").text(text_expense_type);
             $("#v_kind_regard").val(datas.kind_regard);
             $("#v_subject").val(datas.subject);
             $("#v_reason_subject").val(datas.reason_subject);
@@ -155,38 +162,46 @@
             let tr_b = "";
             let amountUSD = '';
             let amountRiel = '';
-            if (datas.location_details.length === 1) {
-                let detail = datas.location_details[0];
+            if (datas.type == "2" ) {
+                if (datas.departments.length  > 0) {
+                    let mid = Math.ceil(datas.departments.length / 2);
+                    for (let index = 0; index < datas.departments.length; index++) {
+                        let detail = datas.departments[index];
+                        let amountUSD = '';
+                        let amountRiel = '';
 
-                if (detail.amount_usd) {
-                    amountUSD = ' $ ' + formatNumber(detail.amount_usd);
+                        if (detail.amount_usd > 0) {
+                            amountUSD = ' $ ' + formatNumber(detail.amount_usd);
+                        }
+
+                        if (detail.amount_riel > 0) {
+                            amountRiel = ' ៛' + formatNumber(detail.amount_riel);
+                        }
+
+                        let currencyText = amountUSD;
+                        if (amountUSD && amountRiel) currencyText += '&nbsp;&nbsp;';
+                        currencyText += amountRiel;
+
+                        let row = '<tr>' +
+                            '<td class="table_tr_">- ' + detail.department.name_khmer + currencyText + '</td>' +
+                        '</tr>';
+
+                        if (index < mid) {
+                            tr_a += row;
+                        } else {
+                            tr_b += row;
+                        }
+                    }
                 }
+            }else{
+                if (datas.location_details.length === 1) {
+                    let detail = datas.location_details[0];
 
-                if (detail.amount_riel) {
-                    amountRiel = ' ៛' + formatNumber(detail.amount_riel);
-                }
-
-                let currencyText = amountUSD;
-                if (amountUSD && amountRiel) currencyText += '&nbsp;&nbsp;';
-                currencyText += amountRiel;
-
-                tr_a = '<tr>' +
-                    '<td class="table_tr_">- ' + detail.location.branch_name_kh + currencyText + '</td>' +
-                '</tr>';
-
-            } else {
-                let mid = Math.ceil(datas.location_details.length / 2);
-
-                for (let index = 0; index < datas.location_details.length; index++) {
-                    let detail = datas.location_details[index];
-                    let amountUSD = '';
-                    let amountRiel = '';
-
-                    if (detail.amount_usd > 0) {
+                    if (detail.amount_usd) {
                         amountUSD = ' $ ' + formatNumber(detail.amount_usd);
                     }
 
-                    if (detail.amount_riel > 0) {
+                    if (detail.amount_riel) {
                         amountRiel = ' ៛' + formatNumber(detail.amount_riel);
                     }
 
@@ -194,14 +209,39 @@
                     if (amountUSD && amountRiel) currencyText += '&nbsp;&nbsp;';
                     currencyText += amountRiel;
 
-                    let row = '<tr>' +
+                    tr_a = '<tr>' +
                         '<td class="table_tr_">- ' + detail.location.branch_name_kh + currencyText + '</td>' +
                     '</tr>';
 
-                    if (index < mid) {
-                        tr_a += row;
-                    } else {
-                        tr_b += row;
+                } else {
+                    let mid = Math.ceil(datas.location_details.length / 2);
+
+                    for (let index = 0; index < datas.location_details.length; index++) {
+                        let detail = datas.location_details[index];
+                        let amountUSD = '';
+                        let amountRiel = '';
+
+                        if (detail.amount_usd > 0) {
+                            amountUSD = ' $ ' + formatNumber(detail.amount_usd);
+                        }
+
+                        if (detail.amount_riel > 0) {
+                            amountRiel = ' ៛' + formatNumber(detail.amount_riel);
+                        }
+
+                        let currencyText = amountUSD;
+                        if (amountUSD && amountRiel) currencyText += '&nbsp;&nbsp;';
+                        currencyText += amountRiel;
+
+                        let row = '<tr>' +
+                            '<td class="table_tr_">- ' + detail.location.branch_name_kh + currencyText + '</td>' +
+                        '</tr>';
+
+                        if (index < mid) {
+                            tr_a += row;
+                        } else {
+                            tr_b += row;
+                        }
                     }
                 }
             }
