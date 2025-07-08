@@ -54,7 +54,7 @@
                                     <tr>
                                         <th style="min-width: 350px;">(KPI)</th>
                                         <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
-                                        <th style="min-width: 250px;">គោលដៅ (Goal)</th>
+                                        <th style="min-width: 350px;">គោលដៅ (Goal)</th>
                                         <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
                                         <th style="min-width: 150px;">Is Lock</th>
                                         <th>@lang('lang.action')</th>
@@ -99,11 +99,32 @@
                                                             {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->action_plan }}
                                                         </textarea>
                                                     </td>
-                                                    <td class="">
+                                                    {{-- <td class="">
                                                         <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"
                                                             {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->goal }}
                                                         </textarea>
+                                                    </td> --}}
+
+                                                    <td class="text-center">
+                                                        <select class="form-control goal-type-select" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                            <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
+                                                            <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
+                                                            <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
+                                                            <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
+                                                        </select>
+                                                    
+                                                        <div class="goal-input-wrapper mt-1">
+                                                            <textarea
+                                                                class="form-control required"
+                                                                name="goal[]"
+                                                                rows="3"
+                                                                placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"
+                                                                spellcheck="false"
+                                                                {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}
+                                                            >{{ $Detailitem->goal }}</textarea>
+                                                        </div>
                                                     </td>
+                                                    
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control required weight" name="weight[]" id="weight" placeholder="%" value="{{ $Detailitem->weight }}" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                     </td>
@@ -169,6 +190,22 @@
 <script>
     $(function() {
         let dataKeyKpi = [];
+        $(document).on('change', '.goal-type-select', function () {
+            const selectedType = $(this).val();
+            const wrapper = $(this).closest('td').find('.goal-input-wrapper');
+
+            let placeholder = "e.g.\n60 70\n70 80\n90 100";
+            if (selectedType === 'date') {
+                placeholder = "e.g.\n2025-01-01 2025-06-01\n2025-06-02 2025-12-31";
+            } else if (selectedType === 'currency') {
+                placeholder = "e.g.\n1000 2000\n2000 3000";
+            } else if (selectedType === 'percent') {
+                placeholder = "e.g.\n10 20\n20 30";
+            }
+
+            const textarea = `<textarea class="form-control required" name="goal[]" rows="3" placeholder="${placeholder}"></textarea>`;
+            wrapper.html(textarea);
+        });
         $(document).on('click', ".addNewPurpose", function () {
             let currentPurposeRow = $(this).closest('tr');
             // Find the nearest .title-group above this purpose
@@ -276,9 +313,10 @@
                             let action_plan = $kpiRow.find('textarea[name="action_plan[]"]').val();
                             let goal = $kpiRow.find('textarea[name="goal[]"]').val();
                             let weight = $kpiRow.find('input[name="weight[]"]').val();
+                            let goal_type = $kpiRow.find('select[name="goal_type[]"]').val();
                             let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
 
-                            dataKPi.push({ key_kpi, action_plan, goal, weight,is_lock });
+                            dataKPi.push({ key_kpi, action_plan, goal, weight,goal_type,is_lock });
                             i++;
                         }
 

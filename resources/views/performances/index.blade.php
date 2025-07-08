@@ -67,8 +67,8 @@
 
                                                         <div class="dropdown-menu dropdown-menu-right" id="btnStatus">
                                                             <a class="dropdown-item" data-id="{{$item->id}}" href="#">
-                                                                <i class="fa fa-dot-circle-o text-success"></i>                                                             <span>{{ $item->status == 'prepare' ? 'Prepare' : '' }}</span>
-                                                                <span>{{ $item->status == 'approve' ? 'Approved' : '' }}</span>
+                                                                <i class="fa fa-dot-circle-o text-success"></i>                                                             
+                                                                <span>{{ $item->status == 'prepare' ? 'Approved' : 'Prepared' }}</span>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -79,7 +79,7 @@
                                                         <div class="dropdown-menu dropdown-menu-right">
                                                             <a class="dropdown-item" href="{{url("performance",$item->id)}}"><i class="fa fa-regular fa-eye"></i> @lang("lang.preview")</a>
                                                             <a href="{{ url('performance', $item->id) }}/edit" class="dropdown-item" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                            <a class="dropdown-item" href="#" data-toggle="modal" data-id="" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                            <a class="dropdown-item performanceDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_performance"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -93,12 +93,44 @@
                 </div>
             </div>
         </div>
+        <!-- Delete Performane Modal -->
+        <div class="modal custom-modal fade" id="delete_performance" role="dialog">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="form-header">
+                            <h3>@lang('lang.deleted')!</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
+                        </div>
+                        <div class="modal-btn delete-action">
+                            <form action="{{url('performance/delete')}}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" class="e_id" value="">
+
+                                <div class="row">
+                                    <div class="submit-section" style="text-align: center">
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Delete Performane Modal -->
     </div>
 @endsection
 @include('includs.script')
 @section('script')
     <script>
         $(document).ready(function() {
+            $('.performanceDelete').on('click',function(){
+                let id = $(this).data("id");
+                $('.e_id').val(id);
+            });
+            
             $('#btnStatus a').on('click', function(e) {
                 e.preventDefault();
                 var id = $(this).data('id');

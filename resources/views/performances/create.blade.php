@@ -55,7 +55,7 @@
                                     <tr>
                                         <th style="min-width: 350px;">(KPI)</th>
                                         <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
-                                        <th style="min-width: 250px;">គោលដៅ (Goal)</th>
+                                        <th style="min-width: 350px;">គោលដៅ (Goal)</th>
                                         <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
                                         <th style="min-width: 150px;">Is Lock</th>
                                         <th>@lang('lang.action')</th>
@@ -95,6 +95,7 @@
                                                     {{-- <td class="text-center">
                                                         <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false">{{ old('goal') }}</textarea>
                                                     </td> --}}
+
                                                     <td class="text-center">
                                                         <select class="form-control goal-type-select" name="goal_type[]">
                                                             <option value="number">Number</option>
@@ -103,9 +104,10 @@
                                                             <option value="percent">Percent</option>
                                                         </select>
                                                         <div class="goal-input-wrapper mt-1">
-                                                            <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter number" spellcheck="false">{{ old('goal') }}</textarea>
+                                                            <textarea class="form-control required" name="goal[]" rows="3" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                                                         </div>
                                                     </td>
+
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control required" name="weight[]" id="weight" placeholder="%" value="{{old('weight')}}">
                                                     </td>
@@ -158,29 +160,21 @@
 <script>
     $(function() {
         let dataKeyKpi = [];
-
         $(document).on('change', '.goal-type-select', function () {
-            const $select = $(this);
-            const type = $select.val();
-            const $wrapper = $select.siblings('.goal-input-wrapper');
+            const selectedType = $(this).val();
+            const wrapper = $(this).closest('td').find('.goal-input-wrapper');
 
-            let input = '';
-            switch (type) {
-                case 'number':
-                    input = '<textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter number">{{ old("goal") }}</textarea>';
-                    break;
-                case 'date':
-                    input = '<textarea rows="3" class="form-control required" name="goal[]" placeholder="YYYY-MM-DD">{{ old("goal") }}</textarea>';
-                    break;
-                case 'currency':
-                    input = '<textarea rows="3" class="form-control required" name="goal[]" placeholder="$0.00">{{ old("goal") }}</textarea>';
-                    break;
-                case 'percent':
-                    input = '<textarea rows="3" class="form-control required" name="goal[]" placeholder="%">{{ old("goal") }}</textarea>';
-                    break;
+            let placeholder = "e.g.\n60 70\n70 80\n90 100";
+            if (selectedType === 'date') {
+                placeholder = "e.g.\n2025-01-01 2025-06-01\n2025-06-02 2025-12-31";
+            } else if (selectedType === 'currency') {
+                placeholder = "e.g.\n1000 2000\n2000 3000";
+            } else if (selectedType === 'percent') {
+                placeholder = "e.g.\n10 20\n20 30";
             }
 
-            $wrapper.html(input);
+            const textarea = `<textarea class="form-control required" name="goal[]" rows="3" placeholder="${placeholder}"></textarea>`;
+            wrapper.html(textarea);
         });
         
         // Event to add a new purpose
@@ -265,9 +259,10 @@
                             let action_plan = $kpiRow.find('textarea[name="action_plan[]"]').val();
                             let goal = $kpiRow.find('textarea[name="goal[]"]').val();
                             let weight = $kpiRow.find('input[name="weight[]"]').val();
+                            let goal_type = $kpiRow.find('select[name="goal_type[]"]').val();
                             let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
 
-                            dataKPi.push({ key_kpi, action_plan, goal, weight,is_lock });
+                            dataKPi.push({ key_kpi, action_plan, goal, weight,goal_type,is_lock });
                             i++;
                         }
 
@@ -297,18 +292,17 @@
                     },
                     dataType: "JSON",
                     success: function (response) {
-                        if (response.message) {
+                        if (response.success) {
                             toastr.success(response.message, 'Success');
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 window.location.href = "{{ url('performance') }}";
                             }, 2000);
                             $('#performanceForm').trigger("reset");
+                        } else if (response.message === 'not_goal') {
+                            toastr.error(response.error || 'Goal format must be in pairs like "50 60"', 'Error');
                         } else {
                             toastr.error(response.message || 'សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%', 'Error');
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        toastr.error('An error occurred. Please try again.', 'Error');
                     }
                 });
             }
@@ -335,8 +329,16 @@
             <td class="text-center">
                 <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
-            <td class="">
-                <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
+           <td class="text-center">
+                <select class="form-control goal-type-select" name="goal_type[]">
+                    <option value="number">Number</option>
+                    <option value="date">Date</option>
+                    <option value="currency">Currency</option>
+                    <option value="percent">Percent</option>
+                </select>
+                <div class="goal-input-wrapper mt-1">
+                    <textarea class="form-control required" name="goal[]" rows="3" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight required" id="weight" placeholder="%"></td>
             <td class="text-center">
@@ -360,7 +362,15 @@
                 <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
+                <select class="form-control goal-type-select" name="goal_type[]">
+                    <option value="number">Number</option>
+                    <option value="date">Date</option>
+                    <option value="currency">Currency</option>
+                    <option value="percent">Percent</option>
+                </select>
+                <div class="goal-input-wrapper mt-1">
+                    <textarea class="form-control required" name="goal[]" rows="3" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
@@ -404,9 +414,17 @@
             <td class="text-center">
                 <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
-            <td class="">
-                <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
-            </td>
+            <td class="text-center">
+                    <select class="form-control goal-type-select" name="goal_type[]">
+                        <option value="number">Number</option>
+                        <option value="date">Date</option>
+                        <option value="currency">Currency</option>
+                        <option value="percent">Percent</option>
+                    </select>
+                    <div class="goal-input-wrapper mt-1">
+                        <textarea class="form-control required" name="goal[]" rows="3" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    </div>
+                </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>
