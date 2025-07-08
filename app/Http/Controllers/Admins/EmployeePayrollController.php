@@ -697,14 +697,27 @@ class EmployeePayrollController extends Controller
                             if ($item->emp_status == 10) {
                                 $type_fdc1 = 'FDC-1';
                             }
-                            $type_udc = 'UDC';
+
+                           // Start date = contract end date
+                            $start_working_day_date = Carbon::parse($item->fdc_end);
+                            // End date = end of the same month as the contract end
+                            $end_working_day_date = $start_working_day_date->copy()->endOfMonth();
+                            // Calculate working days (Monday–Friday)
+                            $workingDays = $start_working_day_date->diffInWeekdays($end_working_day_date);
+                            // Include start date if it's a weekday
+                            if (!$start_working_day_date->isWeekend()) {
+                                $workingDays += 1;
+                            }
+                            if ($workingDays >= 21) {
+                                $type_udc = 'UDC';
+                            }
+                            
                             $totalSeniority = $totalSalarySeverancyPay;
                             $basic1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
                             $basic2 = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
                             $totalBaseSalaryRecived =  $basic1 + $basic2;
                         }
                     }
-                    
                     $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
                     $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
                     $totalSeverancePay2 = $SeverancePay2;
@@ -779,7 +792,8 @@ class EmployeePayrollController extends Controller
                             })->when($currentMonth, function($query, $currentMonth){
                                 $query->where('payment_date', '>=',$currentMonth);
                             })->pluck('total_seniority')->avg();
-                            $totalAVG = ($totalSalary * 7.5) / 22;
+
+                            $totalAVG = (round($totalSalary,2) * 7.5) / 22;
                             $totalSalaryReceive = $totalAVG;
                             // $totalSalaryReceive = ceil($totalAVG);
                             $totalGrossExchange = 2000000 / $request->exchange_rate;
@@ -796,6 +810,7 @@ class EmployeePayrollController extends Controller
                                 $totaltaxableSalary = 0;
                             }
                             $paymentOfMonth = $PaymentOfMonth;
+                            Seniority::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
                             $seniority = Seniority::create([
                                 'employee_id'           => $item->id,
                                 'number_employee'       => $item->number_employee,
@@ -1257,6 +1272,7 @@ class EmployeePayrollController extends Controller
                     $data['phone_allowance']                = $item->phone_allowance;
                     $data['total_kny_phcumben']             = $totalBunus;
                     $data['monthly_quarterly_bonuses']      = $monthlyQuarterlyIncentive;
+                    $data['annual_incentive_bonus']         = $annualBonus;
                     $data['other_benefits']                 = $otherBenefit;
                     $data['total_severance_pay']            = round($totalSeverancePay,3);
                     $data['seniority_pay_included_tax']     = $seniorityPayableTax;

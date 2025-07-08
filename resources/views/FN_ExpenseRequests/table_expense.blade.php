@@ -12,14 +12,9 @@
                             <th>@lang('lang.type_of_expense')</th>
                             <th>@lang('lang.amount') @lang('lang.usd')</th>
                             <th>@lang('lang.amount') @lang('lang.kh')</th>
-                            {{-- <th>@lang('lang.type_of_payment')</th> --}}
                             <th>@lang('lang.reference')</th>
                             <th>@lang('lang.description')</th>
-                            {{-- <th>@lang('lang.request_date')</th> --}}
-                            {{-- <th>@lang('lang.approved_date')</th> --}}
                             <th>@lang('lang.location')</th>
-                            {{-- <th>@lang('lang.request_by')</th> --}}
-                            {{-- <th>@lang('lang.review')</th> --}}
                             <th>@lang('lang.reason')</th>
                             <th style="text-align: center;">@lang('lang.action')</th>
                         </tr>
@@ -81,14 +76,19 @@
                                         @endif
                                     </td>
                                     <td >{{$item->expense_type == "1" ? "Regular Expense": "Irregular Expense"}}</td>
-                                    <td >{{$item->ge_total_amount_usd}}</td>
-                                    <td>{{$item->type == "2" ? $item->te_total_tax : $item->ge_total_amount_riel}}</td>
+                                    <td >{{number_format($item->ge_total_amount_usd, 2)}}</td>
+                                    <td>{{$item->type == "2" ? number_format($item->te_total_tax ,2) : number_format($item->ge_total_amount_riel, 2)}}</td>
                                     @if(count($item->References) <= 1)
+                                        @php
+                                            $cleanReference = str_replace('null,', '', $item->reference);
+                                            $cleanReference = ltrim($cleanReference, ','); // remove leading comma if exists
+                                            $cleanReference = trim($cleanReference);      // clean up spaces
+                                        @endphp
                                         <td>
                                             @if(isset($item->References[0]->file_upload))
                                                 <small class="block text-ellipsis">
                                                     <a href="{{ url('uploads/FnRegularExspenses/' . $item->References[0]->file_upload) }}" target="_blank">
-                                                        {{ $item->reference }}
+                                                        {{ $cleanReference }}
                                                     </a>
                                                 </small>
                                             @endif
@@ -96,9 +96,14 @@
                                     @else
                                         <td>
                                             @foreach ($item->References as $rf)
+                                                @php
+                                                    $cleanReference = str_replace('null,', '', $rf->serialref);
+                                                    $cleanReference = ltrim($cleanReference, ',');
+                                                    $cleanReference = trim($cleanReference);
+                                                @endphp
                                                 <small class="block text-ellipsis">
                                                     <a href="{{ url('uploads/FnRegularExspenses/' . $rf->file_upload) }}" target="_blank">
-                                                        {{ $rf->serialref }}
+                                                        {{ $cleanReference }}
                                                     </a>
                                                 </small>
                                             @endforeach
@@ -107,13 +112,10 @@
                                     <td data-toggle="tooltip" data-html="true" title="{!! $item->subject !!}">
                                         {{ Str::limit($item->subject, 30, '...') }}
                                     </td>
-                                    {{-- <td>{{$item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i') : ''}}</td> --}}
-                                    {{-- <td>{{$item->date_approve ? \Carbon\Carbon::parse($item->date_approve)->format('d-M-Y H:i') : ''}}</td> --}}
 
                                     <td data-toggle="tooltip" data-html="true" title="{!! $locations !!}" >
                                         {{ Str::limit($locations, 30, '...') }}
                                     </td>
-                                    {{-- <td>{{$item->createdBy ? $item->createdBy->employee_name_en: ""}}</td> --}}
                                     <td data-toggle="tooltip" data-html="true" title="{!! $item->reason !!}">
                                         {{ Str::limit($item->reason, 25, '...') }}
                                     </td>
@@ -127,7 +129,7 @@
                                                     @else
                                                         <a class="dropdown-item update" href="{{url("fn/expense-request/edit",$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                     @endif
-                                                    <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-numberday="{{$item->number_of_day}}" data-target="#delete_ER"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                    <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_ER"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                 @endif
                                                 {{-- @if ($item->status == "approved" || ($item->expense_type == 1 && $item->status == "pending_approve")) --}}
                                                     <a class="dropdown-item {{ $item->type == '2' ? 'btn-TEXP-print' : 'btn-GEXP-print'}}" href="#" data-datas="{{$item}}"><i class="fa fa-print fa-lg m-r-5"></i> @lang('lang.print')</a>
@@ -212,25 +214,33 @@
                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                         @endif
                                     </td>
-                                    <td >{{$item->ge_total_amount_usd}}</td>
-                                    <td>{{$item->type == "2" ? $item->te_total_tax : $item->ge_total_amount_riel}}</td>
+                                    <td>$ {{ number_format($item->ge_total_amount_usd, 2) }}</td>
+                                    <td>
+                                        {{ $item->type == "2" ? '$ ' . number_format($item->te_total_tax, 2) : '៛ ' . number_format($item->ge_total_amount_riel, 2) }}
+                                    </td>
 
                                     @if(count($item->References) <= 1 && isset($item->References[0]->file_upload))
                                         @php
+                                            $cleanReference = str_replace('null,', '', $item->reference);
+                                            $cleanReference = ltrim($cleanReference, ',');
+                                            $cleanReference = trim($cleanReference);
                                             $html = '<small class="block text-ellipsis">
                                                         <a href="' . url('uploads/FnRegularExspenses/' . $item->References[0]->file_upload) . '" target="_blank">'
-                                                            . $item->reference .
+                                                            . $cleanReference .
                                                         '</a>
                                                     </small>';
                                             $reference = htmlspecialchars($html, ENT_QUOTES);
                                         @endphp
                                     @else
                                         @php
+                                            $cleanReference = str_replace('null,', '', $rf->serialref);
+                                            $cleanReference = ltrim($cleanReference, ',');
+                                            $cleanReference = trim($cleanReference);
                                             $html = '';
                                             foreach ($item->References as $rf) {
                                                 $html .= '<small class="block text-ellipsis">
                                                             <a href="' . url('uploads/FnRegularExspenses/' . $rf->file_upload) . '" target="_blank">'
-                                                                . $rf->serialref .
+                                                                . $cleanReference .
                                                             '</a>
                                                         </small>';
                                             }

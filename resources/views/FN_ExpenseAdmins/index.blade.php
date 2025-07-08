@@ -43,7 +43,7 @@
                                 @foreach ($datas as $inx=>$item)
                                     @php
                                         $positionReviews = "";
-                                        if ($item->status != "approved") {
+                                        if ($item->status != "pending_approve") {
                                             if (count($item->PositionReviews)>0) {
                                                 $num = 1;
                                                 foreach ($item->PositionReviews as $key => $position) {
@@ -73,8 +73,8 @@
                                                 <span class="badge bg-inverse-success" style="font-size: 13px;">@lang('lang.approved')</span>
                                             @endif
                                         </td>
-                                        <td>$ {{$item->ge_total_amount_usd}}</td>
-                                        <td>៛ {{$item->type == "2" ? $item->te_total_tax : $item->ge_total_amount_riel}}</td>
+                                        <td>$ {{number_format($item->ge_total_amount_usd, 2)}}</td>
+                                        <td>៛ {{$item->type == "2" ? number_format($item->te_total_tax, 2) : number_format($item->ge_total_amount_riel, 2)}}</td>
                                         <td>{{$item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i') : ''}}</td>
                                         <td >
                                             {{

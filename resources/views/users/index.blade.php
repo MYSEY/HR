@@ -819,11 +819,11 @@
                         dataType: "JSON",
                         success: function(response) {
                             let dataEmployee = response.dataEmployee;
-                            $('#line_manager').html('<option selected > -- @lang("lang.select") --</option>');
+                            $('.line_manager').html('<option selected > -- @lang("lang.select") --</option>');
                             if (dataEmployee != '') {
                                 $(".assign_line_manager").css("display","block");
                                 $.each(dataEmployee, function(i, item) {
-                                    $('#line_manager').append($('<option>', {
+                                    $('.line_manager').append($('<option>', {
                                         value: item.id,
                                         text: item.employee_name_en,
                                     }));
@@ -942,11 +942,11 @@
                         dataType: "JSON",
                         success: function(response) {
                             let dataEmployee = response.datas;
-                            $('#line_manager').html('<option selected > -- @lang("lang.select") --</option>');
+                            $('.line_manager').html('<option selected > -- @lang("lang.select") --</option>');
                             if (dataEmployee != '') {
                                 $(".assign_line_manager").css("display","block");
                                 $.each(dataEmployee, function(i, item) {
-                                    $('#line_manager').append($('<option>', {
+                                    $('.line_manager').append($('<option>', {
                                         value: item.id,
                                         text: item.employee_name_en,
                                     }));

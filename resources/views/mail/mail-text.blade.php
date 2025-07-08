@@ -13,8 +13,35 @@
                 <div style="font-size: 16px; line-height: 1.6; color: #333;">
                     {!! nl2br(e($data["mail_message"]->message)) !!}
                 </div>
+                <br>
+                <table width="90%" style="border-collapse: collapse; font-size: 14px; color: #333;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #ccc; padding: 8px; background-color: #f5f5f5; text-align: center; font-weight: bold;">
+                                From Date
+                            </th>
+                            <th style="border: 1px solid #ccc; padding: 8px; background-color: #f5f5f5; text-align: center; font-weight: bold;">
+                                To Date
+                            </th>
+                            <th style="border: 1px solid #ccc; padding: 8px; background-color: #f5f5f5; text-align: center; font-weight: bold;">
+                                Day Taken
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ $data['start_date'] }}</td>
+                            <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ $data['end_date'] }}</td>
+                            <td style="border: 1px solid #ccc; padding: 8px; text-align: center;">{{ $data['number_of_day'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                <p style="margin-top: 20px; font-weight: bold;">អរគុណដ៏ជ្រាលជ្រៅ!</p>
+                 {{-- <div style="font-size: 16px; line-height: 1.6; color: #333;">
+                    Really appreciate for your approval.
+                </div> --}}
+
+                <p style="margin-top: 20px; font-weight: bold;">Best Regards,</p>
                 <strong>{{$data["staff_request"]->employee_name_en }}</strong>
                 <p style="margin: 0;">{{ $data["staff_request"]->position->name_english }}</p>
                 
@@ -35,7 +62,7 @@
                 </table>
                 @if ($btn_approve == true)
                     <div style="text-align: center; margin-top: 20px;">
-                        <a href="{{ url('http://127.0.0.1:8000/leaves/admin') }}" 
+                        <a href="{{ url('http://hrms.camma.com:9090/HR_Production/public/leaves/admin') }}" 
                         style="background-color: #007bff; color: #ffffff; text-decoration: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; display: inline-block;">
                             Click Here
                         </a>

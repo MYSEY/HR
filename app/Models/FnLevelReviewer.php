@@ -14,14 +14,17 @@ class FnLevelReviewer extends Model
     use HasFactory;
     protected $table = 'fn_level_reviewers';
     protected $guarded = ['id'];
+    protected $appends = ['position_review'];
 
     protected $fillable = [
+        'group_id',
         'from_amount',
         'to_amount',
         'request_type',
         'reference_type',
         'type',
         'from_location',
+        'model_review',
         'department_review',
         'id_positions',
         'description',
@@ -48,6 +51,10 @@ class FnLevelReviewer extends Model
         $positionIds = is_array($this->id_positions) ? $this->id_positions : json_decode($this->id_positions, true);
 
         return !empty($positionIds) ? Position::whereIn('id', $positionIds)->get() : collect();
+    }
+    public function modelReview()
+    {
+        return $this->belongsTo(Department::class, 'model_review');
     }
     public function departmentView()
     {

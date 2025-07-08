@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('fn_level_reviewers', function (Blueprint $table) {
             $table->id();
+            $table->string('group_id')->nullable();
             $table->integer('from_amount')->default(0);
             $table->integer('to_amount')->default(0);
             $table->integer('request_type');
             $table->integer('reference_type')->nullable();
             $table->integer('type');
             $table->integer('from_location');
+            $table->integer('model_review')->nullable();
             $table->integer('department_review')->nullable();
             $table->json('id_positions');
             $table->string('description')->nullable();

@@ -101,81 +101,24 @@ class ExpenseRequestController extends Controller
     }
 
     function lovelReview($dataLevelView){
-
-        $baseQuery = FnLevelReviewer::query()
-        ->where("from_location", $dataLevelView["by_location"])
-        ->where("type", $dataLevelView["type"]);
-
-        // Apply request_type & reference_type
-        if (isset($dataLevelView["request_type"])) {
-            $baseQuery->where("request_type", $dataLevelView["request_type"]);
-
-            if (!in_array($dataLevelView["request_type"], [1, 2])) {
-                $baseQuery->where("reference_type", $dataLevelView["reference_type"]);
-            }
-        }
-
-        // Apply amount range
-        if (isset($dataLevelView["amount"])) {
-            $amount = $dataLevelView["amount"];
-            $baseQuery->where("from_amount", "<", $amount)
-                    ->where("to_amount", ">=", $amount);
-        }
-
-        // Clone and try with department_review
-        $queryWithDept = clone $baseQuery;
-        if (!empty($dataLevelView["department_review"])) {
-            $queryWithDept->where("department_review", $dataLevelView["department_review"]);
-        } else {
-            $queryWithDept->whereNull("department_review");
-        }
-
-        $positionReview = $queryWithDept->orderBy("id", "DESC")->first();
-
-        // Fallback: if we tried with dept and found nothing, try null department_review
-        if (!$positionReview && !empty($dataLevelView["department_review"])) {
-            $positionReview = $baseQuery
-                ->whereNull("department_review")
+        $positionReview = FnLevelReviewer::with(["departmentView", "modelReview"])
+                ->when($dataLevelView["by_location"], function ($query, $by_location) use ($dataLevelView) {
+                    $query->where('from_location', $by_location);
+                    if ((string)$by_location === "2") {
+                        $query->where('model_review', $dataLevelView["model_review"]);
+                    } else {
+                        $query->whereNull("model_review");
+                    }
+                })
+                ->when($dataLevelView["type"], function ($query, $type) {
+                    $query->where('type', $type);
+                })
+                ->when($dataLevelView["amount"], function ($query, $amount) {
+                    $query->where("from_amount", "<", $amount)
+                        ->where("to_amount", ">=", $amount);
+                })
                 ->orderBy("id", "DESC")
                 ->first();
-        }
-
-        return $positionReview;
-    }
-
-    function processReview($dataLevelView){
-        $baseQuery = FnLevelReviewer::where("from_location", $dataLevelView["by_location"])
-        ->where("type", $dataLevelView["type"]);
-
-        // Shared condition: request_type
-        if (isset($dataLevelView["request_type"])) {
-            $baseQuery->where("request_type", $dataLevelView["request_type"]);
-
-            if (!in_array($dataLevelView["request_type"], [1, 2])) {
-                $baseQuery->where("reference_type", $dataLevelView["reference_type"]);
-            }
-        }
-
-        // Shared condition: amount range
-        if (isset($dataLevelView["amount"])) {
-            $amount = $dataLevelView["amount"];
-            $baseQuery->where("from_amount", "<", $amount)
-                    ->where("to_amount", ">=", $amount);
-        }
-
-        // First try: with department_review
-        $queryWithDept = clone $baseQuery;
-        if (!empty($dataLevelView["department_review"])) {
-            $queryWithDept->where("department_review", $dataLevelView["department_review"]);
-        }
-
-        $positionReview = $queryWithDept->orderBy("id", "DESC")->first();
-
-        // Fallback: without department_review
-        if (!$positionReview) {
-            $positionReview = $baseQuery->orderBy("id", "DESC")->first();
-        }
-
         return $positionReview;
     }
 
@@ -199,21 +142,22 @@ class ExpenseRequestController extends Controller
 
             $dataCheckLevelView = [
                 "by_location"=> 2,
-                "department_review"=> "",
+                "model_review"=> null,
                 "request_type"=> $request->type,
                 "reference_type"=> $request->expense_type,
                 "type"=> 1,
                 "amount"=> $amount,
             ];
+           
             $data = $request->all();
             if(Auth::user()->branch->abbreviations == "HQ"){
-                $dataCheckLevelView["department_review"] = Auth::user()->department_id;
+                $dataCheckLevelView["model_review"] = (int) Auth::user()->department_id;
                 $positionReview = self::lovelReview($dataCheckLevelView);
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
             }else{
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::lovelReview($dataCheckLevelView);
-                $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
+                $data['location_review']    =  $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
             }
             if ($request->hasFile('fn_invoice')) {
                 $autoSerial = $this->generateSerialCode(Carbon::today())['serialref'];
@@ -232,36 +176,12 @@ class ExpenseRequestController extends Controller
             }
             $data['tracking_id']        = $this->generateExpenseCode(Carbon::today())['tracking_id'];
             $data['payment_term']       = $request->paymentTerms;
-
-            // if ($request->expense_type == 1) {
-                //** Rrgular Expense **//
-            //     $data['status']             = 'pending_approve';
-            // }else{
-                //** Irrgular Expense **//
-                // if(!$positionReview){
-                //     return response()->json([
-                //         'error'=>'lang.please_to_set_up_lovel_review_request_expense',
-                //         'status'=>404,
-                //     ]);
-                // }
-                $data['status']             = 'pending';
-                // if (Auth::user()->branch->abbreviations != "HQ") {
-                //     $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
-                // }else{
-                //     $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
-                // }
-
-                $data['position_review']    = json_encode($positionReview->id_positions);
-                $data['review_type']        = $positionReview->type;
-            // }   
-
+            $data['status']             = 'pending';
+            $data['position_review']    = json_encode($positionReview->id_positions);
+            $data['review_type']        = $positionReview->type;
             $data['request_by']         = Auth::user()->id;
             $data['date_request']       = Carbon::createFromDate()->format('Y-m-d H:i');
             $data['created_by']         = Auth::user()->id;
-            // GenerateIdExpense::create([
-            //     'tracking_id' => $data['tracking_id'],
-            //     'created_by'  => Auth::user()->id,
-            // ]);
             unset($data['fn_invoice']);
             $expense = ExpenseRequest::create($data);
             $locations = [];
@@ -274,6 +194,7 @@ class ExpenseRequestController extends Controller
                     'amount_riel'        => $location["amount_kh"],
                 ];
             }
+
             if (!empty($locations)) {
                 FnDetailLocation::insert($locations);
             }else{
@@ -378,7 +299,7 @@ class ExpenseRequestController extends Controller
             $amount = ($request->ge_total_cost_usd + $ge_total_cost_riel);
             $dataCheckLevelView = [
                 "by_location"=> 2,
-                "department_review"=> "",
+                "model_review"=> null,
                 "request_type"=> $request->type,
                 "reference_type"=> $request->expense_type,
                 "type"=> 1,
@@ -386,7 +307,7 @@ class ExpenseRequestController extends Controller
             ];
             $data = ExpenseRequest::find($request->id);
             if(Auth::user()->branch->abbreviations == "HQ"){
-                $dataCheckLevelView["department_review"] = Auth::user()->department_id;
+                $dataCheckLevelView["model_review"] = (int) Auth::user()->department_id;
                 $positionReview = self::lovelReview($dataCheckLevelView);
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
             }else{
@@ -394,16 +315,13 @@ class ExpenseRequestController extends Controller
                 $positionReview = self::lovelReview($dataCheckLevelView);
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
             }
-             // ***  block create history *** //
-            // if ($data->status == "rejected") {
-                $oldId = ExpenseRequestHistory::where("expense_id", $request->id)->count();
-                $dataHistory = $data->toArray();
-                $dataHistory['expense_id'] = $data->id;
-                $dataHistory['tracking_id'] = $data->tracking_id . "@".$oldId;
-                unset($dataHistory['id']);
-                ExpenseRequestHistory::create($dataHistory);
-                $data['status']             = 'pending';
-            // }
+            $oldId = ExpenseRequestHistory::where("expense_id", $request->id)->count();
+            $dataHistory = $data->toArray();
+            $dataHistory['expense_id'] = $data->id;
+            $dataHistory['tracking_id'] = $data->tracking_id . "@".$oldId;
+            unset($dataHistory['id']);
+            ExpenseRequestHistory::create($dataHistory);
+            $data['status']             = 'pending';
             
             // ***  block update reference or add new reference *** //
             if ($request->e_fn_invoice) {
@@ -522,28 +440,8 @@ class ExpenseRequestController extends Controller
                     }
                 }
             }
-           //** Rrgular Expense **//
-            // if ($request->expense_type == 1) {
-                // $data['status']             = 'pending';
-            //     $data['position_review']    = [];
-            //     $data['review_type']        = null;
-            // }else{
-                //** Irrrgular Expense **//
-                // if(!$positionReview){
-                //     return response()->json([
-                //         'error'=>'lang.please_to_set_up_lovel_review_request_expense',
-                //         'status'=>404,
-                //     ]);
-                // }
-                // if (Auth::user()->branch->abbreviations != "HQ") {
-                //     $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
-                // }else{
-                //     $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
-                // }
-                $data['position_review']    = json_encode($positionReview->id_positions);
-                $data['review_type']        = $positionReview->type;
-            // }
-
+            $data['position_review']                = json_encode($positionReview->id_positions);
+            $data['review_type']                    = $positionReview->type;
             $data["approve_by"]                     = $request->approve_by;
             $data["type"]                           = $request->type;
             $data["expense_type"]                   = $request->expense_type;
@@ -590,7 +488,7 @@ class ExpenseRequestController extends Controller
             $amount = ($request->ge_total_cost_usd + $ge_total_cost_riel);
             $dataCheckLevelView = [
                 "by_location"=> 2,
-                "department_review"=> "",
+                "model_review"=> null,
                 "request_type"=> 2,
                 "reference_type"=> 1,
                 "type"=> 1,
@@ -598,7 +496,7 @@ class ExpenseRequestController extends Controller
             ];
             $data = ExpenseRequest::find($request->id);
             if(Auth::user()->branch->abbreviations == "HQ"){
-                $dataCheckLevelView["department_review"] = Auth::user()->department_id;
+                $dataCheckLevelView["model_review"] = Auth::user()->department_id;
                 $positionReview = self::lovelReview($dataCheckLevelView);
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
             }else{
@@ -614,15 +512,13 @@ class ExpenseRequestController extends Controller
             }
 
             // ***  block create history *** //
-            // if ($data->status == "rejected") {
-                $oldId = ExpenseRequestHistory::where("expense_id", $request->id)->count();
-                $dataHistory = $data->toArray();
-                $dataHistory['expense_id'] = $data->id;
-                $dataHistory['tracking_id'] = $data->tracking_id . "@".$oldId;
-                unset($dataHistory['id']);
-                ExpenseRequestHistory::create($dataHistory);
-                $data['status']             = 'pending';
-            // }
+            $oldId = ExpenseRequestHistory::where("expense_id", $request->id)->count();
+            $dataHistory = $data->toArray();
+            $dataHistory['expense_id'] = $data->id;
+            $dataHistory['tracking_id'] = $data->tracking_id . "@".$oldId;
+            unset($dataHistory['id']);
+            ExpenseRequestHistory::create($dataHistory);
+            $data['status']             = 'pending';
             
             // ***  block update reference or add new reference *** //
             if ($request->e_fn_invoice) {
@@ -735,7 +631,6 @@ class ExpenseRequestController extends Controller
                     FnDetailLocation::insert($locations);
                 }
             }
-            // $data['location_review']                = ($positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id);
             $data["approve_by"]                     = $request->approve_by;
             $data["kind_regard"]                    = $request->kind_regard;
             $data["subject"]                        = $request->subject;
@@ -794,7 +689,7 @@ class ExpenseRequestController extends Controller
                 $amount = ($data->ge_total_cost_usd + $ge_total_cost_riel);
                 $dataCheckLevelView = [
                     "by_location"=> 2,
-                    "department_review"=> "",
+                    "model_review"=> null,
                     "request_type"=> $data->type,
                     "reference_type"=> $data->expense_type,
                     "type"=> $type,
@@ -804,11 +699,11 @@ class ExpenseRequestController extends Controller
                 $branch = Branchs::where("id", $data->requestBy->branch_id)->first();
                 
                 if($branch->abbreviations == "HQ"){
-                    $dataCheckLevelView["department_review"] = $data->requestBy->department_id;
-                    $lovelReview = self::processReview($dataCheckLevelView);
+                    $dataCheckLevelView["model_review"] = (int) $data->requestBy->department_id;
+                    $lovelReview = self::lovelReview($dataCheckLevelView);
                 }else{
                     $dataCheckLevelView["by_location"] = 1;
-                    $lovelReview = self::processReview($dataCheckLevelView);
+                    $lovelReview = self::lovelReview($dataCheckLevelView);
                 };
                 if ($lovelReview) {
                     if ($branch->abbreviations != "HQ") {
@@ -817,7 +712,7 @@ class ExpenseRequestController extends Controller
                         $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->department_id;
                     }
                     $data['status']             = 'pending';
-                    $data['position_review']    = $lovelReview->id_positions;
+                    $data['position_review']    = json_encode($lovelReview->id_positions);
                     $data['review_type']        = $lovelReview->type;
                 }else{
                     $data['position_review']    = [];

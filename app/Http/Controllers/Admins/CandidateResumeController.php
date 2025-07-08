@@ -204,7 +204,7 @@ class CandidateResumeController extends Controller
     }
 
     public function showemp(){
-        $dataEmp =  User::whereIn('emp_status',['1','2','10'])->get();
+        $dataEmp =  User::whereIn('emp_status',['Probation', '1','2','10'])->get();
         return response()->json(['employees'=>$dataEmp]);
     }
     
@@ -673,6 +673,7 @@ class CandidateResumeController extends Controller
                     'salary_increas' => $request->salary_increas,
                     'position_type' => $request->position_type,
                     'pro_rate' => $request->pro_rate,
+                    'condition_other' => $request->condition_other,
                     'department_id' =>$request->department_id,
                     'join_date' => $request->date_of_commencement,
                     'fdc_date' => $newDateTime,
