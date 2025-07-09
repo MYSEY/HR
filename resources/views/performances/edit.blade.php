@@ -350,13 +350,17 @@
                     },
                     dataType: "JSON",
                     success: function (response) {
-                        if (response.message) {
+                        console.log(response);
+                        
+                        if (response.message == 'successfully') {
                             toastr.success(response.message, 'Success');
                             setTimeout(function() {
                                 window.location.href = "{{ url('performance') }}";
                             }, 2000);
                             $('#performanceForm').trigger("reset");
-                        } else {
+                        } else if(response.message == 'not_goal') {
+                            toastr.error(response.error || 'Invalid goal format for type'+' '+response.goal_type || 'Error');
+                        }else {
                             toastr.error(response.message || 'សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%', 'Error');
                         }
                     },

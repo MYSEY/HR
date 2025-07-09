@@ -330,7 +330,7 @@
         var rolePermission = $("#rolePermission").val();
         if (rolePermission != "HRAdmin") {
             let idleTime = 0;
-            const maxIdleTime = 5 * 60 * 1000; // 5 minutes (in milliseconds)
+            const maxIdleTime = 60 * 60 * 1000; // 5 minutes (in milliseconds)
         
             function resetIdleTimer() {
                 clearTimeout(idleTime);
