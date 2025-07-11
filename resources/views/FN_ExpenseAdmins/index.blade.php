@@ -33,7 +33,8 @@
                                 <th>@lang('lang.amount') @lang('lang.kh')</th>
                                 <th>@lang('lang.request_date')</th>
                                 <th>@lang('lang.request_by') @lang('lang.location')</th>
-                                <th>@lang('lang.review') or @lang('lang.approve')</th>
+                                <th>@lang('lang.position') @lang('lang.review')</th>
+                                <th>@lang('lang.approve_by')</th>
                                 <th>@lang('lang.asign_to')</th>
                                 <th>@lang('lang.action')</th>
                             </tr>
@@ -84,6 +85,9 @@
                                         </td>
                                         <td data-toggle="tooltip" data-html="true" title="{!! $positionReviews !!}" >
                                             {{ Str::limit($positionReviews, 30, '...') }}
+                                        </td>
+                                        <td>
+                                            {{$item->approveBy->employee_name_en}}
                                         </td>
                                         <td >
                                            @if ($permission->is_update == "1")
