@@ -74,29 +74,14 @@
                                         <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 350px;">គោលដៅ (Goal)</th>
                                         <th>ទម្ងន់ (Weight %)</th>
-                                        <th style="min-width: 100px;">ពិន្ទុសម្រេចបាន (Score achieved)</th>
-                                        <th>ពិន្ទុ (Score)</th>
-                                        <th>បុគ្គលិកផ្ទាល់</th>
-                                        <th>ប្រធានផ្ទាល់</th>
-                                        <th style="min-width: 350px;">កត្តាដែលងាយស្រួល និងលំបាក</th>
-                                        <th style="min-width: 350px;">យោបល់/កំណត់សម្គាល់</th>
                                     </tr>
                                 </thead>
-                                @php
-                                    $totalWeight = 0;
-                                @endphp
                                 <tbody id="tbl_performance">
                                     @foreach ($data->titles as $item)
                                         <tr>
                                             <td colspan="2" class="text-center">
                                                 <input type="text" class="form-control" value="{{ $item->title ?? '' }}" required>
                                             </td>
-                                            <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
@@ -108,18 +93,9 @@
                                                 </td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
                                             </tr>
                                             
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
-                                                @php
-                                                    $totalWeight += (float) $Detailitem->weight;
-                                                @endphp
                                                 <tr>
                                                     <td class="text-center">
                                                         <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
@@ -133,77 +109,10 @@
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
                                                     </td>
-                                                    <td class="text-center">
-                                                        <input type="number" step="any" class="form-control score_achieved" placeholder="0" id="score_achieved" min="0" max="5">
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="number" step="any" class="form-control score" placeholder="0" min="0" id="score" readonly>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="number" step="any" class="form-control personnel_score" placeholder="0" min="0" id="personnel_score" readonly>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="number" step="any" class="form-control direct_chairman" placeholder="0" min="0" id="direct_chairman" readonly>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here"></textarea>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here"></textarea>
-                                                    </td>
                                                 </tr>
                                             @endforeach
                                         @endforeach
-                                        
-                                        <tr class="total">
-                                            <td colspan="5" class="text-center">សរុប = </td>
-                                            <td colspan="1" class="text-center">
-                                                <input type="text" class="form-control tr_score" placeholder="0" id="tr_score" value="" readonly>
-                                            </td>
-                                            <td colspan="1" class="text-center">
-                                                <input type="text" class="form-control tr_personnel_score" placeholder="0" id="tr_personnel_score" value="" readonly>
-                                            </td>
-                                            <td colspan="1" class="text-center">
-                                                <input type="text" class="form-control tr_direct_chairman" placeholder="0" id="tr_direct_chairman" value="" readonly>
-                                            </td>
-                                            <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
-                                        </tr>
                                     @endforeach
-                                </tbody>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="3" class="text-center">សរុបរួម</td>
-                                        <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control" id="total-weight" placeholder="%" value="{{$totalWeight}}" readonly>
-                                        </td>
-                                        <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control" placeholder="លទ្ធផលរួម =" value="" readonly>
-                                        </td>
-                                        <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control" placeholder="" id="total_score" value="" readonly>
-                                        </td>
-                                        <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control" placeholder="" id="total_personnel_score" value="" readonly>
-                                        </td>
-                                        <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control" placeholder="" id="total_direct_chairman" value="" readonly>
-                                        </td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                    </tr>
-                                </tbody>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="3" class="text-center">% ពិន្ទុវាយតម្លៃតាមគោលដៅ</td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="3" class="text-center">
-                                            <input type="text" id="overall_results" class="form-control" placeholder="Overall Results" readonly>
-                                        </td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>

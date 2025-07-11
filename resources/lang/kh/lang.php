@@ -896,6 +896,8 @@ return[
     "type_fdc1"=>'Type FDC-1',
     "type_fdc2"=>'Type FDC-2',
     "type_udc"=>'Type UDC',
+    "total_weight"=>'Total Weight',
+
     // "apply_leave"=>'អនុវត្តការចាកចេញ',
 	"unactive"=>"មិនដំណើរការ",
 	"update"=>"កែប្រែ",

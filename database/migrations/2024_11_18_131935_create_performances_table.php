@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('employee_id');
             $table->date('from_date');
             $table->date('to_date');
+            $table->integer('total_weight')->default(0);
             $table->decimal('total_score')->default(0);
             $table->decimal('total_score_achieved')->default(0);
             $table->decimal('overall_results')->default(0);

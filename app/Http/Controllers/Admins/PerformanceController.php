@@ -66,16 +66,16 @@ class PerformanceController extends Controller
     {  
         try {
             DB::beginTransaction();
-            // $totalWeight = 0;
+            $totalWeight = 0;
 
             // Calculate total weight
-            // foreach ($request->data as $titleItem) {
-            //     foreach ($titleItem['dataPurpose'] as $purposeItem) {
-            //         foreach ($purposeItem['dataKPi'] as $kpi) {
-            //             $totalWeight += (int) $kpi['weight'];
-            //         }
-            //     }
-            // }
+            foreach ($request->data as $titleItem) {
+                foreach ($titleItem['dataPurpose'] as $purposeItem) {
+                    foreach ($purposeItem['dataKPi'] as $kpi) {
+                        $totalWeight += (int) $kpi['weight'];
+                    }
+                }
+            }
 
             // if ($totalWeight == 100) {
                 foreach ($request->employee_id as $empId) {
@@ -84,6 +84,7 @@ class PerformanceController extends Controller
                     $data = $request->all();
                     $data['created_by'] = Auth::id();
                     $data['employee_id'] = $empId;
+                    $data['total_weight'] = $totalWeight;
                     $data['status'] = 'prepare';
                     $data['type'] = $type;
 
@@ -270,9 +271,9 @@ class PerformanceController extends Controller
                 }
             }
 
-            if ($totalWeight !== 100) {
-                return response()->json(['error' => 'The total weight of all KPIs must equal 100%.']);
-            }
+            // if ($totalWeight !== 100) {
+            //     return response()->json(['error' => 'The total weight of all KPIs must equal 100%.']);
+            // }
 
             /* -------------------------------------------------
             | 2. Update Performance header
@@ -288,6 +289,7 @@ class PerformanceController extends Controller
                 'from_date'   => $request->from_date,
                 'to_date'     => $request->to_date,
                 'type'        => $type,
+                'total_weight' => $totalWeight,
                 'updated_by'  => Auth::id(),
             ]);
 
@@ -310,7 +312,6 @@ class PerformanceController extends Controller
                 ]);
 
                 foreach ($titleItem['dataPurpose'] as $purposeItem) {
-
                     $purpose = Purpose::create([
                         'performance_id' => $performance->id,
                         'title_id'       => $title->id,
@@ -319,7 +320,6 @@ class PerformanceController extends Controller
                     ]);
 
                     foreach ($purposeItem['dataKPi'] as $kpi) {
-
                         /* ---- Validate goal lines -------------------------------- */
                         $isValidGoal = true;
                         $goalType    = $kpi['goal_type'];           // number|currency|percent|date
@@ -389,7 +389,6 @@ class PerformanceController extends Controller
             return response()->json([
                 'message' => 'successfully'
             ]);
-
         } catch (\Throwable $e) {
             DB::rollBack();
             return response()->json([
@@ -399,27 +398,37 @@ class PerformanceController extends Controller
             ], 500);
         }
     }
-    public function status($id){
+    public function performanceApprove($id)
+    {
         try {
+            DB::beginTransaction(); // ✅ Start transaction
             $performance = Performance::findOrFail($id);
-            $performance->update([
-                'status'      => 'approve',
-                'updated_by'  => Auth::id(),
-            ]);
-            DB::commit();
+            if ($performance->total_weight == 100) {
+                $performance->update([
+                    'status'     => 'approve',
+                    'updated_by' => Auth::id(),
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'weight_must_be_exactly'
+                ]);
+            }
+
+            DB::commit(); // ✅ Commit after successful update
             return response()->json([
                 'success' => true,
                 'message' => 'Updated performance status successfully!',
                 'status'  => 200
             ]);
         } catch (\Throwable $exp) {
-            DB::rollBack();
+            DB::rollBack(); // ✅ Roll back only if transaction started
             return response()->json([
-                'error' => 'Updated performance status failed.',
+                'error'     => 'Updated performance status failed.',
                 'exception' => $exp->getMessage()
             ], 500);
         }
     }
+
     /**
      * Remove the specified resource from storage.
      *

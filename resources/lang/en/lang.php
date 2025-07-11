@@ -934,6 +934,7 @@ return[
     "type_fdc2"=>'Type FDC-2',
     "type_udc"=>'Type UDC',
     "tracking_id"=>'Tracking ID',
+    "total_weight"=>'Total Weight',
     "apply_leave"=>'Apply Leave',
     "update"=>"Update",
     "updated_by"=>"Updated By",

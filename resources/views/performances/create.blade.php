@@ -415,16 +415,16 @@
                 <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                    <select class="form-control goal-type-select" name="goal_type[]">
-                        <option value="number">Number</option>
-                        <option value="date">Date</option>
-                        <option value="currency">Currency</option>
-                        <option value="percent">Percent</option>
-                    </select>
-                    <div class="goal-input-wrapper mt-1">
-                        <textarea class="form-control required" name="goal[]" rows="3" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
-                    </div>
-                </td>
+                <select class="form-control goal-type-select" name="goal_type[]">
+                    <option value="number">Number</option>
+                    <option value="date">Date</option>
+                    <option value="currency">Currency</option>
+                    <option value="percent">Percent</option>
+                </select>
+                <div class="goal-input-wrapper mt-1">
+                    <textarea class="form-control required" name="goal[]" rows="3" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                </div>
+            </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>

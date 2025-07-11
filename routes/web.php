@@ -10,11 +10,13 @@ use App\Http\Controllers\Admins\RoleConroller;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admins\BankController;
 use App\Http\Controllers\Admins\UserController;
+use App\Http\Controllers\Admins\FNTaxController;
 use App\Http\Controllers\Admins\TaxesController;
 use App\Http\Controllers\Admins\BranchController;
 use App\Http\Controllers\Admins\HolidayController;
 use App\Http\Controllers\Admins\ReportsController;
 use App\Http\Controllers\Admins\SettingController;
+use App\Http\Controllers\Admins\SpecialController;
 use App\Http\Controllers\Admins\TrainerController;
 use App\Http\Controllers\Admins\DashboadController;
 use App\Http\Controllers\Admins\PositionController;
@@ -22,6 +24,7 @@ use App\Http\Controllers\Admins\ProvinceController;
 use App\Http\Controllers\Admins\TrainingController;
 use App\Http\Controllers\Admins\LeaveTypeController;
 use App\Http\Controllers\Admins\DepartmentController;
+use App\Http\Controllers\Admins\FnApprovalController;
 use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\ActivityLogController;
 use App\Http\Controllers\Admins\LeavesAdminController;
@@ -29,32 +32,30 @@ use App\Http\Controllers\Admins\MotorRentelController;
 use App\Http\Controllers\Admins\PayrollItemController;
 use App\Http\Controllers\Admins\PerformanceController;
 use App\Http\Controllers\Admins\ExchangeRateController;
+use App\Http\Controllers\Admins\ExpenseAdminController;
 use App\Http\Controllers\Admins\TrainingTypeController;
+use App\Http\Controllers\Admins\ExpenseReportController;
+use App\Http\Controllers\Admins\FnPaymentTermController;
 use App\Http\Controllers\Admins\FringeBenefitController;
 use App\Http\Controllers\Admins\PayrollReportController;
+use App\Http\Controllers\Admins\ExpenseRequestController;
+use App\Http\Controllers\Admins\FNExchangeRateController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\VillageAddressController;
 use App\Http\Controllers\Admins\CandidateResumeController;
-use App\Http\Controllers\Admins\CategoryPermissionController;
 use App\Http\Controllers\Admins\ConmmuneAddressController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
+use App\Http\Controllers\Admins\FnLevelReviewerController;
 use App\Http\Controllers\Admins\MotorAdjustmentController;
 use App\Http\Controllers\Admins\ProvinceAddressController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\DistrictsAddressController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
-use App\Http\Controllers\Admins\ExpenseAdminController;
-use App\Http\Controllers\Admins\ExpenseReportController;
-use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
-use App\Http\Controllers\Admins\ExpenseRequestController;
-use App\Http\Controllers\Admins\FnApprovalController;
-use App\Http\Controllers\Admins\FNExchangeRateController;
-use App\Http\Controllers\Admins\FnLevelReviewerController;
-use App\Http\Controllers\Admins\FnPaymentTermController;
 use App\Http\Controllers\Admins\FnRegularExspenseController;
-use App\Http\Controllers\Admins\FNTaxController;
-use App\Http\Controllers\Admins\SpecialController;
+use App\Http\Controllers\Admins\CategoryPermissionController;
+use App\Http\Controllers\Admins\PerformanceAppraisalController;
+use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
 
 /*
 |--------------------------------------------------------------------------
@@ -269,6 +270,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('payroll/staff/risign/create',[EmployeePayrollController::class,'payrollStaffResignCreate']);
     Route::post('payroll/staff/risign/search',[EmployeePayrollController::class,'payrollStaffResignSearch']);
 
+    ///performance
     Route::get('performance', [PerformanceController::class,'index']);
     Route::get('performance/create', [PerformanceController::class,'create']);
     Route::post('performance/store', [PerformanceController::class,'store']);
@@ -276,8 +278,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('performance/{id}/edit', [PerformanceController::class,'edit']);
     Route::post('performance/update', [PerformanceController::class,'update']);
     Route::post('performance/delete', [PerformanceController::class,'destroy']);
-    Route::get('performance/status/{id}', [PerformanceController::class,'status']);
+    Route::post('performance/approve/{id}', [PerformanceController::class,'performanceApprove']);
 
+    //performance Appraisal
+    Route::resource('performance-appraisal', PerformanceAppraisalController::class);
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
     Route::get('motor-rentel/edit',[MotorRentelController::class,'edit']);
