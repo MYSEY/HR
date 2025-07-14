@@ -148,6 +148,8 @@
                                                         <span class="badge bg-inverse-info" style="font-size: 13px;">@lang('lang.pending') @lang('lang.review')</span>
                                                     @elseif ($item->status == "rejected")
                                                         <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                    @elseif ($item->status == "cancel")
+                                                        <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
                                                     @elseif($item->status == "approved")
                                                         <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                     @endif
@@ -282,6 +284,7 @@
             window.location = url;
         });
         $(document).on('click','.btn-GEXP-print', function() {
+            $('.number_supplier').text('៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
             $(".p_kind_regard").text(datas.kind_regard);
@@ -350,6 +353,8 @@
             print_pdf("print_expense")
         });
         $(document).on('click','.btn-TEXP-print', function() {
+            $('.p_reverse_charge').css('display','none');
+            $('.number_supplier').text('៥ បើកជូនអ្នកផ្គត់ផ្គង់ (៤)');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
             $(".p_kind_regard").text(datas.kind_regard);
@@ -364,8 +369,8 @@
             $(".p_te_tax_income").text(datas.te_tax_income);
             $(".p_ge_total_cost_usd").text(datas.ge_total_cost_usd);
             $(".p_ge_total_cost_riel").text(datas.ge_total_cost_riel);
-            $(".p_vat_reverse_charge_usd").text(datas.ge_vat_reverse_charge_usd);
-            $(".p_vat_reverse_charge_riel").text(datas.vat_reverse_charge_riel);
+            // $(".p_vat_reverse_charge_usd").text(datas.ge_vat_reverse_charge_usd);
+            // $(".p_vat_reverse_charge_riel").text(datas.vat_reverse_charge_riel);
             $(".p_te_total_usd").text(datas.ge_total_amount_usd);
             $(".p_te_total_tax").text(datas.te_total_tax);
             let convertNumberRiel = convertNumberToWordsExp(datas.te_total_tax,"rial");
@@ -441,6 +446,8 @@
                              status = '<span class="badge bg-inverse-info" style="font-size: 13px;">@lang("lang.pending") @lang("lang.review")</span>';
                         }else if (item.status == "rejected") {
                             status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>';
+                        }else if (item.status == "cancel") {
+                            status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>';
                         }else if (item.status == "approved") {
                             status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
                         };

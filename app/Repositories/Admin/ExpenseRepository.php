@@ -92,7 +92,7 @@ class ExpenseRepository extends BaseRepository
         ->when($request->location_id, function ($query, $location_id) {
             $query->where('fn_detail_locations.location_id', $location_id);
         })
-        ->where('expense_requests.status', "approved")
+        ->whereIn('expense_requests.status', ["approved","cancel"])
         ->orderBy('expense_requests.id', 'DESC');
 
          $perPage = $request->get('per_page', 10);

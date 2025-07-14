@@ -19,6 +19,7 @@
             </div>
         </div>
     </div>
+    <button type="button" class="btn btn-sm btn-success btn_approved_all mt-3" href="#" data-id=""> @lang('lang.approve')</button>
     <div class="content">
         <div class="row">
             <div class="col-md-12">
@@ -26,9 +27,12 @@
                     <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-expense-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                         <thead>
                             <tr>
-                                <th class="stuck-scroll-3">#</th>
-                                <th class="stuck-scroll-3">@lang('lang.tracking_id')</th>
-                                <th class="stuck-scroll-3">@lang('lang.status')</th>
+                                {{-- @if (Auth::user()->RolePermission == 'HRAdmin') --}}
+                                    <th class="stuck-scroll-4"><input type="checkbox" id="checkAll"></th>
+                                {{-- @endif --}}
+                                <th class="stuck-scroll-4">#</th>
+                                <th class="stuck-scroll-4">@lang('lang.tracking_id')</th>
+                                <th class="stuck-scroll-4">@lang('lang.status')</th>
                                 <th>@lang('lang.amount') @lang('lang.usd')</th>
                                 <th>@lang('lang.amount') @lang('lang.kh')</th>
                                 <th>@lang('lang.request_date')</th>
@@ -61,15 +65,23 @@
                                         
                                     @endphp
                                     <tr class="odd">
-                                        <td class="stuck-scroll-3">{{$inx+1}}</td>
-                                        <td class="stuck-scroll-3"><a href="#">{{$item->tracking_id}}</a></td>
-                                        <td class="stuck-scroll-3"> 
+                                        {{-- @if (Auth::user()->RolePermission == 'HRAdmin') --}}
+                                            <td class="stuck-scroll-4">
+                                                <input type="checkbox" class="sub_chk" data-id="{{$item->id}}" data-status="{{$item->status}}"
+                                                @if($item->status != 'approved') disabled @endif>
+                                            </td>
+                                        {{-- @endif --}}
+                                        <td class="stuck-scroll-4">{{$inx+1}}</td>
+                                        <td class="stuck-scroll-4"><a href="#">{{$item->tracking_id}}</a></td>
+                                        <td class="stuck-scroll-4"> 
                                             @if ($item->status == "" || $item->status == "pending")
                                                 <span class="badge bg-inverse-info" style="font-size: 13px;">@lang('lang.pending') @lang('lang.review')  {{$item->review_type}}</span>
                                             @elseif($item->status == "pending_approve")
                                                 <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending') @lang('lang.approved')</span>
                                             @elseif ($item->status == "rejected")
                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected {{$item->review_type ? "review ".$item->review_type : "by Approved"}}</span>
+                                            @elseif ($item->status == "cancel")
+                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">@lang('lang.cancel')</span>
                                             @elseif($item->status == "approved")
                                                 <span class="badge bg-inverse-success" style="font-size: 13px;">@lang('lang.approved')</span>
                                             @endif
@@ -105,6 +117,17 @@
                                             <div class="dropdown dropdown-action">
                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
+                                                    @php
+                                                        $currentDate = \Carbon\Carbon::now();
+                                                        $end = \Carbon\Carbon::parse($item->date_approve)->addDays(7);
+                                                    @endphp
+                                                    @if ($item->status == "approved" && $permission->is_update == "1")
+                                                        @if ($currentDate->lte($end))
+                                                            <a class="dropdown-item btn-cancel" href="#" data-id="{{ $item->id }}">
+                                                                <i class="fa fa-close m-r-5"></i> @lang('lang.cancel')
+                                                            </a>
+                                                        @endif
+                                                    @endif
                                                     <a class="dropdown-item" href="{{url("admin-expense/histories",$item->id)}}" ><i class="fa fa-eye m-r-5"></i> @lang('lang.view_history')</a>
                                                 </div>
                                             </div>
@@ -132,6 +155,74 @@
         });
     });
     $(function(){
+        $('#checkAll').on('click', function(e) {
+            if($(this).is(':checked',true)){
+                $(".sub_chk").each(function() {
+                    if ($(this).data('status') == "approved") {
+                        $(this).prop('checked', true);
+                    }
+                });
+            } else {  
+                $(".sub_chk").prop('checked',false);
+            }  
+        });
+       $('body').on('click','.btn_approved_all',function(){
+            var allVals = [];  
+            $(".sub_chk:checked").each(function() {
+                if ($(this).data('status') == "approved") {
+                    allVals.push($(this).attr('data-id'));
+                }
+            });
+            if(allVals.length <=0)  
+            {
+                new Noty({
+                    title: "",
+                    text: '@lang("lang.please_select_item_befor_approve")',
+                    timeout: 3000,
+                    type: "error",
+                    icon: true
+                }).show();
+            }  else {
+                $(".loading-icon").css('display', 'block')
+                $.confirm({
+                    title: '@lang("lang.approve")',
+                    content: ""+
+                                "<p>The item you selected has a number "+allVals.length+"</p>"+
+                                "<span>The item you selected will no longer be visible in Expense Admin. </span>"+
+                                "<label>@lang('lang.are_you_sure_want_to_approve')?</label>",
+                    type: 'blue',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: 'ok',
+                            btnClass: 'btn-blue',
+                            action: function(){
+                            axios.post('{{ URL('admin-expense/approveds') }}',{
+                                'ids': allVals,
+                            }).then(function(response) {
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.the_process_has_been_successfully")',
+                                    type: "success",
+                                    icon: true
+                                }).show();
+                                window.location.replace("{{ URL('admin-expense/list') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                            close: function () {
+                        }
+                    }
+                });
+            }
+        });
         $('body').on('click', '.btn-asign', function() {
             var expense_id = $(this).data("id");
             var position_old = $(this).data("positionold");
@@ -226,6 +317,82 @@
                         }
                     }
                 });
+            });
+        });
+
+        $(".btn-cancel").on("click", function() {
+            let id = $(this).data("id");
+            let description = "@lang('lang.are_you_sure_want_to_cancel')?";
+            let button_cancel = {
+                text: '@lang("lang.submit")',
+                btnClass: 'btn-red btn-sm',
+                action: function () {
+                    var id = this.$content.find('.id').val();
+                    let reason = this.$content.find('.reason').val();
+                    if (reason == ""){
+                        $(".reason").css("border","solid 1px red");
+                        new Noty({
+                            title: "",
+                            text: "Please enter infomation in the reason.",
+                            type: "error",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                        return false;
+                    }
+                    axios.post('{{ URL('admin-expense/cancel') }}', {
+                        'id': id,
+                        'reason': reason,
+                        'status': "pending_cancel",
+                    }).then(function(response) {
+                        new Noty({
+                            title: "",
+                            text: "@lang('lang.the_process_has_been_successfully').",
+                            type: "success",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                        window.location.replace("{{ URL('/admin-expense/list') }}"); 
+                    }).catch(function(error) {
+                        new Noty({
+                            title: "",
+                            text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                            type: "error",
+                            icon: true
+                        }).show();
+                    });
+                }
+            };
+            $.confirm({
+                icon: 'fa fa-warning',
+                title: 'Cancel request expense',
+                titleClass: 'text-center',
+                type: 'blue',
+                content: '' +
+                '<form action="" class="formName">' +
+                    '<div class="form-group" style="text-align: center">' +
+                        '<label>'+(description)+'</label>' +
+                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                    '</div>' +
+                    '<div class="form-group">'+
+                        '<label>@lang("lang.reason") <span class="text-danger">*</span></label>'+
+                        '<textarea rows="3" class="form-control reason"></textarea>'+
+                    '</div>'+
+                '</form>',
+                buttons: {
+                    button_cancel,
+                    cancel: {
+                        text: '@lang("lang.close")',
+                        btnClass: 'btn-secondary btn-sm',
+                    },
+                },
+                onContentReady: function () {
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click');
+                    });
+                }
             });
         });
     });
