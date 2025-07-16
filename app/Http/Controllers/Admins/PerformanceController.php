@@ -38,6 +38,12 @@ class PerformanceController extends Controller
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
         );
+        if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO','HR','DHOD','DBM'])) {
+            $query->where('performances.created_by', Auth::user()->id);
+        }
+        if (in_array(Auth::user()->RolePermission, ['Employee'])) {
+            $query->where('performances.employee_id', Auth::user()->id);
+        }
         // ->groupBy('performances.employee_id')
         // Fetch paginated data
         $data = $query->get();

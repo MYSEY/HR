@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Title;
-use App\Models\Purpose;
 use App\Models\PerformanceDetail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,5 +33,10 @@ class Performance extends Model
     public function titles()
     {
         return $this->hasMany(Title::class, 'performance_id');
+    }
+
+    public function PerformanceDetails()
+    {
+        return $this->hasMany(PerformanceDetail::class,'performance_id');
     }
 }

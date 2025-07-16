@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
+use App\Models\Performance;
 use Illuminate\Http\Request;
 
 class PerformanceAppraisalController extends Controller
@@ -14,6 +15,66 @@ class PerformanceAppraisalController extends Controller
      */
     public function index()
     {
+        $data = Performance::with('PerformanceDetails')->where('id',24)->where('status','approve')->get();
+        $results = [];
+        
+        $targetDate = \Carbon\Carbon::parse('2025-01-15'); // For date comparisons
+        
+        foreach ($data as $performance) {
+            foreach ($performance->PerformanceDetails as $detail) {
+                $goalType = $detail->goal_type;
+                $lines = explode("\n", trim($detail->goal));
+        
+                foreach ($lines as $index => $line) {
+                    [$min, $max] = preg_split('/\s+/', trim($line));
+        
+                    switch ($goalType) {
+                        case 'number':
+                            if (is_numeric($min) && is_numeric($max)) {
+                                if ($min <= $max) {
+                                    $results[$goalType] = [
+                                        'range' => "$min - $max",
+                                        'score' => $detail->score,
+                                        'kpi'   => $detail->key_kpi ?? null,
+                                    ];
+                                }
+                            }
+                            break;
+                        case 'currency':
+                        case 'percent':
+                            if (is_numeric($min) && is_numeric($max)) {
+                                if ($min <= $max) {
+                                    $results[$goalType] = [
+                                        'range' => "$min - $max",
+                                        'score' => $detail->score,
+                                        'kpi'   => $detail->key_kpi ?? null,
+                                    ];
+                                }
+                            }
+                            break;
+        
+                        case 'date':
+                            try {
+                                $d1 = \Carbon\Carbon::parse($min);
+                                $d2 = \Carbon\Carbon::parse($max);
+                                if ($targetDate->between($d1, $d2)) {
+                                    $results['date'][] = [
+                                        'range' => "$min to $max",
+                                        'score' => $detail->score,
+                                        'kpi'   => $detail->key_kpi ?? null,
+                                    ];
+                                }
+                            } catch (\Exception $e) {
+                                // Invalid date, skip
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        
+        dd($results);
+        
         return view('performance_appraisal.index');
     }
 
