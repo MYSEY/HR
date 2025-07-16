@@ -10,13 +10,13 @@
             </div>
             <div style="margin-top: -90px; margin-left: -6%">
                 <img style="width:auto;height: 10%;"alt='White' id="image_logo_print"
-                    src="http://127.0.0.1:8000/admin/img/logo/cammalogo.png">
+                    src="http://hrms.camma.com:9090/HR_UAT/public/admin/img/logo/cammalogo.png">
             </div>
         </div><br>
         <div class="font-sub-title">
             <label class="label-sub">សូមគោរពជូន</label><br>
             <label class="label-sub"><span class="p_kind_regard"></span></label>
-        </div><br>
+        </div><br><br>
         
         <div style="display:flex;" class="set-font">
             <div style="width: 487%;">
@@ -74,7 +74,7 @@
                 <div class="style-table">
                         <table style="width:100%">
                             <tr>
-                                <td class="table_tr_" colspan="2">១ ថ្លៃសម្ភារៈចំនួន</td>
+                                <td class="table_tr_" colspan="2">១ ថ្លៃទំនិញឬសម្ភារ</td>
                             </tr>
                             <tr>
                                 <td class="table_tr_" colspan="2">២ ថ្លៃពលកម្ម/ជួល/សេវា/ផ្សេងៗ</td>
@@ -83,13 +83,13 @@
                                 <td class="table_tr_" colspan="2">៣ ចំណាយប្រកាសពន្ធ</td>
                             </tr>
                             <tr>
-                                <td class="table_tr_" colspan="2">៤ សរុបចំណាយ (១+២)</td>
+                                <td class="table_tr_" colspan="2">៤ សរុបចំណាយ (១+២+៣)</td>
                             </tr>
-                            <tr>
+                            <tr class="p_reverse_charge">
                                 <td class="table_tr_" colspan="2">៥ អាករជំនួស (VAT Reverse Charge) ១០% </td>
                             </tr>
                             <tr>
-                                <td class="table_tr_" colspan="2">៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))</td>
+                                <td class="table_tr_" colspan="2"><span class="number_supplier"></span></td>
                             </tr>
                             <tr>
                                 <td class="table_tr_" colspan="2">- បើកជូនអ្នកផ្គត់ផ្គង់ជាអក្សរ (ដុល្លារអាមេរិក)</td>
@@ -118,7 +118,7 @@
                                 <td class="table_tr">: $ <span class="p_ge_total_cost_usd"></span></td>
                                 <td class="table_tr">៛ <span class="p_ge_total_cost_riel"></span></td>
                             </tr>
-                            <tr>
+                            <tr class="p_reverse_charge">
                                 <td class="table_tr">: $ <span class="p_vat_reverse_charge_usd"></span></td>
                                 <td class="table_tr">៛ <span class="p_vat_reverse_charge_riel"></span></td>
                             </tr>
@@ -127,13 +127,13 @@
                                 <td class="table_tr">៛ <span class="p_te_total_tax"></span></td>
                             </tr>
                             <tr>
-                                <td class="table_tr" colspan="2">: <span class="p_convertNumberDollar"></span></td>
+                                <td class="table_tr" colspan="2">:<span class="p_convertNumberDollar"></span></td>
                             </tr>
                             <tr>
-                                <td class="table_tr" colspan="2">: <span class="p_convertNumberRiel"></span></td>
+                                <td class="table_tr" colspan="2">:<span class="p_convertNumberRiel"></span></td>
                             </tr>
                             <tr>
-                                <td class="table_tr" colspan="2">: <span class="p_payment_term"></span></td>
+                                <td class="table_tr" colspan="2">:<span class="p_payment_term"></span></td>
                             </tr>
                         </table>
                 </div>
@@ -161,7 +161,7 @@
             <!-- Column 3 -->
             <div style="flex: 1;">
               <label class="label-subs" style="display: block; margin-bottom: 60px;"><strong>រៀបចំដោយ</strong></label>
-              <label class="label-sub_lll p_request_by"></label>
+              <label class="label-sub_lll">...................</label>
             </div>
           
           </div>

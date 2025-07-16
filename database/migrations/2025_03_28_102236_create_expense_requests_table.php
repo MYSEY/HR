@@ -60,6 +60,7 @@ return new class extends Migration
             $table->dateTime('date_reject')->nullable();
             $table->longText('remark')->nullable();
             $table->longText('reason')->nullable();
+            $table->string('page_show')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

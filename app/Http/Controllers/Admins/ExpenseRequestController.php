@@ -101,6 +101,7 @@ class ExpenseRequestController extends Controller
     }
 
     function lovelReview($dataLevelView){
+
         $positionReview = FnLevelReviewer::with(["departmentView", "modelReview"])
                 ->when($dataLevelView["by_location"], function ($query, $by_location) use ($dataLevelView) {
                     $query->where('from_location', $by_location);
@@ -112,6 +113,14 @@ class ExpenseRequestController extends Controller
                 })
                 ->when($dataLevelView["type"], function ($query, $type) {
                     $query->where('type', $type);
+                })
+                ->when(isset($dataLevelView["request_type"]), function ($query) use ($dataLevelView) {
+                    $request_type = $dataLevelView["request_type"];
+                    $query->where('request_type', $request_type);
+                    
+                    if ($request_type !== "2") {
+                        $query->where('reference_type', $dataLevelView["reference_type"]);
+                    }
                 })
                 ->when($dataLevelView["amount"], function ($query, $amount) {
                     $query->where("from_amount", "<", $amount)
@@ -486,11 +495,12 @@ class ExpenseRequestController extends Controller
                 $ge_total_cost_riel = ( $request->ge_total_cost_riel / $exchange->amount_riel);
             }
             $amount = ($request->ge_total_cost_usd + $ge_total_cost_riel);
+            
             $dataCheckLevelView = [
                 "by_location"=> 2,
                 "model_review"=> null,
-                "request_type"=> 2,
-                "reference_type"=> 1,
+                "request_type"=> "2",
+                "reference_type"=> "1",
                 "type"=> 1,
                 "amount"=> $amount,
             ];
@@ -690,9 +700,9 @@ class ExpenseRequestController extends Controller
                 $dataCheckLevelView = [
                     "by_location"=> 2,
                     "model_review"=> null,
+                    "type"=> $type,
                     "request_type"=> $data->type,
                     "reference_type"=> $data->expense_type,
-                    "type"=> $type,
                     "amount"=> $amount,
                 ];
 

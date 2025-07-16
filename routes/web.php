@@ -53,9 +53,16 @@ use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\DistrictsAddressController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
 use App\Http\Controllers\Admins\FnRegularExspenseController;
+<<<<<<< HEAD
 use App\Http\Controllers\Admins\CategoryPermissionController;
 use App\Http\Controllers\Admins\PerformanceAppraisalController;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
+=======
+use App\Http\Controllers\Admins\FNTaxController;
+use App\Http\Controllers\Admins\PAFlowController;
+use App\Http\Controllers\Admins\PALevelReviewController;
+use App\Http\Controllers\Admins\SpecialController;
+>>>>>>> 139fcfcda65e526833baf6d7abddff27054fabcb
 
 /*
 |--------------------------------------------------------------------------
@@ -588,6 +595,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // Block FN Exspense Admin
     Route::get('/admin-expense/list', [ExpenseAdminController::class,'index']);
+    Route::post('/admin-expense/cancel', [ExpenseAdminController::class,'cancel']);
+    Route::post('/admin-expense/approveds', [ExpenseAdminController::class,'approveds']);
     Route::post('/admin-expense/asign', [ExpenseAdminController::class,'asign']);
     Route::get('/admin-expense/histories/{id}', [ExpenseAdminController::class,'histories']);
     Route::get('/admin-expense/histories-export', [ExpenseAdminController::class,'historiesExport']);
@@ -596,6 +605,21 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/fn/expense/report', [ExpenseReportController::class,'index']);
     Route::post('/fn/expense/search', [ExpenseReportController::class,'filter']);
     Route::get('/fn/expense/report/export', [ExpenseReportController::class,'reportExport']);
+
+    // Block PA flow review
+    Route::get('/pa/flow/list', [PAFlowController::class,'index']);
+    Route::get('/pa/flow/edit', [PAFlowController::class,'edit']);
+    Route::post('/pa/flow', [PAFlowController::class,'store']);
+    Route::post('/pa/flow/update', [PAFlowController::class,'update']);
+    Route::post('/pa/flow/delete', [PAFlowController::class,'destroy']);
+
+    // Block PA level review
+    Route::get('/pa/level/review', [PALevelReviewController::class,'index']);
+    Route::post('/pa/level//search', [PALevelReviewController::class,'']);
+    Route::get('/pa/level/create', [PALevelReviewController::class,'formCreate']);
+    Route::post('/pa/level/create', [PALevelReviewController::class,'create']);
+    Route::get('/pa/level/edit/{id}', [PALevelReviewController::class,'formEdit']);
+    Route::get('/pa/level//export', [PALevelReviewController::class,'']);
 
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);

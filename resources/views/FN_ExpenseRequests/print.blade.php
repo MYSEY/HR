@@ -10,13 +10,13 @@
             </div>
             <div style="margin-top: -90px; margin-left: -6%">
                 <img style="width:auto;height: 10%;"alt='White' id="image_logo_print"
-                    src="http://127.0.0.1:8000/admin/img/logo/cammalogo.png">
+                    src="http://hrms.camma.com:9090/HR_UAT/public/admin/img/logo/cammalogo.png">
             </div>
         </div><br>
         <div class="font-sub-title">
             <label class="label-sub">សូមគោរពជូន</label><br>
             <label class="label-sub"><span class="p_kind_regard"></span></label>
-        </div><br>
+        </div><br><br>
         
         <div style="display:flex;" class="set-font">
             <div style="width: 487%;">
@@ -74,7 +74,7 @@
                 <div class="style-table">
                         <table style="width:100%">
                             <tr>
-                                <td class="table_tr_" colspan="2">១ ថ្លៃសម្ភារៈចំនួន</td>
+                                <td class="table_tr_" colspan="2">១ ថ្លៃទំនិញឬសម្ភារ</td>
                             </tr>
                             <tr>
                                 <td class="table_tr_" colspan="2">២ ថ្លៃពលកម្ម/ជួល/សេវា/ផ្សេងៗ</td>
@@ -161,7 +161,7 @@
             <!-- Column 3 -->
             <div style="flex: 1;">
               <label class="label-subs" style="display: block; margin-bottom: 50px;"><strong>រៀបចំដោយ</strong></label>
-              <label class="label-sub_lll p_request_by"></label>
+              <label class="label-sub_lll">...................</label>
             </div>
           
           </div>

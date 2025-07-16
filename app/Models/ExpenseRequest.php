@@ -64,6 +64,7 @@ class ExpenseRequest extends Model
         "date_reject",
         "remark",
         "reason",
+        "page_show",
         "created_by",
         "updated_by",
         "deleted_at",

@@ -417,6 +417,7 @@
             });
         });
         $('.btn-GEXP-print').on('click', function() {
+            $('.number_supplier').text('៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
             $(".p_kind_regard").text(datas.kind_regard);
@@ -516,6 +517,8 @@
             print_pdf("print_expense")
         });
         $('.btn-TEXP-print').on('click', function() {
+            $('.p_reverse_charge').css('display','none');
+            $('.number_supplier').text('៥ បើកជូនអ្នកផ្គត់ផ្គង់ (៤)');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
             $(".p_kind_regard").text(datas.kind_regard);
@@ -530,8 +533,8 @@
             $(".p_te_tax_income").text(formatNumber(datas.te_tax_income));
             $(".p_ge_total_cost_usd").text(formatNumber(datas.ge_total_cost_usd));
             $(".p_ge_total_cost_riel").text(formatNumber(datas.ge_total_cost_riel));
-            $(".p_vat_reverse_charge_usd").text(formatNumber(datas.ge_vat_reverse_charge_usd));
-            $(".p_vat_reverse_charge_riel").text(formatNumber(datas.vat_reverse_charge_riel));
+            // $(".p_vat_reverse_charge_usd").text(formatNumber(datas.ge_vat_reverse_charge_usd));
+            // $(".p_vat_reverse_charge_riel").text(formatNumber(datas.vat_reverse_charge_riel));
             $(".p_te_total_usd").text(formatNumber(datas.ge_total_amount_usd));
             $(".p_te_total_tax").text(formatNumber(datas.te_total_tax));
 
