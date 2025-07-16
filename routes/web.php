@@ -53,16 +53,11 @@ use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\DistrictsAddressController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
 use App\Http\Controllers\Admins\FnRegularExspenseController;
-<<<<<<< HEAD
 use App\Http\Controllers\Admins\CategoryPermissionController;
 use App\Http\Controllers\Admins\PerformanceAppraisalController;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
-=======
-use App\Http\Controllers\Admins\FNTaxController;
 use App\Http\Controllers\Admins\PAFlowController;
 use App\Http\Controllers\Admins\PALevelReviewController;
-use App\Http\Controllers\Admins\SpecialController;
->>>>>>> 139fcfcda65e526833baf6d7abddff27054fabcb
 
 /*
 |--------------------------------------------------------------------------
