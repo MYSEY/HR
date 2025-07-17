@@ -164,7 +164,9 @@
                                                         <span >General Expense</span>
                                                     @endif
                                                 </td>
-                                                <td >{{$item->expense_type == "1" ? "Regular Expense": "Irregular Expense"}}</td>
+                                                <td >{{
+                                                        $item->type == "0" ?  $item->expense_type == "1" ? "Regular Expense": "Irregular Expense" : ""
+                                                    }}</td>
                                                 <td >$ {{number_format($item->amount_usd, 2)}}</td>
                                                 <td>៛ {{number_format($item->amount_riel, 2)}}</td>
                                                 <td>{{$item->payment_term}}</td>

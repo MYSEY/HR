@@ -109,6 +109,8 @@
             $('#v-btn-approve').data('id', datas.id);
             $('#v-btn-approve').data('daterequest', datas.date_request);
             $('#v-btn-approve').data('status', datas.status);
+            let review_type = (datas.review_type + 1);
+            $('#Stage_review').val(review_type);
             if (datas.type == "1") {
                 $(".v_type_exp").css("display","block");
             }else{
@@ -256,6 +258,7 @@
         });
         $(document).on('click','.btn-approved', function(e) {
             e.preventDefault(); // Prevent the default anchor behavior
+            let review_type = $('#Stage_review').val();
             $('#view_information_expense').modal('hide');
             let dateRequest = moment($(this).data('daterequest')).format('D-MM-YYYY');
             let status = $(this).data('status');
@@ -287,17 +290,31 @@
                     }
                     axios.post('{{ URL('fn/expense-request/processing') }}', {
                         'id': id,
+                        'review_type': review_type,
                         'approve_date': approve_date,
                         'remark': remark,
                     }).then(function(response) {
-                        new Noty({
-                            title: "",
-                            text: "@lang('lang.the_process_has_been_successfully').",
-                            type: "success",
-                            timeout: 3000,
-                            icon: true
-                        }).show();
-                        window.location.replace("{{ URL('/expense-request/list') }}"); 
+                        if (response.data.status == 400) {
+                            new Noty({
+                                title: "",
+                                text: response.data.message,
+                                type: "error",
+                                timeout: 4000,
+                                icon: true
+                            }).show();
+                        }else{
+                            new Noty({
+                                title: "",
+                                text: "@lang('lang.the_process_has_been_successfully').",
+                                type: "success",
+                                timeout: 3000,
+                                icon: true
+                            }).show();
+                            window.location.replace("{{ URL('/expense-request/list') }}"); 
+                        }
+                        console.log(response.data.status);
+                        
+                        
                     }).catch(function(error) {
                         new Noty({
                             title: "",

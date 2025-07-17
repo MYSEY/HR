@@ -117,8 +117,9 @@
                             <div class="row">
                                 <label class="col-sm-2 col-form-label">យោង៖ <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
+                                    <span class="text-danger" id="RI_required" style="display: none">Please select any checkbox to request.</span>
                                     <label class="container-checkbox">Special Expense
-                                        <input type="checkbox" id="exp-type" name="type"> <span class="checkmark"></span>
+                                        <input type="checkbox" class="checkbox-group" id="exp-type" name="type"> <span class="checkmark"></span>
                                     </label>
                                     <label class="container-checkbox">Regular Expense
                                         <input type="checkbox" class="checkbox-group" name="selected_item" value="1"> <span class="checkmark"></span>
@@ -126,7 +127,6 @@
                                     <label class="container-checkbox">Irregular Expense
                                         <input type="checkbox" class="checkbox-group" name="selected_item" value="2"> <span class="checkmark"></span>
                                     </label>
-                                    <span class="text-danger" id="RI_required" style="display: none">Please check Regular Expense on Irregular Expense</span>
                                 </div>
                             </div>
                             <div class="row">
@@ -163,7 +163,7 @@
                                 <label class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
-                                        <textarea type="text" rows="3" class="form-control fn_require" placeholder="តបតាមកម្មវត្ថុ និងយោងខាងលើ ខ្ញុំបាទ/នាងខ្ញុំស្នើសុំចំណាយ"  name="reason_subject" id="fn_reason_subject" required></textarea>
+                                        <textarea type="text" rows="3" class="form-control fn_require" name="reason_subject" id="fn_reason_subject" required>តបតាមកម្មវត្ថុ និងយោងខាងលើ ខ្ញុំបាទ/នាងខ្ញុំស្នើសុំ</textarea>
                                     </div>
                                 </div>
                             </div>

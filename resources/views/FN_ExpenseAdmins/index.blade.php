@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-sm btn-success btn_approved_all mt-3" href="#" data-id=""> @lang('lang.approve')</button>
+    <button type="button" class="btn btn-sm btn-success btn_approved_all mt-3" href="#" data-id="">Remove Approved</button>
     <div class="content">
         <div class="row">
             <div class="col-md-12">

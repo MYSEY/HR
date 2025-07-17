@@ -77,7 +77,12 @@
                                             <span >General Expense</span>
                                         @endif
                                     </td>
-                                    <td >{{$item->expense_type == "1" ? "Regular Expense": "Irregular Expense"}}</td>
+                                    <td >
+                                        {{
+                                            $item->type == "0" ?  $item->expense_type == "1" ? "Regular Expense": "Irregular Expense" : ""
+                                        }}
+
+                                    </td>
                                     <td >{{number_format($item->ge_total_amount_usd, 2)}}</td>
                                     <td>{{$item->type == "2" ? number_format($item->te_total_tax ,2) : number_format($item->ge_total_amount_riel, 2)}}</td>
                                     @if(count($item->References) <= 1)
@@ -237,11 +242,11 @@
                                         @endphp
                                     @else
                                         @php
-                                            $cleanReference = str_replace('null,', '', $rf->serialref);
-                                            $cleanReference = ltrim($cleanReference, ',');
-                                            $cleanReference = trim($cleanReference);
                                             $html = '';
                                             foreach ($item->References as $rf) {
+                                                $cleanReference = str_replace('null,', '', $rf->serialref);
+                                                $cleanReference = ltrim($cleanReference, ',');
+                                                $cleanReference = trim($cleanReference);
                                                 $html .= '<small class="block text-ellipsis">
                                                             <a href="' . url('uploads/FnRegularExspenses/' . $rf->file_upload) . '" target="_blank">'
                                                                 . $cleanReference .
