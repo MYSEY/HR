@@ -58,7 +58,7 @@
                     </td></tr>
                 </table>
                 
-                <label class="label-sub_lll">នាយកដ្ឋានដូចខាងក្រោម៖</label>
+                <label class="label-sub_lll"></label>
                 <div class="style-table">
                     <table style="width:100%" class="p_locations_a">
                         <tr >

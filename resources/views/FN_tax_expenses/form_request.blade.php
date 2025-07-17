@@ -130,7 +130,7 @@
                                 <label class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
-                                        <textarea type="text" rows="3" class="form-control fn_require" placeholder="តបតាមកម្មវត្ថុ និងយោងខាងលើ ខ្ញុំបាទ/នាងខ្ញុំស្នើសុំចំណាយ"  name="reason_subject" id="fn_reason_subject" required></textarea>
+                                        <textarea type="text" rows="3" class="form-control fn_require"  name="reason_subject" id="fn_reason_subject" required>តបតាមកម្មវត្ថុ និងយោងខាងលើ ខ្ញុំបាទ/នាងខ្ញុំស្នើសុំ</textarea>
                                     </div>
                                 </div>
                             </div>

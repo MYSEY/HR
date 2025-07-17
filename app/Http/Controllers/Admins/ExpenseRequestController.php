@@ -117,8 +117,7 @@ class ExpenseRequestController extends Controller
                 ->when(isset($dataLevelView["request_type"]), function ($query) use ($dataLevelView) {
                     $request_type = $dataLevelView["request_type"];
                     $query->where('request_type', $request_type);
-                    
-                    if ($request_type !== "2") {
+                    if ((string)$request_type == "0") {
                         $query->where('reference_type', $dataLevelView["reference_type"]);
                     }
                 })
@@ -682,7 +681,9 @@ class ExpenseRequestController extends Controller
             $dataHistory['tracking_id'] = $data->tracking_id . "@".$oldId;
             unset($dataHistory['id']);
             unset($dataHistory['request_by']);
-            ExpenseRequestHistory::create($dataHistory);
+            if($request->review_type == $data->review_type){
+                return response()->json(['message' => 'Already reviewed please to reload page.', 'status'=>400]);
+            }
             $type =  $data->review_type + 1;
             if ($data->approve_by == Auth::user()->id) {
                 $data['position_review']    = [];
@@ -730,12 +731,12 @@ class ExpenseRequestController extends Controller
                     $data['status']             = 'pending_approve';
                 }
             }
-           
+           ExpenseRequestHistory::create($dataHistory);
             $data["reason"]                 = $request->remark;
             $data['updated_by']             = Auth::user()->id;
             $data->save();
             DB::commit();
-            return response()->json(['message' => 'Update successfully.']);
+            return response()->json(['message' => 'Update successfully.', 'status'=>200]);
         }catch(\Exception $e){
             DB::rollBack();
             return response()->json(['message' => 'Something went wrong', 'error' => $e->getMessage()], 500);
@@ -760,9 +761,10 @@ class ExpenseRequestController extends Controller
             $dataHistory['tracking_id'] = $data->tracking_id . "@".$oldId;
             unset($dataHistory['id']);
             unset($dataHistory['request_by']);
+            
             $dataCheckLevelView = [
                 "by_location"=> 2,
-                "department_review"=> "",
+                "model_review"=> null,
                 "request_type"=> $data->type,
                 "reference_type"=> $data->expense_type,
                 "type"=> 1,
@@ -770,7 +772,7 @@ class ExpenseRequestController extends Controller
             ];
             $branch = Branchs::where("id", $data->requestBy->branch_id)->first();
             if($branch->abbreviations == "HQ"){
-                $dataCheckLevelView["department_review"] = $data->requestBy->department_id;
+                $dataCheckLevelView["model_review"] = (int) $data->requestBy->department_id;
                 $lovelReview = self::lovelReview($dataCheckLevelView);
                 $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->department_id;
             }else{

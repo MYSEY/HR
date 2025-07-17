@@ -133,6 +133,7 @@
                         </div>
                     </div>
                     <div class="submit-section">
+                        <input type="text" hidden name="Stage_review" id="Stage_review">
                         <button type="button" class="btn btn-primary btn-reject" id="v-btn-reject">
                             <span class="btn-text-print">@lang('lang.reject')</span>
                             <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>

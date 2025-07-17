@@ -129,8 +129,9 @@
                             <div class="row">
                                 <label class="col-sm-2 col-form-label">យោង៖ <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
+                                    <span class="text-danger" id="RI_required" style="display: none">Please select any checkbox to request.</span>
                                     <label class="container-checkbox">Special Expense
-                                        <input type="checkbox" id="exp-type" name="type" {{ $data->type == 1 ? 'checked' : '' }}> <span class="checkmark"></span>
+                                        <input type="checkbox" class="checkbox-group" id="exp-type" name="type" {{ $data->type == 1 ? 'checked' : '' }}> <span class="checkmark"></span>
                                     </label>
                                     <label class="container-checkbox">Regular Expense
                                         <input type="checkbox" class="checkbox-group" name="selected_item" value="1" {{ $data->expense_type == 1 ? 'checked' : '' }}> <span class="checkmark"></span>
@@ -138,7 +139,7 @@
                                     <label class="container-checkbox">Irregular Expense
                                         <input type="checkbox" class="checkbox-group" name="selected_item" value="2" {{ $data->expense_type == 2 ? 'checked' : '' }}> <span class="checkmark"></span>
                                     </label>
-                                    <span class="text-danger" id="RI_required" style="display: none">Please check Regular Expense on Irregular Expense</span>
+                                    {{-- <span class="text-danger" id="RI_required" style="display: none">Please check Regular Expense on Irregular Expense</span> --}}
                                 </div>
                             </div>
                             

@@ -102,7 +102,7 @@ class ExpenseAdminController extends Controller
         }
     }
 
-      public function approveds(Request $request){
+    public function approveds(Request $request){
         try {
             $updated = DB::table('expense_requests')
                 ->whereIn('id', $request->ids)

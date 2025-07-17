@@ -117,7 +117,9 @@
                                             <span >General Expense</span>
                                         @endif
                                     </td>
-                                    <td >{{$item->expense_type == "1" ? "Regular Expense": "Irregular Expense"}}</td>
+                                    <td >{{
+                                        $item->type == "0" ?  $item->expense_type == "1" ? "Regular Expense": "Irregular Expense" : ""
+                                    }}</td>
                                     <td >{{$item->ge_total_amount_usd}}</td>
                                     <td>{{$item->type == "2" ? $item->te_total_tax : $item->ge_total_amount_riel}}</td>
                                     @if(count($item->References) <= 1)

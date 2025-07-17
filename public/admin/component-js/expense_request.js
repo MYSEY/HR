@@ -10,7 +10,6 @@ $(document).ready(function() {
         $("#RI_required").css("display", "none");
         $(".checkbox-group").not(this).prop("checked", false);
         if ($(".checkbox-group:checked").length == 0) {
-            // $("#view-Irregular_reference").css("display", "none");
             $("#view-Regular_reference").css("display", "none");
         }else{
             let value = $(this).val();
@@ -223,11 +222,15 @@ $(document).ready(function() {
                     form_data.append("fn_invoice", file_data);
                 }
             }
-        } else if (expense_type == 2) {
-            if ($("#IrregularFileName").val() == "" || $("#IrregularFileName").val() == null) {
+        } else {
+            if (($("#IrregularFileName").val() == "" || $("#IrregularFileName").val() == null) && type == 0) {
                 $("#IrregularFileName").css("border-color","#dc3545");
                 $("#RI_required").css("display","block");
-                $("#RI_required").text("Please select a file first.");
+                if (expense_type == 0 && type == 0) {
+                    $("#RI_required").text("Please select any checkbox to request.");
+                }else{
+                    $("#RI_required").text("Please select a file first.");
+                }
                 num_miss++;
             }else{
                 $("#RI_required").css("display","none");
@@ -271,10 +274,7 @@ $(document).ready(function() {
                 icon: true
             }).show();
         }
-
         // costs include required
-        let costs_requiredA = 0;
-        let costs_requiredB = 0;
         let costs_required = 0;
         $(".costs_include_required").each(function () {
             let value = $(this).val();
@@ -294,21 +294,6 @@ $(document).ready(function() {
             $(".costs_include_required").css("border-color","#198754");
             $("#include_required").css("display","none");
         }
-
-        // if (($(".1costs_include_requiredKh").val() == "" || $(".1costs_include_requiredKh").val() == 0) && ($(".1costs_include_requiredEn").val() == "" || $(".1costs_include_requiredEn").val() == 0)) {
-        //     costs_requiredA = 1;
-        // }
-        // if (($(".2costs_include_requiredKh").val() == "" || $(".2costs_include_requiredKh").val() == 0) && ($(".2costs_include_requiredKh").val() == "" || $(".2costs_include_requiredKh").val() == 0)) {
-        //     costs_requiredB = 1;
-        // }
-        // if (costs_requiredA == 1 && costs_requiredB == 1) {
-        //     $(".costs_include_required").css("border-color","#dc3545");
-        //     $("#include_required").css("display","block");
-        //     num_miss++;
-        // }else{
-        //     $(".costs_include_required").css("border-color","#198754");
-        //     $("#include_required").css("display","none");
-        // }
 
         // Get payment terms
         let paymentTerms = '';
