@@ -161,12 +161,19 @@ class ExpenseRequestController extends Controller
             if(Auth::user()->branch->abbreviations == "HQ"){
                 $dataCheckLevelView["model_review"] = (int) Auth::user()->department_id;
                 $positionReview = self::lovelReview($dataCheckLevelView);
+                if(!$positionReview){
+                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
             }else{
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::lovelReview($dataCheckLevelView);
+                if(!$positionReview){
+                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                }
                 $data['location_review']    =  $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
             }
+            
             if ($request->hasFile('fn_invoice')) {
                 $autoSerial = $this->generateSerialCode(Carbon::today())['serialref'];
                 $data['reference'] = $request->fn_reference ? $request->fn_reference . ',' . $autoSerial : $autoSerial;
@@ -317,10 +324,16 @@ class ExpenseRequestController extends Controller
             if(Auth::user()->branch->abbreviations == "HQ"){
                 $dataCheckLevelView["model_review"] = (int) Auth::user()->department_id;
                 $positionReview = self::lovelReview($dataCheckLevelView);
+                if(!$positionReview){
+                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
             }else{
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::lovelReview($dataCheckLevelView);
+                if(!$positionReview){
+                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
             }
             $oldId = ExpenseRequestHistory::where("expense_id", $request->id)->count();
@@ -782,6 +795,7 @@ class ExpenseRequestController extends Controller
             };
             ExpenseRequestHistory::create($dataHistory);
             $data['status']             = 'rejected';
+            $data['reject_review_type'] = $data->review_type;
             if ($lovelReview) {
                 $data['position_review']    = $lovelReview->id_positions;
                 $data['review_type']        = 1;

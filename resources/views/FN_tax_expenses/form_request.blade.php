@@ -123,6 +123,7 @@
                                         <input type="text" id="IrregularFileName" class="form-control form-control-lg" placeholder="No file selected" readonly>
                                         <input type="file" name="IrregularFile" class="d-none" id="IrregularFile" onchange="updateFileName(this)">
                                         <button class="btn btn-outline-secondary" type="button" onclick="openFileInNewTab()">Review File</button>
+                                        <button class="btn btn-outline-danger btn-clear-file" type="button"> Clear </button>
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +166,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control costs_include_required exp_costs_dollar" id="exp_costs_dollar" placeholder="0.00" aria-label="Amount (to the nearest dollar)">
+                                            <input type="text" class="form-control khmer-toEnglish-number-only costs_include_required exp_costs_dollar" id="exp_costs_dollar" placeholder="0.00" aria-label="Amount (to the nearest dollar)">
                                         </div>
                                     </div>
                                 </div>
@@ -173,7 +174,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" placeholder="0.00" class="form-control costs_include_required exp_costs_rial" id="exp_costs_rial">
+                                            <input type="text" placeholder="0.00" class="form-control khmer-toEnglish-number-only costs_include_required exp_costs_rial" id="exp_costs_rial">
                                         </div>
                                     </div>
                                 </div>
@@ -185,7 +186,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control costs_include_required exp_costs_dollar" placeholder="0.00" id="exp_LSOC_dollar">
+                                            <input type="text" class="form-control khmer-toEnglish-number-only costs_include_required exp_costs_dollar" placeholder="0.00" id="exp_LSOC_dollar">
                                         </div>
                                     </div>
                                 </div>
@@ -193,7 +194,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" placeholder="0.00" class="form-control costs_include_required exp_costs_rial" id="exp_LSOC_rial">
+                                            <input type="text" placeholder="0.00" class="form-control khmer-toEnglish-number-only costs_include_required exp_costs_rial" id="exp_LSOC_rial">
                                         </div>
                                     </div>
                                 </div>
@@ -205,7 +206,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control costs_include_required exp_tax_declaration_dollar exp_costs_dollar" id="exp_tax_declaration_dollar" placeholder="0.00" aria-label="Amount (to the nearest dollar)">
+                                            <input type="text" class="form-control khmer-toEnglish-number-only costs_include_required exp_tax_declaration_dollar exp_costs_dollar" id="exp_tax_declaration_dollar" placeholder="0.00" aria-label="Amount (to the nearest dollar)">
                                         </div>
                                     </div>
                                 </div>
@@ -213,7 +214,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" placeholder="0.00" class="form-control costs_include_required exp_tax_declaration_rial exp_costs_rial" id="exp_tax_declaration_rial">
+                                            <input type="text" placeholder="0.00" class="form-control khmer-toEnglish-number-only costs_include_required exp_tax_declaration_rial exp_costs_rial" id="exp_tax_declaration_rial">
                                         </div>
                                     </div>
                                 </div>
@@ -247,7 +248,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control exp_total_paid" placeholder="0.00" id="exp_reverse_charge_usd">
+                                            <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid" placeholder="0.00" id="exp_reverse_charge_usd">
                                         </div>
                                     </div>
                                 </div>
@@ -255,7 +256,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" placeholder="0.00" class="form-control exp_total_paid_rial" id="exp_reverse_charge_rial">
+                                            <input type="text" placeholder="0.00" class="form-control khmer-toEnglish-number-only exp_total_paid_rial" id="exp_reverse_charge_rial">
                                         </div>
                                     </div>
                                 </div>
@@ -346,6 +347,7 @@
 <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
 <script src="{{ asset('/admin/js/noty.js') }}"></script>
 <script src="{{asset('/admin/js/convertNumberToWordsExp.js')}}"></script>
+<script src="{{asset('/admin/js/khmerToEnglishNumber.js')}}"></script>
 <script>
     const expenseRequestUrl = "{{ url('/fn/expense-request') }}";
     const expenseRequestListUrl = "{{ url('/expense-request/list') }}";

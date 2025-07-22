@@ -27,7 +27,7 @@
                                     if ($item->type == "2" ) {
                                         if (count($item->departments)>0) {
                                             $num = 1;
-                                            foreach ($item->departments as $key => $location) {
+                                            foreach ($item->departments as $in => $location) {
                                                 if ($location->Location) {
                                                     $locations .= $num . ". " . $location->department->name_english . "\n";
                                                     $num++;
@@ -38,7 +38,7 @@
                                     }else{
                                         if (count($item->locationDetails)>0) {
                                             $num = 1;
-                                            foreach ($item->locationDetails as $key => $location) {
+                                            foreach ($item->locationDetails as $ind => $location) {
                                                 // dd($location->Location);
                                                 if ($location->Location) {
                                                     $locations .=  $num . ". " .$location->Location->branch_name_en."\n";
@@ -59,7 +59,7 @@
                                         @elseif($item->status == "pending_approve")
                                             <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending') @lang('lang.approved')</span>
                                         @elseif ($item->status == "rejected")
-                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected {{$item->review_type ? "review ".$item->review_type : "by Approved"}}</span>
+                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by {{$item->review_type ? "review ".$item->reject_review_type : "Approved"}}</span>
                                         @elseif ($item->status == "cancel")
                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">@lang('lang.cancel')</span>
                                         @elseif($item->status == "approved")
@@ -186,7 +186,7 @@
                                     if ($item->type == "2" ) {
                                         if (count($item->departments)>0) {
                                             $asignNum = 1;
-                                            foreach ($item->departments as $key => $location) {
+                                            foreach ($item->departments as $in => $location) {
                                                 if ($location->Location) {
                                                     $asignLocations .= $asignNum . ". " . $location->department->name_english . "\n";
                                                     $asignNum++;
@@ -196,7 +196,7 @@
                                     }else{
                                         if (count($item->locationDetails)>0) {
                                             $asignNum = 1;
-                                            foreach ($item->locationDetails as $key => $location) {
+                                            foreach ($item->locationDetails as $ind => $location) {
                                                 if ($location->Location) {
                                                     $asignLocations .=  $asignNum . ". " .$location->Location->branch_name_en."\n";
                                                     $asignNum++;
@@ -216,7 +216,7 @@
                                         @elseif($item->status == "pending_approve")
                                             <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending') @lang('lang.approved')</span>
                                         @elseif ($item->status == "rejected")
-                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected {{$item->review_type ? "review ".$item->review_type : "by Approved"}}</span>
+                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by {{$item->review_type ? "review ".$item->reject_review_type : "Approved"}}</span>
                                         @elseif ($item->status == "cancel")
                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">@lang('lang.cancel')</span>
                                         @elseif($item->status == "approved")

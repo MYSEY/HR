@@ -1,10 +1,26 @@
 $(document).ready(function() {
+    $(document).on("input", ".khmer-toEnglish-number-only", function () {
+        let raw = $(this).val();
+        raw = raw.replace(/[^០-៩0-9.]/g, ""); // allow only Khmer/English digits and dot
+        $(this).val(khmerToEnglishNumber(raw));
+    });
+
     totalPaidDollar();
     totalPaidRial();
     $("#fn_approve").on("change", function() {
         let approve_description = $(this).find("option:selected").data("description");
         $("#remark").val(approve_description);
         // $("#remark").val(approve_description);
+    });
+    document.querySelector('.btn-clear-file').addEventListener('click', function () {
+        // Clear file input and fields
+        document.getElementById('IrregularFile').value = '';
+        document.getElementById('IrregularFileName').value = '';
+        document.getElementById('e_fn_invoice').value = '';
+
+        // const input = document.getElementById('IrregularFile');
+        // const file = input.files;
+        // console.log(file);
     });
     $(".checkbox-group").on("click", function () {
         $("#RI_required").css("display", "none");
@@ -63,13 +79,13 @@ $(document).ready(function() {
                 <td class="align-middle">
                     <div class="input-group d-flex justify-content-center">
                         <span class="input-group-text">$</span>
-                        <input type="number" class="form-control " placeholder="0.00" aria-label="Amount (to the nearest dollar)">
+                        <input type="text" class="form-control khmer-toEnglish-number-only" placeholder="0.00" aria-label="Amount (to the nearest dollar)">
                     </div>
                 </td>
                 <td class="align-middle">
                     <div class="input-group d-flex justify-content-center">
                         <span class="input-group-text" style="font-size: 20px">៛</span>
-                        <input type="number" placeholder="0" class="form-control">
+                        <input type="text" placeholder="0" class="form-control khmer-toEnglish-number-only">
                     </div>
                 </td>
                 <td class="text-center align-middle">
@@ -229,7 +245,7 @@ $(document).ready(function() {
                 if (expense_type == 0 && type == 0) {
                     $("#RI_required").text("Please select any checkbox to request.");
                 }else{
-                    $("#RI_required").text("Please select a file first.");
+                    $("#RI_required").text("Please to choose a file first.");
                 }
                 num_miss++;
             }else{
@@ -378,7 +394,7 @@ $(document).ready(function() {
                     if(response.status == 404){
                         new Noty({
                             title: "",
-                            text: 'Please to set up level review request expense',
+                            text: 'Please contact the finance team to set up a level review.',
                             type: "error",
                             timeout: 3000,
                             icon: true
@@ -440,6 +456,7 @@ function totalPaidRial(){
 function openFileInNewTab() {
     const input = document.getElementById('IrregularFile');
     const file = input.files[0];
+    console.log(file);
     if (file) {
         const fileURL = URL.createObjectURL(file);
         window.open(fileURL, '_blank');

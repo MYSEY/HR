@@ -1,11 +1,27 @@
 $(document).ready(function() {
+    $(document).on("input", ".khmer-toEnglish-number-only", function () {
+        let raw = $(this).val();
+        raw = raw.replace(/[^០-៩0-9.]/g, ""); // allow only Khmer/English digits and dot
+        $(this).val(khmerToEnglishNumber(raw));
+    });
     totalPaidDollar();
     totalPaidRial();
     $("#fn_approve").on("change", function() {
         let approve_description = $(this).find("option:selected").data("description");
         $("#remark").val(approve_description);
     });
-    
+    document.querySelector('.btn-clear-file').addEventListener('click', function () {
+        // Clear file input and fields
+        document.getElementById('IrregularFile').value = '';
+        document.getElementById('IrregularFileName').value = '';
+        document.getElementById('e_fn_invoice').value = '';
+
+        // Hide the review button if it exists
+        const reviewBtn = document.getElementById('reviewFileBtn');
+        if (reviewBtn) {
+            reviewBtn.style.display = 'none';
+        }
+    });
     $("#addLocations").on("change", function() {
         $("#view-tbl_location").css("display", "block");
 
@@ -34,13 +50,13 @@ $(document).ready(function() {
                 <td class="align-middle">
                     <div class="input-group d-flex justify-content-center">
                         <span class="input-group-text">$</span>
-                        <input type="number" class="form-control " placeholder="0.00" aria-label="Amount (to the nearest dollar)">
+                        <input type="text" class="form-control khmer-toEnglish-number-only" placeholder="0.00" aria-label="Amount (to the nearest dollar)">
                     </div>
                 </td>
                 <td class="align-middle">
                     <div class="input-group d-flex justify-content-center">
                         <span class="input-group-text" style="font-size: 20px">៛</span>
-                        <input type="number" placeholder="0" class="form-control">
+                        <input type="text" placeholder="0" class="form-control khmer-toEnglish-number-only">
                     </div>
                 </td>
                 <td class="text-center align-middle">
@@ -316,7 +332,7 @@ $(document).ready(function() {
                     if(response.status == 404){
                         new Noty({
                             title: "",
-                            text: 'Please to set up level review request expense',
+                            text: 'Please contact the finance team to set up a level review.',
                             type: "error",
                             timeout: 3000,
                             icon: true

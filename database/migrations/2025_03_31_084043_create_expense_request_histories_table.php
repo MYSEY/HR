@@ -59,6 +59,7 @@ return new class extends Migration
             $table->dateTime('date_request')->nullable();
             $table->dateTime('date_approve')->nullable();
             $table->dateTime('date_reject')->nullable();
+            $table->integer('reject_review_type')->nullable();
             $table->longText('remark')->nullable();
             $table->longText('reason')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();

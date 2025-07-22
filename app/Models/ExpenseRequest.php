@@ -62,6 +62,7 @@ class ExpenseRequest extends Model
         "date_request",
         "date_approve",
         "date_reject",
+        "reject_review_type",
         "remark",
         "reason",
         "page_show",
