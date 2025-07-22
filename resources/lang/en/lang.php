@@ -280,6 +280,7 @@ return[
     "edit_staff_upcoming"=>"Edit Staff UpComing",
     "edit_approval"=>"Edit approval",
     "edit_pa_flow"=>"Edit Flow",
+    "edit_tax_expense"=>"Edit tax expense",
     "email"=>"Email",
     "earning"=>"Earning",
     "earnings_after_tax"=>"Earnings After Tax",

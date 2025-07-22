@@ -179,10 +179,11 @@
                                     
                                         {{-- Review existing file --}}
                                         @if ($viewFile)
-                                            <button class="btn btn-sm btn-outline-secondary" type="button">
+                                            <button class="btn btn-sm btn-outline-secondary" type="button" id="reviewFileBtn">
                                                 <a href="{{ url('uploads/FnRegularExspenses/' . $viewFile) }}" target="_blank" style="text-decoration: none; color: inherit;">Review File</a>
                                             </button>
                                         @endif
+                                        <button class="btn btn-outline-danger btn-clear-file" type="button"> Clear </button>
                                     </div>
                                 </div>
                             </div>
@@ -218,13 +219,13 @@
                                                                 <td class="align-middle">
                                                                     <div class="input-group d-flex justify-content-center">
                                                                         <span class="input-group-text">$</span>
-                                                                        <input type="number" class="form-control " placeholder="0.00" value="{{$item->amount_usd}}">
+                                                                        <input type="text" class="form-control khmer-toEnglish-number-only" placeholder="0.00" value="{{$item->amount_usd}}">
                                                                     </div>
                                                                 </td>
                                                                 <td class="align-middle">
                                                                     <div class="input-group d-flex justify-content-center">
                                                                         <span class="input-group-text" style="font-size: 20px">៛</span>
-                                                                        <input type="number" placeholder="0" class="form-control" value="{{$item->amount_riel}}">
+                                                                        <input type="text" placeholder="0" class="form-control khmer-toEnglish-number-only" value="{{$item->amount_riel}}">
                                                                     </div>
                                                                 </td>
                                                                 <td class="text-center align-middle">
@@ -252,7 +253,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" value="{{$data->ge_cost_material_usd}}" placeholder="0.00" class="form-control costs_include_required 1costs_include_requiredEn exp_costs_dollar" id="exp_costs_dollar">
+                                            <input type="text" value="{{$data->ge_cost_material_usd}}" placeholder="0.00" class="form-control khmer-toEnglish-number-only costs_include_required 1costs_include_requiredEn exp_costs_dollar" id="exp_costs_dollar">
                                         </div>
                                     </div>
                                 </div>
@@ -260,7 +261,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" value="{{$data->ge_cost_material_riel}}" placeholder="0.00" class="form-control costs_include_required 1costs_include_requiredKh exp_costs_rial" id="exp_costs_rial">
+                                            <input type="text" value="{{$data->ge_cost_material_riel}}" placeholder="0.00" class="form-control khmer-toEnglish-number-only costs_include_required 1costs_include_requiredKh exp_costs_rial" id="exp_costs_rial">
                                         </div>
                                     </div>
                                 </div>
@@ -272,7 +273,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" value="{{$data->ge_cost_lso_usd}}" class="form-control costs_include_required 2costs_include_requiredEn exp_costs_dollar" placeholder="0.00" id="exp_LSOC_dollar">
+                                            <input type="text" value="{{$data->ge_cost_lso_usd}}" class="form-control khmer-toEnglish-number-only costs_include_required 2costs_include_requiredEn exp_costs_dollar" placeholder="0.00" id="exp_LSOC_dollar">
                                         </div>
                                     </div>
                                 </div>
@@ -280,7 +281,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" value="{{$data->ge_cost_lso_riel}}" placeholder="0.00" class="form-control costs_include_required 2costs_include_requiredKh exp_costs_rial" id="exp_LSOC_rial">
+                                            <input type="text" value="{{$data->ge_cost_lso_riel}}" placeholder="0.00" class="form-control khmer-toEnglish-number-only costs_include_required 2costs_include_requiredKh exp_costs_rial" id="exp_LSOC_rial">
                                         </div>
                                     </div>
                                 </div>
@@ -314,7 +315,7 @@
                                 <div class="col-sm-3">
                                     <div class="input-group" style="margin-bottom: 0.4rem !important;">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control exp_total_paid" value="{{$data->ge_tax_usd}}" placeholder="0.00" id="exp_tax_wht_dollar">
+                                        <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid" value="{{$data->ge_tax_usd}}" placeholder="0.00" id="exp_tax_wht_dollar">
                                         <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             @if (count($taxWHT)>0)
@@ -329,7 +330,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group" style="margin-bottom: 0.4rem !important;">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" class="form-control exp_total_paid_rial" value="{{$data->tax_riel}}" placeholder="0.00" id="exp_tax_wht_rial">
+                                            <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid_rial" value="{{$data->tax_riel}}" placeholder="0.00" id="exp_tax_wht_rial">
                                             <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 @if (count($taxWHT)>0)
@@ -348,7 +349,7 @@
                                 <div class="col-sm-3">
                                     <div class="input-group" style="margin-bottom: 0.4rem !important;">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control exp_total_paid" value="{{$data->ge_tax_fringe_benefit_usd}}" placeholder="0.00" id="exp_tax_wbt_dollar">
+                                        <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid" value="{{$data->ge_tax_fringe_benefit_usd}}" placeholder="0.00" id="exp_tax_wbt_dollar">
                                         <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             @if (count($taxeFBT)>0)
@@ -363,7 +364,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group" style="margin-bottom: 0.4rem !important;">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" class="form-control exp_total_paid_rial" value="{{$data->tax_fringe_benefit_riel}}" placeholder="0.00" id="exp_tax_wbt_rial">
+                                            <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid_rial" value="{{$data->tax_fringe_benefit_riel}}" placeholder="0.00" id="exp_tax_wbt_rial">
                                             <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 @if (count($taxeFBT)>0)
@@ -383,7 +384,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control exp_total_paid" value="{{$data->ge_vat_reverse_charge_usd}}" placeholder="0.00" id="exp_reverse_charge_usd">
+                                            <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid" value="{{$data->ge_vat_reverse_charge_usd}}" placeholder="0.00" id="exp_reverse_charge_usd">
                                         </div>
                                     </div>
                                 </div>
@@ -391,7 +392,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" value="{{$data->vat_reverse_charge_riel}}" placeholder="0.00" class="form-control exp_total_paid_rial" id="exp_reverse_charge_rial">
+                                            <input type="text" value="{{$data->vat_reverse_charge_riel}}" placeholder="0.00" class="form-control khmer-toEnglish-number-only exp_total_paid_rial" id="exp_reverse_charge_rial">
                                         </div>
                                     </div>
                                 </div>
@@ -486,6 +487,7 @@
 <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
 <script src="{{ asset('/admin/js/noty.js') }}"></script>
 <script src="{{asset('/admin/js/convertNumberToWordsExp.js')}}"></script>
+<script src="{{asset('/admin/js/khmerToEnglishNumber.js')}}"></script>
 <script>
     const expenseRequestUrl = "{{ url('/fn/expense-request/update') }}";
     const expenseRequestListUrl = "{{ url('/expense-request/list') }}";
