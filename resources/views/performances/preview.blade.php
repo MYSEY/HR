@@ -21,18 +21,18 @@
                     </div>
                     <div class="col-md-4">
                         <h4 class="payslip-title">ទម្រង់វាយតម្លៃការងាររបស់បុគ្គលិកសាកល្បង</h4>
-                        <h5 class="payslip-title">ប្រចាំឆ្នាំ៖ ២០២២</h5>
+                        <h5 class="payslip-title">ប្រចាំឆ្នាំ៖ {{ \App\Helpers\Helper::toKhmerNumber(\Carbon\Carbon::parse($data->to_date)->format('Y')) }}</h5>
                     </div>
                 </div>
                 <div class="row" style="text-align: center;justify-content: center;justify-items: center;">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label><strong>(ពីថ្ងៃខែឆ្នាំ៖ 05/12/2022</strong></label>
+                            <label><strong>(ពីថ្ងៃខែឆ្នាំ៖ {{$data->from_date}}</strong></label>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label><strong>ដល់ថ្ងៃខែឆ្នាំ៖ 05/03/2023)</strong></label>
+                            <label><strong>ដល់ថ្ងៃខែឆ្នាំ៖ {{$data->to_date}})</strong></label>
                         </div>
                     </div>
                 </div>
@@ -70,9 +70,9 @@
                             <table class="table table-bordered review-table mb-0">
                                 <thead>
                                     <tr>
-                                        <th style="min-width: 350px;">(KPI)</th>
-                                        <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
-                                        <th style="min-width: 350px;">គោលដៅ (Goal)</th>
+                                        <th style="min-width: 450px;">(KPI)</th>
+                                        <th style="min-width: 450px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
+                                        <th style="min-width: 250px;">គោលដៅ (Goal)</th>
                                         <th>ទម្ងន់ (Weight %)</th>
                                     </tr>
                                 </thead>
@@ -98,13 +98,13 @@
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
                                                 <tr>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
+                                                        <textarea rows="5" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
+                                                        <textarea rows="5" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->goal}}</textarea>
+                                                        <textarea rows="5" class="form-control" placeholder="Enter text here" required>{{$Detailitem->goal}}</textarea>
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
@@ -120,11 +120,6 @@
                 </div>
 
                 <div class="submit-section mb-2">
-                    <button type="submit" class="btn btn-primary submit-btn">
-                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
-                            @lang('lang.loading') </span>
-                        <span class="btn-txt">@lang('lang.submit')</span>
-                    </button>
                     <a href="{{ url('performance') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
                 </div>
             </form>

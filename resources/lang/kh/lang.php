@@ -683,6 +683,7 @@ return[
 	"performance_management"=>"ការគ្រប់គ្រងការអនុវត្ត",
 	"performance"=>"Performance",
 	"performance_review"=>"Performance Review",
+	"performance_appraisal"=>"ទម្រង់វាយតម្លៃ",
 	"adjustment_date"=>"កាលបរិច្ឆេទ",
 	"add_adjustment"=>"Add Adjustment",
 	"adjustment_to"=>"Adjustment To",

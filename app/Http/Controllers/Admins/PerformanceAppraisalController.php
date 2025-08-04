@@ -15,67 +15,23 @@ class PerformanceAppraisalController extends Controller
      */
     public function index()
     {
-        $data = Performance::with('PerformanceDetails')->where('id',24)->where('status','approve')->get();
-        $results = [];
+        $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->select(
+            'performances.*',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'departments.name_english as dep_name',
+            'positions.name_english as positions_name',
+            'branchs.branch_name_en',
+            'branchs.branch_name_kh',
+        )->where('performances.status', 'approve');
+        $data = $query->get();
         
-        $targetDate = \Carbon\Carbon::parse('2025-01-15'); // For date comparisons
-        
-        foreach ($data as $performance) {
-            foreach ($performance->PerformanceDetails as $detail) {
-                $goalType = $detail->goal_type;
-                $lines = explode("\n", trim($detail->goal));
-        
-                foreach ($lines as $index => $line) {
-                    [$min, $max] = preg_split('/\s+/', trim($line));
-        
-                    switch ($goalType) {
-                        case 'number':
-                            if (is_numeric($min) && is_numeric($max)) {
-                                if ($min <= $max) {
-                                    $results[$goalType] = [
-                                        'range' => "$min - $max",
-                                        'score' => $detail->score,
-                                        'kpi'   => $detail->key_kpi ?? null,
-                                    ];
-                                }
-                            }
-                            break;
-                        case 'currency':
-                        case 'percent':
-                            if (is_numeric($min) && is_numeric($max)) {
-                                if ($min <= $max) {
-                                    $results[$goalType] = [
-                                        'range' => "$min - $max",
-                                        'score' => $detail->score,
-                                        'kpi'   => $detail->key_kpi ?? null,
-                                    ];
-                                }
-                            }
-                            break;
-        
-                        case 'date':
-                            try {
-                                $d1 = \Carbon\Carbon::parse($min);
-                                $d2 = \Carbon\Carbon::parse($max);
-                                if ($targetDate->between($d1, $d2)) {
-                                    $results['date'][] = [
-                                        'range' => "$min to $max",
-                                        'score' => $detail->score,
-                                        'kpi'   => $detail->key_kpi ?? null,
-                                    ];
-                                }
-                            } catch (\Exception $e) {
-                                // Invalid date, skip
-                            }
-                            break;
-                    }
-                }
-            }
-        }
-        
-        dd($results);
-        
-        return view('performance_appraisal.index');
+        return view('performance_appraisal.index',compact('data'));
     }
 
     /**
@@ -107,7 +63,22 @@ class PerformanceAppraisalController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Performance::with(['titles.purposes.performanceDetail'])
+        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->select(
+            'performances.*',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'departments.name_english as dep_name',
+            'positions.name_english as positions_name',
+            'branchs.branch_name_en',
+            'branchs.branch_name_kh',
+        )->where('performances.id',$id)->first();
+        return view('performance_appraisal.preview',compact('data'));
     }
 
     /**
@@ -120,7 +91,69 @@ class PerformanceAppraisalController extends Controller
     {
         //
     }
-
+    public function progress(Request $request){
+        $performance = Performance::with('PerformanceDetails')->where('employee_id',$request->employee_id)->where('id',$request->performance_id)->where('status','approve')->first();
+        // dd($datas);
+        
+        // foreach ($datas as $performance) {
+            foreach ($performance->PerformanceDetails as $detail) {
+                $lines = explode("\n", trim($detail->goal));
+                $goalType = $detail->goal_type; // Assume this field exists
+                $score = 1; // Default score
+        
+                // Example input values (replace with real input)
+                $inputValue = match ($goalType) {
+                    'date'     => $detail->goal_achieved,
+                    'percent'  => $detail->goal_achieved,
+                    'currency' => $detail->goal_achieved,
+                    'number'   => $detail->goal_achieved, // Assuming this is a numeric value
+                };
+                foreach ($lines as $index => $line) {
+                    [$min, $max] = preg_split('/\s+/', trim($line));
+                    // Normalize based on type
+                    switch ($goalType) {
+                        case 'date':
+                            $min = strtotime($min);
+                            $max = strtotime($max);
+                            $input = strtotime($request->progress);
+                            break;
+        
+                        case 'percent':
+                            $min = floatval(str_replace('%', '', $min));
+                            $max = floatval(str_replace('%', '', $max));
+                            $input = floatval(str_replace('%', '', $request->progress));
+                            break;
+        
+                        case 'currency':
+                            $min = floatval(preg_replace('/[^\d.]/', '', $min));
+                            $max = floatval(preg_replace('/[^\d.]/', '', $max));
+                            $input = floatval(preg_replace('/[^\d.]/', '', $request->progress));
+                            break;
+        
+                        case 'number':
+                        default:
+                            $min = floatval($min);
+                            $max = floatval($max);
+                            $input = floatval($request->progress);
+                            break;
+                    }
+        
+                    if ($input >= $min && $input <= $max) {
+                        $score = $index + 1;
+                        break;
+                    }
+                }
+                // $score_achieved = ($detail->weight * $score) / 100;
+                // echo("Type: $goalType | Input: $inputValue → Score: $score | Weight: $detail->weight | Score Achieved: $score_achieved <br>");
+            }
+        // }
+        dd($score);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Progress calculated successfully.',
+            'score' => $score,
+        ]);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -128,9 +161,12 @@ class PerformanceAppraisalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        dd($request->all());
+        $datas = Performance::with('PerformanceDetails')->where('employee_id',$request->employee_id)->where('id',$request->performance_id)->where('status','approve')->first();
+        dd($datas);
+        
     }
 
     /**

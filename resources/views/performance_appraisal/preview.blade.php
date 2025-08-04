@@ -3,36 +3,37 @@
     <div class="page-header">
         <div class="row">
             <div class="col">
-                <h3 class="page-title">@lang('lang.performance_review')</h3>
+                <h3 class="page-title">@lang('lang.performance_appraisal')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.performance_review')</li>
+                    <li class="breadcrumb-item active">@lang('lang.performance_appraisal')</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
-            <form action="{{ url('users/create') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-                @csrf
+            {{-- <form action="{{ url('performan') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                @csrf --}}
                 <div class="row">
                     <div class="col-sm-4">
                         <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" class="inv-logo" alt="">
                     </div>
+                    
                     <div class="col-md-4">
                         <h4 class="payslip-title">ទម្រង់វាយតម្លៃការងាររបស់បុគ្គលិកសាកល្បង</h4>
-                        <h5 class="payslip-title">ប្រចាំឆ្នាំ៖ ២០២២</h5>
+                        <h5 class="payslip-title">ប្រចាំឆ្នាំ៖ {{ \App\Helpers\Helper::toKhmerNumber(\Carbon\Carbon::parse($data->to_date)->format('Y')) }}</h5>
                     </div>
                 </div>
                 <div class="row" style="text-align: center;justify-content: center;justify-items: center;">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label><strong>(ពីថ្ងៃខែឆ្នាំ៖ 05/12/2022</strong></label>
+                            <label><strong>(ពីថ្ងៃខែឆ្នាំ៖ {{$data->from_date}}</strong></label>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label><strong>ដល់ថ្ងៃខែឆ្នាំ៖ 05/03/2023)</strong></label>
+                            <label><strong>ដល់ថ្ងៃខែឆ្នាំ៖ {{$data->to_date}})</strong></label>
                         </div>
                     </div>
                 </div>
@@ -67,14 +68,15 @@
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <table class="table table-bordered review-table mb-0">
+                            <table class="table table-bordered review-table mb-0" id="tbl_performance_appraisal">
                                 <thead>
                                     <tr>
                                         <th style="min-width: 350px;">(KPI)</th>
                                         <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
-                                        <th style="min-width: 350px;">គោលដៅ (Goal)</th>
+                                        <th style="min-width: 250px;">គោលដៅ (Goal)</th>
+                                        <th style="min-width: 250px;">Progress</th>
                                         <th>ទម្ងន់ (Weight %)</th>
-                                        <th style="min-width: 100px;">ពិន្ទុសម្រេចបាន (Score achieved)</th>
+                                        <th>ពិន្ទុសម្រេចបាន (Score Achieved)</th>
                                         <th>ពិន្ទុ (Score)</th>
                                         <th>បុគ្គលិកផ្ទាល់</th>
                                         <th>ប្រធានផ្ទាល់</th>
@@ -85,12 +87,13 @@
                                 @php
                                     $totalWeight = 0;
                                 @endphp
-                                <tbody id="tbl_performance">
+                                <tbody>
                                     @foreach ($data->titles as $item)
                                         <tr>
                                             <td colspan="2" class="text-center">
                                                 <input type="text" class="form-control" value="{{ $item->title ?? '' }}" required>
                                             </td>
+                                            <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
@@ -114,6 +117,7 @@
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
+                                                <td colspan="1" class="text-center"></td>
                                             </tr>
                                             
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
@@ -122,41 +126,55 @@
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
+                                                        <textarea rows="5" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
+                                                        <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" required>{{$Detailitem->goal}}</textarea>
+                                                        <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>
+                                                            <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
+                                                            <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
+                                                            <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
+                                                            <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
+                                                        </select>
+                                                    
+                                                        <div class="goal-input-wrapper mt-1">
+                                                            <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal" required>{{ $Detailitem->goal }}</textarea>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="text" class="form-control" id="progress" name="progress[]">
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="number" step="any" class="form-control score_achieved" placeholder="0" id="score_achieved" min="0" max="5">
+                                                        <input type="number" step="any" class="form-control score_achieved" name="score_achieved[]" placeholder="0" id="score_achieved" min="0" max="5" readonly>
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="number" step="any" class="form-control score" placeholder="0" min="0" id="score" readonly>
+                                                        <input type="number" step="any" class="form-control score" name="score[]" placeholder="0" min="0" id="score" readonly>
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="number" step="any" class="form-control personnel_score" placeholder="0" min="0" id="personnel_score" readonly>
+                                                        <input type="number" step="any" class="form-control personnel_score" name="personnel_score[]" placeholder="0" min="0" id="personnel_score" readonly>
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="number" step="any" class="form-control direct_chairman" placeholder="0" min="0" id="direct_chairman" readonly>
+                                                        <input type="number" step="any" class="form-control direct_chairman" name="direct_chairman[]" placeholder="0" min="0" id="direct_chairman" readonly>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here"></textarea>
+                                                        <textarea rows="5" class="form-control easy_difficult_factors" name="easy_difficult_factors[]" placeholder="Enter text here"></textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here"></textarea>
+                                                        <textarea rows="5" class="form-control comment" name="comment[]" placeholder="Enter text here"></textarea>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         @endforeach
                                         
                                         <tr class="total">
-                                            <td colspan="5" class="text-center">សរុប = </td>
+                                            <td colspan="4" class="text-center">សរុប = </td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center">
                                                 <input type="text" class="form-control tr_score" placeholder="0" id="tr_score" value="" readonly>
                                             </td>
@@ -173,7 +191,7 @@
                                 </tbody>
                                 <tbody>
                                     <tr>
-                                        <td colspan="3" class="text-center">សរុបរួម</td>
+                                        <td colspan="4" class="text-center">សរុបរួម</td>
                                         <td colspan="1" class="text-center">
                                             <input type="text" class="form-control" id="total-weight" placeholder="%" value="{{$totalWeight}}" readonly>
                                         </td>
@@ -195,7 +213,7 @@
                                 </tbody>
                                 <tbody>
                                     <tr>
-                                        <td colspan="3" class="text-center">% ពិន្ទុវាយតម្លៃតាមគោលដៅ</td>
+                                        <td colspan="4" class="text-center">% ពិន្ទុវាយតម្លៃតាមគោលដៅ</td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="3" class="text-center">
@@ -211,14 +229,16 @@
                 </div>
 
                 <div class="submit-section mb-2">
-                    <button type="submit" class="btn btn-primary submit-btn">
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
                             @lang('lang.loading') </span>
                         <span class="btn-txt">@lang('lang.submit')</span>
                     </button>
-                    <a href="{{ url('performance') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+                    <input type="text" name="performance_id" id="performance_id" value="{{ $data->id }}" hidden>
+                    <input type="text" name="employee_id" id="employee_id" value="{{ $data->employee_id }}" hidden>
+                    <a href="{{ url('performance-appraisal') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
                 </div>
-            </form>
+            {{-- </form> --}}
         </div>
     </div>
 @endsection
@@ -226,29 +246,115 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(document).ready(function () {
-        document.querySelectorAll('.score_achieved').forEach(input => {
-            input.addEventListener('input', function () {
-                let val = parseFloat(this.value);
-                if (val > 5) this.value = 5;
-                if (val < 0) this.value = 0;
-            });
-        });
-
-        // Trigger sum calculation when any score_achieved is changed
-        $(document).on('input', '.score_achieved', function () {
+        $(document).on('change', '#progress', function (e) {
             let $row = $(this).closest('tr');
-            let weight = parseFloat($row.find('.weight').val()) || 0;
-            let achieved = parseFloat($(this).val()) || 0;
+            let goal = $row.find('.goal').val();
+            let progress = $(this).val();
+            let goalType = $row.find('.goal_type').val();
+
+            let scoreAchieved = 0;
+
+            if (!goal || !progress) return;
+
+            const lines = goal.trim().split('\n');
+            let exceeded = false; // flag to track if progress exceeds max
+            let lastMax = null;   // store last max to compare
+
+            const getParsedValue = (val, type) => {
+                switch (type) {
+                    case 'date':
+                        return Date.parse(val);
+                    case 'percent':
+                        return parseFloat(val.replace('%', ''));
+                    case 'currency':
+                        return parseFloat(val.replace(/[^\d.]/g, ''));
+                    default:
+                        return parseFloat(val);
+                }
+            };
+
+            const input = getParsedValue(progress, goalType);
+
+            lines.forEach((element, index) => {
+                let [minRaw, maxRaw] = element.trim().split(/\s+/);
+                let min = getParsedValue(minRaw, goalType);
+                let max = getParsedValue(maxRaw, goalType);
+
+                lastMax = max;
+
+                if (!isNaN(input) && input >= min && input <= max) {
+                    scoreAchieved = index + 1;
+                    return false; // stop looping
+                }
+            });
+
+            // Check for exceeding max range
+            if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
+                scoreAchieved = (goalType === 'date') ? 1 : 5;
+            }
+
+            $row.find('.score_achieved').val(scoreAchieved);
 
             // Calculate and update scores
-            let score = (weight * achieved) / 100;
+            let weight = parseFloat($row.find('.weight').val()) || 0;
+            let score = (weight * scoreAchieved) / 100;
+
             $row.find('.score').val(score.toFixed(2));
             $row.find('.personnel_score').val(score.toFixed(2));
             $row.find('.direct_chairman').val(score.toFixed(2));
 
-            // Recalculate subtotals
             calculateSubtotals();
             calculateGrandTotals();
+        });
+
+
+        $(document).on('click', '#btnSubmit', function (e) {
+            e.preventDefault();
+
+            let token = $('meta[name="csrf-token"]').attr('content');
+            let performance_id = $('#performance_id').val();
+            let employee_id = $('#employee_id').val();
+
+            let rowsData = [];
+
+            $('#tbl_performance_appraisal tbody tr').each(function () {
+                const $row = $(this);
+
+                // Only collect rows that actually have a progress input (or use another required input)
+                if ($row.find('input[name="progress[]"]').length > 0) {
+                    rowsData.push({
+                        progress: $row.find('input[name="progress[]"]').val(),
+                        score_achieved: $row.find('input[name="score_achieved[]"]').val(),
+                        score: $row.find('input[name="score[]"]').val(),
+                        personnel_score: $row.find('input[name="personnel_score[]"]').val(),
+                        direct_chairman: $row.find('input[name="direct_chairman[]"]').val(),
+                        easy_difficult_factors: $row.find('textarea[name="easy_difficult_factors[]"]').val(),
+                        comment: $row.find('textarea[name="comment[]"]').val()
+                    });
+                }
+            });
+
+            console.log(rowsData);
+            
+            $.ajax({
+                type: 'PUT',
+                url: "{{ url('performance-appraisal') }}/" + performance_id,
+                data: {
+                    _token: token,
+                    performance_id,
+                    employee_id,
+                    rows: rowsData
+                },
+                dataType: 'JSON',
+                success: function (response) {
+                    console.log('Success:', response);
+                    alert('Data saved successfully.');
+                },
+                error: function (xhr) {
+                    console.log('Error:', xhr.responseJSON);
+                    alert('An error occurred while saving.');
+                }
+            });
         });
 
         function calculateSubtotals() {

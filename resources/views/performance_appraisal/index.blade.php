@@ -40,7 +40,40 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        @foreach ($data as $item)
+                                            <tr class="odd">
+                                                <td class="ids stuck-scroll-4">{{$item->id}}</td>
+                                                <td class="stuck-scroll-4"><a href="{{url("performance",$item->employee_id)}}">{{$item->number_employee}}</a></td>
+                                                <td class="stuck-scroll-4"><a href="">{{$item->employee_name_en}}</a></td>
+                                                <td>{{$item->branch_name_en}}</td>
+                                                <td>{{$item->dep_name}}</td>
+                                                <td>{{$item->positions_name}}</td>
+                                                <td>{{$item->from_date}}</td>
+                                                <td>{{$item->to_date}}</td>
+                                                <td>{{$item->type}}</td>
+                                                <td><span class="badge bg-inverse-success">40%</span></td>
+                                                <td>{{$item->total_score}}</td>
+                                                <td>{{$item->total_score_achieved}}</td>
+                                                <td>{{$item->overall_results}}</td>
+                                                <td>
+                                                    <div class="dropdown action-label">
+                                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fa fa-dot-circle-o text-success"></i>
+                                                            <span>{{ $item->status == 'prepare' ? 'Prepare' : 'Approved' }}</span>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                
+                                                <td class="text-end">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a class="dropdown-item" href="{{url("performance-appraisal",$item->id)}}"><i class="fa fa-regular fa-eye"></i> @lang("lang.preview")</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -49,62 +82,5 @@
                 </div>
             </div>
         </div>
-        <!-- Delete Performane Modal -->
-        <div class="modal custom-modal fade" id="delete_performance" role="dialog">
-            <div class="modal-dialog modal-sm modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="form-header">
-                            <h3>@lang('lang.deleted')!</h3>
-                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
-                        </div>
-                        <div class="modal-btn delete-action">
-                            <form action="{{url('performance/delete')}}" method="POST">
-                                @csrf
-                                <input type="hidden" name="id" class="e_id" value="">
-
-                                <div class="row">
-                                    <div class="submit-section" style="text-align: center">
-                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /Delete Performane Modal -->
     </div>
 @endsection
-@include('includs.script')
-@section('script')
-    <script>
-        $(document).ready(function() {
-            $('.performanceDelete').on('click',function(){
-                let id = $(this).data("id");
-                $('.e_id').val(id);
-            });
-            
-            $('#btnStatus a').on('click', function(e) {
-                e.preventDefault();
-                var id = $(this).data('id');
-                $.ajax({
-                    url: "{{ url('performance/status') }}/" + id,
-                    type: 'GET',
-                    success: function(response) {
-                        if (response.success) {
-                            toastr.success(response.message);
-                            location.reload();
-                        } else {
-                            toastr.error(response.message);
-                        }
-                    },
-                    error: function(xhr) {
-                        toastr.error(xhr.responseJSON.message);
-                    }
-                });
-            });
-        });
-    </script>

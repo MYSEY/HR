@@ -1314,8 +1314,6 @@ class EmployeePayrollController extends Controller
         if (permissionAccess("m4-s7","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        // $data = $this->payrollRepo->getAllPayrollStaffResign($request);
-        $yearLy = Carbon::now()->format('Y');
 
         if (request()->ajax()) {
             // Define the base query
@@ -1339,8 +1337,8 @@ class EmployeePayrollController extends Controller
                 'departments.name_english as depart_name_en',
                 'branchs.branch_name_kh',
                 'branchs.branch_name_en',
-            )->whereYear('payment_date','=',$yearLy);
-            $query ->when($request->employee_name, function ($query, $employee_name) {
+            );
+            $query->when($request->employee_name, function ($query, $employee_name) {
                 return $query->where('users.employee_name_en', 'LIKE', "%$employee_name%");
             })
             ->when($request->number_employee, function ($query, $number_employee) {
@@ -1351,30 +1349,30 @@ class EmployeePayrollController extends Controller
             })
             ->when($request->filter_month, function ($query, $filter_month) {
                 return $query->whereMonth('paryll_staff_resigns.payment_date', date('m', strtotime($filter_month)));
-            })->orderBy('users.number_employee', 'ASC');
+            });
 
             // **Search Handling**
-            // $searchValue = request()->input('search.value');
-            // if (!empty($searchValue)) {
-            //     $query->where(function ($q) use ($searchValue) {
-            //         $q->where('payroll_previews.id', 'like', "%{$searchValue}%")
-            //         ->orWhere('payroll_previews.number_employee', 'like', "%{$searchValue}%")
-            //         ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
-            //         ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
-            //         ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
-            //         ->orWhere('departments.name_english', 'like', "%{$searchValue}%")
-            //         ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%");
-            //     });
-            // }
+            $searchValue = request()->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('paryll_staff_resigns.id', 'like', "%{$searchValue}%")
+                    ->orWhere('users.number_employee', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                    ->orWhere('departments.name_english', 'like', "%{$searchValue}%")
+                    ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%");
+                });
+            }
 
             // Fetch paginated data
-            $recordsTotal = ParyllStaffResign::where('id', $request->id)->count();
+            $recordsTotal = ParyllStaffResign::count();
             $recordsFiltered = $query->count();
             // Apply pagination for the actual data retrieval
             $start = intval($request->input('start', 0));
             $limit = intval($request->input('length', 10));
-            $data = $query->offset($start)->limit($limit)->get();
-
+            $data = $query->offset($start)->limit($limit)->orderBy('users.number_employee', 'ASC')->get();
+            
             // Return JSON response
             return response()->json([
                 'draw' => intval($request->input('draw')),  // Optional: for client-side tracking
@@ -1550,7 +1548,7 @@ class EmployeePayrollController extends Controller
                                 $query->where('payment_date', '>=',$currentMonth);
                             })->pluck('total_fdc1')->avg();
                             
-                            $totalSalaryReceive = ($totalSalary / 22) * 7.5;
+                            $totalSalaryReceive = (round($totalSalary,2) / 22) * 7.5;
                             $totalGrossExchange = 2000000 / $request->exchange_rate;
                             if ($totalSalaryReceive > $totalGrossExchange) {
                                 $taxExemptionSalary = $totalGrossExchange;

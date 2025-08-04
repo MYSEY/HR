@@ -722,6 +722,7 @@ return[
     "performance_management"=>"Performance Management",
 	"performance"=>"Performance",
 	"performance_review"=>"Performance Review",
+	"performance_appraisal"=>"Performance Appraisal",
     "qty"=>"Qty",
     "quantity"=>"Quantity",
     "review"=>"Review",

@@ -225,6 +225,7 @@ class EmployeeRepository extends BaseRepository
                     'udc_end_date'  => $udc_end_date,
                     'id_number_nssf'  => $request->id_number_nssf,
                     'email'  => $request->email,
+                    'emp_status'  => $request->emp_status,
                     'branch_id'  => $request->branch_id,
                     'unit'  => $request->unit,
                     'level'  => $request->level,

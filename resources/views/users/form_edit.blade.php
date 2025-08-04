@@ -289,6 +289,16 @@
                             </div>
                         </div>
                     @endif
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="">@lang('lang.status')</label>
+                                <select class="form-control select floating" id="e_emp_status" name="emp_status" value="{{old('emp_status')}}">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     
 
                     {{-- Bank Infor --}}
@@ -757,6 +767,28 @@
                             }));
                         });
                     }
+                    $("#e_emp_status").empty();
+
+                    // Define the mapping for statuses
+                    const statusOptions = [
+                        { value: 1, label: "FDC-1" },
+                        { value: 10, label: "FDC-2" }, // Show before UDC (value 2)
+                        { value: 2, label: "UDC" },
+                        { value: 3, label: "Resignation" },
+                        { value: 4, label: "Termination" },
+                        { value: 5, label: "Death" },
+                        { value: 6, label: "Retired" },
+                        { value: 7, label: "Lay Off" },
+                        { value: 8, label: "Suspension" },
+                        { value: 9, label: "Failed Probation" }
+                    ];
+                    let selectedStatus = parseInt(response.success.emp_status);
+
+                    $.each(statusOptions, function(_, option) {
+                        const selected = (selectedStatus === option.value) ? 'selected' : '';
+                        $("#e_emp_status").append(`<option value="${option.value}" ${selected}>${option.label}</option>`);
+                    });
+
                     if (response.success.spouse == 1) {
                         $("#e_spouse").append('<option selected value="1">Yes</option> <option value="0">No</option>');
                     } else {
