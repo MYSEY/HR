@@ -22,6 +22,7 @@ class PerformanceDetail extends Model
         'action_plan',
         'goal',
         'weight',
+        'progress',
         'score_achieved',
         'score',
         'score_live_staff',

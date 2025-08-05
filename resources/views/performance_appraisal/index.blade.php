@@ -31,9 +31,9 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">@lang('lang.from_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">@lang('lang.to_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">@lang('lang.type')</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Total Percentage(%)</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Total Score</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Total Score achieved</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">ពិន្ទុ</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">បុគ្គលិកផ្ទាល់</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">ប្រធានផ្ទាល់</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Overall Results</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.status')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
@@ -51,9 +51,9 @@
                                                 <td>{{$item->from_date}}</td>
                                                 <td>{{$item->to_date}}</td>
                                                 <td>{{$item->type}}</td>
-                                                <td><span class="badge bg-inverse-success">40%</span></td>
-                                                <td>{{$item->total_score}}</td>
-                                                <td>{{$item->total_score_achieved}}</td>
+                                                <td id="overall_results"><span class="badge bg-inverse-success">{{$item->total_score}}</span></td>
+                                                <td><span class="badge bg-inverse-success">{{$item->total_score_live_staff}}</span></td>
+                                                <td><span class="badge bg-inverse-success">{{$item->total_score_direct_chairman}}</span></td>
                                                 <td>{{$item->overall_results}}</td>
                                                 <td>
                                                     <div class="dropdown action-label">
@@ -84,3 +84,35 @@
         </div>
     </div>
 @endsection
+@include('includs.script')
+
+<script>
+    $(document).ready(function () {
+        var overall_results = $("#overall_results").val();
+        console.log(overall_results); 
+    });
+
+    // function updateOverallResults(totalScore) {
+    //     var overallResults = '';
+    //     var color = '';
+    //     if (totalScore === 0) {
+    //         overallResults = '';
+    //     } else if (totalScore < 2) {
+    //         overallResults = 'ខ្សោយ_(ក្រោមផែនការ២០%)';
+    //         color = 'red';
+    //     } else if (totalScore <= 2.99) {
+    //         overallResults = 'ត្រូវកែលម្អ_(ក្រោមផែនការ១០%)';
+    //         color = 'orange';
+    //     } else if (totalScore <= 3.99) {
+    //         overallResults = 'ធម្យម_(អនុវត្តន៍ការងារគ្រប់ផែនការងារ)';
+    //         color = 'info';
+    //     } else if (totalScore <= 4.99) {
+    //         overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
+    //         color = 'lightgreen';
+    //     } else {
+    //         overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
+    //         color = 'green';
+    //     }
+    //     $('#overall_results').val(overallResults).css('color', color);
+    // }
+</script>

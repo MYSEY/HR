@@ -18,7 +18,6 @@ class Performance extends Model
         'from_date',
         'to_date',
         'total_weight',
-        'total_score_achieved',
         'total_score',
         'total_score_live_staff',
         'total_score_direct_chairman',

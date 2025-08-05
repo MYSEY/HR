@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
 use App\Models\Performance;
 use Illuminate\Http\Request;
+use App\Models\PerformanceDetail;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 
 class PerformanceAppraisalController extends Controller
 {
@@ -30,7 +34,6 @@ class PerformanceAppraisalController extends Controller
             'branchs.branch_name_kh',
         )->where('performances.status', 'approve');
         $data = $query->get();
-        
         return view('performance_appraisal.index',compact('data'));
     }
 
@@ -163,10 +166,36 @@ class PerformanceAppraisalController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request->all());
-        $datas = Performance::with('PerformanceDetails')->where('employee_id',$request->employee_id)->where('id',$request->performance_id)->where('status','approve')->first();
-        dd($datas);
-        
+        try {
+            DB::beginTransaction();
+            Performance::where('employee_id',$request->employee_id)->where('id',$request->id)->update([
+                'total_score'  => $request->total_score,
+                'total_score_live_staff'  => $request->total_personnel_score,
+                'total_score_direct_chairman'  => $request->total_direct_chairman,
+                'overall_results'  => $request->overall_results,
+                'updated_by'  => Auth::id(),
+            ]);
+
+            foreach ($request->performanceDetail as $value) {
+                PerformanceDetail::where('id',$value['performance_id'])->update([
+                    'progress' => $value['progress'],
+                    'score_achieved' => $value['score_achieved'],
+                    'score' => $value['score'],
+                    'score_live_staff' => $value['personnel_score'],
+                    'score_direct_chairman' => $value['direct_chairman'],
+                    'easy_difficult_factors' => $value['easy_difficult_factors'],
+                    'comment' => $value['comment'],
+                    'updated_by' => Auth::id(),
+                ]);
+            }
+            DB::commit();
+            return response()->json([
+                'message' => 'successfully'
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Performance created fail.','Error');
+        }
     }
 
     /**

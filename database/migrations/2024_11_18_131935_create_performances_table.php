@@ -21,10 +21,9 @@ return new class extends Migration
             $table->date('to_date');
             $table->integer('total_weight')->default(0);
             $table->decimal('total_score')->default(0);
-            $table->decimal('total_score_achieved')->default(0);
-            $table->decimal('overall_results')->default(0);
             $table->decimal('total_score_live_staff')->default(0);
             $table->decimal('total_score_direct_chairman')->default(0);
+            $table->string('overall_results')->nullable();
             $table->string('type')->nullable();
             $table->string('status')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
