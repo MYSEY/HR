@@ -24,6 +24,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
+use App\Mail\SendEmail;
+use App\Models\mail as ModelsMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+
 
 class ExpenseRequestController extends Controller
 {
@@ -39,26 +44,31 @@ class ExpenseRequestController extends Controller
         if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-        $datas = ExpenseRequest::with(["requestBy","approveBy","locationDetails","departments", "createdBy"])->where("created_by", Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $datas = ExpenseRequest::with(["requestBy","locationDetails","departments", "createdBy"])->where("created_by", Auth::user()->id)->orderBy('id', 'DESC')->get();
         $user = Auth::user();
-        $dataAsign = ExpenseRequest::with(['requestBy', 'approveBy', 'locationDetails', 'departments', 'createdBy'])
+        $dataAsign = ExpenseRequest::with(['requestBy', 'locationDetails', 'departments', 'createdBy'])
             ->where('status', '!=', "rejected")
             ->whereNot('created_by', $user->id)
             ->where(function ($query) use ($user) {
-                $query->where(function ($q) use ($user) {
-                    $q->where('status', 'pending_approve')
-                    ->where('approve_by', $user->id);
-                })->orWhere(function ($q) use ($user) {
-                    if($user->branch->abbreviations == "HQ"){
-                        $q->where('status', '!=', 'pending_approve')
-                        ->where('location_review', $user->department_id)
-                        ->whereJsonContains('position_review', $user->position_id);
-                    }else{
-                        $q->where('status', '!=', 'pending_approve')
-                        ->where('location_review', $user->branch_id)
-                        ->whereJsonContains('position_review', $user->position_id);
-                    }
-                });
+                if ($user->RolePermission != "admin" && $user->RolePermission != "developer") {
+                    $query->where(function ($q) use ($user) {
+                        $q->where('status', 'pending_approve')
+                        ->whereJsonContains('approve_by', (string)$user->id);
+                        // ->whereJsonContains('approve_by', $user->id);
+                    })
+                    ->orWhere(function ($q) use ($user) {
+                        if($user->branch->abbreviations == "HQ"){
+                            $q->where('status', '!=', 'pending_approve')
+                            ->where('location_review', $user->department_id)
+                            ->whereJsonContains('position_review', $user->position_id);
+                        }else{
+                            $q->where('status', '!=', 'pending_approve')
+                            ->where('location_review', $user->branch_id)
+                            ->whereJsonContains('position_review', (string)$user->position_id);
+                            // ->whereJsonContains('position_review', $user->position_id);
+                        }
+                    });
+                }
             })
             ->orderBy('id', 'DESC')
             ->get();
@@ -72,7 +82,7 @@ class ExpenseRequestController extends Controller
      */
     public function create()
     {
-        $FnApproval = FnApproval::with(["employee","location"])->get();
+        $FnApproval = FnApproval::with(["location"])->get();
         $locations = Branchs::get();
         $taxWHT = FnTaxRate::where('tax_type', 1)->get();
         $taxeFBT = FnTaxRate::where('tax_type', 2)->get();
@@ -90,7 +100,7 @@ class ExpenseRequestController extends Controller
 
     public function createTax()
     {
-        $FnApproval = FnApproval::with(["employee","location"])->get();
+        $FnApproval = FnApproval::with(["location"])->get();
         $locations = Department::get();
         $FnPaymentTerms = FnPaymentTerm::get();
         return view('FN_tax_expenses.form_request', compact([
@@ -130,6 +140,45 @@ class ExpenseRequestController extends Controller
         return $positionReview;
     }
 
+    function sendEmail($dataSend, $emailUserRequest){
+        $datasSendEmail = [
+            'data'              => $dataSend["data"],
+            'type'              => "expense",
+        ];
+        Mail::mailer('mailer2')->to("thyvan.vuth@camma.com.kh")->queue(new SendEmail($datasSendEmail, true));
+        $condiction = $dataSend["condiction"];
+        // if($dataSend["data"]["status"] == "reject" || $dataSend["data"]["status"] == "approve"){
+        //     Mail::to($emailUserRequest)->queue(new SendEmail($datasSendEmail, true));
+        // }else{
+        //     $userALertEmail =  User::whereIn("position_id", $condiction["position_id"])
+        //         ->when($condiction["department_id"], function ($query, $department_id) {
+        //             $query->where('department_id', $department_id);
+        //         })
+        //         ->when($condiction["branch_id"], function ($query, $branch_id) {
+        //             $query->where('branch_id', $branch_id);
+        //         })
+        //         ->when($condiction["approve_by"], function ($query, $approve_by) {
+        //             $query->whereIn('id', $approve_by);
+        //         })
+        //         ->when($condiction["request_by"], function ($query, $request_by) {
+        //             $query->where('id', $request_by);
+        //         })
+        //         ->select(
+        //             'number_employee',
+        //             'department_id',
+        //             'email',
+        //             'branch_id'
+        //         )
+        //     ->get();
+        //     $data = [];
+        //     foreach ($userALertEmail as $user) {
+        //         if($user->email != $emailUserRequest){
+        //             $data[] = $user->email;
+        //             Mail::mailer('mailer2')->to($user->email)->queue(new SendEmail($datasSendEmail, true));
+        //         }
+        //     }
+        // }
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -156,6 +205,27 @@ class ExpenseRequestController extends Controller
                 "type"=> 1,
                 "amount"=> $amount,
             ];
+            $dataSendEmail = [
+                "condiction" => [
+                    "department_id"=> "",
+                    "branch_id"=> "",
+                    "position_id"=> "",
+                    "approve_by"=> "",
+                    "request_by"=> "",
+                ],
+                "data" =>[
+                    "title" => "សំណើស្នើសុំចំណាយ",
+                    "status" => "pending",
+                    "tracking_id" => "",
+                    "date" => "",
+                    "subject" => "",
+                    "review" => 0,
+                    "request_by" => "",
+                    "reason" => "",
+                    "amount_usd" => 0,
+                    "amount_kh" => 0,
+                ]
+            ];
            
             $data = $request->all();
             if(Auth::user()->branch->abbreviations == "HQ"){
@@ -165,6 +235,10 @@ class ExpenseRequestController extends Controller
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
+                if (count($positionReview->id_positions) > 0) {
+                    $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                    $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
+                }
             }else{
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::lovelReview($dataCheckLevelView);
@@ -172,8 +246,17 @@ class ExpenseRequestController extends Controller
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
                 $data['location_review']    =  $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
+                if (count($positionReview->id_positions) > 0) {
+                    if($positionReview->department_review){
+                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                        $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
+                    }else{
+                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                        $dataSendEmail["condiction"]["branch_id"] = $data['location_review'];
+                    }
+                }
             }
-            
+
             if ($request->hasFile('fn_invoice')) {
                 $autoSerial = $this->generateSerialCode(Carbon::today())['serialref'];
                 $data['reference'] = $request->fn_reference ? $request->fn_reference . ',' . $autoSerial : $autoSerial;
@@ -189,11 +272,22 @@ class ExpenseRequestController extends Controller
             } else {
                 $data['reference'] = $request->fn_reference;
             }
+
+            // *** Process flow send alert email **/
+            $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
+            $dataSendEmail["data"]["subject"] = $request->subject;
+            $dataSendEmail["data"]["amount_usd"] = $request->ge_total_amount_usd;
+            $dataSendEmail["data"]["amount_kh"] = $request->ge_total_amount_riel;
+            $dataSendEmail["data"]["request_by"] = Auth::user()->employee_name_kh;
+            self::sendEmail($dataSendEmail, Auth::user()->email);
+            //*** end **/
+
             $data['tracking_id']        = $this->generateExpenseCode(Carbon::today())['tracking_id'];
             $data['payment_term']       = $request->paymentTerms;
             $data['status']             = 'pending';
             $data['position_review']    = json_encode($positionReview->id_positions);
             $data['review_type']        = $positionReview->type;
+            $data['approve_by']         = json_encode(explode(",", $request->approve_by));
             $data['request_by']         = Auth::user()->id;
             $data['date_request']       = Carbon::createFromDate()->format('Y-m-d H:i');
             $data['created_by']         = Auth::user()->id;
@@ -250,7 +344,7 @@ class ExpenseRequestController extends Controller
      */
     public function edit(Request $request)
     {
-        $FnApproval = FnApproval::with(["employee","location"])->get();
+        $FnApproval = FnApproval::with(["location"])->get();
         $locations = Branchs::get();
         $taxWHT = FnTaxRate::where('tax_type', 1)->get();
         $taxeFBT = FnTaxRate::where('tax_type', 2)->get();
@@ -275,7 +369,7 @@ class ExpenseRequestController extends Controller
     }
     public function editTax(Request $request)
     {
-        $FnApproval = FnApproval::with(["employee","location"])->get();
+        $FnApproval = FnApproval::with(["location"])->get();
         $locations = Department::get();
         $FnPaymentTerms = FnPaymentTerm::get();
         $FnRegularExspenses = FnRegularExspense::where("status", "1")->where("is_contactual", "1")->get();
@@ -320,6 +414,27 @@ class ExpenseRequestController extends Controller
                 "type"=> 1,
                 "amount"=> $amount,
             ];
+            $dataSendEmail = [
+                "condiction" => [
+                    "department_id"=> "",
+                    "branch_id"=> "",
+                    "position_id"=> "",
+                    "approve_by"=> "",
+                    "request_by"=> "",
+                ],
+                "data" =>[
+                    "title" => "សំណើស្នើសុំចំណាយ",
+                    "status" => "pending",
+                    "tracking_id" => "",
+                    "date" => "",
+                    "subject" => "",
+                    "review" => 0,
+                    "request_by" => "",
+                    "reason" => "",
+                    "amount_usd" => 0,
+                    "amount_kh" => 0,
+                ]
+            ];
             $data = ExpenseRequest::find($request->id);
             if(Auth::user()->branch->abbreviations == "HQ"){
                 $dataCheckLevelView["model_review"] = (int) Auth::user()->department_id;
@@ -328,6 +443,10 @@ class ExpenseRequestController extends Controller
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
+                if (count($positionReview->id_positions) > 0) {
+                    $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                    $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
+                }
             }else{
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::lovelReview($dataCheckLevelView);
@@ -335,6 +454,15 @@ class ExpenseRequestController extends Controller
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
+                if (count($positionReview->id_positions) > 0) {
+                    if($positionReview->department_review){
+                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                        $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
+                    }else{
+                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                        $dataSendEmail["condiction"]["branch_id"] = $data['location_review'];
+                    }
+                }
             }
             $oldId = ExpenseRequestHistory::where("expense_id", $request->id)->count();
             $dataHistory = $data->toArray();
@@ -371,9 +499,12 @@ class ExpenseRequestController extends Controller
                                 $expense->delete(); // soft or hard delete depending on model
                             }
                         }
-                        $data['reference'] = $request->fn_reference; 
+                        $data['reference'] = $request->fn_reference;
+                    }else{
+                        $data['reference'] = $request->fn_reference ? $request->fn_reference . ',' . $dataReference->serialref : $dataReference->serialref; 
                     }
                 }
+                 
             }else{
                 if ($request->hasFile('fn_invoice')) {
                     $image = $request->file('fn_invoice');
@@ -463,7 +594,8 @@ class ExpenseRequestController extends Controller
             }
             $data['position_review']                = json_encode($positionReview->id_positions);
             $data['review_type']                    = $positionReview->type;
-            $data["approve_by"]                     = $request->approve_by;
+            $data['approve_by']                     = json_encode(explode(",", $request->approve_by));
+            // $data["approve_by"]                     = $request->approve_by;
             $data["type"]                           = $request->type;
             $data["expense_type"]                   = $request->expense_type;
             $data["kind_regard"]                    = $request->kind_regard;
@@ -488,6 +620,14 @@ class ExpenseRequestController extends Controller
             $data["reason"]                         = "";
             $data['updated_by']                     = Auth::user()->id;
             $data->save();
+            // *** function send email **/
+            $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
+            $dataSendEmail["data"]["subject"] = $request->subject;
+            $dataSendEmail["data"]["amount_usd"] = $request->ge_total_amount_usd;
+            $dataSendEmail["data"]["amount_kh"] = $request->ge_total_amount_riel;
+            $dataSendEmail["data"]["request_by"] = Auth::user()->employee_name_kh;
+            self::sendEmail($dataSendEmail, Auth::user()->email);
+            /// *** end **/
             DB::commit();
             return response()->json(['message' => 'Update successfully.', 'status'=>200]);
         }catch(\Exception $e){
@@ -516,21 +656,55 @@ class ExpenseRequestController extends Controller
                 "type"=> 1,
                 "amount"=> $amount,
             ];
+            $dataSendEmail = [
+                "condiction" => [
+                    "department_id"=> "",
+                    "branch_id"=> "",
+                    "position_id"=> "",
+                    "approve_by"=> "",
+                    "request_by"=> "",
+                ],
+                "data" =>[
+                    "title" => "សំណើស្នើសុំចំណាយ",
+                    "status" => "pending",
+                    "tracking_id" => "",
+                    "date" => "",
+                    "subject" => "",
+                    "review" => 0,
+                    "request_by" => "",
+                    "reason" => "",
+                    "amount_usd" => 0,
+                    "amount_kh" => 0,
+                ]
+            ];
             $data = ExpenseRequest::find($request->id);
             if(Auth::user()->branch->abbreviations == "HQ"){
                 $dataCheckLevelView["model_review"] = Auth::user()->department_id;
                 $positionReview = self::lovelReview($dataCheckLevelView);
+                if(!$positionReview){
+                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
+                if (count($positionReview->id_positions) > 0) {
+                    $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                    $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
+                }
             }else{
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::lovelReview($dataCheckLevelView);
+                if(!$positionReview){
+                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
-            }
-            if(!$positionReview){
-                return response()->json([
-                    'error'=>'lang.please_to_set_up_lovel_review_request_expense',
-                    'status'=>404,
-                ]);
+                if (count($positionReview->id_positions) > 0) {
+                    if($positionReview->department_review){
+                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                        $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
+                    }else{
+                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                        $dataSendEmail["condiction"]["branch_id"] = $data['location_review'];
+                    }
+                }
             }
 
             // ***  block create history *** //
@@ -653,7 +827,8 @@ class ExpenseRequestController extends Controller
                     FnDetailLocation::insert($locations);
                 }
             }
-            $data["approve_by"]                     = $request->approve_by;
+            $data['approve_by']                     = json_encode(explode(",", $request->approve_by));
+            // $data["approve_by"]                     = $request->approve_by;
             $data["kind_regard"]                    = $request->kind_regard;
             $data["subject"]                        = $request->subject;
             $data["reason_subject"]                 = $request->reason_subject;
@@ -675,6 +850,14 @@ class ExpenseRequestController extends Controller
             $data['position_review']                = json_encode($positionReview->id_positions);
             $data['updated_by']                     = Auth::user()->id;
             $data->save();
+            // *** function send email **/
+            $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
+            $dataSendEmail["data"]["subject"] = $request->subject;
+            $dataSendEmail["data"]["amount_usd"] = $request->ge_total_amount_usd;
+            $dataSendEmail["data"]["amount_kh"] = $request->ge_total_amount_riel;
+            $dataSendEmail["data"]["request_by"] = Auth::user()->employee_name_kh;
+            self::sendEmail($dataSendEmail, Auth::user()->email);
+            /// *** end **/
             DB::commit();
             return response()->json(['message' => 'Update successfully.', 'status'=>200]);
         }catch(\Exception $e){
@@ -698,11 +881,42 @@ class ExpenseRequestController extends Controller
                 return response()->json(['message' => 'Already reviewed please to reload page.', 'status'=>400]);
             }
             $type =  $data->review_type + 1;
-            if ($data->approve_by == Auth::user()->id) {
+            $dataSendEmail = [
+                "condiction" => [
+                    "department_id"=> "",
+                    "branch_id"=> "",
+                    "position_id"=> "",
+                    "approve_by"=> "",
+                    "request_by"=> "",
+                ],
+                "data" =>[
+                    "title" => "សំណើស្នើសុំចំណាយត្រូវបានបដិសេធ",
+                    "status" => "pending",
+                    "tracking_id" => "",
+                    "date" => "",
+                    "subject" => "",
+                    "review" => 0,
+                    "request_by" => "",
+                    "reason" => "",
+                    "amount_usd" => 0,
+                    "amount_kh" => 0,
+                ]
+            ];
+            $approveByArray = json_decode($data->approve_by);
+            if (in_array(Auth::user()->id, $approveByArray)) {
+            // if ($data->approve_by == Auth::user()->id) {
+
                 $data['position_review']    = [];
                 $data['review_type']        = null;
                 $data['status']             = 'approved';
+                $data['final_approve_by']   = Auth::user()->id;
                 $data['date_approve']       = ($request->approve_date ? $request->approve_date : Carbon::createFromDate()->format('Y-m-d H:i'));
+                if ($data->requestBy && $data->requestBy->email) {
+                    $dataSendEmail["data"]["title"]= "សំណើស្នើសុំចំណាយត្រូវបានអនុម័ត";
+                    $dataSendEmail["data"]["tracking_id"]= $data->tracking_id;
+                    $dataSendEmail["data"]["status"]= "approve";
+                    self::sendEmail($dataSendEmail, $data->requestBy->email);
+                }
             }else{
                 $exchange = FNExchangeRate::first();
                 $amount = 0;
@@ -732,8 +946,19 @@ class ExpenseRequestController extends Controller
                 if ($lovelReview) {
                     if ($branch->abbreviations != "HQ") {
                         $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->branch_id;
+                        if (count($lovelReview->id_positions) > 0) {
+                            if($lovelReview->department_review){
+                                $dataSendEmail["condiction"]["position_id"] = $lovelReview->id_positions;
+                                $dataSendEmail["condiction"]["department_id"] = $lovelReview->department_review;
+                            }else{
+                                $dataSendEmail["condiction"]["position_id"] = $lovelReview->id_positions;
+                                $dataSendEmail["condiction"]["branch_id"] = $data->requestBy->branch_id;
+                            }
+                        }
                     }else{
                         $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->department_id;
+                        $dataSendEmail["condiction"]["position_id"] = $lovelReview->id_positions;
+                        $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
                     }
                     $data['status']             = 'pending';
                     $data['position_review']    = json_encode($lovelReview->id_positions);
@@ -742,9 +967,11 @@ class ExpenseRequestController extends Controller
                     $data['position_review']    = [];
                     $data['review_type']        = null;
                     $data['status']             = 'pending_approve';
+                    $dataSendEmail["condiction"]["approve_by"]= $data->approve_by;
                 }
+                self::sendEmail($dataSendEmail, Auth::user()->email);
             }
-           ExpenseRequestHistory::create($dataHistory);
+            ExpenseRequestHistory::create($dataHistory);
             $data["reason"]                 = $request->remark;
             $data['updated_by']             = Auth::user()->id;
             $data->save();
@@ -769,6 +996,27 @@ class ExpenseRequestController extends Controller
             }
             $amount = ($data->ge_total_cost_usd + $ge_total_cost_riel);
 
+            $dataSendEmail = [
+                "condiction" => [
+                    "department_id"=> "",
+                    "branch_id"=> "",
+                    "position_id"=> "",
+                    "approve_by"=> "",
+                    "request_by"=> "",
+                ],
+                "data" =>[
+                    "title" => "សំណើស្នើសុំចំណាយត្រូវបានបដិសេធ",
+                    "status" => "reject",
+                    "tracking_id" => "",
+                    "date" => "",
+                    "subject" => "",
+                    "review" => 0,
+                    "request_by" => "",
+                    "reason" => "",
+                    "amount_usd" => 0,
+                    "amount_kh" => 0,
+                ]
+            ];
             $dataHistory = $data->toArray();
             $dataHistory['expense_id'] = $data->id;
             $dataHistory['tracking_id'] = $data->tracking_id . "@".$oldId;
@@ -793,6 +1041,14 @@ class ExpenseRequestController extends Controller
                 $lovelReview = self::lovelReview($dataCheckLevelView);
                 $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->branch_id;
             };
+            
+            $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
+            $dataSendEmail["data"]["reason"] = $request->remark;
+            $dataSendEmail["data"]["review"] = $data->review_type;
+            if ($data->requestBy && $data->requestBy->email) {
+                self::sendEmail($dataSendEmail, $data->requestBy->email);
+            }
+           
             ExpenseRequestHistory::create($dataHistory);
             $data['status']             = 'rejected';
             $data['reject_review_type'] = $data->review_type;

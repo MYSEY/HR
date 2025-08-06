@@ -8,7 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *php artisan migrate:refresh --path=database/migrations/2025_03_20_110806_create_fn_approvals_table.php
+     * php artisan migrate:refresh --path=database/migrations/2025_03_20_110806_create_fn_approvals_table.php
      * @return void
      */
     public function up()
@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('fn_approvals', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->integer('employee_id');
+            $table->json('employee_id');
             $table->integer('location_id');
             $table->longText('description')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();

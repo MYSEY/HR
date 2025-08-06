@@ -27,17 +27,6 @@ class SendEmail extends Mailable
         $this->btn_approve = $btn_approve;
     }
 
-    /**
-     * Get the message envelope.
-     *
-     * @return \Illuminate\Mail\Mailables\Envelope
-     */
-    public function envelope()
-    {
-        return new Envelope(
-            subject: 'HRMS Email',
-        );
-    }
    /**
      * Build the message.
      *
@@ -47,28 +36,26 @@ class SendEmail extends Mailable
     {
         $data = $this->mailData;
         $btn_approve = $this->btn_approve;
-        return $this->view('mail.mail-text',['data'=>$data, 'btn_approve'=>$btn_approve]);
+        if (isset($this->mailData["type"]) && $this->mailData["type"] === 'expense') {
+            $fromAddress = env('MAIL_FROM_ADDRESS');
+            $fromName = env('MAIL_FROM_NAME_2');
+
+            return $this->from($fromAddress, $fromName)
+                        ->subject('Expense Alert')
+                        ->view('mail.mail-text-expense', [
+                            'data' => $data,
+                            'btn_approve' => $btn_approve
+                        ]);
+        } else {
+            $fromAddress = env('MAIL_FROM_ADDRESS');
+            $fromName = env('MAIL_FROM_NAME');
+
+            return $this->from($fromAddress, $fromName)
+                        ->subject('General Alert')
+                        ->view('mail.mail-text', [
+                            'data' => $data,
+                            'btn_approve' => $btn_approve
+                        ]);
+        }
     }
-
-    // /**
-    //  * Get the message content definition.
-    //  *
-    //  * @return \Illuminate\Mail\Mailables\Content
-    //  */
-    // public function content()
-    // {
-    //     return new Content(
-    //         view: 'mail.mail-text',
-    //     );
-    // }
-
-    // /**
-    //  * Get the attachments for the message.
-    //  *
-    //  * @return array
-    //  */
-    // public function attachments()
-    // {
-    //     return [];
-    // }
 }

@@ -30,10 +30,12 @@ $(function(){
                 let value = formGroup.attr("data-select2-id");
                 let requeredField = formGroup.find(".hr-select2-option").val();
                 let requered = formGroup.find(".requered").prop('required');
-                if(!value && requered){ 
+                if(!value && requered){
                     formGroup.find(".select2-selection--single").css("border-color","#dc3545");
+                    formGroup.find(".select2-selection--multiple").css("border-color","#dc3545");
                 }else if (!requeredField && requered) {
                     formGroup.find(".select2-selection--single").css("border-color","#dc3545");
+                    formGroup.find(".select2-selection--multiple").css("border-color","#dc3545");
                 }
             });
             $(".loading-icon").css('display', 'block');

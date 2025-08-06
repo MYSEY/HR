@@ -100,7 +100,7 @@
                                         <select class="form-control requered fn_require hr-select2-option" id="fn_approve" name="fn_approve" required>
                                             <option selected disabled value=""> Please select </option>
                                             @foreach ($FnApproval as $item)
-                                                <option value="{{$item->title}}" data-description="{{$item->description}}" data-approved="{{$item->employee_id}}">{{$item->title}}</option>
+                                                <option value="{{$item->title}}" data-description="{{$item->description}}" data-approved="{{json_encode($item->employee_id)}}">{{$item->title}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -132,20 +132,20 @@
                             <div class="row">
                                 <label class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-10">
-                                    <div class="form-group" id="view-Regular_reference" style="display: none">
-                                        <div class="input-group">
-                                            <select class="form-control form-select" id="fn_reference">
-                                                <option disabled selected>-- Select --</option>
+                                    <div class="form-group hr-form-group-fn-select2" id="view-Regular_reference" style="display: none">
+                                        {{-- <div class="input-group"> --}}
+                                            <select class="form-control hr-select2-option fn_reference_require" id="fn_reference">
+                                                <option value="">-- Select --</option>
                                                 @foreach ($FnRegularExspenses as $item)
                                                     <option value="{{$item->serialref}}" data-file="{{ $item->file_upload ? url('uploads/FnRegularExspenses/' . $item->file_upload) : '' }}">
                                                         {{ $item->serialref." ".  $item->description}}
                                                     </option>
                                                 @endforeach
                                             </select>
-                                            <button id="reviewBtn" style="display: none" class="btn btn-sm btn-outline-secondary" type="button">
-                                                <a id="reviewLink" href="#" target="_blank" style="text-decoration: none; color: inherit;">Review File</a>
+                                            <button id="reviewBtn" style="display: none;" class="btn btn-sm btn-outline-secondary" type="button">
+                                                <a id="reviewLink" href="#" target="_blank" style="text-decoration: none; color: inherit;">Review file regular</a>
                                             </button>
-                                        </div>
+                                        {{-- </div> --}}
                                     </div>
                                     <div class="form-group input-group" id="view-Irregular_reference">
                                         <button class="btn btn-outline-secondary" type="button"

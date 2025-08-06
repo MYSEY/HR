@@ -17,6 +17,7 @@ use App\Models\LeaveAllocation;
 use App\Models\RecruitmentPlan;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use App\Models\ExpenseRequest;
 use App\Repositories\Admin\EmployeeRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,34 @@ class DashboadController extends Controller
         $holiday = Holiday::where('from','=',Carbon::now()->addDays(2))->get(['title_kh','from']);
         $LeaveRequest = LeaveRequest::where('employee_id',Auth::user()->id)->orderBy('id', 'DESC')->first();
         $data = LeaveAllocation::where('employee_id',Auth::user()->id)->first();
-        return view('dashboads.employee',compact('data','holiday','LeaveRequest'));
+        $user = Auth::user();
+        $dataExpenseAsign = ExpenseRequest::where('status', '!=', "rejected")
+            ->whereNot('created_by', $user->id)
+            ->where(function ($query) use ($user) {
+                if ($user->RolePermission != "admin" && $user->RolePermission != "developer") {
+                  $query->where(function ($q) use ($user) {
+                        $q->where('status', 'pending_approve')
+                       ->whereJsonContains('approve_by', (string)$user->id);
+                    })->orWhere(function ($q) use ($user) {
+                        if($user->branch->abbreviations == "HQ"){
+                            $q->where('status', '!=', 'pending_approve')
+                            ->where('location_review', $user->department_id)
+                            ->whereJsonContains('position_review', $user->position_id);
+                        }else{
+                            $q->where('status', '!=', 'pending_approve')
+                            ->where('location_review', $user->branch_id)
+                            ->whereJsonContains('position_review', $user->position_id);
+                        }
+                    });
+                }
+            });
+            // Clone the query for reuse
+            $groupedExpenseCounts = (clone $dataExpenseAsign)
+                ->selectRaw('status, COUNT(*) as total')
+                ->groupBy('status')
+                ->get()
+                ->pluck('total', 'status');
+        return view('dashboads.employee',compact('data','holiday','LeaveRequest', 'groupedExpenseCounts'));
     }
     public function dashboadAdmin(){
         $dataContract = '';
@@ -221,7 +249,33 @@ class DashboadController extends Controller
         })->count();
 
         $candidateResumes = CandidateResume::whereNot("status","5")->count();
-
+        $user = Auth::user();
+        $dataExpenseAsign = ExpenseRequest::where('status', '!=', "rejected")
+            ->whereNot('created_by', $user->id)
+            ->where(function ($query) use ($user) {
+                if ($user->RolePermission != "admin" && $user->RolePermission != "developer") {
+                  $query->where(function ($q) use ($user) {
+                        $q->where('status', 'pending_approve')
+                        ->where('approve_by', $user->id);
+                    })->orWhere(function ($q) use ($user) {
+                        if($user->branch->abbreviations == "HQ"){
+                            $q->where('status', '!=', 'pending_approve')
+                            ->where('location_review', $user->department_id)
+                            ->whereJsonContains('position_review', $user->position_id);
+                        }else{
+                            $q->where('status', '!=', 'pending_approve')
+                            ->where('location_review', $user->branch_id)
+                            ->whereJsonContains('position_review', $user->position_id);
+                        }
+                    });
+                }
+            });
+            // Clone the query for reuse
+            $groupedCounts = (clone $dataExpenseAsign)
+                ->selectRaw('status, COUNT(*) as total')
+                ->groupBy('status')
+                ->get()
+                ->pluck('total', 'status');
         return response()->json([
             'options'=>$options,
             'position_type'=>$position_type,
@@ -241,6 +295,7 @@ class DashboadController extends Controller
             'leaveApproval'     => $leaveApproval,
             'leaveReject'       => $leaveReject,
             'leaveCancel'       => $leaveCancel,
+            'dataExpenseAsign'  => $groupedCounts,
         ]);
     }
 
