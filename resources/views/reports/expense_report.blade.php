@@ -289,6 +289,7 @@
             $('.number_supplier').text('៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
+             $(".expense_tracking_id").text(datas.tracking_id);
             $(".p_kind_regard").text(datas.kind_regard);
             $(".p_subject").text(datas.subject);
             $(".p_reference").text(datas.reference);
@@ -359,6 +360,7 @@
             $('.number_supplier').text('៥ បើកជូនអ្នកផ្គត់ផ្គង់ (៤)');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
+             $(".expense_tracking_id").text(datas.tracking_id);
             $(".p_kind_regard").text(datas.kind_regard);
             $(".p_subject").text(datas.subject);
             $(".p_reference").text(datas.reference);

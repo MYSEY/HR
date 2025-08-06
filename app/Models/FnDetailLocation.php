@@ -21,7 +21,7 @@ class FnDetailLocation extends Model
     
     public function expenseRequest()
     {
-        return $this->belongsTo(ExpenseRequest::class, 'expense_request_id')->with(["requestBy","approveBy","locationDetails","departments", "createdBy"]);
+        return $this->belongsTo(ExpenseRequest::class, 'expense_request_id')->with(["requestBy","locationDetails","departments", "createdBy"]);
     }
     public function location()
     {

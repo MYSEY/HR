@@ -23,7 +23,7 @@ class ExpenseAdminController extends Controller
             return view('upgrade.access_page');
         }
 
-        $datas = ExpenseRequest::with(["requestBy","approveBy","locationDetails","departments", "createdBy"])
+        $datas = ExpenseRequest::with(["requestBy","locationDetails","departments", "createdBy"])
         ->whereNot("status", "cancel")->where("page_show", null)->orderBy('id', 'DESC')->get();
         return view('FN_ExpenseAdmins.index',compact(['permission','datas']));
     }
@@ -34,7 +34,7 @@ class ExpenseAdminController extends Controller
             return view('upgrade.access_page');
         }
 
-        $datas = ExpenseRequestHistory::where("expense_id", $request->id)->with(["requestBy","approveBy","locationDetails","departments", "createdBy"])
+        $datas = ExpenseRequestHistory::where("expense_id", $request->id)->with(["requestBy","locationDetails","departments", "createdBy"])
         ->orderBy('id', 'DESC')->get();
         return view('FN_ExpenseAdmins.view_histories',compact(['permission','datas']));
     }

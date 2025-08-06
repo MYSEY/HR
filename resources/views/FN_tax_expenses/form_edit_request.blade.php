@@ -110,7 +110,7 @@
                                             {{-- <option selected value="{{$data->kind_regard}}" data-approved="{{$data->approve_by}}"> {{$data->kind_regard}} </option> --}}
                                             @foreach ($FnApproval as $item)
                                                 <option value="{{$item->title}}" @if ($item->title == $data->kind_regard) selected @endif data-description="{{$item->description}}" 
-                                                    data-approved="{{$item->employee_id}}">{{$item->title}}</option>
+                                                    data-approved="{{json_encode($item->employee_id)}}">{{$item->title}}</option>
                                             @endforeach
                                         </select>
                                     </div>

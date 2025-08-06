@@ -27,7 +27,7 @@
         <script src="{{asset('/admin/js/app.js')}}"></script>
         <style>
             body {
-                background: url({{asset('/admin/img/logo/hero-bg.png')}});
+                background: url({{asset('/admin/img/logo/background_login.png')}});
                 background-size: cover;
                 font-family: Montserrat;
             }
@@ -45,7 +45,7 @@
                 transform: translate(-50%,-50%);
                 background: #fff;
                 border-radius: 10px;
-                box-shadow: -15px 15px 20px -4px #0004;
+                box-shadow: 0px 0px 20px 0px #0002;
                 display: flex;
                 overflow: hidden;
             }
@@ -87,7 +87,7 @@
                 border-radius: 8px;
                 display: block;
                 margin: auto;
-                margin-top: 120px;
+                margin-top: 30px;
                 background: #cf2e2e;
                 color: #fff;
                 font-weight: bold;
@@ -117,10 +117,18 @@
                     <div class="login_box">
                         <div class="left">
                             <div class="contact">
+                                {{-- <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded border-bottom-left-radius-0 border-bottom-right-radius-0 px-4">
+                                    <a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
+                                        <img src="{{asset('admin/img/logo/cammalogo.png')}}" alt="Support Form" aria-roledescription="logo" style="width: 85px !important">
+                                    </a>
+                                </div> --}}
                                 <form id="form-login">
                                 {{-- <form method="POST" action="{{ route('login') }}"> --}}
                                     {{-- @csrf --}}
-                                    <h3>Welcome! Please log in</h3>
+                                    <div style="text-align: center">
+                                        <img src="{{asset('admin/img/logo/cammalogo.png')}}" aria-roledescription="logo" style="width: 60% !important">
+                                        <h4>Welcome! Please log in</h4>
+                                    </div>
                                     <div class="form-group">
                                         <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" placeholder="Employee ID"  required name="number_employee">
                                         @error('number_employee')

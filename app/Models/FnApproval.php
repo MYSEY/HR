@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class FnApproval extends Model
 {
@@ -32,9 +33,18 @@ class FnApproval extends Model
         ->logOnlyDirty()
         ->dontSubmitEmptyLogs();
     }
-    public function employee()
+    protected function employeeId(): Attribute
     {
-        return $this->belongsTo(User::class, 'employee_id')->select(
+        return Attribute::make(
+            get: fn ($value) => json_decode($value, true),
+            set: fn ($value) => json_encode($value),
+        );
+    }
+    public function getEmployeeAttribute()
+    {
+        $employeeIds = is_array($this->employee_id) ? $this->employee_id : json_decode($this->employee_id, true);
+
+        return !empty($employeeIds) ? User::whereIn('id', $employeeIds)->select(
             'id',
             'number_employee',
             'last_name_kh',
@@ -50,7 +60,7 @@ class FnApproval extends Model
             'gender',
             'date_of_commencement',
             'personal_phone_number',
-        );
+        )->get() : collect();
     }
     public function location()
     {

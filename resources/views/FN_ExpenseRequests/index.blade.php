@@ -247,7 +247,6 @@
                     }
                 }
             }
-
             $(".v_locations_a tr").html(tr_a);
             $(".v_locations_b tr").html(tr_b);
             $('#view_information_expense').modal('show');
@@ -288,12 +287,14 @@
                             return false;
                         }
                     }
+                    $('#modal-loading').modal('show');
                     axios.post('{{ URL('fn/expense-request/processing') }}', {
                         'id': id,
                         'review_type': review_type,
                         'approve_date': approve_date,
                         'remark': remark,
                     }).then(function(response) {
+                        $('#modal-loading').modal('hide');
                         if (response.data.status == 400) {
                             new Noty({
                                 title: "",
@@ -312,7 +313,6 @@
                             }).show();
                             window.location.replace("{{ URL('/expense-request/list') }}"); 
                         }
-                        console.log(response.data.status);
                         
                         
                     }).catch(function(error) {
@@ -376,10 +376,12 @@
                             this.$content.find('.remark').css("border-color","#dc3545");
                             return false;
                         }
+                        $('#modal-loading').modal('show');
                         axios.post('{{ URL('fn/expense-request/reject') }}', {
                             'id': id,
                             'remark': remark,
                         }).then(function(response) {
+                            $('#modal-loading').modal('hide');
                             new Noty({
                                 title: "",
                                 text: "@lang('lang.the_process_has_been_successfully').",
@@ -437,6 +439,7 @@
             $('.number_supplier').text('៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
+            $(".expense_tracking_id").text(datas.tracking_id);
             $(".p_kind_regard").text(datas.kind_regard);
             $(".p_subject").text(datas.subject);
             $(".p_reference").text(datas.reference);
@@ -538,6 +541,7 @@
             $('.number_supplier').text('៥ បើកជូនអ្នកផ្គត់ផ្គង់ (៤)');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
+            $(".expense_tracking_id").text(datas.tracking_id);
             $(".p_kind_regard").text(datas.kind_regard);
             $(".p_subject").text(datas.subject);
             $(".p_reference").text(datas.reference);
