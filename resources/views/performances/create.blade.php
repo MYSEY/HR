@@ -53,8 +53,8 @@
                             <table id="tbl_performance" class="table table-bordered review-table mb-0">
                                 <thead>
                                     <tr>
-                                        <th style="min-width: 350px;">(KPI)</th>
-                                        <th style="min-width: 350px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
+                                        <th style="min-width: 450px;">(KPI)</th>
+                                        <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 350px;">គោលដៅ (Goal)</th>
                                         <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
                                         <th style="min-width: 150px;">Is Lock</th>
@@ -87,15 +87,11 @@
                                             <div>
                                                 <tr class="kpi-group">
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
+                                                        <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
+                                                        <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
                                                     </td>
-                                                    {{-- <td class="text-center">
-                                                        <textarea rows="3" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false">{{ old('goal') }}</textarea>
-                                                    </td> --}}
-
                                                     <td class="text-center">
                                                         <select class="form-control goal-type-select" name="goal_type[]">
                                                             <option value="number">Number</option>
@@ -104,7 +100,7 @@
                                                             <option value="percent">Percent</option>
                                                         </select>
                                                         <div class="goal-input-wrapper mt-1">
-                                                            <textarea class="form-control required" name="goal[]" rows="3" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                                                            <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                                                         </div>
                                                     </td>
 
@@ -173,7 +169,7 @@
                 placeholder = "e.g.\n10 20\n20 30";
             }
 
-            const textarea = `<textarea class="form-control required" name="goal[]" rows="3" placeholder="${placeholder}"></textarea>`;
+            const textarea = `<textarea class="form-control required" name="goal[]" rows="5" placeholder="${placeholder}"></textarea>`;
             wrapper.html(textarea);
         });
         
@@ -324,10 +320,10 @@
         </tr>
         <tr class='section-purpose kpi-group' style='text-align: center'>
             <td class="text-center">
-                <textarea rows="3" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false"></textarea>
+                <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"></textarea>
+                <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
            <td class="text-center">
                 <select class="form-control goal-type-select" name="goal_type[]">
@@ -337,7 +333,7 @@
                     <option value="percent">Percent</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required" name="goal[]" rows="3" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight required" id="weight" placeholder="%"></td>
@@ -356,10 +352,10 @@
     function addNewRecord() {
         return `<tr class='section-purpose kpi-group' style='text-align: center'>
             <td class="text-center">
-                <textarea rows="3" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
+                <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
+                <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
                 <select class="form-control goal-type-select" name="goal_type[]">
@@ -369,7 +365,7 @@
                     <option value="percent">Percent</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required" name="goal[]" rows="3" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
@@ -409,10 +405,10 @@
         </tr>
         <tr class='kpi-group' style='text-align: center'>
             <td class="text-center">
-                <textarea rows="3" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
+                <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
+                <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
                 <select class="form-control goal-type-select" name="goal_type[]">
@@ -422,7 +418,7 @@
                     <option value="percent">Percent</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required" name="goal[]" rows="3" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
