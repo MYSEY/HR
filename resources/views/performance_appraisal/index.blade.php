@@ -51,7 +51,7 @@
                                                 <td>{{$item->from_date}}</td>
                                                 <td>{{$item->to_date}}</td>
                                                 <td>{{$item->type}}</td>
-                                                <td id="overall_results"><span class="badge bg-inverse-success">{{$item->total_score}}</span></td>
+                                                <td><span class="badge bg-inverse-success">{{$item->total_score}}</span></td>
                                                 <td><span class="badge bg-inverse-success">{{$item->total_score_live_staff}}</span></td>
                                                 <td><span class="badge bg-inverse-success">{{$item->total_score_direct_chairman}}</span></td>
                                                 <td>{{$item->overall_results}}</td>

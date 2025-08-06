@@ -84,6 +84,7 @@
                             </thead>
                             @php
                                 $totalWeight = 0;
+                                $totalsByTitleId = [];
                             @endphp
                             <tbody>
                                 @foreach ($data->titles as $item)
@@ -121,16 +122,33 @@
                                         @foreach ($purposeItem->performanceDetail as $Detailitem)
                                             @php
                                                 $totalWeight += (float) $Detailitem->weight;
+                                                $titleId = $Detailitem->title_id;
+                                                if (!isset($totalsByTitleId[$titleId])) {
+                                                    $totalsByTitleId[$titleId] = [
+                                                        'total_score' => 0,
+                                                        'total_personnel_score' => 0,
+                                                        'total_direct_chairman' => 0,
+                                                    ];
+                                                }
+                                                $totalsByTitleId[$titleId]['total_score'] += (float) ($Detailitem->score ?? 0);
+                                                $totalsByTitleId[$titleId]['total_personnel_score'] += (float) ($Detailitem->score_live_staff ?? 0);
+                                                $totalsByTitleId[$titleId]['total_direct_chairman'] += (float) ($Detailitem->score_direct_chairman ?? 0);
+
+                                                $currentTitleTotal = $totalsByTitleId[$item->id] ?? [
+                                                    'total_score' => 0,
+                                                    'total_personnel_score' => 0,
+                                                    'total_direct_chairman' => 0,
+                                                ];
                                             @endphp
                                             <tr class="performance-row">
                                                 <td class="text-center" hidden>
                                                     <input type="number" step="any" class="form-control performance_id" name="performance_id[]" value="{{$Detailitem->id}}" id="performance_id">
                                                 </td>
                                                 <td class="text-center">
-                                                    <textarea rows="5" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
+                                                    <textarea rows="5" class="form-control" placeholder="Enter text here" readonly>{{$Detailitem->key_kpi}}</textarea>
                                                 </td>
                                                 <td class="text-center">
-                                                    <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
+                                                    <textarea rows="7" class="form-control" placeholder="Enter text here" readonly>{{$Detailitem->action_plan}}</textarea>
                                                 </td>
                                                 <td class="text-center">
                                                     <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>
@@ -140,7 +158,7 @@
                                                         <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
                                                     </select>
                                                     <div class="goal-input-wrapper mt-1">
-                                                        <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal" required>{{ $Detailitem->goal }}</textarea>
+                                                        <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal" readonly>{{ $Detailitem->goal }}</textarea>
                                                     </div>
                                                 </td>
                                                 <td class="text-center">
@@ -170,8 +188,23 @@
                                             </tr>
                                         @endforeach
                                     @endforeach
-                                    
                                     <tr class="total">
+                                        <td colspan="4" class="text-center">សរុប = </td>
+                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center">
+                                            <input type="text" class="form-control tr_score" id="tr_score" value="{{ number_format($currentTitleTotal['total_score'], 2) }}" readonly>
+                                        </td>
+                                        <td colspan="1" class="text-center">
+                                            <input type="text" class="form-control tr_personnel_score" id="tr_personnel_score" value="{{ number_format($currentTitleTotal['total_personnel_score'], 2) }}" readonly>
+                                        </td>
+                                        <td colspan="1" class="text-center">
+                                            <input type="text" class="form-control tr_direct_chairman" id="tr_direct_chairman" value="{{ number_format($currentTitleTotal['total_direct_chairman'], 2) }}" readonly>
+                                        </td>
+                                        <td colspan="2"></td>
+                                    </tr>
+
+                                    {{-- <tr class="total">
                                         <td colspan="4" class="text-center">សរុប = </td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
@@ -186,14 +219,14 @@
                                         </td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
-                                    </tr>
+                                    </tr> --}}
                                 @endforeach
                             </tbody>
                             <tbody>
                                 <tr>
                                     <td colspan="4" class="text-center">សរុបរួម</td>
                                     <td colspan="1" class="text-center">
-                                        <input type="text" class="form-control" id="total-weight" placeholder="%" value="{{$totalWeight}}" readonly>
+                                        <input type="text" class="form-control" id="total-weight" placeholder="%" value="{{$totalWeight}}%" readonly>
                                     </td>
                                     <td colspan="1" class="text-center">
                                         <input type="text" class="form-control" placeholder="លទ្ធផលរួម =" value="" readonly>
@@ -287,7 +320,7 @@
             if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
                 scoreAchieved = (goalType === 'date') ? 1 : 5;
             }
-
+            
             $row.find('.score_achieved').val(scoreAchieved.toFixed(2));
             // Calculate and update scores
             let weight = parseFloat($row.find('.weight').val()) || 0;
@@ -299,7 +332,6 @@
 
             calculateSubtotals();
             calculateGrandTotals();
-            updateOverallResults();
         });
 
         $(document).on('click', '#btnSubmit', function (e) {
@@ -315,7 +347,6 @@
 
             let performanceDetail = [];
             $('tr.performance-row').each(function () {
-                // $('#tbl_performance_appraisal tbody tr').each(function () {
                 const $row = $(this);
                 const performance_id = $row.find('input[name="performance_id[]"]').val();
                 const progress = $row.find('input[name="progress[]"]').val();
@@ -370,15 +401,13 @@
         function calculateSubtotals() {
             $('#tbl_performance_appraisal').find('tr.total').each(function () {
                 let $totalRow = $(this);
-                let $rows = $totalRow.prevUntil('tr.total, tr:has(td[colspan="2"] input[type="text"])');
-
+                let $rows = $totalRow.prevUntil('tr.total, tr.title-row');
                 let sumScore = 0, sumPersonnel = 0, sumChairman = 0;
                 $rows.each(function () {
                     sumScore += parseFloat($(this).find('.score').val()) || 0;
                     sumPersonnel += parseFloat($(this).find('.personnel_score').val()) || 0;
                     sumChairman += parseFloat($(this).find('.direct_chairman').val()) || 0;
                 });
-
                 $totalRow.find('.tr_score').val(sumScore.toFixed(2));
                 $totalRow.find('.tr_personnel_score').val(sumPersonnel.toFixed(2));
                 $totalRow.find('.tr_direct_chairman').val(sumChairman.toFixed(2));
@@ -403,28 +432,25 @@
 
             $('#total_score').val(totalScore.toFixed(2));
             $('#total_personnel_score').val(totalPersonnel.toFixed(2));
-            $('#total_direct_chairman').val(totalChairman.toFixed(2));
-            updateOverallResults(totalScore);
-        }
-
-        function updateOverallResults(totalScore) {
+            $('#total_direct_chairman').val(totalChairman.toFixed(2));            
+            
             var overallResults = '';
             var color = '';
-            if (totalScore === 0) {
+            if (totalScore.toFixed(2) === 0) {
                 overallResults = '';
-            } else if (totalScore < 2) {
+            } else if (totalScore.toFixed(2) < 2) {
                 overallResults = 'ខ្សោយ_(ក្រោមផែនការ២០%)';
                 color = 'red';
-            } else if (totalScore <= 2.99) {
+            } else if (totalScore.toFixed(2) <= 2.99) {
                 overallResults = 'ត្រូវកែលម្អ_(ក្រោមផែនការ១០%)';
                 color = 'orange';
-            } else if (totalScore <= 3.99) {
+            } else if (totalScore.toFixed(2) <= 3.99) {
                 overallResults = 'ធម្យម_(អនុវត្តន៍ការងារគ្រប់ផែនការងារ)';
                 color = 'info';
-            } else if (totalScore <= 4.99) {
+            } else if (totalScore.toFixed(2) <= 4.99) {
                 overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
                 color = 'lightgreen';
-            } else {
+            } else {                
                 overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
                 color = 'green';
             }
