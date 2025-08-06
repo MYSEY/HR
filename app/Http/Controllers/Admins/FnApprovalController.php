@@ -26,7 +26,7 @@ class FnApprovalController extends Controller
         if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-        $datas = FnApproval::with(["employee","location"])->get();
+        $datas = FnApproval::with(["location"])->get();
         $employees = User::whereIn("emp_status", ['Probation','1','10','2'])->get();
         $locations = Branchs::get();
         return view('FN_Approvals.index',compact(['datas','permission', 'employees', 'locations']));
@@ -53,6 +53,7 @@ class FnApprovalController extends Controller
         try {
             Activity::all()->last();
             $data = $request->all();
+            // $data['employee_id']    = json_encode($request->employee_id);
             $data['created_by'] = Auth::user()->id;
             FnApproval::create($data);
             Toastr::success('Created successfully.','Success');
@@ -105,6 +106,7 @@ class FnApprovalController extends Controller
         try{
             $data = FnApproval::where("id",$request->id)->first();
             $data['title'] = $request->title;
+            // $data['employee_id']    = json_encode($request->employee_id);
             $data['employee_id'] = $request->employee_id;
             $data['location_id'] = $request->location_id;
             $data['description'] = $request->description;
