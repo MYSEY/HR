@@ -5,6 +5,10 @@ $(document).ready(function() {
         $(this).val(khmerToEnglishNumber(raw));
     });
 
+    if ($("#fn_reference").val() && $(".checkbox-group:checked").val() == 1) {
+        $("#reviewBtn").css("display", "block");
+    }
+
     totalPaidDollar();
     totalPaidRial();
     $("#fn_approve").on("change", function() {
@@ -228,10 +232,26 @@ $(document).ready(function() {
                 num_miss++;
                 $("#fn_reference").css("border-color","#dc3545");
                 $("#IrregularFileName").css("border-color","#dc3545");
+                $(".hr-form-group-fn-select2").each(function(){
+                    let formGroup = $(this);
+                    let requeredField = formGroup.find(".hr-select2-option").val();
+                    let requered = formGroup.find(".fn_reference_require").val();
+                    if(requeredField == null){ 
+                        num_miss++;
+                        formGroup.find(".select2-selection--single").css("border-color","#dc3545");
+                    }else if (!requeredField && requered == "") {
+                        formGroup.find(".select2-selection--single").css("border-color","#dc3545");
+                        num_miss++;
+                    }
+                });
             }else{
+                $(".hr-form-group-fn-select2").each(function(){
+                    let formGroup = $(this);
+                    formGroup.find(".select2-selection--single").css("border-color","#198754");
+                });
                 $("#fn_reference").css("border-color","#198754");
                 form_data.append("fn_reference", fn_reference);
-
+                
                 let fileInput = $('#IrregularFile')[0];
                 if (fileInput.files.length > 0) {
                     let file_data = fileInput.files[0];

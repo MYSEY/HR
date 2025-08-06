@@ -1,9 +1,10 @@
 @extends('layouts.master')
 <style>
     .tooltip-inner {
-        white-space: pre-line; /* Ensures new lines appear */
+        white-space: pre-line !important;
         text-align: left !important;
-        max-width: 300px; /* Adjust width if needed */
+        max-width: 300px !important; 
+        /* word-wrap: break-word !important; */
     }
 </style>
 @section('content')
@@ -41,9 +42,21 @@
                         <tbody>
                             @if (count($datas)>0)
                                 @foreach ($datas as $key=>$item)
+                                    @php
+                                        $employeeApprove = "";
+                                        if (count($item->employee)>0) {
+                                            $num = 1;
+                                            foreach ($item->employee as $key => $employee) {
+                                                $employeeApprove .= $num . ". " . $employee->employee_name_en . "\n";
+                                                $num++;
+                                            }
+                                        }
+                                    @endphp
                                     <tr class="odd">
-                                        <td>{{$item->title}}</td>
-                                        <td>{{$item->employee ? $item->employee->employee_name_en : ""}}</td>
+                                        <td data-toggle="tooltip" data-html="true" title="{!! $item->title !!}">
+                                            {{ Str::limit($item->title, 30, '...') }}
+                                        </td>
+                                        <td>{{$employeeApprove}}</td>
                                         <td>{{$item->location ? $item->location->branch_name_en : ""}}</td>
                                         <td data-toggle="tooltip" data-html="true" title="{!! $item->description !!}">
                                             {{ Str::limit($item->description, 30, '...') }}
@@ -82,8 +95,8 @@
                             </div>
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.employee') <span class="text-danger">*</span></label>
-                                <select class="select form-control hr-select2-option requered @error('employee_id') is-invalid @enderror" id="employee_id" name="employee_id" required>
-                                    <option value="" selected> -- @lang('lang.select') --</option>
+                                <select class="form-control hr-select2-option requered" id="employee_id" name="employee_id[]" multiple="" required>
+                                    {{-- <option value=""> -- @lang('lang.select') --</option> --}}
                                     @foreach ($employees as $item)
                                         <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
                                     @endforeach
@@ -115,7 +128,7 @@
             </div>
         </div>
 
-        <div id="edit_approval" class="modal custom-modal fade" aria-hidden="true" data-bs-backdrop="static">
+        <div id="edit_approval" class="modal custom-modal fade hr-modal-select2" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -133,7 +146,7 @@
                             </div>
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.employee') <span class="text-danger">*</span></label>
-                                <select class="select form-control hr-select2-option emp_required" id="e_employee_id" name="employee_id" required>
+                                <select class="form-control hr-select2-option required" id="e_employee_id" name="employee_id[]" multiple="" required>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -192,7 +205,10 @@
 <script>
     $(function() {
         $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip({ html: true });
+            $('[data-toggle="tooltip"]').tooltip({ 
+                html: true,
+                container: 'tr' 
+            });
         });
         $('.update').on('click', function() {
             let id = $(this).data("id");
@@ -200,7 +216,7 @@
                 let formGroup = $(this);
                 let value = formGroup.attr("data-select2-id");
                 let requeredField = formGroup.find(".hr-select2-option").val();
-                let requered = formGroup.find(".emp_required").val();
+                let requered = formGroup.find(".data_required").val();
                 if(!value && requered == ""){ 
                     formGroup.find(".select2-selection--single").css("border-color","#dc3545");
                 }else if (!requeredField && requered == "") {

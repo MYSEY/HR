@@ -352,7 +352,40 @@
                     </div>
                 </div>
             @endif
-            <div class="col-md-12 col-lg-6 col-xl-8">
+            {{-- @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_expense"] == "1") --}}
+                <div class="col-md-12 col-lg-6 col-xl-3 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <div class="statistic-header">
+                                <h4>@lang('lang.expense_request')</h4>
+                            </div>
+                            <div class="attendance-list">
+                                <div class="row">
+                                    
+                                    <div class="col-md-6">
+                                        <div class="attendance-details">
+                                            <h4 class="text-info expensePending"></h4>
+                                            <p>@lang('lang.pending') @lang('lang.review')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="attendance-details">
+                                            <h4 class="text-success expenseApproval"></h4>
+                                            <p>@lang('lang.pending') @lang('lang.approval')</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="view-attendance">
+                                <a href="{{ url('/expense-request/list') }}">
+                                    <i class="fa fa-arrow-right"></i> @lang('lang.click_to') @lang('lang.review') @lang('lang.or') @lang('lang.approval')</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{-- @endif --}}
+            <div class="col-md-12 col-lg-6 col-xl-5">
                 <div class="row">
                     @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_total_resigned_staff"] == "1")
                         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
@@ -619,6 +652,17 @@
             },
             dataType: "JSON",
             success: function(response) {
+            if (response.dataExpenseAsign) {
+                $(".expensePending").text(0);
+                if (response.dataExpenseAsign.pending) {
+                    $(".expensePending").text(response.dataExpenseAsign.pending);
+                }
+                $(".expenseApproval").text(0);
+                if (response.dataExpenseAsign.pending_approve) {
+                    $(".expenseApproval").text(response.dataExpenseAsign.pending_approve);
+                }
+            }
+            
                 let totalStaff = response.totalStaff;
                 if (totalStaff.length > 0 ) {
                     let total_female = 0;

@@ -48,6 +48,7 @@
                                 @foreach ($datas as $inx=>$item)
                                     @php
                                         $positionReviews = "";
+                                        $approveBy = "";
                                         if ($item->status != "pending_approve") {
                                             if (count($item->PositionReviews)>0) {
                                                 $num = 1;
@@ -57,12 +58,22 @@
                                                 }
                                             }
                                         }else{
-                                            if ($item->approveBy) {
+                                            if ($item->EmployeeApprove) {
                                                 $num = 1;
-                                                $positionReviews =  $num . ". " .$item->approveBy->position->name_english;  
+                                                foreach ($item->EmployeeApprove as $ind => $approve) {
+                                                    $positionReviews .= $num . ". " . $approve->position->name_english . "\n";
+                                                    $num++;
+                                                }
+                                                // $positionReviews =  $num . ". " .$item->EmployeeApprove->position->name_english;  
                                             }
                                         }
-                                        
+                                        if ($item->EmployeeApprove) {
+                                            $num = 1;
+                                            foreach ($item->EmployeeApprove as $in => $approve) {
+                                                $approveBy .= $num . ". " . $approve->employee_name_en . "\n";
+                                                $num++;
+                                            }
+                                        }
                                     @endphp
                                     <tr class="odd">
                                         {{-- @if (Auth::user()->RolePermission == 'HRAdmin') --}}
@@ -99,10 +110,10 @@
                                             {{ Str::limit($positionReviews, 30, '...') }}
                                         </td>
                                         <td>
-                                            {{$item->approveBy->employee_name_en}}
+                                            {{$approveBy}}
                                         </td>
                                         <td >
-                                           @if ($permission->is_update == "1")
+                                           @if ($permission->is_update == "1" && $item->status != "approved")
                                                 <a class="btn btn-white btn-sm btn-rounded btn-asign" data-id="{{$item->id}}" data-positionold="{{$positionReviews}}" href="#" aria-expanded="false">
                                                     <i class="fa fa-dot-circle-o text-success"></i>
                                                     <span >@lang('lang.asign_to')</span>

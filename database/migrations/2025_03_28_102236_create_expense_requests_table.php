@@ -53,7 +53,8 @@ return new class extends Migration
             $table->json('position_review')->nullable();
             $table->integer('review_type')->nullable();
             $table->integer('request_by');
-            $table->integer('approve_by')->nullable();
+            $table->json('approve_by')->nullable();
+            $table->integer('final_approve_by')->nullable();
             $table->dateTime('date_print')->nullable();
             $table->dateTime('date_request')->nullable();
             $table->dateTime('date_approve')->nullable();

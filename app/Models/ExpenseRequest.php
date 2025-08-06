@@ -16,7 +16,7 @@ class ExpenseRequest extends Model
     use LogsActivity;
     protected $table = 'expense_requests';
     protected $guarded = ['id'];
-    protected $appends = ['references'];
+    protected $appends = ['references','EmployeeApprove'];
 
     protected $fillable = [
         "tracking_id",
@@ -58,6 +58,7 @@ class ExpenseRequest extends Model
         "review_type",
         "request_by",
         "approve_by",
+        "final_approve_by",
         "date_print",
         "date_request",
         "date_approve",
@@ -115,9 +116,15 @@ class ExpenseRequest extends Model
             'personal_phone_number',
         )->with(["department","branch"]);
     }
-    public function approveBy()
+    public function getEmployeeApproveAttribute()
     {
-        return $this->belongsTo(User::class, 'approve_by')->select(
+        if (is_array($this->attributes['approve_by'] ?? null)) {
+            $ids = $this->attributes['approve_by'];
+        } else {
+            $ids = json_decode($this->attributes['approve_by'] ?? '[]', true);
+        }
+    
+        return User::whereIn('id', $ids)->select(
             'id',
             'number_employee',
             'last_name_kh',
@@ -133,7 +140,7 @@ class ExpenseRequest extends Model
             'gender',
             'date_of_commencement',
             'personal_phone_number',
-        )->with("position");
+        )->with("position")->get();
     }
     public function getPositionReviewsAttribute()
     {

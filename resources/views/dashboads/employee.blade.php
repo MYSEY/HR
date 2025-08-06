@@ -17,7 +17,7 @@
         @endif
 
         <div class="row">
-            <div class="col-md-12 col-lg-6 col-xl-6 d-flex">
+            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
                 <div class="card employee-welcome-card flex-fill">
                     <div class="card-body">
                         <div class="welcome-info">
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 col-lg-6 col-xl-6 d-flex">
+            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
                 <div class="card flex-fill">
                     <div class="card-body">
                         <div class="statistic-header">
@@ -76,6 +76,40 @@
                             class="float-end">{{ number_format($data->total_special_leave ?? 0) }} Days</span></p>
                         <p><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.unpaid_leave') <span
                             class="float-end">{{ $data->total_unpaid_leave ?? 0 }} Days</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-body">
+                        <div class="statistic-header">
+                            <h4>@lang('lang.expense_request')</h4>
+                        </div>
+                        <div class="attendance-list">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="attendance-details">
+                                        <h4 class="text-info"> 
+                                            {{ isset($groupedExpenseCounts["pending"]) ? $groupedExpenseCounts["pending"] : 0 }}
+                                        </h4>
+                                        <p>@lang('lang.pending') @lang('lang.review')</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="attendance-details">
+                                        <h4 class="text-success">
+                                            {{ isset($groupedExpenseCounts["pending_approve"]) ? $groupedExpenseCounts["pending_approve"] : 0 }}
+                                        </h4>
+                                        <p>@lang('lang.pending') @lang('lang.approval')</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="view-attendance">
+                            <a href="{{ url('/expense-request/list') }}">
+                                <i class="fa fa-arrow-right"></i> @lang('lang.click_to') @lang('lang.review') @lang('lang.or') @lang('lang.approval')</p>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

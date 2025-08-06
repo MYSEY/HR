@@ -89,9 +89,14 @@
         $items = array_map('trim', explode(',', $data->payment_term));
         $lastValue = end($items);
         $viewFile ="";
+        $viewFileRegular ="";
+        // dd($data->References);
         foreach ($data->References as $key => $value) {
            if ($value->is_contactual !=1) {
             $viewFile = $value->file_upload;
+           }
+           if ($value->is_contactual ==1) {
+            $viewFileRegular = $value->file_upload;
            }
         }
     @endphp
@@ -111,8 +116,9 @@
                                     <div class="form-group hr-form-group-select2">
                                         <select class="form-control requered fn_require hr-select2-option" id="fn_approve" name="fn_approve" required>
                                             @foreach ($FnApproval as $item)
-                                                <option value="{{$item->title}}"  @if ($item->title == $data->kind_regard) selected @endif
-                                                    data-description="{{$item->description}}" data-approved="{{$item->employee_id}}">{{$item->title}}</option>
+                                                <option value="{{$item->title}}" 
+                                                    @if ($item->title == $data->kind_regard) selected @endif
+                                                    data-description="{{$item->description}}" data-approved="{{json_encode($item->employee_id)}}">{{$item->title}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -146,9 +152,10 @@
                             <div class="row">
                                 <label class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-10">
-                                    <div class="form-group" id="view-Regular_reference" style="display: {{$data->expense_type == 1 ? 'block' : 'none'}}">
-                                        <div class="input-group">
-                                            <select class="form-control form-select" id="fn_reference">
+                                    <div class="form-group hr-form-group-fn-select2" id="view-Regular_reference" style="display: {{$data->expense_type == 1 ? 'block' : 'none'}}">
+                                        {{-- <div class="input-group"> --}}
+                                            {{-- @dd($reference) --}}
+                                            <select class="form-control hr-select2-option fn_reference_require" id="fn_reference">
                                                 <option value="" >-- Select --</option>
                                                 @foreach ($FnRegularExspenses as $item)
                                                     <option value="{{ $item->serialref }}"
@@ -156,12 +163,12 @@
                                                         data-file="{{ $item->file_upload ? url('uploads/FnRegularExspenses/' . $item->file_upload) : '' }}">
                                                         {{ $item->serialref . " " . $item->description }}
                                                     </option>
-                                            @endforeach
+                                                @endforeach
                                             </select>
-                                            <button id="reviewBtn" style="display: {{$data->expense_type == 1 ? 'block' : 'none'}}" class="btn btn-sm btn-outline-secondary" type="button">
-                                                <a id="reviewLink" href="#" target="_blank" style="text-decoration: none; color: inherit;">Review File</a>
+                                            <button id="reviewBtn" style="display: none" class="btn btn-sm btn-outline-secondary" type="button">
+                                                <a id="reviewLink" href="{{ url('uploads/FnRegularExspenses/' . $viewFileRegular) }}" target="_blank" style="text-decoration: none; color: inherit;">Review file regular</a>
                                             </button>
-                                        </div>
+                                        {{-- </div> --}}
                                     </div>
                                     <div class="form-group input-group" id="view-Irregular_reference">
                                         {{-- Hidden input to keep the reference value --}}
@@ -235,8 +242,6 @@
                                                                 </td>
                                                             </tr>
                                                         @endforeach
-                                                        
-                                                        
                                                     </tbody>
                                                 </table>
                                             </div>
