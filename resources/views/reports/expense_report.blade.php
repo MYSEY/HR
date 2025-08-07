@@ -130,6 +130,7 @@
                                         <th>@lang('lang.description')</th>
                                         <th>@lang('lang.request_date')</th>
                                         <th>@lang('lang.approved_date')</th>
+                                        <th>@lang('lang.approved_by')</th>
                                         <th>@lang('lang.location')</th>
                                         <th>@lang('lang.request_by') @lang('lang.location')</th>
                                         <th>@lang('lang.request_by')</th>
@@ -196,6 +197,7 @@
                                                 </td>
                                                 <td>{{$item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i') : ''}}</td>
                                                 <td>{{$item->date_approve ? \Carbon\Carbon::parse($item->date_approve)->format('d-M-Y') : ''}}</td>
+                                                <td>{{$item->approver_employee_name_en}}</td>
                                                 <td>{{$item->type == "2" ?  $item->department->name_english : $item->location->branch_name_en}}</td>
                                                 <td>
                                                     {{
@@ -515,6 +517,7 @@
                             '</td>'+
                             '<td>'+date_request+'</td>'+
                             '<td>'+date_approve+'</td>'+
+                            '<td>'+item.approver_employee_name_en+'</td>'+
                             '<td>'+(item.location.branch_name_en)+'</td>'+
                             '<td>'+(item.expense_request.request_by.department.name_english)+' / '+(item.expense_request.request_by.branch.branch_name_en)+'</td>'+
                             '<td>'+item.expense_request.request_by.employee_name_en+'</td>'+

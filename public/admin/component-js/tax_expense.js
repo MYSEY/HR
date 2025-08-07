@@ -1,8 +1,9 @@
 $(document).ready(function() {
     $(document).on("input", ".khmer-toEnglish-number-only", function () {
-        let raw = $(this).val();
-        raw = raw.replace(/[^០-៩0-9.]/g, ""); // allow only Khmer/English digits and dot
-        $(this).val(khmerToEnglishNumber(raw));
+      let raw = $(this).val();
+      raw = raw.replace(/[^០-៩0-9។.]/g, ""); // allow Khmer/English digits and Khmer dot
+      const converted = khmerToEnglishNumber(raw);
+      $(this).val(converted);
     });
     totalPaidDollar();
     totalPaidRial();

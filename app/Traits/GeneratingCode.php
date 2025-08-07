@@ -76,7 +76,7 @@ trait GeneratingCode
          ];
      }
     //*** Generate Serialef
-    public function generateSerialCode($date)
+    public function generateSerialCode($date,$nameDoc)
      {
          $count = 0;
          $expDate = Carbon::parse($date);
@@ -100,7 +100,8 @@ trait GeneratingCode
             $year = $expDate->format('y');
             $month = $expDate->format('m');
             $day = $expDate->format('d');
-             $expId =  "CNT".$year.$month.$day. str_pad(($count + 1), 3, "0", STR_PAD_LEFT);
+            //  $expId =  "CNT".$year.$month.$day. str_pad(($count + 1), 3, "0", STR_PAD_LEFT);
+             $expId =  $nameDoc.$year.$month.$day. str_pad(($count + 1), 3, "0", STR_PAD_LEFT);
              $alreadyExist = FnRegularExspense::select('serialref')->where('serialref', $expId)->first()->serialref ?? null;
              $count++;
          } while ($alreadyExist);
