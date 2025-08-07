@@ -411,7 +411,7 @@ class PerformanceController extends Controller
             $performance = Performance::findOrFail($id);
             if ($performance->total_weight == 100) {
                 $performance->update([
-                    'status'     => 'approve',
+                    'status'     => 'approved',
                     'updated_by' => Auth::id(),
                 ]);
             } else {

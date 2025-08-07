@@ -203,23 +203,6 @@
                                         </td>
                                         <td colspan="2"></td>
                                     </tr>
-
-                                    {{-- <tr class="total">
-                                        <td colspan="4" class="text-center">សរុប = </td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control tr_score" placeholder="0" id="tr_score" value="" readonly>
-                                        </td>
-                                        <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control tr_personnel_score" placeholder="0" id="tr_personnel_score" value="" readonly>
-                                        </td>
-                                        <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control tr_direct_chairman" placeholder="0" id="tr_direct_chairman" value="" readonly>
-                                        </td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                    </tr> --}}
                                 @endforeach
                             </tbody>
                             <tbody>
@@ -321,7 +304,7 @@
                 scoreAchieved = (goalType === 'date') ? 1 : 5;
             }
             
-            $row.find('.score_achieved').val(scoreAchieved.toFixed(2));
+            $row.find('.score_achieved').val(scoreAchieved);
             // Calculate and update scores
             let weight = parseFloat($row.find('.weight').val()) || 0;
             let score = (weight * scoreAchieved) / 100;

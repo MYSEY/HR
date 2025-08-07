@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('goal_type')->nullable();
             $table->string('progress')->nullable();
             $table->string('weight');
-            $table->decimal('score_achieved')->nullable();
+            $table->integer('score_achieved')->nullable();
             $table->decimal('score')->nullable();
             $table->decimal('score_live_staff')->nullable();
             $table->decimal('score_direct_chairman')->nullable();

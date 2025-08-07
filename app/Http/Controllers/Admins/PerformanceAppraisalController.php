@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Models\Branchs;
 use App\Models\Performance;
 use Illuminate\Http\Request;
 use App\Models\PerformanceDetail;
@@ -17,24 +18,79 @@ class PerformanceAppraisalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        // if (request()->ajax()) {
+        //     // Define the base query
+        //     $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        //         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        //         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        //         ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        //         ->select(
+        //             'performances.*',
+        //             'users.number_employee',
+        //             'users.employee_name_kh',
+        //             'users.employee_name_en',
+        //             'users.branch_id',
+        //             'departments.name_english as dep_name',
+        //             'positions.name_english as positions_name',
+        //             'branchs.branch_name_en',
+        //             'branchs.branch_name_kh',
+        //         )
+        //     ->where('performances.status', 'approve')
+        //     ->when($request->employee_id, function ($query, $employee_id) {
+        //         return $query->where('users.number_employee', $employee_id);
+        //     })
+        //     ->when($request->employee_name, function ($query, $employee_name) {
+        //         return $query->where('users.employee_name_en', $employee_name);
+        //     })
+        //     ->when($request->branch_id, function ($query, $branch_id) {
+        //         return $query->where('users.branch_id', $branch_id);
+        //     });
+        
+        //     // Search filter
+        //     $searchValue = request()->input('search.value');
+        //     if (!empty($searchValue)) {
+        //         $query->where(function ($q) use ($searchValue) {
+        //             $q->where('performances.id', 'like', "%{$searchValue}%")
+        //             ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+        //             ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+        //             ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
+        //             ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
+        //         });
+        //     }
+        
+        //     $recordsTotal = Performance::where('status', 'approve')->count();  // total records without filter
+        //     $recordsFiltered = $query->count();
+        //     $start = intval(request()->input('start', 0));
+        //     $limit = intval(request()->input('length', 10));
+        //     $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
+        //     return response()->json([
+        //         'draw' => intval(request()->input('draw')),
+        //         'recordsTotal' => $recordsTotal,
+        //         'recordsFiltered' => $recordsFiltered,
+        //         'data' => $data
+        //     ]);
+        // }
         $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
-        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
-        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
-        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
-        ->select(
-            'performances.*',
-            'users.number_employee',
-            'users.employee_name_kh',
-            'users.employee_name_en',
-            'departments.name_english as dep_name',
-            'positions.name_english as positions_name',
-            'branchs.branch_name_en',
-            'branchs.branch_name_kh',
-        )->where('performances.status', 'approve');
-        $data = $query->get();
-        return view('performance_appraisal.index',compact('data'));
+            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->select(
+                'performances.*',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.branch_id',
+                'departments.name_english as dep_name',
+                'positions.name_english as positions_name',
+                'branchs.branch_name_en',
+                'branchs.branch_name_kh',
+            )
+        ->where('performances.status', 'approved');
+        $data = $query->orderBy('performances.id', 'desc')->get();
+        $branch = Branchs::all();
+        return view('performance_appraisal.index',compact('data','branch'));
     }
 
     /**

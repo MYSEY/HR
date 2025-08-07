@@ -71,7 +71,7 @@
                                 <thead>
                                     <tr>
                                         <th style="min-width: 450px;">(KPI)</th>
-                                        <th style="min-width: 450px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
+                                        <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 250px;">គោលដៅ (Goal)</th>
                                         <th>ទម្ងន់ (Weight %)</th>
                                     </tr>
@@ -98,13 +98,24 @@
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
                                                 <tr>
                                                     <td class="text-center">
-                                                        <textarea rows="5" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
+                                                        <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="5" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
+                                                        <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
-                                                    <td class="text-center">
+                                                    {{-- <td class="text-center">
                                                         <textarea rows="5" class="form-control" placeholder="Enter text here" required>{{$Detailitem->goal}}</textarea>
+                                                    </td> --}}
+                                                    <td class="text-center">
+                                                        <select class="form-control goal-type-selec goal_type" name="goal_type">
+                                                            <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
+                                                            <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
+                                                            <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
+                                                            <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
+                                                        </select>
+                                                        <div class="goal-input-wrapper mt-1">
+                                                            <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal">{{ $Detailitem->goal }}</textarea>
+                                                        </div>
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
