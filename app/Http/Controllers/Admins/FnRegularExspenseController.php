@@ -50,7 +50,8 @@ class FnRegularExspenseController extends Controller
     public function store(Request $request)
     {
         try{
-            $autoSerialref   = $this->generateSerialCode(Carbon::today())['serialref'];
+            $request->is_contactual == 1 ? $nameDoc = "CNT" : $nameDoc = "REF";
+            $autoSerialref   = $this->generateSerialCode(Carbon::today(),$nameDoc)['serialref'];
             Activity::all()->last();
             $data = $request->all();
             if($request->hasFile('file_upload')) {

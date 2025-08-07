@@ -39,6 +39,7 @@ class ExpenseRepository extends BaseRepository
         
         ->leftJoin('expense_requests', 'fn_detail_locations.expense_request_id', '=', 'expense_requests.id')
         ->leftJoin('users', 'expense_requests.request_by', '=', 'users.id')
+        ->leftJoin('users as approver', 'expense_requests.final_approve_by', '=', 'approver.id')
         ->select(
             'fn_detail_locations.*', 
             'expense_requests.*',
@@ -47,6 +48,14 @@ class ExpenseRepository extends BaseRepository
             'users.branch_id',
             'users.department_id',
             'users.line_manager',
+            // approver info
+            'approver.number_employee as approver_number_employee',
+            'approver.employee_name_kh as approver_employee_name_kh',
+            'approver.employee_name_en as approver_employee_name_en',
+            'approver.position_id as approver_position_id',
+            'approver.branch_id as approver_branch_id',
+            'approver.department_id as approver_department_id',
+            'approver.line_manager as approver_line_manager'
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if (permissionAccess("m13-s3","is_access")->value == 1) {

@@ -134,12 +134,12 @@
                     </div>
                     <div class="submit-section">
                         <input type="text" hidden name="Stage_review" id="Stage_review">
-                        <button type="button" class="btn btn-primary btn-reject" id="v-btn-reject">
+                        <button type="button" class="btn btn-warning btn-reject" id="v-btn-reject">
                             <span class="btn-text-print">@lang('lang.reject')</span>
                             <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                         </button>
-                        <button type="button" class="btn btn-success btn-approved" id="v-btn-approve">
-                            <span class="btn-text-save">@lang('lang.approve')</span>
+                        <button type="button" class="btn btn-approved" id="v-btn-approve">
+                            <span class="btn-text-save"></span>
                             <span id="btn-save-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                         </button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">

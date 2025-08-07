@@ -258,7 +258,7 @@ class ExpenseRequestController extends Controller
             }
 
             if ($request->hasFile('fn_invoice')) {
-                $autoSerial = $this->generateSerialCode(Carbon::today())['serialref'];
+                $autoSerial = $this->generateSerialCode(Carbon::today(),"REF")['serialref'];
                 $data['reference'] = $request->fn_reference ? $request->fn_reference . ',' . $autoSerial : $autoSerial;
                 $image = $request->file('fn_invoice');
                 $filename = $autoSerial.'.'.$image->getClientOriginalName();
@@ -508,7 +508,7 @@ class ExpenseRequestController extends Controller
             }else{
                 if ($request->hasFile('fn_invoice')) {
                     $image = $request->file('fn_invoice');
-                    $autoSerial = $this->generateSerialCode(Carbon::today())['serialref'];
+                    $autoSerial = $this->generateSerialCode(Carbon::today(),"REF")['serialref'];
                     $data['reference'] = $request->fn_reference ? $request->fn_reference . ',' . $autoSerial : $autoSerial;
                     $filename = $autoSerial.'.'.$image->getClientOriginalName();
                     $image->move(public_path('uploads/FnRegularExspenses'), $filename);
@@ -749,7 +749,7 @@ class ExpenseRequestController extends Controller
             }else{
                 if ($request->hasFile('fn_invoice')) {
                     $image = $request->file('fn_invoice');
-                    $autoSerial = $this->generateSerialCode(Carbon::today())['serialref'];
+                    $autoSerial = $this->generateSerialCode(Carbon::today(),"REF")['serialref'];
                     $data['reference'] = $request->fn_reference ? $request->fn_reference . ',' . $autoSerial : $autoSerial;
                     $filename = $autoSerial.'.'.$image->getClientOriginalName();
                     $image->move(public_path('uploads/FnRegularExspenses'), $filename);
