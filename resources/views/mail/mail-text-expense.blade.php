@@ -6,7 +6,8 @@
     {{-- <meta name="viewport"> --}}
     <title>{{$data["data"]["title"]}}</title>
 </head>
-<body style="font-family:'Khmer OS Battambang',Tahoma,sans-serif; background-color:#f9f9f9; padding:20px;">
+{{-- <body style="font-family:'Khmer OS Battambang',Tahoma,sans-serif; background-color:#f9f9f9; padding:20px;"> --}}
+<body>
     <table style="max-width:600px; margin:0 auto;  padding:20px;">
         <tr>
             <td>
