@@ -227,13 +227,36 @@
                                     <td colspan="1" class="text-center"></td>
                                 </tr>
                             </tbody>
+                            @php
+                                $overallResults = '';
+                                $color = '';
+                                $score = (float) $data->total_score_direct_chairman;
+                                if ($score === 0.00) {
+                                    $overallResults = '';
+                                } else if ($score < 2) {
+                                    $overallResults = 'ខ្សោយ_(ក្រោមផែនការ២០%)';
+                                    $color = 'red';
+                                } else if ($score <= 2.99) {
+                                    $overallResults = 'ត្រូវកែលម្អ_(ក្រោមផែនការ១០%)';
+                                    $color = 'orange';
+                                } else if ($score <= 3.99) {
+                                    $overallResults = 'ធម្យម_(អនុវត្តន៍ការងារគ្រប់ផែនការងារ)';
+                                    $color = 'info';
+                                } else if ($score <= 4.99) {
+                                    $overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
+                                    $color = 'lightgreen';
+                                } else {                
+                                    $overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
+                                    $color = 'green';
+                                }
+                            @endphp
                             <tbody>
                                 <tr>
                                     <td colspan="4" class="text-center">% ពិន្ទុវាយតម្លៃតាមគោលដៅ</td>
                                     <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
                                     <td colspan="3" class="text-center">
-                                        <input type="text" id="overall_results" class="form-control" value="{{$data->overall_results}}" placeholder="Overall Results" readonly>
+                                        <input type="text" id="overall_results" class="form-control"  value="{{$overallResults}}" placeholder="Overall Results" readonly style="color: {{ $color }};">
                                     </td>
                                     <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
@@ -301,7 +324,7 @@
 
             // Check for exceeding max range
             if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
-                scoreAchieved = (goalType === 'date') ? 1 : 5;
+                scoreAchieved = (goalType === 'date') ? 0 : 5;
             }
             
             $row.find('.score_achieved').val(scoreAchieved);
@@ -326,7 +349,6 @@
             let total_score = $('#total_score').val();
             let total_personnel_score = $('#total_personnel_score').val();
             let total_direct_chairman = $('#total_direct_chairman').val();
-            let overall_results = $('#overall_results').val();
 
             let performanceDetail = [];
             $('tr.performance-row').each(function () {
@@ -363,7 +385,6 @@
                     total_score,
                     total_personnel_score,
                     total_direct_chairman,
-                    overall_results,
                     performanceDetail: performanceDetail
                 },
                 dataType: 'JSON',

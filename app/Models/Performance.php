@@ -21,10 +21,10 @@ class Performance extends Model
         'total_score',
         'total_score_live_staff',
         'total_score_direct_chairman',
-        'overall_results',
         'score_level',
         'status',
         'type',
+        'noted',
         'created_by',
         'updated_by',
     ];

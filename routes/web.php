@@ -284,7 +284,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     //performance Appraisal
     Route::resource('performance-appraisal', PerformanceAppraisalController::class);
-    Route::get('performance/appraisal/progress', [PerformanceAppraisalController::class,'progress']);
+    Route::post('performance/appraisal/update/score', [PerformanceAppraisalController::class,'updateScorePerformance']);
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
     Route::get('motor-rentel/edit',[MotorRentelController::class,'edit']);

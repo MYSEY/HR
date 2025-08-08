@@ -88,7 +88,7 @@ class PerformanceAppraisalController extends Controller
                 'branchs.branch_name_kh',
             )
         ->where('performances.status', 'approved');
-        $data = $query->orderBy('performances.id', 'desc')->get();
+        $data = $query->get();
         $branch = Branchs::all();
         return view('performance_appraisal.index',compact('data','branch'));
     }
@@ -148,7 +148,22 @@ class PerformanceAppraisalController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = Performance::with(['titles.purposes.performanceDetail'])
+        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->select(
+            'performances.*',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'departments.name_english as dep_name',
+            'positions.name_english as positions_name',
+            'branchs.branch_name_en',
+            'branchs.branch_name_kh',
+        )->where('performances.id',$id)->first();
+        return view('performance_appraisal.edit',compact('data'));
     }
     public function progress(Request $request){
         $performance = Performance::with('PerformanceDetails')->where('employee_id',$request->employee_id)->where('id',$request->performance_id)->where('status','approve')->first();
@@ -228,7 +243,6 @@ class PerformanceAppraisalController extends Controller
                 'total_score'  => $request->total_score,
                 'total_score_live_staff'  => $request->total_personnel_score,
                 'total_score_direct_chairman'  => $request->total_direct_chairman,
-                'overall_results'  => $request->overall_results,
                 'updated_by'  => Auth::id(),
             ]);
 
@@ -254,6 +268,21 @@ class PerformanceAppraisalController extends Controller
         }
     }
 
+    public function updateScorePerformance(Request $request){
+        try {
+            Performance::where('employee_id',$request->employee_id)->where('id',$request->id)->update([
+                'total_score_direct_chairman'  => $request->total_score_direct_chairman,
+                'noted'  => $request->noted,
+            ]);
+            DB::commit();
+            return response()->json([
+                'message' => 'successfully'
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Performance created fail.','Error');
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *

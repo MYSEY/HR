@@ -87,6 +87,29 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($data as $item)
+                                            @php
+                                                $overallResults = '';
+                                                $color = '';
+                                                $score = (float) $item->total_score_direct_chairman;
+                                                if ($score === 0.00) {
+                                                    $overallResults = '';
+                                                } else if ($score < 2) {
+                                                    $overallResults = 'ខ្សោយ_(ក្រោមផែនការ២០%)';
+                                                    $color = 'red';
+                                                } else if ($score <= 2.99) {
+                                                    $overallResults = 'ត្រូវកែលម្អ_(ក្រោមផែនការ១០%)';
+                                                    $color = 'orange';
+                                                } else if ($score <= 3.99) {
+                                                    $overallResults = 'ធម្យម_(អនុវត្តន៍ការងារគ្រប់ផែនការងារ)';
+                                                    $color = 'info';
+                                                } else if ($score <= 4.99) {
+                                                    $overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
+                                                    $color = 'lightgreen';
+                                                } else {                
+                                                    $overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
+                                                    $color = 'green';
+                                                }
+                                            @endphp
                                             <tr class="odd">
                                                 <td class="ids stuck-scroll-4">{{$item->id}}</td>
                                                 <td class="stuck-scroll-4"><a href="{{url("performance",$item->employee_id)}}">{{$item->number_employee}}</a></td>
@@ -100,7 +123,7 @@
                                                 <td><span class="badge bg-inverse-success">{{$item->total_score}}</span></td>
                                                 <td><span class="badge bg-inverse-success">{{$item->total_score_live_staff}}</span></td>
                                                 <td><span class="badge bg-inverse-success">{{$item->total_score_direct_chairman}}</span></td>
-                                                <td>{{$item->overall_results}}</td>
+                                                <td style="color: {{ $color }}">{{ $overallResults }}</td>
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
@@ -115,6 +138,7 @@
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
                                                             <a class="dropdown-item" href="{{url("performance-appraisal",$item->id)}}"><i class="fa fa-regular fa-eye"></i> @lang("lang.preview")</a>
+                                                            <a class="dropdown-item" href="{{ url('performance-appraisal', $item->id) }}/edit" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                         </div>
                                                     </div>
                                                 </td>
