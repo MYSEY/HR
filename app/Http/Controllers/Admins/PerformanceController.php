@@ -83,7 +83,7 @@ class PerformanceController extends Controller
                 }
             }
 
-            // if ($totalWeight == 100) {
+            if ($totalWeight <= 100) {
                 foreach ($request->employee_id as $empId) {
                     $user = User::where('id', $empId)->select('id', 'number_employee', 'employee_name_kh', 'employee_name_en', 'emp_status')->first();
                     $type = $user->emp_status === 'Probation' ? 'KPI Probation ' . Carbon::parse($request->from_date)->format('Y') : 'KPI Form ' . Carbon::parse($request->from_date)->format('Y');
@@ -186,15 +186,14 @@ class PerformanceController extends Controller
                 return response()->json([
                     'message' => 'successfully'
                 ]);
-
-            // } else {
-            //     DB::rollBack();
-            //     return response()->json([
-            //         'success' => false,
-            //         'error' => 'The total weight of all KPIs must equal 100%.',
-            //         'status' => 422
-            //     ], 422);
-            // }
+            } else {
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'error' => 'The total weight of all KPIs must equal 100%.',
+                    'status' => 422
+                ], 422);
+            }
         } catch (\Throwable $exp) {
             DB::rollback();
             Toastr::error('Performance created fail.','Error');
@@ -277,124 +276,124 @@ class PerformanceController extends Controller
                 }
             }
 
-            // if ($totalWeight !== 100) {
-            //     return response()->json(['error' => 'The total weight of all KPIs must equal 100%.']);
-            // }
+           
+            if ($totalWeight <= 100) {
+                /* -------------------------------------------------
+                | 2. Update Performance header
+                * ------------------------------------------------*/
+                $performance = Performance::findOrFail($request->performance_id);
+                $employee    = User::findOrFail($request->employee_id);
 
-            /* -------------------------------------------------
-            | 2. Update Performance header
-            * ------------------------------------------------*/
-            $performance = Performance::findOrFail($request->performance_id);
-            $employee    = User::findOrFail($request->employee_id);
+                $year = \Carbon\Carbon::parse($request->from_date)->format('Y');
+                $type = $employee->emp_status === 'KPI Probation' ? "Probation $year" : "KPI Form $year";
 
-            $year = \Carbon\Carbon::parse($request->from_date)->format('Y');
-            $type = $employee->emp_status === 'KPI Probation' ? "Probation $year" : "KPI Form $year";
-
-            $performance->update([
-                'employee_id' => $request->employee_id,
-                'from_date'   => $request->from_date,
-                'to_date'     => $request->to_date,
-                'type'        => $type,
-                'total_weight' => $totalWeight,
-                'updated_by'  => Auth::id(),
-            ]);
-
-            /* -------------------------------------------------
-            | 3. Remove old detail rows
-            * ------------------------------------------------*/
-            Title::where('performance_id', $performance->id)->delete();
-            Purpose::where('performance_id', $performance->id)->delete();
-            PerformanceDetail::where('performance_id', $performance->id)->delete();
-
-            /* -------------------------------------------------
-            | 4. Re-insert Titles › Purposes › KPI Details
-            * ------------------------------------------------*/
-            foreach ($request->data as $titleItem) {
-
-                $title = Title::create([
-                    'performance_id' => $performance->id,
-                    'title'          => $titleItem['title'],
-                    'created_by'     => Auth::id(),
+                $performance->update([
+                    'employee_id' => $request->employee_id,
+                    'from_date'   => $request->from_date,
+                    'to_date'     => $request->to_date,
+                    'type'        => $type,
+                    'total_weight' => $totalWeight,
+                    'updated_by'  => Auth::id(),
                 ]);
 
-                foreach ($titleItem['dataPurpose'] as $purposeItem) {
-                    $purpose = Purpose::create([
+                /* -------------------------------------------------
+                | 3. Remove old detail rows
+                * ------------------------------------------------*/
+                Title::where('performance_id', $performance->id)->delete();
+                Purpose::where('performance_id', $performance->id)->delete();
+                PerformanceDetail::where('performance_id', $performance->id)->delete();
+
+                /* -------------------------------------------------
+                | 4. Re-insert Titles › Purposes › KPI Details
+                * ------------------------------------------------*/
+                foreach ($request->data as $titleItem) {
+
+                    $title = Title::create([
                         'performance_id' => $performance->id,
-                        'title_id'       => $title->id,
-                        'name'           => $purposeItem['purpose'],
+                        'title'          => $titleItem['title'],
                         'created_by'     => Auth::id(),
                     ]);
 
-                    foreach ($purposeItem['dataKPi'] as $kpi) {
-                        /* ---- Validate goal lines -------------------------------- */
-                        $isValidGoal = true;
-                        $goalType    = $kpi['goal_type'];           // number|currency|percent|date
-                        $lines       = explode("\n", $kpi['goal']);
-
-                        foreach ($lines as $line) {
-                            $parts = preg_split('/\s+/', trim($line));
-
-                            if (count($parts) !== 2) { $isValidGoal = false; break; }
-
-                            [$min, $max] = $parts;
-
-                            switch ($goalType) {
-                                case 'number':
-                                case 'currency':
-                                case 'percent':
-                                    if (!is_numeric($min) || !is_numeric($max)) {
-                                        $isValidGoal = false;
-                                    }
-                                    break;
-
-                                case 'date':
-                                    try {
-                                        $d1 = \Carbon\Carbon::createFromFormat('Y-m-d', $min);
-                                        $d2 = \Carbon\Carbon::createFromFormat('Y-m-d', $max);
-
-                                        if ($d1->format('Y-m-d') !== $min || $d2->format('Y-m-d') !== $max) {
-                                            $isValidGoal = false;
-                                        }
-                                    } catch (\Exception $e) {
-                                        $isValidGoal = false;
-                                    }
-                                    break;
-
-                                default:
-                                    $isValidGoal = false;
-                            }
-                            if (!$isValidGoal) { break; }
-                        }
-
-                        if (!$isValidGoal) {
-                            DB::rollBack();
-                            return response()->json([
-                                'message' => 'not_goal',
-                                'goal_type' => $goalType,
-                            ]);
-                        }
-
-                        /* ---- Passed validation → create row -------------------- */
-                        PerformanceDetail::create([
+                    foreach ($titleItem['dataPurpose'] as $purposeItem) {
+                        $purpose = Purpose::create([
                             'performance_id' => $performance->id,
                             'title_id'       => $title->id,
-                            'purpose_id'     => $purpose->id,
-                            'key_kpi'        => $kpi['key_kpi'],
-                            'action_plan'    => $kpi['action_plan'],
-                            'goal'           => $kpi['goal'],
-                            'weight'         => $kpi['weight'],
-                            'goal_type'      => $goalType,
-                            'is_lock'        => $kpi['is_lock'],
-                            'updated_by'     => Auth::id(),
+                            'name'           => $purposeItem['purpose'],
+                            'created_by'     => Auth::id(),
                         ]);
+
+                        foreach ($purposeItem['dataKPi'] as $kpi) {
+                            /* ---- Validate goal lines -------------------------------- */
+                            $isValidGoal = true;
+                            $goalType    = $kpi['goal_type'];           // number|currency|percent|date
+                            $lines       = explode("\n", $kpi['goal']);
+
+                            foreach ($lines as $line) {
+                                $parts = preg_split('/\s+/', trim($line));
+
+                                if (count($parts) !== 2) { $isValidGoal = false; break; }
+
+                                [$min, $max] = $parts;
+
+                                switch ($goalType) {
+                                    case 'number':
+                                    case 'currency':
+                                    case 'percent':
+                                        if (!is_numeric($min) || !is_numeric($max)) {
+                                            $isValidGoal = false;
+                                        }
+                                        break;
+
+                                    case 'date':
+                                        try {
+                                            $d1 = \Carbon\Carbon::createFromFormat('Y-m-d', $min);
+                                            $d2 = \Carbon\Carbon::createFromFormat('Y-m-d', $max);
+
+                                            if ($d1->format('Y-m-d') !== $min || $d2->format('Y-m-d') !== $max) {
+                                                $isValidGoal = false;
+                                            }
+                                        } catch (\Exception $e) {
+                                            $isValidGoal = false;
+                                        }
+                                        break;
+
+                                    default:
+                                        $isValidGoal = false;
+                                }
+                                if (!$isValidGoal) { break; }
+                            }
+
+                            if (!$isValidGoal) {
+                                DB::rollBack();
+                                return response()->json([
+                                    'message' => 'not_goal',
+                                    'goal_type' => $goalType,
+                                ]);
+                            }
+
+                            /* ---- Passed validation → create row -------------------- */
+                            PerformanceDetail::create([
+                                'performance_id' => $performance->id,
+                                'title_id'       => $title->id,
+                                'purpose_id'     => $purpose->id,
+                                'key_kpi'        => $kpi['key_kpi'],
+                                'action_plan'    => $kpi['action_plan'],
+                                'goal'           => $kpi['goal'],
+                                'weight'         => $kpi['weight'],
+                                'goal_type'      => $goalType,
+                                'is_lock'        => $kpi['is_lock'],
+                                'updated_by'     => Auth::id(),
+                            ]);
+                        }
                     }
                 }
+                DB::commit();
+                return response()->json([
+                    'message' => 'successfully'
+                ]);
+            } else {
+                return response()->json(['error' => 'The total weight of all KPIs must equal 100%.']);
             }
-
-            DB::commit();
-            return response()->json([
-                'message' => 'successfully'
-            ]);
         } catch (\Throwable $e) {
             DB::rollBack();
             return response()->json([

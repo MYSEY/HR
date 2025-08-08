@@ -3,179 +3,176 @@
     <div class="page-header">
         <div class="row">
             <div class="col">
-                <h3 class="page-title">@lang('lang.add_new_performance')</h3>
+                <h3 class="page-title">@lang('lang.performance')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.add_new_performance')</li>
+                    <li class="breadcrumb-item active">@lang('lang.performance')</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
-            <form action="" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-                @csrf
-                <div class="row">
-                    <div class="col-md-4 hr-form-group-select2">
-                        <div class="form-group">
-                            <label>@lang('lang.employee')</label>
-                            <select class="form-control hr-select2-option" id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
-                                <option selected value=""> -- @lang('lang.select')--</option>
-                                @foreach ($employee as $item)
-                                    <option value="{{ $item->id }}" {{$item->id == $data->employee_id ? 'selected' : ''}}>
-                                        {{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+            <div class="row">
+                <div class="col-md-4 hr-form-group-select2">
+                    <div class="form-group">
+                        <label>@lang('lang.employee')</label>
+                        <select class="form-control hr-select2-option" id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
+                            <option selected value=""> -- @lang('lang.select')--</option>
+                            @foreach ($employee as $item)
+                                <option value="{{ $item->id }}" {{$item->id == $data->employee_id ? 'selected' : ''}}>
+                                    {{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>@lang('lang.from_date')</label>
-                            <div class="cal-icon">
-                                <input class="form-control datetimepicker required" type="text" id="from_date" name="from_date" value="{{$data->from_date}}" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>@lang('lang.to_date')</label>
-                            <div class="cal-icon">
-                                <input class="form-control datetimepicker required" type="text" id="to_date" name="to_date" value="{{$data->to_date}}" required>
-                            </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>@lang('lang.from_date')</label>
+                        <div class="cal-icon">
+                            <input class="form-control datetimepicker required" type="text" id="from_date" name="from_date" value="{{$data->from_date}}" required>
                         </div>
                     </div>
                 </div>
-                <div class="row mb-2">
-                    <div class="col-md-12">
-                        <div class="table-responsive">
-                            <table id="tbl_performance" class="table table-bordered review-table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th style="min-width: 450px;">(KPI)</th>
-                                        <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
-                                        <th style="min-width: 350px;">គោលដៅ (Goal)</th>
-                                        <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
-                                        <th style="min-width: 150px;">Is Lock</th>
-                                        <th>@lang('lang.action')</th>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>@lang('lang.to_date')</label>
+                        <div class="cal-icon">
+                            <input class="form-control datetimepicker required" type="text" id="to_date" name="to_date" value="{{$data->to_date}}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table id="tbl_performance" class="table table-bordered review-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="min-width: 450px;">(KPI)</th>
+                                    <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
+                                    <th style="min-width: 350px;">គោលដៅ (Goal)</th>
+                                    <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
+                                    <th style="min-width: 150px;">Is Lock</th>
+                                    <th>@lang('lang.action')</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($data->titles as $item)
+                                    <tr class="title-group">
+                                        <td colspan="2" class="text-center">
+                                            <input type="text" class="form-control required" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{ $item->title ?? '' }}">
+                                        </td>
+                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($data->titles as $item)
-                                        <tr class="title-group">
+                                    @foreach ($item->purposes as $purposeItem)
+                                        <tr class='section-purpose purpose-group' style='text-align: center'>
                                             <td colspan="2" class="text-center">
-                                                <input type="text" class="form-control required" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{ $item->title ?? '' }}">
+                                                <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{ $purposeItem->name ?? '' }}">
                                             </td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
+                                            <td class="text-center">
+                                                @if ($loop->index == 0)
+                                                    <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
+                                                @else
+                                                    <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
+                                                @endif
+                                            </td>
                                         </tr>
-                                        @foreach ($item->purposes as $purposeItem)
-                                            <tr class='section-purpose purpose-group' style='text-align: center'>
-                                                <td colspan="2" class="text-center">
-                                                    <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{ $purposeItem->name ?? '' }}">
+                                        @foreach ($purposeItem->performanceDetail as $Detailitem)
+                                            <tr class="section-purpose kpi-group">
+                                                <td class="text-center">
+                                                    <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false"
+                                                        {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->key_kpi }}
+                                                    </textarea>
                                                 </td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
-                                                <td colspan="1" class="text-center"></td>
+                                                <td class="text-center">
+                                                    <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"
+                                                        {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->action_plan }}
+                                                    </textarea>
+                                                </td>
+                                                <td class="text-center">
+                                                    <select class="form-control goal-type-select" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                        <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
+                                                        <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
+                                                        <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
+                                                        <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
+                                                    </select>
+                                                
+                                                    <div class="goal-input-wrapper mt-1">
+                                                        <textarea
+                                                            class="form-control required"
+                                                            name="goal[]"
+                                                            rows="5"
+                                                            placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"
+                                                            spellcheck="false"
+                                                            {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}
+                                                        >{{ $Detailitem->goal }}</textarea>
+                                                    </div>
+                                                </td>
+                                                
+                                                <td class="text-center">
+                                                    <input type="number" step="any" class="form-control required weight" name="weight[]" id="weight" placeholder="%" value="{{ $Detailitem->weight }}" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                </td>
+                                                <td class="text-center">
+                                                    <select class="form-control" name="is_lock[]" id="is_lock" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                        <option value="0" {{ $Detailitem->is_lock == 0 ? 'selected' : '' }}>No</option>
+                                                        <option value="1" {{ $Detailitem->is_lock == 1 ? 'selected' : '' }}>Yes</option>
+                                                    </select>
+                                                </td>
                                                 <td class="text-center">
                                                     @if ($loop->index == 0)
-                                                        <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
+                                                        <button type="button" class="btn btn-success btn-sm addRecord">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
                                                     @else
-                                                        <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
+                                                        @if ($Detailitem->is_lock == 1)
+                                                            <button type="button" class="btn btn-secondary btn-sm" disabled><i class="fa fa-lock"></i></button>
+                                                        @else
+                                                            <button type="button" class="btn btn-danger me-1 btn-sm removeRecord">
+                                                                <i class="fa fa-trash-o"></i>
+                                                            </button>
+                                                        @endif
                                                     @endif
                                                 </td>
                                             </tr>
-                                            @foreach ($purposeItem->performanceDetail as $Detailitem)
-                                                <tr class="section-purpose kpi-group">
-                                                    <td class="text-center">
-                                                        <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false"
-                                                            {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->key_kpi }}
-                                                        </textarea>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"
-                                                            {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->action_plan }}
-                                                        </textarea>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <select class="form-control goal-type-select" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
-                                                            <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
-                                                            <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
-                                                            <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
-                                                            <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
-                                                        </select>
-                                                    
-                                                        <div class="goal-input-wrapper mt-1">
-                                                            <textarea
-                                                                class="form-control required"
-                                                                name="goal[]"
-                                                                rows="5"
-                                                                placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"
-                                                                spellcheck="false"
-                                                                {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}
-                                                            >{{ $Detailitem->goal }}</textarea>
-                                                        </div>
-                                                    </td>
-                                                    
-                                                    <td class="text-center">
-                                                        <input type="number" step="any" class="form-control required weight" name="weight[]" id="weight" placeholder="%" value="{{ $Detailitem->weight }}" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <select class="form-control" name="is_lock[]" id="is_lock" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
-                                                            <option value="0" {{ $Detailitem->is_lock == 0 ? 'selected' : '' }}>No</option>
-                                                            <option value="1" {{ $Detailitem->is_lock == 1 ? 'selected' : '' }}>Yes</option>
-                                                        </select>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        @if ($loop->index == 0)
-                                                            <button type="button" class="btn btn-success btn-sm addRecord">
-                                                                <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        @else
-                                                            @if ($Detailitem->is_lock == 1)
-                                                                <button type="button" class="btn btn-secondary btn-sm" disabled><i class="fa fa-lock"></i></button>
-                                                            @else
-                                                                <button type="button" class="btn btn-danger me-1 btn-sm removeRecord">
-                                                                    <i class="fa fa-trash-o"></i>
-                                                                </button>
-                                                            @endif
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
                                         @endforeach
                                     @endforeach
-                                </tbody>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="2" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center">
-                                            <div class="add-more">
-                                                <a class="add-repeatable-element-button addMore"><i class="fa fa-plus-circle"></i> Add More</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                @endforeach
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center">
+                                        <div class="add-more">
+                                            <a class="add-repeatable-element-button addMore"><i class="fa fa-plus-circle"></i> Add More</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </div>
 
-                <div class="submit-section mb-2">
-                    <input type="text" name="performance_id" id="performance_id" value="{{ $data->id }}" hidden>
-                    <button type="submit" class="btn btn-primary" id="btnCreatePerformance">
-                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
-                            @lang('lang.loading') </span>
-                        <span class="btn-txt">@lang('lang.submit')</span>
-                    </button>
-                    <a href="{{ url('performance') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
-                </div>
-            </form>
+            <div class="submit-section mb-2">
+                <input type="text" name="performance_id" id="performance_id" value="{{ $data->id }}" hidden>
+                <button type="submit" class="btn btn-primary" id="btnCreatePerformance">
+                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
+                        @lang('lang.loading') </span>
+                    <span class="btn-txt">@lang('lang.submit')</span>
+                </button>
+                <a href="{{ url('performance') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+            </div>
         </div>
     </div>
 @endsection
@@ -323,7 +320,6 @@
             }
 
             var performance_id = $("#performance_id").val();
-
             if (numRequired>0) {
                 toastr.error("@lang('lang.input_required')", "@lang('lang.message_title')");
                 $(".required").each(function(){
@@ -344,8 +340,6 @@
                     },
                     dataType: "JSON",
                     success: function (response) {
-                        console.log(response);
-                        
                         if (response.message == 'successfully') {
                             toastr.success(response.message, 'Success');
                             setTimeout(function() {
