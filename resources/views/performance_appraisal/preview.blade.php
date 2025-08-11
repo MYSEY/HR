@@ -323,10 +323,22 @@
             });
 
             // Check for exceeding max range
+            // if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
+            //     scoreAchieved = (goalType === 'date') ? 0 : 5;
+            // }
+
             if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
+                // If goal type is date, don't force 5 here
                 scoreAchieved = (goalType === 'date') ? 0 : 5;
+            } else if (goalType === 'date' && lastMax !== null) {
+                // Handle date type specifically
+                let inputDate = new Date(input);
+                let lastMaxDate = new Date(lastMax);
+
+                if (!isNaN(inputDate) && !isNaN(lastMaxDate) && inputDate < lastMaxDate) {
+                    scoreAchieved = 5;
+                }
             }
-            
             $row.find('.score_achieved').val(scoreAchieved);
             // Calculate and update scores
             let weight = parseFloat($row.find('.weight').val()) || 0;
