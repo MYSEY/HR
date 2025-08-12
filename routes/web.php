@@ -27,6 +27,7 @@ use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\FnApprovalController;
 use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\ActivityLogController;
+use App\Http\Controllers\Admins\BackupController;
 use App\Http\Controllers\Admins\LeavesAdminController;
 use App\Http\Controllers\Admins\MotorRentelController;
 use App\Http\Controllers\Admins\PayrollItemController;
@@ -615,7 +616,15 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/pa/level/create', [PALevelReviewController::class,'formCreate']);
     Route::post('/pa/level/create', [PALevelReviewController::class,'create']);
     Route::get('/pa/level/edit/{id}', [PALevelReviewController::class,'formEdit']);
+    Route::post('/pa/level/update', [PALevelReviewController::class,'update']);
     Route::get('/pa/level//export', [PALevelReviewController::class,'']);
-
+    Route::get('/pa/level/view/{id}', [PALevelReviewController::class,'view']);
+    Route::post('/pa/level/delete', [PALevelReviewController::class,'destroy']);
+    
+    // Block backup database and file upload
+    Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
+    Route::get('/backup/database', [BackupController::class, 'databaseBackup'])->name('backup.database');
+    Route::get('/backup/files', [BackupController::class, 'filesBackup'])->name('backup.files');
+    Route::get('/backup/full', [BackupController::class, 'fullBackup'])->name('backup.full');
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);
