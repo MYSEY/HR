@@ -111,11 +111,11 @@
             $('#v-btn-approve').data('status', datas.status);
             if (datas.status == "pending_approve") {
                 $(".btn-text-save").text("@lang('lang.approve')");
-                $(".btn-approved").css("background-color", "#dc0000");
+                $(".btn-approved").css("background-color", "#e62329");
                 $(".btn-approved").css("color","#ffffff");
             }else{
                 $(".btn-text-save").text("@lang('lang.submit')"); 
-                $(".btn-approved").css("background-color", "#26af48");
+                $(".btn-approved").css("background-color", "#48aa48");
                 $(".btn-approved").css("color","#ffffff");
             }
             let review_type = (datas.review_type + 1);
