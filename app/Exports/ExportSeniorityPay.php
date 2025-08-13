@@ -59,11 +59,7 @@ class ExportSeniorityPay implements FromCollection, WithColumnWidths, WithHeadin
                 $value->total_average_salary,
                 $value->total_salary_receive,
                 $value->tax_exemption_salary,
-<<<<<<< Updated upstream
                 round($value->taxable_salary,2),
-=======
-                number_format($value->taxable_salary,2),
->>>>>>> Stashed changes
             ];
             // Show data for  gross seniority 1
             if ($value->gross_seniority_1 && count($value->gross_seniority_1) > 0) {

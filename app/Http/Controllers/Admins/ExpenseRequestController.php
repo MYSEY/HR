@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use App\Mail\SendEmail;
+use App\Models\LeaveRequest;
 use App\Models\mail as ModelsMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -109,9 +110,122 @@ class ExpenseRequestController extends Controller
             'FnPaymentTerms'
         ]));
     }
+    
+    public function leaveRequest($condistion, $department_id,$branch_id, $status){
+        $request_date = Carbon::createFromDate()->format('Y-m-d');
+        if($status === "pending_approve"){
+            $dataLeaveRequest = LeaveRequest::
+            whereIn("leave_requests.employee_id", $condistion)
+            ->whereIn('leave_requests.status', ["approved_hod","approved","pending"])
+            ->where('leave_requests.start_date', '<=', $request_date)
+            ->where('leave_requests.end_date', '>=', $request_date)
+            ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
+            ->leftJoin('delegate_leaves', function($join) use ($request_date) {
+            $join->on('leave_requests.employee_id', '=', 'delegate_leaves.requester_id')
+                ->where('delegate_leaves.start_date', '<=', $request_date)
+                ->where('delegate_leaves.end_date', '>=', $request_date);
+            })
+            ->leftJoin('users as delegate', 'delegate_leaves.delegate_id', '=', 'delegate.id')
+            ->select( 
+                    "leave_requests.employee_id",
+                    "leave_requests.handover_staff_id",
+                    "leave_requests.start_date",
+                    "leave_requests.start_half_day",
+                    "leave_requests.end_date",
+                    "leave_requests.approved_by",
+                    "leave_requests.status",
+
+                    'users.id',
+                    'users.department_id',
+                    'users.branch_id',
+                    'users.position_id',
+                    'users.employee_name_en',
+                    'users.employee_name_kh',
+                    
+                    'delegate.id  as delegate_delegate_id',
+                    'delegate.employee_name_en  as delegate_employee_name_en',
+                    'delegate.employee_name_kh  as delegate_leaves_employee_name_kh',
+            )->get();
+             if ($dataLeaveRequest && count($dataLeaveRequest) > 0) {
+               $condistion = $condistion ?? [];
+                foreach ($dataLeaveRequest as $lr) {
+                    if ($lr->delegate_delegate_id || $lr->handover_staff_id) {
+                        $condistion = array_values(array_diff($condistion, [(string)$lr->employee_id]));
+                        $newPos = $lr->delegate_delegate_id ?: $lr->handover_staff_id;
+                        if (!in_array((string)$newPos, $condistion, true)) { // strict check
+                            $condistion[] = (string)$newPos;
+                        }
+                    }
+                }
+                // Assign updated array back (make sure all values are strings)
+                $condistion = array_map('strval', array_values($condistion));
+                return $condistion;
+            }
+        }else{
+            $dataLeaveRequest = LeaveRequest::
+            // where("users.branch_id", $branch_id)
+            when($branch_id, function ($query, $bran_id) {
+                $query->where('users.branch_id', $bran_id);
+            })
+            ->when($department_id, function ($query, $dep_id) {
+                $query->where('users.department_id', $dep_id);
+            })
+            ->whereIn("users.position_id", $condistion)
+            ->whereIn('leave_requests.status', ["approved_hod","approved"])
+            ->where('leave_requests.start_date', '<=', $request_date)
+            ->where('leave_requests.end_date', '>=', $request_date)
+            ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
+            ->leftJoin('users as handover', 'leave_requests.handover_staff_id', '=', 'handover.id')
+            ->leftJoin('delegate_leaves', function($join) use ($request_date) {
+            $join->on('leave_requests.employee_id', '=', 'delegate_leaves.requester_id')
+                ->where('delegate_leaves.start_date', '<=', $request_date)
+                ->where('delegate_leaves.end_date', '>=', $request_date);
+            })
+            ->leftJoin('users as delegate', 'delegate_leaves.delegate_id', '=', 'delegate.id')
+            ->select( 
+                    "leave_requests.employee_id",
+                    "leave_requests.handover_staff_id",
+                    "leave_requests.start_date",
+                    "leave_requests.start_half_day",
+                    "leave_requests.end_date",
+                    "leave_requests.approved_by",
+                    "leave_requests.status",
+
+                    'users.id',
+                    'users.department_id',
+                    'users.branch_id',
+                    'users.position_id',
+                    'users.employee_name_en',
+                    'users.employee_name_kh',
+
+                    'handover.position_id  as handover_position_id',
+                    'handover.employee_name_en  as handover_employee_name_en',
+                    'handover.employee_name_kh  as handover_employee_name_kh',
+                    
+                    'delegate.position_id  as delegate_position_id',
+                    'delegate.employee_name_en  as delegate_employee_name_en',
+                    'delegate.employee_name_kh  as delegate_leaves_employee_name_kh',
+            )->get();
+            if ($dataLeaveRequest && count($dataLeaveRequest) > 0) {
+                // Work on a local copy of id_condistion
+                $condistion = $condistion ?? [];
+                foreach ($dataLeaveRequest as $lr) {
+                    if ($lr->delegate_position_id || $lr->handover_position_id) {
+                        $condistion = array_values(array_diff($condistion, [$lr->position_id]));
+                        $newPos = $lr->delegate_position_id ?: $lr->handover_position_id;
+                        if (!in_array($newPos, $condistion)) {
+                            $condistion[] = $newPos;
+                        }
+                    }
+                }
+                // Assign updated array back
+                $condistion = array_values($condistion);
+                return $condistion;
+            }
+        }
+    }
 
     function lovelReview($dataLevelView){
-
         $positionReview = FnLevelReviewer::with(["departmentView", "modelReview"])
                 ->when($dataLevelView["by_location"], function ($query, $by_location) use ($dataLevelView) {
                     $query->where('from_location', $by_location);
@@ -228,6 +342,7 @@ class ExpenseRequestController extends Controller
             ];
            
             $data = $request->all();
+            $leave = [];
             if(Auth::user()->branch->abbreviations == "HQ"){
                 $dataCheckLevelView["model_review"] = (int) Auth::user()->department_id;
                 $positionReview = self::lovelReview($dataCheckLevelView);
@@ -236,6 +351,12 @@ class ExpenseRequestController extends Controller
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
                 if (count($positionReview->id_positions) > 0) {
+                    // *** Process get leave request **/
+                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id,"pending");
+                    if($leave && count($leave) > 0){
+                        $positionReview->id_positions = $leave;
+                    }
+                    //*** end **/
                     $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
                     $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
                 }
@@ -247,6 +368,12 @@ class ExpenseRequestController extends Controller
                 }
                 $data['location_review']    =  $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
                 if (count($positionReview->id_positions) > 0) {
+                    // *** Process get leave request **/
+                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id,"pending");
+                    if($leave && count($leave) > 0){
+                        $positionReview->id_positions = $leave;
+                    }
+                    //*** end **/
                     if($positionReview->department_review){
                         $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
                         $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
@@ -256,7 +383,6 @@ class ExpenseRequestController extends Controller
                     }
                 }
             }
-
             if ($request->hasFile('fn_invoice')) {
                 $autoSerial = $this->generateSerialCode(Carbon::today(),"REF")['serialref'];
                 $data['reference'] = $request->fn_reference ? $request->fn_reference . ',' . $autoSerial : $autoSerial;
@@ -444,6 +570,12 @@ class ExpenseRequestController extends Controller
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
                 if (count($positionReview->id_positions) > 0) {
+                    // *** Process get leave request **/
+                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id, "pending");
+                    if($leave && count($leave) > 0){
+                        $positionReview->id_positions = $leave;
+                    }
+                    // *** end **/
                     $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
                     $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
                 }
@@ -455,6 +587,12 @@ class ExpenseRequestController extends Controller
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
                 if (count($positionReview->id_positions) > 0) {
+                    // *** Process get leave request **/
+                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id, "pending");
+                    if($leave && count($leave) > 0){
+                        $positionReview->id_positions = $leave;
+                    }
+                    // *** end **/
                     if($positionReview->department_review){
                         $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
                         $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
@@ -686,6 +824,12 @@ class ExpenseRequestController extends Controller
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
                 if (count($positionReview->id_positions) > 0) {
+                    // *** Process get leave request **/
+                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id, "pending");
+                    if($leave && count($leave) > 0){
+                        $positionReview->id_positions = $leave;
+                    }
+                    // *** end **/
                     $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
                     $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
                 }
@@ -697,6 +841,12 @@ class ExpenseRequestController extends Controller
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
                 if (count($positionReview->id_positions) > 0) {
+                    // *** Process get leave request **/
+                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id,"pending");
+                    if($leave && count($leave) > 0){
+                        $positionReview->id_positions = $leave;
+                    }
+                    // *** end **/
                     if($positionReview->department_review){
                         $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
                         $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
@@ -904,8 +1054,6 @@ class ExpenseRequestController extends Controller
             ];
             $approveByArray = json_decode($data->approve_by);
             if (in_array(Auth::user()->id, $approveByArray)) {
-            // if ($data->approve_by == Auth::user()->id) {
-
                 $data['position_review']    = [];
                 $data['review_type']        = null;
                 $data['status']             = 'approved';
@@ -960,10 +1108,30 @@ class ExpenseRequestController extends Controller
                         $dataSendEmail["condiction"]["position_id"] = $lovelReview->id_positions;
                         $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
                     }
+                    // *** Process get leave request **/
+                    $model_review = '';
+                    $branch = '';
+                    if($lovelReview->department_review){
+                        $model_review = $lovelReview->department_review;
+                    }else{
+                        $model_review = $lovelReview->model_review;
+                        $branch = $data->requestBy->branch_id;
+                    }
+                    $leave = self::leaveRequest($lovelReview->id_positions, $model_review, $branch,"pending");
+                    if($leave && count($leave) > 0){
+                        $lovelReview->id_positions = $leave;
+                    }
+                    // *** end **/
                     $data['status']             = 'pending';
                     $data['position_review']    = json_encode($lovelReview->id_positions);
                     $data['review_type']        = $lovelReview->type;
                 }else{
+                    // *** Process get leave request **/
+                    $leave = self::leaveRequest(json_decode($data->approve_by),"", "","pending_approve");
+                    if($leave && count($leave) > 0){
+                        $data['approve_by'] = $leave;
+                    }
+                    // *** end **/
                     $data['position_review']    = [];
                     $data['review_type']        = null;
                     $data['status']             = 'pending_approve';
@@ -1041,7 +1209,7 @@ class ExpenseRequestController extends Controller
                 $lovelReview = self::lovelReview($dataCheckLevelView);
                 $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->branch_id;
             };
-            
+
             $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
             $dataSendEmail["data"]["reason"] = $request->remark;
             $dataSendEmail["data"]["review"] = $data->review_type;
@@ -1052,6 +1220,12 @@ class ExpenseRequestController extends Controller
             ExpenseRequestHistory::create($dataHistory);
             $data['status']             = 'rejected';
             $data['reject_review_type'] = $data->review_type;
+            // *** Process get leave request **/
+            $leave = self::leaveRequest($lovelReview->id_positions, $lovelReview->model_review, $data->requestBy->branch_id,"pending");
+            if($leave && count($leave) > 0){
+                $lovelReview->id_positions = $leave;
+            }
+            // *** end **/
             if ($lovelReview) {
                 $data['position_review']    = $lovelReview->id_positions;
                 $data['review_type']        = 1;

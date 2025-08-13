@@ -134,7 +134,7 @@
                     </div>
                     <div class="submit-section">
                         <input type="text" hidden name="Stage_review" id="Stage_review">
-                        <button type="button" class="btn btn-warning btn-reject" id="v-btn-reject">
+                        <button type="button" class="btn btn-reject" id="v-btn-reject" style="background-color: #fccf0a; color:white">
                             <span class="btn-text-print">@lang('lang.reject')</span>
                             <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                         </button>
