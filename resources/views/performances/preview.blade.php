@@ -103,9 +103,6 @@
                                                     <td class="text-center">
                                                         <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
-                                                    {{-- <td class="text-center">
-                                                        <textarea rows="5" class="form-control" placeholder="Enter text here" required>{{$Detailitem->goal}}</textarea>
-                                                    </td> --}}
                                                     <td class="text-center">
                                                         <select class="form-control goal-type-selec goal_type" name="goal_type">
                                                             <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>

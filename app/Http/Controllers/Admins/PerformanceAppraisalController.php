@@ -92,6 +92,31 @@ class PerformanceAppraisalController extends Controller
         $branch = Branchs::all();
         return view('performance_appraisal.index',compact('data','branch'));
     }
+    public function salaryIncreasement(Request $request)
+    {
+        $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
+            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->select(
+                'performances.*',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.branch_id',
+                'users.basic_salary',
+                'users.date_of_commencement',
+                'departments.name_english as dep_name',
+                'positions.name_english as positions_name',
+                'branchs.branch_name_en',
+                'branchs.branch_name_kh',
+            )
+        ->where('performances.status', 'approved');
+        $data = $query->get();
+        $branch = Branchs::all();
+        return view('performance_appraisal.increasement',compact('data','branch'));
+    }
+
 
     /**
      * Show the form for creating a new resource.

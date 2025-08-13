@@ -229,4 +229,40 @@ class Helper
     {
         return strtr($number, ['0'=>'០','1'=>'១','2'=>'២','3'=>'៣','4'=>'៤','5'=>'៥','6'=>'៦','7'=>'៧','8'=>'៨','9'=>'៩']);
     }
+
+    public static function calculationSalaryIncreasement($score,$basicSalary,$date_of_commencement){
+        $score = (float) $score;
+        $interest = 0; // default interest
+        $totalsSalaryIncreasement = 0; // default increase
+
+        if ($score >= 1 && $score < 1.99) {
+            $interest = 5/100;
+        } elseif ($score >= 2 && $score <= 2.99) {
+            $interest = 10/100;
+        } elseif ($score >= 3 && $score <= 3.99) {
+            $interest = 15/100;
+        } elseif ($score >= 4 && $score <= 4.69) {
+            $interest = 20/100;
+        } elseif ($score >= 4.70 && $score <= 5) {
+            $interest = 25/100;
+        }
+    
+        // Example: $date_of_commencement comes from your DB
+        if (!empty($date_of_commencement)) {
+            $startOfYear = Carbon::now()->startOfYear();
+            $endOfYear   = Carbon::now()->endOfYear();
+            $commenceDate = Carbon::parse($date_of_commencement);
+
+            // If employee joined before this year, start counting from Jan 1
+            $startDate = $commenceDate->lessThan($startOfYear) ? $startOfYear : $commenceDate;
+
+            // Make sure end date is today if this year isn't finished yet
+            $endDate = Carbon::today()->lessThan($endOfYear) ? Carbon::today() : $endOfYear;
+            $totalWorkingDays = $startDate->diffInDays($endDate) + 1; // +1 to include start day
+        } else {
+            $totalWorkingDays = 0;
+        }
+        $totalsSalaryIncreasement = ($basicSalary * $interest * $totalWorkingDays) / 365;
+        return number_format($totalsSalaryIncreasement,2);
+    }
 }

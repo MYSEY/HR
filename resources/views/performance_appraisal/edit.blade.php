@@ -94,8 +94,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Noted</label>
-                        <textarea rows="7" class="form-control" id="noted" name="noted" placeholder="Enter text here"></textarea>
+                        <label>Remark</label>
+                        <textarea rows="7" class="form-control" id="remark" name="remark" placeholder="Enter text here"></textarea>
                     </div>
                 </div>
             </div>
@@ -138,7 +138,7 @@
                         id : $("#id").val(),
                         employee_id : $("#employee_id").val(),
                         total_score_direct_chairman : $("#total_score_direct_chairman").val(),
-                        noted : $("#noted").val(),
+                        remark : $("#remark").val(),
                     },
                     dataType: "JSON",
                     success: function (response) {
