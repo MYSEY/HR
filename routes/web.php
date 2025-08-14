@@ -12,7 +12,9 @@ use App\Http\Controllers\Admins\BankController;
 use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\Admins\FNTaxController;
 use App\Http\Controllers\Admins\TaxesController;
+use App\Http\Controllers\Admins\BackupController;
 use App\Http\Controllers\Admins\BranchController;
+use App\Http\Controllers\Admins\PAFlowController;
 use App\Http\Controllers\Admins\HolidayController;
 use App\Http\Controllers\Admins\ReportsController;
 use App\Http\Controllers\Admins\SettingController;
@@ -27,7 +29,6 @@ use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\FnApprovalController;
 use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\ActivityLogController;
-use App\Http\Controllers\Admins\BackupController;
 use App\Http\Controllers\Admins\LeavesAdminController;
 use App\Http\Controllers\Admins\MotorRentelController;
 use App\Http\Controllers\Admins\PayrollItemController;
@@ -38,6 +39,7 @@ use App\Http\Controllers\Admins\TrainingTypeController;
 use App\Http\Controllers\Admins\ExpenseReportController;
 use App\Http\Controllers\Admins\FnPaymentTermController;
 use App\Http\Controllers\Admins\FringeBenefitController;
+use App\Http\Controllers\Admins\PALevelReviewController;
 use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\ExpenseRequestController;
 use App\Http\Controllers\Admins\FNExchangeRateController;
@@ -56,9 +58,8 @@ use App\Http\Controllers\Admins\ChildrenAllowanceController;
 use App\Http\Controllers\Admins\FnRegularExspenseController;
 use App\Http\Controllers\Admins\CategoryPermissionController;
 use App\Http\Controllers\Admins\PerformanceAppraisalController;
+use App\Http\Controllers\Admins\AnnualSalaryIncreasementController;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
-use App\Http\Controllers\Admins\PAFlowController;
-use App\Http\Controllers\Admins\PALevelReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -286,7 +287,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     //performance Appraisal
     Route::resource('performance-appraisal', PerformanceAppraisalController::class);
     Route::post('performance/appraisal/update/score', [PerformanceAppraisalController::class,'updateScorePerformance']);
-    Route::get('annual/salary/increasement', [PerformanceAppraisalController::class,'salaryIncreasement']);
+    // Route::get('annual/salary/increasement', [PerformanceAppraisalController::class,'salaryIncreasement']);
+
+    Route::resource('annual/salary/increasement', AnnualSalaryIncreasementController::class);
+
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
     Route::get('motor-rentel/edit',[MotorRentelController::class,'edit']);
