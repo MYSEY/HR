@@ -8,6 +8,7 @@
                             <th class="stuck-scroll-3">#</th>
                             <th class="stuck-scroll-3">@lang('lang.tracking_id')</th>
                             <th class="stuck-scroll-3">@lang('lang.status')</th>
+                            <th >@lang('lang.position') @lang('lang.review')</th>
                             <th >@lang('lang.type')</th>
                             <th>@lang('lang.type_of_expense')</th>
                             <th>@lang('lang.amount') @lang('lang.usd')</th>
@@ -23,7 +24,25 @@
                         @if (count($datas)>0)
                             @foreach ($datas as $key=>$item)
                                 @php
+                                    $positionReviews = "";
                                     $locations = "";
+                                     if ($item->status != "pending_approve") {
+                                        if (count($item->PositionReviews)>0) {
+                                            $num = 1;
+                                            foreach ($item->PositionReviews as $key => $position) {
+                                                $positionReviews .= $num . ". " . $position->name_english . "\n";
+                                                $num++;
+                                            }
+                                        }
+                                    }else{
+                                        if ($item->EmployeeApprove) {
+                                            $num = 1;
+                                            foreach ($item->EmployeeApprove as $ind => $approve) {
+                                                $positionReviews .= $num . ". " . $approve->position->name_english . "\n";
+                                                $num++;
+                                            }
+                                        }
+                                    }
                                     if ($item->type == "2" ) {
                                         if (count($item->departments)>0) {
                                             $num = 1;
@@ -66,6 +85,9 @@
                                             <span class="badge bg-inverse-success" style="font-size: 13px;">@lang('lang.approved')</span>
                                         @endif
                                         
+                                    </td>
+                                     <td data-toggle="tooltip" data-html="true" title="{!! $positionReviews !!}" >
+                                        {{ Str::limit($positionReviews, 30, '...') }}
                                     </td>
                                     <td>
                                         {{-- {{$item->type == "1" ? "Special Expense": "General Expense"}} --}}
