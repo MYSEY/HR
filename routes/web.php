@@ -626,5 +626,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/backup/database', [BackupController::class, 'databaseBackup'])->name('backup.database');
     Route::get('/backup/files', [BackupController::class, 'filesBackup'])->name('backup.files');
     Route::get('/backup/full', [BackupController::class, 'fullBackup'])->name('backup.full');
+    Route::post('/restore/database', [BackupController::class, 'restoreDatabase'])->name('restore.database');
+    Route::post('/restore/files', [BackupController::class, 'restoreFiles'])->name('restore.files');
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);

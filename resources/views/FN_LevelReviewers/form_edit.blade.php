@@ -99,7 +99,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                         <div class="form-group">
-                                                                <label>@lang('lang.type') <span class="text-danger">*</span></label>
+                                                                <label>@lang('lang.review_type') <span class="text-danger">*</span></label>
                                                                 <select class="form-control level_type data_required" name="type[]" required>
                                                                     @foreach ($requestType as $rev)
                                                                         <option value="{{ $rev['id'] }}" {{ ($item->type == $rev['id']) ? 'selected' : '' }}>

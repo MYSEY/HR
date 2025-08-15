@@ -84,19 +84,19 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                        <div class="form-group">
-                                                            <label>@lang('lang.type') <span class="text-danger">*</span></label>
+                                                            <label>@lang('lang.review_type') <span class="text-danger">*</span></label>
                                                             <select class="form-control level_type data_required" name="type[]" required>
                                                                 <option value="" selected> </option>
-                                                                <option value="1">@lang('lang.review') 1</option>
-                                                                <option value="2">@lang('lang.review') 2</option>
-                                                                <option value="3">@lang('lang.review') 3</option>
-                                                                <option value="4">@lang('lang.review') 4</option>
-                                                                <option value="5">@lang('lang.review') 5</option>
-                                                                <option value="6">@lang('lang.review') 6</option>
-                                                                <option value="7">@lang('lang.review') 7</option>
-                                                                <option value="8">@lang('lang.review') 8</option>
-                                                                <option value="9">@lang('lang.review') 9</option>
-                                                                <option value="10">@lang('lang.review') 10</option>
+                                                                <option value="1">1 @lang('lang.review')</option>
+                                                                <option value="2">2 @lang('lang.review')</option>
+                                                                <option value="3">3 @lang('lang.review')</option>
+                                                                <option value="4">4 @lang('lang.review')</option>
+                                                                <option value="5">5 @lang('lang.review')</option>
+                                                                <option value="6">6 @lang('lang.review')</option>
+                                                                <option value="7">7 @lang('lang.review')</option>
+                                                                <option value="8">8 @lang('lang.review')</option>
+                                                                <option value="9">9 @lang('lang.review')</option>
+                                                                <option value="10">10 @lang('lang.review')</option>
                                                             </select>
                                                         </div>
                                                     </div>

@@ -349,6 +349,12 @@ class ExpenseRequestController extends Controller
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
+                if(count($positionReview->id_positions) == 1){
+                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                        $dataCheckLevelView["type"] = 2;
+                        $positionReview = self::lovelReview($dataCheckLevelView);
+                    }   
+                }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
                 if (count($positionReview->id_positions) > 0) {
                     // *** Process get leave request **/
@@ -365,6 +371,12 @@ class ExpenseRequestController extends Controller
                 $positionReview = self::lovelReview($dataCheckLevelView);
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                }
+                if(count($positionReview->id_positions) == 1){
+                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                        $dataCheckLevelView["type"] = 2;
+                        $positionReview = self::lovelReview($dataCheckLevelView);
+                    }   
                 }
                 $data['location_review']    =  $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
                 if (count($positionReview->id_positions) > 0) {
@@ -398,7 +410,6 @@ class ExpenseRequestController extends Controller
             } else {
                 $data['reference'] = $request->fn_reference;
             }
-
             // *** Process flow send alert email **/
             $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
             $dataSendEmail["data"]["subject"] = $request->subject;
@@ -568,6 +579,12 @@ class ExpenseRequestController extends Controller
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
+                if(count($positionReview->id_positions) == 1){
+                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                        $dataCheckLevelView["type"] = 2;
+                        $positionReview = self::lovelReview($dataCheckLevelView);
+                    }   
+                }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
                 if (count($positionReview->id_positions) > 0) {
                     // *** Process get leave request **/
@@ -584,6 +601,12 @@ class ExpenseRequestController extends Controller
                 $positionReview = self::lovelReview($dataCheckLevelView);
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                }
+                if(count($positionReview->id_positions) == 1){
+                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                        $dataCheckLevelView["type"] = 2;
+                        $positionReview = self::lovelReview($dataCheckLevelView);
+                    }   
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
                 if (count($positionReview->id_positions) > 0) {
@@ -822,6 +845,12 @@ class ExpenseRequestController extends Controller
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
+                if(count($positionReview->id_positions) == 1){
+                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                        $dataCheckLevelView["type"] = 2;
+                        $positionReview = self::lovelReview($dataCheckLevelView);
+                    }   
+                }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
                 if (count($positionReview->id_positions) > 0) {
                     // *** Process get leave request **/
@@ -838,6 +867,12 @@ class ExpenseRequestController extends Controller
                 $positionReview = self::lovelReview($dataCheckLevelView);
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                }
+                if(count($positionReview->id_positions) == 1){
+                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                        $dataCheckLevelView["type"] = 2;
+                        $positionReview = self::lovelReview($dataCheckLevelView);
+                    }   
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
                 if (count($positionReview->id_positions) > 0) {
