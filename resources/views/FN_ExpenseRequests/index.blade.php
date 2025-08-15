@@ -43,7 +43,7 @@
                                 </a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link clearTabs" data-bs-toggle="tab" id="tab_assign" href="#tbl_assign" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.assigned_to_me')
+                                <a class="nav-link clearTabs" data-bs-toggle="tab" id="tab_assign" href="#tbl_assign" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.review_and_submit')
                                     <span id="dataShortList" class="badge bg-inverse-danger ms-1 rounded-pill">{{count($dataAsign)}}</span>
                                 </a>
                             </li>

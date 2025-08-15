@@ -728,6 +728,8 @@ return[
     "qty"=>"Qty",
     "quantity"=>"Quantity",
     "review"=>"Review",
+    "review_type"=>"Review Type",
+    "review_and_submit"=>"Review and Submit",
     "rile"=>"Riel",
     "riel"=>"Riel",
     "reil"=>"Reil",
