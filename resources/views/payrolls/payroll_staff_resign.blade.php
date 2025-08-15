@@ -368,6 +368,7 @@
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
+@section('script')
 <script>
     var lang = @json(Helper::getLang());
     var number_employee = null;
@@ -384,7 +385,7 @@
             branch_id = $('#branch_id').val();
             filter_month = $('#filter_month').val();
             // Reload DataTable with the filter values
-            $('#btl_payroll_resign').DataTable().ajax.reload(); 
+            $('#btl_payroll_resign').DataTable().ajax.reload(null, false); 
         });
         
         $(".btn_excel").on("click", function() {
@@ -575,6 +576,11 @@
     });
     
     function dataTables() {
+        $('#loading-overlay').show();
+        // Check if DataTable instance exists, then destroy it
+        if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
+            $('#DataTables_Table_0').DataTable().clear().destroy();
+        }
         $('#btl_payroll_resign').DataTable({
             pageLength: 10,
             processing: true,
@@ -844,7 +850,15 @@
                     searchable: false
                 }
             ],
+            order: [[0, 'desc']],
             initComplete: function() {
+                $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
+            }
+        });
+        $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
+            if (processing) {
+                $('#loading-overlay').show();
+            } else {
                 $('#loading-overlay').hide();
             }
         });
@@ -853,3 +867,4 @@
         return parseInt(currency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
+@endsection

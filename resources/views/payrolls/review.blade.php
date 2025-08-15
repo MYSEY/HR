@@ -730,7 +730,7 @@
         if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
             $('#DataTables_Table_0').DataTable().clear().destroy();
         }
-        
+        $('#DataTables_Table_0').empty(); // remove old table head/body
         $('#DataTables_Table_0').DataTable({
             pageLength: 10,
             processing: true,

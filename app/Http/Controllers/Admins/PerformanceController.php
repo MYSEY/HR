@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admins;
 
 use App\Models\User;
 use App\Models\Title;
+use App\Models\Branchs;
 use App\Models\Purpose;
+use App\Models\Department;
 use App\Models\Performance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -22,32 +24,70 @@ class PerformanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
-        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
-        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
-        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
-        ->select(
-            'performances.*',
-            'users.number_employee',
-            'users.employee_name_kh',
-            'users.employee_name_en',
-            'departments.name_english as dep_name',
-            'positions.name_english as positions_name',
-            'branchs.branch_name_en',
-            'branchs.branch_name_kh',
-        );
-        if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO','HR','DHOD','DBM'])) {
-            $query->where('performances.created_by', Auth::user()->id);
+        if (request()->ajax()) {
+            // Define the base query
+            $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
+            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->select(
+                'performances.*',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'departments.name_english as dep_name',
+                'positions.name_english as positions_name',
+                'branchs.branch_name_en',
+                'branchs.branch_name_kh',
+            )->when($request->employee_id, function ($query, $employee_id) {
+                return $query->where('users.number_employee', $employee_id);
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                return $query->where('users.employee_name_en', $employee_name);
+            })
+            ->when($request->branch_id, function ($query, $branch_id) {
+                return $query->where('users.branch_id', $branch_id);
+            })
+            ->when($request->department_id, function ($query, $department_id) {
+                return $query->where('users.department_id', $department_id);
+            });
+        
+            // Search filter
+            $searchValue = request()->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('performances.id', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                    ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
+                });
+            }
+
+            if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO','HR','DHOD','DBM'])) {
+                $query->where('performances.created_by', Auth::user()->id);
+            }
+            if (in_array(Auth::user()->RolePermission, ['Employee'])) {
+                $query->where('performances.employee_id', Auth::user()->id);
+            }
+
+            $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
+            $recordsFiltered = $query->count();
+            $start = intval(request()->input('start', 0));
+            $limit = intval(request()->input('length', 10));
+            $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
+            return response()->json([
+                'draw' => intval(request()->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
         }
-        if (in_array(Auth::user()->RolePermission, ['Employee'])) {
-            $query->where('performances.employee_id', Auth::user()->id);
-        }
-        // ->groupBy('performances.employee_id')
-        // Fetch paginated data
-        $data = $query->get();
-        return view('performances.index',compact('data'));
+        $branch = Branchs::all();
+        $department = Department::all();
+        return view('performances.index',compact('branch','department'));
     }
 
     /**

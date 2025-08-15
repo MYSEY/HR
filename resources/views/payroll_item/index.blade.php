@@ -49,7 +49,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped" id="tbl_adjustment">
+                                <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -63,34 +63,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- @if (count($data)>0)
-                                            @foreach ($data as $key=>$item)
-                                                <tr>
-                                                    <td class="sorting_1 ids">{{$item->id}}</td>
-                                                    <td class="name_khmer">{{$item->EmployeeName}}</td>
-                                                    <td class="name_english">{{$item->amount}}</td>
-                                                    <td class="name_english">{{$item->adjustment_type == 'include_taxe' ? 'Include Taxe' : 'Exclued Taxe'}}</td>
-                                                    <td class="position_type">{{ \Carbon\Carbon::parse($item->adjustment_date)->format('d-M-Y') ?? '' }}</td>
-                                                    <td class="position_range">{{$item->description}}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
-                                                    <td class="text-end">
-                                                        @if (permissionAccess("m9-s2","is_update")->value == "1" || permissionAccess("m9-s2","is_delete")->value == "1")
-                                                            <div class="dropdown dropdown-action">
-                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (permissionAccess("m9-s2","is_update")->value == "1")
-                                                                        <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_payroll_adjustment"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    @endif
-                                                                    @if (permissionAccess("m9-s2","is_delete")->value == "1")
-                                                                        <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_payroll_adjustment"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -242,7 +214,7 @@
                 employee_name = $('#employee_name').val();
                 filter_month = $('#filter_month').val();
                 // Reload DataTable with the filter values
-                $('#tbl_adjustment').DataTable().ajax.reload(null, false); 
+                $('#DataTables_Table_0').DataTable().ajax.reload(null, false);
             });
             
             dataTables();
@@ -313,11 +285,12 @@
         function dataTables() {
             $('#loading-overlay').show();
             // Check if DataTable instance exists, then destroy it
-            if ($.fn.DataTable.isDataTable('#tbl_adjustment')) {
-                $('#tbl_adjustment').DataTable().clear().destroy();
+            if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
+                $('#DataTables_Table_0').DataTable().clear().destroy();
             }
             
-            $('#tbl_adjustment').DataTable({
+            $('#DataTables_Table_0').DataTable({
+                destroy: true,
                 pageLength: 10,
                 processing: true,
                 serverSide: true,
@@ -375,7 +348,7 @@
                     $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
                 }
             });
-            $('#tbl_adjustment').on('processing.dt', function (e, settings, processing) {
+            $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
                 if (processing) {
                     $('#loading-overlay').show();
                 } else {

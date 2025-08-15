@@ -15,6 +15,63 @@
                 </div>
             </div>
         </div>
+        <div class="row filter-btn"> 
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
+                <div class="form-group">
+                    <div class="search">
+                        <i class="uil uil-search"></i>
+                        <input spellcheck="false" id="employee_id" name="employee_id" class="form-control" type="text" placeholder="Employee ID">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                <div class="form-group ">
+                    <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+                    <div class="form-group">
+                        <select class="select form-control hr-select2-option" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                            @foreach ($branch as $item)
+                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+                    <div class="form-group">
+                        <select class="select form-control hr-select2-option" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
+                            @foreach ($department as $item)
+                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+            </div>
+            <div class="col-sm-2 col-md-2">
+                <div style="display: flex" class="float-end">
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
+                        <span class="btn-txt"><i class="fa fa-search"></i></span>
+                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                    </button>
+                    {{-- @if (permissionAccess("m4-s2","is_export")->value == "1")
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                            <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
+                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                    @endif --}}
+                    <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                        <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
@@ -35,76 +92,11 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">@lang('lang.to_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">@lang('lang.type')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">@lang('lang.total_weight')</th>
-                                            {{-- <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Total Percentage(%)</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Total Score</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Total Score achieved</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Overall Results</th> --}}
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.status')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $item)
-                                            <tr class="odd">
-                                                <td class="ids stuck-scroll-4">{{$item->id}}</td>
-                                                <td class="stuck-scroll-4"><a href="{{url("performance",$item->employee_id)}}">{{$item->number_employee}}</a></td>
-                                                <td class="stuck-scroll-4"><a href="">{{$item->employee_name_en}}</a></td>
-                                                <td>{{$item->branch_name_en}}</td>
-                                                <td>{{$item->dep_name}}</td>
-                                                <td>{{$item->positions_name}}</td>
-                                                <td>{{$item->from_date}}</td>
-                                                <td>{{$item->to_date}}</td>
-                                                <td>{{$item->type}}</td>
-                                                <td>{{$item->total_weight}}%</td>
-                                                {{-- <td><span class="badge bg-inverse-success">40%</span></td>
-                                                <td>{{$item->total_score}}</td>
-                                                <td>{{$item->total_score_achieved}}</td>
-                                                <td>{{$item->overall_results}}</td> --}}
-                                                {{-- <td>
-                                                    <div class="dropdown action-label">
-                                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                            <i class="fa fa-dot-circle-o text-warning"></i>
-                                                            <span>{{ $item->status == 'prepare' ? 'Prepare' : 'Approved' }}</span>
-                                                        </a>
-
-                                                        <div class="dropdown-menu dropdown-menu-right" id="btnStatus">
-                                                            <a class="dropdown-item" data-id="{{$item->id}}" href="#">
-                                                                <i class="fa fa-dot-circle-o text-success"></i>                                                             
-                                                                <span>{{ $item->status == 'prepare' ? 'Approve' : 'Prepared' }}</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </td> --}}
-                                                <td>
-                                                    <div class="dropdown action-label">
-                                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                            <i class="fa fa-dot-circle-o {{ $item->status == 'prepare' ? 'text-warning' : 'text-success' }}"></i>
-                                                            <span>{{ $item->status == 'prepare' ? 'Prepare' : 'Approved' }}</span>
-                                                        </a>
-                                                
-                                                        @if($item->status == 'prepare')
-                                                            <div class="dropdown-menu dropdown-menu-right" id="btnStatus">
-                                                                <a class="dropdown-item" data-id="{{ $item->id }}" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>Approve</span>
-                                                                </a>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                                
-                                                <td class="text-end">
-                                                    <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="{{url("performance",$item->id)}}"><i class="fa fa-regular fa-eye"></i> @lang("lang.preview")</a>
-                                                            <a href="{{ url('performance', $item->id) }}/edit" class="dropdown-item" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                            <a class="dropdown-item performanceDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_performance"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -141,17 +133,44 @@
         </div>
         <!-- /Delete Performane Modal -->
     </div>
+    <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p>Loading Data...</p>
+        </div>
+    </div>
 @endsection
 @include('includs.script')
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 @section('script')
     <script>
-        $(document).ready(function() {
+        var number_employee = null;
+        var employee_name = null;
+        var branch_id = null;
+        var department_id = null;
+        $(function(){
+            $('.btn-search').on('click', function() {
+                number_employee = $('#employee_id').val();
+                employee_name = $('#employee_name').val();
+                branch_id = $('#branch_id').val();
+                department_id = $('#department_id').val();
+                $('#DataTables_Table_0').DataTable().ajax.reload(null, false);
+            });
+            // Initialize only once
+            dataTables();
+            $(".reset-btn").on("click", function() {
+                $(this).prop('disabled', true);
+                $(".btn-text-reset").hide();
+                $("#btn-text-loading").css('display', 'block');
+                window.location.replace("{{ URL('performance') }}");
+            });
             $('.performanceDelete').on('click',function(){
                 let id = $(this).data("id");
                 $('.e_id').val(id);
             });
-            
-            $('#btnStatus a').on('click', function(e) {
+            $('body').on('click','#btnStatus',function(e){
                 e.preventDefault();
                 var id = $(this).data('id');
                 $.confirm({
@@ -208,22 +227,120 @@
                         });
                     }
                 });
-
-                // $.ajax({
-                //     url: "{{ url('performance/status') }}/" + id,
-                //     type: 'GET',
-                //     success: function(response) {
-                //         if (response.success) {
-                //             toastr.success(response.message);
-                //             location.reload();
-                //         } else {
-                //             toastr.error(response.message);
-                //         }
-                //     },
-                //     error: function(xhr) {
-                //         toastr.error(xhr.responseJSON.message);
-                //     }
-                // });
             });
         });
+
+        function dataTables() {
+            $('#loading-overlay').show();
+            // Check if DataTable instance exists, then destroy it
+            if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
+                $('#DataTables_Table_0').DataTable().clear().destroy();
+            }
+            $('#DataTables_Table_0').DataTable({
+                destroy: true,
+                pageLength: 10,
+                processing: true,
+                serverSide: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                ajax: {
+                    url: '{{ URL("performance") }}',
+                    type: 'GET',
+                    data: function (d) {
+                        d.employee_id = $('input[name="employee_id"]').val();
+                        d.employee_name = $('input[name="employee_name"]').val();
+                        d.branch_id = $('select[name="branch_id"]').val();
+                        d.department_id = $('select[name="department_id"]').val();
+                    }
+                },
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'number_employee', name: 'number_employee' },
+                    { data: 'employee_name_kh', name: 'employee_name_kh' },
+                    { data: 'branch_name_en', name: 'branch_name_en' },
+                    { data: 'dep_name', name: 'dep_name' },
+                    { data: 'positions_name', name: 'positions_name' },
+                    { data: 'from_date', name: 'from_date' },
+                    { data: 'to_date', name: 'to_date' },
+                    { data: 'type', name: 'type' },
+                    {
+                        data: 'total_weight',
+                        name: 'total_weight',
+                        render: function (data, type, row) {
+                            return data !== null ? data + '%' : '';
+                        }
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            if (row.status === 'prepare') {
+                                // Show dropdown if status is prepare
+                                return `
+                                    <div class="dropdown action-label">
+                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-dot-circle-o text-warning"></i>
+                                            <span>Prepare</span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" data-id="${row.id}" href="javascript:void(0)" id="btnStatus">
+                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                <span>Approve</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                // Show non-clickable Approved label
+                                return `
+                                    <div class="action-label">
+                                        <span class="btn btn-white btn-sm btn-rounded">
+                                            <i class="fa fa-dot-circle-o text-success"></i>
+                                            Approved
+                                        </span>
+                                    </div>
+                                `;
+                            }
+                        }
+                    },
+                    {
+                        data: null,
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            return `
+                                <div class="dropdown dropdown-action">
+                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="{{url('performance')}}/${row.id}">
+                                            <i class="fa fa-regular fa-eye"></i> Preview
+                                        </a>
+                                        <a href="{{url('/performance')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
+                                            <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')
+                                        </a>
+                                        <a class="dropdown-item performanceDelete" href="#" data-toggle="modal" data-id="${row.id}" data-target="#delete_performance"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                ],
+                order: [[0, 'desc']],
+                initComplete: function() {
+                    $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
+                }
+            });
+
+            $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
+                if (processing) {
+                    $('#loading-overlay').show();
+                } else {
+                    $('#loading-overlay').hide();
+                }
+            });
+        }
     </script>
+@endsection
