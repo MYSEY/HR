@@ -14,7 +14,7 @@
         </div>
         {!! Toastr::message() !!}
         <div class="row filter-btn"> 
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"> 
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
                 <div class="form-group">
                     <div class="search">
                         <i class="uil uil-search"></i>
@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
                 <div class="form-group ">
                     <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                 </div>
@@ -39,8 +39,20 @@
                     </div>
                 @endif
             </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+                    <div class="form-group">
+                        <select class="select form-control hr-select2-option" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
+                            @foreach ($department as $item)
+                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+            </div>
             <div class="col-sm-2 col-md-2">
-                <div style="display: flex" class="float-end">
+                <div style="display: flex">
                     <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
                         <span class="btn-txt"><i class="fa fa-search"></i></span>
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -155,8 +167,16 @@
                 },
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'number_employee', name: 'number_employee' },
-                    { data: 'employee_name_kh', name: 'employee_name_kh' },
+                    { 
+                        data: 'number_employee', 
+                        name: 'number_employee',
+                        className: 'stuck-scroll-3',
+                    },
+                    { 
+                        data: 'employee_name_kh', 
+                        name: 'employee_name_kh',
+                        className: 'stuck-scroll-3',
+                    },
                     { data: 'branch_name_en', name: 'branch_name_en' },
                     { data: 'dep_name', name: 'dep_name' },
                     { data: 'positions_name', name: 'positions_name' },

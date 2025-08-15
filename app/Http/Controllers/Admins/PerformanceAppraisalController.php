@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Models\Branchs;
+use App\Models\Department;
 use App\Models\Performance;
 use Illuminate\Http\Request;
 use App\Models\PerformanceDetail;
@@ -76,7 +77,8 @@ class PerformanceAppraisalController extends Controller
             ]);
         }
         $branch = Branchs::all();
-        return view('performance_appraisal.index',compact('branch'));
+        $department = Department::all();
+        return view('performance_appraisal.index',compact('branch','department'));
     }
     public function salaryIncreasement(Request $request)
     {
