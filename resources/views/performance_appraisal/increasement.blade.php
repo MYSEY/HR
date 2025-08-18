@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.annual_salary_increasement')</h3>
+                    <h3 class="page-title">@lang('lang.generate_annual_salary_increasement')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.annual_salary_increasement')</li>
+                        <li class="breadcrumb-item active">@lang('lang.generate_annual_salary_increasement')</li>
                     </ul>
                 </div>
             </div>
@@ -65,13 +65,15 @@
                                             <th class="sorting sorting_asc stuck-scroll-4">#</th>
                                             <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
                                             <th class="sorting sorting_asc stuck-scroll-4">@lang('lang.employee_name')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">@lang('lang.location')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">@lang('lang.department')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">@lang('lang.position')</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">ពិន្ទុ</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">បុគ្គលិកផ្ទាល់</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">ប្រធានផ្ទាល់</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.salary_increasement')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="location: activate to sort column ascending">@lang('lang.location')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="department: activate to sort column ascending">@lang('lang.department')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="position: activate to sort column ascending">@lang('lang.position')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="date_of_commencement: activate to sort column ascending">@lang('lang.date_of_commencement')</th>
+                                            {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="basic_salary: activate to sort column ascending">@lang('lang.basic_salary')</th> --}}
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ពិន្ទុ</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">បុគ្គលិកផ្ទាល់</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ប្រធានផ្ទាល់</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.salary_increasement')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -83,12 +85,13 @@
                                                 <td>{{$item->branch_name_en}}</td>
                                                 <td>{{$item->dep_name}}</td>
                                                 <td>{{$item->positions_name}}</td>
+                                                <td>{{$item->date_of_commencement}}</td>
+                                                {{-- <td>{{$item->basic_salary}}</td> --}}
                                                 <td><span class="badge bg-inverse-success">{{$item->total_score}}</span></td>
                                                 <td><span class="badge bg-inverse-success">{{$item->total_score_live_staff}}</span></td>
                                                 <td><span class="badge bg-inverse-success">{{$item->total_score_direct_chairman}}</span></td>
                                                 <td>
                                                     {{Helper::calculationSalaryIncreasement($item->total_score_direct_chairman,$item->basic_salary,$item->date_of_commencement)}}
-                                                    {{-- ${{ number_format((float) $totalsSalaryIncreasement, 2) }} --}}
                                                 </td>
                                             </tr>
                                         @endforeach

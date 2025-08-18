@@ -39,14 +39,14 @@
                                                 <td>{{$item->id}}</td>
                                                 <td>{{$item->ranking_work_result}}</td>
                                                 <td>{{$item->total_score}}</td>
-                                                <td>{{$item->percentage}}</td>
+                                                <td>{{$item->percentage}}%</td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            {{-- @if(permissionAccess("m9-s4","is_update")->value == "1") --}}
+                                                            @if(permissionAccess("m9-s4","is_update")->value == "1")
                                                                 <a class="dropdown-item btn_edit" data-toggle="modal" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                            {{-- @endif --}}
+                                                            @endif
                                                             @if(permissionAccess("m9-s4","is_delete")->value == "1")
                                                                 <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_department"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                             @endif

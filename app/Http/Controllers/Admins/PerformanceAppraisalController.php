@@ -80,7 +80,7 @@ class PerformanceAppraisalController extends Controller
         $department = Department::all();
         return view('performance_appraisal.index',compact('branch','department'));
     }
-    public function salaryIncreasement(Request $request)
+    public function generateSalaryIncreasement(Request $request)
     {
         $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
             ->leftJoin('departments', 'users.department_id', '=', 'departments.id')

@@ -2,15 +2,16 @@
 
 namespace App\Helpers;
 
-use App\Models\permissions;
+use DateTime;
 use \Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use App\Models\User;
 use App\Models\Setting;
-use DateTime;
+use Carbon\CarbonPeriod;
+use App\Models\permissions;
+use KhmerDateTime\KhmerDateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
-use KhmerDateTime\KhmerDateTime;
+use App\Models\AnnualSalaryIncreasement;
 
 class Helper
 {
@@ -231,38 +232,49 @@ class Helper
     }
 
     public static function calculationSalaryIncreasement($score,$basicSalary,$date_of_commencement){
-        $score = (float) $score;
-        $interest = 0; // default interest
-        $totalsSalaryIncreasement = 0; // default increase
-
-        if ($score >= 1 && $score < 1.99) {
-            $interest = 5/100;
-        } elseif ($score >= 2 && $score <= 2.99) {
-            $interest = 10/100;
-        } elseif ($score >= 3 && $score <= 3.99) {
-            $interest = 15/100;
-        } elseif ($score >= 4 && $score <= 4.69) {
-            $interest = 20/100;
-        } elseif ($score >= 4.70 && $score <= 5) {
-            $interest = 25/100;
+        $data = AnnualSalaryIncreasement::orderBy('id')->get();
+        $PerformanceScore = (float) $score;
+        $interest = 0; 
+    
+        // Define bands by row index (row 0 = score 1–1.99, row 1 = 2–2.99, etc.)
+        $bands = [
+            ['min' => 1.00, 'max' => 1.99],
+            ['min' => 2.00, 'max' => 2.99],
+            ['min' => 3.00, 'max' => 3.99],
+            ['min' => 4.00, 'max' => 4.69],
+            ['min' => 4.70, 'max' => 5.00],
+        ];
+    
+        foreach ($data as $index => $item) {
+            if (!isset($bands[$index])) {
+                continue; // skip if table has more rows than defined bands
+            }
+    
+            $min = $bands[$index]['min'];
+            $max = $bands[$index]['max'];
+    
+            if ($PerformanceScore >= $min && $PerformanceScore <= $max) {
+                $interest = $item->percentage / 100;
+                break; // stop looping when match found
+            }
         }
     
-        // Example: $date_of_commencement comes from your DB
+        // working days calc
+        $totalWorkingDays = 0;
         if (!empty($date_of_commencement)) {
-            $startOfYear = Carbon::now()->startOfYear();
-            $endOfYear   = Carbon::now()->endOfYear();
-            $commenceDate = Carbon::parse($date_of_commencement);
-
-            // If employee joined before this year, start counting from Jan 1
+            $startOfYear   = Carbon::now()->startOfYear();
+            $endOfYear     = Carbon::now()->endOfYear();
+            $commenceDate  = Carbon::parse($date_of_commencement);
+    
             $startDate = $commenceDate->lessThan($startOfYear) ? $startOfYear : $commenceDate;
-
-            // Make sure end date is today if this year isn't finished yet
-            $endDate = Carbon::today()->lessThan($endOfYear) ? Carbon::today() : $endOfYear;
-            $totalWorkingDays = $startDate->diffInDays($endDate) + 1; // +1 to include start day
-        } else {
-            $totalWorkingDays = 0;
+            $endDate   = Carbon::today()->lessThan($endOfYear) ? Carbon::today() : $endOfYear;
+    
+            $totalWorkingDays = $startDate->diffInDays($endDate) + 1;
         }
+    
+        // final salary increase
         $totalsSalaryIncreasement = ($basicSalary * $interest * $totalWorkingDays) / 365;
-        return number_format($totalsSalaryIncreasement,2);
+    
+        return number_format($totalsSalaryIncreasement, 2);
     }
 }
