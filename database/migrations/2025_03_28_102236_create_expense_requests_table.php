@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('expense_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('tracking_id');
+            $table->string('tracking_id')->unique();
             $table->integer('type');
             $table->integer('expense_type');
             $table->string('kind_regard');
@@ -55,6 +55,9 @@ return new class extends Migration
             $table->integer('request_by');
             $table->json('approve_by')->nullable();
             $table->integer('final_approve_by')->nullable();
+            $table->integer('review_by')->nullable();
+            $table->integer('verify_print')->nullable();
+            $table->dateTime('date_review')->nullable();
             $table->dateTime('date_print')->nullable();
             $table->dateTime('date_request')->nullable();
             $table->dateTime('date_approve')->nullable();
@@ -63,6 +66,7 @@ return new class extends Migration
             $table->longText('remark')->nullable();
             $table->longText('reason')->nullable();
             $table->string('page_show')->nullable();
+            $table->integer('is_log_action')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

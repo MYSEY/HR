@@ -391,6 +391,7 @@ $(document).ready(function() {
             form_data.append("ge_total_amount_usd", getVal("exp_total_paid_dollar"));
             form_data.append("ge_total_amount_riel", getVal("exp_total_paid_rial"));
             form_data.append("remark", getVal("remark"));
+            form_data.append("request_by", getVal("fn_request_by"));
             // AJAX Request
             $.ajax({
                 type: "POST",

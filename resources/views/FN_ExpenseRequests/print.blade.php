@@ -152,17 +152,20 @@
             <!-- Column 1 -->
             <div style="flex: 1;">
               <label class="label-subs" style="display: block; margin-bottom: 50px;"><strong>ឯកភាព</strong></label>
-              <label class="label-sub_lll p_approved_by"></label>
+              <label class="label-sub_lll p_approved_by"></label><br>
+              <label class="label-sub_lll p_date_approve"></label>
             </div>
             <!-- Column 2 -->
             <div style="flex: 1;">
               <label class="label-subs" style="display: block; margin-bottom: 50px;"><strong>បានត្រួតពិនិត្យ</strong></label>
-              <label>...................</label>
+              <label class="label-sub_lll p_review_by"></label><br>
+              <label class="p_data_review"></label>
             </div>
             <!-- Column 3 -->
             <div style="flex: 1;">
               <label class="label-subs" style="display: block; margin-bottom: 50px;"><strong>រៀបចំដោយ</strong></label>
-              <label class="label-sub_lll">...................</label>
+              <label class="label-sub_lll p_request_by"></label><br>
+              <label class="label-sub_lll p_data_request"></label>
             </div>
           
           </div>

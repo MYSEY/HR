@@ -28,6 +28,7 @@ $(document).ready(function() {
 
         let location_id = $(this).val();
         let location_name = $(this).find("option:selected").data("name");
+        let location_type = $(this).find("option:selected").data("leocatiotype");
 
         // Check if the location is already in the table
         if ($(".tbl-locations input[data-id='" + location_id + "']").length > 0) {
@@ -45,7 +46,7 @@ $(document).ready(function() {
             <tr class="odd">
                 <td class="align-middle">
                     <div class="input-group d-flex justify-content-center">
-                        <input type="text" disabled class="form-control" data-id="${location_id}" value="${location_name}">
+                        <input type="text" disabled class="form-control" data-locationtype="${location_type}" data-id="${location_id}" value="${location_name}">
                     </div>
                 </td>
                 <td class="align-middle">
@@ -203,7 +204,15 @@ $(document).ready(function() {
         let locations = [];
         let num_bybranchs = 0;
         $(".tbl-locations tr").each(function() {
-            let location_id = $(this).find("input[data-id]").data("id"); // Get data-id
+            let location_type = $(this).find("input[data-locationtype]").data("locationtype"); // Get data-id
+            let location_id = "";
+            let department_id = "";
+            if (location_type == "branch") {
+                location_id = $(this).find("input[data-id]").data("id"); // Get data-id
+            }else{
+                department_id = $(this).find("input[data-id]").data("id"); // Get data-id
+            }
+            
             let amount_usd = $(this).find("td:nth-child(2) input").val();
             let amount_kh = $(this).find("td:nth-child(3) input").val();
             if ((amount_usd == "" || amount_usd == 0) && (amount_kh == "" || amount_kh == 0)) {
@@ -218,6 +227,7 @@ $(document).ready(function() {
             }
             locations.push({
                 id: location_id,
+                department_id: department_id,
                 amount_usd: amount_usd || 0,
                 amount_kh: amount_kh || 0
             });

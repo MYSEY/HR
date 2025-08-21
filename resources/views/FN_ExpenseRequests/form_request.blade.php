@@ -90,9 +90,6 @@
                 <div class="card card_background_color">
                     <div class="card-body">
                         <form>
-                            {{-- <label class="container-checkbox">Special Expense
-                                <input type="checkbox" id="exp-type" name="type"> <span class="checkmark"></span>
-                            </label><br> --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label">សូមគោរពជូន <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
@@ -190,7 +187,19 @@
                                     </div>
                                 @endif
                             </fieldset>
-
+                            {{-- <div class="row">
+                                <label class="col-sm-2 col-form-label">អ្នកទទួលការទូទាត់ចំណាយ</label>
+                                <div class="col-sm-10">
+                                    <div class="form-group hr-form-group-select2">
+                                        <select class="form-control hr-select2-option" id="fn_request_by" name="fn_request_by">
+                                            <option selected  value=""> </option>
+                                            @foreach ($employees as $user)
+                                                <option value="{{$user->id}}" >{{$user->employee_name_en}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> --}}
                             <label class="">ចំណាយរួមមាន៖</label>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>

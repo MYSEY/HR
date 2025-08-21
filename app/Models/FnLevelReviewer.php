@@ -27,6 +27,7 @@ class FnLevelReviewer extends Model
         'model_review',
         'department_review',
         'id_positions',
+        'verify_print',
         'description',
         'created_by',
         'updated_by',
