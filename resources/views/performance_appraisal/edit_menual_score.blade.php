@@ -3,10 +3,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col">
-                <h3 class="page-title">@lang('lang.performance_appraisal')</h3>
+                <h3 class="page-title">@lang('lang.menual_score')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.performance_appraisal')</li>
+                    <li class="breadcrumb-item active">@lang('lang.menual_score')</li>
                 </ul>
             </div>
         </div>
@@ -95,7 +95,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>Remark</label>
-                        <textarea rows="7" class="form-control" id="remark" name="remark" placeholder="Enter text here"></textarea>
+                        <textarea rows="7" class="form-control" id="remark" name="remark" placeholder="Enter text here">{{$data->remark}}</textarea>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
                         @lang('lang.loading') </span>
                     <span class="btn-txt">@lang('lang.submit')</span>
                 </button>
-                <a href="{{ url('performance-appraisal') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+                <a href="{{ url('menual/score') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
             </div>
         </div>
     </div>

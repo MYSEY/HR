@@ -286,8 +286,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     //performance Appraisal
     Route::resource('performance-appraisal', PerformanceAppraisalController::class);
-    Route::post('performance/appraisal/update/score', [PerformanceAppraisalController::class,'updateScorePerformance']);
-    Route::get('generate/annual/salary/inreasement', [PerformanceAppraisalController::class,'generateSalaryIncreasement']);
+    Route::post('performance/appraisal/update/score', [PerformanceAppraisalController::class,'updateKpiScore']);
+    Route::get('generate/annual/salary/inreasement/list', [PerformanceAppraisalController::class,'generateSalaryIncreasementIndex']);
+    Route::post('generate/annual/salary/inreasement', [PerformanceAppraisalController::class,'generateSalaryIncreasement']);
+    Route::get('performance/appraisal/export/{id}', [PerformanceAppraisalController::class,'performanceAppraisalExport']);
+    Route::get('menual/score', [PerformanceAppraisalController::class,'menualScore']);
 
     Route::resource('annual/salary/increasement', AnnualSalaryIncreasementController::class);
 

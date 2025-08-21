@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('ranking_work_result');
             $table->string('total_score');
             $table->integer('percentage');
+            $table->year('increasement_year');
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

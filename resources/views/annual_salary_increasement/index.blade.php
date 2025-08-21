@@ -30,6 +30,7 @@
                                             <th class="sorting stuck-scroll-4">ចំណាត់ថ្នាក់លទ្ទផលការងារ</th>
                                             <th class="sorting sorting_asc stuck-scroll-4">ពិន្ទុសរុប</th>
                                             <th class="sorting sorting_asc stuck-scroll-4">គិតជាភាគរយ</th>
+                                            <th class="sorting sorting_asc stuck-scroll-4">Increasement Year</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
@@ -40,6 +41,7 @@
                                                 <td>{{$item->ranking_work_result}}</td>
                                                 <td>{{$item->total_score}}</td>
                                                 <td>{{$item->percentage}}%</td>
+                                                <td>{{$item->increasement_year}}</td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
@@ -88,6 +90,20 @@
                                 <label>Percentage <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('percentage') is-invalid @enderror" id="percentage" name="percentage" required>
                             </div>
+                            @php
+                                $startYear = 2020;
+                                $endYear   = now()->year + 1; // current year + 1
+                            @endphp
+                            <div class="form-group">
+                                <label>Year <span class="text-danger">*</span></label>
+                                <select name="increasement_year" id="increasement_year" class="form-control">
+                                    @for ($year = $startYear; $year <= $endYear; $year++)
+                                        <option value="{{ $year }}"  {{ old('increasement_year', date('Y')) == $year ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
                                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
@@ -125,6 +141,20 @@
                             <div class="form-group">
                                 <label>Percentage <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('percentage') is-invalid @enderror" id="e_percentage" name="percentage" required>
+                            </div>
+                            @php
+                                $startYear = 2020;
+                                $endYear   = now()->year + 1; // current year + 1
+                            @endphp
+                            <div class="form-group">
+                                <label>Year <span class="text-danger">*</span></label>
+                                <select name="increasement_year" class="form-control" id="e_increasement_year">
+                                    @for ($year = $startYear; $year <= $endYear; $year++)
+                                        <option value="{{ $year }}"  {{ old('increasement_year', date('Y')) == $year ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endfor
+                                </select>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
@@ -184,6 +214,7 @@
                         $('#e_ranking_work_result').val(response.success.ranking_work_result);
                         $('#e_total_score').val(response.success.total_score);
                         $('#e_percentage').val(response.success.percentage);
+                        $('#e_increasement_year').val(response.success.increasement_year);
                         // dynamically set action URL for PUT request
                         $('#edit_annual_salary_increasement form').attr('action', "{{ url('annual/salary/increasement') }}/" + id);
                         $('#edit_annual_salary_increasement').modal('show');

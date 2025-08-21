@@ -233,7 +233,7 @@ class Helper
 
     public static function calculationSalaryIncreasement($score,$basicSalary,$date_of_commencement){
         $data = AnnualSalaryIncreasement::orderBy('id')->get();
-        $PerformanceScore = (float) $score;
+        $KPIScore = (float) $score;
         $interest = 0; 
     
         // Define bands by row index (row 0 = score 1–1.99, row 1 = 2–2.99, etc.)
@@ -253,7 +253,7 @@ class Helper
             $min = $bands[$index]['min'];
             $max = $bands[$index]['max'];
     
-            if ($PerformanceScore >= $min && $PerformanceScore <= $max) {
+            if ($KPIScore >= $min && $KPIScore <= $max) {
                 $interest = $item->percentage / 100;
                 break; // stop looping when match found
             }

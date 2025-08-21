@@ -19,6 +19,7 @@ class AnnualSalaryIncreasement extends Model
         'ranking_work_result',
         'total_score',
         'percentage',
+        'increasement_year',
         'created_by',
         'updated_by',
         'deleted_at',

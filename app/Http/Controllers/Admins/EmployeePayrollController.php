@@ -585,21 +585,22 @@ class EmployeePayrollController extends Controller
                     } else {
                        $totalParkAllowance = 0;
                     }
-                    
+                   
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
-                        $dataHolidayBunuse = Holiday::where('type','bonus')->get();
+                        $dataHolidayBunuse = Holiday::where('type','bonus')->whereYear('created_at', now()->year)->get();
                         foreach ($dataHolidayBunuse as $value) {
                             $userJoinDate = $item->date_of_commencement;
                             $dayOfYear = 365;
-                            $fromDate = Carbon::parse($item->date_of_commencement);
+                            $fromDate = Carbon::parse($userJoinDate);
                             $toDate = Carbon::parse($value->from);
+
                             $totalStartDays = $fromDate->diffInDays($toDate) + 1;
                             $hildayMonth = Carbon::createFromDate($value->period_month)->format('Y-m');
-                            $hildayDays = Carbon::createFromDate($value->period_month)->format('d');
+                            $hildayDays = Carbon::createFromDate($value->period_month)->format('Y-m');
                             $payMonth = Carbon::createFromDate($request->payment_date)->format('Y-m');
-                            $payDays = Carbon::createFromDate($request->payment_date)->format('d');
+                            $payDays = Carbon::createFromDate($request->payment_date)->format('Y-m');
                             $bounsType = $value->title;
                             if($hildayMonth == $payMonth && $hildayDays >= $payDays){
                                 if ($totalStartDays > $dayOfYear) {
@@ -625,7 +626,6 @@ class EmployeePayrollController extends Controller
                             $totalBunus = $dataBonus->total_allowance ?? 0;
                         }
                     }
-    
                     // function sum benefit age children <= 18
                     $dataDateOfBirth = [];
                     $dataChildren = ChildrenInfor::where('employee_id',$item->id)->get();

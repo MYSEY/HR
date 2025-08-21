@@ -10,6 +10,9 @@
                         <li class="breadcrumb-item active">@lang('lang.generate_annual_salary_increasement')</li>
                     </ul>
                 </div>
+                <div class="col-auto float-end ms-auto">
+                    <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_annual_salary_increasement"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                </div>
             </div>
         </div>
         {!! Toastr::message() !!}
@@ -23,7 +26,7 @@
                 </div>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                <div class="form-group ">
+                <div class="form-group">
                     <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                 </div>
             </div>
@@ -73,7 +76,7 @@
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ពិន្ទុ</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">បុគ្គលិកផ្ទាល់</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ប្រធានផ្ទាល់</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.salary_increasement')</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 50.825px;">@lang('lang.salary_increasement')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -104,6 +107,36 @@
             </div>
         </div>
     </div>
+    <div id="add_annual_salary_increasement" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@lang('lang.annual_salary_increasement')</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{url('generate/annual/salary/inreasement')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        @csrf
+                        <div class="form-group">
+                            <label>Year <span class="text-danger">*</span></label>
+                            <div class="form-group ">
+                                <input class="form-control" type="month" id="increasement_year" name="increasement_year">
+                            </div>
+                        </div>
+                        <div class="submit-section">
+                            <button type="submit" class="btn btn-primary submit-btn">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                <span class="btn-txt">@lang('lang.submit')</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
             <div class="spinner-border text-primary" role="status">

@@ -3,14 +3,19 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Models\Branchs;
+use App\Models\Payroll;
 use App\Models\Department;
+use App\Exports\ExportKpis;
 use App\Models\Performance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\PerformanceDetail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\AnnualSalaryIncreasement;
 
 class PerformanceAppraisalController extends Controller
 {
@@ -80,29 +85,157 @@ class PerformanceAppraisalController extends Controller
         $department = Department::all();
         return view('performance_appraisal.index',compact('branch','department'));
     }
-    public function generateSalaryIncreasement(Request $request)
+    public function menualScore(Request $request)
+    {
+        if (request()->ajax()) {
+            // Define the base query
+            $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
+                ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+                ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+                ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+                ->select(
+                    'performances.*',
+                    'users.position_id',
+                    'users.department_id',
+                    'users.branch_id',
+                    'users.number_employee',
+                    'users.employee_name_kh',
+                    'users.employee_name_en',
+                    'users.branch_id',
+                    'departments.name_english as dep_name',
+                    'positions.name_english as positions_name',
+                    'branchs.branch_name_en',
+                    'branchs.branch_name_kh',
+                )
+            ->where('performances.status', 'approved')
+            ->when($request->employee_id, function ($query, $employee_id) {
+                return $query->where('users.number_employee', $employee_id);
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                return $query->where('users.employee_name_en', $employee_name);
+            })
+            ->when($request->branch_id, function ($query, $branch_id) {
+                return $query->where('users.branch_id', $branch_id);
+            });
+        
+            // Search filter
+            $searchValue = request()->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('performances.id', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                    ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
+                });
+            }
+        
+            $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
+            $recordsFiltered = $query->count();
+            $start = intval(request()->input('start', 0));
+            $limit = intval(request()->input('length', 10));
+            $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
+            return response()->json([
+                'draw' => intval(request()->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
+        $branch = Branchs::all();
+        $department = Department::all();
+        return view('performance_appraisal.menual_score',compact('branch','department'));
+    }
+    public function generateSalaryIncreasementIndex(Request $request)
     {
         $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
             ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
             ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
             ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->leftJoin('payrolls', 'users.id', '=', 'payrolls.employee_id')
             ->select(
                 'performances.*',
                 'users.number_employee',
                 'users.employee_name_kh',
                 'users.employee_name_en',
                 'users.branch_id',
-                'users.basic_salary',
                 'users.date_of_commencement',
                 'departments.name_english as dep_name',
                 'positions.name_english as positions_name',
                 'branchs.branch_name_en',
                 'branchs.branch_name_kh',
+                'payrolls.basic_salary',
+                'payrolls.payment_date',
             )
-        ->where('performances.status', 'approved');
+        ->where('performances.status', 'approved')->where('payrolls.payment_date','2024-12-25');
         $data = $query->get();
         $branch = Branchs::all();
         return view('performance_appraisal.increasement',compact('data','branch'));
+    }
+    public function generateSalaryIncreasement(Request $request)
+    {
+        $yearOnly = Carbon::parse($request->increasement_year)->format('Y');
+        $data = AnnualSalaryIncreasement::where('increasement_year',$yearOnly)->orderBy('id')->get();
+        if ($request->filled('increasement_year')) {
+            [$year, $month] = explode('-', $request->increasement_year);
+            $payrolls = Payroll::where('employee_id',144)->whereYear('payment_date', $year)->whereMonth('payment_date', $month)->get();
+            foreach ($payrolls as $payroll) {
+                // Example: get average KPI score of employee
+                $kpiPerform = Performance::where('employee_id', 144)->get();
+                foreach ($kpiPerform as $value) {
+                    $kpiScores = (float) $value->total_score_direct_chairman;
+                }
+                $interest = 0; 
+                // Define bands
+                $bands = [
+                    ['min' => 1.00, 'max' => 1.99],
+                    ['min' => 2.00, 'max' => 2.99],
+                    ['min' => 3.00, 'max' => 3.99],
+                    ['min' => 4.00, 'max' => 4.69],
+                    ['min' => 4.70, 'max' => 5.00],
+                ];
+
+                foreach ($data as $index => $item) {
+                    // if (!isset($bands[$index])) continue;
+                    
+                    // $min = $bands[$index]['min'];
+                    // $max = $bands[$index]['max'];
+                    if ($kpiScores >= 1 && $kpiScores <= 1.99) {
+                        $interest = $item->percentage / 100;
+                        $total_percentage = $item->percentage;
+                    } elseif($kpiScores >= 2 && $kpiScores <= 2.99) {
+                        $interest = $item->percentage / 100;
+                        $total_percentage = $item->percentage;
+                    }elseif($kpiScores >= 3 && $kpiScores <= 3.99){
+                        $interest = $item->percentage / 100;
+                        $total_percentage = $item->percentage;
+                    }elseif ($kpiScores >= 4 && $kpiScores <= 4.69) {
+                        $interest = $item->percentage / 100;
+                        $total_percentage = $item->percentage;
+                    }elseif($kpiScores >= 4.70 && $kpiScores <= 5){
+                        $interest = $item->percentage / 100;
+                        $total_percentage = $item->percentage;
+                    }
+                }
+                dd($total_percentage);
+
+                // Example: calculate total working days in that year
+                $dateOfCommencement = \Carbon\Carbon::parse($payroll->date_of_commencement);
+                $endOfYear = \Carbon\Carbon::create($year, 12, 31);
+                $totalWorkingDays = $dateOfCommencement->diffInDays($endOfYear) + 1;
+
+                $totalsSalaryIncreasement = ($payroll->basic_salary * $interest * $totalWorkingDays) / 365;
+
+                // 👉 save or push into array
+                dd([    
+                    'employee_id' => $payroll->employee_id,
+                    'basic_salary' => $payroll->basic_salary,
+                    'kpi_score' => $kpiScores,
+                    'percentage' => $percentage,
+                    'salary_increasement' => number_format($totalsSalaryIncreasement,2),
+                ]);
+            }
+        }
     }
 
 
@@ -150,7 +283,7 @@ class PerformanceAppraisalController extends Controller
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
         )->where('performances.id',$id)->first();
-        return view('performance_appraisal.preview',compact('data'));
+        return view('performance_appraisal.progress',compact('data'));
     }
 
     /**
@@ -176,70 +309,7 @@ class PerformanceAppraisalController extends Controller
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
         )->where('performances.id',$id)->first();
-        return view('performance_appraisal.edit',compact('data'));
-    }
-    public function progress(Request $request){
-        $performance = Performance::with('PerformanceDetails')->where('employee_id',$request->employee_id)->where('id',$request->performance_id)->where('status','approve')->first();
-        // dd($datas);
-        
-        // foreach ($datas as $performance) {
-            foreach ($performance->PerformanceDetails as $detail) {
-                $lines = explode("\n", trim($detail->goal));
-                $goalType = $detail->goal_type; // Assume this field exists
-                $score = 1; // Default score
-        
-                // Example input values (replace with real input)
-                $inputValue = match ($goalType) {
-                    'date'     => $detail->goal_achieved,
-                    'percent'  => $detail->goal_achieved,
-                    'currency' => $detail->goal_achieved,
-                    'number'   => $detail->goal_achieved, // Assuming this is a numeric value
-                };
-                foreach ($lines as $index => $line) {
-                    [$min, $max] = preg_split('/\s+/', trim($line));
-                    // Normalize based on type
-                    switch ($goalType) {
-                        case 'date':
-                            $min = strtotime($min);
-                            $max = strtotime($max);
-                            $input = strtotime($request->progress);
-                            break;
-        
-                        case 'percent':
-                            $min = floatval(str_replace('%', '', $min));
-                            $max = floatval(str_replace('%', '', $max));
-                            $input = floatval(str_replace('%', '', $request->progress));
-                            break;
-        
-                        case 'currency':
-                            $min = floatval(preg_replace('/[^\d.]/', '', $min));
-                            $max = floatval(preg_replace('/[^\d.]/', '', $max));
-                            $input = floatval(preg_replace('/[^\d.]/', '', $request->progress));
-                            break;
-        
-                        case 'number':
-                        default:
-                            $min = floatval($min);
-                            $max = floatval($max);
-                            $input = floatval($request->progress);
-                            break;
-                    }
-        
-                    if ($input >= $min && $input <= $max) {
-                        $score = $index + 1;
-                        break;
-                    }
-                }
-                // $score_achieved = ($detail->weight * $score) / 100;
-                // echo("Type: $goalType | Input: $inputValue → Score: $score | Weight: $detail->weight | Score Achieved: $score_achieved <br>");
-            }
-        // }
-        dd($score);
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Progress calculated successfully.',
-            'score' => $score,
-        ]);
+        return view('performance_appraisal.edit_menual_score',compact('data'));
     }
     /**
      * Update the specified resource in storage.
@@ -281,11 +351,11 @@ class PerformanceAppraisalController extends Controller
         }
     }
 
-    public function updateScorePerformance(Request $request){
+    public function updateKpiScore(Request $request){
         try {
             Performance::where('employee_id',$request->employee_id)->where('id',$request->id)->update([
                 'total_score_direct_chairman'  => $request->total_score_direct_chairman,
-                'noted'  => $request->noted,
+                'remark'  => $request->remark,
             ]);
             DB::commit();
             return response()->json([
@@ -305,5 +375,9 @@ class PerformanceAppraisalController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function performanceAppraisalExport($id){
+        return Excel::download(new ExportKpis($id), 'kpis.xlsx');
     }
 }

@@ -89,7 +89,7 @@ class AnnualSalaryIncreasementController extends Controller
     public function update(Request $request)
     {
         try {
-            $data = $request->only(['ranking_work_result', 'total_score', 'percentage']);
+            $data = $request->only(['ranking_work_result', 'total_score', 'percentage','increasement_year']);
             $data['updated_by'] = Auth::user()->id;
             AnnualSalaryIncreasement::where('id', $request->id)->update($data);
             DB::commit(); // commit transaction

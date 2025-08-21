@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.performance_appraisal')</h3>
+                    <h3 class="page-title">@lang('lang.menual_score')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.performance_appraisal')</li>
+                        <li class="breadcrumb-item active">@lang('lang.menual_score')</li>
                     </ul>
                 </div>
             </div>
@@ -81,20 +81,18 @@
                                         <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th class="sorting sorting_asc stuck-scroll-4">#</th>
+                                                    {{-- <th class="sorting sorting_asc stuck-scroll-4">#</th> --}}
                                                     <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
                                                     <th class="sorting sorting_asc stuck-scroll-4">@lang('lang.employee_name')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
+                                                    <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.department')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.from_date')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.to_date')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.type')</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ពិន្ទុ</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">បុគ្គលិកផ្ទាល់</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ប្រធានផ្ទាល់</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Overall Results</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
+                                                    <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.remark')</th>
                                                     <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                                 </tr>
                                             </thead>
@@ -166,7 +164,6 @@
                     }
                 },
                 columns: [
-                    { data: 'id', name: 'id' },
                     { 
                         data: 'number_employee', 
                         name: 'number_employee',
@@ -177,12 +174,13 @@
                         name: 'employee_name_kh',
                         className: 'stuck-scroll-3',
                     },
-                    { data: 'branch_name_en', name: 'branch_name_en' },
+                    {
+                        data: 'branch_name_en', 
+                        name: 'branch_name_en',
+                        className: 'stuck-scroll-3',
+                    },
                     { data: 'dep_name', name: 'dep_name' },
                     { data: 'positions_name', name: 'positions_name' },
-                    { data: 'from_date', name: 'from_date' },
-                    { data: 'to_date', name: 'to_date' },
-                    { data: 'type', name: 'type' },
                     {
                         data: 'total_score',
                         name: 'total_score',
@@ -235,18 +233,16 @@
                         }
                     },
                     {
-                        data: 'status',
-                        name: 'status',
+                        data: 'type',
+                        name: 'type',
                         orderable: false,
                         searchable: false,
-                        render: function (data, type, row) {
-                            return `
-                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="javascript:void(0)">
-                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                    <span>${ row.status == 'approved' ? 'Approved' : '' }</span>
-                                </a>
-                            `;
-                        }
+                    },
+                    {
+                        data: 'remark',
+                        name: 'remark',
+                        orderable: false,
+                        searchable: false,
                     },
                     {
                         data: null,
@@ -260,8 +256,8 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="{{url('performance-appraisal')}}/${row.id}">
-                                            <i class="fa fa-regular fa-eye"></i> Progress KPI
+                                        <a href="{{url('performance-appraisal')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
+                                            <i class="fa fa-pencil m-r-5"></i> KPI
                                         </a>
                                     </div>
                                 </div>
