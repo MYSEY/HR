@@ -174,10 +174,11 @@
             let amountUSD = '';
             let amountRiel = '';
             if (datas.type == "2" ) {
-                if (datas.departments.length  > 0) {
-                    let mid = Math.ceil(datas.departments.length / 2);
-                    for (let index = 0; index < datas.departments.length; index++) {
-                        let detail = datas.departments[index];
+                if (datas.location_details.length  > 0) {
+                    let mid = Math.ceil(datas.location_details.length / 2);
+                    let name_ =  "";
+                    for (let index = 0; index < datas.location_details.length; index++) {
+                        let detail = datas.location_details[index];
                         let amountUSD = '';
                         let amountRiel = '';
 
@@ -192,9 +193,14 @@
                         let currencyText = amountUSD;
                         if (amountUSD && amountRiel) currencyText += '&nbsp;&nbsp;';
                         currencyText += amountRiel;
-
+                        
+                        if (detail.location) {
+                            name_ = detail.location.branch_name_kh;
+                        }else{
+                            name_ = detail.department.name_khmer;
+                        }
                         let row = '<tr>' +
-                            '<td class="table_tr_">- ' + detail.department.name_khmer + currencyText + '</td>' +
+                            '<td class="table_tr_">- ' + name_ + currencyText + '</td>' +
                         '</tr>';
 
                         if (index < mid) {
@@ -448,6 +454,8 @@
             $('.number_supplier').text('៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
+            console.log(datas);
+            
             $(".expense_tracking_id").text(datas.tracking_id);
             $(".p_kind_regard").text(datas.kind_regard);
             $(".p_subject").text(datas.subject);
@@ -472,16 +480,28 @@
             $(".p_convertNumberRiel").text(convertNumberRiel);
             document.getElementById("GEXP_remark").innerHTML = nl2brWithIndent(datas.remark);
             $(".p_payment_term").text(datas.payment_term);
-            $(".p_approved_by").text(datas.approve_by.employee_name_kh);
+            if (datas.approve_by) {
+                $(".p_approved_by").text(datas.approve_by.employee_name_kh);
+                let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
+                $(".p_date_approve").text(p_date_approve);
+            }
             $(".p_request_by").text(datas.request_by.employee_name_kh);
+            let p_data_request = moment(datas.date_request).format('YYYY-MM-DD');
+            $(".p_data_request").text(p_data_request);
+            if(datas.review_by){
+                $(".p_review_by").text(datas.review_by.employee_name_kh);
+                let p_data_review = moment(datas.date_review).format('YYYY-MM-DD');
+                $(".p_data_review").text(p_data_review);
+            }
+           
             let day = ".......";
             let month = ".......";
             let year = ".......";
-            if (datas.date_approve) {
-                let date_approve = new Date(datas.date_approve);
-                day = formatDate( date_approve, 'km', format_date={day: true});
-                month = formatDate( date_approve, 'km', format_date={month: true});
-                year = formatDate( date_approve, 'km', format_date={year: true});
+            if (datas.date_request) {
+                let date_request = new Date(datas.date_request);
+                day = formatDate( date_request, 'km', format_date={day: true});
+                month = formatDate( date_request, 'km', format_date={month: true});
+                year = formatDate( date_request, 'km', format_date={year: true});
             }
             $(".p_day").text(day);
             $(".p_month").text(month);
@@ -574,16 +594,29 @@
             $(".p_convertNumberDollar").text(convertNumber);
             document.getElementById("TEXP_remark").innerHTML = nl2brWithIndent(datas.remark);
             $(".p_payment_term").text(datas.payment_term);
-            $(".p_approved_by").text(datas.approve_by.employee_name_kh);
+            if (datas.approve_by) {
+                $(".p_approved_by").text(datas.approve_by.employee_name_kh);
+                let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
+                $(".p_date_approve").text(p_date_approve);
+            }
             $(".p_request_by").text(datas.request_by.employee_name_kh);
+            let p_data_request = moment(datas.date_request).format('YYYY-MM-DD');
+            $(".p_data_request").text(p_data_request);
+            if(datas.review_by){
+                $(".p_review_by").text(datas.review_by.employee_name_kh);
+                let p_data_review = moment(datas.date_review).format('YYYY-MM-DD');
+                $(".p_data_review").text(p_data_review);
+            }
+            // $(".p_approved_by").text(datas.approve_by.employee_name_kh);
+            // $(".p_request_by").text(datas.request_by.employee_name_kh);
             let day = ".......";
             let month = ".......";
             let year = ".......";
-            if (datas.date_approve) {
-                let date_approve = new Date(datas.date_approve);
-                day = formatDate( date_approve, 'km', format_date={day: true});
-                month = formatDate( date_approve, 'km', format_date={month: true});
-                year = formatDate( date_approve, 'km', format_date={year: true});
+            if (datas.date_request) {
+                let date_request = new Date(datas.date_request);
+                day = formatDate( date_request, 'km', format_date={day: true});
+                month = formatDate( date_request, 'km', format_date={month: true});
+                year = formatDate( date_request, 'km', format_date={year: true});
             }
             $(".p_day").text(day);
             $(".p_month").text(month);

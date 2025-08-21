@@ -56,9 +56,12 @@ class ExpenseRequest extends Model
         "location_review",
         "position_review",
         "review_type",
+        "review_by",
+        "verify_print",
         "request_by",
         "approve_by",
         "final_approve_by",
+        "date_review",
         "date_print",
         "date_request",
         "date_approve",
@@ -67,6 +70,7 @@ class ExpenseRequest extends Model
         "remark",
         "reason",
         "page_show",
+        "is_log_action",
         "created_by",
         "updated_by",
         "deleted_at",
@@ -89,7 +93,7 @@ class ExpenseRequest extends Model
     }
     public function locationDetails()
     {
-        return $this->hasMany(FnDetailLocation::class, 'expense_request_id', 'id')->with("location");
+        return $this->hasMany(FnDetailLocation::class, 'expense_request_id', 'id')->with("location")->with("department");
        
     }
     public function departments()
@@ -99,6 +103,46 @@ class ExpenseRequest extends Model
     public function requestBy()
     {
         return $this->belongsTo(User::class, 'request_by')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'position_id',
+            'branch_id',
+            'department_id',
+            'gender',
+            'date_of_commencement',
+            'personal_phone_number',
+        )->with(["department","branch"]);
+    }
+    public function reviewBy()
+    {
+        return $this->belongsTo(User::class, 'review_by')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'position_id',
+            'branch_id',
+            'department_id',
+            'gender',
+            'date_of_commencement',
+            'personal_phone_number',
+        )->with(["department","branch"]);
+    }
+    public function approveBy()
+    {
+        return $this->belongsTo(User::class, 'final_approve_by')->select(
             'id',
             'number_employee',
             'last_name_kh',
@@ -155,7 +199,7 @@ class ExpenseRequest extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by')->select(
+        return $this->belongsTo(User::class, 'request_by')->select(
             'id',
             'number_employee',
             'last_name_kh',

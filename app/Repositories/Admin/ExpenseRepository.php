@@ -40,14 +40,20 @@ class ExpenseRepository extends BaseRepository
         ->leftJoin('expense_requests', 'fn_detail_locations.expense_request_id', '=', 'expense_requests.id')
         ->leftJoin('users', 'expense_requests.request_by', '=', 'users.id')
         ->leftJoin('users as approver', 'expense_requests.final_approve_by', '=', 'approver.id')
+        ->leftJoin('users as reviewby', 'expense_requests.review_by', '=', 'reviewby.id')
         ->select(
             'fn_detail_locations.*', 
             'expense_requests.*',
             'users.number_employee',
             'users.position_id',
-            'users.branch_id',
-            'users.department_id',
+            'users.branch_id as user_branch_id',
+            'users.department_id as user_department_id',
             'users.line_manager',
+            // reviewby info
+            'reviewby.number_employee as reviewby_number_employee',
+            'reviewby.employee_name_kh as reviewby_employee_name_kh',
+            'reviewby.employee_name_en as reviewby_employee_name_en',
+
             // approver info
             'approver.number_employee as approver_number_employee',
             'approver.employee_name_kh as approver_employee_name_kh',
