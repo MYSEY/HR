@@ -45,11 +45,11 @@ class ExpenseRequestController extends Controller
         if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-        $datas = ExpenseRequest::with(["requestBy","locationDetails","departments", "createdBy"])->where("created_by", Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $datas = ExpenseRequest::with(["requestBy","locationDetails","departments", "createdBy","reviewBy",'approveBy'])->where("request_by", Auth::user()->id)->orderBy('id', 'DESC')->get();
         $user = Auth::user();
-        $dataAsign = ExpenseRequest::with(['requestBy', 'locationDetails', 'departments', 'createdBy'])
+        $dataAsign = ExpenseRequest::with(['requestBy', 'locationDetails', 'departments', 'createdBy', 'reviewBy','approveBy'])
             ->where('status', '!=', "rejected")
-            ->whereNot('created_by', $user->id)
+            ->whereNot('request_by', $user->id)
             ->where(function ($query) use ($user) {
                 if ($user->RolePermission != "admin" && $user->RolePermission != "developer") {
                     $query->where(function ($q) use ($user) {
@@ -73,6 +73,7 @@ class ExpenseRequestController extends Controller
             })
             ->orderBy('id', 'DESC')
             ->get();
+            // dd($dataAsign);
         return view('FN_ExpenseRequests.index',compact(['permission','datas', 'dataAsign']));
     }
 
@@ -89,23 +90,51 @@ class ExpenseRequestController extends Controller
         $taxeFBT = FnTaxRate::where('tax_type', 2)->get();
         $FnPaymentTerms = FnPaymentTerm::get();
         $FnRegularExspenses = FnRegularExspense::where("status", "1")->where("is_contactual", "1")->get();
+        $employees= DB::table('users')
+        ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
+        ->select( 'users.*', 'roles.role_type',)
+        ->whereIn('users.emp_status', ['Probation','1','2','10',])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'Employee'){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['BM','DBM'])){
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['HR','HRAdmin','DHOD','HOD'])){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['BOD','CEO'])){
+                $query->whereNot("users.id", Auth::user()->id);
+                $query->whereNot("roles.role_type", "Employee");
+            }
+            })->get();
         return view('FN_ExpenseRequests.form_request', compact([
             'locations', 
             'FnApproval', 
             'taxWHT', 
             'taxeFBT', 
             'FnPaymentTerms', 
-            'FnRegularExspenses'
+            'FnRegularExspenses',
+            'employees'
         ]));
     }
 
     public function createTax()
     {
         $FnApproval = FnApproval::with(["location"])->get();
-        $locations = Department::get();
         $FnPaymentTerms = FnPaymentTerm::get();
+        $locations = Branchs::get();
+        $department = Department::get();
         return view('FN_tax_expenses.form_request', compact([
             'locations', 
+            'department', 
             'FnApproval', 
             'FnPaymentTerms'
         ]));
@@ -149,9 +178,9 @@ class ExpenseRequestController extends Controller
              if ($dataLeaveRequest && count($dataLeaveRequest) > 0) {
                $condistion = $condistion ?? [];
                 foreach ($dataLeaveRequest as $lr) {
-                    if ($lr->delegate_delegate_id || $lr->handover_staff_id) {
+                    if ($lr->delegate_delegate_id) {
                         $condistion = array_values(array_diff($condistion, [(string)$lr->employee_id]));
-                        $newPos = $lr->delegate_delegate_id ?: $lr->handover_staff_id;
+                        $newPos = $lr->delegate_delegate_id;
                         if (!in_array((string)$newPos, $condistion, true)) { // strict check
                             $condistion[] = (string)$newPos;
                         }
@@ -210,9 +239,9 @@ class ExpenseRequestController extends Controller
                 // Work on a local copy of id_condistion
                 $condistion = $condistion ?? [];
                 foreach ($dataLeaveRequest as $lr) {
-                    if ($lr->delegate_position_id || $lr->handover_position_id) {
+                    if ($lr->delegate_position_id) {
                         $condistion = array_values(array_diff($condistion, [$lr->position_id]));
-                        $newPos = $lr->delegate_position_id ?: $lr->handover_position_id;
+                        $newPos = $lr->delegate_position_id;
                         if (!in_array($newPos, $condistion)) {
                             $condistion[] = $newPos;
                         }
@@ -226,32 +255,81 @@ class ExpenseRequestController extends Controller
     }
 
     function lovelReview($dataLevelView){
-        $positionReview = FnLevelReviewer::with(["departmentView", "modelReview"])
-                ->when($dataLevelView["by_location"], function ($query, $by_location) use ($dataLevelView) {
-                    $query->where('from_location', $by_location);
-                    if ((string)$by_location === "2") {
-                        $query->where('model_review', $dataLevelView["model_review"]);
-                    } else {
-                        $query->whereNull("model_review");
-                    }
-                })
-                ->when($dataLevelView["type"], function ($query, $type) {
-                    $query->where('type', $type);
-                })
-                ->when(isset($dataLevelView["request_type"]), function ($query) use ($dataLevelView) {
-                    $request_type = $dataLevelView["request_type"];
-                    $query->where('request_type', $request_type);
-                    if ((string)$request_type == "0") {
-                        $query->where('reference_type', $dataLevelView["reference_type"]);
-                    }
-                })
-                ->when($dataLevelView["amount"], function ($query, $amount) {
-                    $query->where("from_amount", "<", $amount)
-                        ->where("to_amount", ">=", $amount);
+        $query = FnLevelReviewer::with(["departmentView", "modelReview"])
+            ->when($dataLevelView["by_location"], function ($query, $by_location) use ($dataLevelView) {
+                $query->where('from_location', $by_location);
+                if ((string) $by_location === "2") {
+                    $query->where('model_review', $dataLevelView["model_review"]);
+                } else {
+                    $query->whereNull("model_review");
+                }
+            })
+            ->when(isset($dataLevelView["request_type"]), function ($query) use ($dataLevelView) {
+                $request_type = $dataLevelView["request_type"];
+                $query->where('request_type', $request_type);
+                if ((string) $request_type === "0") {
+                    $query->where('reference_type', $dataLevelView["reference_type"]);
+                }
+            })
+            ->when($dataLevelView["amount"], function ($query, $amount) {
+                $query->where("from_amount", "<", $amount)
+                    ->where("to_amount", ">=", $amount);
+            });
+
+        // 🔹 Try first with position check
+        if ($dataLevelView["position_request"]) {
+            $positionReview = (clone $query) // clone again to keep base query clean
+                ->whereJsonContains('id_positions', (string) $dataLevelView["position_request"])
+                ->orderBy("id", "DESC")
+                ->first();
+
+                 // 🔹 If not found, fallback to type
+                if (!$positionReview) {
+                    $positionReview = (clone $query)
+                        ->when($dataLevelView["type"], function ($q, $type) {
+                            $q->where('type', $type);
+                        })
+                        ->orderBy("id", "DESC")
+                        ->first();
+                }
+
+                return $positionReview;
+        }else{
+            $positionReview = (clone $query)
+                ->when($dataLevelView["type"], function ($q, $type) {
+                    $q->where('type', $type);
                 })
                 ->orderBy("id", "DESC")
                 ->first();
-        return $positionReview;
+            return $positionReview;
+        }
+
+        // $positionReview = FnLevelReviewer::with(["departmentView", "modelReview"])
+        //     ->when($dataLevelView["by_location"], function ($query, $by_location) use ($dataLevelView) {
+        //         $query->where('from_location', $by_location);
+        //         if ((string)$by_location === "2") {
+        //             $query->where('model_review', $dataLevelView["model_review"]);
+        //         } else {
+        //             $query->whereNull("model_review");
+        //         }
+        //     })
+        //     ->when($dataLevelView["type"], function ($query, $type) {
+        //         $query->where('type', $type);
+        //     })
+        //     ->when(isset($dataLevelView["request_type"]), function ($query) use ($dataLevelView) {
+        //         $request_type = $dataLevelView["request_type"];
+        //         $query->where('request_type', $request_type);
+        //         if ((string)$request_type == "0") {
+        //             $query->where('reference_type', $dataLevelView["reference_type"]);
+        //         }
+        //     })
+        //     ->when($dataLevelView["amount"], function ($query, $amount) {
+        //         $query->where("from_amount", "<", $amount)
+        //             ->where("to_amount", ">=", $amount);
+        //     })
+        //     ->orderBy("id", "DESC")
+        //     ->first();
+        
     }
 
     function sendEmail($dataSend, $emailUserRequest){
@@ -259,8 +337,8 @@ class ExpenseRequestController extends Controller
             'data'              => $dataSend["data"],
             'type'              => "expense",
         ];
-        Mail::mailer('mailer2')->to("thyvan.vuth@camma.com.kh")->queue(new SendEmail($datasSendEmail, true));
-        $condiction = $dataSend["condiction"];
+        // Mail::mailer('mailer2')->to("thyvan.vuth@camma.com.kh")->queue(new SendEmail($datasSendEmail, true));
+        // $condiction = $dataSend["condiction"];
         // if($dataSend["data"]["status"] == "reject" || $dataSend["data"]["status"] == "approve"){
         //     Mail::to($emailUserRequest)->queue(new SendEmail($datasSendEmail, true));
         // }else{
@@ -313,6 +391,7 @@ class ExpenseRequestController extends Controller
 
             $dataCheckLevelView = [
                 "by_location"=> 2,
+                "position_request"=> Auth::user()->position_id,
                 "model_review"=> null,
                 "request_type"=> $request->type,
                 "reference_type"=> $request->expense_type,
@@ -349,11 +428,16 @@ class ExpenseRequestController extends Controller
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
-                if(count($positionReview->id_positions) == 1){
+                if(count($positionReview->id_positions) > 0){
                     if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        $dataCheckLevelView["type"] = 2;
+                        if($positionReview->verify_print == 1){
+                            $data["review_by"]      = Auth::user()->id;
+                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                        }
+                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                        $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
-                    }   
+                    } 
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
                 if (count($positionReview->id_positions) > 0) {
@@ -372,9 +456,14 @@ class ExpenseRequestController extends Controller
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
-                if(count($positionReview->id_positions) == 1){
+                if(count($positionReview->id_positions) > 0){
                     if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        $dataCheckLevelView["type"] = 2;
+                        if($positionReview->verify_print == 1){
+                            $data["review_by"]      = Auth::user()->id;
+                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                        }
+                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                        $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
                     }   
                 }
@@ -423,9 +512,10 @@ class ExpenseRequestController extends Controller
             $data['payment_term']       = $request->paymentTerms;
             $data['status']             = 'pending';
             $data['position_review']    = json_encode($positionReview->id_positions);
+            $data['verify_print']      = $positionReview->verify_print;
             $data['review_type']        = $positionReview->type;
             $data['approve_by']         = json_encode(explode(",", $request->approve_by));
-            $data['request_by']         = Auth::user()->id;
+            $data['request_by']         = ($request->request_by? $request->request_by: Auth::user()->id);
             $data['date_request']       = Carbon::createFromDate()->format('Y-m-d H:i');
             $data['created_by']         = Auth::user()->id;
             unset($data['fn_invoice']);
@@ -436,6 +526,7 @@ class ExpenseRequestController extends Controller
                 $locations[] = [
                     'expense_request_id' => $expense->id,
                     'location_id'        => $location["id"],
+                    'department_id'      => (isset($location["department_id"]) ? $location["department_id"] : ""),
                     'amount_usd'         => $location["amount_usd"],
                     'amount_riel'        => $location["amount_kh"],
                 ];
@@ -494,6 +585,31 @@ class ExpenseRequestController extends Controller
                 'fn_approvals.title'
             )
             ->with("locationDetails")->first();
+        $employees= DB::table('users')
+        ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
+        ->select( 'users.*', 'roles.role_type',)
+        ->whereIn('users.emp_status', ['Probation','1','2','10',])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'Employee'){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                // $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['BM','DBM'])){
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                // $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['HR','HRAdmin','DHOD','HOD'])){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+                // $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['BOD','CEO'])){
+                // $query->whereNot("users.id", Auth::user()->id);
+                $query->whereNot("roles.role_type", "Employee");
+            }
+            })->get();
         return view('FN_ExpenseRequests.form_edit_request', compact([
             'locations', 
             'FnApproval', 
@@ -501,13 +617,15 @@ class ExpenseRequestController extends Controller
             'taxeFBT', 
             'FnPaymentTerms', 
             'FnRegularExspenses',
-            'data'
+            'data',
+            'employees'
         ]));
     }
     public function editTax(Request $request)
     {
         $FnApproval = FnApproval::with(["location"])->get();
-        $locations = Department::get();
+        $locations = Branchs::get();
+        $department = Department::get();
         $FnPaymentTerms = FnPaymentTerm::get();
         $FnRegularExspenses = FnRegularExspense::where("status", "1")->where("is_contactual", "1")->get();
         $data = ExpenseRequest::where("expense_requests.id", $request->id)
@@ -519,6 +637,7 @@ class ExpenseRequestController extends Controller
             ->with("departments")->first();
         return view('FN_tax_expenses.form_edit_request', compact([
             'locations', 
+            'department', 
             'FnApproval',
             'FnPaymentTerms', 
             'FnRegularExspenses',
@@ -546,6 +665,7 @@ class ExpenseRequestController extends Controller
             $dataCheckLevelView = [
                 "by_location"=> 2,
                 "model_review"=> null,
+                "position_request"=> Auth::user()->position_id,
                 "request_type"=> $request->type,
                 "reference_type"=> $request->expense_type,
                 "type"=> 1,
@@ -579,9 +699,14 @@ class ExpenseRequestController extends Controller
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
-                if(count($positionReview->id_positions) == 1){
+                if(count($positionReview->id_positions) > 0){
                     if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        $dataCheckLevelView["type"] = 2;
+                        if($positionReview->verify_print == 1){
+                            $data["review_by"]      = Auth::user()->id;
+                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                        }
+                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                        $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
                     }   
                 }
@@ -602,9 +727,14 @@ class ExpenseRequestController extends Controller
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
-                if(count($positionReview->id_positions) == 1){
+                if(count($positionReview->id_positions) > 0){
                     if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        $dataCheckLevelView["type"] = 2;
+                        if($positionReview->verify_print == 1){
+                            $data["review_by"]      = Auth::user()->id;
+                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                        }
+                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                        $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
                     }   
                 }
@@ -754,6 +884,7 @@ class ExpenseRequestController extends Controller
                 }
             }
             $data['position_review']                = json_encode($positionReview->id_positions);
+            $data['verify_print']                   = $positionReview->verify_print;
             $data['review_type']                    = $positionReview->type;
             $data['approve_by']                     = json_encode(explode(",", $request->approve_by));
             // $data["approve_by"]                     = $request->approve_by;
@@ -812,6 +943,7 @@ class ExpenseRequestController extends Controller
             $dataCheckLevelView = [
                 "by_location"=> 2,
                 "model_review"=> null,
+                "position_request"=> Auth::user()->position_id,
                 "request_type"=> "2",
                 "reference_type"=> "1",
                 "type"=> 1,
@@ -845,9 +977,15 @@ class ExpenseRequestController extends Controller
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
-                if(count($positionReview->id_positions) == 1){
+                if(count($positionReview->id_positions) > 0){
+                    
                     if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        $dataCheckLevelView["type"] = 2;
+                        if($positionReview->verify_print == 1){
+                            $data["review_by"]      = Auth::user()->id;
+                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                        }
+                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                        $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
                     }   
                 }
@@ -868,9 +1006,14 @@ class ExpenseRequestController extends Controller
                 if(!$positionReview){
                     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
                 }
-                if(count($positionReview->id_positions) == 1){
+                if(count($positionReview->id_positions) > 0){
                     if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        $dataCheckLevelView["type"] = 2;
+                        if($positionReview->verify_print == 1){
+                            $data["review_by"]      = Auth::user()->id;
+                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                        }
+                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                        $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
                     }   
                 }
@@ -955,7 +1098,12 @@ class ExpenseRequestController extends Controller
             if ($locationCount > $totalLocations) {
                 foreach ($locationArrays as $location) {
                     $dataLocation = FnDetailLocation::where('expense_request_id', $request->id)
-                        ->where('location_id', $location['id'])
+                       ->when($location['id'], function ($query, $location_id) {
+                            $query->where('location_id', $location_id);
+                        })
+                        ->when($location['department_id'], function ($query, $department_id) {
+                            $query->where('department_id', $department_id);
+                        })
                         ->first();
             
                     if ($dataLocation) {
@@ -968,6 +1116,7 @@ class ExpenseRequestController extends Controller
                         $locations[] = [
                             'expense_request_id' => $request->id,
                             'location_id'        => $location['id'],
+                            'department_id'      => (isset($location["department_id"]) ? $location["department_id"] : ""),
                             'amount_usd'         => $location['amount_usd'],
                             'amount_riel'        => $location['amount_kh'],
                         ];
@@ -978,18 +1127,37 @@ class ExpenseRequestController extends Controller
                     FnDetailLocation::insert($locations);
                 }
             } else{
-                // Get all location IDs that exist in the database but not in the new array for deletion
-                $existingLocations = FnDetailLocation::where('expense_request_id', $request->id)
-                    ->whereNotIn('location_id', array_column($locationArrays, 'id'))
-                    ->get();
+
+                $ids          = array_column($locationArrays, 'id');
+                $departmentIds = array_column($locationArrays, 'department_id');
+
+                $existingLocations = FnDetailLocation::where('expense_request_id', $request->id)->get();
+
                 foreach ($existingLocations as $existingLocation) {
-                    // Delete locations that are no longer present
-                    $existingLocation->delete();
+                    $shouldDelete = false;
+
+                    if (!empty($existingLocation->location_id) && !in_array($existingLocation->location_id, $ids)) {
+                        $shouldDelete = true;
+                    }
+
+                    if (!empty($existingLocation->department_id) && !in_array($existingLocation->department_id, $departmentIds)) {
+                        $shouldDelete = true;
+                    }
+
+                    if ($shouldDelete) {
+                        $existingLocation->delete();
+                    }
                 }
+
                 // Now proceed with adding new locations or updating existing ones
                 foreach ($locationArrays as $location) {
                     $dataLocation = FnDetailLocation::where('expense_request_id', $request->id)
-                        ->where('location_id', $location['id'])
+                        ->when($location['id'], function ($query, $location_id) {
+                            $query->where('location_id', $location_id);
+                        })
+                        ->when($location['department_id'], function ($query, $department_id) {
+                            $query->where('department_id', $department_id);
+                        })
                         ->first();
             
                     if ($dataLocation) {
@@ -1002,6 +1170,7 @@ class ExpenseRequestController extends Controller
                         $locations[] = [
                             'expense_request_id' => $request->id,
                             'location_id'        => $location['id'],
+                            'department_id'      => (isset($location["department_id"]) ? $location["department_id"] : ""),
                             'amount_usd'         => $location['amount_usd'],
                             'amount_riel'        => $location['amount_kh'],
                         ];
@@ -1014,6 +1183,7 @@ class ExpenseRequestController extends Controller
             }
             $data['approve_by']                     = json_encode(explode(",", $request->approve_by));
             // $data["approve_by"]                     = $request->approve_by;
+            $data['verify_print']                   = $positionReview->verify_print;
             $data["kind_regard"]                    = $request->kind_regard;
             $data["subject"]                        = $request->subject;
             $data["reason_subject"]                 = $request->reason_subject;
@@ -1110,6 +1280,7 @@ class ExpenseRequestController extends Controller
                 $amount = ($data->ge_total_cost_usd + $ge_total_cost_riel);
                 $dataCheckLevelView = [
                     "by_location"=> 2,
+                    "position_request"=> null,
                     "model_review"=> null,
                     "type"=> $type,
                     "request_type"=> $data->type,
@@ -1125,7 +1296,7 @@ class ExpenseRequestController extends Controller
                 }else{
                     $dataCheckLevelView["by_location"] = 1;
                     $lovelReview = self::lovelReview($dataCheckLevelView);
-                };
+                }
                 if ($lovelReview) {
                     if ($branch->abbreviations != "HQ") {
                         $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->branch_id;
@@ -1160,6 +1331,11 @@ class ExpenseRequestController extends Controller
                     $data['status']             = 'pending';
                     $data['position_review']    = json_encode($lovelReview->id_positions);
                     $data['review_type']        = $lovelReview->type;
+                    if($data->verify_print == 1){
+                        $data["review_by"]      = Auth::user()->id;
+                        $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                    }
+                    $data['verify_print']        = $lovelReview->verify_print;
                 }else{
                     // *** Process get leave request **/
                     $leave = self::leaveRequest(json_decode($data->approve_by),"", "","pending_approve");
@@ -1176,6 +1352,7 @@ class ExpenseRequestController extends Controller
             }
             ExpenseRequestHistory::create($dataHistory);
             $data["reason"]                 = $request->remark;
+            $data['is_log_action']          = 1;
             $data['updated_by']             = Auth::user()->id;
             $data->save();
             DB::commit();
@@ -1225,10 +1402,12 @@ class ExpenseRequestController extends Controller
             $dataHistory['tracking_id'] = $data->tracking_id . "@".$oldId;
             unset($dataHistory['id']);
             unset($dataHistory['request_by']);
-            
+            $data["review_by"] = null;
+            $data["date_review"] = null;
             $dataCheckLevelView = [
                 "by_location"=> 2,
                 "model_review"=> null,
+                "position_request"=> $data->requestBy->position_id,
                 "request_type"=> $data->type,
                 "reference_type"=> $data->expense_type,
                 "type"=> 1,
@@ -1236,12 +1415,38 @@ class ExpenseRequestController extends Controller
             ];
             $branch = Branchs::where("id", $data->requestBy->branch_id)->first();
             if($branch->abbreviations == "HQ"){
+
                 $dataCheckLevelView["model_review"] = (int) $data->requestBy->department_id;
                 $lovelReview = self::lovelReview($dataCheckLevelView);
+                if(count($lovelReview->id_positions) > 0){
+                    if (in_array($data->requestBy->position_id, $lovelReview->id_positions)) {
+                        if($lovelReview->verify_print == 1){
+                            $data["review_by"]      = $data->request_by;
+                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                        }
+                        $dataCheckLevelView["type"] = ($lovelReview->type + 1);
+                        $dataCheckLevelView["position_request"] = null;
+                        $lovelReview = self::lovelReview($dataCheckLevelView);
+                    } 
+                }
                 $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->department_id;
+
             }else{
+
                 $dataCheckLevelView["by_location"] = 1;
                 $lovelReview = self::lovelReview($dataCheckLevelView);
+                if(count($lovelReview->id_positions) > 0){
+                    if (in_array($data->requestBy->position_id, $lovelReview->id_positions)) {
+                        if($lovelReview->verify_print == 1){
+                            $data["review_by"]      = $data->request_by;
+                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                        }
+                        $dataCheckLevelView["type"] = ($lovelReview->type + 1);
+                        $dataCheckLevelView["position_request"] = null;
+                        $lovelReview = self::lovelReview($dataCheckLevelView);
+                    } 
+                }
+
                 $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->branch_id;
             };
 
@@ -1263,9 +1468,12 @@ class ExpenseRequestController extends Controller
             // *** end **/
             if ($lovelReview) {
                 $data['position_review']    = $lovelReview->id_positions;
-                $data['review_type']        = 1;
+                $data['review_type']        = $lovelReview->type;
+                $data['verify_print']       = $lovelReview->verify_print;
+                // $data['review_type']        = 1;
             }
             $data["reason"]                 = $request->remark;
+            $data['is_log_action']          = null;
             $data['updated_by']             = Auth::user()->id;
             $data->save();
             DB::commit();
@@ -1287,6 +1495,8 @@ class ExpenseRequestController extends Controller
         try{
             $exp = ExpenseRequest::find($request->id);
             if ($exp) {
+                $exp->tracking_id     = "D".$exp->tracking_id;
+                $exp->save();
                 $reference = explode(',', $exp->reference);
                 $FnRegularList = FnRegularExspense::whereIn("serialref", $reference)->get();
                 foreach ($FnRegularList as $rxp) {

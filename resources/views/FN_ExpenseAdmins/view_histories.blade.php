@@ -65,13 +65,16 @@
                                 @php
                                     $locations = "";
                                     if ($item->type == "2" ) {
-                                        if (count($item->departments)>0) {
+                                        if (count($item->locationDetails)>0) {
                                             $num = 1;
-                                            foreach ($item->departments as $key => $location) {
-                                                if ($location->Location) {
-                                                    $locations .= $num . ". " . $location->department->name_english . "\n";
+                                            foreach ($item->locationDetails as $in => $lt) {
+                                                if ($lt->location) {
+                                                    $locations .= $num . ". " . $lt->location->branch_name_en . "\n";
                                                     $num++;
-                                                    // $locations .= $location->department->name_english.", ";
+                                                }
+                                                if ($lt->department) {
+                                                    $locations .= $num . ". " . $lt->department->name_english . "\n";
+                                                    $num++;
                                                 }
                                             }
                                         }

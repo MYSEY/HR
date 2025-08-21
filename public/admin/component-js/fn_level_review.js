@@ -110,16 +110,19 @@ $(function(){
                         "id":                   $(this).find(".id_edit").val(),
                         "type":                 $(this).find(".level_type").val(),
                         "department_review":    $(this).find(".department_review").val(),
+                        "verify_print":         $(this).find(".verify_print").is(":checked") ? 1 : "",
                         "id_positions":         positions
                     });
                 }else{
                     data_levels.push({
                         "type":                 $(this).find(".level_type").val(),
                         "department_review":    $(this).find(".department_review").val(),
+                        "verify_print":         $(this).find(".verify_print").is(":checked") ? 1 : "",
                         "id_positions":         positions
                     });
                 }
             })
+            
             $.ajax({
                 type: "POST",
                 url: submitUrl,

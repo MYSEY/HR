@@ -143,8 +143,13 @@
                                         <div class="form-group hr-form-group-select2">
                                             <select class="form-control required hr-select2-option" id="addLocations" name="location_id" required>
                                                 <option value="" disabled selected> Please select department </option>
-                                                @foreach ($locations as $item)
-                                                    <option value="{{$item->id}}" data-name="{{$item->name_english}}">{{$item->name_english}}</option>
+                                                @foreach ($locations as $lt)
+                                                    {{-- @if ($lt->abbreviations !="HQ") --}}
+                                                        <option value="{{$lt->id}}" data-leocatiotype="branch" data-name="{{$lt->branch_name_en}}">{{$lt->branch_name_en}}</option>
+                                                    {{-- @endif --}}
+                                                @endforeach
+                                                @foreach ($department as $item)
+                                                    <option value="{{$item->id}}" data-leocatiotype="department" data-name="{{$item->name_english}}">{{$item->name_english}}</option>
                                                 @endforeach
                                             </select>
                                             <div class="table-responsive my-1" style="display: none" id="view-tbl_location">

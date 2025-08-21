@@ -22,9 +22,36 @@ class ExpenseAdminController extends Controller
         if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-
         $datas = ExpenseRequest::with(["requestBy","locationDetails","departments", "createdBy"])
-        ->whereNot("status", "cancel")->where("page_show", null)->orderBy('id', 'DESC')->get();
+        ->whereNot("expense_requests.status", "cancel")->where("expense_requests.page_show", null)
+        ->leftJoin('users', 'expense_requests.request_by', '=', 'users.id')
+        ->select(
+            'expense_requests.*',
+            'users.number_employee',
+            'users.position_id',
+            'users.branch_id as user_branch_id',
+            'users.department_id as user_department_id',
+            'users.line_manager',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if (permissionAccess("m13-s3","is_access")->value == 1) {
+                // $query->where('expense_requests.status', "approved");
+            }else{
+                if (in_array($RolePermission, ['HOD', 'BM', 'HRAdmin'])) {
+                    $query->where("users.department_id", Auth::user()->department_id)
+                        ->where("users.branch_id", Auth::user()->branch_id);
+                } elseif (in_array($RolePermission, ['DHOD', 'DBM'])) {
+                    $query->where("expense_requests.request_by", Auth::user()->id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
+                } elseif ($RolePermission == "Employee") {
+                    $query->where("expense_requests.request_by", Auth::user()->id);
+                } elseif ($RolePermission == 'HR') {
+                    $query->where("expense_requests.request_by", Auth::user()->id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
+                }
+            }
+        })
+        ->orderBy('id', 'DESC')->get();
         return view('FN_ExpenseAdmins.index',compact(['permission','datas']));
     }
     public function histories(Request $request)

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('model_review')->nullable();
             $table->integer('department_review')->nullable();
             $table->json('id_positions');
+            $table->integer('verify_print')->nullable();
             $table->string('description')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

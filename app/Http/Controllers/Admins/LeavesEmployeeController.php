@@ -405,28 +405,29 @@ class LeavesEmployeeController extends Controller
                         'end_date'          => $request->end_date,
                         'number_of_day'     => $request->number_of_day,
                     ];
-                    if ($manager1) {
-                        $recipients = [$manager1->email, $line_manager2->email];
-                        if ($manager1->email != $line_manager2->email) {
-                            foreach ($recipients as $email) {
-                                $btn_approve = false;
-                                if($email != $manager1->email){
-                                    $btn_approve = true;
-                                }
-                                if($email){
-                                    Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
-                                }
-                            }
-                        }else{
-                            if($line_manager2->email){
-                                Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
-                            }
-                        }
-                    }else{
-                        if($line_manager2->email){
-                            Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
-                        }
-                    }
+                    // Mail::mailer('mailer2')->to("hshong9666@gmail.com")->queue(new SendEmail($datasSendEmail, true));
+                    // if ($manager1) {
+                    //     $recipients = [$manager1->email, $line_manager2->email];
+                    //     if ($manager1->email != $line_manager2->email) {
+                    //         foreach ($recipients as $email) {
+                    //             $btn_approve = false;
+                    //             if($email != $manager1->email){
+                    //                 $btn_approve = true;
+                    //             }
+                    //             if($email){
+                    //                 Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
+                    //             }
+                    //         }
+                    //     }else{
+                    //         if($line_manager2->email){
+                    //             Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
+                    //         }
+                    //     }
+                    // }else{
+                    //     if($line_manager2->email){
+                    //         Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
+                    //     }
+                    // }
 
                 }
             }
@@ -612,17 +613,17 @@ class LeavesEmployeeController extends Controller
                                     $btn_approve = true;
                                 }
                                 if($email){
-                                    Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
+                                    // Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
                                 }
                             }
                         }else{
                             if($line_manager2->email){
-                                Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
+                                // Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
                             }
                         }
                     }else{
                         if($line_manager2->email){
-                            Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
+                            // Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
                         }
                     }
                 }

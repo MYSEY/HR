@@ -44,16 +44,29 @@
                                         }
                                     }
                                     if ($item->type == "2" ) {
-                                        if (count($item->departments)>0) {
+                                        if (count($item->locationDetails)>0) {
                                             $num = 1;
-                                            foreach ($item->departments as $in => $location) {
-                                                if ($location->Location) {
-                                                    $locations .= $num . ". " . $location->department->name_english . "\n";
+                                            foreach ($item->locationDetails as $in => $lt) {
+                                                if ($lt->location) {
+                                                    $locations .= $num . ". " . $lt->location->branch_name_en . "\n";
                                                     $num++;
-                                                    // $locations .= $location->department->name_english.", ";
+                                                }
+                                                if ($lt->department) {
+                                                    $locations .= $num . ". " . $lt->department->name_english . "\n";
+                                                    $num++;
                                                 }
                                             }
                                         }
+                                        // if (count($item->departments)>0) {
+                                        //     $num = 1;
+                                        //     foreach ($item->departments as $in => $location) {
+                                        //         if ($location->Location) {
+                                        //             $locations .= $num . ". " . $location->department->name_english . "\n";
+                                        //             $num++;
+                                        //             // $locations .= $location->department->name_english.", ";
+                                        //         }
+                                        //     }
+                                        // }
                                     }else{
                                         if (count($item->locationDetails)>0) {
                                             $num = 1;
@@ -152,7 +165,7 @@
                                         <div class="dropdown dropdown-action">
                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                @if (($item->review_type == "1" && $item->status == "pending") || ($item->expense_type == 1 && $item->status == "pending_approve") || $item->status == "rejected")
+                                                @if ((!$item->is_log_action))
                                                     @if ($item->type == "2")
                                                         <a class="dropdown-item update" href="{{url("fn/tax-expense/edit",$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                     @else
@@ -206,11 +219,15 @@
                                     $reference = '';
                                     $asignLocations = "";
                                     if ($item->type == "2" ) {
-                                        if (count($item->departments)>0) {
+                                        if (count($item->locationDetails)>0) {
                                             $asignNum = 1;
-                                            foreach ($item->departments as $in => $location) {
-                                                if ($location->Location) {
-                                                    $asignLocations .= $asignNum . ". " . $location->department->name_english . "\n";
+                                            foreach ($item->locationDetails as $in => $lt) {
+                                                if ($lt->location) {
+                                                    $asignLocations .= $asignNum . ". " . $lt->location->branch_name_en . "\n";
+                                                    $asignNum++;
+                                                }
+                                                if ($lt->department) {
+                                                    $asignLocations .= $asignNum . ". " . $lt->department->name_english . "\n";
                                                     $asignNum++;
                                                 }
                                             }
@@ -226,8 +243,7 @@
                                                 
                                             }
                                         }
-                                    }
-                                    
+                                    } 
                                 @endphp
                                 <tr class="odd">
                                     <td class="stuck-scroll-3">{{$key+1}}</td>

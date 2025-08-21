@@ -14,6 +14,7 @@ class FnDetailLocation extends Model
     protected $fillable = [
         'expense_request_id',
         'location_id',
+        'department_id',
         'amount_usd',
         'amount_riel',
         
@@ -29,7 +30,7 @@ class FnDetailLocation extends Model
     }
     public function department()
     {
-        return $this->belongsTo(Department::class, 'location_id');
+        return $this->belongsTo(Department::class, 'department_id');
     }
     public function getLocationAttribute()
     {

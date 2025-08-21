@@ -163,44 +163,67 @@
                                 @if (Auth::user()->branch->abbreviations == "HQ")
                                     <legend class="col-form-label col-sm-2 pt-0">Add departments <span class="text-danger">*</span></legend>
                                     <div class="col-sm-10">
+                                        {{-- @dd($data->locationDetails) --}}
                                         <div class="form-group hr-form-group-select2">
                                             <select class="form-control required hr-select2-option" id="addLocations" name="location_id" required>
                                                 <option value="" disabled selected> Please select location </option>
-                                                @foreach ($locations as $item)
-                                                    <option value="{{$item->id}}" @if ($data->departments[0]->department->id == $item->id) selected @endif data-name="{{$item->name_english}}">{{$item->name_english}}</option>
+                                                
+                                                @foreach ($data->locationDetails as $dt)
+                                                    @foreach ($locations as $lt)
+                                                        <option value="{{$lt->id}}" @if ($dt->location_id == $lt->id) selected @endif data-leocatiotype="branch" data-name="{{$lt->branch_name_en}}">{{$lt->branch_name_en}}</option>
+                                                    @endforeach
+                                                    @foreach ($department as $dp)
+                                                        <option value="{{$dp->id}}" @if ($dt->department_id == $dp->id) selected @endif data-leocatiotype="department" data-name="{{$dp->name_english}}">{{$dp->name_english}}</option>
+                                                    @endforeach
                                                 @endforeach
+                                                
+
                                             </select>
                                             <div class="table-responsive my-1" id="view-tbl_location">
                                                 <table class="table table-striped custom-table mb-0 tbl-locations">
                                                     <tbody>
-                                                        @foreach ($data->departments as $item)
-                                                            <tr class="odd">
-                                                                <td class="align-middle">
-                                                                    <div class="input-group d-flex justify-content-center">
-                                                                        <input type="text" disabled class="form-control" data-id="{{$item->department->id}}" value="{{$item->department->name_english}}">
-                                                                    </div>
-                                                                </td>
-                                                                <td class="align-middle">
-                                                                    <div class="input-group d-flex justify-content-center">
-                                                                        <span class="input-group-text">$</span>
-                                                                        <input type="text" class="form-control khmer-toEnglish-number-only" placeholder="0.00" value="{{$item->amount_usd}}">
-                                                                    </div>
-                                                                </td>
-                                                                <td class="align-middle">
-                                                                    <div class="input-group d-flex justify-content-center">
-                                                                        <span class="input-group-text" style="font-size: 20px">៛</span>
-                                                                        <input type="text" placeholder="0" class="form-control khmer-toEnglish-number-only" value="{{$item->amount_riel}}">
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-center align-middle">
-                                                                    <a class="btn btn-danger delete" href="#" data-id="{{$item->location->id}}">
-                                                                        <i class="fa fa-trash-o"></i>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
+                                                        @foreach ($data->locationDetails as $item)
+                                                            {{-- @foreach ($data->departments as $item) --}}
+                                                                @php
+                                                                    $name_ = "";
+                                                                    $lt_id = "";
+                                                                    $locationtype = "";
+                                                                    if ($item->location) {
+                                                                        $name_ = $item->location->branch_name_en;
+                                                                        $lt_id = $item->location->id;
+                                                                        $locationtype = "branch";
+                                                                    }else{
+                                                                        $name_ = $item->department->name_english;
+                                                                        $lt_id = $item->department->id;
+                                                                        $locationtype = "department";
+                                                                    }
+                                                                @endphp
+                                                                <tr class="odd">
+                                                                    <td class="align-middle">
+                                                                        <div class="input-group d-flex justify-content-center">
+                                                                            <input type="text" disabled class="form-control" data-locationtype="{{$locationtype}}" data-id="{{$lt_id}}" value="{{$name_}}">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <div class="input-group d-flex justify-content-center">
+                                                                            <span class="input-group-text">$</span>
+                                                                            <input type="text" class="form-control khmer-toEnglish-number-only" placeholder="0.00" value="{{$item->amount_usd}}">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <div class="input-group d-flex justify-content-center">
+                                                                            <span class="input-group-text" style="font-size: 20px">៛</span>
+                                                                            <input type="text" placeholder="0" class="form-control khmer-toEnglish-number-only" value="{{$item->amount_riel}}">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-center align-middle">
+                                                                        <a class="btn btn-danger delete" href="#" data-id="{{$lt_id}}">
+                                                                            <i class="fa fa-trash-o"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            {{-- @endforeach --}}
                                                         @endforeach
-                                                        
-                                                        
                                                     </tbody>
                                                 </table>
                                             </div>

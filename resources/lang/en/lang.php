@@ -779,6 +779,7 @@ return[
     "resign_reason"=>"Resign Reason",
     "relationship"=>"Relationship",
     "reject"=>"Reject",
+    "return"=>"Return",
     "rejected_offered"=>"Rejected Offered",
     "read"=>"Read",
     "reason"=>"Reason",

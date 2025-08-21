@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('fn_detail_locations', function (Blueprint $table) {
             $table->id();
-            $table->integer('expense_request_id');
+            $table->integer('expense_request_id')->nullable();
+            $table->integer('department_id')->nullable();
             $table->decimal('amount_usd',50,2)->default(0);
             $table->decimal('amount_riel',50,2)->default(0);
             $table->integer('location_id');

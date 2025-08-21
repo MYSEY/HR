@@ -161,6 +161,7 @@ class FnLevelReviewerController extends Controller
                     $data['model_review']       = $request->model_review;
                     $data['department_review']  = $value["department_review"];
                     $data['id_positions']       = $value["id_positions"];
+                    $data['verify_print']       = (isset($value["verify_print"]) ? $value["verify_print"] : "");
                     $data['description']        = $request->description;
                     $data['created_by']         = Auth::user()->id;
                     FnLevelReviewer::create($data);
@@ -209,6 +210,7 @@ class FnLevelReviewerController extends Controller
                         $data->model_review       = $request->model_review;
                         $data->department_review  = $value["department_review"];
                         $data->id_positions       = $value["id_positions"];
+                        $data->verify_print       = (isset($value["verify_print"]) ? $value["verify_print"] : "");
                         $data->description        = $request->description;
                         $data->updated_by         = Auth::user()->id;
                         $data->save();
@@ -228,6 +230,7 @@ class FnLevelReviewerController extends Controller
                     'model_review'       => $request->model_review,
                     'department_review'  => $value["department_review"],
                     'id_positions'       => $value["id_positions"],
+                    'verify_print'       => (isset($value["verify_print"]) ? $value["verify_print"] : ""),
                     'description'        => $request->description,
                     'created_by'         => Auth::user()->id,
                 ]);

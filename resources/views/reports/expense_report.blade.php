@@ -139,6 +139,7 @@
                                 </thead>
                                 <tbody>
                                     @if (count($datas)>0)
+                                    {{-- @dd($datas) --}}
                                         @foreach ($datas as $key=>$item)
                                         
                                             <tr class="odd">
@@ -198,7 +199,16 @@
                                                 <td>{{$item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y H:i') : ''}}</td>
                                                 <td>{{$item->date_approve ? \Carbon\Carbon::parse($item->date_approve)->format('d-M-Y') : ''}}</td>
                                                 <td>{{$item->approver_employee_name_en}}</td>
-                                                <td>{{$item->type == "2" ?  $item->department->name_english : $item->location->branch_name_en}}</td>
+                                                
+                                                <td>
+                                                    @if ($item->type == "2")
+                                                        {{$item->department ? $item->department->name_english : $item->location->branch_name_en}}
+                                                    @else
+                                                        {{$item->location->branch_name_en}}
+                                                    @endif
+                                                    {{-- {{ $item->type == "2" ?  $item->department->name_english : $item->location->branch_name_en}} --}}
+                                                </td>
+                                                
                                                 <td>
                                                     {{
                                                         $item->expenseRequest->requestBy->department->name_english." / ".$item->expenseRequest->requestBy->branch->branch_name_en
