@@ -59,7 +59,7 @@
                     </td></tr>
                 </table>
                 
-                {{-- <label class="label-sub_lll">នាយកដ្ឋានដូចខាងក្រោម៖</label>
+                {{-- <label class="label-sub_lll">នាយកដ្ឋានដូចខាងក្រោម៖</label> --}}
                 <div class="style-table">
                     <table style="width:100%" class="locations_a">
                         <tr >
@@ -70,7 +70,7 @@
                            
                         </tr>
                     </table>
-                </div> --}}
+                </div>
                 <label class="label-sub_lll">ចំណាយរួមមាន៖</label>
                 <div class="style-table">
                         <table style="width:100%">

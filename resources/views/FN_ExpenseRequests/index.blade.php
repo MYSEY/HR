@@ -621,32 +621,48 @@
             $(".p_day").text(day);
             $(".p_month").text(month);
             $(".p_year").text(year);
-            // let tr_a = "";
-            // let tr_b = "";
-            // if (datas.departments.length === 1) {
-            //     tr_a = '<tr>' +
-            //             '<td class="table_tr_">' + datas.departments[0].department.name_khmer +
-            //             'ចំនួនទឹកប្រាក់​ $ ' + datas.departments[0].amount_usd + '</td>' +
-            //         '</tr>';
-            // } else {
-            //     let mid = Math.ceil(datas.departments.length / 2);
+            let tr_a = "";
+            let tr_b = "";
 
-            //     for (let index = 0; index < datas.departments.length; index++) {
-            //         let detail = datas.departments[index];
-            //         let row = '<tr>' +
-            //                     '<td class="table_tr_">' + detail.department.name_khmer +
-            //                     'ចំនួនទឹកប្រាក់​ $ ' + detail.amount_usd + '</td>' +
-            //                 '</tr>';
+            let mid = Math.ceil(datas.location_details.length / 2);
 
-            //         if (index < mid) {
-            //             tr_a += row;
-            //         } else {
-            //             tr_b += row;
-            //         }
-            //     }
-            // }
-            // $(".locations_a tr").html(tr_a);
-            // $(".locations_b tr").html(tr_b);
+            for (let index = 0; index < datas.location_details.length; index++) {
+                let detail = datas.location_details[index];
+                let amountUSD = '';
+                let amountRiel = '';
+
+                if (detail.amount_usd > 0) {
+                    amountUSD = ' $ ' + formatNumber(detail.amount_usd);
+                }
+
+                if (detail.amount_riel > 0) {
+                    amountRiel = ' ៛' + formatNumber(detail.amount_riel);
+                }
+
+                let currencyText = amountUSD;
+                if (amountUSD && amountRiel) currencyText += '&nbsp;&nbsp;';
+                currencyText += amountRiel;
+                
+                let row = ''
+                if (detail.location) {
+                    row = '<tr>' +
+                        '<td class="table_tr_">- ' + detail.location.branch_name_kh + currencyText + '</td>' +
+                    '</tr>';
+                };
+                if (detail.department) {
+                    row = '<tr>' +
+                        '<td class="table_tr_">- ' + detail.department.name_khmer + currencyText + '</td>' +
+                    '</tr>';
+                }
+
+                if (index < mid) {
+                    tr_a += row;
+                } else {
+                    tr_b += row;
+                }
+            }
+            $(".locations_a tr").html(tr_a);
+            $(".locations_b tr").html(tr_b);
            
             print_pdf("print_tax_expense")
         });
