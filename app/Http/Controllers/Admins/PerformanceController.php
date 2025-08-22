@@ -41,7 +41,8 @@ class PerformanceController extends Controller
                 'positions.name_english as positions_name',
                 'branchs.branch_name_en',
                 'branchs.branch_name_kh',
-            )->when($request->employee_id, function ($query, $employee_id) {
+            )->where('performances.status', 'preparing')
+            ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
             ->when($request->employee_name, function ($query, $employee_name) {
@@ -131,7 +132,7 @@ class PerformanceController extends Controller
                     $data['created_by'] = Auth::id();
                     $data['employee_id'] = $empId;
                     $data['total_weight'] = $totalWeight;
-                    $data['status'] = 'prepare';
+                    $data['status'] = 'preparing';
                     $data['type'] = $type;
 
                     // Create Performance
@@ -451,6 +452,8 @@ class PerformanceController extends Controller
             if ($performance->total_weight == 100) {
                 $performance->update([
                     'status'     => 'approved',
+                    'approved_by' => Auth::id(),
+                    'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_by' => Auth::id(),
                 ]);
             } else {
@@ -459,6 +462,44 @@ class PerformanceController extends Controller
                 ]);
             }
 
+            DB::commit(); // ✅ Commit after successful update
+            return response()->json([
+                'success' => true,
+                'message' => 'Updated performance status successfully!',
+                'status'  => 200
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollBack(); // ✅ Roll back only if transaction started
+            return response()->json([
+                'error'     => 'Updated performance status failed.',
+                'exception' => $exp->getMessage()
+            ], 500);
+        }
+    }
+    public function performanceApproveAll(Request $request)
+    {
+        try {
+            DB::beginTransaction(); // ✅ Start transaction
+            $ids = explode(',', $request->performance_id);
+            $approved = [];
+            $skipped = [];
+            foreach ($ids as $id) {
+                $performance = Performance::findOrFail($id);
+                if ($performance->total_weight == 100) {
+                    $performance->update([
+                        'status'        => 'approved',
+                        'approved_by'   => Auth::id(),
+                        'approved_date' => now(),
+                        'updated_by'    => Auth::id(),
+                    ]);
+                    $approved[] = $id;
+                } else {
+                    $skipped[] = $id;
+                    return response()->json([
+                        'message' => 'weight_must_be_exactly'
+                    ]);
+                }
+            }
             DB::commit(); // ✅ Commit after successful update
             return response()->json([
                 'success' => true,

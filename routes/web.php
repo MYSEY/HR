@@ -283,6 +283,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('performance/update', [PerformanceController::class,'update']);
     Route::post('performance/delete', [PerformanceController::class,'destroy']);
     Route::post('performance/approve/{id}', [PerformanceController::class,'performanceApprove']);
+    Route::post('performance/approved/all', [PerformanceController::class,'performanceApproveAll']);
 
     //performance Appraisal
     Route::resource('performance-appraisal', PerformanceAppraisalController::class);

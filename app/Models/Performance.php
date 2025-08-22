@@ -24,6 +24,8 @@ class Performance extends Model
         'score_level',
         'status',
         'type',
+        'approved_by',
+        'approved_date',
         'remark',
         'created_by',
         'updated_by',

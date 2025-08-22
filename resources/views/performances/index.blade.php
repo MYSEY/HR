@@ -1,4 +1,13 @@
 @extends('layouts.master')
+<style>
+    .big-checkbox .custom-control-input {
+        transform: scale(1.5); /* make checkbox 1.5x bigger */
+        margin-right: 8px;
+    }
+    .big-checkbox .custom-control-label {
+        font-size: 18px; /* adjust label text if you add one */
+    }
+</style>
 @section('content')
     <div class="">
         <div class="page-header">
@@ -75,6 +84,9 @@
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
+                <a href="javascript:void(0);" class="btn btn-sm btn-secondary" id="btnApprovedAll">
+                    Approved
+                </a>
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
@@ -82,7 +94,12 @@
                                 <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            <th class="sorting sorting_asc stuck-scroll-4">#</th>
+                                            <th>
+                                                <div class="custom-control custom-checkbox custom-control-inline big-checkbox">
+                                                    <input type="checkbox" class="custom-control-input checkAll" name="checkAll" id="checkAll" onClick="toggle(this)">
+                                                    <label class="custom-control-label" for="checkAll"></label>
+                                                </div>
+                                            </th>
                                             <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
                                             <th class="sorting sorting_asc stuck-scroll-4">@lang('lang.employee_name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
@@ -90,7 +107,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.from_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.to_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.type')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.kip')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.total_weight')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
@@ -158,6 +175,95 @@
                 department_id = $('#department_id').val();
                 $('#DataTables_Table_0').DataTable().ajax.reload(null, false);
             });
+            $('.checkAll').on('click', function(e) {
+                if($(this).is(':checked',true)){
+                    $(".sub_chk").prop('checked', true);
+                } else {
+                    $(".sub_chk").prop('checked',false);
+                }
+            });
+            $('body').on('click','#btnApprovedAll',function(){
+                var allVals = [];
+                $(".sub_chk:checked").each(function() {
+                    allVals.push($(this).attr('data-id'));
+                });
+                var performance_id = allVals.join(",");
+                if(allVals.length <=0)
+                {
+                    $.alert({
+                        title: '@lang("lang.approve")!',
+                        content: '@lang("lang.please_select_item_befor").',
+                        type: 'blue',
+                    });
+                }  else {
+                    $.confirm({
+                        title: 'Approve!',
+                        content: '@lang("lang.are_you_sure_want_to_approve")?',
+                        type: "blue",
+                        buttons: {
+                            ok: {
+                                text: 'ok',
+                                btnClass: 'btn-blue',
+                                action: function () {
+                                    axios.post('{{ URL("performance/approved/all") }}', {
+                                        'performance_id': performance_id,
+                                    }).then(function (response) {
+                                        if (response.data.success) {
+                                            new Noty({
+                                                title: "",
+                                                text: '@lang("lang.the_process_has_been_successfully")',
+                                                type: "success",
+                                                icon: true
+                                            }).show();
+                                            setTimeout(() => {
+                                                window.location.replace("{{ URL('performance') }}");
+                                            }, 1500);
+                                        } else if (response.data.message === 'weight_must_be_exactly') {
+                                            new Noty({
+                                                title: "",
+                                                text: 'Total weight must be exactly 100% before approval.',
+                                                type: "error",
+                                                icon: true
+                                            }).show();
+                                            setTimeout(() => {
+                                                window.location.replace("{{ URL('performance') }}");
+                                            }, 2000);
+                                        } else {
+                                            new Noty({
+                                                title: "",
+                                                text: 'Something went wrong. Please try again.',
+                                                type: "error",
+                                                icon: true
+                                            }).show();
+                                        }
+                                        dataTables();
+                                    }).catch(function (error) {
+                                        new Noty({
+                                            text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                            type: "error",
+                                            timeout: 3000,
+                                            progressBar: true,
+                                        }).show();
+                                    });
+                                }
+                            },
+                            cancel: {
+                                text: '@lang("lang.cancel")',
+                                action: function () {
+                                    // Action for cancel button (if needed)
+                                }
+                            }
+                        },
+                        onContentReady: function () {
+                            var jc = this;
+                            this.$content.find('form').on('submit', function (e) {
+                                e.preventDefault();
+                                jc.$$formSubmit.trigger('click');
+                            });
+                        }
+                    });
+                }
+            });
             // Initialize only once
             dataTables();
             $(".reset-btn").on("click", function() {
@@ -170,20 +276,18 @@
                 let id = $(this).data("id");
                 $('.e_id').val(id);
             });
-            $('body').on('click','#btnStatus',function(e){
+            $('body').on('click','#btnUpdateStatus',function(e){
                 e.preventDefault();
                 var id = $(this).data('id');
                 $.confirm({
-                    title: '@lang("lang.approve")',
-                    contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
-                    content: '@lang("lang.are_you_sure_want_to_approve")',
+                    title: 'Approve!',
+                    content: '@lang("lang.are_you_sure_want_to_approve")?',
+                    type: "blue",
                     buttons: {
-                        confirm: {
-                            text: 'Ok',
-                            type: 'blue',
-                            btnClass: 'btn-green',
-                            action: function() {
+                        ok: {
+                            text: 'ok',
+                            btnClass: 'btn-blue',
+                            action: function () {
                                 axios.post('{{ URL("performance/approve") }}/'+id).then(function(response) {
                                     if (response.data.success) {
                                         new Noty({
@@ -213,23 +317,28 @@
                             }
                         },
                         cancel: {
-                            text: 'Cancel',
-                            btnClass: 'btn-secondary btn-sm',
-                        },
+                            text: '@lang("lang.cancel")',
+                            action: function () {
+                                // Action for cancel button (if needed)
+                            }
+                        }
                     },
-                    onContentReady: function() {
-                        // bind to events
+                    onContentReady: function () {
                         var jc = this;
-                        this.$content.find('form').on('submit', function(e) {
-                            // if the user submits the form by pressing enter in the field.
+                        this.$content.find('form').on('submit', function (e) {
                             e.preventDefault();
-                            jc.$$formSubmit.trigger('click'); // reference the button and click it
+                            jc.$$formSubmit.trigger('click');
                         });
                     }
                 });
             });
         });
-
+        function toggle(source) {
+            checkboxes = $('.checkAll');
+            for(var i=0, n=checkboxes.length;i<n;i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
         function dataTables() {
             $('#loading-overlay').show();
             // Check if DataTable instance exists, then destroy it
@@ -254,7 +363,18 @@
                     }
                 },
                 columns: [
-                    { data: 'id', name: 'id' },
+                    {
+                        data: 'id',
+                        name: 'id',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row) {
+                            return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
+                                <input type="checkbox" class="custom-control-input sub_chk" name="checkbox" data-id="${data}" id="${data}" value="${data}">
+                                <label class="custom-control-label" for="${data}"></label>
+                            </div>`;
+                        }
+                    },
                     { 
                         data: 'number_employee', 
                         name: 'number_employee',
@@ -284,7 +404,7 @@
                         orderable: false,
                         searchable: false,
                         render: function (data, type, row) {
-                            if (row.status === 'prepare') {
+                            if (row.status === 'preparing') {
                                 // Show dropdown if status is prepare
                                 return `
                                     <div class="dropdown action-label">
@@ -293,7 +413,7 @@
                                             <span>Prepare</span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" data-id="${row.id}" href="javascript:void(0)" id="btnStatus">
+                                            <a class="dropdown-item" data-id="${row.id}" href="javascript:void(0)" id="btnUpdateStatus">
                                                 <i class="fa fa-dot-circle-o text-success"></i>
                                                 <span>Approve</span>
                                             </a>

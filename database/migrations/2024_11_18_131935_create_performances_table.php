@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('type')->nullable();
             $table->string('remark')->nullable();
             $table->string('status')->nullable();
+            $table->integer('approved_by')->nullable();
+            $table->dateTime('approved_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();
