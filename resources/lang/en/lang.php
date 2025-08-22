@@ -884,7 +884,7 @@ return[
     "taxable_salary"=>"Taxable Salary",
     "tax_deduction"=>"Tax Deduction",
     "tax_exemption_salary"=>"Tax Exemption Salary",
-    "tax_expense"=>"Tax Exspense",
+    "tax_expense"=>"Tax Expense",
     "tax_request"=>"Tax Request",
     "to_date"=>"To Date",
     "today"=>"Today",
