@@ -260,6 +260,9 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="{{url('performance')}}/${row.id}">
+                                            <i class="fa fa-regular fa-eye"></i> Preview
+                                        </a>
                                         <a class="dropdown-item" href="{{url('performance-appraisal')}}/${row.id}">
                                             <i class="fa fa-regular fa-eye"></i> Progress KPI
                                         </a>

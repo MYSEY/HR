@@ -410,7 +410,7 @@
                                     <div class="dropdown action-label">
                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                             <i class="fa fa-dot-circle-o text-warning"></i>
-                                            <span>Prepare</span>
+                                            <span>Preparing</span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <a class="dropdown-item" data-id="${row.id}" href="javascript:void(0)" id="btnUpdateStatus">
