@@ -518,6 +518,13 @@
                                 }
                             });
                         }
+                        let location = "";
+                        if (item.department) {
+                            location = item.department.name_english;
+                        }
+                        if (item.location) {
+                            location = item.location.branch_name_en;
+                        }
 
                         referenceTd += '</td>';
                         let printClass = item.type == "2" ? "btn-TEXP-print" : "btn-GEXP-print";
@@ -543,7 +550,9 @@
                             '<td>'+date_request+'</td>'+
                             '<td>'+date_approve+'</td>'+
                             '<td>'+item.approver_employee_name_en+'</td>'+
-                            '<td>'+(item.location.branch_name_en)+'</td>'+
+
+                            '<td>'+(location)+'</td>'+
+
                             '<td>'+(item.expense_request.request_by.department.name_english)+' / '+(item.expense_request.request_by.branch.branch_name_en)+'</td>'+
                             '<td>'+item.expense_request.request_by.employee_name_en+'</td>'+
                             '<td style="text-align: center;">'+
