@@ -437,6 +437,9 @@ class ExpenseRequestController extends Controller
                         $dataCheckLevelView["type"] = ($positionReview->type + 1);
                         $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
+                        if(!$positionReview){
+                            return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                        }
                     } 
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
@@ -465,6 +468,9 @@ class ExpenseRequestController extends Controller
                         $dataCheckLevelView["type"] = ($positionReview->type + 1);
                         $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
+                        if(!$positionReview){
+                            return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                        }
                     }   
                 }
                 $data['location_review']    =  $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
@@ -708,6 +714,9 @@ class ExpenseRequestController extends Controller
                         $dataCheckLevelView["type"] = ($positionReview->type + 1);
                         $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
+                        if(!$positionReview){
+                            return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                        }
                     }   
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
@@ -736,6 +745,9 @@ class ExpenseRequestController extends Controller
                         $dataCheckLevelView["type"] = ($positionReview->type + 1);
                         $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
+                        if(!$positionReview){
+                            return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                        }
                     }   
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
@@ -987,6 +999,9 @@ class ExpenseRequestController extends Controller
                         $dataCheckLevelView["type"] = ($positionReview->type + 1);
                         $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
+                        if(!$positionReview){
+                            return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                        }
                     }   
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
@@ -1015,6 +1030,9 @@ class ExpenseRequestController extends Controller
                         $dataCheckLevelView["type"] = ($positionReview->type + 1);
                         $dataCheckLevelView["position_request"] = null;
                         $positionReview = self::lovelReview($dataCheckLevelView);
+                        if(!$positionReview){
+                            return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                        }
                     }   
                 }
                 $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;

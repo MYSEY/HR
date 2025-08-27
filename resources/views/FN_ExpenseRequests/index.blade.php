@@ -131,13 +131,15 @@
             if (datas.type == "2") {
                 convertNumberKH = convertNumberToWordsExp(datas.te_total_tax,"rial");
                 $("#v_expense_type").text("ចំណាយប្រកាសពន្ធ");
-                $("#v_total_cost_text").text("សរុបចំណាយ (១+២)");
+                $("#v_total_cost_text").text("សរុបចំណាយ (១+២+៣)");
+                $("#v_suppliers").text("៥. បើកជូនអ្នកផ្គត់ផ្គង់ (៤)");
                 $("#block_fringe_benefit").css("display","none");
                 $("#v_tax_riel").text("៛ "+formatNumber(datas.te_tax_income));
                 $("#v_total_amount_riel").text("៛ "+formatNumber(datas.te_total_tax));
             }else{
                 $("#v_expense_type").text("សរុបចំណាយ (១+២)");
                 $("#v_total_cost_text").text("ពន្ធកាត់ទុក");
+                $("#v_suppliers").text("៦. បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឬ (៣-(៤+៥))");
                 convertNumberKH = convertNumberToWordsExp(datas.ge_total_amount_riel,"rial");
                 $("#block_fringe_benefit").css("display","block");
                 $("#v_tax_fringe_benefit_usd").text("$ "+formatNumber(datas.ge_tax_fringe_benefit_usd));
