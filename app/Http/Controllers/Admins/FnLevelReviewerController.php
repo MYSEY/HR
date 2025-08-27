@@ -22,10 +22,9 @@ class FnLevelReviewerController extends Controller
 {
 
     function getDatas($request){
-
         $filteredIds = FnLevelReviewer::select(DB::raw('MIN(id) as id'))
             ->when($request->department_id, function ($query, $department_id) {
-                $query->where('department_review', $department_id);
+                $query->where('model_review', $department_id);
             })
             ->when($request->location_id, function ($query, $location_id) {
                 $query->where('from_location', $location_id);

@@ -193,7 +193,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
-                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-asign" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                     <thead>
                         <tr>
                             <th class="stuck-scroll-3">#</th>
@@ -245,7 +245,7 @@
                                         }
                                     } 
                                 @endphp
-                                <tr class="odd">
+                                <tr class="odd tbl-index-{{$item->id}}" id="tbl-asign-rowID{{$item->id}}">
                                     <td class="stuck-scroll-3">{{$key+1}}</td>
                                     <td class="stuck-scroll-3"><a href="#">{{$item->tracking_id}}</a></td>
                                     <td class="stuck-scroll-3"> 

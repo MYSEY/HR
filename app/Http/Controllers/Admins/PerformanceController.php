@@ -14,6 +14,8 @@ use App\Models\PerformanceDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\PAFlow;
+use App\Models\PALevelReviewer;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 
@@ -89,6 +91,14 @@ class PerformanceController extends Controller
         $branch = Branchs::all();
         $department = Department::all();
         return view('performances.index',compact('branch','department'));
+        if (in_array(Auth::user()->RolePermission, ['Employee'])) {
+            $query->where('performances.employee_id', Auth::user()->id);
+        }
+        // ->groupBy('performances.employee_id')
+        // Fetch paginated data
+        $data = $query->get();
+        // dd($data);
+        return view('performances.index',compact('data'));
     }
 
     /**
@@ -103,6 +113,32 @@ class PerformanceController extends Controller
         return view('performances.create',compact('employee'));
     }
 
+    function lovelReview($dataLevelView){
+        $stage_order = $dataLevelView["stage_order"];
+        $levelReview = PALevelReviewer::where('criteria', $dataLevelView["criteria"])
+                // ->where('stage_order', $stage_order)
+                ->when($dataLevelView["criteria"], function ($query, $criteria) use ($dataLevelView) {
+                    if ((string)$criteria === "2") {
+                        $query->where(function ($q) use ($dataLevelView) {
+                            $q->where('branch_id', $dataLevelView["model_review"])
+                            ->orWhere('branch_id', 'default');
+                        });
+                    } else {
+                        $query->where(function ($q) use ($dataLevelView) {
+                            $q->where('department_id', $dataLevelView["model_review"])
+                            ->orWhere('department_id', 'default');
+                        });
+                    }
+                })
+                ->orderByRaw("FIELD(branch_id, ?) DESC", [$dataLevelView["model_review"]]) // prioritizes match over 'default'
+                ->orderByRaw("FIELD(department_id, ?) DESC", [$dataLevelView["model_review"]])
+                ->select( 
+                    "p_a_level_reviewers.*",
+                )
+                ->first();
+        return $levelReview;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -111,9 +147,17 @@ class PerformanceController extends Controller
      */
     public function store(Request $request)
     {  
-        try {
+        // try {
             DB::beginTransaction();
             $totalWeight = 0;
+
+            $dataCheckLevelView = [
+                "criteria"=> 1,
+                "model_review"=> "",
+                "stage_order"=> 1,
+            ];
+           
+            $data = $request->all();
 
             // Calculate total weight
             foreach ($request->data as $titleItem) {
@@ -126,7 +170,57 @@ class PerformanceController extends Controller
 
             if ($totalWeight <= 100) {
                 foreach ($request->employee_id as $empId) {
-                    $user = User::where('id', $empId)->select('id', 'number_employee', 'employee_name_kh', 'employee_name_en', 'emp_status')->first();
+
+                    $user = User::with("branch")->where('id', $empId)->select('id','department_id','branch_id','line_manager', 'number_employee', 'employee_name_kh', 'employee_name_en', 'emp_status')->first();
+                    if ($user->branch->abbreviations == "HQ") {
+                       $dataCheckLevelView["criteria"] = "1";
+                       $dataCheckLevelView["model_review"] = $user->department_id;
+                    }else{
+                        $dataCheckLevelView["criteria"] = "2";
+                        $dataCheckLevelView["model_review"] = $user->branch_id;
+                    }
+                    $levelReview = self::lovelReview($dataCheckLevelView);
+                    if($levelReview){
+                        $data["stage_order"] = $levelReview->stage_order;
+                        if(!$levelReview->criteria){
+                            return response()->json(['message' => 'Please contact the HR team to set up a level review and Approve.', 'status'=>404]);
+                        }
+                        if($levelReview->criteria == 1){
+                            // ** review by branch */
+                            if($levelReview->department_review){
+                                $data["location_review"] = $levelReview->department_review;
+                            }else{
+                                $data["location_review"] = $levelReview->department_id == "default" ? $user->branch_id : $levelReview->department_id;
+                            }
+                        }else{
+                            //**  review by department */
+                            if($levelReview->department_review){
+                                $data["location_review"] = $levelReview->department_review;
+                            }else{
+                                $data["location_review"] = $levelReview->branch_id == "default" ? $user->branch_id : $levelReview->branch_id;
+                            }
+                        }
+
+                        if($levelReview->asign_type == 3){
+                            $data["position_review"] = $levelReview->id_positions;
+                        }else{
+                            $data["review_employee_id"] = $levelReview->asign_type == 2 ? $user->line_manager : $levelReview->employee_id;
+                        }
+
+                    }else{
+                        return response()->json(['message' => 'Please contact the HR team to set up a level review and Approve.', 'status'=>404]);
+                    }
+                    dd($levelReview);
+                    return false;
+
+                    $type = $user->emp_status === 'Probation' ? 'KPI Probation ' . Carbon::parse($request->from_date)->format('Y') : 'KPI Form ' . Carbon::parse($request->from_date)->format('Y');
+                    $data = $request->all();
+                    $data['created_by'] = Auth::id();
+                    $data['employee_id'] = $empId;
+                    $data['total_weight'] = $totalWeight;
+                    $data['status'] = 'prepare';
+                    $data['type'] = $type;
+                
                     $type = $user->emp_status === 'Probation' ? 'KPI Probation ' . Carbon::parse($request->from_date)->format('Y') : 'KPI Form ' . Carbon::parse($request->from_date)->format('Y');
                     $data = $request->all();
                     $data['created_by'] = Auth::id();
@@ -235,10 +329,10 @@ class PerformanceController extends Controller
                     'status' => 422
                 ], 422);
             }
-        } catch (\Throwable $exp) {
-            DB::rollback();
-            Toastr::error('Performance created fail.','Error');
-        }
+        // } catch (\Throwable $exp) {
+        //     DB::rollback();
+        //     Toastr::error('Performance created fail.','Error');
+        // }
     }
 
     /**
