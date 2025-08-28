@@ -80,6 +80,23 @@ class PerformanceController extends Controller
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
+
+            $order = request()->input('order', []);
+            $columns = request()->input('columns', []);
+            if (!empty($order)) {
+                foreach ($order as $ord) {
+                    $colIndex = $ord['column'];
+                    $colDir   = $ord['dir'];
+                    $colName  = $columns[$colIndex]['name'] ?? null;
+
+                    if ($colName && $columns[$colIndex]['orderable'] === 'true') {
+                        $query->orderBy($colName, $colDir);
+                    }
+                }
+            } else {
+                // Default order
+                $query->orderBy('performances.id', 'desc');
+            }
             $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw' => intval(request()->input('draw')),

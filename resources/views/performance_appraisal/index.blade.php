@@ -165,27 +165,66 @@
                         d.branch_id = $('select[name="branch_id"]').val();
                     }
                 },
+                "order": [
+                    { "column": "2", "dir": "asc" }
+                ],
                 columns: [
                     { data: 'id', name: 'id' },
                     { 
                         data: 'number_employee', 
                         name: 'number_employee',
                         className: 'stuck-scroll-3',
+                        orderable: true,
+                        searchable: true,
                     },
                     { 
                         data: 'employee_name_kh', 
                         name: 'employee_name_kh',
                         className: 'stuck-scroll-3',
+                        orderable: true,
+                        searchable: true,
                     },
-                    { data: 'branch_name_en', name: 'branch_name_en' },
-                    { data: 'dep_name', name: 'dep_name' },
-                    { data: 'positions_name', name: 'positions_name' },
-                    { data: 'from_date', name: 'from_date' },
-                    { data: 'to_date', name: 'to_date' },
-                    { data: 'type', name: 'type' },
+                    { 
+                        data: 'branch_name_en', 
+                        name: 'branch_name_en',
+                        orderable: true,
+                        searchable: true,
+                    },
+                    { 
+                        data: 'dep_name', 
+                        name: 'dep_name',
+                        orderable: true,
+                        searchable: true,
+                    },
+                    { 
+                        data: 'positions_name', 
+                        name: 'positions_name',
+                        orderable: true,
+                        searchable: true,
+                    },
+                    { 
+                        data: 'from_date', 
+                        name: 'from_date',
+                        orderable: true,
+                        searchable: true,
+                    },
+                    { 
+                        data: 'to_date', 
+                        name: 'to_date',
+                        orderable: true,
+                        searchable: true,
+                    },
+                    { 
+                        data: 'type', 
+                        name: 'type',
+                        orderable: true,
+                        searchable: true,
+                    },
                     {
                         data: 'total_score',
                         name: 'total_score',
+                        orderable: true,
+                        searchable: true,
                         render: function (data) {
                             return `<span class="badge bg-inverse-success">${data}</span>`;
                         }
@@ -193,6 +232,8 @@
                     {
                         data: 'total_score_live_staff',
                         name: 'total_score_live_staff',
+                        orderable: true,
+                        searchable: true,
                         render: function (data) {
                             return `<span class="badge bg-inverse-success">${data}</span>`;
                         }
@@ -200,6 +241,8 @@
                     {
                         data: 'total_score_direct_chairman',
                         name: 'total_score_direct_chairman',
+                        orderable: true,
+                        searchable: true,
                         render: function (data) {
                             return `<span class="badge bg-inverse-success">${data}</span>`;
                         }
@@ -207,6 +250,8 @@
                     {
                         data: 'overall_results',
                         name: 'overall_results',
+                        orderable: false,
+                        searchable: false,
                         render: function (data, type, row) {
                             let overallResults = '';
                             let color = '';
@@ -230,15 +275,14 @@
                                 overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
                                 color = 'green';
                             }
-
                             return `<span style="color:${color}">${overallResults}</span>`;
                         }
                     },
                     {
                         data: 'status',
                         name: 'status',
-                        orderable: false,
-                        searchable: false,
+                        orderable: true,
+                        searchable: true,
                         render: function (data, type, row) {
                             return `
                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="javascript:void(0)">
@@ -251,8 +295,8 @@
                     {
                         data: null,
                         name: 'action',
-                        orderable: false,
-                        searchable: false,
+                        orderable: true,
+                        searchable: true,
                         render: function (data, type, row) {
                             return `
                                 <div class="dropdown dropdown-action">

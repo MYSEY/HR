@@ -366,8 +366,8 @@
                     {
                         data: 'id',
                         name: 'id',
-                        orderable: false,
-                        searchable: false,
+                        orderable: true,
+                        searchable: true,
                         render: function(data, type, row) {
                             return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
                                 <input type="checkbox" class="custom-control-input sub_chk" name="checkbox" data-id="${data}" id="${data}" value="${data}">
@@ -379,13 +379,22 @@
                         data: 'number_employee', 
                         name: 'number_employee',
                         className: 'stuck-scroll-3',
+                        orderable: true,
+                        searchable: true,
                     },
                     { 
                         data: 'employee_name_kh', 
                         name: 'employee_name_kh',
                         className: 'stuck-scroll-3',
+                        orderable: true,
+                        searchable: true,
                     },
-                    { data: 'branch_name_en', name: 'branch_name_en' },
+                    { 
+                        data: 'branch_name_en', 
+                        name: 'branch_name_en',
+                        orderable: true,
+                        searchable: true,
+                    },
                     { data: 'dep_name', name: 'dep_name' },
                     { data: 'positions_name', name: 'positions_name' },
                     { data: 'from_date', name: 'from_date' },
@@ -401,14 +410,14 @@
                     {
                         data: 'status',
                         name: 'status',
-                        orderable: false,
-                        searchable: false,
+                        orderable: true,
+                        searchable: true,
                         render: function (data, type, row) {
                             if (row.status === 'preparing') {
                                 // Show dropdown if status is prepare
                                 return `
                                     <div class="dropdown action-label">
-                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="true">
                                             <i class="fa fa-dot-circle-o text-warning"></i>
                                             <span>Preparing</span>
                                         </a>
@@ -436,8 +445,8 @@
                     {
                         data: null,
                         name: 'action',
-                        orderable: false,
-                        searchable: false,
+                        orderable: true,
+                        searchable: true,
                         render: function (data, type, row) {
                             return `
                                 <div class="dropdown dropdown-action">
@@ -456,7 +465,6 @@
                         }
                     }
                 ],
-                order: [[0, 'desc']],
                 initComplete: function() {
                     $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
                 }

@@ -73,6 +73,24 @@ class PerformanceAppraisalController extends Controller
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
+
+            $order = request()->input('order', []);
+            $columns = request()->input('columns', []);
+            if (!empty($order)) {
+                foreach ($order as $ord) {
+                    $colIndex = $ord['column'];
+                    $colDir   = $ord['dir'];
+                    $colName  = $columns[$colIndex]['name'] ?? null;
+
+                    if ($colName && $columns[$colIndex]['orderable'] === 'true') {
+                        $query->orderBy($colName, $colDir);
+                    }
+                }
+            } else {
+                // Default order
+                $query->orderBy('performances.id', 'desc');
+            }
+
             $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw' => intval(request()->input('draw')),
@@ -174,6 +192,10 @@ class PerformanceAppraisalController extends Controller
     }
     public function generateSalaryIncreasement(Request $request)
     {
+        $validated = $request->validate([
+            'increasement_year' => 'required|date',
+        ]);
+
         $yearOnly = Carbon::parse($request->increasement_year)->format('Y');
         $data = AnnualSalaryIncreasement::where('increasement_year',$yearOnly)->orderBy('id')->get();
         if ($request->filled('increasement_year')) {
@@ -181,58 +203,46 @@ class PerformanceAppraisalController extends Controller
             $payrolls = Payroll::where('employee_id',144)->whereYear('payment_date', $year)->whereMonth('payment_date', $month)->get();
             foreach ($payrolls as $payroll) {
                 // Example: get average KPI score of employee
-                $kpiPerform = Performance::where('employee_id', 144)->get();
-                foreach ($kpiPerform as $value) {
-                    $kpiScores = (float) $value->total_score_direct_chairman;
-                }
-                $interest = 0; 
-                // Define bands
-                $bands = [
-                    ['min' => 1.00, 'max' => 1.99],
-                    ['min' => 2.00, 'max' => 2.99],
-                    ['min' => 3.00, 'max' => 3.99],
-                    ['min' => 4.00, 'max' => 4.69],
-                    ['min' => 4.70, 'max' => 5.00],
-                ];
+                // $kpiPerform = Performance::where('employee_id', 144)->get();
+                // foreach ($kpiPerform as $value) {
+                //     $kpiScores = (float) $value->total_score_direct_chairman;
+                // }
 
+                $kpiPerform = Performance::where('employee_id', 144)->orderBy('id', 'desc')->first();
+                $kpiScores = $kpiPerform ? (float) $kpiPerform->total_score_direct_chairman : 0;
+                $interest = 0;
+                $total_percentage = 0;
                 foreach ($data as $index => $item) {
-                    // if (!isset($bands[$index])) continue;
-                    
-                    // $min = $bands[$index]['min'];
-                    // $max = $bands[$index]['max'];
-                    if ($kpiScores >= 1 && $kpiScores <= 1.99) {
+                    [$min, $max] = explode('-', $item->total_score); 
+                    $min = (float) $min;
+                    $max = (float) $max;
+                
+                    if ($kpiScores >= $min && $kpiScores <= $max) {
                         $interest = $item->percentage / 100;
                         $total_percentage = $item->percentage;
-                    } elseif($kpiScores >= 2 && $kpiScores <= 2.99) {
-                        $interest = $item->percentage / 100;
-                        $total_percentage = $item->percentage;
-                    }elseif($kpiScores >= 3 && $kpiScores <= 3.99){
-                        $interest = $item->percentage / 100;
-                        $total_percentage = $item->percentage;
-                    }elseif ($kpiScores >= 4 && $kpiScores <= 4.69) {
-                        $interest = $item->percentage / 100;
-                        $total_percentage = $item->percentage;
-                    }elseif($kpiScores >= 4.70 && $kpiScores <= 5){
-                        $interest = $item->percentage / 100;
-                        $total_percentage = $item->percentage;
+                        break; // stop once matched
                     }
                 }
-                dd($total_percentage);
 
                 // Example: calculate total working days in that year
                 $dateOfCommencement = \Carbon\Carbon::parse($payroll->date_of_commencement);
                 $endOfYear = \Carbon\Carbon::create($year, 12, 31);
-                $totalWorkingDays = $dateOfCommencement->diffInDays($endOfYear) + 1;
-
+                $totalDay = $dateOfCommencement->diffInDays($endOfYear) + 1;
+                if ($totalDay >= 365) {
+                    $totalWorkingDays = 365; // or 366 for leap years
+                }else {
+                    $totalWorkingDays = $totalDay;
+                }
                 $totalsSalaryIncreasement = ($payroll->basic_salary * $interest * $totalWorkingDays) / 365;
-
                 // 👉 save or push into array
                 dd([    
                     'employee_id' => $payroll->employee_id,
                     'basic_salary' => $payroll->basic_salary,
                     'kpi_score' => $kpiScores,
-                    'percentage' => $percentage,
+                    'percentage' => $total_percentage,
+                    'total working day' => $totalWorkingDays,
                     'salary_increasement' => number_format($totalsSalaryIncreasement,2),
+                    'total salary' => $payroll->basic_salary + number_format($totalsSalaryIncreasement,2)
                 ]);
             }
         }
