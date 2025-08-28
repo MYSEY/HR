@@ -39,12 +39,13 @@
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist" id="show-tabs-user">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active clearTabs" data-bs-toggle="tab" id="tab_request" href="#tbl_request" aria-selected="false" role="tab" data-tab-id="2" tabindex="1">@lang('lang.expense_request')
-                                    <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($datas)}}</span>
+                                    <span  class="badge bg-secondary ms-1 rounded-pill">{{count($datas)}}</span>
                                 </a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link clearTabs" data-bs-toggle="tab" id="tab_assign" href="#tbl_assign" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.review_and_submit')
                                     <span id="dataShortList" class="badge bg-inverse-danger ms-1 rounded-pill">{{count($dataAsign)}}</span>
+                                    <input type="hidden" name="" id="total-dataAsign" value="{{count($dataAsign)}}">
                                 </a>
                             </li>
                         </ul>
@@ -130,13 +131,15 @@
             if (datas.type == "2") {
                 convertNumberKH = convertNumberToWordsExp(datas.te_total_tax,"rial");
                 $("#v_expense_type").text("ចំណាយប្រកាសពន្ធ");
-                $("#v_total_cost_text").text("សរុបចំណាយ (១+២)");
+                $("#v_total_cost_text").text("សរុបចំណាយ (១+២+៣)");
+                $("#v_suppliers").text("៥. បើកជូនអ្នកផ្គត់ផ្គង់ (៤)");
                 $("#block_fringe_benefit").css("display","none");
                 $("#v_tax_riel").text("៛ "+formatNumber(datas.te_tax_income));
                 $("#v_total_amount_riel").text("៛ "+formatNumber(datas.te_total_tax));
             }else{
                 $("#v_expense_type").text("សរុបចំណាយ (១+២)");
                 $("#v_total_cost_text").text("ពន្ធកាត់ទុក");
+                $("#v_suppliers").text("៦. បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឬ (៣-(៤+៥))");
                 convertNumberKH = convertNumberToWordsExp(datas.ge_total_amount_riel,"rial");
                 $("#block_fringe_benefit").css("display","block");
                 $("#v_tax_fringe_benefit_usd").text("$ "+formatNumber(datas.ge_tax_fringe_benefit_usd));
@@ -326,10 +329,12 @@
                                 timeout: 3000,
                                 icon: true
                             }).show();
-                            window.location.replace("{{ URL('/expense-request/list') }}"); 
+                            let dataAsign =  $("#total-dataAsign").val() - 1;
+                            $("#dataShortList").text(dataAsign);
+                            $("#total-dataAsign").val(dataAsign);
+                            $("#tbl-asign-rowID" + id).remove();
+                            // window.location.replace("{{ URL('/expense-request/list') }}");
                         }
-                        
-                        
                     }).catch(function(error) {
                         new Noty({
                             title: "",
@@ -404,7 +409,11 @@
                                 timeout: 3000,
                                 icon: true
                             }).show();
-                            window.location.replace("{{ URL('/expense-request/list') }}"); 
+                            let dataAsign =  $("#total-dataAsign").val() - 1;
+                            $("#dataShortList").text(dataAsign);
+                            $("#total-dataAsign").val(dataAsign);
+                            $("#tbl-asign-rowID" + id).remove();
+                            // window.location.replace("{{ URL('/expense-request/list') }}"); 
                         }).catch(function(error) {
                             new Noty({
                                 title: "",

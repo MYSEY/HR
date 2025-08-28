@@ -66,13 +66,13 @@
                     <label style="font-weight: bold;">ចំណាយរួមមាន៖</label>
                     <div class="row">
                         <label class="col-form-label col-sm-1"></label>
-                        <label class="col-form-label col-sm-6">១. ថ្លៃទំនិញឬសម្ភារៈ <span style="float: right">:</span></label>
+                        <label class="col-form-label col-sm-6">១. ថ្លៃទំនិញឬសម្ភារ <span style="float: right">:</span></label>
                         <label class="col-form-label col-sm-2" id="v_cost_material_usd"> </label>
                         <label class="col-form-label col-sm-3" id="v_cost_material_riel"> </label>
                     </div>
                     <div class="row">
                         <label class="col-form-label col-sm-1"></label>
-                        <label class="col-form-label col-sm-6">២. ថ្លៃពលកម្ម/សេវា/ផ្សេងៗ <span style="float: right">:</span></label>
+                        <label class="col-form-label col-sm-6">២. ថ្លៃពលកម្ម/ជួល/សេវា/ផ្សេងៗ <span style="float: right">:</span></label>
                         <label class="col-form-label col-sm-2" id="v_cost_lso_usd"> </label>
                         <label class="col-form-label col-sm-3" id="v_cost_lso_riel"> </label>
                     </div>
@@ -95,16 +95,17 @@
                             <label class="col-form-label col-sm-2" id="v_tax_fringe_benefit_usd"> </label>
                             <label class="col-form-label col-sm-3" id="v_tax_fringe_benefit_riel"> </label>
                         </div>
+                        <div class="row">
+                            <label class="col-form-label col-sm-1"></label>
+                            <label class="col-form-label col-sm-6">៥. អាករជំនួស (VAT Reverse Charge) ១០% <span style="float: right">:</span></label>
+                            <label class="col-form-label col-sm-2" id="v_vat_reverse_charge_usd"> </label>
+                            <label class="col-form-label col-sm-3" id="v_vat_reverse_charge_riel"> </label>
+                        </div>
                     </div>
+                    
                     <div class="row">
                         <label class="col-form-label col-sm-1"></label>
-                        <label class="col-form-label col-sm-6">៥. អាករជំនួស (VAT Reverse Charge) ១០% <span style="float: right">:</span></label>
-                        <label class="col-form-label col-sm-2" id="v_vat_reverse_charge_usd"> </label>
-                        <label class="col-form-label col-sm-3" id="v_vat_reverse_charge_riel"> </label>
-                    </div>
-                    <div class="row">
-                        <label class="col-form-label col-sm-1"></label>
-                        <label class="col-form-label col-sm-6">៦. បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឬ (៣-(៤+៥)) <span style="float: right">:</span></label>
+                        <label class="col-form-label col-sm-6"><span id="v_suppliers"></span> <span style="float: right">:</span></label>
                         <label class="col-form-label col-sm-2" id="v_total_amount_usd"> </label>
                         <label class="col-form-label col-sm-3" id="v_total_amount_riel"> </label>
                     </div>

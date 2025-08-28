@@ -425,62 +425,73 @@ class ExpenseRequestController extends Controller
             if(Auth::user()->branch->abbreviations == "HQ"){
                 $dataCheckLevelView["model_review"] = (int) Auth::user()->department_id;
                 $positionReview = self::lovelReview($dataCheckLevelView);
-                if(!$positionReview){
-                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
-                }
-                if(count($positionReview->id_positions) > 0){
-                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        if($positionReview->verify_print == 1){
-                            $data["review_by"]      = Auth::user()->id;
-                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
-                        }
-                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
-                        $dataCheckLevelView["position_request"] = null;
-                        $positionReview = self::lovelReview($dataCheckLevelView);
-                    } 
-                }
-                $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
-                if (count($positionReview->id_positions) > 0) {
-                    // *** Process get leave request **/
-                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id,"pending");
-                    if($leave && count($leave) > 0){
-                        $positionReview->id_positions = $leave;
+                if($positionReview){
+                    // return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                    if(count($positionReview->id_positions) > 0){
+                        if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                            if($positionReview->verify_print == 1){
+                                $data["review_by"]      = Auth::user()->id;
+                                $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                            }
+                            $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                            $dataCheckLevelView["position_request"] = null;
+                            $positionReview = self::lovelReview($dataCheckLevelView);
+                            // if(!$positionReview){
+                            //     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                            // }
+                        } 
                     }
-                    //*** end **/
-                    $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
-                    $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
+                    if($positionReview){
+                        $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
+                        if (count($positionReview->id_positions) > 0) {
+                            // *** Process get leave request **/
+                            $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id,"pending");
+                            if($leave && count($leave) > 0){
+                                $positionReview->id_positions = $leave;
+                            }
+                            //*** end **/
+                            $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                            $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
+                        }
+                    }
+                    
                 }
+                
             }else{
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::lovelReview($dataCheckLevelView);
-                if(!$positionReview){
-                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
-                }
-                if(count($positionReview->id_positions) > 0){
-                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        if($positionReview->verify_print == 1){
-                            $data["review_by"]      = Auth::user()->id;
-                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
-                        }
-                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
-                        $dataCheckLevelView["position_request"] = null;
-                        $positionReview = self::lovelReview($dataCheckLevelView);
-                    }   
-                }
-                $data['location_review']    =  $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
-                if (count($positionReview->id_positions) > 0) {
-                    // *** Process get leave request **/
-                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id,"pending");
-                    if($leave && count($leave) > 0){
-                        $positionReview->id_positions = $leave;
+                if($positionReview){
+                    if(count($positionReview->id_positions) > 0){
+                        if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                            if($positionReview->verify_print == 1){
+                                $data["review_by"]      = Auth::user()->id;
+                                $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                            }
+                            $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                            $dataCheckLevelView["position_request"] = null;
+                            $positionReview = self::lovelReview($dataCheckLevelView);
+                            // if(!$positionReview){
+                            //     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                            // }
+                        }   
                     }
-                    //*** end **/
-                    if($positionReview->department_review){
-                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
-                        $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
-                    }else{
-                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
-                        $dataSendEmail["condiction"]["branch_id"] = $data['location_review'];
+                    if($positionReview){
+                        $data['location_review']    =  $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
+                        if (count($positionReview->id_positions) > 0) {
+                            // *** Process get leave request **/
+                            $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id,"pending");
+                            if($leave && count($leave) > 0){
+                                $positionReview->id_positions = $leave;
+                            }
+                            //*** end **/
+                            if($positionReview->department_review){
+                                $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                                $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
+                            }else{
+                                $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                                $dataSendEmail["condiction"]["branch_id"] = $data['location_review'];
+                            }
+                        }
                     }
                 }
             }
@@ -499,6 +510,26 @@ class ExpenseRequestController extends Controller
             } else {
                 $data['reference'] = $request->fn_reference;
             }
+
+            $data['status']             = 'pending';
+            $data['approve_by']         = json_encode(explode(",", $request->approve_by));
+            if($positionReview){
+                $data['position_review']    = json_encode($positionReview->id_positions);
+                $data['verify_print']      = $positionReview->verify_print;
+                $data['review_type']        = $positionReview->type;
+            }else{
+                // *** Process get leave request **/
+                $leave = self::leaveRequest([$request->approve_by],"", "","pending_approve");
+                if($leave && count($leave) > 0){
+                    $data['approve_by'] = $leave;
+                }
+                // *** end **/
+                $data['position_review']    = null;
+                $data['review_type']        = null;
+                $data['status']             = 'pending_approve';
+                $dataSendEmail["condiction"]["approve_by"]= [$request->approve_by];
+            }
+            
             // *** Process flow send alert email **/
             $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
             $dataSendEmail["data"]["subject"] = $request->subject;
@@ -507,14 +538,9 @@ class ExpenseRequestController extends Controller
             $dataSendEmail["data"]["request_by"] = Auth::user()->employee_name_kh;
             self::sendEmail($dataSendEmail, Auth::user()->email);
             //*** end **/
-
+            
             $data['tracking_id']        = $this->generateExpenseCode(Carbon::today())['tracking_id'];
             $data['payment_term']       = $request->paymentTerms;
-            $data['status']             = 'pending';
-            $data['position_review']    = json_encode($positionReview->id_positions);
-            $data['verify_print']      = $positionReview->verify_print;
-            $data['review_type']        = $positionReview->type;
-            $data['approve_by']         = json_encode(explode(",", $request->approve_by));
             $data['request_by']         = ($request->request_by? $request->request_by: Auth::user()->id);
             $data['date_request']       = Carbon::createFromDate()->format('Y-m-d H:i');
             $data['created_by']         = Auth::user()->id;
@@ -696,62 +722,70 @@ class ExpenseRequestController extends Controller
             if(Auth::user()->branch->abbreviations == "HQ"){
                 $dataCheckLevelView["model_review"] = (int) Auth::user()->department_id;
                 $positionReview = self::lovelReview($dataCheckLevelView);
-                if(!$positionReview){
-                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
-                }
-                if(count($positionReview->id_positions) > 0){
-                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        if($positionReview->verify_print == 1){
-                            $data["review_by"]      = Auth::user()->id;
-                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
-                        }
-                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
-                        $dataCheckLevelView["position_request"] = null;
-                        $positionReview = self::lovelReview($dataCheckLevelView);
-                    }   
-                }
-                $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
-                if (count($positionReview->id_positions) > 0) {
-                    // *** Process get leave request **/
-                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id, "pending");
-                    if($leave && count($leave) > 0){
-                        $positionReview->id_positions = $leave;
+                if($positionReview){
+                    if(count($positionReview->id_positions) > 0){
+                        if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                            if($positionReview->verify_print == 1){
+                                $data["review_by"]      = Auth::user()->id;
+                                $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                            }
+                            $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                            $dataCheckLevelView["position_request"] = null;
+                            $positionReview = self::lovelReview($dataCheckLevelView);
+                            // if(!$positionReview){
+                            //     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                            // }
+                        }   
                     }
-                    // *** end **/
-                    $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
-                    $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
+                    if($positionReview){
+                        $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
+                        if (count($positionReview->id_positions) > 0) {
+                            // *** Process get leave request **/
+                            $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id, "pending");
+                            if($leave && count($leave) > 0){
+                                $positionReview->id_positions = $leave;
+                            }
+                            // *** end **/
+                            $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                            $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
+                        }
+                    }
                 }
             }else{
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::lovelReview($dataCheckLevelView);
-                if(!$positionReview){
-                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
-                }
-                if(count($positionReview->id_positions) > 0){
-                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        if($positionReview->verify_print == 1){
-                            $data["review_by"]      = Auth::user()->id;
-                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
-                        }
-                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
-                        $dataCheckLevelView["position_request"] = null;
-                        $positionReview = self::lovelReview($dataCheckLevelView);
-                    }   
-                }
-                $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
-                if (count($positionReview->id_positions) > 0) {
-                    // *** Process get leave request **/
-                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id, "pending");
-                    if($leave && count($leave) > 0){
-                        $positionReview->id_positions = $leave;
+                if($positionReview){
+                    if(count($positionReview->id_positions) > 0){
+                        if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                            if($positionReview->verify_print == 1){
+                                $data["review_by"]      = Auth::user()->id;
+                                $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                            }
+                            $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                            $dataCheckLevelView["position_request"] = null;
+                            $positionReview = self::lovelReview($dataCheckLevelView);
+                            if(!$positionReview){
+                                return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                            }
+                        }   
                     }
-                    // *** end **/
-                    if($positionReview->department_review){
-                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
-                        $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
-                    }else{
-                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
-                        $dataSendEmail["condiction"]["branch_id"] = $data['location_review'];
+                    if($positionReview){
+                        $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
+                        if (count($positionReview->id_positions) > 0) {
+                            // *** Process get leave request **/
+                            $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id, "pending");
+                            if($leave && count($leave) > 0){
+                                $positionReview->id_positions = $leave;
+                            }
+                            // *** end **/
+                            if($positionReview->department_review){
+                                $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                                $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
+                            }else{
+                                $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                                $dataSendEmail["condiction"]["branch_id"] = $data['location_review'];
+                            }
+                        }
                     }
                 }
             }
@@ -883,10 +917,25 @@ class ExpenseRequestController extends Controller
                     }
                 }
             }
-            $data['position_review']                = json_encode($positionReview->id_positions);
-            $data['verify_print']                   = $positionReview->verify_print;
-            $data['review_type']                    = $positionReview->type;
             $data['approve_by']                     = json_encode(explode(",", $request->approve_by));
+            if($positionReview){
+                $data['position_review']                = json_encode($positionReview->id_positions);
+                $data['verify_print']                   = $positionReview->verify_print;
+                $data['review_type']                    = $positionReview->type;
+            }else{
+                // *** Process get leave request **/
+                $leave = self::leaveRequest([$request->approve_by],"", "","pending_approve");
+                if($leave && count($leave) > 0){
+                    $data['approve_by'] = $leave;
+                }
+                // *** end **/
+                $data['position_review']    = null;
+                $data['review_type']        = null;
+                $data['status']             = 'pending_approve';
+                // $dataSendEmail["condiction"]["approve_by"]= [$request->approve_by];
+            }
+           
+            
             // $data["approve_by"]                     = $request->approve_by;
             $data["type"]                           = $request->type;
             $data["expense_type"]                   = $request->expense_type;
@@ -974,63 +1023,71 @@ class ExpenseRequestController extends Controller
             if(Auth::user()->branch->abbreviations == "HQ"){
                 $dataCheckLevelView["model_review"] = Auth::user()->department_id;
                 $positionReview = self::lovelReview($dataCheckLevelView);
-                if(!$positionReview){
-                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
-                }
-                if(count($positionReview->id_positions) > 0){
-                    
-                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        if($positionReview->verify_print == 1){
-                            $data["review_by"]      = Auth::user()->id;
-                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
-                        }
-                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
-                        $dataCheckLevelView["position_request"] = null;
-                        $positionReview = self::lovelReview($dataCheckLevelView);
-                    }   
-                }
-                $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
-                if (count($positionReview->id_positions) > 0) {
-                    // *** Process get leave request **/
-                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id, "pending");
-                    if($leave && count($leave) > 0){
-                        $positionReview->id_positions = $leave;
+                if($positionReview){
+                    if(count($positionReview->id_positions) > 0){
+                        
+                        if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                            if($positionReview->verify_print == 1){
+                                $data["review_by"]      = Auth::user()->id;
+                                $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                            }
+                            $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                            $dataCheckLevelView["position_request"] = null;
+                            $positionReview = self::lovelReview($dataCheckLevelView);
+                            // if(!$positionReview){
+                            //     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                            // }
+                        }   
                     }
-                    // *** end **/
-                    $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
-                    $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
+                    if($positionReview){
+                        $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->department_id;
+                        if (count($positionReview->id_positions) > 0) {
+                            // *** Process get leave request **/
+                            $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id, "pending");
+                            if($leave && count($leave) > 0){
+                                $positionReview->id_positions = $leave;
+                            }
+                            // *** end **/
+                            $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                            $dataSendEmail["condiction"]["department_id"] = $data['location_review'];
+                        }
+                    }
                 }
             }else{
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::lovelReview($dataCheckLevelView);
-                if(!$positionReview){
-                    return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
-                }
-                if(count($positionReview->id_positions) > 0){
-                    if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
-                        if($positionReview->verify_print == 1){
-                            $data["review_by"]      = Auth::user()->id;
-                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
-                        }
-                        $dataCheckLevelView["type"] = ($positionReview->type + 1);
-                        $dataCheckLevelView["position_request"] = null;
-                        $positionReview = self::lovelReview($dataCheckLevelView);
-                    }   
-                }
-                $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
-                if (count($positionReview->id_positions) > 0) {
-                    // *** Process get leave request **/
-                    $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id,"pending");
-                    if($leave && count($leave) > 0){
-                        $positionReview->id_positions = $leave;
+                if($positionReview){
+                    if(count($positionReview->id_positions) > 0){
+                        if (in_array(Auth::user()->position_id, $positionReview->id_positions)) {
+                            if($positionReview->verify_print == 1){
+                                $data["review_by"]      = Auth::user()->id;
+                                $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                            }
+                            $dataCheckLevelView["type"] = ($positionReview->type + 1);
+                            $dataCheckLevelView["position_request"] = null;
+                            $positionReview = self::lovelReview($dataCheckLevelView);
+                            // if(!$positionReview){
+                            //     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
+                            // }
+                        }   
                     }
-                    // *** end **/
-                    if($positionReview->department_review){
-                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
-                        $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
-                    }else{
-                        $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
-                        $dataSendEmail["condiction"]["branch_id"] = $data['location_review'];
+                    if($positionReview){
+                        $data['location_review']    = $positionReview->department_review ? $positionReview->department_review : Auth::user()->branch_id;
+                        if (count($positionReview->id_positions) > 0) {
+                            // *** Process get leave request **/
+                            $leave = self::leaveRequest($positionReview->id_positions, $positionReview->model_review, Auth::user()->branch_id,"pending");
+                            if($leave && count($leave) > 0){
+                                $positionReview->id_positions = $leave;
+                            }
+                            // *** end **/
+                            if($positionReview->department_review){
+                                $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                                $dataSendEmail["condiction"]["department_id"] = $positionReview->department_review;
+                            }else{
+                                $dataSendEmail["condiction"]["position_id"] = $positionReview->id_positions;
+                                $dataSendEmail["condiction"]["branch_id"] = $data['location_review'];
+                            }
+                        }
                     }
                 }
             }
@@ -1182,8 +1239,25 @@ class ExpenseRequestController extends Controller
                 }
             }
             $data['approve_by']                     = json_encode(explode(",", $request->approve_by));
-            // $data["approve_by"]                     = $request->approve_by;
-            $data['verify_print']                   = $positionReview->verify_print;
+            if($positionReview){
+                $data['position_review']                = json_encode($positionReview->id_positions);
+                $data['verify_print']                   = $positionReview->verify_print;
+            }else{
+                // *** Process get leave request **/
+                $leave = self::leaveRequest([$request->approve_by],"", "","pending_approve");
+                if($leave && count($leave) > 0){
+                    $data['approve_by'] = $leave;
+                }
+                // *** end **/
+                $data['position_review']    = null;
+                $data['review_type']        = null;
+                $data['status']             = 'pending_approve';
+                // $dataSendEmail["condiction"]["approve_by"]= [$request->approve_by];
+            }
+            
+            // $data['approve_by']                     = json_encode(explode(",", $request->approve_by));
+            // $data['position_review']                = json_encode($positionReview->id_positions);
+            // $data['verify_print']                   = $positionReview->verify_print;
             $data["kind_regard"]                    = $request->kind_regard;
             $data["subject"]                        = $request->subject;
             $data["reason_subject"]                 = $request->reason_subject;
@@ -1202,7 +1276,6 @@ class ExpenseRequestController extends Controller
             $data["te_total_tax"]                   = $request->te_total_tax;
             $data["remark"]                         = $request->remark;
             $data["reason"]                         = "";
-            $data['position_review']                = json_encode($positionReview->id_positions);
             $data['updated_by']                     = Auth::user()->id;
             $data->save();
             // *** function send email **/
@@ -1347,6 +1420,12 @@ class ExpenseRequestController extends Controller
                     $data['review_type']        = null;
                     $data['status']             = 'pending_approve';
                     $dataSendEmail["condiction"]["approve_by"]= $data->approve_by;
+
+                    if($data->verify_print == 1){
+                        $data["review_by"]      = Auth::user()->id;
+                        $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                    }
+                    $data['verify_print']        = null;
                 }
                 self::sendEmail($dataSendEmail, Auth::user()->email);
             }
@@ -1418,36 +1497,44 @@ class ExpenseRequestController extends Controller
 
                 $dataCheckLevelView["model_review"] = (int) $data->requestBy->department_id;
                 $lovelReview = self::lovelReview($dataCheckLevelView);
-                if(count($lovelReview->id_positions) > 0){
-                    if (in_array($data->requestBy->position_id, $lovelReview->id_positions)) {
-                        if($lovelReview->verify_print == 1){
-                            $data["review_by"]      = $data->request_by;
-                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
-                        }
-                        $dataCheckLevelView["type"] = ($lovelReview->type + 1);
-                        $dataCheckLevelView["position_request"] = null;
-                        $lovelReview = self::lovelReview($dataCheckLevelView);
-                    } 
+                if($lovelReview){
+                    if(count($lovelReview->id_positions) > 0){
+                        if (in_array($data->requestBy->position_id, $lovelReview->id_positions)) {
+                            if($lovelReview->verify_print == 1){
+                                $data["review_by"]      = $data->request_by;
+                                $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                            }
+                            $dataCheckLevelView["type"] = ($lovelReview->type + 1);
+                            $dataCheckLevelView["position_request"] = null;
+                            $lovelReview = self::lovelReview($dataCheckLevelView);
+                        } 
+                    }
+                    if($lovelReview){
+                        $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->department_id;
+                    }
                 }
-                $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->department_id;
-
             }else{
 
                 $dataCheckLevelView["by_location"] = 1;
                 $lovelReview = self::lovelReview($dataCheckLevelView);
-                if(count($lovelReview->id_positions) > 0){
-                    if (in_array($data->requestBy->position_id, $lovelReview->id_positions)) {
-                        if($lovelReview->verify_print == 1){
-                            $data["review_by"]      = $data->request_by;
-                            $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
-                        }
-                        $dataCheckLevelView["type"] = ($lovelReview->type + 1);
-                        $dataCheckLevelView["position_request"] = null;
-                        $lovelReview = self::lovelReview($dataCheckLevelView);
-                    } 
+                if($lovelReview){
+                    if(count($lovelReview->id_positions) > 0){
+                        if (in_array($data->requestBy->position_id, $lovelReview->id_positions)) {
+                            if($lovelReview->verify_print == 1){
+                                $data["review_by"]      = $data->request_by;
+                                $data["date_review"]    = Carbon::createFromDate()->format('Y-m-d H:i');
+                            }
+                            $dataCheckLevelView["type"] = ($lovelReview->type + 1);
+                            $dataCheckLevelView["position_request"] = null;
+                            $lovelReview = self::lovelReview($dataCheckLevelView);
+                        } 
+                    }
+                    if($lovelReview){
+                        $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->branch_id;
+                    }
+                    
                 }
-
-                $data['location_review']    = $lovelReview->department_review ? $lovelReview->department_review : $data->requestBy->branch_id;
+                
             };
 
             $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
@@ -1460,13 +1547,15 @@ class ExpenseRequestController extends Controller
             ExpenseRequestHistory::create($dataHistory);
             $data['status']             = 'rejected';
             $data['reject_review_type'] = $data->review_type;
-            // *** Process get leave request **/
-            $leave = self::leaveRequest($lovelReview->id_positions, $lovelReview->model_review, $data->requestBy->branch_id,"pending");
-            if($leave && count($leave) > 0){
-                $lovelReview->id_positions = $leave;
-            }
-            // *** end **/
+           
             if ($lovelReview) {
+                // *** Process get leave request **/
+                $leave = self::leaveRequest($lovelReview->id_positions, $lovelReview->model_review, $data->requestBy->branch_id,"pending");
+                if($leave && count($leave) > 0){
+                    $lovelReview->id_positions = $leave;
+                }
+                // *** end **/
+
                 $data['position_review']    = $lovelReview->id_positions;
                 $data['review_type']        = $lovelReview->type;
                 $data['verify_print']       = $lovelReview->verify_print;

@@ -37,9 +37,19 @@
             "Database\\Seeders\\": "database/seeders/"
         }
     },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        },
+        "files": [
+            "app/Helpers/RolePermission.php"
+        ]
+    },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+           "App\\": "app/"
         }
     },
     "autoload": {

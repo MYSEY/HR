@@ -235,7 +235,7 @@
                             <label class="">ចំណាយរួមមាន៖</label>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">១. ថ្លៃទំនិញឬសម្ភារៈ</label>
+                                <label class="col-form-label col-sm-5">១. ថ្លៃទំនិញឬសម្ភារ</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -255,7 +255,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">២. ថ្លៃពលកម្ម/សេវា/ផ្សេងៗ</label>
+                                <label class="col-form-label col-sm-5">២. ថ្លៃពលកម្ម/ជួល/សេវា/ផ្សេងៗ</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -297,7 +297,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៤. សរុបចំណាយ (១+២)</label>
+                                <label class="col-form-label col-sm-5">៤. សរុបចំណាយ (១+២+៣)</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -315,7 +315,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            {{-- <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
                                 <label class="col-form-label col-sm-5">៥. អាករជំនួស (VAT Reverse Charge) ១០%</label>
                                 <div class="col-sm-3">
@@ -334,10 +334,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៦. បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឬ (៣-(៤+៥))</label>
+                                <label class="col-form-label col-sm-5">៥. បើកជូនអ្នកផ្គត់ផ្គង់ (៤)</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
