@@ -60,6 +60,7 @@ use App\Http\Controllers\Admins\CategoryPermissionController;
 use App\Http\Controllers\Admins\PerformanceAppraisalController;
 use App\Http\Controllers\Admins\AnnualSalaryIncreasementController;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
+use App\Http\Controllers\Admins\GenerateAnnualSalaryIncreasementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -288,12 +289,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     //performance Appraisal
     Route::resource('performance-appraisal', PerformanceAppraisalController::class);
     Route::post('performance/appraisal/update/score', [PerformanceAppraisalController::class,'updateKpiScore']);
-    Route::get('generate/annual/salary/inreasement/list', [PerformanceAppraisalController::class,'generateSalaryIncreasementIndex']);
-    Route::post('generate/annual/salary/inreasement', [PerformanceAppraisalController::class,'generateSalaryIncreasement']);
     Route::get('performance/appraisal/export/{id}', [PerformanceAppraisalController::class,'performanceAppraisalExport']);
     Route::get('menual/score', [PerformanceAppraisalController::class,'menualScore']);
 
     Route::resource('annual/salary/increasement', AnnualSalaryIncreasementController::class);
+    Route::resource('generate/annual/salary/increasement', GenerateAnnualSalaryIncreasementController::class);
 
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);

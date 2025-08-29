@@ -3,19 +3,16 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Models\Branchs;
-use App\Models\Payroll;
 use App\Models\Department;
 use App\Exports\ExportKpis;
 use App\Models\Performance;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use App\Models\PerformanceDetail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\AnnualSalaryIncreasement;
 
 class PerformanceAppraisalController extends Controller
 {
@@ -164,90 +161,6 @@ class PerformanceAppraisalController extends Controller
         $department = Department::all();
         return view('performance_appraisal.menual_score',compact('branch','department'));
     }
-    public function generateSalaryIncreasementIndex(Request $request)
-    {
-        $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
-            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
-            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
-            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
-            ->leftJoin('payrolls', 'users.id', '=', 'payrolls.employee_id')
-            ->select(
-                'performances.*',
-                'users.number_employee',
-                'users.employee_name_kh',
-                'users.employee_name_en',
-                'users.branch_id',
-                'users.date_of_commencement',
-                'departments.name_english as dep_name',
-                'positions.name_english as positions_name',
-                'branchs.branch_name_en',
-                'branchs.branch_name_kh',
-                'payrolls.basic_salary',
-                'payrolls.payment_date',
-            )
-        ->where('performances.status', 'approved')->where('payrolls.payment_date','2024-12-25');
-        $data = $query->get();
-        $branch = Branchs::all();
-        return view('performance_appraisal.increasement',compact('data','branch'));
-    }
-    public function generateSalaryIncreasement(Request $request)
-    {
-        $validated = $request->validate([
-            'increasement_year' => 'required|date',
-        ]);
-
-        $yearOnly = Carbon::parse($request->increasement_year)->format('Y');
-        $data = AnnualSalaryIncreasement::where('increasement_year',$yearOnly)->orderBy('id')->get();
-        if ($request->filled('increasement_year')) {
-            [$year, $month] = explode('-', $request->increasement_year);
-            $payrolls = Payroll::where('employee_id',144)->whereYear('payment_date', $year)->whereMonth('payment_date', $month)->get();
-            foreach ($payrolls as $payroll) {
-                // Example: get average KPI score of employee
-                // $kpiPerform = Performance::where('employee_id', 144)->get();
-                // foreach ($kpiPerform as $value) {
-                //     $kpiScores = (float) $value->total_score_direct_chairman;
-                // }
-
-                $kpiPerform = Performance::where('employee_id', 144)->orderBy('id', 'desc')->first();
-                $kpiScores = $kpiPerform ? (float) $kpiPerform->total_score_direct_chairman : 0;
-                $interest = 0;
-                $total_percentage = 0;
-                foreach ($data as $index => $item) {
-                    [$min, $max] = explode('-', $item->total_score); 
-                    $min = (float) $min;
-                    $max = (float) $max;
-                
-                    if ($kpiScores >= $min && $kpiScores <= $max) {
-                        $interest = $item->percentage / 100;
-                        $total_percentage = $item->percentage;
-                        break; // stop once matched
-                    }
-                }
-
-                // Example: calculate total working days in that year
-                $dateOfCommencement = \Carbon\Carbon::parse($payroll->date_of_commencement);
-                $endOfYear = \Carbon\Carbon::create($year, 12, 31);
-                $totalDay = $dateOfCommencement->diffInDays($endOfYear) + 1;
-                if ($totalDay >= 365) {
-                    $totalWorkingDays = 365; // or 366 for leap years
-                }else {
-                    $totalWorkingDays = $totalDay;
-                }
-                $totalsSalaryIncreasement = ($payroll->basic_salary * $interest * $totalWorkingDays) / 365;
-                // 👉 save or push into array
-                dd([    
-                    'employee_id' => $payroll->employee_id,
-                    'basic_salary' => $payroll->basic_salary,
-                    'kpi_score' => $kpiScores,
-                    'percentage' => $total_percentage,
-                    'total working day' => $totalWorkingDays,
-                    'salary_increasement' => number_format($totalsSalaryIncreasement,2),
-                    'total salary' => $payroll->basic_salary + number_format($totalsSalaryIncreasement,2)
-                ]);
-            }
-        }
-    }
-
 
     /**
      * Show the form for creating a new resource.
