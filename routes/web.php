@@ -294,6 +294,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::resource('annual/salary/increasement', AnnualSalaryIncreasementController::class);
     Route::resource('generate/annual/salary/increasement', GenerateAnnualSalaryIncreasementController::class);
+    Route::post('generate/annual/salary/increasement/approved', [GenerateAnnualSalaryIncreasementController::class,'annualSalaryIncreasementApproved']);
 
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);

@@ -93,7 +93,7 @@ class GenerateAnnualSalaryIncreasementController extends Controller
      */
     public function store(Request $request)
     {
-        // try{
+        try{
             [$year, $month] = explode('-', $request->increasement_year);
 
             // Get increasement settings
@@ -129,41 +129,53 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                 // Working days adjustment
                 $user = User::find($employeeId);
                 $dateOfCommencement = $user && $user->date_of_commencement ? Carbon::parse($user->date_of_commencement) : Carbon::create($year, 1, 1);
-
                 $endOfYear = Carbon::create($year, 12, 31);
-                $totalWorkingDays = $dateOfCommencement->diffInDays($endOfYear) + 1;
-                $daysInYear = $endOfYear->isLeapYear() ? 366 : 365;
-
-                if ($totalWorkingDays > $daysInYear) {
-                    $totalWorkingDays = $daysInYear;
+                $months = $dateOfCommencement->diffInMonths($endOfYear) + 1; // +1 if inclusive
+                if ($months > 2) {
+                    $endOfYear = Carbon::create($year, 12, 31);
+                    $totalWorkingDays = $dateOfCommencement->diffInDays($endOfYear) + 1;
+                    $daysInYear = $endOfYear->isLeapYear() ? 366 : 365;
+    
+                    if ($totalWorkingDays > $daysInYear) {
+                        $totalWorkingDays = $daysInYear;
+                    }
+    
+                    // Final salary increasement calculation
+                    $totalsSalaryIncreasement = ($payroll->basic_salary * $interest * $totalWorkingDays) / $daysInYear;
+    
+                    // Replace old record for this employee/year-month
+                    GenerateAnnualSalaryIncreasement::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->delete();
+    
+                    GenerateAnnualSalaryIncreasement::create([
+                        'employee_id' => $employeeId,
+                        'performance_id' => $kpiPerform->id,
+                        'basic_salary' => $payroll->basic_salary,
+                        'increasement_of_year' => $request->increasement_year,
+                        'salary_increasement' => $totalsSalaryIncreasement,
+                        'percentage' => $total_percentage,
+                        'created_by' => Auth::id(),
+                    ]);
                 }
-
-                // Final salary increasement calculation
-                $totalsSalaryIncreasement = ($payroll->basic_salary * $interest * $totalWorkingDays) / $daysInYear;
-
-                // Replace old record for this employee/year-month
-                GenerateAnnualSalaryIncreasement::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->delete();
-
-                GenerateAnnualSalaryIncreasement::create([
-                    'employee_id' => $employeeId,
-                    'performance_id' => $kpiPerform->id,
-                    'basic_salary' => $payroll->basic_salary,
-                    'increasement_of_year' => $request->increasement_year,
-                    'salary_increasement' => $totalsSalaryIncreasement,
-                    'percentage' => $total_percentage,
-                    'created_by' => Auth::id(),
-                ]);
             }
             DB::commit();
             Toastr::success('Generate annual salary increasement successfully','Success');
             return redirect()->back();
-        // }catch(\Exception $e){
-        //     DB::rollback();
-        //     Toastr::error('Generate annual salary increasement fail','Error');
-        //     return redirect()->back();
-        // }
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Generate annual salary increasement fail','Error');
+            return redirect()->back();
+        }
     }
 
+    public function annualSalaryIncreasementApproved(Request $request){
+        $data = GenerateAnnualSalaryIncreasement::whereIn('id',explode(',', $request->id))->get();
+        foreach ($data as $value) {
+            dd($value);
+            User::where('id',$value->employee_id)->update([
+                'basic_salary' => $value->salary_increasement
+            ]);
+        }
+    }
     /**
      * Display the specified resource.
      *
