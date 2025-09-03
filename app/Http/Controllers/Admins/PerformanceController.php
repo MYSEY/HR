@@ -4,20 +4,21 @@ namespace App\Http\Controllers\Admins;
 
 use App\Models\User;
 use App\Models\Title;
+use App\Models\PAFlow;
 use App\Models\Branchs;
 use App\Models\Purpose;
 use App\Models\Department;
 use App\Models\Performance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Models\PALevelReviewer;
 use App\Models\PerformanceDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\PAFlow;
-use App\Models\PALevelReviewer;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class PerformanceController extends Controller
 {
@@ -652,5 +653,72 @@ class PerformanceController extends Controller
             DB::rollBack();
             Toastr::error('Failed to delete performance.','Error');
         }
+    }
+
+    public function performanceImport(Request $request){
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
+
+        if (!in_array($extension, ["xlsx", "xls", "csv"])) {
+            return 0;
+        }
+
+        $spreadsheet = IOFactory::load($file->getPathname());
+
+        foreach ($spreadsheet->getAllSheets() as $sheet) {
+            $sheetName = $sheet->getTitle();
+            $rows = $sheet->toArray();
+
+            foreach ($rows as $i => $row) {
+                if ($i == 0) continue; // skip header row
+
+                if ($sheetName == "Performance") {
+                    $employee = User::where("number_employee", $row[0])->first();
+                    if (!$employee) continue;
+
+                    $performance = Performance::create([
+                        'employee_id'  => $employee->id,
+                        'from_date'    => Carbon::parse($row[1]),
+                        'to_date'      => Carbon::parse($row[2]),
+                        'type'         => $row[3],
+                        'total_weight' => $row[4],
+                        'status'       => 'preparing',
+                        'created_by'   => Auth::id(),
+                    ]);
+                }
+
+                if ($sheetName == "Title") {
+                    $title = Title::create([
+                        'performance_id' => $performance->id,
+                        'title'          => $row[0], // Col A = Title Name
+                        'created_by'     => Auth::id(),
+                    ]);
+                }
+
+                if ($sheetName == "Purposes") {
+                    $purpose = Purpose::create([
+                        'performance_id' => $performance->id,
+                        'title_id'       => $title->id,
+                        'name'           => $row[0], // Col A = Purpose Name
+                        'created_by'     => Auth::id(),
+                    ]);
+                }
+
+                if ($sheetName == "Performance Detail") {
+                    PerformanceDetail::create([
+                        'performance_id' => $performance->id,
+                        'title_id'       => $title->id,
+                        'purpose_id'     => $purpose->id,
+                        'key_kpi'        => $row[0], // Col E
+                        'action_plan'    => $row[1], // Col F
+                        'goal'           => $row[2] ?? null,
+                        'goal_type'      => $row[3] ?? null,
+                        'weight'         => $row[4] ?? null,
+                        'created_by'     => Auth::id(),
+                    ]);
+                }
+            }
+        }
+        return 1;
     }
 }

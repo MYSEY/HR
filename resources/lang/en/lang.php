@@ -433,6 +433,7 @@ return[
     "generat_leaves"=>"Generat Leaves",
     "generate_leave_all_employee"=>"Generate Leave All Employee",
     "general_expense"=>"General Expense",
+    "generate_annual_salary_increasement"=>"Generate Annual Salary Increasement",
     "hello"=>"Hello",
     "health_care"=>"Health Care",
     "head_of_hr_and_admin_department"=>"Head of HR and Admin Department",

@@ -19,6 +19,13 @@
                         <li class="breadcrumb-item active">@lang('lang.performance')</li>
                     </ul>
                 </div>
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
+                    <div class="col-auto float-end ms-auto">
+                        @if (permissionAccess("m4-s2","is_import")->value == "1")
+                            <a href="#" class="btn add-btn" data-toggle="modal" id="importPayroll"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                        @endif
+                    </div>
+                @endif
                 <div class="col-auto float-end ms-auto">
                     <a href="{{url('performance/create')}}" class="btn add-btn me-2"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 </div>
@@ -158,6 +165,7 @@
             <p>Loading Data...</p>
         </div>
     </div>
+    @include('performances.import')
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
@@ -168,6 +176,11 @@
         var branch_id = null;
         var department_id = null;
         $(function(){
+            $("#importPayroll").on("click", function() {
+                $(".thanLess").hide();
+                $("#thanLess").text("");
+                $('#importLeaves').modal('show');
+            });
             $('.btn-search').on('click', function() {
                 number_employee = $('#employee_id').val();
                 employee_name = $('#employee_name').val();

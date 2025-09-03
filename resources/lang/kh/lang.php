@@ -394,6 +394,8 @@ return[
     "generate_payroll"=>"បង្កើតប្រាក់ខែ",
 	"generat_leaves"=>"បង្កើតការឈប់សម្រាក",
     "generate_leave_all_employee"=>"បង្កើតការឈប់សម្រាករបស់បុគ្គលិកទាំងអស់",
+    "generate_annual_salary_increasement"=>"បង្កើតប្រាក់បៀវត្សរ៍ប្រចាំឆ្នាំ",
+
 	"hello"=>"សួស្តី",
 	"health_care"=>"ថែទាំសុខភាព",
 	"head_of_hr_and_admin_department"=>"ប្រធានផ្នែកធនធានមនុស្ស និងរដ្ឋបាល",

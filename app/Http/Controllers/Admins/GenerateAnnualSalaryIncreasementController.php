@@ -172,7 +172,8 @@ class GenerateAnnualSalaryIncreasementController extends Controller
         foreach ($data as $value) {
             dd($value);
             User::where('id',$value->employee_id)->update([
-                'basic_salary' => $value->salary_increasement
+                'basic_salary' => $value->basic_salary + $value->salary_increasement,
+                'salary_increas' => $value->salary_increasement
             ]);
         }
     }
