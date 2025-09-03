@@ -54,6 +54,7 @@ use App\Http\Controllers\Admins\MotorAdjustmentController;
 use App\Http\Controllers\Admins\ProvinceAddressController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\DistrictsAddressController;
+use App\Http\Controllers\Admins\AnnualBonuConfigeController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
 use App\Http\Controllers\Admins\FnRegularExspenseController;
 use App\Http\Controllers\Admins\CategoryPermissionController;
@@ -296,6 +297,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::resource('annual/salary/increasement', AnnualSalaryIncreasementController::class);
     Route::resource('generate/annual/salary/increasement', GenerateAnnualSalaryIncreasementController::class);
     Route::post('generate/annual/salary/increasement/approved', [GenerateAnnualSalaryIncreasementController::class,'annualSalaryIncreasementApproved']);
+
+    Route::resource('annual/bonus', AnnualBonuConfigeController::class);
 
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
