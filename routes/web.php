@@ -62,6 +62,7 @@ use App\Http\Controllers\Admins\PerformanceAppraisalController;
 use App\Http\Controllers\Admins\AnnualSalaryIncreasementController;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
 use App\Http\Controllers\Admins\GenerateAnnualSalaryIncreasementController;
+use App\Http\Controllers\Admins\PerformanceAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -275,6 +276,17 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('payroll/staff/resign/delete',[EmployeePayrollController::class,'payrollStaffResignDelete']);
     Route::post('payroll/staff/risign/create',[EmployeePayrollController::class,'payrollStaffResignCreate']);
     Route::post('payroll/staff/risign/search',[EmployeePayrollController::class,'payrollStaffResignSearch']);
+
+    ///performance admins
+    Route::get('performance-admin', [PerformanceAdminController::class,'index']);
+    Route::get('performance-admin/employees', [PerformanceAdminController::class,'employees']);
+    Route::get('performance-admin/{id}', [PerformanceAdminController::class,'show']);
+    Route::post('performance-admin/asign', [PerformanceAdminController::class,'asign']);
+    Route::post('performance-admin/asigns', [PerformanceAdminController::class,'asigns']);
+    Route::post('performance-admin/return', [PerformanceAdminController::class,'return']);
+    Route::post('performance-admin/returns', [PerformanceAdminController::class,'returns']);
+    Route::post('performance-admin/approved', [PerformanceAdminController::class,'approved']);
+    Route::post('performance-admin/approveds', [PerformanceAdminController::class,'approveds']);
 
     ///performance
     Route::get('performance', [PerformanceController::class,'index']);

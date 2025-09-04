@@ -27,6 +27,15 @@ class Performance extends Model
         'approved_by',
         'approved_date',
         'remark',
+        'noted',
+        'review_employee_id',
+        'location_review',
+        'position_review',
+        'review_date',
+        'approve_by',
+        'approve_date',
+        'reject_date',
+        'reason',
         'created_by',
         'updated_by',
     ];
@@ -39,5 +48,25 @@ class Performance extends Model
     public function PerformanceDetails()
     {
         return $this->hasMany(PerformanceDetail::class,'performance_id');
+    }
+    public function RevieweEmployee()
+    {
+        return $this->hasMany(User::class,'review_employee_id')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'position_id',
+            'branch_id',
+            'department_id',
+            'gender',
+            'date_of_commencement',
+            'personal_phone_number',
+        );
     }
 }

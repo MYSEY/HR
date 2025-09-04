@@ -69,11 +69,11 @@
                             <h4>Leave Type</h4>
                         </div>
                         <p><i class="fa fa-dot-circle-o text-secondary me-2"></i>@lang('lang.annual_leave')<span
-                            class="float-end">{{ number_format($data->total_annual_leave ?? 0) }} Days</span></p>
+                            class="float-end">{{ number_format($data->total_annual_leave ?? 0, 1) }} Days</span></p>
                         <p><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.sick_leave')<span
-                            class="float-end">{{ number_format($data->total_sick_leave ?? 0) }} Days</span></p>
+                            class="float-end">{{ number_format($data->total_sick_leave ?? 0, 1) }} Days</span></p>
                         <p><i class="fa fa-dot-circle-o text-info me-2"></i>@lang('lang.special_leave')<span
-                            class="float-end">{{ number_format($data->total_special_leave ?? 0) }} Days</span></p>
+                            class="float-end">{{ number_format($data->total_special_leave ?? 0, 1) }} Days</span></p>
                         <p><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.unpaid_leave') <span
                             class="float-end">{{ $data->total_unpaid_leave ?? 0 }} Days</span></p>
                     </div>
