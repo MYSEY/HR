@@ -28,6 +28,16 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->integer('approved_by')->nullable();
             $table->dateTime('approved_date')->nullable();
+            //**  Process review and approve */
+            $table->integer('review_employee_id')->nullable();
+            $table->string('location_review')->nullable();
+            $table->json('position_review')->nullable();
+            $table->dateTime('review_date')->nullable();
+            $table->integer('approve_by')->nullable();
+            $table->dateTime('approve_date')->nullable();
+            $table->dateTime('reject_date')->nullable();
+            $table->longText('reason')->nullable();
+            // ** end */
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

@@ -42,6 +42,7 @@ return[
 	"all_employee"=>"បុគ្គលិកទាំងអស់",
 	"all_status"=>"ស្ថានភាពទាំងអស់",
 	"select_year"=>"ជ្រើសរើសឆ្នាំ",
+	"selected_items_must_have_the_same_status"=>"ធាតុដែលបានជ្រើសរើសត្រូវតែមានស្ថានភាពដូចគ្នា។",
 	"all_account"=>"All Account-គណនីទាំងអស់",
 	"all_contacts"=>"All Contacts បញ្ជីទំនាក់ទំនងទាំងអស់",
 	"all_contacts_list"=>"បញ្ជីព័ត៌មានទំនាក់ទំនងទាំងអស់",
@@ -954,6 +955,7 @@ return[
     "year_3"=>"ឆ្នាំទី៣",
 	"year_of_manufature"=>"ឆ្នាំផលិត",
 	"you_cannot_aprove"=>"អ្នកមិនអាចអនុម័តបានទេ",
+	"you_cannot_approve"=>"អ្នកមិនអាចអនុម័តបានទេ",
 
 	// monthly
     "january" => "មករា",
