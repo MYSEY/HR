@@ -332,7 +332,7 @@
                                     'performance_id': performance_id,
                                     'actionAsign': actionAsign,
                                     'asign_employee_id': asign_employee_id,
-                                    'remark': remark,
+                                    'reason': remark,
                                 }).then(function(response) {
                                     $('#modal-loading').modal('hide');
                                     if (response.data.success) {
@@ -384,7 +384,7 @@
                                 axios.post('{{ URL('performance-admin/approveds') }}', {
                                     'performance_id': performance_id,
                                     'actionAsign': "approved",
-                                    'remark': remark,
+                                    'reason': remark,
                                 }).then(function(response) {
                                     $('#modal-loading').modal('hide');
                                     if (response.data.success) {
@@ -443,7 +443,7 @@
                                         'performance_id': performance_id,
                                         'actionAsign': 5,
                                         'asign_employee_id': asign_employee_id,
-                                        'remark': remark,
+                                        'reason': remark,
                                     }).then(function(response) {
                                         $('#modal-loading').modal('hide');
                                         if (response.data.success) {
@@ -602,7 +602,7 @@
                                 'id': pa_id,
                                 'actionAsign': actionAsign,
                                 'asign_employee_id': asign_employee_id,
-                                'remark': remark,
+                                'reason': remark,
                             }).then(function(response) {
                                 $('#modal-loading').modal('hide');
                                 if (response.data.success) {
@@ -654,7 +654,7 @@
                             axios.post('{{ URL('performance-admin/approved') }}', {
                                 'id': pa_id,
                                 'actionAsign': "approved",
-                                'remark': remark,
+                                'reason': remark,
                             }).then(function(response) {
                                 $('#modal-loading').modal('hide');
                                 if (response.data.success) {
@@ -713,7 +713,7 @@
                                     'id': pa_id,
                                     'actionAsign': 5,
                                     'asign_employee_id': asign_employee_id,
-                                    'remark': remark,
+                                    'reason': remark,
                                 }).then(function(response) {
                                     $('#modal-loading').modal('hide');
                                     if (response.data.success) {
@@ -947,6 +947,7 @@
                                         <a class="dropdown-item" href="{{url('performance-admin')}}/${row.id}">
                                             <i class="fa fa-regular fa-eye"></i> Preview
                                         </a>
+                                        <a class="dropdown-item" href="{{url("performance-admin/histories")}}/${row.id}" ><i class="fa fa-eye m-r-5"></i> @lang('lang.view_history')</a>
                                     </div>
                                 </div>
                             `;

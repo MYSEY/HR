@@ -195,27 +195,29 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="submit-section mb-2">
-                    @if (Auth::user()->id == $data->review_employee_id || $permission->is_access == 1 && ($data->status !="preparing" && $data->status != "approved"))
-                        <a class="btn @if ($data->status == 4) btn-success @else btn-danger @endif btn-asign" 
-                            data-id="{{$data->id}}" 
-                            data-status="{{$data->status}}" 
-                            data-name="{{$data->review_employee_name_en}}" 
-                            data-employeeid="{{$data->employee_id}}" 
-                            href="#" aria-expanded="false">
-                                @if ($data->status == 4)
-                                    <span>@lang('lang.approved')</span>
-                                @else
-                                    <span>@lang('lang.asign_to')</span>
-                                @endif
-                        </a>
-                     @else
-                        <a class="btn btn-danger" href="#">
-                            <span>You can't asign</span>
-                        </a>
+                    @if ($permission)
+                        @if (Auth::user()->id == $data->review_employee_id || $permission->is_access == 1 && ($data->status !="preparing" && $data->status != "approved"))
+                            <a class="btn @if ($data->status == 4) btn-success @else btn-danger @endif btn-asign" 
+                                data-id="{{$data->id}}" 
+                                data-status="{{$data->status}}" 
+                                data-name="{{$data->review_employee_name_en}}" 
+                                data-employeeid="{{$data->employee_id}}" 
+                                href="#" aria-expanded="false">
+                                    @if ($data->status == 4)
+                                        <span>@lang('lang.approved')</span>
+                                    @else
+                                        <span>@lang('lang.asign_to')</span>
+                                    @endif
+                            </a>
+                        @else
+                            <a class="btn btn-danger" href="#">
+                                <span>You can't asign</span>
+                            </a>
+                        @endif
                     @endif
-                    <a href="{{ url('performance-admin') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+                    <a href=" @if ($permission) {{ url('performance-admin') }} @else {{ url('performance-admin/histories') }}/{{$data->performance_id}} @endif" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
                 </div>
             </form>
         </div>

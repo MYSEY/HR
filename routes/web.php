@@ -281,6 +281,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('performance-admin', [PerformanceAdminController::class,'index']);
     Route::get('performance-admin/employees', [PerformanceAdminController::class,'employees']);
     Route::get('performance-admin/{id}', [PerformanceAdminController::class,'show']);
+    Route::get('performance-admin/histories/{id}', [PerformanceAdminController::class,'histories']);
+    Route::get('performance-admin/histories/detail/{id}', [PerformanceAdminController::class,'historiesDetail']);
     Route::post('performance-admin/asign', [PerformanceAdminController::class,'asign']);
     Route::post('performance-admin/asigns', [PerformanceAdminController::class,'asigns']);
     Route::post('performance-admin/return', [PerformanceAdminController::class,'return']);

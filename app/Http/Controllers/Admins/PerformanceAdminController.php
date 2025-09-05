@@ -6,7 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\Department;
 use App\Models\Performance;
+use App\Models\PerformanceDetail;
+use App\Models\PerformanceDetailHistory;
+use App\Models\PerformanceHistory;
 use App\Models\permissions;
+use App\Models\Purpose;
+use App\Models\PurposeHistory;
+use App\Models\Title;
+use App\Models\TitleHistory;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -142,6 +149,45 @@ class PerformanceAdminController extends Controller
         )->where('performances.id',$id)->first();
         return view('performance_admins.preview',compact('data','permission'));
     }
+    public function dataHistory(){
+        $query = PerformanceHistory::with(['titles.purposes.performanceDetail'])
+            ->leftJoin('users', 'performance_histories.employee_id', '=', 'users.id')
+            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->leftJoin('users as reviewEmployee', 'performance_histories.review_employee_id', '=', 'reviewEmployee.id')
+            ->select(
+                'performance_histories.*',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.department_id',
+                'users.branch_id',
+                'users.line_manager',
+                'departments.name_english as dep_name',
+                'positions.name_english as positions_name',
+                'branchs.branch_name_en',
+                'branchs.branch_name_kh',
+                'reviewEmployee.number_employee as review_employee_number_employee',
+                'reviewEmployee.employee_name_kh as review_employee_name_kh',
+                'reviewEmployee.employee_name_en as review_employee_name_en',
+            );
+        return $query;
+    }
+    public function histories($id)
+    {
+        $query = self::dataHistory();
+        $datas = $query->where("performance_histories.performance_id", $id)->get();
+        return view('performance_admins.view_histories', compact('datas'));
+    }
+    public function historiesDetail($id)
+    {
+        $permission = false;
+        $query = self::dataHistory();
+        $data = $query->where("performance_histories.id", $id)->first();
+        return view('performance_admins.preview', compact('data','permission'));
+    }
+   
     public function employees(Request $request)
     {
         $kpiUser = User::where("id", $request->get_employee_id)->select(
@@ -183,14 +229,71 @@ class PerformanceAdminController extends Controller
             'datas' => $datas
         ]);
     }
+    function createHistories($data)
+    {
+        DB::transaction(function () use ($data) {
+
+            // 🔹 Convert Performance to array
+            $dataHistory = $data->toArray();
+            unset($dataHistory['id']);
+            $dataHistory['performance_id'] = $data->id;
+
+            // 🔹 Create PerformanceHistory
+            $paHistory = PerformanceHistory::create($dataHistory);
+
+            // 🔹 Get related Titles
+            $titles = Title::where("performance_id", $data->id)->get();
+
+            foreach ($titles as $titleItem) {
+                $titleArray = $titleItem->toArray();
+                unset($titleArray['id']);
+                $titleArray['performance_histories_id'] = $paHistory->id;
+
+                $tHistory = TitleHistory::create($titleArray);
+
+                // 🔹 Get related Purposes for this title
+                $purposes = Purpose::where("performance_id", $data->id)
+                    ->where("title_id", $titleItem->id)
+                    ->get();
+
+                foreach ($purposes as $pp) {
+                    $ppArray = $pp->toArray();
+                    unset($ppArray['id']);
+                    $ppArray['performance_histories_id'] = $paHistory->id;
+                    $ppArray['title_histories_id'] = $tHistory->id;
+
+                    $ppHistory = PurposeHistory::create($ppArray);
+
+                    // 🔹 Get related PerformanceDetails
+                    $details = PerformanceDetail::where("performance_id", $data->id)
+                        ->where("title_id", $titleItem->id)
+                        ->where("purpose_id", $pp->id)
+                        ->get();
+
+                    foreach ($details as $pd) {
+                        $pdArray = $pd->toArray();
+                        unset($pdArray['id']);
+                        $pdArray['performance_histories_id'] = $paHistory->id;
+                        $pdArray['title_histories_id'] = $tHistory->id;
+                        $pdArray['purpose_histories_id'] = $ppHistory->id;
+
+                        PerformanceDetailHistory::create($pdArray);
+                    }
+                }
+            }
+        });
+    }
+
     public function asign(Request $request)
     {
         DB::beginTransaction();
         try{
             $performance = Performance::findOrFail($request->id);
             if ($performance->total_weight == 100) {
+                self::createHistories($performance);
                 $performance->update([
                     'status'                => $request->actionAsign,
+                    'reason'                => $request->reason,
                     'review_employee_id'    => $request->asign_employee_id,
                     'review_date'           => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_by'            => Auth::id(),
@@ -221,8 +324,10 @@ class PerformanceAdminController extends Controller
             foreach ($ids as $id) {
                 $performance = Performance::findOrFail($id);
                 if ($performance->total_weight == 100) {
+                    self::createHistories($performance);
                     $performance->update([
                         'status'                => $request->actionAsign,
+                        'reason'                => $request->reason,
                         'review_employee_id'    => $request->asign_employee_id,
                         'review_date'           => Carbon::now()->format('Y-m-d H:i:s'),
                         'updated_by'            => Auth::id(),
@@ -251,10 +356,11 @@ class PerformanceAdminController extends Controller
         DB::beginTransaction();
         try{
             $performance = Performance::findOrFail($request->id);
+            self::createHistories($performance);
             $performance->update([
                 'status'                => $request->actionAsign,
                 'review_employee_id'    => $request->asign_employee_id,
-                'remark'                => $request->remark,
+                'reason'                => $request->reason,
                 'reject_date'           => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_by'            => Auth::id(),
             ]);
@@ -279,10 +385,11 @@ class PerformanceAdminController extends Controller
             foreach ($ids as $id) {
                 $performance = Performance::findOrFail($id);
                 if ($performance->total_weight == 100) {
+                    self::createHistories($performance);
                     $performance->update([
                         'status'                => $request->actionAsign,
                         'review_employee_id'    => $request->asign_employee_id,
-                        'remark'                => $request->remark,
+                        'reason'                => $request->reason,
                         'reject_date'           => Carbon::now()->format('Y-m-d H:i:s'),
                         'updated_by'            => Auth::id(),
                     ]);
@@ -311,9 +418,11 @@ class PerformanceAdminController extends Controller
         try{
             $performance = Performance::findOrFail($request->id);
             if ($performance->total_weight == 100) {
+                self::createHistories($performance);
                 $performance->update([
                     'remark'        => $request->remark,
                     'approved_by'   => Auth::id(),
+                    'reason'        => $request->reason,
                     'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_by'    => Auth::id(),
                 ]);
@@ -343,6 +452,7 @@ class PerformanceAdminController extends Controller
             foreach ($ids as $id) {
                 $performance = Performance::findOrFail($id);
                 if ($performance->total_weight == 100) {
+                    self::createHistories($performance);
                     $performance->update([
                         'status'        => 'approved',
                         'remark'        => $request->remark,
