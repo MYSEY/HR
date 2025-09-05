@@ -25,9 +25,9 @@
                         <thead>
                             <tr>
                                 <th>@lang('lang.tax_rate')</th>
-                                <th>@lang('lang.type')</th>
+                                <th>@lang('lang.fn_type')</th>
                                 <th>@lang('lang.description')</th>
-                                <th style="text-align: center;">@lang('lang.action')</th>
+                                <th style="text-align: center;">@lang('lang.option')</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,7 +71,7 @@
                                 <input class="form-control @error('tax_rate') is-invalid @enderror" type="number" id="" name="tax_rate" required>
                             </div>
                             <div class="form-group">
-                                <label>@lang('lang.type')</label>
+                                <label>@lang('lang.fn_type')</label>
                                 <select class="form-control @error('tax_type') is-invalid @enderror" id="tax_type" name="tax_type" required>
                                     <option value="" selected> -- @lang('lang.select') --</option>
                                     <option value="1">WHT</option>

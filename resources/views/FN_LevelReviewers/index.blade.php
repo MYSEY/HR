@@ -112,9 +112,9 @@
                                 <th>@lang('lang.from_location')</th>
                                 <th>@lang('lang.model_review')</th>
                                 <th>@lang('lang.request_type')</th>
-                                <th>@lang('lang.reference') @lang('lang.type')</th>
+                                <th>@lang('lang.reference_type')</th>
                                 <th>@lang('lang.description')</th>
-                                <th style="text-align: center;">@lang('lang.action')</th>
+                                <th style="text-align: center;">@lang('lang.option')</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -134,7 +134,7 @@
                                         <th>@lang('lang.location')</th>
                                         <th>@lang('lang.request_by') @lang('lang.location')</th>
                                         <th>@lang('lang.request_by')</th>
-                                        <th style="text-align: center;">@lang('lang.action')</th>
+                                        <th style="text-align: center;">@lang('lang.option')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -147,13 +147,13 @@
                                                 <td class="stuck-scroll-3"><a href="#">{{$item->tracking_id}}</a></td>
                                                 <td class="stuck-scroll-3"> 
                                                     @if ($item->status == "" || $item->status == "pending")
-                                                        <span class="badge bg-inverse-info" style="font-size: 13px;">@lang('lang.pending') @lang('lang.review')</span>
+                                                        <span class="badge bg-inverse-info" style="font-size: 13px;">@lang('lang.pending_review')</span>
                                                     @elseif ($item->status == "rejected")
                                                         <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
                                                     @elseif ($item->status == "cancel")
-                                                        <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
+                                                        <span class="badge bg-inverse-danger" style="font-size: 13px;">@lang('lang.cancel')</span>
                                                     @elseif($item->status == "approved")
-                                                        <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                        <span class="badge bg-inverse-success" style="font-size: 13px;">@lang('lang.approved')</span>
                                                     @endif
                                                     
                                                 </td>
@@ -478,9 +478,9 @@
                         }else if (item.status == "rejected") {
                             status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>';
                         }else if (item.status == "cancel") {
-                            status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>';
+                            status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">@lang("lang.cancel")</span>';
                         }else if (item.status == "approved") {
-                            status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
+                            status = '<span class="badge bg-inverse-success" style="font-size: 13px;">@lang("lang.approved")</span>';
                         };
                         if (item.type == "1"){
                            type = '<span >Special Expense</span>';

@@ -24,10 +24,10 @@
                     <table class="table table-striped custom-table mb-0 datatable dataTable no-footer btn_trainer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                         <thead>
                             <tr>
-                                <th>@lang('lang.title')</th>
+                                <th>@lang('lang.fn_title')</th>
                                 <th>@lang('lang.status')</th>
                                 <th>@lang('lang.description')</th>
-                                <th style="text-align: center;">@lang('lang.action')</th>
+                                <th style="text-align: center;">@lang('lang.option')</th>
                             </tr>
                         </thead>
                         <tbody>
