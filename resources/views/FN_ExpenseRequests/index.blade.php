@@ -387,7 +387,7 @@
             let text_label = "";
             let button_ok = "";
                 button_ok =   {
-                    text: '@lang("lang.reject")',
+                    text: '@lang("lang.return")',
                     btnClass: 'btn-danger btn-sm',
                     action: function () {
                         var id = this.$content.find('.id').val();

@@ -36,7 +36,7 @@
                                 <th>@lang('lang.employee')</th>
                                 <th>@lang('lang.location')</th>
                                 <th>@lang('lang.description')</th>
-                                <th style="text-align: center;">@lang('lang.action')</th>
+                                <th style="text-align: center;">@lang('lang.option')</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,7 +90,7 @@
                         <form action="{{url('fn/approval')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
-                                <label>@lang('lang.title') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.authorizer') <span class="text-danger">*</span></label>
                                 <textarea type="text" rows="3" class="form-control" name="title" id="title" value="{{old('title')}}" required></textarea>
                             </div>
                             <div class="form-group hr-form-group-select2">

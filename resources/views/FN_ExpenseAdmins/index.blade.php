@@ -36,11 +36,11 @@
                                 <th>@lang('lang.amount') @lang('lang.usd')</th>
                                 <th>@lang('lang.amount') @lang('lang.kh')</th>
                                 <th>@lang('lang.request_date')</th>
-                                <th>@lang('lang.request_by') @lang('lang.location')</th>
-                                <th>@lang('lang.position') @lang('lang.review')</th>
+                                <th>@lang('lang.request_by_location')</th>
+                                <th>@lang('lang.position_review')</th>
                                 <th>@lang('lang.approve_by')</th>
                                 <th>@lang('lang.asign_to')</th>
-                                <th>@lang('lang.action')</th>
+                                <th>@lang('lang.option')</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,9 +86,9 @@
                                         <td class="stuck-scroll-4"><a href="#">{{$item->tracking_id}}</a></td>
                                         <td class="stuck-scroll-4"> 
                                             @if ($item->status == "" || $item->status == "pending")
-                                                <span class="badge bg-inverse-info" style="font-size: 13px;">@lang('lang.pending') @lang('lang.review')  {{$item->review_type}}</span>
+                                                <span class="badge bg-inverse-info" style="font-size: 13px;">@lang('lang.pending_review')  {{$item->review_type}}</span>
                                             @elseif($item->status == "pending_approve")
-                                                <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending') @lang('lang.approved')</span>
+                                                <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending_approved')</span>
                                             @elseif ($item->status == "rejected")
                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by {{$item->review_type ? "review ".$item->reject_review_type : "Approved"}}</span>
                                             @elseif ($item->status == "cancel")

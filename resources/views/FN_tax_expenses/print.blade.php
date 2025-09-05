@@ -31,7 +31,7 @@
                     </div>
                     <div>
                         <table style="width:100%">
-                            <tr><td class="table_tr">
+                            <tr><td class="table_tr" style="word-wrap: break-word; white-space: normal">
                                 <span class="p_subject"></span>
                             </td></tr>
                         </table>
@@ -54,8 +54,8 @@
                     </div>
                 </div>
                 <table style="width:100%">
-                    <tr><td class="table_tr">
-                        <span class="p_reason_subject" style="margin-left: 6%;"></span>
+                    <tr><td class="table_tr" style="padding-left: 6%;">
+                        <span class="p_reason_subject" style="word-wrap: break-word; white-space: normal"></span>
                     </td></tr>
                 </table>
                 

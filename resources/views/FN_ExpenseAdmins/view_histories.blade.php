@@ -100,9 +100,9 @@
                                         <input type="hidden" class="expense_id" value="{{$item->expense_id}}">
                                         <input type="hidden" class="expense_type" value="{{$item->type}}">
                                         @if ($item->status == "" || $item->status == "pending")
-                                            <span class="badge bg-inverse-info" style="font-size: 13px;">@lang('lang.pending') @lang('lang.review')  {{$item->review_type}}</span>
+                                            <span class="badge bg-inverse-info" style="font-size: 13px;">@lang('lang.pending_review')  {{$item->review_type}}</span>
                                         @elseif($item->status == "pending_approve")
-                                            <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending') @lang('lang.approved')</span>
+                                            <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending_approved')</span>
                                         @elseif ($item->status == "rejected")
                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by {{$item->review_type ? "review ".$item->reject_review_type : "Approved"}}</span>
                                         @elseif($item->status == "approved")
