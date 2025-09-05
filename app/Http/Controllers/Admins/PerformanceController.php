@@ -15,6 +15,10 @@ use App\Models\PerformanceDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\PerformanceDetailHistory;
+use App\Models\PerformanceHistory;
+use App\Models\PurposeHistory;
+use App\Models\TitleHistory;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -329,6 +333,61 @@ class PerformanceController extends Controller
         return view('performances.edit',compact('employee','data'));
     }
 
+    function createHistories($data)
+    {
+        DB::transaction(function () use ($data) {
+
+            // 🔹 Convert Performance to array
+            $dataHistory = $data->toArray();
+            unset($dataHistory['id']);
+            $dataHistory['performance_id'] = $data->id;
+
+            // 🔹 Create PerformanceHistory
+            $paHistory = PerformanceHistory::create($dataHistory);
+
+            // 🔹 Get related Titles
+            $titles = Title::where("performance_id", $data->id)->get();
+
+            foreach ($titles as $titleItem) {
+                $titleArray = $titleItem->toArray();
+                unset($titleArray['id']);
+                $titleArray['performance_histories_id'] = $paHistory->id;
+
+                $tHistory = TitleHistory::create($titleArray);
+
+                // 🔹 Get related Purposes for this title
+                $purposes = Purpose::where("performance_id", $data->id)
+                    ->where("title_id", $titleItem->id)
+                    ->get();
+
+                foreach ($purposes as $pp) {
+                    $ppArray = $pp->toArray();
+                    unset($ppArray['id']);
+                    $ppArray['performance_histories_id'] = $paHistory->id;
+                    $ppArray['title_histories_id'] = $tHistory->id;
+
+                    $ppHistory = PurposeHistory::create($ppArray);
+
+                    // 🔹 Get related PerformanceDetails
+                    $details = PerformanceDetail::where("performance_id", $data->id)
+                        ->where("title_id", $titleItem->id)
+                        ->where("purpose_id", $pp->id)
+                        ->get();
+
+                    foreach ($details as $pd) {
+                        $pdArray = $pd->toArray();
+                        unset($pdArray['id']);
+                        $pdArray['performance_histories_id'] = $paHistory->id;
+                        $pdArray['title_histories_id'] = $tHistory->id;
+                        $pdArray['purpose_histories_id'] = $ppHistory->id;
+
+                        PerformanceDetailHistory::create($pdArray);
+                    }
+                }
+            }
+        });
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -358,6 +417,7 @@ class PerformanceController extends Controller
                 | 2. Update Performance header
                 * ------------------------------------------------*/
                 $performance = Performance::findOrFail($request->performance_id);
+                self::createHistories($performance);
                 $employee    = User::findOrFail($request->employee_id);
 
                 $year = \Carbon\Carbon::parse($request->from_date)->format('Y');
