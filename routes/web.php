@@ -58,6 +58,7 @@ use App\Http\Controllers\Admins\AnnualBonuConfigeController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
 use App\Http\Controllers\Admins\FnRegularExspenseController;
 use App\Http\Controllers\Admins\CategoryPermissionController;
+use App\Http\Controllers\Admins\GenerateAnnaulBonusController;
 use App\Http\Controllers\Admins\PerformanceAppraisalController;
 use App\Http\Controllers\Admins\AnnualSalaryIncreasementController;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
@@ -299,6 +300,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('performance/update', [PerformanceController::class,'update']);
     Route::post('performance/delete', [PerformanceController::class,'destroy']);
     Route::post('performance/approve/{id}', [PerformanceController::class,'performanceApprove']);
+    Route::post('performance/accepted/{id}', [PerformanceController::class,'performanceAccepted']);
     Route::post('performance/approved/all', [PerformanceController::class,'performanceApproveAll']);
     Route::post('performance/import', [PerformanceController::class,'performanceImport']);
 
@@ -313,6 +315,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('generate/annual/salary/increasement/approved', [GenerateAnnualSalaryIncreasementController::class,'annualSalaryIncreasementApproved']);
 
     Route::resource('annual/bonus', AnnualBonuConfigeController::class);
+    Route::resource('generate/annual/bonus', GenerateAnnaulBonusController::class);
 
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);

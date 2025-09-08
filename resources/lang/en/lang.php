@@ -110,6 +110,11 @@ return[
 	"adjustment_excluded_tax"=>"Adjustment (Exclued Tax)",
 	"adjustment"=>"Adjustment",
 	"annual_salary_increasement"=>"Annual Salary Increasement",
+	"asign_to_employee"=>"Asign To Employee",
+	"accepted"=>"Accepted",
+	"are_you_sure_want_to_accepted"=>"Are you sure want to accepted",
+
+
     "bank"=>"Bank",
     "banks"=>"Banks",
     "balance"=>"Balance",

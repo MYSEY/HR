@@ -128,7 +128,9 @@
                 </div>
 
                 <div class="submit-section mb-2">
+                    <input type="text" name="performance_id" id="performance_id" value="{{ $data->id }}" hidden>
                     <a href="{{ url('performance') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+                    <a href="javascript:" class="btn btn-success" id="btn_accepted">@lang('lang.accepted')</a>
                 </div>
             </form>
         </div>
@@ -138,6 +140,63 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(document).ready(function () {
+        $("#btn_accepted").on('click',function(){
+            var id = $("#performance_id").val();    
+            $.confirm({
+                title: 'Accepted!',
+                content: '@lang("lang.are_you_sure_want_to_accepted")?',
+                type: "blue",
+                buttons: {
+                    ok: {
+                        text: 'ok',
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            axios.post('{{ URL("performance/accepted") }}/'+id).then(function(response) {
+                                if (response.data.success) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
+                                        type: "success",
+                                        icon: true
+                                    }).show();
+                                    window.location.replace("{{ URL('performance') }}");
+                                } else if(response.data.message == 'weight_must_be_exactly'){
+                                    new Noty({
+                                        title: "",
+                                        text: 'Total weight must be exactly 100% before approval.',
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 2000);
+                                }
+                            }).catch(function(error) {
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                    type: "error",
+                                    icon: true
+                                }).show();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: '@lang("lang.cancel")',
+                        action: function () {
+                            // Action for cancel button (if needed)
+                        }
+                    }
+                },
+                onContentReady: function () {
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click');
+                    });
+                }
+            });
+        });
         document.querySelectorAll('.score_achieved').forEach(input => {
             input.addEventListener('input', function () {
                 let val = parseFloat(this.value);

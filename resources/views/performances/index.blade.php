@@ -91,9 +91,9 @@
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
-                <a href="javascript:void(0);" class="btn btn-sm btn-secondary" id="btnApprovedAll">
+                {{-- <a href="javascript:void(0);" class="btn btn-sm btn-secondary" id="btnApprovedAll">
                     Approved
-                </a>
+                </a> --}}
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
@@ -289,19 +289,19 @@
                 let id = $(this).data("id");
                 $('.e_id').val(id);
             });
-            $('body').on('click','#btnUpdateStatus',function(e){
+            $('body').on('click','#btnAccepted',function(e){
                 e.preventDefault();
                 var id = $(this).data('id');
                 $.confirm({
-                    title: 'Approve!',
-                    content: '@lang("lang.are_you_sure_want_to_approve")?',
+                    title: 'Accepted!',
+                    content: '@lang("lang.are_you_sure_want_to_accepted")?',
                     type: "blue",
                     buttons: {
                         ok: {
                             text: 'ok',
                             btnClass: 'btn-blue',
                             action: function () {
-                                axios.post('{{ URL("performance/approve") }}/'+id).then(function(response) {
+                                axios.post('{{ URL("performance/accepted") }}/'+id).then(function(response) {
                                     if (response.data.success) {
                                         new Noty({
                                             title: "",
@@ -317,7 +317,9 @@
                                             type: "error",
                                             icon: true
                                         }).show();
-                                        window.location.replace("{{ URL('performance') }}");
+                                        setTimeout(function() {
+                                            window.location.reload();
+                                        }, 2000);
                                     }
                                 }).catch(function(error) {
                                     new Noty({
@@ -435,9 +437,9 @@
                                             <span>Preparing</span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" data-id="${row.id}" href="javascript:void(0)" id="btnUpdateStatus">
+                                            <a class="dropdown-item" data-id="${row.id}" href="javascript:void(0)" id="btnAccepted">
                                                 <i class="fa fa-dot-circle-o text-success"></i>
-                                                <span>Approve</span>
+                                                <span>@lang('lang.accepted')</span>
                                             </a>
                                         </div>
                                     </div>

@@ -13,14 +13,14 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.generate_annual_salary_increasement')</h3>
+                    <h3 class="page-title">@lang('lang.generate_annual_bonus')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.generate_annual_salary_increasement')</li>
+                        <li class="breadcrumb-item active">@lang('lang.generate_annual_bonus')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_annual_salary_increasement"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_annual_bonus"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 </div>
             </div>
         </div>
@@ -42,12 +42,12 @@
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                 @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
                     <div class="form-group">
-                        <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                        {{-- <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
                             <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
                             @foreach ($branch as $item)
                                 <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
                             @endforeach
-                        </select>
+                        </select> --}}
                     </div>
                 @endif
             </div>
@@ -107,17 +107,17 @@
             </div>
         </div>
     </div>
-    <div id="add_annual_salary_increasement" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
+    <div id="add_annual_bonus" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">@lang('lang.annual_salary_increasement')</h5>
+                    <h5 class="modal-title">@lang('lang.annual_bonus')</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{url('generate/annual/salary/increasement')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <form action="{{url('generate/annual/bonus')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                         @csrf
                         <div class="form-group">
                             <label>Year <span class="text-danger">*</span></label>
@@ -293,21 +293,21 @@
                     data: 'total_score',
                     name: 'total_score',
                     render: function (data) {
-                        return `<span class="badge bg-inverse-success">${data == null ? '0.00' : data}</span>`;
+                        return `<span class="badge bg-inverse-success">${data}</span>`;
                     }
                 },
                 {
                     data: 'total_score_live_staff',
                     name: 'total_score_live_staff',
                     render: function (data) {
-                        return `<span class="badge bg-inverse-success">${data == null ? '0.00' : data}</span>`;
+                        return `<span class="badge bg-inverse-success">${data}</span>`;
                     }
                 },
                 {
                     data: 'total_score_direct_chairman',
                     name: 'total_score_direct_chairman',
                     render: function (data) {
-                        return `<span class="badge bg-inverse-success">${data == null ? '0.00' : data}</span>`;
+                        return `<span class="badge bg-inverse-success">${data}</span>`;
                     }
                 },
                 {

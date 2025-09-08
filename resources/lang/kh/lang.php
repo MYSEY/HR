@@ -106,6 +106,10 @@ return[
 	"address_latin"=>"Address Latin",
 	"address_en"=>"Address EN",
 	"abbreviations"=>"ពាក្យកាត់",
+	"asign_to_employee"=>"Asign To Employee",
+	"accepted"=>"Accepted",
+	"are_you_sure_want_to_accepted"=>"Are you sure want to accepted",
+	
 	"payroll_adjustment"=>"Payroll Adjustment",
 	"bank"=>"ធនាគារ",
 	"banks"=>"ធនាគារ",
