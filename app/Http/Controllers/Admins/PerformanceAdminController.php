@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportPerformance;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\Department;
@@ -19,6 +20,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PerformanceAdminController extends Controller
 {
@@ -420,9 +422,9 @@ class PerformanceAdminController extends Controller
             if ($performance->total_weight == 100) {
                 self::createHistories($performance);
                 $performance->update([
-                    'remark'        => $request->remark,
-                    'approved_by'   => Auth::id(),
                     'reason'        => $request->reason,
+                    'approved_by'   => Auth::id(),
+                    'status'        => $request->actionAsign,
                     'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_by'    => Auth::id(),
                 ]);
@@ -455,7 +457,8 @@ class PerformanceAdminController extends Controller
                     self::createHistories($performance);
                     $performance->update([
                         'status'        => 'approved',
-                        'remark'        => $request->remark,
+                        'reason'        => $request->reason,
+                        'status'        => $request->actionAsign,
                         'approved_by'   => Auth::id(),
                         'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
                         'updated_by'    => Auth::id(),
@@ -483,5 +486,161 @@ class PerformanceAdminController extends Controller
         }
     }
 
+    public function kpiReport(Request $request)
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "performance-admin/kpi-report")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        if (request()->ajax()) {
+            // Define the base query
+            $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
+            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->leftJoin('users as reviewEmployee', 'performances.review_employee_id', '=', 'reviewEmployee.id')
+            ->leftJoin('users as userApprove', 'performances.approved_by', '=', 'userApprove.id')
+            ->select(
+                'performances.*',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.department_id',
+                'users.branch_id',
+                'users.line_manager',
+                'departments.name_english as dep_name',
+                'positions.name_english as positions_name',
+                'branchs.branch_name_en',
+                'branchs.branch_name_kh',
+                'reviewEmployee.number_employee as review_employee_number_employee',
+                'reviewEmployee.employee_name_kh as review_employee_name_kh',
+                'reviewEmployee.employee_name_en as review_employee_name_en',
 
+                'userApprove.number_employee as approve_number_employee',
+                'userApprove.employee_name_kh as approve_employee_name_kh',
+                'userApprove.employee_name_en as approve_employee_name_en',
+            )
+            ->where('performances.status', 'approved')
+            ->when($request->employee_id, function ($query, $employee_id) {
+                return $query->where('users.number_employee', $employee_id);
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                return $query->where('users.employee_name_en', $employee_name);
+            })
+            ->when($request->branch_id, function ($query, $branch_id) {
+                return $query->where('users.branch_id', $branch_id);
+            })
+            ->when($request->department_id, function ($query, $department_id) {
+                return $query->where('users.department_id', $department_id);
+            });
+        
+            // Search filter
+            $searchValue = request()->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('performances.id', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                    ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
+                });
+            }
+
+            if (in_array(Auth::user()->RolePermission, ['HR']) && $permission->is_access != "1") {
+                $query->where("performances.review_employee_id", Auth::user()->id);
+                $query->whereNot('performances.status', 'preparing');
+            }
+
+            if (in_array(Auth::user()->RolePermission, ['HRAdmin','BOD','CEO','HOD','DHOD','BM','DBM','Employee'])) {
+                $query->where('performances.review_employee_id', Auth::user()->id);
+                $query->whereNot('performances.status', 'preparing');
+            }
+            $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
+            $recordsFiltered = $query->count();
+            $start = intval(request()->input('start', 0));
+            $limit = intval(request()->input('length', 10));
+            $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
+            return response()->json([
+                'draw' => intval(request()->input('draw')),
+                'permission'=>$permission,
+                'userIdLog'=>Auth::user()->id,
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
+        $branch = Branchs::all();
+        $department = Department::all();
+        return view('reports.kpi_report',compact('branch','department'));
+        if (in_array(Auth::user()->RolePermission, ['Employee'])) {
+            $query->where('performances.employee_id', Auth::user()->id);
+        }
+        // ->groupBy('performances.employee_id')
+        // Fetch paginated data
+        $data = $query->get();
+        // dd($data);
+        return view('reports.kpi_report',compact('data'));
+    }
+    public function reportExport(Request $request)
+    {
+        // Define the base query
+        $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('options', 'users.gender', '=', 'options.id')
+        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->leftJoin('users as reviewEmployee', 'performances.review_employee_id', '=', 'reviewEmployee.id')
+        ->leftJoin('users as userApprove', 'performances.approved_by', '=', 'userApprove.id')
+        ->select(
+            'performances.*',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'users.department_id',
+            'users.branch_id',
+            'users.line_manager',
+            'users.gender',
+            'options.name_khmer as gender_name_khmer',
+            'options.name_english as gender_name_english',
+            'users.date_of_commencement',
+            'departments.name_english as dep_name_english',
+            'departments.name_khmer as dep_name_khmer',
+            'positions.name_english as positions_name',
+            'positions.name_khmer as positions_name_khmer',
+            'branchs.branch_name_en',
+            'branchs.branch_name_kh',
+            'reviewEmployee.number_employee as review_employee_number_employee',
+            'reviewEmployee.employee_name_kh as review_employee_name_kh',
+            'reviewEmployee.employee_name_en as review_employee_name_en',
+
+            'userApprove.number_employee as approve_number_employee',
+            'userApprove.employee_name_kh as approve_employee_name_kh',
+            'userApprove.employee_name_en as approve_employee_name_en',
+        )
+        ->where('performances.status', 'approved')
+        ->when($request->employee_id, function ($query, $employee_id) {
+            return $query->where('users.number_employee', $employee_id);
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            return $query->where('users.employee_name_en', $employee_name);
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            return $query->where('users.branch_id', $branch_id);
+        })
+        ->when($request->department_id, function ($query, $department_id) {
+            return $query->where('users.department_id', $department_id);
+        });
+        if (in_array(Auth::user()->RolePermission, ['HR'])) {
+            $query->where("performances.review_employee_id", Auth::user()->id);
+            $query->whereNot('performances.status', 'preparing');
+        }
+        if (in_array(Auth::user()->RolePermission, ['HRAdmin','BOD','CEO','HOD','DHOD','BM','DBM','Employee'])) {
+            $query->where('performances.review_employee_id', Auth::user()->id);
+            $query->whereNot('performances.status', 'preparing');
+        }
+        $data = $query->orderBy('performances.id', 'desc')->get();
+        $name_file = "Performance-Report.xlsx";
+        $export = new ExportPerformance($data, $request);
+        return Excel::download($export, $name_file);
+    }
 }

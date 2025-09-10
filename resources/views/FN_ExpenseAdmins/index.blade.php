@@ -33,8 +33,8 @@
                                 <th class="stuck-scroll-4">#</th>
                                 <th class="stuck-scroll-4">@lang('lang.tracking_id')</th>
                                 <th class="stuck-scroll-4">@lang('lang.status')</th>
-                                <th>@lang('lang.amount') @lang('lang.usd')</th>
-                                <th>@lang('lang.amount') @lang('lang.kh')</th>
+                                <th>@lang('lang.fn_amount_usd')</th>
+                                <th>@lang('lang.fn_amount_khr')</th>
                                 <th>@lang('lang.request_date')</th>
                                 <th>@lang('lang.request_by_location')</th>
                                 <th>@lang('lang.position_review')</th>

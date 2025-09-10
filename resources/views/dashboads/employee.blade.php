@@ -92,7 +92,7 @@
                                         <h4 class="text-info"> 
                                             {{ isset($groupedExpenseCounts["pending"]) ? $groupedExpenseCounts["pending"] : 0 }}
                                         </h4>
-                                        <p>@lang('lang.pending') @lang('lang.review')</p>
+                                        <p>@lang('lang.pending_review')</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -100,7 +100,7 @@
                                         <h4 class="text-success">
                                             {{ isset($groupedExpenseCounts["pending_approve"]) ? $groupedExpenseCounts["pending_approve"] : 0 }}
                                         </h4>
-                                        <p>@lang('lang.pending') @lang('lang.approval')</p>
+                                        <p>@lang('lang.pending_approved')</p>
                                     </div>
                                 </div>
                             </div>

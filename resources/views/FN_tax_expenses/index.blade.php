@@ -39,8 +39,8 @@
                                         <th class="stuck-scroll-3">@lang('lang.status')</th>
                                         <th >@lang('lang.type')</th>
                                         <th>@lang('lang.type_of_expense')</th>
-                                        <th>@lang('lang.amount') @lang('lang.usd')</th>
-                                        <th>@lang('lang.amount') @lang('lang.kh')</th>
+                                        <th>@lang('lang.fn_amount_usd')</th>
+                                        <th>@lang('lang.fn_amount_khr')</th>
                                         <th>@lang('lang.type_of_payment')</th>
                                         <th>@lang('lang.reference')</th>
                                         <th>@lang('lang.description')</th>

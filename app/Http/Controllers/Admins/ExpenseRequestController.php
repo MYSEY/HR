@@ -84,7 +84,18 @@ class ExpenseRequestController extends Controller
      */
     public function create()
     {
-        $FnApproval = FnApproval::with(["location"])->get();
+        $FnApproval = FnApproval::with(["location"])
+        ->leftJoin('branchs', 'fn_approvals.location_id', '=', 'branchs.id')
+        ->select( 'fn_approvals.*', 'branchs.abbreviations')
+        ->when(Auth::user()->branch, function ($query, $branch) {
+            if($branch->abbreviations != 'HQ'){
+                $query->where("branchs.abbreviations", $branch->abbreviations);
+                $query->orWhere("branchs.abbreviations", "HQ");
+            }
+        })
+        ->get();
+
+
         $locations = Branchs::get();
         $taxWHT = FnTaxRate::where('tax_type', 1)->get();
         $taxeFBT = FnTaxRate::where('tax_type', 2)->get();
@@ -128,7 +139,16 @@ class ExpenseRequestController extends Controller
 
     public function createTax()
     {
-        $FnApproval = FnApproval::with(["location"])->get();
+        $FnApproval = FnApproval::with(["location"])
+        ->leftJoin('branchs', 'fn_approvals.location_id', '=', 'branchs.id')
+        ->select( 'fn_approvals.*', 'branchs.abbreviations')
+        ->when(Auth::user()->branch, function ($query, $branch) {
+            if($branch->abbreviations != 'HQ'){
+                $query->where("branchs.abbreviations", $branch->abbreviations);
+                $query->orWhere("branchs.abbreviations", "HQ");
+            }
+        })
+        ->get();
         $FnPaymentTerms = FnPaymentTerm::get();
         $locations = Branchs::get();
         $department = Department::get();
@@ -598,7 +618,16 @@ class ExpenseRequestController extends Controller
      */
     public function edit(Request $request)
     {
-        $FnApproval = FnApproval::with(["location"])->get();
+        $FnApproval = FnApproval::with(["location"])
+        ->leftJoin('branchs', 'fn_approvals.location_id', '=', 'branchs.id')
+        ->select( 'fn_approvals.*', 'branchs.abbreviations')
+        ->when(Auth::user()->branch, function ($query, $branch) {
+            if($branch->abbreviations != 'HQ'){
+                $query->where("branchs.abbreviations", $branch->abbreviations);
+                $query->orWhere("branchs.abbreviations", "HQ");
+            }
+        })
+        ->get();
         $locations = Branchs::get();
         $taxWHT = FnTaxRate::where('tax_type', 1)->get();
         $taxeFBT = FnTaxRate::where('tax_type', 2)->get();
@@ -649,7 +678,16 @@ class ExpenseRequestController extends Controller
     }
     public function editTax(Request $request)
     {
-        $FnApproval = FnApproval::with(["location"])->get();
+        $FnApproval = FnApproval::with(["location"])
+        ->leftJoin('branchs', 'fn_approvals.location_id', '=', 'branchs.id')
+        ->select( 'fn_approvals.*', 'branchs.abbreviations')
+        ->when(Auth::user()->branch, function ($query, $branch) {
+            if($branch->abbreviations != 'HQ'){
+                $query->where("branchs.abbreviations", $branch->abbreviations);
+                $query->orWhere("branchs.abbreviations", "HQ");
+            }
+        })
+        ->get();
         $locations = Branchs::get();
         $department = Department::get();
         $FnPaymentTerms = FnPaymentTerm::get();
