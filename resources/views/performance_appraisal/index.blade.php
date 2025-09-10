@@ -10,6 +10,13 @@
                         <li class="breadcrumb-item active">@lang('lang.performance_appraisal')</li>
                     </ul>
                 </div>
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
+                    <div class="col-auto float-end ms-auto">
+                        @if (permissionAccess("m4-s2","is_import")->value == "1")
+                            <a href="#" class="btn add-btn" data-toggle="modal" id="importKPI"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
         {!! Toastr::message() !!}
@@ -120,12 +127,18 @@
         </div>
     </div>
 @endsection
+@include('performance_appraisal.import')
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 @section('script')
     <script>
         var number_employee = null;
         $(function(){
+            $("#importKPI").on("click", function() {
+                $(".thanLess").hide();
+                $("#thanLess").text("");
+                $('#importLeaves').modal('show');
+            });
             // Reload only (DON'T destroy/reinit)
             $('.btn-search').on('click', function() {
                 number_employee = $('#employee_id').val();
@@ -304,11 +317,14 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="{{url('performance')}}/${row.id}">
-                                            <i class="fa fa-regular fa-eye"></i> Preview
+                                        <a class="dropdown-item" href="{{url('performance-appraisal-preview')}}/${row.id}">
+                                            <i class="fa fa-regular fa-eye"></i> Preview KPI
                                         </a>
                                         <a class="dropdown-item" href="{{url('performance-appraisal')}}/${row.id}">
-                                            <i class="fa fa-regular fa-eye"></i> Progress KPI
+                                            <i class="fa fa-regular fa-eye"></i> Update Progress
+                                        </a>
+                                        <a class="dropdown-item" href="{{url('performance/appraisal/export')}}/${row.id}">
+                                            <i class="fa fa-regular fa-eye"></i> Export
                                         </a>
                                     </div>
                                 </div>

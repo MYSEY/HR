@@ -40,6 +40,11 @@ class Performance extends Model
         'updated_by',
     ];
 
+    public function users()
+    {
+        return $this->belongsTo(User::class ,'employee_id');
+    }
+
     public function titles()
     {
         return $this->hasMany(Title::class, 'performance_id');

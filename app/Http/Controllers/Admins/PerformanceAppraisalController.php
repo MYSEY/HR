@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Models\User;
 use App\Models\Branchs;
 use App\Models\Department;
 use App\Exports\ExportKpis;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class PerformanceAppraisalController extends Controller
 {
@@ -208,6 +210,25 @@ class PerformanceAppraisalController extends Controller
         )->where('performances.id',$id)->first();
         return view('performance_appraisal.progress',compact('data'));
     }
+    public function performanceAppraisalPreview($id)
+    {
+        $data = Performance::with(['titles.purposes.performanceDetail'])
+        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->select(
+            'performances.*',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'departments.name_english as dep_name',
+            'positions.name_english as positions_name',
+            'branchs.branch_name_en',
+            'branchs.branch_name_kh',
+        )->where('performances.id',$id)->first();
+        return view('performance_appraisal.preview',compact('data'));
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -302,5 +323,45 @@ class PerformanceAppraisalController extends Controller
 
     public function performanceAppraisalExport($id){
         return Excel::download(new ExportKpis($id), 'kpis.xlsx');
+    }
+
+    public function performanceAppraisalImport(Request $request){
+        $file = $request->file;
+        $filesize = $file->getSize(); // ✅ use getSize()
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        $dataKPI =  $spreadsheet->getSheetByName('kpi')->toArray();
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $i = 0;
+            $dataArray = [];
+            $dataUserLeaveArray = [];
+            foreach ($dataKPI as $item) {
+                $i++;
+                if ($i != 1) {
+                    $employee = User::where("number_employee", $item[0])->first();
+                    if ($employee) {
+                        $updated = PerformanceDetail::where('performance_id', $item[2])
+                            ->where('title_id', $item[3])
+                            ->where('purpose_id', $item[4])
+                            ->where('key_kpi', $item[5]) // extra condition
+                            ->update([
+                                'progress' => !empty($item[9]) ? $item[9] : null,
+                            ]);
+
+                        if (!$updated) {
+                            $dataArray[] = ["Row $i: No detail found for KPI {$item[5]}"];
+                        }
+                    } else {
+                        $dataUserLeaveArray[] = [$item[0]]; // employee not found
+                    }
+                }
+            }
+            if($dataArray){
+                return response()->json(['error'=>$dataArray]);
+            }
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }
