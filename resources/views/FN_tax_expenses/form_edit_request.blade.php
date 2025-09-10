@@ -103,7 +103,7 @@
                         <form>
                             <input type="text" hidden id="fn_id" value="{{$data->id}}">
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">សូមគោរពជូន <span class="text-danger">*</span></label>
+                                <label class="col-sm-2 col-form-label">@lang('lang.submit_to') <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                     <div class="form-group hr-form-group-select2">
                                         <select class="form-control requered fn_require hr-select2-option" id="fn_approve" name="fn_approve" required>
@@ -117,7 +117,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">កម្មវត្ថុ៖ <span class="text-danger">*</span></label>
+                                <label class="col-sm-2 col-form-label">@lang('lang.object') <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
                                         <textarea type="text" rows="3" class="form-control fn_require" name="fn_subject" id="fn_subject" required>{{ trim($data->subject ?? '') }}</textarea>
@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">យោង៖ <span class="text-danger">*</span></label>
+                                <label class="col-sm-2 col-form-label">@lang('lang.reference') <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                     <div class="form-group input-group" id="view-Irregular_reference">
                                         {{-- Hidden input to keep the reference value --}}
@@ -133,7 +133,7 @@
                                         {{-- Button to trigger file selection --}}
                                         <button class="btn btn-outline-secondary" type="button"
                                                 onclick="document.getElementById('IrregularFile').click();">
-                                            Choose New File
+                                            @lang('lang.choose_new_file')
                                         </button>
                                         {{-- Show the file name (from DB or newly selected) --}}
                                         <input type="text" id="IrregularFileName" class="form-control form-control-lg"
@@ -144,10 +144,10 @@
                                         {{-- Review existing file --}}
                                         @if ($viewFile)
                                             <button class="btn btn-sm btn-outline-secondary" type="button">
-                                                <a href="{{ url('uploads/FnRegularExspenses/' . $viewFile) }}" target="_blank" style="text-decoration: none; color: inherit;">Review File</a>
+                                                <a href="{{ url('uploads/FnRegularExspenses/' . $viewFile) }}" target="_blank" style="text-decoration: none; color: inherit;">@lang('lang.review_file')</a>
                                             </button>
                                         @endif
-                                        <button class="btn btn-outline-danger btn-clear-file" type="button"> Clear </button>
+                                        <button class="btn btn-outline-danger btn-clear-file" type="button"> @lang('lang.clear') </button>
                                     </div>
                                 </div>
                             </div>
@@ -161,68 +161,62 @@
                             </div>
                             <fieldset class="row">
                                 @if (Auth::user()->branch->abbreviations == "HQ")
-                                    <legend class="col-form-label col-sm-2 pt-0">Add departments <span class="text-danger">*</span></legend>
+                                    <legend class="col-form-label col-sm-2 pt-0">@lang('lang.add_departments') <span class="text-danger">*</span></legend>
                                     <div class="col-sm-10">
-                                        {{-- @dd($data->locationDetails) --}}
                                         <div class="form-group hr-form-group-select2">
                                             <select class="form-control required hr-select2-option" id="addLocations" name="location_id" required>
-                                                <option value="" disabled selected> Please select location </option>
-                                                
+                                                <option value="" disabled selected> @lang('lang.please_select_department') </option>
                                                 @foreach ($data->locationDetails as $dt)
                                                     @foreach ($locations as $lt)
-                                                        <option value="{{$lt->id}}" @if ($dt->location_id == $lt->id) selected @endif data-leocatiotype="branch" data-name="{{$lt->branch_name_en}}">{{$lt->branch_name_en}}</option>
+                                                        <option value="{{$lt->id}}" @if ($dt->location_id == $lt->id) selected @endif data-leocatiotype="branch" data-name="{{Helper::getLang() == 'en' ? $lt->branch_name_en : $lt->branch_name_kh}}">{{Helper::getLang() == 'en' ? $lt->branch_name_en : $lt->branch_name_kh}}</option>
                                                     @endforeach
                                                     @foreach ($department as $dp)
-                                                        <option value="{{$dp->id}}" @if ($dt->department_id == $dp->id) selected @endif data-leocatiotype="department" data-name="{{$dp->name_english}}">{{$dp->name_english}}</option>
+                                                        <option value="{{$dp->id}}" @if ($dt->department_id == $dp->id) selected @endif data-leocatiotype="department" data-name="{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                                     @endforeach
                                                 @endforeach
-                                                
-
                                             </select>
                                             <div class="table-responsive my-1" id="view-tbl_location">
                                                 <table class="table table-striped custom-table mb-0 tbl-locations">
                                                     <tbody>
                                                         @foreach ($data->locationDetails as $item)
-                                                            {{-- @foreach ($data->departments as $item) --}}
-                                                                @php
-                                                                    $name_ = "";
-                                                                    $lt_id = "";
-                                                                    $locationtype = "";
-                                                                    if ($item->location) {
-                                                                        $name_ = $item->location->branch_name_en;
-                                                                        $lt_id = $item->location->id;
-                                                                        $locationtype = "branch";
-                                                                    }else{
-                                                                        $name_ = $item->department->name_english;
-                                                                        $lt_id = $item->department->id;
-                                                                        $locationtype = "department";
-                                                                    }
-                                                                @endphp
-                                                                <tr class="odd">
-                                                                    <td class="align-middle">
-                                                                        <div class="input-group d-flex justify-content-center">
-                                                                            <input type="text" disabled class="form-control" data-locationtype="{{$locationtype}}" data-id="{{$lt_id}}" value="{{$name_}}">
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="align-middle">
-                                                                        <div class="input-group d-flex justify-content-center">
-                                                                            <span class="input-group-text">$</span>
-                                                                            <input type="text" class="form-control khmer-toEnglish-number-only" placeholder="0.00" value="{{$item->amount_usd}}">
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="align-middle">
-                                                                        <div class="input-group d-flex justify-content-center">
-                                                                            <span class="input-group-text" style="font-size: 20px">៛</span>
-                                                                            <input type="text" placeholder="0" class="form-control khmer-toEnglish-number-only" value="{{$item->amount_riel}}">
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-center align-middle">
-                                                                        <a class="btn btn-danger delete" href="#" data-id="{{$lt_id}}">
-                                                                            <i class="fa fa-trash-o"></i>
-                                                                        </a>
-                                                                    </td>
-                                                                </tr>
-                                                            {{-- @endforeach --}}
+                                                            @php
+                                                                $name_ = "";
+                                                                $lt_id = "";
+                                                                $locationtype = "";
+                                                                if ($item->location) {
+                                                                    $name_ = Helper::getLang() == 'en' ? $item->location->branch_name_en : $item->location->branch_name_kh;
+                                                                    $lt_id = $item->location->id;
+                                                                    $locationtype = "branch";
+                                                                }else{
+                                                                    $name_ = Helper::getLang() == 'en' ? $item->department->name_english : $item->department->name_khmer;
+                                                                    $lt_id = $item->department->id;
+                                                                    $locationtype = "department";
+                                                                }
+                                                            @endphp
+                                                            <tr class="odd">
+                                                                <td class="align-middle">
+                                                                    <div class="input-group d-flex justify-content-center">
+                                                                        <input type="text" disabled class="form-control" data-locationtype="{{$locationtype}}" data-id="{{$lt_id}}" value="{{$name_}}">
+                                                                    </div>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <div class="input-group d-flex justify-content-center">
+                                                                        <span class="input-group-text">$</span>
+                                                                        <input type="text" class="form-control khmer-toEnglish-number-only" placeholder="0.00" value="{{$item->amount_usd}}">
+                                                                    </div>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <div class="input-group d-flex justify-content-center">
+                                                                        <span class="input-group-text" style="font-size: 20px">៛</span>
+                                                                        <input type="text" placeholder="0" class="form-control khmer-toEnglish-number-only" value="{{$item->amount_riel}}">
+                                                                    </div>
+                                                                </td>
+                                                                <td class="text-center align-middle">
+                                                                    <a class="btn btn-danger delete" href="#" data-id="{{$lt_id}}">
+                                                                        <i class="fa fa-trash-o"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
                                                         @endforeach
                                                     </tbody>
                                                 </table>
@@ -232,10 +226,10 @@
                                 @endif
                             </fieldset>
 
-                            <label class="">ចំណាយរួមមាន៖</label>
+                            <label class="">@lang('lang.including_expense')</label>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">១. ថ្លៃទំនិញឬសម្ភារ</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.goods_or_materials')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -255,7 +249,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">២. ថ្លៃពលកម្ម/ជួល/សេវា/ផ្សេងៗ</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.labor_fee/services/sthers')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -275,7 +269,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៣. ចំណាយប្រកាសពន្ធ</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.tax_declaration_expenses')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -297,7 +291,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៤. សរុបចំណាយ (១+២+៣)</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.total_expense(១+២+៣)')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -315,29 +309,9 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="row">
-                                <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៥. អាករជំនួស (VAT Reverse Charge) ១០%</label>
-                                <div class="col-sm-3">
-                                    <div style="margin-bottom: 0.4rem;">
-                                        <div class="input-group">
-                                            <span class="input-group-text">$</span>
-                                            <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid" value="{{$data->ge_vat_reverse_charge_usd}}" placeholder="0.00" id="exp_reverse_charge_usd">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div style="margin-bottom: 0.4rem;">
-                                        <div class="input-group">
-                                            <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="text" value="{{$data->vat_reverse_charge_riel}}" placeholder="0.00" class="form-control khmer-toEnglish-number-only exp_total_paid_rial" id="exp_reverse_charge_rial">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៥. បើកជូនអ្នកផ្គត់ផ្គង់ (៤)</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.paid_to_supplier(4)')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -357,17 +331,17 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5"> <span class="m-3">- បើកជូនអ្នកផ្គត់ផ្គង់ជាអក្សរ (ដុល្លារអាមេរិក)</span> <span style="float: right">:</span></label>
+                                <label class="col-form-label col-sm-5"> <span class="m-3">- @lang('lang.paid_to_supplier(USD)')</span> <span style="float: right">:</span></label>
                                 <label class="col-form-label col-sm-6" id="convert_money_dollar"> </label>
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5"> <span class="m-3">- បើកជូនអ្នកផ្គត់ផ្គង់ជាអក្សរ (រៀល)</span> <span style="float: right">:</span></label>
+                                <label class="col-form-label col-sm-5"> <span class="m-3">- @lang('lang.paid_to_supplier(KHR)')</span> <span style="float: right">:</span></label>
                                 <label class="col-form-label col-sm-6" id="convert_money_rial"> </label>
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-4">លក្ខខណ្ឌទូទាត់</label>
+                                <label class="col-form-label col-sm-4">@lang('lang.payment_term')</label>
                                 <div class="col-sm-3">
                                     <div class="form-group hr-form-group-select2">
                                         <label>@lang('lang.payment_by')</label>
@@ -384,7 +358,7 @@
                                 
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label>Other</label>
+                                        <label>@lang('lang.other')</label>
                                         <textarea rows="2"
                                                   class="form-control"
                                                   name="paymentterm_remark"
@@ -392,7 +366,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-5"></div>
-                                <div class="col-sm-7"><span class="text-danger" id="paymentterm_required" style="display: none">Please select payment by or Other</span></div>
+                                <div class="col-sm-7"><span class="text-danger" id="paymentterm_required" style="display: none">@lang('lang.please_select_payment_by_or_Other')</span></div>
                             </div>
                             <div class="row">
                                 <label class="col-sm-2 col-form-label"></label>

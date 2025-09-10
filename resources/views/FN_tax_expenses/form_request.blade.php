@@ -91,11 +91,11 @@
                     <div class="card-body">
                         <form>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">សូមគោរពជូន <span class="text-danger">*</span></label>
+                                <label class="col-sm-2 col-form-label">@lang('lang.submit_to') <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                     <div class="form-group hr-form-group-select2">
                                         <select class="form-control requered fn_require hr-select2-option" id="fn_approve" name="fn_approve" required>
-                                            <option selected disabled value=""> Please select </option>
+                                            <option selected disabled value=""> @lang('lang.please_select') </option>
                                             @foreach ($FnApproval as $item)
                                                 <option value="{{$item->title}}" data-description="{{$item->description}}" data-approved="{{json_encode($item->employee_id)}}">{{$item->title}}</option>
                                             @endforeach
@@ -104,7 +104,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">កម្មវត្ថុ៖ <span class="text-danger">*</span></label>
+                                <label class="col-sm-2 col-form-label">@lang('lang.object') <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
                                         <textarea type="text" rows="3" class="form-control fn_require" name="fn_subject" id="fn_subject" required></textarea>
@@ -112,18 +112,18 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">យោង៖ <span class="text-danger">*</span></label>
+                                <label class="col-sm-2 col-form-label">@lang('lang.reference') <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                     <div class="form-group input-group" id="view-Irregular_reference">
                                         <button class="btn btn-outline-secondary" type="button"
                                                 onclick="document.getElementById('IrregularFile').click();">
-                                            Choose New File
+                                            @lang('lang.choose_new_file')
                                         </button>
                                         {{-- Show the file name (from DB or newly selected) --}}
                                         <input type="text" id="IrregularFileName" class="form-control form-control-lg" placeholder="No file selected" readonly>
                                         <input type="file" name="IrregularFile" class="d-none" id="IrregularFile" onchange="updateFileName(this)">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="openFileInNewTab()">Review File</button>
-                                        <button class="btn btn-outline-danger btn-clear-file" type="button"> Clear </button>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="openFileInNewTab()">@lang('lang.review_file')</button>
+                                        <button class="btn btn-outline-danger btn-clear-file" type="button"> @lang('lang.clear') </button>
                                     </div>
                                 </div>
                             </div>
@@ -138,18 +138,18 @@
 
                             <fieldset class="row">
                                 @if (Auth::user()->branch->abbreviations == "HQ")
-                                    <legend class="col-form-label col-sm-2 pt-0">Add departments <span class="text-danger">*</span></legend>
+                                    <legend class="col-form-label col-sm-2 pt-0">@lang('lang.add_departments') <span class="text-danger">*</span></legend>
                                     <div class="col-sm-10">
                                         <div class="form-group hr-form-group-select2">
                                             <select class="form-control required hr-select2-option" id="addLocations" name="location_id" required>
-                                                <option value="" disabled selected> Please select department </option>
+                                                <option value="" disabled selected> @lang('lang.please_select_department') </option>
                                                 @foreach ($locations as $lt)
                                                     {{-- @if ($lt->abbreviations !="HQ") --}}
-                                                        <option value="{{$lt->id}}" data-leocatiotype="branch" data-name="{{$lt->branch_name_en}}">{{$lt->branch_name_en}}</option>
+                                                        <option value="{{$lt->id}}" data-leocatiotype="branch" data-name="{{Helper::getLang() == 'en' ? $lt->branch_name_en : $lt->branch_name_kh}}">{{Helper::getLang() == 'en' ? $lt->branch_name_en : $lt->branch_name_kh}}</option>
                                                     {{-- @endif --}}
                                                 @endforeach
                                                 @foreach ($department as $item)
-                                                    <option value="{{$item->id}}" data-leocatiotype="department" data-name="{{$item->name_english}}">{{$item->name_english}}</option>
+                                                    <option value="{{$item->id}}" data-leocatiotype="department" data-name="{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                                 @endforeach
                                             </select>
                                             <div class="table-responsive my-1" style="display: none" id="view-tbl_location">
@@ -163,10 +163,10 @@
                                 @endif
                             </fieldset>
 
-                            <label class="">ចំណាយរួមមាន៖</label>
+                            <label class="">@lang('lang.including_expense')</label>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">១. ថ្លៃទំនិញឬសម្ភារ</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.goods_or_materials')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -186,7 +186,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">២. ថ្លៃពលកម្ម/ជួល/សេវា/ផ្សេងៗ</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.labor_fee/services/sthers')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -206,7 +206,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៣. ចំណាយប្រកាសពន្ធ</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.tax_declaration_expenses')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -228,7 +228,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៤. សរុបចំណាយ (១+២+៣)</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.total_expense(១+២+៣)')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -246,29 +246,9 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="row">
-                                <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៥. អាករជំនួស (VAT Reverse Charge) ១០%</label>
-                                <div class="col-sm-3">
-                                    <div style="margin-bottom: 0.4rem;">
-                                        <div class="input-group">
-                                            <span class="input-group-text">$</span>
-                                            <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid" placeholder="0.00" id="exp_reverse_charge_usd">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div style="margin-bottom: 0.4rem;">
-                                        <div class="input-group">
-                                            <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="text" placeholder="0.00" class="form-control khmer-toEnglish-number-only exp_total_paid_rial" id="exp_reverse_charge_rial">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៥. បើកជូនអ្នកផ្គត់ផ្គង់ (៤)</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.paid_to_supplier(4)')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -288,17 +268,17 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5"> <span class="m-3">- បើកជូនអ្នកផ្គត់ផ្គង់ជាអក្សរ (ដុល្លារអាមេរិក)</span> <span style="float: right">:</span></label>
+                                <label class="col-form-label col-sm-5"> <span class="m-3">- @lang('lang.paid_to_supplier(USD)')</span> <span style="float: right">:</span></label>
                                 <label class="col-form-label col-sm-6" id="convert_money_dollar"> </label>
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5"> <span class="m-3">- បើកជូនអ្នកផ្គត់ផ្គង់ជាអក្សរ (រៀល)</span> <span style="float: right">:</span></label>
+                                <label class="col-form-label col-sm-5"> <span class="m-3">- @lang('lang.paid_to_supplier(KHR)')</span> <span style="float: right">:</span></label>
                                 <label class="col-form-label col-sm-6" id="convert_money_rial"> </label>
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-4">លក្ខខណ្ឌទូទាត់</label>
+                                <label class="col-form-label col-sm-4">@lang('lang.payment_term')</label>
                                 <div class="col-sm-3">
                                     <div class="form-group hr-form-group-select2">
                                         <label>@lang('lang.payment_by')</label>
@@ -314,12 +294,12 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label>Other</label>
+                                        <label>@lang('lang.other')</label>
                                         <textarea type="text" style="height: 45px;" class="form-control" name="paymentterm_remark" id="paymentterm_remark"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-sm-5"></div>
-                                <div class="col-sm-7"><span class="text-danger" id="paymentterm_required" style="display: none">Please select payment by or Other</span></div>
+                                <div class="col-sm-7"><span class="text-danger" id="paymentterm_required" style="display: none">@lang('lang.please_select_payment_by_or_Other')</span></div>
                             </div>
                             <div class="row">
                                 <label class="col-sm-2 col-form-label"></label>

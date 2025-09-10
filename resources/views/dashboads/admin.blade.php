@@ -365,13 +365,13 @@
                                     <div class="col-md-6">
                                         <div class="attendance-details">
                                             <h4 class="text-info expensePending"></h4>
-                                            <p>@lang('lang.pending') @lang('lang.review')</p>
+                                            <p>@lang('lang.pending_review')</p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="attendance-details">
                                             <h4 class="text-success expenseApproval"></h4>
-                                            <p>@lang('lang.pending') @lang('lang.approval')</p>
+                                            <p>@lang('lang.pending_approved')</p>
                                         </div>
                                     </div>
                                 </div>

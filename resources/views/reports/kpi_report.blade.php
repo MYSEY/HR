@@ -80,10 +80,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.kpi_process')</h3>
+                    <h3 class="page-title">@lang('lang.kpi_report')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.kpi_process')</li>
+                        <li class="breadcrumb-item active">@lang('lang.kpi_report')</li>
                     </ul>
                 </div>
             </div>
@@ -132,6 +132,12 @@
                         <span class="btn-txt"><i class="fa fa-search"></i></span>
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
+                    {{-- @if ($permission->is_export == "1") --}}
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                            <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
+                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                    {{-- @endif --}}
                     <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                         <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -168,7 +174,8 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.to_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.kip')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.total_weight')</th>
-                                            <th>@lang('lang.review_by')</th>
+                                            <th>@lang('lang.approve_by')</th>
+                                            <th>@lang('lang.approve') @lang('lang.date')</th>
                                             <th>@lang('lang.asign_to')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
                                         </tr>
@@ -182,33 +189,6 @@
                 </div>
             </div>
         </div>
-        <!-- Delete Performane Modal -->
-        <div class="modal custom-modal fade" id="delete_performance" role="dialog">
-            <div class="modal-dialog modal-sm modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="form-header">
-                            <h3>@lang('lang.deleted')!</h3>
-                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
-                        </div>
-                        <div class="modal-btn delete-action">
-                            <form action="{{url('performance/delete')}}" method="POST">
-                                @csrf
-                                <input type="hidden" name="id" class="e_id" value="">
-
-                                <div class="row">
-                                    <div class="submit-section" style="text-align: center">
-                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /Delete Performane Modal -->
     </div>
     <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
@@ -223,10 +203,6 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 @section('script')
     <script>
-        var number_employee = null;
-        var employee_name = null;
-        var branch_id = null;
-        var department_id = null;
         $(function(){
             $('.btn-search').on('click', function() {
                 number_employee = $('#employee_id').val();
@@ -242,7 +218,9 @@
                     $(".sub_chk:not(:disabled)").prop("checked", false);
                 }
             });
-
+            $(document).on('click','.checkbox-group', function(){
+                $(".checkbox-group").not(this).prop("checked", false);
+            });
             $('body').on('click','#btnApprovedAll',function(){
                 var userid = $(this).data("userid");
                 var allVals = [];
@@ -279,14 +257,13 @@
                         columnClassText = 'col-md-6'
                         formContent = ''+
                             '<form id="add-style" style="height: 25em;">'+
-                                // '<span class="text-danger">Old employee review: </span><span>'+employee_old+'</span><br>'+
                                 '<div class="mt-2">'+
                                     '<label class="container-checkbox">Review'+
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
                                     '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                     '<label class="container-checkbox">Accepted'+
-                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
-                                '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                                    // '<label class="container-checkbox">Accepted'+
+                                    //     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
+                                    // '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
                                     '<label class="container-checkbox">Verify'+
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
                                     '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
@@ -342,7 +319,7 @@
                                             type: "success",
                                             icon: true
                                         }).show();
-                                        window.location.replace("{{ URL('performance-admin') }}");
+                                        window.location.replace("{{ URL('performance-admin/kpi-report') }}");
                                     } else if(response.data.message == 'weight_must_be_exactly'){
                                         new Noty({
                                             title: "",
@@ -394,7 +371,7 @@
                                             type: "success",
                                             icon: true
                                         }).show();
-                                        window.location.replace("{{ URL('performance-admin') }}");
+                                        window.location.replace("{{ URL('performance-admin/kpi-report') }}");
                                     } else if(response.data.message == 'weight_must_be_exactly'){
                                         new Noty({
                                             title: "",
@@ -453,7 +430,7 @@
                                                 type: "success",
                                                 icon: true
                                             }).show();
-                                            window.location.replace("{{ URL('performance-admin') }}");
+                                            window.location.replace("{{ URL('performance-admin/kpi-report') }}");
                                         } else if(response.data.message == 'weight_must_be_exactly'){
                                             new Noty({
                                                 title: "",
@@ -520,20 +497,26 @@
                     });
                 }
             });
-            $(document).on('click','.checkbox-group', function(){
-                $(".checkbox-group").not(this).prop("checked", false);
-            });     
+            $(".btn_excel").on("click", function () {
+                let currentPage = $(".per_page").val();
+                let query = {
+                    "_token": "{{ csrf_token() }}",
+                    employee_id:        $("#employee_id").val(),
+                    employee_name:      $("#employee_name").val(),
+                    branch_id:          $("#branch_id").val(),
+                    department_id:      $("#department_id").val(),
+                    per_page: currentPage,
+                };
+                var url = "{{URL::to('performance-admin/kpi-export')}}?" + $.param(query)
+                window.location = url;
+            });
             // Initialize only once
             dataTables();
             $(".reset-btn").on("click", function() {
                 $(this).prop('disabled', true);
                 $(".btn-text-reset").hide();
                 $("#btn-text-loading").css('display', 'block');
-                window.location.replace("{{ URL('performance-admin') }}");
-            });
-            $('.performanceDelete').on('click',function(){
-                let id = $(this).data("id");
-                $('.e_id').val(id);
+                window.location.replace("{{ URL('performance-admin/kpi-report') }}");
             });
             $('body').on('click', '.btn-asign', function() {
                 var pa_id = $(this).data("id");
@@ -549,14 +532,13 @@
                     columnClassText = 'col-md-6'
                     formContent = ''+
                         '<form id="add-style" style="height: 25em;">'+
-                            // '<span class="text-danger">Old employee review: </span><span>'+employee_old+'</span><br>'+
                             '<div class="mt-2">'+
                                 '<label class="container-checkbox">Review'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                '<label class="container-checkbox">Accepted'+
-                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
-                                '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                                // '<label class="container-checkbox">Accepted'+
+                                //     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
+                                // '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
                                 '<label class="container-checkbox">Verify'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
@@ -612,7 +594,7 @@
                                         type: "success",
                                         icon: true
                                     }).show();
-                                    window.location.replace("{{ URL('performance-admin') }}");
+                                    window.location.replace("{{ URL('performance-admin/kpi-report') }}");
                                 } else if(response.data.message == 'weight_must_be_exactly'){
                                     new Noty({
                                         title: "",
@@ -664,7 +646,7 @@
                                         type: "success",
                                         icon: true
                                     }).show();
-                                    window.location.replace("{{ URL('performance-admin') }}");
+                                    window.location.replace("{{ URL('performance-admin/kpi-report') }}");
                                 } else if(response.data.message == 'weight_must_be_exactly'){
                                     new Noty({
                                         title: "",
@@ -723,7 +705,7 @@
                                             type: "success",
                                             icon: true
                                         }).show();
-                                        window.location.replace("{{ URL('performance-admin') }}");
+                                        window.location.replace("{{ URL('performance-admin/kpi-report') }}");
                                     } else if(response.data.message == 'weight_must_be_exactly'){
                                         new Noty({
                                             title: "",
@@ -808,7 +790,7 @@
                 order: [[0, 'desc']],
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
                 ajax: {
-                    url: '{{ URL("performance-admin") }}',
+                    url: '{{ URL("performance-admin/kpi-report") }}',
                     type: 'GET',
                     data: function (d) {
                         d.employee_id = $('input[name="employee_id"]').val();
@@ -819,7 +801,7 @@
                     dataSrc: function (json) {
                         userPermission = json.permission || {}; // 👈 Save permission
                         userIdLog = json.userIdLog;
-                        // console.log("Permission Data:", userPermission);
+                        // console.log("Permission Data:", json);
                         return json.data;
                     }
                 },
@@ -897,11 +879,15 @@
                         }
                     },
                     {
-                        data: 'review_employee_name_en',
-                        name: 'review_by',
+                        data: 'approve_employee_name_kh',
+                        name: 'approve_by',
                         render: function (data, type, row) {
-                            return row.review_employee_name_en;
+                            return row.approve_employee_name_kh;
                         }
+                    },
+                    {
+                        data: 'approved_date',
+                        name: 'approved_date',
                     },
                     {
                         data: null,

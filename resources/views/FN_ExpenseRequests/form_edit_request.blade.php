@@ -111,7 +111,7 @@
                                 <input type="checkbox" id="exp-type" name="type" {{ $data->type == 1 ? 'checked' : '' }}> <span class="checkmark"></span>
                             </label><br> --}}
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">សូមគោរពជូន <span class="text-danger">*</span></label>
+                                <label class="col-sm-2 col-form-label">@lang('lang.submit_to') <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                     <div class="form-group hr-form-group-select2">
                                         <select class="form-control requered fn_require hr-select2-option" id="fn_approve" name="fn_approve" required>
@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">កម្មវត្ថុ៖ <span class="text-danger">*</span></label>
+                                <label class="col-sm-2 col-form-label">@lang('lang.object') <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
                                         <textarea type="text" rows="3" class="form-control fn_require" name="fn_subject" id="fn_subject" required>{{ trim($data->subject ?? '') }}</textarea>
@@ -133,19 +133,18 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">យោង៖ <span class="text-danger">*</span></label>
+                                <label class="col-sm-2 col-form-label">@lang('lang.reference') <span class="text-danger">*</span></label>
                                 <div class="col-sm-10">
-                                    <span class="text-danger" id="RI_required" style="display: none">Please select any checkbox to request.</span>
-                                    <label class="container-checkbox">Special Expense
+                                    <span class="text-danger" id="RI_required" style="display: none">@lang('lang.please_select_any_checkbox_to_request')</span>
+                                    <label class="container-checkbox">@lang('lang.special_expense')
                                         <input type="checkbox" class="checkbox-group" id="exp-type" name="type" {{ $data->type == 1 ? 'checked' : '' }}> <span class="checkmark"></span>
                                     </label>
-                                    <label class="container-checkbox">Regular Expense
+                                    <label class="container-checkbox">@lang('lang.regular_expense')
                                         <input type="checkbox" class="checkbox-group" name="selected_item" value="1" {{ $data->expense_type == 1 ? 'checked' : '' }}> <span class="checkmark"></span>
                                     </label>
-                                    <label class="container-checkbox">Irregular Expense
+                                    <label class="container-checkbox">@lang('lang.irregular_expense')
                                         <input type="checkbox" class="checkbox-group" name="selected_item" value="2" {{ $data->expense_type == 2 ? 'checked' : '' }}> <span class="checkmark"></span>
                                     </label>
-                                    {{-- <span class="text-danger" id="RI_required" style="display: none">Please check Regular Expense on Irregular Expense</span> --}}
                                 </div>
                             </div>
                             
@@ -153,22 +152,19 @@
                                 <label class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-10">
                                     <div class="form-group hr-form-group-fn-select2" id="view-Regular_reference" style="display: {{$data->expense_type == 1 ? 'block' : 'none'}}">
-                                        {{-- <div class="input-group"> --}}
-                                            {{-- @dd($reference) --}}
-                                            <select class="form-control hr-select2-option fn_reference_require" id="fn_reference">
-                                                <option value="" >-- Select --</option>
-                                                @foreach ($FnRegularExspenses as $item)
-                                                    <option value="{{ $item->serialref }}"
-                                                        @if (in_array($item->serialref, $reference)) selected @endif
-                                                        data-file="{{ $item->file_upload ? url('uploads/FnRegularExspenses/' . $item->file_upload) : '' }}">
-                                                        {{ $item->serialref . " " . $item->description }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <button id="reviewBtn" style="display: none" class="btn btn-sm btn-outline-secondary" type="button">
-                                                <a id="reviewLink" href="{{ url('uploads/FnRegularExspenses/' . $viewFileRegular) }}" target="_blank" style="text-decoration: none; color: inherit;">Review file regular</a>
-                                            </button>
-                                        {{-- </div> --}}
+                                        <select class="form-control hr-select2-option fn_reference_require" id="fn_reference">
+                                            <option value="" >@lang('lang.select')</option>
+                                            @foreach ($FnRegularExspenses as $item)
+                                                <option value="{{ $item->serialref }}"
+                                                    @if (in_array($item->serialref, $reference)) selected @endif
+                                                    data-file="{{ $item->file_upload ? url('uploads/FnRegularExspenses/' . $item->file_upload) : '' }}">
+                                                    {{ $item->serialref . " " . $item->description }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <button id="reviewBtn" style="display: none" class="btn btn-sm btn-outline-secondary" type="button">
+                                            <a id="reviewLink" href="{{ url('uploads/FnRegularExspenses/' . $viewFileRegular) }}" target="_blank" style="text-decoration: none; color: inherit;">Review file regular</a>
+                                        </button>
                                     </div>
                                     <div class="form-group input-group" id="view-Irregular_reference">
                                         {{-- Hidden input to keep the reference value --}}
@@ -176,7 +172,7 @@
                                         {{-- Button to trigger file selection --}}
                                         <button class="btn btn-outline-secondary" type="button"
                                                 onclick="document.getElementById('IrregularFile').click();">
-                                            Choose New File
+                                            @lang('lang.choose_new_file')
                                         </button>
                                         {{-- Show the file name (from DB or newly selected) --}}
                                         <input type="text" id="IrregularFileName" class="form-control form-control-lg"
@@ -187,10 +183,10 @@
                                         {{-- Review existing file --}}
                                         @if ($viewFile)
                                             <button class="btn btn-sm btn-outline-secondary" type="button" id="reviewFileBtn">
-                                                <a href="{{ url('uploads/FnRegularExspenses/' . $viewFile) }}" target="_blank" style="text-decoration: none; color: inherit;">Review File</a>
+                                                <a href="{{ url('uploads/FnRegularExspenses/' . $viewFile) }}" target="_blank" style="text-decoration: none; color: inherit;">@lang('lang.review_file')</a>
                                             </button>
                                         @endif
-                                        <button class="btn btn-outline-danger btn-clear-file" type="button"> Clear </button>
+                                        <button class="btn btn-outline-danger btn-clear-file" type="button"> @lang('lang.clear') </button>
                                     </div>
                                 </div>
                             </div>
@@ -204,13 +200,13 @@
                             </div>
                             <fieldset class="row">
                                 @if (Auth::user()->branch->abbreviations == "HQ")
-                                    <legend class="col-form-label col-sm-2 pt-0">Add Locations <span class="text-danger">*</span></legend>
+                                    <legend class="col-form-label col-sm-2 pt-0">@lang('lang.add_locations') <span class="text-danger">*</span></legend>
                                     <div class="col-sm-10">
                                         <div class="form-group hr-form-group-select2">
                                             <select class="form-control required hr-select2-option" id="addLocations" name="location_id" required>
-                                                <option value="" disabled selected> Please select location </option>
+                                                <option value="" disabled selected> @lang('lang.please_select_location') </option>
                                                 @foreach ($locations as $item)
-                                                    <option value="{{$item->id}}" @if ($data->locationDetails[0]->location->id == $item->id) selected @endif data-name="{{$item->branch_name_en}}">{{$item->branch_name_en}}</option>
+                                                    <option value="{{$item->id}}" @if ($data->locationDetails[0]->location->id == $item->id) selected @endif data-name="{{$item->branch_name_en}}">{{Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
                                                 @endforeach
                                             </select>
                                             <div class="table-responsive my-1" id="view-tbl_location">
@@ -220,7 +216,7 @@
                                                             <tr class="odd">
                                                                 <td class="align-middle">
                                                                     <div class="input-group d-flex justify-content-center">
-                                                                        <input type="text" disabled class="form-control" data-id="{{$item->location->id}}" value="{{$item->location->branch_name_en}}">
+                                                                        <input type="text" disabled class="form-control" data-id="{{$item->location->id}}" value="{{Helper::getLang() == 'en' ? $item->location->branch_name_en : $item->location->branch_name_kh}}">
                                                                     </div>
                                                                 </td>
                                                                 <td class="align-middle">
@@ -249,23 +245,10 @@
                                     </div>
                                 @endif
                             </fieldset>
-                            {{-- <div class="row">
-                                <label class="col-sm-2 col-form-label">អ្នកទទួលការទូទាត់ចំណាយ</label>
-                                <div class="col-sm-10">
-                                    <div class="form-group hr-form-group-select2">
-                                        <select class="form-control hr-select2-option" id="fn_request_by" name="fn_request_by">
-                                            <option  value=""> </option>
-                                            @foreach ($employees as $user)
-                                                <option value="{{$user->id}}" @if ($data->request_by == $user->id) selected @endif>{{$user->employee_name_en}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div> --}}
-                            <label class="">ចំណាយរួមមាន៖</label>
+                            <label class="">@lang('lang.including_expense')</label>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">១. ថ្លៃទំនិញឬសម្ភារៈ</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.goods_or_materials')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -285,7 +268,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">២. ថ្លៃពលកម្ម/សេវា/ផ្សេងៗ</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.labor_fee/services/sthers')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -308,7 +291,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៣. សរុបចំណាយ (១+២)</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.total_expense')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -328,7 +311,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៤. ពន្ធកាត់ទុក</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.withholding_tax')</label>
                                 <div class="col-sm-3">
                                     <div class="input-group" style="margin-bottom: 0.4rem !important;">
                                         <span class="input-group-text">$</span>
@@ -362,7 +345,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5"><span class="m-3"> ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម</span></label>
+                                <label class="col-form-label col-sm-5"><span class="m-3"> @lang('lang.or_tax_on_fring_benefit')</span></label>
                                 <div class="col-sm-3">
                                     <div class="input-group" style="margin-bottom: 0.4rem !important;">
                                         <span class="input-group-text">$</span>
@@ -396,7 +379,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៥. អាករជំនួស (VAT Reverse Charge) ១០%</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.vat_reverse_charge_10')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -416,7 +399,7 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5">៦. បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឬ (៣-(៤+៥))</label>
+                                <label class="col-form-label col-sm-5">@lang('lang.paid_to_supplier(3)or(3-(4+5))')</label>
                                 <div class="col-sm-3">
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
@@ -436,17 +419,17 @@
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5"> <span class="m-3">- បើកជូនអ្នកផ្គត់ផ្គង់ជាអក្សរ (ដុល្លារអាមេរិក)</span> <span style="float: right">:</span></label>
+                                <label class="col-form-label col-sm-5"> <span class="m-3">- @lang('lang.paid_to_supplier(USD)')</span> <span style="float: right">:</span></label>
                                 <label class="col-form-label col-sm-6" id="convert_money_dollar"> </label>
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-5"> <span class="m-3">- បើកជូនអ្នកផ្គត់ផ្គង់ជាអក្សរ (រៀល)</span> <span style="float: right">:</span></label>
+                                <label class="col-form-label col-sm-5"> <span class="m-3">- @lang('lang.paid_to_supplier(KHR)')</span> <span style="float: right">:</span></label>
                                 <label class="col-form-label col-sm-6" id="convert_money_rial"> </label>
                             </div>
                             <div class="row">
                                 <label class="col-form-label col-sm-1"></label>
-                                <label class="col-form-label col-sm-4">លក្ខខណ្ឌទូទាត់</label>
+                                <label class="col-form-label col-sm-4">@lang('lang.payment_term')</label>
                                 <div class="col-sm-3">
                                     <div class="form-group hr-form-group-select2">
                                         <label>@lang('lang.payment_by')</label>
@@ -463,7 +446,7 @@
                                 
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label>Other</label>
+                                        <label>@lang('lang.other')</label>
                                         <textarea rows="2"
                                                   class="form-control"
                                                   name="paymentterm_remark"
@@ -471,7 +454,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-5"></div>
-                                <div class="col-sm-7"><span class="text-danger" id="paymentterm_required" style="display: none">Please select payment by or Other</span></div>
+                                <div class="col-sm-7"><span class="text-danger" id="paymentterm_required" style="display: none">@lang('lang.please_select_payment_by_or_Other')</span></div>
                             </div>
                             <div class="row">
                                 <label class="col-sm-2 col-form-label"></label>
