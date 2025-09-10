@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 
-class ExportKpis implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
+class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 
 {
     protected $export_datas;
@@ -20,7 +20,41 @@ class ExportKpis implements FromCollection, WithColumnWidths, WithHeadings, With
 
     public function __construct($id)
     {
-        $data = Performance::with(['users', 'performanceDetails'])->where('status', 'approved')->where('performances.id', $id)->get();
+        // $data = Performance::with('users')
+        //     // ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        //     ->leftJoin('performance_details', 'performances.id', '=', 'performance_details.performance_id')
+        //     ->select(
+        //         'performance_details.performance_id',
+        //         'performance_details.title_id',
+        //         'performance_details.purpose_id',
+        //         'performance_details.key_kpi',
+        //         'performance_details.action_plan',
+        //         'performance_details.goal',
+        //         'performance_details.goal_type',
+        //         'performance_details.progress',
+        //     )
+        // ->where('performances.status', 'approved')->get();
+        // dd($data);
+        // $i = 0;
+        // $dataPer = [];
+        // foreach ($data as $value) {
+        //     $i++;
+        //     $this->num = $i;
+        //     $dataPer[]=[
+        //         $value->users->number_employee,
+        //         $value->users->employee_name_kh,
+        //         $value->performance_id,
+        //         $value->title_id,
+        //         $value->purpose_id,
+        //         $value->key_kpi,
+        //         $value->action_plan,
+        //         $this->formatGoal($value->goal),
+        //         $value->goal_type,
+        //         $value->progress,
+        //     ];
+        // }
+
+        $data = Performance::with(['users', 'performanceDetails'])->where('status', 'approved')->get();
         $i = 0;
         $dataPer = [];
         foreach ($data as $performance) {

@@ -8,6 +8,7 @@ use App\Models\Department;
 use App\Exports\ExportKpis;
 use App\Models\Performance;
 use Illuminate\Http\Request;
+use App\Exports\DownloadKpis;
 use App\Models\PerformanceDetail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -15,6 +16,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Helper\Downloader;
 
 class PerformanceAppraisalController extends Controller
 {
@@ -54,6 +56,9 @@ class PerformanceAppraisalController extends Controller
             })
             ->when($request->branch_id, function ($query, $branch_id) {
                 return $query->where('users.branch_id', $branch_id);
+            })
+            ->when($request->department_id, function ($query, $department_id) {
+                return $query->where('users.department_id', $department_id);
             });
         
             // Search filter
@@ -363,5 +368,9 @@ class PerformanceAppraisalController extends Controller
         } else {
             return 0;
         }
+    }
+
+    public function performanceAppraisalDownload(Request $request){
+        return Excel::download(new DownloadKpis($request), 'kpis.xlsx');
     }
 }

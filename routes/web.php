@@ -315,6 +315,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('performance/appraisal/import', [PerformanceAppraisalController::class,'performanceAppraisalImport']);
     Route::get('performance-appraisal-preview/{id}', [PerformanceAppraisalController::class,'performanceAppraisalPreview']);
     Route::get('menual/score', [PerformanceAppraisalController::class,'menualScore']);
+    Route::get('performance/appraisal/download', [PerformanceAppraisalController::class,'performanceAppraisalDownload']);
+
 
     Route::resource('annual/salary/increasement', AnnualSalaryIncreasementController::class);
     Route::resource('generate/annual/salary/increasement', GenerateAnnualSalaryIncreasementController::class);

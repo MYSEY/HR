@@ -91,9 +91,9 @@
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
-                {{-- <a href="javascript:void(0);" class="btn btn-sm btn-secondary" id="btnApprovedAll">
+                <a href="javascript:void(0);" class="btn btn-sm btn-secondary mb-3" id="btnApprovedAll">
                     Approved
-                </a> --}}
+                </a>
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
