@@ -335,7 +335,9 @@ class PerformanceAppraisalController extends Controller
         $filesize = $file->getSize(); // ✅ use getSize()
         $extension = $request->file->extension();
         $spreadsheet = IOFactory::load($file);
-        $dataKPI =  $spreadsheet->getSheetByName('kpi')->toArray();
+        // $dataKPI =  $spreadsheet->getSheetByName('kpi')->toArray();
+        $allSheets = $spreadsheet->getAllSheets();
+        $dataKPI = $allSheets[0]->toArray(); // take first sheet
         if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
             $i = 0;
             $dataArray = [];

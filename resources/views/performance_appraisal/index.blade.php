@@ -187,6 +187,7 @@
                         d.employee_id = $('input[name="employee_id"]').val();
                         d.employee_name = $('input[name="employee_name"]').val();
                         d.branch_id = $('select[name="branch_id"]').val();
+                        d.department_id = $('select[name="department_id"]').val();
                     }
                 },
                 "order": [
