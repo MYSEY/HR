@@ -20,40 +20,6 @@ class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, Wi
 
     public function __construct($id)
     {
-        // $data = Performance::with('users')
-        //     // ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
-        //     ->leftJoin('performance_details', 'performances.id', '=', 'performance_details.performance_id')
-        //     ->select(
-        //         'performance_details.performance_id',
-        //         'performance_details.title_id',
-        //         'performance_details.purpose_id',
-        //         'performance_details.key_kpi',
-        //         'performance_details.action_plan',
-        //         'performance_details.goal',
-        //         'performance_details.goal_type',
-        //         'performance_details.progress',
-        //     )
-        // ->where('performances.status', 'approved')->get();
-        // dd($data);
-        // $i = 0;
-        // $dataPer = [];
-        // foreach ($data as $value) {
-        //     $i++;
-        //     $this->num = $i;
-        //     $dataPer[]=[
-        //         $value->users->number_employee,
-        //         $value->users->employee_name_kh,
-        //         $value->performance_id,
-        //         $value->title_id,
-        //         $value->purpose_id,
-        //         $value->key_kpi,
-        //         $value->action_plan,
-        //         $this->formatGoal($value->goal),
-        //         $value->goal_type,
-        //         $value->progress,
-        //     ];
-        // }
-
         $data = Performance::with(['users', 'performanceDetails'])->where('status', 'approved')->get();
         $i = 0;
         $dataPer = [];
@@ -72,6 +38,11 @@ class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, Wi
                     $detail->goal,
                     $detail->goal_type,
                     $detail->progress,
+                    $detail->weight,
+                    $detail->score_achieved,
+                    $detail->score,
+                    $detail->score_live_staff,
+                    $detail->score_direct_chairman,
                 ];
             }
         }
@@ -111,8 +82,13 @@ class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, Wi
             'F' => 20,
             'G' => 15,
             'H' => 20,
-            'I' => 20,
-            'J' => 18
+            'I' => 15,
+            'J' => 10,
+            'K' => 10,
+            'M' => 10,
+            'N' => 10,
+            'O' => 10,
+            'P' => 10,
         ];
     }
     public function headings(): array
@@ -128,6 +104,11 @@ class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, Wi
             "Goal",
             "Goal Type",
             "Progress",
+            "Weight",
+            "Score Achieved",
+            "Score",
+            "Score Live Staff",
+            "Score Direct Chairman",
         ];
     }
 }

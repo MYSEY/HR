@@ -126,8 +126,8 @@
             <p>Loading Data...</p>
         </div>
     </div>
+    @include('performance_appraisal.import')
 @endsection
-@include('performance_appraisal.import')
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 @section('script')

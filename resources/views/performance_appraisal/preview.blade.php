@@ -128,7 +128,7 @@
                 </div>
 
                 <div class="submit-section mb-2">
-                    <a href="{{ url('performance') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+                    <a href="{{ url('performance-appraisal') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
                 </div>
             </form>
         </div>
