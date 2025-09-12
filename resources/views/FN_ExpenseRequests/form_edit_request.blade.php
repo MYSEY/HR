@@ -139,6 +139,14 @@
                                     <label class="container-checkbox">@lang('lang.special_expense')
                                         <input type="checkbox" class="checkbox-group" id="exp-type" name="type" {{ $data->type == 1 ? 'checked' : '' }}> <span class="checkmark"></span>
                                     </label>
+                                    <div class="mx-4 my-3" id="special_fixed_asset" style="<?= ($data->type == 1) ? '' : 'display: none;' ?>">
+                                        <label class="container-checkbox">@lang('lang.non_fixed_asset')
+                                            <input type="checkbox" value="0" class="checkbox-group-fixed special_fixed_asset" name="special_fixed_asset" {{ $data->special_asset == 0 ? 'checked' : '' }}> <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container-checkbox">@lang('lang.fixed_asset')
+                                            <input type="checkbox" value="1" class="checkbox-group-fixed special_fixed_asset" name="special_fixed_asset" {{ $data->special_asset == 1 ? 'checked' : '' }}> <span class="checkmark"></span>
+                                        </label>
+                                    </div>
                                     <label class="container-checkbox">@lang('lang.regular_expense')
                                         <input type="checkbox" class="checkbox-group" name="selected_item" value="1" {{ $data->expense_type == 1 ? 'checked' : '' }}> <span class="checkmark"></span>
                                     </label>

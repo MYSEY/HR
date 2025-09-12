@@ -128,6 +128,16 @@
                                     </select>
                                 </div>
                             </div>
+                            <div id="special_fixed_asset" style="display: none>">
+                                <div class="form-group">
+                                    <label class="container-checkbox mt-4">@lang('lang.non_fixed_asset')
+                                        <input type="checkbox" value="0" class="checkbox-group special_fixed_asset" name="special_fixed_asset"> <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container-checkbox">@lang('lang.fixed_asset')
+                                        <input type="checkbox" value="1" class="checkbox-group special_fixed_asset" name="special_fixed_asset"> <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="focus-label">@lang('lang.from_amount')</label>
                                 <input type="text" value="" id="from_amount" name="from_amount" class="form-control floating">

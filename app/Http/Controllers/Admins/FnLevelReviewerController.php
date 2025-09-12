@@ -155,6 +155,7 @@ class FnLevelReviewerController extends Controller
                     $data['to_amount']          = $request->to_amount;
                     $data['request_type']       = $request->request_type;
                     $data['reference_type']     = $request->reference_type;
+                    $data['special_fixed_asset']= $request->special_fixed_asset;
                     $data['type']               = $value["type"];
                     $data['from_location']      = $request->from_location;
                     $data['model_review']       = $request->model_review;
@@ -194,7 +195,7 @@ class FnLevelReviewerController extends Controller
             FnLevelReviewer::where('group_id', $request->group_id)
                 ->whereNotIn('id', $levelIds)
                 ->delete();
-
+                
             foreach ($request->levels as $value) {
                 if (!empty($value['id'])) {
                     $data = FnLevelReviewer::find($value['id']);
@@ -204,6 +205,7 @@ class FnLevelReviewerController extends Controller
                         $data->to_amount          = $request->to_amount;
                         $data->request_type       = $request->request_type;
                         $data->reference_type     = $request->reference_type;
+                        $data->special_fixed_asset= $request->special_fixed_asset;
                         $data->type               = $value["type"];
                         $data->from_location      = $request->from_location;
                         $data->model_review       = $request->model_review;
@@ -224,6 +226,7 @@ class FnLevelReviewerController extends Controller
                     'to_amount'          => $request->to_amount,
                     'request_type'       => $request->request_type,
                     'reference_type'     => $request->reference_type,
+                    'special_fixed_asset'=> $request->special_fixed_asset,
                     'type'               => $value["type"],
                     'from_location'      => $request->from_location,
                     'model_review'       => $request->model_review,

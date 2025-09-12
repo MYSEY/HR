@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('from_amount')->default(0);
             $table->integer('to_amount')->default(0);
             $table->integer('request_type');
+            $table->integer('special_fixed_asset')->nullable();
             $table->integer('reference_type')->nullable();
             $table->integer('type');
             $table->integer('from_location');

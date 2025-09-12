@@ -24,12 +24,21 @@ $(function(){
     $("#request_type").on("change", function() {
         let value = $(this).find("option:selected").val();
         $("#reference_type").val("");
+        $(".checkbox-group").prop("checked", false);
+        $("#special_fixed_asset").css("display","none");
+        if (value == "1") {
+            $("#special_fixed_asset").css("display","block");
+        }
         if (value == "0") {
             $(".reference_type").css("display","block");
         } else {
             $(".reference_type").css("display","none");
         }
     });
+    $(".checkbox-group").on("click", function () {
+        $(".checkbox-group").not(this).prop("checked", false);
+    });
+
     $("#from_location").on("change", function() {
         let value = $(this).find("option:selected").val();
         $("#model_review").val("");
@@ -127,15 +136,16 @@ $(function(){
                 type: "POST",
                 url: submitUrl,
                 data: {
-                    "group_id":         group_id,
-                    "levels":           data_levels,
-                    "from_amount":      $("#from_amount").val(),
-                    "to_amount":        $("#to_amount").val(),
-                    "from_location":    $("#from_location").val(),
-                    "model_review":     $("#model_review").val(),
-                    "request_type":     $("#request_type").val(),
-                    "reference_type":   $("#reference_type").val(),
-                    "description":      $("#description").val(),
+                    "group_id":                 group_id,
+                    "levels":                   data_levels,
+                    "from_amount":              $("#from_amount").val(),
+                    "to_amount":                $("#to_amount").val(),
+                    "from_location":            $("#from_location").val(),
+                    "model_review":             $("#model_review").val(),
+                    "request_type":             $("#request_type").val(),
+                    "special_fixed_asset":      $(".special_fixed_asset:checked").val(),
+                    "reference_type":           $("#reference_type").val(),
+                    "description":              $("#description").val(),
                 },
                 dataType: "JSON",
                 success: function (response) {

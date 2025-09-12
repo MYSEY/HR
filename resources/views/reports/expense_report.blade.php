@@ -330,7 +330,7 @@
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
                 $(".p_date_approve").text(p_date_approve);
             }
-            $(".p_request_by").text(datas.expense_request.approve_by.employee_name_kh);
+            $(".p_request_by").text(datas.expense_request.request_by.employee_name_kh);
             let p_data_request = moment(datas.date_request).format('YYYY-MM-DD');
             $(".p_data_request").text(p_data_request);
             if(datas.reviewby_employee_name_kh){

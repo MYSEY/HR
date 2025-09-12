@@ -14,7 +14,6 @@ use App\Http\Controllers\Admins\FNTaxController;
 use App\Http\Controllers\Admins\TaxesController;
 use App\Http\Controllers\Admins\BackupController;
 use App\Http\Controllers\Admins\BranchController;
-use App\Http\Controllers\Admins\PAFlowController;
 use App\Http\Controllers\Admins\HolidayController;
 use App\Http\Controllers\Admins\ReportsController;
 use App\Http\Controllers\Admins\SettingController;
@@ -64,6 +63,7 @@ use App\Http\Controllers\Admins\AnnualSalaryIncreasementController;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
 use App\Http\Controllers\Admins\GenerateAnnualSalaryIncreasementController;
 use App\Http\Controllers\Admins\PerformanceAdminController;
+use App\Http\Controllers\Admins\SalaryRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -642,13 +642,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/fn/expense/search', [ExpenseReportController::class,'filter']);
     Route::get('/fn/expense/report/export', [ExpenseReportController::class,'reportExport']);
 
-    // Block PA flow review
-    Route::get('/pa/flow/list', [PAFlowController::class,'index']);
-    Route::get('/pa/flow/edit', [PAFlowController::class,'edit']);
-    Route::post('/pa/flow', [PAFlowController::class,'store']);
-    Route::post('/pa/flow/update', [PAFlowController::class,'update']);
-    Route::post('/pa/flow/delete', [PAFlowController::class,'destroy']);
-
     // Block PA level review
     Route::get('/pa/level/review', [PALevelReviewController::class,'index']);
     Route::post('/pa/level//search', [PALevelReviewController::class,'']);
@@ -667,5 +660,15 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/backup/full', [BackupController::class, 'fullBackup'])->name('backup.full');
     Route::post('/restore/database', [BackupController::class, 'restoreDatabase'])->name('restore.database');
     Route::post('/restore/files', [BackupController::class, 'restoreFiles'])->name('restore.files');
+
+    // Block Salary requests
+    Route::get('/salary-requests', [SalaryRequestController::class,'index']);
+    Route::get('/salary-requests/edit', [SalaryRequestController::class,'edit']);
+    Route::post('/salary-requests/store', [SalaryRequestController::class,'store']);
+    Route::post('/salary-requests/update', [SalaryRequestController::class,'update']);
+    Route::post('/salary-requests/delete', [SalaryRequestController::class,'destroy']);
+    
+
+    
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);
