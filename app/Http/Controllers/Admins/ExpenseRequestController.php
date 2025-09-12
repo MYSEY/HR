@@ -287,6 +287,9 @@ class ExpenseRequestController extends Controller
             ->when(isset($dataLevelView["request_type"]), function ($query) use ($dataLevelView) {
                 $request_type = $dataLevelView["request_type"];
                 $query->where('request_type', $request_type);
+                if($dataLevelView["reference_type"] == "on" || (string) $request_type === "1"){
+                    $query->where('special_fixed_asset', $dataLevelView["special_fixed_asset"]);
+                }
                 if ((string) $request_type === "0") {
                     $query->where('reference_type', $dataLevelView["reference_type"]);
                 }
@@ -323,33 +326,6 @@ class ExpenseRequestController extends Controller
                 ->first();
             return $positionReview;
         }
-
-        // $positionReview = FnLevelReviewer::with(["departmentView", "modelReview"])
-        //     ->when($dataLevelView["by_location"], function ($query, $by_location) use ($dataLevelView) {
-        //         $query->where('from_location', $by_location);
-        //         if ((string)$by_location === "2") {
-        //             $query->where('model_review', $dataLevelView["model_review"]);
-        //         } else {
-        //             $query->whereNull("model_review");
-        //         }
-        //     })
-        //     ->when($dataLevelView["type"], function ($query, $type) {
-        //         $query->where('type', $type);
-        //     })
-        //     ->when(isset($dataLevelView["request_type"]), function ($query) use ($dataLevelView) {
-        //         $request_type = $dataLevelView["request_type"];
-        //         $query->where('request_type', $request_type);
-        //         if ((string)$request_type == "0") {
-        //             $query->where('reference_type', $dataLevelView["reference_type"]);
-        //         }
-        //     })
-        //     ->when($dataLevelView["amount"], function ($query, $amount) {
-        //         $query->where("from_amount", "<", $amount)
-        //             ->where("to_amount", ">=", $amount);
-        //     })
-        //     ->orderBy("id", "DESC")
-        //     ->first();
-        
     }
 
     function sendEmail($dataSend, $emailUserRequest){
@@ -408,13 +384,13 @@ class ExpenseRequestController extends Controller
                 $ge_total_cost_riel = ( $request->ge_total_cost_riel / $exchange->amount_riel);
             }
             $amount = ($request->ge_total_cost_usd + $ge_total_cost_riel);
-
             $dataCheckLevelView = [
                 "by_location"=> 2,
                 "position_request"=> Auth::user()->position_id,
                 "model_review"=> null,
                 "request_type"=> $request->type,
                 "reference_type"=> $request->expense_type,
+                "special_fixed_asset"=> ($request->type != 2 ? $request->special_asset : null),
                 "type"=> 1,
                 "amount"=> $amount,
             ];
@@ -732,6 +708,7 @@ class ExpenseRequestController extends Controller
                 "position_request"=> Auth::user()->position_id,
                 "request_type"=> $request->type,
                 "reference_type"=> $request->expense_type,
+                "special_fixed_asset"=> ($request->type != 2 ? $request->special_asset : null),
                 "type"=> 1,
                 "amount"=> $amount,
             ];
@@ -1033,6 +1010,7 @@ class ExpenseRequestController extends Controller
                 "position_request"=> Auth::user()->position_id,
                 "request_type"=> "2",
                 "reference_type"=> "1",
+                "special_fixed_asset"=> null,
                 "type"=> 1,
                 "amount"=> $amount,
             ];
@@ -1385,7 +1363,7 @@ class ExpenseRequestController extends Controller
                 $exchange = FNExchangeRate::first();
                 $amount = 0;
                 $ge_total_cost_riel = 0;
-                if ($request->ge_total_cost_riel) {
+                if ($data->ge_total_cost_riel) {
                     $ge_total_cost_riel = ( $data->ge_total_cost_riel / $exchange->amount_riel);
                 }
                 $amount = ($data->ge_total_cost_usd + $ge_total_cost_riel);
@@ -1396,11 +1374,10 @@ class ExpenseRequestController extends Controller
                     "type"=> $type,
                     "request_type"=> $data->type,
                     "reference_type"=> $data->expense_type,
+                    "special_fixed_asset"=> ($data->type != 2 ? $data->special_asset : null),
                     "amount"=> $amount,
                 ];
-
-                $branch = Branchs::where("id", $data->requestBy->branch_id)->first();
-                
+                $branch = Branchs::where("id", $data->requestBy->branch_id)->first();   
                 if($branch->abbreviations == "HQ"){
                     $dataCheckLevelView["model_review"] = (int) $data->requestBy->department_id;
                     $lovelReview = self::lovelReview($dataCheckLevelView);
@@ -1527,6 +1504,7 @@ class ExpenseRequestController extends Controller
                 "position_request"=> $data->requestBy->position_id,
                 "request_type"=> $data->type,
                 "reference_type"=> $data->expense_type,
+                "special_fixed_asset"=> ($data->type != 2 ? $data->special_asset : null),
                 "type"=> 1,
                 "amount"=> $amount,
             ];
@@ -1552,7 +1530,6 @@ class ExpenseRequestController extends Controller
                     }
                 }
             }else{
-
                 $dataCheckLevelView["by_location"] = 1;
                 $lovelReview = self::lovelReview($dataCheckLevelView);
                 if($lovelReview){

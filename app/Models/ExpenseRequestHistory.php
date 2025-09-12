@@ -17,6 +17,7 @@ class ExpenseRequestHistory extends Model
         "tracking_id",
         "type",
         "expense_type",
+        "special_asset",
         "kind_regard",
         "te_through",
         "subject",

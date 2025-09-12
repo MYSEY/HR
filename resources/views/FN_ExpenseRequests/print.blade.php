@@ -159,7 +159,7 @@
             <div style="flex: 1;">
               <label class="label-subs" style="display: block; margin-bottom: 50px;"><strong>បានត្រួតពិនិត្យ</strong></label>
               <label class="label-sub_lll p_review_by"></label><br>
-              <label class="p_data_review"></label>
+              <label class="label-sub_lll p_data_review"></label>
             </div>
             <!-- Column 3 -->
             <div style="flex: 1;">

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('tracking_id')->unique();
             $table->integer('type');
             $table->integer('expense_type');
+            $table->integer('special_asset')->nullable();
             $table->string('kind_regard');
             $table->string('te_through')->nullable();
             $table->longText('subject');

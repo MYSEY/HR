@@ -21,6 +21,7 @@ class FnLevelReviewer extends Model
         'from_amount',
         'to_amount',
         'request_type',
+        'special_fixed_asset',
         'reference_type',
         'type',
         'from_location',

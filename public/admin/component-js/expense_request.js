@@ -30,6 +30,12 @@ $(document).ready(function() {
     $(".checkbox-group").on("click", function () {
         $("#RI_required").css("display", "none");
         $(".checkbox-group").not(this).prop("checked", false);
+        let special_asset = $(".checkbox-group:checked").val();
+        $("#special_fixed_asset").css("display", "none");
+        $(".checkbox-group-fixed").prop("checked", false);
+        if (special_asset =="on" ) {
+            $("#special_fixed_asset").css("display", "block");
+        }
         if ($(".checkbox-group:checked").length == 0) {
             $("#view-Regular_reference").css("display", "none");
         }else{
@@ -42,6 +48,9 @@ $(document).ready(function() {
                 $("#view-Regular_reference").css("display", "none");
             }
         }
+    });
+    $(".checkbox-group-fixed").on("click", function () {
+        $(".checkbox-group-fixed").not(this).prop("checked", false);
     });
     $("#fn_reference").on("change", function() {
         let fileUrl = $(this).find("option:selected").data("file");
@@ -366,11 +375,13 @@ $(document).ready(function() {
             return false;
         }else{
             // Function to get field values (fallback to 0)
+            let special_fixed_asset = $(".special_fixed_asset:checked").val();
             let getVal = (id) => $("#" + id).val() || 0;
             // Append other form fields
             form_data.append("type", type);
             form_data.append("approve_by", approved);
             form_data.append("expense_type", expense_type);
+            form_data.append("special_asset", special_fixed_asset);
             form_data.append("kind_regard", getVal("fn_approve"));
             form_data.append("subject", getVal("fn_subject"));
             form_data.append("reason_subject", getVal("fn_reason_subject"));
