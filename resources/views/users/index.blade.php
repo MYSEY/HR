@@ -725,8 +725,9 @@
                         },
                     }
                 }); 
-            }else if(status == 3){
+            }else if(status == 3 || status == 4 || status == 5 || status == 6 || status == 7 || status == 8 || status == 9){
                 var selectOption = '<select class="form-control select floating resign_reason" name="department_id"></select>';
+                let resign_date = $(this).attr('data-resign-date');
                 $.confirm({
                     title: '@lang("lang.employee_status")',
                     contentClass: 'text-center',
@@ -739,7 +740,7 @@
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
                                     '<label>@lang("lang.resign_date") <span class="text-danger">*</span></label>'+
-                                    '<input type="date" class="form-control resign_date" id="" name="" value="">'+
+                                    '<input type="date" class="form-control resign_date" id="" name="" value="'+resign_date+'">'+
                                     '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                                 '</div>'+

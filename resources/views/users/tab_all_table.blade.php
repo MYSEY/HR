@@ -703,7 +703,7 @@
                                                             
                                                         @endif
                                                     </td>
-                                                    <td>
+                                                    {{-- <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='3')
                                                                 <span style="font-size: 13px" class="badge bg-inverse-danger">Resignation</span>
@@ -723,6 +723,71 @@
                                                                 <span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>
                                                             @endif
                                                         </div>
+                                                    </td> --}}
+                                                    <td>
+                                                        <div class="dropdown action-label">
+                                                            @if ($item->emp_status=='3')
+                                                                @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                        <span>Resignation</span>
+                                                                    </a>
+                                                                @endif
+                                                            @elseif($item->emp_status=='4')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Termination</span>
+                                                                </a>
+                                                            @elseif($item->emp_status=='5')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Death</span>
+                                                                </a>
+                                                            @elseif($item->emp_status=='6')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Retired</span>
+                                                                </a>
+                                                            @elseif($item->emp_status=='7')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Lay Off</span>
+                                                                </a>
+                                                            @elseif($item->emp_status=='8')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Suspension</span>
+                                                                </a>
+                                                            @else
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Failed Probation</span>
+                                                                </a>
+                                                            @endif
+                                                            <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-resign-date="{{$item->resign_date}}" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-resign-date="{{$item->resign_date}}" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-resign-date="{{$item->resign_date}}" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-resign-date="{{$item->resign_date}}" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-resign-date="{{$item->resign_date}}" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-resign-date="{{$item->resign_date}}" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Suspension
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-resign-date="{{$item->resign_date}}" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
+                                                                </a>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                     <td class="text-end">
                                                         @if (permissionAccess("m2-s1","is_delete")->value == "1")
@@ -730,9 +795,6 @@
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                                    @if (permissionAccess("m2-s1","is_update")->value == "1")
-                                                                        <a href="{{url("user/form/edit",$item->id)}}" class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         @endif
@@ -1045,23 +1107,111 @@
                         }else if(emp.emp_status == '3'){
                             emp_status = "Resignation";
                             status_color = "text-danger";
-                            all_status = "";
+                            all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="3" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Resignation'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="4" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Termination'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="5" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Death'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="6" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Retired'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="7" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Lay off'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="8" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Suspension'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="9" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Fall Probation'+
+                                '</a>'+
+                            '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '4'){
                             emp_status = "Termination";
                             status_color = "text-danger";
-                            all_status = "";
+                            all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="3" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Resignation'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="4" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Termination'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="5" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Death'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="6" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Retired'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="7" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Lay off'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="8" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Suspension'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="9" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Fall Probation'+
+                                '</a>'+
+                            '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '5'){
                             emp_status = "Death";
                             status_color = "text-danger";
-                            all_status = "";
+                            all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="3" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Resignation'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="4" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Termination'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="5" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Death'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="6" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Retired'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="7" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Lay off'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="8" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Suspension'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="9" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Fall Probation'+
+                                '</a>'+
+                            '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '6'){
                             emp_status = "Retired";
                             status_color = "text-danger";
                             status_color = "text-danger";
-                            all_status = "";
+                            all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="3" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Resignation'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="4" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Termination'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="5" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Death'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="6" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Retired'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="7" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Lay off'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="8" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Suspension'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="9" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Fall Probation'+
+                                '</a>'+
+                            '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '7'){
                             emp_status = "Lay off";
@@ -1070,12 +1220,56 @@
                         }else if(emp.emp_status == '8'){
                             emp_status = "Suspension";
                             status_color = "text-danger";
-                            all_status = "";
+                            all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="3" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Resignation'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="4" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Termination'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="5" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Death'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="6" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Retired'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="7" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Lay off'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="8" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Suspension'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="9" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Fall Probation'+
+                                '</a>'+
+                            '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '9'){
                             emp_status = "Fall Probation";
                             status_color = "text-danger";
-                            all_status = "";
+                            all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="3" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Resignation'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="4" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Termination'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="5" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Death'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="6" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Retired'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="7" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Lay off'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="8" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Suspension'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-resign-date="'+(emp.resign_date)+'" data-id="9" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Fall Probation'+
+                                '</a>'+
+                            '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == 'Cancel'){
                             emp_status = "Cancel";
