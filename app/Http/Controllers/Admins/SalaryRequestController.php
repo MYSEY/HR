@@ -122,6 +122,7 @@ class SalaryRequestController extends Controller
         try{
             $data = SalaryRequest::find($request->id);
             $data['employee_id'] = $request->employee_id;
+            $data['type'] = $request->type;
             $data['request_date'] = $request->request_date;
             $data['new_basic_salary'] = $request->new_basic_salary;
             $data['description'] = $request->description;
@@ -133,6 +134,43 @@ class SalaryRequestController extends Controller
             DB::rollback();
             Toastr::error('Updated fail.','Error');
             return redirect()->back();
+        }
+    }
+
+    public function requestApproveAll(Request $request)
+    {
+        try {
+            DB::beginTransaction(); // ✅ Start transaction
+            $ids = explode(',', $request->request_id);
+            foreach ($ids as $id) {
+                $salaryRequest = SalaryRequest::findOrFail($id);
+                $user = User::where("id", $salaryRequest->employee_id)->first();
+                if ($user && $salaryRequest->type == 1) {
+                    $salaryRequest->update([
+                        'status'        => '2',
+                        'updated_by'    => Auth::id(),
+                    ]);
+
+                    //** update basic_salary and salary_increas */
+                    $user->update([
+                        'basic_salary' => ($user->basic_salary + $salaryRequest->new_basic_salary),
+                        'salary_increas' => $salaryRequest->new_basic_salary,
+                        'updated_by'    => Auth::id(),
+                    ]);
+                }
+            }
+            DB::commit(); // ✅ Commit after successful update
+            return response()->json([
+                'success' => true,
+                'message' => 'Updated status successfully!',
+                'status'  => 200
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollBack(); // ✅ Roll back only if transaction started
+            return response()->json([
+                'error'     => 'Updated status failed.',
+                'exception' => $exp->getMessage()
+            ], 500);
         }
     }
 

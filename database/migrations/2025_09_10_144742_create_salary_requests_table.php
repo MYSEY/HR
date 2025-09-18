@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('new_basic_salary');
             $table->date('request_date');
             $table->string('status');
+            $table->integer('type')->nullable();
             $table->longText('description')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

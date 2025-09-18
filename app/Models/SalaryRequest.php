@@ -18,6 +18,7 @@ class SalaryRequest extends Model
         'request_date',
         'new_basic_salary',
         'status',
+        'type',
         'description',
         'created_by',
         'updated_by',
