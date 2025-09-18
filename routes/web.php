@@ -495,6 +495,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/fringe-benefits-report', [ReportsController::class,'fringeBenefit']);
     Route::post('/reports/fringe-benefits-filter', [ReportsController::class,'fringeBenefitFilter']);
     Route::get('/reports/fringe-benefits-export', [ReportsController::class,'fringeBenefitExport']);
+
+    Route::get('/report/annual/salary/increasement', [ReportsController::class,'AnnualSalaryIncreasement']);
+    Route::get('/report/annual/salary/export', [ReportsController::class,'AnnualSalaryIncreasementExport']);
     
     // export excel
     Route::get('motor-rentel/export',[PayrollReportController::class,'export']);
@@ -666,6 +669,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/salary-requests/edit', [SalaryRequestController::class,'edit']);
     Route::post('/salary-requests/store', [SalaryRequestController::class,'store']);
     Route::post('/salary-requests/update', [SalaryRequestController::class,'update']);
+    Route::post('salary-requests/approved/all', [SalaryRequestController::class,'requestApproveAll']);
     Route::post('/salary-requests/delete', [SalaryRequestController::class,'destroy']);
     
 

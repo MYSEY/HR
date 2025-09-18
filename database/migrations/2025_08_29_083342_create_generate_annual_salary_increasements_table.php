@@ -18,10 +18,14 @@ return new class extends Migration
             $table->id();
             $table->integer('employee_id');
             $table->integer('performance_id');
+            $table->string('status')->nullable();
             $table->decimal('basic_salary',50,2)->default(0);
             $table->decimal('salary_increasement',50,2)->default(0);
+            $table->json('salary_request_ids')->nullable();
+            $table->decimal('salary_request',50,2)->default(0);
             $table->string('increasement_of_year');
             $table->integer('percentage');
+            $table->bigInteger('approved_by')->unsigned()->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

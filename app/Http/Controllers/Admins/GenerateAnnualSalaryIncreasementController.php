@@ -14,6 +14,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AnnualSalaryIncreasement;
 use App\Models\GenerateAnnualSalaryIncreasement;
+use App\Models\SalaryRequest;
 
 class GenerateAnnualSalaryIncreasementController extends Controller
 {
@@ -26,7 +27,7 @@ class GenerateAnnualSalaryIncreasementController extends Controller
     {
         if ($request->ajax()) {
             // Base query with joins
-            $query = GenerateAnnualSalaryIncreasement::leftJoin('users', 'generate_annual_salary_increasements.employee_id', '=', 'users.id')
+            $query = GenerateAnnualSalaryIncreasement::where("generate_annual_salary_increasements.status", "!=", "approved")->leftJoin('users', 'generate_annual_salary_increasements.employee_id', '=', 'users.id')
                 ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
                 ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
                 ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
@@ -168,13 +169,52 @@ class GenerateAnnualSalaryIncreasementController extends Controller
     }
 
     public function annualSalaryIncreasementApproved(Request $request){
-        $data = GenerateAnnualSalaryIncreasement::whereIn('id',explode(',', $request->id))->get();
-        foreach ($data as $value) {
-            dd($value);
-            User::where('id',$value->employee_id)->update([
-                'basic_salary' => $value->basic_salary + $value->salary_increasement,
-                'salary_increas' => $value->salary_increasement
+        try {
+            DB::beginTransaction();
+            $data = GenerateAnnualSalaryIncreasement::whereIn('id',explode(',', $request->id))->get();
+            foreach ($data as $value) {
+                // Get related salary request IDs
+                $salaryRequest_ids = SalaryRequest::where('employee_id', $value->employee_id)
+                    ->where('type', 0)
+                    ->where('status', 1)
+                    ->pluck('id')
+                    ->toArray();
+
+                // Update user salary
+                User::where('id', $value->employee_id)->update([
+                    'basic_salary' => $value->basic_salary + $value->salary_increasement + $value->total_salary_request,
+                    'salary_increas' => $value->salary_increasement + $value->total_salary_request,
+                ]);
+
+                // Update GenerateAnnualSalaryIncreasement record
+                $value->update([
+                    'status'             => 'approved',
+                    'salary_request_ids' => $salaryRequest_ids, // auto-cast to JSON if model has $casts
+                    'salary_request'     => $value->total_salary_request,
+                    'approved_by'        => Auth::id(),
+                ]);
+
+                // Update related SalaryRequests
+                SalaryRequest::where('employee_id', $value->employee_id)
+                    ->where('type', 0)
+                    ->where('status', 1)
+                    ->update([
+                        'status'     => 2, // consider using a constant like SalaryRequest::STATUS_APPROVED
+                        'updated_by' => Auth::id(),
+                    ]);
+            }
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Approve successfully!',
+                'status'  => 200
             ]);
+        } catch (\Throwable $exp) {
+            DB::rollBack();
+            return response()->json([
+                'error'     => 'Updated status failed.',
+                'exception' => $exp->getMessage()
+            ], 500);
         }
     }
     /**

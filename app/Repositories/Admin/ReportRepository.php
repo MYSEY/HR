@@ -4,6 +4,7 @@ namespace App\Repositories\Admin;
 
 use App\Helpers\Helper;
 use App\Models\FringeBenefit;
+use App\Models\GenerateAnnualSalaryIncreasement;
 use App\Models\Payroll;
 use App\Models\TrainingDetailStaff;
 use App\Repositories\BaseRepository;
@@ -276,5 +277,59 @@ class ReportRepository extends BaseRepository
         }
 
         return $dataTrainings;
+    }
+
+    public function getAnnualSalaryIncreasementReport($request){
+      
+        // Base query with joins
+        $query = GenerateAnnualSalaryIncreasement::where("generate_annual_salary_increasements.status", "approved")->leftJoin('users', 'generate_annual_salary_increasements.employee_id', '=', 'users.id')
+            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->leftJoin('performances', 'generate_annual_salary_increasements.performance_id', '=', 'performances.id')
+            ->leftJoin('users as users_approve', 'generate_annual_salary_increasements.approved_by', '=', 'users_approve.id')
+            ->select(
+                'generate_annual_salary_increasements.*',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.date_of_commencement',
+                'departments.name_english as dep_name',
+                'departments.name_khmer as dep_name_kh',
+                'positions.name_english as positions_name',
+                'positions.name_khmer as positions_name_kh',
+                'branchs.branch_name_kh',
+                'branchs.branch_name_en',
+                'performances.total_score',
+                'performances.total_score_live_staff',
+                'performances.total_score_direct_chairman',
+                'users_approve.employee_name_kh as approve_employee_name_kh',
+                'users_approve.employee_name_en as approve_employee_name_en',
+            )
+            ->when($request->employee_id, function ($query, $employee_id) {
+                return $query->where('users.number_employee', $employee_id);
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                return $query->where('users.employee_name_en', $employee_name);
+            })
+            ->when($request->branch_id, function ($query, $branch_id) {
+                return $query->where('users.branch_id', $branch_id);
+            })
+            ->when($request->department_id, function ($query, $department_id) {
+                return $query->where('users.department_id', $department_id);
+            });
+    
+        // Search filter
+        $searchValue = request()->input('search.value');
+        if (!empty($searchValue)) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('users.number_employee', 'like', "%{$searchValue}%")
+                    ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                    ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
+            });
+        }
+        return $query;
     }
 }

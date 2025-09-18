@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportAnnualSalaryIncreasement;
 use App\Exports\ExportBankTransfer;
 use App\Exports\ExportEFiling;
 use App\Exports\ExportEForm;
@@ -14,6 +15,7 @@ use App\Models\Bank;
 use App\Models\Branchs;
 use App\Models\Department;
 use App\Models\FringeBenefit;
+use App\Models\GenerateAnnualSalaryIncreasement;
 use App\Models\Payroll;
 use App\Models\Position;
 use App\Models\StaffPromoted;
@@ -509,4 +511,32 @@ class ReportsController extends Controller
         $export = new ExportFringeBenefits($data);
         return Excel::download($export, 'ReportFringeBenefits.xlsx');
     }
+
+    public function AnnualSalaryIncreasement(Request $request){
+        if ($request->ajax()) {
+            $query = $this->reportRepo->getAnnualSalaryIncreasementReport($request);
+             // Pagination
+            $recordsTotal = GenerateAnnualSalaryIncreasement::count();
+            $recordsFiltered = $query->count();
+            $start = intval(request()->input('start', 0));
+            $limit = intval(request()->input('length', 10));
+            $data = $query->orderBy('generate_annual_salary_increasements.id', 'desc')->offset($start)->limit($limit)->get();
+            // ✅ Return JSON for DataTables
+            return response()->json([
+                'draw' => intval(request()->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        } 
+        $branch = Branchs::all();
+        return view('reports.annualSalary_increasement_report',compact('branch'));
+    }
+    public function AnnualSalaryIncreasementExport(Request $request){
+        $query = $this->reportRepo->getAnnualSalaryIncreasementReport($request);
+        $data = $query->orderBy('generate_annual_salary_increasements.id', 'desc')->get();
+        $export = new ExportAnnualSalaryIncreasement($data);
+        return Excel::download($export, 'annual_salary_increasement.xlsx');
+    }
+    
 }
