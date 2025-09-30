@@ -669,192 +669,101 @@ class PerformanceController extends Controller
     }
 
     public function performanceImport(Request $request){
-        $file = $request->file('file');
-        $extension = $file->getClientOriginalExtension();
+        DB::beginTransaction();
+        try {
+            // --- Performance Sheet ---
+            $file = $request->file('file');
+            $extension = $file->getClientOriginalExtension();
+    
+            if (!in_array($extension, ["xlsx", "xls", "csv"])) {
+                return back()->withErrors(["file" => "Invalid file format"]);
+            }
+    
+            $spreadsheet = IOFactory::load($file->getPathname());
+            $performanceSheet = $spreadsheet->getSheetByName('Performance');
+            if ($performanceSheet) {
+                $rows = $performanceSheet->toArray();
+                foreach ($rows as $i => $row) {
+                    if ($i == 0) continue; // skip header
 
-        if (!in_array($extension, ["xlsx", "xls", "csv"])) {
-            return 0;
-        }
-        $spreadsheet = IOFactory::load($file->getPathname());
+                    $employee = User::where("number_employee", $row[0])->first();
+                    if (!$employee) continue;
 
-        // 1. Performance Sheet
-        $performanceSheet = $spreadsheet->getSheetByName('Performance');
-        $rows = $performanceSheet->toArray();
-        
-        $performance = null;
-        foreach ($rows as $i => $row) {
-            if ($i == 0) continue; // skip header
-        
-            $employee = User::where("number_employee", $row[0])->first();
-            if (!$employee) continue;
-        
-            $performance = Performance::create([
-                'employee_id'  => $employee->id,
-                'from_date'    => Carbon::parse($row[1]),
-                'to_date'      => Carbon::parse($row[2]),
-                'type'         => $row[3],
-                'total_weight' => $row[4],
-                'status'       => 'preparing',
-                'created_by'   => Auth::id(),
-            ]);
-
-            // 2. Title Sheet
-            $titleSheet = $spreadsheet->getSheetByName('Title');
-            $rowsTitle = $titleSheet->toArray();
-            foreach ($rowsTitle as $i => $rowT) {
-                if ($i == 0) continue;
-                $title = Title::create([
-                    'performance_id' => $performance->id,
-                    'title'          => $rowT[0],
-                    'created_by'     => Auth::id(),
-                ]);
-
-                // 3. Purposes Sheet
-                $purposeSheet = $spreadsheet->getSheetByName('Purposes');
-                $rowsPurposes = $purposeSheet->toArray();
-                foreach ($rowsPurposes as $i => $rowP) {
-                    if ($i == 0) continue;
-                    $purpose = Purpose::create([
-                        'performance_id' => $performance->id,
-                        'title_id'       => $title->id,
-                        'name'           => $rowP[2], // Col C = Purpose Name
-                        'created_by'     => Auth::id(),
+                    $performance = Performance::create([
+                        'employee_id'  => $employee->id,
+                        'from_date'    => Carbon::parse($row[1]),
+                        'to_date'      => Carbon::parse($row[2]),
+                        'type'         => $row[3],
+                        'total_weight' => $row[4],
+                        'status'       => 'preparing',
+                        'created_by'   => Auth::id(),
                     ]);
 
-                    // 4. Performance Detail Sheet
-                    $detailSheet = $spreadsheet->getSheetByName('Performance Detail');
-                    $rowsPerformanceDetail = $detailSheet->toArray();
-                    foreach ($rowsPerformanceDetail as $i => $rowPD) {
-                        if ($i == 0) continue;
-                        PerformanceDetail::create([
-                            'performance_id' => $performance->id,
-                            'title_id'       => $title->id,
-                            'purpose_id'     => $purpose->id,
-                            'key_kpi'        => $rowPD[0], // Col A
-                            'action_plan'    => $rowPD[3], // Col D
-                            'goal'           => $rowPD[4], // Col E
-                            'weight'         => $rowPD[5], // Col F
-                            'progress'       => $rowPD[6], // Col G
-                            'score'          => $rowPD[7], // Col H
-                            'created_by'     => Auth::id(),
-                        ]);
+                    // --- Title Sheet ---
+                    $titleSheet = $spreadsheet->getSheetByName('Title');
+                    if ($titleSheet) {
+                        $rowsTitle = $titleSheet->toArray();
+                        foreach ($rowsTitle as $j => $rowT) {
+                            if ($j == 0) continue;
+
+                            $title = $performance->titles()->create([
+                                'title'      => $rowT[0],
+                                'created_by' => Auth::id(),
+                            ]);
+                            // --- Purpose Sheet ---
+                            $purposeSheet = $spreadsheet->getSheetByName('Purposes');
+                            if ($purposeSheet) {
+                                $rowsPurpose = $purposeSheet->toArray();
+                                foreach ($rowsPurpose as $k => $rowP) {
+                                    if ($k == 0) continue;
+
+                                    // ✅ Match Title Ref in col[0] with current Title in rowT[0]
+                                    if (trim($rowP[0]) == trim($rowT[0])) {
+                                        $purpose = $title->purposes()->create([
+                                            'performance_id' => $performance->id,
+                                            'title_id'       => $title->id,
+                                            'name'           => $rowP[1], // Purpose Name in Col B
+                                            'created_by'     => Auth::id(),
+                                        ]);
+
+                                        // --- Performance Detail Sheet ---
+                                        $detailSheet = $spreadsheet->getSheetByName('Performance Detail');
+                                        if ($detailSheet) {
+                                            $rowsDetail = $detailSheet->toArray();
+                                            foreach ($rowsDetail as $m => $rowD) {
+                                                if ($m == 0) continue;
+
+                                                // ✅ Match Purpose Ref in detail with current Purpose
+                                                if (trim($rowD[0]) == trim($rowP[1])) {
+                                                    $purpose->performanceDetail()->create([
+                                                        'performance_id' => $performance->id,
+                                                        'title_id'       => $title->id,
+                                                        'purpose_id'     => $purpose->id,
+                                                        'key_kpi'        => $rowD[1],
+                                                        'action_plan'    => $rowD[2],
+                                                        'goal'           => $rowD[3],
+                                                        'goal_type'      => $rowD[4],
+                                                        'weight'         => $rowD[5],
+                                                        'is_lock'        => $rowD[6],
+                                                        'created_by'     => Auth::id(),
+                                                    ]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
             }
+
+            DB::commit();
+            return 1;
+        } catch (\Exception $e) {
+            DB::rollback();
+            Toastr::error("Import failed: " . $e->getMessage(), "Error");
         }
-        
-        
-        // $spreadsheet = IOFactory::load($file->getPathname());
-
-        // foreach ($spreadsheet->getAllSheets() as $sheet) {
-        //     $sheetName = $sheet->getTitle();
-        //     $rows = $sheet->toArray();
-
-        //     foreach ($rows as $i => $row) {
-        //         if ($i == 0) continue; // skip header row
-
-        //         if ($sheetName == "Performance") {
-        //             $employee = User::where("number_employee", $row[0])->first();
-        //             if (!$employee) continue;
-
-        //             $performance = Performance::create([
-        //                 'employee_id'  => $employee->id,
-        //                 'from_date'    => Carbon::parse($row[1]),
-        //                 'to_date'      => Carbon::parse($row[2]),
-        //                 'type'         => $row[3],
-        //                 'total_weight' => $row[4],
-        //                 'status'       => 'preparing',
-        //                 'created_by'   => Auth::id(),
-        //             ]);
-        //         }
-
-        //         // if ($sheetName == "Title") {
-        //         //     $title = Title::create([
-        //         //         'performance_id' => $performance->id,
-        //         //         'title'          => $row[0], // Col A = Title Name
-        //         //         'created_by'     => Auth::id(),
-        //         //     ]);
-        //         // }
-
-        //         // ===============================
-        //         // 2. Title Sheet
-        //         // ===============================
-        //         $titleSheet = $spreadsheet->getSheetByName('Title');
-        //         $rows = $titleSheet->toArray(null, true, true, true);
-
-        //         foreach ($rows as $i => $row) {
-        //             if ($i == 1) continue; // skip header
-        //             $title = Title::create([
-        //                 'performance_id' => $performance->id,
-        //                 'title'          => $row[0],
-        //                 'created_by'     => auth()->id(),
-        //             ]);
-        //         }
-
-        //         // if ($sheetName == "Purposes") {
-        //         //     $purpose = Purpose::create([
-        //         //         'performance_id' => $performance->id,
-        //         //         'title_id'       => $title->id,
-        //         //         'name'           => $row[0], // Col A = Purpose Name
-        //         //         'created_by'     => Auth::id(),
-        //         //     ]);
-        //         // }
-
-        //         // ===============================
-        //         // 3. Purposes Sheet
-        //         // ===============================
-        //         $purposeSheet = $spreadsheet->getSheetByName('Purposes');
-        //         $rows = $purposeSheet->toArray(null, true, true, true);
-
-        //         foreach ($rows as $i => $row) {
-        //             if ($i == 1) continue; // skip header
-        //             if ($title) {
-        //                 $purpose = Purpose::create([
-        //                     'performance_id' => $performance->id,
-        //                     'title_id'       => $title->id,
-        //                     'name'           => $row[0],
-        //                     'created_by'     => auth()->id(),
-        //                 ]);
-        //             }
-        //         }
-
-        //         // ===============================
-        //         // 4. Performance Detail Sheet
-        //         // ===============================
-        //         $detailSheet = $spreadsheet->getSheetByName('Performance Detail');
-        //         $rows = $detailSheet->toArray(null, true, true, true);
-
-        //         foreach ($rows as $i => $row) {
-        //             if ($i == 1) continue; // skip header
-        //             PerformanceDetail::create([
-        //                 'performance_id' => $performance->id,
-        //                 'title_id'       => $title->id,
-        //                 'purpose_id'     => $purpose->id,
-        //                 'key_kpi'        => $row[0],
-        //                 'action_plan'    => $row[1],
-        //                 'goal'           => $row[2],
-        //                 'weight'         => $row[3],
-        //                 'progress'       => $row[4],
-        //                 'score'          => $row[5],
-        //                 'created_by'     => auth()->id(),
-        //             ]);
-        //         }
-                
-        //         // if ($sheetName == "Performance Detail") {
-        //         //     PerformanceDetail::create([
-        //         //         'performance_id' => $performance->id,
-        //         //         'title_id'       => $title->id,
-        //         //         'purpose_id'     => $purpose->id,
-        //         //         'key_kpi'        => $row[0], // Col E
-        //         //         'action_plan'    => $row[1], // Col F
-        //         //         'goal'           => $row[2] ?? null,
-        //         //         'goal_type'      => $row[3] ?? null,
-        //         //         'weight'         => $row[4] ?? null,
-        //         //         'created_by'     => Auth::id(),
-        //         //     ]);
-        //         // }
-        //     }
-        // }
-        return 1;
     }
 }

@@ -94,27 +94,30 @@ class GenerateAnnualSalaryIncreasementController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
+            DB::beginTransaction();
+        
             [$year, $month] = explode('-', $request->increasement_year);
-
-            // Get increasement settings
+        
+            // Get increasement settings for this year
             $data = AnnualSalaryIncreasement::where('increasement_year', $year)->orderBy('id')->get();
-
+        
             // Get all approved performance records for that year/month
             $performances = Performance::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'approved')->get();
+        
             foreach ($performances as $kpiPerform) {
                 $employeeId = $kpiPerform->employee_id;
-
-                // Find related payroll for that employee/year/month
+        
+                // Find related payroll for employee in same year/month
                 $payroll = Payroll::where('employee_id', $employeeId)->whereYear('payment_date', $year)->whereMonth('payment_date', $month)->first();
-
+        
                 if (!$payroll) {
-                    continue; // skip if payroll not found
+                    continue; // Skip if payroll not found
                 }
-
+        
                 // KPI Score
                 $kpiScores = (float) $kpiPerform->total_score_direct_chairman;
-
+        
                 // Match KPI score with increasement range
                 $interest = 0;
                 $total_percentage = 0;
@@ -126,27 +129,30 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                         break;
                     }
                 }
-
-                // Working days adjustment
+        
+                // Get employee start date
                 $user = User::find($employeeId);
                 $dateOfCommencement = $user && $user->date_of_commencement ? Carbon::parse($user->date_of_commencement) : Carbon::create($year, 1, 1);
+        
                 $endOfYear = Carbon::create($year, 12, 31);
-                $months = $dateOfCommencement->diffInMonths($endOfYear) + 1; // +1 if inclusive
+        
+                // Only calculate if worked at least 3 months
+                $months = $dateOfCommencement->diffInMonths($endOfYear) + 1;
                 if ($months > 2) {
-                    $endOfYear = Carbon::create($year, 12, 31);
                     $totalWorkingDays = $dateOfCommencement->diffInDays($endOfYear) + 1;
                     $daysInYear = $endOfYear->isLeapYear() ? 366 : 365;
-    
+        
                     if ($totalWorkingDays > $daysInYear) {
                         $totalWorkingDays = $daysInYear;
                     }
-    
-                    // Final salary increasement calculation
+        
+                    // Final increasement calculation
                     $totalsSalaryIncreasement = ($payroll->basic_salary * $interest * $totalWorkingDays) / $daysInYear;
-    
-                    // Replace old record for this employee/year-month
+        
+                    // Remove old record if exists for this employee/year
                     GenerateAnnualSalaryIncreasement::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->delete();
-    
+        
+                    // Insert new record
                     GenerateAnnualSalaryIncreasement::create([
                         'employee_id' => $employeeId,
                         'performance_id' => $kpiPerform->id,
@@ -154,18 +160,20 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                         'increasement_of_year' => $request->increasement_year,
                         'salary_increasement' => $totalsSalaryIncreasement,
                         'percentage' => $total_percentage,
+                        'status' => 'pending',
                         'created_by' => Auth::id(),
                     ]);
                 }
             }
+        
             DB::commit();
-            Toastr::success('Generate annual salary increasement successfully','Success');
+            Toastr::success('Generate annual salary increasement successfully', 'Success');
             return redirect()->back();
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Generate annual salary increasement fail','Error');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Toastr::error('Generate annual salary increasement failed', 'Error');
             return redirect()->back();
-        }
+        }        
     }
 
     public function annualSalaryIncreasementApproved(Request $request){
