@@ -447,11 +447,17 @@
                             } else {
                                 // Show non-clickable Approved label
                                 return `
-                                    <div class="action-label">
-                                        <span class="btn btn-white btn-sm btn-rounded">
+                                    <div class="dropdown action-label">
+                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="true">
                                             <i class="fa fa-dot-circle-o text-success"></i>
-                                            Approved
-                                        </span>
+                                            <span>Accepted</span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" data-id="${row.id}" href="javascript:void(0)" id="btnApprove">
+                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                <span>@lang('lang.approve')</span>
+                                            </a>
+                                        </div>
                                     </div>
                                 `;
                             }

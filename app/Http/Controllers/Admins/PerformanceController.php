@@ -47,7 +47,7 @@ class PerformanceController extends Controller
                 'positions.name_english as positions_name',
                 'branchs.branch_name_en',
                 'branchs.branch_name_kh',
-            )->where('performances.status', 'preparing')
+            )->whereIn('performances.status', ['preparing','accepted'])
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -576,7 +576,7 @@ class PerformanceController extends Controller
             $performance = Performance::findOrFail($id);
             if ($performance->total_weight == 100) {
                 $performance->update([
-                    'status'     => 2,
+                    'status'     => 'accepted',
                     'approved_by' => Auth::id(),
                     'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_by' => Auth::id(),
