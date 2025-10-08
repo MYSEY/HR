@@ -283,8 +283,11 @@
                             '</div>'+
                             '<div class="form-group">'+
                                 '<label>@lang("lang.employee")</label>'+
-                                '<select class="form-control hr-select2-option-emp-role form-select asign_employee_id" id="asign_employee_id">'+
-                                
+                                '<select class="select form-control hr-select2-option asign_employee_id" id="asign_employee_id">'+
+                                    '<option value="">-- @lang("lang.select") --</option>'+
+                                    '@foreach ($employee as $item)'+
+                                        '<option value="{{ $item->id }}">{{ $item->employee_name_en }}</option>'+
+                                    '@endforeach'+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group">' +
@@ -329,7 +332,7 @@
                                         type: "success",
                                         icon: true
                                     }).show();
-                                    window.location.replace("{{ URL('performance-admin') }}");
+                                    window.location.replace("{{ URL('performance') }}");
                                 } else if(response.data.message == 'weight_must_be_exactly'){
                                     new Noty({
                                         title: "",
@@ -364,127 +367,16 @@
                             btnClass: 'btn-secondary btn-sm',
                         },
                     },
-                    onContentReady: function() {
-                        var jc = this;
-                        this.$content.find('form').on('submit', function(e) {
-                            e.preventDefault();
-                            jc.$$formSubmit.trigger('click');
+                    onContentReady: function () {
+                        // ✅ Initialize Select2 inside the modal
+                        this.$content.find('.hr-select2-option').select2({
+                            width: '100%',
+                            dropdownParent: this.$content, // <-- IMPORTANT
+                            placeholder: '-- Select Employee --'
                         });
                     }
                 });
-                $(document).ready(function(){
-                    $('.hr-select2-option-emp-role').each(function() {
-                        $(this).select2({
-                            width: '100%',
-                            dropdownParent: $(this).parent(),
-                        })
-                    });
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ url('/performance-admin/employees') }}",
-                        data: {
-                            'get_employee_id': get_employee_id
-                        },
-                        dataType: "JSON",
-                        success: function(response) {
-                            let datas = response.datas;
-                            $('#asign_employee_id').html('<option selected value=""> -- @lang("lang.select") --</option>');
-                            if (datas != '') {
-                                $.each(datas, function(i, item) {
-                                    $('#asign_employee_id').append($('<option>', {
-                                        value: item.id,
-                                        html: item.employee_name_en + '&nbsp;&nbsp;' + '(' + '&nbsp;'+ item.department.name_english + '&nbsp;)'
-                                    }));
-                                });
-                            }
-                        }
-                    });
-                });
             });
-
-            // $('body').on('click','#btnApprovedAll',function(){
-            //     var allVals = [];
-            //     $(".sub_chk:checked").each(function() {
-            //         allVals.push($(this).attr('data-id'));
-            //     });
-            //     var performance_id = allVals.join(",");
-            //     if(allVals.length <=0)
-            //     {
-            //         $.alert({
-            //             title: '@lang("lang.approve")!',
-            //             content: '@lang("lang.please_select_item_befor_approve").',
-            //             type: 'blue',
-            //         });
-            //     }  else {
-            //         $.confirm({
-            //             title: 'Approve!',
-            //             content: '@lang("lang.are_you_sure_want_to_approve")?',
-            //             type: "blue",
-            //             buttons: {
-            //                 ok: {
-            //                     text: 'ok',
-            //                     btnClass: 'btn-blue',
-            //                     action: function () {
-            //                         axios.post('{{ URL("performance/approved/all") }}', {
-            //                             'performance_id': performance_id,
-            //                         }).then(function (response) {
-            //                             if (response.data.success) {
-            //                                 new Noty({
-            //                                     title: "",
-            //                                     text: '@lang("lang.the_process_has_been_successfully")',
-            //                                     type: "success",
-            //                                     icon: true
-            //                                 }).show();
-            //                                 setTimeout(() => {
-            //                                     window.location.replace("{{ URL('performance') }}");
-            //                                 }, 1500);
-            //                             } else if (response.data.message === 'weight_must_be_exactly') {
-            //                                 new Noty({
-            //                                     title: "",
-            //                                     text: 'Total weight must be exactly 100% before approval.',
-            //                                     type: "error",
-            //                                     icon: true
-            //                                 }).show();
-            //                                 setTimeout(() => {
-            //                                     window.location.replace("{{ URL('performance') }}");
-            //                                 }, 2000);
-            //                             } else {
-            //                                 new Noty({
-            //                                     title: "",
-            //                                     text: 'Something went wrong. Please try again.',
-            //                                     type: "error",
-            //                                     icon: true
-            //                                 }).show();
-            //                             }
-            //                             dataTables();
-            //                         }).catch(function (error) {
-            //                             new Noty({
-            //                                 text: '@lang("lang.something_went_wrong_please_try_again_later")',
-            //                                 type: "error",
-            //                                 timeout: 3000,
-            //                                 progressBar: true,
-            //                             }).show();
-            //                         });
-            //                     }
-            //                 },
-            //                 cancel: {
-            //                     text: '@lang("lang.cancel")',
-            //                     action: function () {
-            //                         // Action for cancel button (if needed)
-            //                     }
-            //                 }
-            //             },
-            //             onContentReady: function () {
-            //                 var jc = this;
-            //                 this.$content.find('form').on('submit', function (e) {
-            //                     e.preventDefault();
-            //                     jc.$$formSubmit.trigger('click');
-            //                 });
-            //             }
-            //         });
-            //     }
-            // });
-            
 
             $('body').on('click','#btnApprovedAll',function(){
                 var userid = $(this).data("userid");

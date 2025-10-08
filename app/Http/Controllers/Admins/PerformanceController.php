@@ -55,7 +55,7 @@ class PerformanceController extends Controller
                 'positions.name_english as positions_name',
                 'branchs.branch_name_en',
                 'branchs.branch_name_kh',
-            )
+            )->whereIn('performances.status', ['preparing','accepted'])
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -80,9 +80,11 @@ class PerformanceController extends Controller
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
                 });
             }
-
-            if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO','HR','DHOD','DBM'])) {
-                $query->whereIn('performances.status', ['preparing','accepted']);
+            
+            if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM'])) {
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
             }
             
             // if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO','HR','DHOD','DBM'])) {
@@ -127,7 +129,8 @@ class PerformanceController extends Controller
         }
         $branch = Branchs::all();
         $department = Department::all();
-        return view('performances.index',compact('branch','department'));
+        $employee = User::where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
+        return view('performances.index',compact('branch','department','employee'));
     }
 
     /**
