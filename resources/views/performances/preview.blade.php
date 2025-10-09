@@ -1,4 +1,80 @@
 @extends('layouts.master')
+<style>
+    .big-checkbox .custom-control-input {
+        transform: scale(1.5); /* make checkbox 1.5x bigger */
+        margin-right: 8px;
+    }
+    .big-checkbox .custom-control-label {
+        font-size: 18px; /* adjust label text if you add one */
+    }
+    .container-checkbox {
+        /* display: block; */
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        font-size: 15px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    .container-checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 1;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        border: solid 1px #ccc;
+        background-color: #fff;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container-checkbox:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container-checkbox input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container-checkbox .checkmark:after {
+        left: 7px;
+        top: 4px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+</style>
 @section('content')
     <div class="page-header">
         <div class="row">
@@ -141,58 +217,110 @@
 <script>
     $(document).ready(function () {
         $("#btn_accepted").on('click',function(){
-            var id = $("#performance_id").val();    
+            var id = $("#performance_id").val();
+            var actionBtn = "";
+            var formContent = "";
+            var columnClassText = 'col-md-4';
+            columnClassText = 'col-md-6'
+            formContent = ''+
+                '<form id="add-style">'+
+                    '<div class="mt-2">'+
+                        '<label class="container-checkbox">Review'+
+                            '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
+                        '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                    '</div>'+
+                    '<div class="form-group">'+
+                        '<label>@lang("lang.employee")</label>'+
+                        '<select class="select form-control hr-select2-option employee_id" id="employee_id">'+
+                            '<option value="">-- @lang("lang.select") --</option>'+
+                            '@foreach ($employee as $item)'+
+                                '<option value="{{ $item->id }}">{{ $item->employee_name_en }}</option>'+
+                            '@endforeach'+
+                        '</select>'+
+                    '</div>'+
+                    '<div class="form-group">' +
+                        '<label>@lang("lang.remark")</label>' +
+                        '<textarea class="form-control remark" rows="4" placeholder="Enter remark..."></textarea>' +
+                    '</div>' +
+                '</form>';
+            actionBtn = {
+                text: 'Submit',
+                btnClass: 'btn-green',
+                action: function() {
+                    this.$content.find('.remark').css("border-color","#e3e3e3");
+                    var employee_id = this.$content.find('.employee_id').val();
+                    let status = this.$content.find('.action-asign:checked').val();
+                    let remark = this.$content.find('.remark').val();
+                    if (!status) {
+                        $.alert({
+                            title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                            content: 'Check action for asign!',
+                        });
+                        return false;
+                    }
+                    if (!employee_id) {
+                        $.alert({
+                            title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                            content: 'Please select employee for asign!',
+                        });
+                        return false;
+                    }
+                    $('#modal-loading').modal('show');
+                    axios.post('{{ URL("performance/accepted") }}', {
+                        'id': id,
+                        'status': status,
+                        'employee_id': employee_id,
+                        'reason': remark,
+                    }).then(function(response) {
+                        $('#modal-loading').modal('hide');
+                        if (response.data.success) {
+                            new Noty({
+                                title: "",
+                                text: '@lang("lang.the_process_has_been_successfully")',
+                                type: "success",
+                                icon: true
+                            }).show();
+                            window.location.replace("{{ URL('performance') }}");
+                        } else if(response.data.message == 'weight_must_be_exactly'){
+                            new Noty({
+                                title: "",
+                                text: 'Total weight must be exactly 100% before approval.',
+                                type: "error",
+                                icon: true,
+                                timeout: 3000,
+                            }).show();
+                        }
+                    }).catch(function(error) {
+                        $('#modal-loading').modal('hide');
+                        new Noty({
+                            title: "",
+                            text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                            type: "error",
+                            icon: true,
+                            timeout: 3000,
+                        }).show();
+                    });
+                }
+            }
             $.confirm({
-                title: 'Accepted!',
-                content: '@lang("lang.are_you_sure_want_to_accepted")?',
+                title: '@lang("lang.accepted")',
+                contentClass: 'text-center',
+                columnClass: columnClassText,
+                content: formContent,
                 type: "blue",
                 buttons: {
-                    ok: {
-                        text: 'ok',
-                        btnClass: 'btn-blue',
-                        action: function () {
-                            axios.post('{{ URL("performance/accepted") }}/'+id).then(function(response) {
-                                if (response.data.success) {
-                                    new Noty({
-                                        title: "",
-                                        text: '@lang("lang.the_process_has_been_successfully")',
-                                        type: "success",
-                                        icon: true
-                                    }).show();
-                                    window.location.replace("{{ URL('performance') }}");
-                                } else if(response.data.message == 'weight_must_be_exactly'){
-                                    new Noty({
-                                        title: "",
-                                        text: 'Total weight must be exactly 100% before approval.',
-                                        type: "error",
-                                        icon: true
-                                    }).show();
-                                    setTimeout(function() {
-                                        window.location.reload();
-                                    }, 2000);
-                                }
-                            }).catch(function(error) {
-                                new Noty({
-                                    title: "",
-                                    text: '@lang("lang.something_went_wrong_please_try_again_later")',
-                                    type: "error",
-                                    icon: true
-                                }).show();
-                            });
-                        }
-                    },
+                    confirm: actionBtn,
                     cancel: {
-                        text: '@lang("lang.cancel")',
-                        action: function () {
-                            // Action for cancel button (if needed)
-                        }
-                    }
+                        text: 'Cancel',
+                        btnClass: 'btn-secondary btn-sm',
+                    },
                 },
                 onContentReady: function () {
-                    var jc = this;
-                    this.$content.find('form').on('submit', function (e) {
-                        e.preventDefault();
-                        jc.$$formSubmit.trigger('click');
+                    // ✅ Initialize Select2 inside the modal
+                    this.$content.find('.hr-select2-option').select2({
+                        width: '100%',
+                        dropdownParent: this.$content, // <-- IMPORTANT
+                        placeholder: '-- Select Employee --'
                     });
                 }
             });
