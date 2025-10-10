@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\DownloadKpis;
+use App\Exports\ExporPerformanceDetail;
 use App\Exports\ExportAnnualSalaryIncreasement;
 use App\Exports\ExportBankTransfer;
 use App\Exports\ExportEFiling;
 use App\Exports\ExportEForm;
 use App\Exports\ExportEmployeeReport;
 use App\Exports\ExportFringeBenefits;
+use App\Exports\ExportPA;
 use App\Exports\ExportTraining;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
@@ -17,6 +20,7 @@ use App\Models\Department;
 use App\Models\FringeBenefit;
 use App\Models\GenerateAnnualSalaryIncreasement;
 use App\Models\Payroll;
+use App\Models\Performance;
 use App\Models\Position;
 use App\Models\StaffPromoted;
 use App\Models\Trainer;
@@ -537,6 +541,74 @@ class ReportsController extends Controller
         $data = $query->orderBy('generate_annual_salary_increasements.id', 'desc')->get();
         $export = new ExportAnnualSalaryIncreasement($data);
         return Excel::download($export, 'annual_salary_increasement.xlsx');
+    }
+
+    public function PaReport(Request $request){
+        if ($request->ajax()) {
+            $query = $this->reportRepo->getPAReport($request);
+            $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
+            $recordsFiltered = $query->count();
+            $start = intval(request()->input('start', 0));
+            $limit = intval(request()->input('length', 10));
+
+            $order = request()->input('order', []);
+            $columns = request()->input('columns', []);
+            if (!empty($order)) {
+                foreach ($order as $ord) {
+                    $colIndex = $ord['column'];
+                    $colDir   = $ord['dir'];
+                    $colName  = $columns[$colIndex]['name'] ?? null;
+
+                    if ($colName && $columns[$colIndex]['orderable'] === 'true') {
+                        $query->orderBy($colName, $colDir);
+                    }
+                }
+            } else {
+                // Default order
+                $query->orderBy('performances.id', 'desc');
+            }
+
+            $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
+            return response()->json([
+                'draw' => intval(request()->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        } 
+        $branch = Branchs::all();
+        $department = Department::all();
+        return view('reports.pa_report',compact('branch','department'));
+    }
+    public function PaReportExport(Request $request){
+        $query = $this->reportRepo->getPAReport($request);
+        $data = $query->orderBy('performances.id', 'desc')->get();
+        return Excel::download(new ExportPA($data), 'pa.xlsx');
+    }
+    public function PaReportExportDetail(Request $request){
+        $id = $request->id;
+        $data = Performance::with(['titles.purposes.performanceDetail'])
+        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        ->leftJoin('users as line_manager', 'users.line_manager', '=', 'line_manager.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->select(
+            'performances.*',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'line_manager.employee_name_kh as line_manager_name_kh',
+            'line_manager.employee_name_en as line_manager_name_en',
+            'users.date_of_commencement',
+            'departments.name_english as dep_name',
+            'positions.name_english as positions_name',
+            'positions.name_khmer as positions_name_kh',
+            'branchs.branch_name_en',
+            'branchs.branch_name_kh',
+        )->where('performances.id',$id)->first();
+        return Excel::download(new ExporPerformanceDetail($data), 'performance_appraisal_'.$id.'.xlsx');
+        
     }
     
 }
