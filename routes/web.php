@@ -317,6 +317,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('menual/score', [PerformanceAppraisalController::class,'menualScore']);
     Route::get('performance/appraisal/download', [PerformanceAppraisalController::class,'performanceAppraisalDownload']);
 
+    Route::get('performance/appraisal/pa-report', [ReportsController::class,'PaReport']);
+    Route::get('performance/appraisal/pa-export', [ReportsController::class,'PaReportExport']);
+    Route::get('performance/appraisal/pa-export/{id}', [ReportsController::class,'PaReportExportDetail']);
 
     Route::resource('annual/salary/increasement', AnnualSalaryIncreasementController::class);
     Route::resource('generate/annual/salary/increasement', GenerateAnnualSalaryIncreasementController::class);

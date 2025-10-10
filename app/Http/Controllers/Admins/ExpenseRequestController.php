@@ -1347,7 +1347,7 @@ class ExpenseRequestController extends Controller
                 ]
             ];
             $approveByArray = json_decode($data->approve_by);
-            if (in_array(Auth::user()->id, $approveByArray)) {
+            if (in_array(Auth::user()->id, $approveByArray) && $data->status== "pending_approve") {
                 $data['position_review']    = [];
                 $data['review_type']        = null;
                 $data['status']             = 'approved';

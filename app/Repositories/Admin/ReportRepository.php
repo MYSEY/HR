@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Models\FringeBenefit;
 use App\Models\GenerateAnnualSalaryIncreasement;
 use App\Models\Payroll;
+use App\Models\Performance;
 use App\Models\TrainingDetailStaff;
 use App\Repositories\BaseRepository;
 use App\Traits\UploadFiles\UploadFIle;
@@ -328,6 +329,66 @@ class ReportRepository extends BaseRepository
                     ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
                     ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
+            });
+        }
+        return $query;
+    }
+    public function getPAReport($request){
+      
+        // Base query with joins
+        $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
+            ->leftJoin('options', 'users.gender', '=', 'options.id')
+            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->select(
+                'performances.*',
+                'users.position_id',
+                'users.department_id',
+                'users.branch_id',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.date_of_commencement',
+                'options.name_khmer as gender_name_khmer',
+                'options.name_english as gender_name_english',
+                'users.branch_id',
+                'departments.name_english as dep_name',
+                'departments.name_khmer as dep_name_kh',
+                'positions.name_english as positions_name',
+                'positions.name_khmer as positions_name_kh',
+                'branchs.branch_name_en',
+                'branchs.branch_name_kh',
+            )
+        ->where('performances.status', 'approved')
+        ->when($request->from_date, function ($query, $from_date) {
+            $query->where('performances.from_date', '>=', $from_date);
+        })
+        ->when($request->to_date, function ($query, $to_date) {
+            $query->where('performances.to_date','<=', $to_date);
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            return $query->where('users.number_employee', $employee_id);
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            return $query->where('users.employee_name_en', $employee_name);
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            return $query->where('users.branch_id', $branch_id);
+        })
+        ->when($request->department_id, function ($query, $department_id) {
+            return $query->where('users.department_id', $department_id);
+        });
+    
+        // Search filter
+        $searchValue = request()->input('search.value');
+        if (!empty($searchValue)) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('performances.id', 'like', "%{$searchValue}%")
+                ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
+                ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
             });
         }
         return $query;

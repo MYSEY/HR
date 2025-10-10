@@ -268,14 +268,17 @@
             </div>
 
             <div class="submit-section mb-2">
-                <button type="submit" class="btn btn-primary" id="btnSubmit">
-                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
-                        @lang('lang.loading') </span>
-                    <span class="btn-txt">@lang('lang.submit')</span>
-                </button>
+                @if ($data->status !="approved")
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">
+                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
+                            @lang('lang.loading') </span>
+                        <span class="btn-txt">@lang('lang.submit')</span>
+                    </button>
+                @endif
+                
                 <input type="text" name="id" id="id" value="{{ $data->id }}" hidden>
                 <input type="text" name="employee_id" id="employee_id" value="{{ $data->employee_id }}" hidden>
-                <a href="{{ url('performance-appraisal') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+                <a href=" @if ($data->status =='approved') {{ url('performance/appraisal/pa-report') }} @else {{ url('performance-appraisal') }} @endif" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
             </div>
         </div>
     </div>
