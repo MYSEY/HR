@@ -119,7 +119,7 @@
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
                                         
-                                        @foreach ($purposeItem->performanceDetail as $Detailitem)
+                                        @foreach ($purposeItem->performanceAppraiDetail as $Detailitem)
                                             @php
                                                 $totalWeight += (float) $Detailitem->weight;
                                                 $titleId = $Detailitem->title_id;
@@ -278,7 +278,7 @@
                 
                 <input type="text" name="id" id="id" value="{{ $data->id }}" hidden>
                 <input type="text" name="employee_id" id="employee_id" value="{{ $data->employee_id }}" hidden>
-                <a href=" @if ($data->status =='approved') {{ url('performance/appraisal/pa-report') }} @else {{ url('performance-appraisal') }} @endif" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+                <a href=" @if ($data->status =='approved') {{ url('performance-appraisal') }} @else {{ url('performance-appraisal') }} @endif" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
             </div>
         </div>
     </div>
@@ -365,7 +365,7 @@
             let total_personnel_score = $('#total_personnel_score').val();
             let total_direct_chairman = $('#total_direct_chairman').val();
 
-            let performanceDetail = [];
+            let performanceAppraiDetail = [];
             $('tr.performance-row').each(function () {
                 const $row = $(this);
                 const performance_id = $row.find('input[name="performance_id[]"]').val();
@@ -378,7 +378,7 @@
                 const comment = $row.find('textarea[name="comment[]"]').val();
 
                 if (progress || score_achieved) {
-                    performanceDetail.push({
+                    performanceAppraiDetail.push({
                         performance_id,
                         progress,
                         score_achieved,
@@ -400,7 +400,7 @@
                     total_score,
                     total_personnel_score,
                     total_direct_chairman,
-                    performanceDetail: performanceDetail
+                    performanceAppraiDetail: performanceAppraiDetail
                 },
                 dataType: 'JSON',
                 success: function (response) {

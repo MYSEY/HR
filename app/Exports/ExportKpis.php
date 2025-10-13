@@ -2,8 +2,8 @@
 
 namespace App\Exports;
 
-use App\Models\Performance;
 use Illuminate\Support\Collection;
+use App\Models\PerformanceAppraisal;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -20,11 +20,11 @@ class ExportKpis implements FromCollection, WithColumnWidths, WithHeadings, With
 
     public function __construct($id)
     {
-        $data = Performance::with(['users', 'performanceDetails'])->where('status', 'approved')->where('performances.id', $id)->get();
+        $data = PerformanceAppraisal::with(['users', 'PaDetail'])->where('status', 'approved')->where('performance_appraisals.id', $id)->get();
         $i = 0;
         $dataPer = [];
         foreach ($data as $performance) {
-            foreach ($performance->performanceDetails as $detail) {
+            foreach ($performance->PaDetail as $detail) {
                 $i++;
                 $this->num = $i;
                 $dataPer[] = [

@@ -87,13 +87,6 @@ class PerformanceController extends Controller
                 $query->where("users.branch_id", Auth::user()->branch_id);
                 $query->where('performances.status', 'preparing');
             }
-            
-            // if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO','HR','DHOD','DBM'])) {
-            //     $query->where("users.department_id", Auth::user()->department_id);
-            //     $query->where("users.branch_id", Auth::user()->branch_id);
-            //     $query->orWhere("users.line_manager", Auth::user()->id);
-            //     $query->whereNot("users.id", Auth::user()->id);
-            // }
 
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
                 $query->where('performances.employee_id', Auth::user()->id);

@@ -2,25 +2,29 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Exports\ExportPerformance;
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Title;
 use App\Models\Branchs;
+use App\Models\PaTitle;
+use App\Models\Purpose;
+use App\Models\PaDetail;
+use App\Models\PaPurpose;
 use App\Models\Department;
 use App\Models\Performance;
-use App\Models\PerformanceDetail;
-use App\Models\PerformanceDetailHistory;
-use App\Models\PerformanceHistory;
 use App\Models\permissions;
-use App\Models\Purpose;
-use App\Models\PurposeHistory;
-use App\Models\Title;
 use App\Models\TitleHistory;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\PurposeHistory;
+use App\Models\PerformanceDetail;
+use App\Exports\ExportPerformance;
+use App\Models\PerformanceHistory;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\PerformanceAppraisal;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\PerformanceDetailHistory;
 
 class PerformanceAdminController extends Controller
 {
@@ -418,21 +422,88 @@ class PerformanceAdminController extends Controller
     {
         DB::beginTransaction();
         try{
-            $performance = Performance::findOrFail($request->id);
-            if ($performance->total_weight == 100) {
-                self::createHistories($performance);
-                $performance->update([
-                    'reason'        => $request->reason,
-                    'approved_by'   => Auth::id(),
-                    'status'        => $request->actionAsign,
-                    'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
-                    'updated_by'    => Auth::id(),
+            $performance = Performance::with('titles')->findOrFail($request->id);
+            // Copy selected fields
+            self::createHistories($performance);
+            $data = $performance->only([
+                'employee_id',
+                'from_date',
+                'to_date',
+                'total_weight',
+                'total_score',
+                'total_score_live_staff',
+                'total_score_direct_chairman',
+                'status',
+                'type',
+                'approved_by',
+                'approved_date',
+                'remark',
+                'review_employee_id',
+                'location_review',
+                'position_review',
+                'review_date',
+                'approve_by',
+                'approve_date',
+                'reject_date',
+                'reason',
+                'created_by',
+                'updated_by',
+            ]);
+            // Create new PerformanceAppraisal record
+            $data['reason']  = $request->reason;
+            $data['approved_by'] = Auth::id();
+            $data['status'] = $request->actionAsign;
+            $data['approved_date'] = Carbon::now()->format('Y-m-d H:i:s');
+            $pa = PerformanceAppraisal::create($data);
+            // ✅ Loop over related titles from the Performance model (not $data)
+            foreach ($performance->titles as $titleItem) {
+                $paTitle = PaTitle::create([
+                    'performance_id' => $pa->id, // link to new appraisal
+                    'title'          => $titleItem->title,
+                    'created_by'     => Auth::id(),
                 ]);
-            } else {
-                return response()->json([
-                    'message' => 'weight_must_be_exactly'
-                ]);
+                foreach ($titleItem->purposes as $purposeItem) {
+                    $paPurpose = PaPurpose::create([
+                        'performance_id' => $pa->id,
+                        'title_id'       => $paTitle->id,
+                        'name'           => $purposeItem->name,
+                        'created_by'     => Auth::id(),
+                    ]);
+
+                    foreach ($purposeItem->performanceDetail as $kpi) {
+                        PaDetail::create([
+                            'performance_id' => $pa->id,
+                            'title_id'       => $paTitle->id,
+                            'purpose_id'     => $paPurpose->id,
+                            'key_kpi'        => $kpi->key_kpi,
+                            'action_plan'    => $kpi->action_plan,
+                            'goal'           => $kpi->goal,
+                            'weight'         => $kpi->weight,
+                            'goal_type'      => $kpi->goal_type,
+                            'is_lock'        => $kpi->is_lock,
+                            'updated_by'     => Auth::id(),
+                        ]);
+                    }
+                }
             }
+            Performance::where('id',$request->id)->delete();
+            Title::where('performance_id',$request->id)->delete();
+            Purpose::where('performance_id',$request->id)->delete();
+            PerformanceDetail::where('performance_id',$request->id)->delete();
+            // if ($performance->total_weight == 100) {
+            //     self::createHistories($performance);
+            //     $performance->update([
+            //         'reason'        => $request->reason,
+            //         'approved_by'   => Auth::id(),
+            //         'status'        => $request->actionAsign,
+            //         'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
+            //         'updated_by'    => Auth::id(),
+            //     ]);
+            // } else {
+            //     return response()->json([
+            //         'message' => 'weight_must_be_exactly'
+            //     ]);
+            // }
             DB::commit();
             return response()->json([
                 'success' => true,

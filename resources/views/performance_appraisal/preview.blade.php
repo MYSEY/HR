@@ -95,7 +95,7 @@
                                                 <td colspan="1" class="text-center"></td>
                                             </tr>
                                             
-                                            @foreach ($purposeItem->performanceDetail as $Detailitem)
+                                            @foreach ($purposeItem->performanceAppraiDetail as $Detailitem)
                                                 <tr>
                                                     <td class="text-center">
                                                         <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>

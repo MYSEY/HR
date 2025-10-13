@@ -4,19 +4,20 @@ namespace App\Http\Controllers\Admins;
 
 use App\Models\User;
 use App\Models\Branchs;
+use App\Models\PaDetail;
+use App\Models\PaPurpose;
 use App\Models\Department;
 use App\Exports\ExportKpis;
 use App\Models\Performance;
 use Illuminate\Http\Request;
 use App\Exports\DownloadKpis;
-use App\Models\PerformanceDetail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\PerformanceAppraisal;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Helper\Downloader;
 
 class PerformanceAppraisalController extends Controller
 {
@@ -29,12 +30,12 @@ class PerformanceAppraisalController extends Controller
     {
         if (request()->ajax()) {
             // Define the base query
-            $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
+            $query = PerformanceAppraisal::leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
                 ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
                 ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
                 ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
                 ->select(
-                    'performances.*',
+                    'performance_appraisals.*',
                     'users.position_id',
                     'users.department_id',
                     'users.branch_id',
@@ -47,7 +48,7 @@ class PerformanceAppraisalController extends Controller
                     'branchs.branch_name_en',
                     'branchs.branch_name_kh',
                 )
-            ->where('performances.status', 'approved')
+            ->where('performance_appraisals.status', 'approved')
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -65,7 +66,7 @@ class PerformanceAppraisalController extends Controller
             $searchValue = request()->input('search.value');
             if (!empty($searchValue)) {
                 $query->where(function ($q) use ($searchValue) {
-                    $q->where('performances.id', 'like', "%{$searchValue}%")
+                    $q->where('performance_appraisals.id', 'like', "%{$searchValue}%")
                     ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
                     ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
                     ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
@@ -92,10 +93,10 @@ class PerformanceAppraisalController extends Controller
                 }
             } else {
                 // Default order
-                $query->orderBy('performances.id', 'desc');
+                $query->orderBy('performance_appraisals.id', 'desc');
             }
 
-            $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
+            $data = $query->orderBy('performance_appraisals.id', 'desc')->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw' => intval(request()->input('draw')),
                 'recordsTotal' => $recordsTotal,
@@ -111,12 +112,12 @@ class PerformanceAppraisalController extends Controller
     {
         if (request()->ajax()) {
             // Define the base query
-            $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
+            $query = PerformanceAppraisal::leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
                 ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
                 ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
                 ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
                 ->select(
-                    'performances.*',
+                    'performance_appraisals.*',
                     'users.position_id',
                     'users.department_id',
                     'users.branch_id',
@@ -129,7 +130,7 @@ class PerformanceAppraisalController extends Controller
                     'branchs.branch_name_en',
                     'branchs.branch_name_kh',
                 )
-            ->where('performances.status', 'approved')
+            ->where('performance_appraisals.status', 'approved')
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -144,7 +145,7 @@ class PerformanceAppraisalController extends Controller
             $searchValue = request()->input('search.value');
             if (!empty($searchValue)) {
                 $query->where(function ($q) use ($searchValue) {
-                    $q->where('performances.id', 'like', "%{$searchValue}%")
+                    $q->where('performance_appraisals.id', 'like', "%{$searchValue}%")
                     ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
                     ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
                     ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
@@ -156,7 +157,7 @@ class PerformanceAppraisalController extends Controller
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
-            $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
+            $data = $query->orderBy('performance_appraisals.id', 'desc')->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw' => intval(request()->input('draw')),
                 'recordsTotal' => $recordsTotal,
@@ -198,13 +199,13 @@ class PerformanceAppraisalController extends Controller
      */
     public function show($id)
     {
-        $data = Performance::with(['titles.purposes.performanceDetail'])
-        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceAppraiDetail'])
+        ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
         ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
         ->select(
-            'performances.*',
+            'performance_appraisals.*',
             'users.number_employee',
             'users.employee_name_kh',
             'users.employee_name_en',
@@ -212,18 +213,18 @@ class PerformanceAppraisalController extends Controller
             'positions.name_english as positions_name',
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
-        )->where('performances.id',$id)->first();
+        )->where('performance_appraisals.id',$id)->first();
         return view('performance_appraisal.progress',compact('data'));
     }
     public function performanceAppraisalPreview($id)
     {
-        $data = Performance::with(['titles.purposes.performanceDetail'])
-        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceAppraiDetail'])
+        ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
         ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
         ->select(
-            'performances.*',
+            'performance_appraisals.*',
             'users.number_employee',
             'users.employee_name_kh',
             'users.employee_name_en',
@@ -231,7 +232,7 @@ class PerformanceAppraisalController extends Controller
             'positions.name_english as positions_name',
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
-        )->where('performances.id',$id)->first();
+        )->where('performance_appraisals.id',$id)->first();
         return view('performance_appraisal.preview',compact('data'));
     }
 
@@ -243,13 +244,13 @@ class PerformanceAppraisalController extends Controller
      */
     public function edit($id)
     {
-        $data = Performance::with(['titles.purposes.performanceDetail'])
-        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceAppraiDetail'])
+        ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
         ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
         ->select(
-            'performances.*',
+            'performance_appraisals.*',
             'users.number_employee',
             'users.employee_name_kh',
             'users.employee_name_en',
@@ -257,7 +258,7 @@ class PerformanceAppraisalController extends Controller
             'positions.name_english as positions_name',
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
-        )->where('performances.id',$id)->first();
+        )->where('performance_appraisals.id',$id)->first();
         return view('performance_appraisal.edit_menual_score',compact('data'));
     }
     /**
@@ -271,15 +272,15 @@ class PerformanceAppraisalController extends Controller
     {
         try {
             DB::beginTransaction();
-            Performance::where('employee_id',$request->employee_id)->where('id',$request->id)->update([
+            PerformanceAppraisal::where('employee_id',$request->employee_id)->where('id',$request->id)->update([
                 'total_score'  => $request->total_score,
                 'total_score_live_staff'  => $request->total_personnel_score,
                 'total_score_direct_chairman'  => $request->total_direct_chairman,
                 'updated_by'  => Auth::id(),
             ]);
 
-            foreach ($request->performanceDetail as $value) {
-                PerformanceDetail::where('id',$value['performance_id'])->update([
+            foreach ($request->performanceAppraiDetail as $value) {
+                PaDetail::where('id',$value['performance_id'])->update([
                     'progress' => $value['progress'],
                     'score_achieved' => $value['score_achieved'],
                     'score' => $value['score'],
@@ -302,7 +303,7 @@ class PerformanceAppraisalController extends Controller
 
     public function updateKpiScore(Request $request){
         try {
-            Performance::where('employee_id',$request->employee_id)->where('id',$request->id)->update([
+            PerformanceAppraisal::where('employee_id',$request->employee_id)->where('id',$request->id)->update([
                 'total_score_direct_chairman'  => $request->total_score_direct_chairman,
                 'remark'  => $request->remark,
             ]);
@@ -363,7 +364,7 @@ class PerformanceAppraisalController extends Controller
                         $employeeTotals[$eid]['dc'] += $chair;
 
 
-                        $updated = PerformanceDetail::where('performance_id', $item[2])
+                        $updated = PaDetail::where('performance_id', $item[2])
                             ->where('title_id', $item[3])
                             ->where('purpose_id', $item[4])
                             ->where('key_kpi', $item[5]) // extra condition
@@ -385,7 +386,7 @@ class PerformanceAppraisalController extends Controller
             }
             // ✅ After loop, apply sums per employee
             foreach ($employeeTotals as $employeeId => $sum) {
-                Performance::where('employee_id', $employeeId)->update([
+                PerformanceAppraisal::where('employee_id', $employeeId)->update([
                     'total_score'             => $sum['s'],
                     'total_score_live_staff'  => $sum['ls'],
                     'total_score_direct_chairman' => $sum['dc'],
