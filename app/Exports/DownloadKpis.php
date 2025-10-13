@@ -82,7 +82,7 @@ class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, Wi
             'F' => 20,
             'G' => 15,
             'H' => 20,
-            'I' => 15,
+            'I' => 10,
             'J' => 10,
             'K' => 10,
             'M' => 10,

@@ -38,6 +38,11 @@ class ExportKpis implements FromCollection, WithColumnWidths, WithHeadings, With
                     $detail->goal,
                     $detail->goal_type,
                     $detail->progress,
+                    $detail->weight,
+                    $detail->score_achieved,
+                    $detail->score,
+                    $detail->score_live_staff,
+                    $detail->score_direct_chairman,
                 ];
             }
         }
@@ -77,8 +82,13 @@ class ExportKpis implements FromCollection, WithColumnWidths, WithHeadings, With
             'F' => 20,
             'G' => 15,
             'H' => 20,
-            'I' => 20,
-            'J' => 18
+            'I' => 10,
+            'J' => 10,
+            'K' => 10,
+            'M' => 10,
+            'N' => 10,
+            'O' => 10,
+            'P' => 10,
         ];
     }
     public function headings(): array
@@ -94,6 +104,11 @@ class ExportKpis implements FromCollection, WithColumnWidths, WithHeadings, With
             "Goal",
             "Goal Type",
             "Progress",
+            "Weight",
+            "Score Achieved",
+            "Score",
+            "Score Live Staff",
+            "Score Direct Chairman",
         ];
     }
 }
