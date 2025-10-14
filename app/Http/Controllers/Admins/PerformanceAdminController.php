@@ -486,24 +486,25 @@ class PerformanceAdminController extends Controller
                     }
                 }
             }
-            Performance::where('id',$request->id)->delete();
-            Title::where('performance_id',$request->id)->delete();
-            Purpose::where('performance_id',$request->id)->delete();
-            PerformanceDetail::where('performance_id',$request->id)->delete();
-            // if ($performance->total_weight == 100) {
-            //     self::createHistories($performance);
-            //     $performance->update([
-            //         'reason'        => $request->reason,
-            //         'approved_by'   => Auth::id(),
-            //         'status'        => $request->actionAsign,
-            //         'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
-            //         'updated_by'    => Auth::id(),
-            //     ]);
-            // } else {
-            //     return response()->json([
-            //         'message' => 'weight_must_be_exactly'
-            //     ]);
-            // }
+            // Performance::where('id',$request->id)->delete();
+            // Title::where('performance_id',$request->id)->delete();
+            // Purpose::where('performance_id',$request->id)->delete();
+            // PerformanceDetail::where('performance_id',$request->id)->delete();
+
+            if ($performance->total_weight == 100) {
+                self::createHistories($performance);
+                $performance->update([
+                    'reason'        => $request->reason,
+                    'approved_by'   => Auth::id(),
+                    'status'        => $request->actionAsign,
+                    'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_by'    => Auth::id(),
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'weight_must_be_exactly'
+                ]);
+            }
             DB::commit();
             return response()->json([
                 'success' => true,
