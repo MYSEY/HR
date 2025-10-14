@@ -198,7 +198,7 @@ class PerformanceAppraisalController extends Controller
      */
     public function show($id)
     {
-        $data = PerformanceAppraisal::with(['titles.purposes.performanceAppraiDetail'])
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail'])
         ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
@@ -217,7 +217,7 @@ class PerformanceAppraisalController extends Controller
     }
     public function performanceAppraisalPreview($id)
     {
-        $data = PerformanceAppraisal::with(['titles.purposes.performanceAppraiDetail'])
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail'])
         ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
@@ -243,7 +243,7 @@ class PerformanceAppraisalController extends Controller
      */
     public function edit($id)
     {
-        $data = PerformanceAppraisal::with(['titles.purposes.performanceAppraiDetail'])
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail'])
         ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
@@ -278,7 +278,7 @@ class PerformanceAppraisalController extends Controller
                 'updated_by'  => Auth::id(),
             ]);
 
-            foreach ($request->performanceAppraiDetail as $value) {
+            foreach ($request->performanceDetail as $value) {
                 PaDetail::where('id',$value['performance_id'])->update([
                     'progress' => $value['progress'],
                     'score_achieved' => $value['score_achieved'],

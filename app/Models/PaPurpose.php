@@ -20,7 +20,7 @@ class PaPurpose extends Model
         'updated_by',
     ];
 
-    public function performanceAppraiDetail()
+    public function performanceDetail()
     {
         return $this->hasMany(PaDetail::class, 'purpose_id');
     }
