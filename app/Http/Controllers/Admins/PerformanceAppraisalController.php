@@ -47,7 +47,7 @@ class PerformanceAppraisalController extends Controller
                     'branchs.branch_name_en',
                     'branchs.branch_name_kh',
                 )
-            ->where('performance_appraisals.status', 'approved')
+            ->where('performance_appraisals.status', 'new')
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })

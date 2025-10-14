@@ -452,8 +452,8 @@ class PerformanceAdminController extends Controller
             // Create new PerformanceAppraisal record
             $data['reason']  = $request->reason;
             $data['approved_by'] = Auth::id();
-            $data['status'] = $request->actionAsign;
             $data['approved_date'] = Carbon::now()->format('Y-m-d H:i:s');
+            $data['status'] = 'new';
             $pa = PerformanceAppraisal::create($data);
             // ✅ Loop over related titles from the Performance model (not $data)
             foreach ($performance->titles as $titleItem) {
@@ -486,13 +486,8 @@ class PerformanceAdminController extends Controller
                     }
                 }
             }
-            // Performance::where('id',$request->id)->delete();
-            // Title::where('performance_id',$request->id)->delete();
-            // Purpose::where('performance_id',$request->id)->delete();
-            // PerformanceDetail::where('performance_id',$request->id)->delete();
-
+            
             if ($performance->total_weight == 100) {
-                self::createHistories($performance);
                 $performance->update([
                     'reason'        => $request->reason,
                     'approved_by'   => Auth::id(),

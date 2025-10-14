@@ -312,7 +312,7 @@
                             return `
                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="javascript:void(0)">
                                     <i class="fa fa-dot-circle-o text-success"></i>
-                                    <span>${ row.status == 'approved' ? 'Approved' : '' }</span>
+                                    <span>${ row.status == 'new' ? 'New' : '' }</span>
                                 </a>
                             `;
                         }
