@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admins;
 use App\Models\User;
 use App\Models\Branchs;
 use App\Models\PaDetail;
-use App\Models\PaPurpose;
 use App\Models\Department;
 use App\Exports\ExportKpis;
 use App\Models\Performance;

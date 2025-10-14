@@ -460,14 +460,14 @@ class PerformanceAdminController extends Controller
                 $paTitle = PaTitle::create([
                     'performance_id' => $pa->id, // link to new appraisal
                     'title'          => $titleItem->title,
-                    'created_by'     => Auth::id(),
+                    'created_by'     => $titleItem->created_by,
                 ]);
                 foreach ($titleItem->purposes as $purposeItem) {
                     $paPurpose = PaPurpose::create([
                         'performance_id' => $pa->id,
                         'title_id'       => $paTitle->id,
                         'name'           => $purposeItem->name,
-                        'created_by'     => Auth::id(),
+                        'created_by'     => $purposeItem->created_by,
                     ]);
 
                     foreach ($purposeItem->performanceDetail as $kpi) {
@@ -481,7 +481,7 @@ class PerformanceAdminController extends Controller
                             'weight'         => $kpi->weight,
                             'goal_type'      => $kpi->goal_type,
                             'is_lock'        => $kpi->is_lock,
-                            'updated_by'     => Auth::id(),
+                            'created_by'     => $kpi->created_by,
                         ]);
                     }
                 }

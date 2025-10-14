@@ -81,7 +81,6 @@
                                         <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    {{-- <th class="sorting sorting_asc stuck-scroll-4">#</th> --}}
                                                     <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
                                                     <th class="sorting sorting_asc stuck-scroll-4">@lang('lang.employee_name')</th>
                                                     <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
@@ -91,7 +90,6 @@
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">បុគ្គលិកផ្ទាល់</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ប្រធានផ្ទាល់</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Overall Results</th>
-                                                    <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.remark')</th>
                                                     <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                                 </tr>
@@ -231,12 +229,6 @@
 
                             return `<span style="color:${color}">${overallResults}</span>`;
                         }
-                    },
-                    {
-                        data: 'type',
-                        name: 'type',
-                        orderable: false,
-                        searchable: false,
                     },
                     {
                         data: 'remark',
