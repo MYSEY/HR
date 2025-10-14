@@ -119,7 +119,7 @@
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
                                         
-                                        @foreach ($purposeItem->performanceAppraiDetail as $Detailitem)
+                                        @foreach ($purposeItem->performanceDetail as $Detailitem)
                                             @php
                                                 $totalWeight += (float) $Detailitem->weight;
                                                 $titleId = $Detailitem->title_id;
@@ -365,7 +365,7 @@
             let total_personnel_score = $('#total_personnel_score').val();
             let total_direct_chairman = $('#total_direct_chairman').val();
 
-            let performanceAppraiDetail = [];
+            let performanceDetail = [];
             $('tr.performance-row').each(function () {
                 const $row = $(this);
                 const performance_id = $row.find('input[name="performance_id[]"]').val();
@@ -378,7 +378,7 @@
                 const comment = $row.find('textarea[name="comment[]"]').val();
 
                 if (progress || score_achieved) {
-                    performanceAppraiDetail.push({
+                    performanceDetail.push({
                         performance_id,
                         progress,
                         score_achieved,
@@ -400,7 +400,7 @@
                     total_score,
                     total_personnel_score,
                     total_direct_chairman,
-                    performanceAppraiDetail: performanceAppraiDetail
+                    performanceDetail: performanceDetail
                 },
                 dataType: 'JSON',
                 success: function (response) {

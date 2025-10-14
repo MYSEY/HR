@@ -48,8 +48,11 @@ class PerformanceAppraisal extends Model
     {
         return $this->hasMany(PaTitle::class, 'performance_id');
     }
-
-    public function PaDetail()
+    public function purpose()
+    {
+        return $this->belongsTo(PaPurpose::class, 'purpose_id');
+    }
+    public function performanceDetail()
     {
         return $this->hasMany(PaDetail::class,'performance_id');
     }
