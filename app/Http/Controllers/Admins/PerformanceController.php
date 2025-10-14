@@ -134,8 +134,34 @@ class PerformanceController extends Controller
      */
     public function create()
     {
-        $employee = User::where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
-        // $employee = User::where('line_manager',Auth::user()->line_manager)->where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
+        $employee= DB::table('users')
+        ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
+        ->select( 'users.*', 'roles.role_type',)
+        ->whereIn('users.emp_status', ['Probation','1','2','10',])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'Employee'){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['BM'])){
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['HR','HRAdmin','DHOD','HOD'])){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['DHOD','DBM'])){
+                $query->where("users.line_manager", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['BOD','CEO'])){
+                $query->whereNot("users.id", Auth::user()->id);
+                $query->whereNot("roles.role_type", "Employee");
+            }
+            })->get();
         return view('performances.create',compact('employee'));
     }
     /**
