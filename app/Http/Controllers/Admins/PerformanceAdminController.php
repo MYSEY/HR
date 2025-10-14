@@ -450,9 +450,7 @@ class PerformanceAdminController extends Controller
                 'updated_by',
             ]);
             // Create new PerformanceAppraisal record
-            $data['reason']  = $request->reason;
-            $data['approved_by'] = Auth::id();
-            $data['approved_date'] = Carbon::now()->format('Y-m-d H:i:s');
+            $data['created_by'] = Auth::id();
             $data['status'] = 'new';
             $pa = PerformanceAppraisal::create($data);
             // ✅ Loop over related titles from the Performance model (not $data)
@@ -520,6 +518,66 @@ class PerformanceAdminController extends Controller
             $skipped = [];
             foreach ($ids as $id) {
                 $performance = Performance::findOrFail($id);
+                $data = $performance->only([
+                    'employee_id',
+                    'from_date',
+                    'to_date',
+                    'total_weight',
+                    'total_score',
+                    'total_score_live_staff',
+                    'total_score_direct_chairman',
+                    'status',
+                    'type',
+                    'approved_by',
+                    'approved_date',
+                    'remark',
+                    'review_employee_id',
+                    'location_review',
+                    'position_review',
+                    'review_date',
+                    'approve_by',
+                    'approve_date',
+                    'reject_date',
+                    'reason',
+                    'created_by',
+                    'updated_by',
+                ]);
+                $data['created_by'] = Auth::id();
+                $data['status'] = 'new';
+                $pa = PerformanceAppraisal::create($data);
+
+                // ✅ Loop over related titles from the Performance model (not $data)
+                foreach ($performance->titles as $titleItem) {
+                    $paTitle = PaTitle::create([
+                        'performance_id' => $pa->id, // link to new appraisal
+                        'title'          => $titleItem->title,
+                        'created_by'     => $titleItem->created_by,
+                    ]);
+                    foreach ($titleItem->purposes as $purposeItem) {
+                        $paPurpose = PaPurpose::create([
+                            'performance_id' => $pa->id,
+                            'title_id'       => $paTitle->id,
+                            'name'           => $purposeItem->name,
+                            'created_by'     => $purposeItem->created_by,
+                        ]);
+
+                        foreach ($purposeItem->performanceDetail as $kpi) {
+                            PaDetail::create([
+                                'performance_id' => $pa->id,
+                                'title_id'       => $paTitle->id,
+                                'purpose_id'     => $paPurpose->id,
+                                'key_kpi'        => $kpi->key_kpi,
+                                'action_plan'    => $kpi->action_plan,
+                                'goal'           => $kpi->goal,
+                                'weight'         => $kpi->weight,
+                                'goal_type'      => $kpi->goal_type,
+                                'is_lock'        => $kpi->is_lock,
+                                'created_by'     => $kpi->created_by,
+                            ]);
+                        }
+                    }
+                }
+                
                 if ($performance->total_weight == 100) {
                     self::createHistories($performance);
                     $performance->update([
