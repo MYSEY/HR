@@ -21,6 +21,8 @@ use App\Models\FringeBenefit;
 use App\Models\GenerateAnnualSalaryIncreasement;
 use App\Models\Payroll;
 use App\Models\Performance;
+use App\Models\PerformanceAppraisal;
+use App\Models\permissions;
 use App\Models\Position;
 use App\Models\StaffPromoted;
 use App\Models\Trainer;
@@ -544,13 +546,16 @@ class ReportsController extends Controller
     }
 
     public function PaReport(Request $request){
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "performance/appraisal/pa-report")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
         if ($request->ajax()) {
-            $query = $this->reportRepo->getPAReport($request);
-            $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
+            $query = $this->reportRepo->getPAReport($request, $permission);
+            $recordsTotal = PerformanceAppraisal::where('status', 'approved')->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
-
             $order = request()->input('order', []);
             $columns = request()->input('columns', []);
             if (!empty($order)) {
@@ -567,8 +572,7 @@ class ReportsController extends Controller
                 // Default order
                 $query->orderBy('performances.id', 'desc');
             }
-
-            $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
+            $data = $query->where('performance_appraisals.status', 'approved')->orderBy('performance_appraisals.id', 'desc')->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw' => intval(request()->input('draw')),
                 'recordsTotal' => $recordsTotal,
@@ -578,23 +582,24 @@ class ReportsController extends Controller
         } 
         $branch = Branchs::all();
         $department = Department::all();
-        return view('reports.pa_report',compact('branch','department'));
+        return view('reports.pa_report',compact('branch','department','permission'));
     }
     public function PaReportExport(Request $request){
-        $query = $this->reportRepo->getPAReport($request);
-        $data = $query->orderBy('performances.id', 'desc')->get();
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "performance/appraisal/pa-report")->first();
+        $query = $this->reportRepo->getPAReport($request, $permission);
+        $data = $query->where('performance_appraisals.status', 'approved')->orderBy('performance_appraisals.id', 'desc')->get();
         return Excel::download(new ExportPA($data), 'pa.xlsx');
     }
     public function PaReportExportDetail(Request $request){
         $id = $request->id;
-        $data = Performance::with(['titles.purposes.performanceDetail'])
-        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail'])
+        ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('users as line_manager', 'users.line_manager', '=', 'line_manager.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
         ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
         ->select(
-            'performances.*',
+            'performance_appraisals.*',
             'users.number_employee',
             'users.employee_name_kh',
             'users.employee_name_en',
@@ -606,7 +611,7 @@ class ReportsController extends Controller
             'positions.name_khmer as positions_name_kh',
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
-        )->where('performances.id',$id)->first();
+        )->where('performance_appraisals.id',$id)->first();
         return Excel::download(new ExporPerformanceDetail($data), 'performance_appraisal_'.$id.'.xlsx');
         
     }

@@ -88,69 +88,71 @@
                 </div>
             </div>
         </div>
-        <div class="row filter-btn"> 
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
-                <div class="form-group">
-                    <div class="search">
-                        <i class="uil uil-search"></i>
-                        <input spellcheck="false" id="employee_id" name="employee_id" class="form-control" type="text" placeholder="Employee ID">
+        @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO', 'HOD','DHOD','BM','DBM']))
+            <div class="row filter-btn"> 
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
+                    <div class="form-group">
+                        <div class="search">
+                            <i class="uil uil-search"></i>
+                            <input spellcheck="false" id="employee_id" name="employee_id" class="form-control" type="text" placeholder="Employee ID">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                <div class="form-group ">
-                    <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <div class="form-group ">
+                        <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                 @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                    <div class="form-group">
-                        <select class="select form-control hr-select2-option" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
-                            @foreach ($branch as $item)
-                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
-                            @endforeach
-                        </select>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <div class="form-group">
+                            <select class="select form-control hr-select2-option" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                                @foreach ($branch as $item)
+                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                @endif
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                    <div class="form-group">
-                        <select class="select form-control hr-select2-option" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
-                            @foreach ($department as $item)
-                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
-                            @endforeach
-                        </select>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <div class="form-group">
+                            <select class="select form-control hr-select2-option" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
+                                @foreach ($department as $item)
+                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
+                @else
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
                 @endif
-            </div>
-            <div class="col-sm-2 col-md-2">
-                <div style="display: flex">
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
-                        <span class="btn-txt"><i class="fa fa-search"></i></span>
-                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                    </button>
-                    {{-- @if ($permission->is_export == "1") --}}
-                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
-                            <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
-                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                <div class="col-sm-2 col-md-2">
+                    <div style="display: flex">
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
+                            <span class="btn-txt"><i class="fa fa-search"></i></span>
+                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                         </button>
-                    {{-- @endif --}}
-                    <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
-                        <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
-                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                    </button>
+                        @if ($permission->is_export == "1")
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                                <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
+                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            </button>
+                        @endif
+                        <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                            <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
-                <a href="javascript:void(0);" class="btn btn-sm btn-secondary mb-3" id="btnApprovedAll" data-userid="{{Auth::user()->id}}">
+                {{-- <a href="javascript:void(0);" class="btn btn-sm btn-secondary mb-3" id="btnApprovedAll" data-userid="{{Auth::user()->id}}">
                     Approved
-                </a>
+                </a> --}}
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
@@ -158,12 +160,12 @@
                                 <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            <th>
+                                            {{-- <th>
                                                 <div class="custom-control custom-checkbox custom-control-inline big-checkbox">
                                                     <input type="checkbox" class="custom-control-input checkAll" name="checkAll" id="checkAll" onClick="toggle(this)">
                                                     <label class="custom-control-label" for="checkAll"></label>
                                                 </div>
-                                            </th>
+                                            </th> --}}
                                             <th class="text-nowrap sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
                                             <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
                                             <th class="sorting sorting_asc ">@lang('lang.employee_name')</th>
@@ -176,7 +178,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.total_weight')</th>
                                             <th>@lang('lang.approve_by')</th>
                                             <th>@lang('lang.approve') @lang('lang.date')</th>
-                                            <th>@lang('lang.asign_to')</th>
+                                            {{-- <th>@lang('lang.asign_to')</th> --}}
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
@@ -806,22 +808,22 @@
                     }
                 },
                 columns: [
-                    {
-                        data: 'id',
-                        name: 'id',
-                        orderable: false,
-                        searchable: false,
-                        render: function(data, type, row) {
-                            let disabledAttr = "";
-                            if (row.status == "preparing") {
-                                disabledAttr = "disabled";
-                            }
-                            return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
-                                <input type="checkbox" class="custom-control-input sub_chk" ${disabledAttr} name="checkbox" data-status="${row.status}" data-id="${data}" id="${data}" value="${data}">
-                                <label class="custom-control-label" for="${data}"></label>
-                            </div>`;
-                        }
-                    },
+                    // {
+                    //     data: 'id',
+                    //     name: 'id',
+                    //     orderable: false,
+                    //     searchable: false,
+                    //     render: function(data, type, row) {
+                    //         let disabledAttr = "";
+                    //         if (row.status == "preparing") {
+                    //             disabledAttr = "disabled";
+                    //         }
+                    //         return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
+                    //             <input type="checkbox" class="custom-control-input sub_chk" ${disabledAttr} name="checkbox" data-status="${row.status}" data-id="${data}" id="${data}" value="${data}">
+                    //             <label class="custom-control-label" for="${data}"></label>
+                    //         </div>`;
+                    //     }
+                    // },
                      {
                         data: 'status',
                         name: 'status',
@@ -889,37 +891,37 @@
                         data: 'approved_date',
                         name: 'approved_date',
                     },
-                    {
-                        data: null,
-                        name: 'asign_to',
-                        orderable: false,
-                        searchable: false,
-                        render: function (data, type, row) {
-                            let textBtn = "@lang('lang.asign_to')";
-                            if (row.status == 4) {
-                                textBtn = "@lang('lang.approved')";
-                            }
-                            if (userIdLog == data.review_employee_id || userPermission.is_access == 1 && (row.status !="preparing" && row.status != "approved")) {
-                                return `
-                                    <a class="btn btn-white btn-sm btn-rounded btn-asign" 
-                                    data-id="${row.id}" 
-                                    data-name="${row.review_employee_name_en}" 
-                                    data-employeeid="${row.employee_id}"
-                                    data-status="${row.status}" 
-                                    href="#" aria-expanded="false">
-                                        <i class="fa fa-dot-circle-o text-success"></i>
-                                        <span>${textBtn}</span>
-                                    </a>
-                                `;
-                            } else {
-                                return `
-                                        <a class="btn btn-white btn-sm btn-rounded" href="#">
-                                            <i class="fa fa-dot-circle-o text-danger"></i> <span>You can't asign</span>
-                                        </a>
-                                `;
-                            }
-                        }
-                    },
+                    // {
+                    //     data: null,
+                    //     name: 'asign_to',
+                    //     orderable: false,
+                    //     searchable: false,
+                    //     render: function (data, type, row) {
+                    //         let textBtn = "@lang('lang.asign_to')";
+                    //         if (row.status == 4) {
+                    //             textBtn = "@lang('lang.approved')";
+                    //         }
+                    //         if (userIdLog == data.review_employee_id || userPermission.is_access == 1 && (row.status !="preparing" && row.status != "approved")) {
+                    //             return `
+                    //                 <a class="btn btn-white btn-sm btn-rounded btn-asign" 
+                    //                 data-id="${row.id}" 
+                    //                 data-name="${row.review_employee_name_en}" 
+                    //                 data-employeeid="${row.employee_id}"
+                    //                 data-status="${row.status}" 
+                    //                 href="#" aria-expanded="false">
+                    //                     <i class="fa fa-dot-circle-o text-success"></i>
+                    //                     <span>${textBtn}</span>
+                    //                 </a>
+                    //             `;
+                    //         } else {
+                    //             return `
+                    //                     <a class="btn btn-white btn-sm btn-rounded" href="#">
+                    //                         <i class="fa fa-dot-circle-o text-danger"></i> <span>You can't asign</span>
+                    //                     </a>
+                    //             `;
+                    //         }
+                    //     }
+                    // },
                     {
                         data: null,
                         name: 'action',
@@ -934,6 +936,9 @@
                                             <i class="fa fa-regular fa-eye"></i> Preview
                                         </a>
                                         <a class="dropdown-item" href="{{url("performance-admin/histories")}}/${row.id}" ><i class="fa fa-eye m-r-5"></i> @lang('lang.view_history')</a>
+                                        <a class="dropdown-item" href="{{url('performance-admin/kpi-export')}}/${row.id}">
+                                            <i class="fa fa-arrow-circle-down"></i> Export
+                                        </a>
                                     </div>
                                 </div>
                             `;
