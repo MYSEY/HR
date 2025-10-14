@@ -16,43 +16,43 @@
         <div class="row filter-btn"> 
             <div class="col-md-10">
                 <div class="row">
-                    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4"> 
-                        <div class="form-group">
-                            <div class="search">
-                                <i class="uil uil-search"></i>
-                                <input spellcheck="false" id="employee_id" name="employee_id" class="form-control" type="text" placeholder="Employee ID">
+                    @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO', 'HOD','DHOD','BM','DBM']))
+                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4"> 
+                            <div class="form-group">
+                                <div class="search">
+                                    <i class="uil uil-search"></i>
+                                    <input spellcheck="false" id="employee_id" name="employee_id" class="form-control" type="text" placeholder="Employee ID">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                        <div class="form-group ">
-                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group ">
+                                <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
                         @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                            <div class="form-group">
-                                <select class="select form-control hr-select2-option" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                                    <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
-                                    @foreach ($branch as $item)
-                                        <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                <div class="form-group">
+                                    <select class="select form-control hr-select2-option" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                                        <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                                        @foreach ($branch as $item)
+                                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                <div class="form-group">
+                                    <select class="select form-control hr-select2-option" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                                        <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
+                                        @foreach ($department as $item)
+                                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         @endif
-                    </div>
-                    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                        @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                            <div class="form-group">
-                                <select class="select form-control hr-select2-option" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
-                                    <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
-                                    @foreach ($department as $item)
-                                        <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @endif
-                    </div>
+                    @endif
                     <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 col-4">
                         <div class="form-group">
                             <div class="cal-icon">
@@ -76,7 +76,7 @@
                         <span class="btn-txt"><i class="fa fa-search"></i></span>
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
-                    @if (permissionAccess("m4-s2","is_export")->value == "1")
+                    @if ($permission->is_export== "1")
                         <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
                             <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
                             <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -323,7 +323,7 @@
                                             <i class="fa fa-regular fa-eye"></i> Detail
                                         </a>
                                         <a class="dropdown-item" href="{{url('performance/appraisal/pa-export')}}/${row.id}">
-                                            <i class="fa fa-regular fa-eye"></i> Export
+                                            <i class="fa fa-arrow-circle-down"></i> Export
                                         </a>
                                     </div>
                                 </div>

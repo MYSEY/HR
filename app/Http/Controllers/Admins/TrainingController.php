@@ -191,7 +191,7 @@ class TrainingController extends Controller
     {
         $data = Training::where("id", $request->id)->first();
         $trainer = Trainer::with("employee")->get();
-        $employee = User::whereIn("emp_status", ['Probation','Upcoming','1','10','2'])->get();
+        $employee = User::get();
 
         return response()->json([
             'success'=>$data,

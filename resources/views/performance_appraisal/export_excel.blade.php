@@ -130,7 +130,25 @@
             <td>{{ $data->total_score_direct_chairman ?? 0 }}</td>
             <td colspan="2"></td>
         </tr>
-         @php
+        <tr><td colspan="11" style="font-weight: bold;">ផ្នែកទី៣៖ ការវាយតម្លៃលើសមត្ថភាព (ប្រើនៅពេលវាយតម្លៃការងារ)</td></tr>
+        <tr>
+            <th rowspan="4">កម្រិតពិន្ទុ៖</th>
+            <td colspan="7">លើសពីកម្រិតសមត្ថភាព/ចំណេះដឹងដែលទាមទារ</td>
+            <td colspan="3">ប្រហាក់ប្រហែល រឺត្រូវនឹងកម្រិតសមត្ថភាព/ចំណេះដឹងដែលទាមទារ</td>
+        </tr>
+        <tr>
+            <td colspan="7">៥ = ឆ្នើម (អនុវត្តន៍ការងារលើសផែនការ>20%)​</td>
+            <td colspan="3">៣ = មធ្យម (អនុវត្តន៍ការងារគ្រប់ផែនការ)</td>
+        </tr>
+        <tr>
+            <th rowspan="2" colspan="7">៤ = ល្អ (អនុវត្តន៍ការងារលើសផែនការ>10%)</th>
+            <td colspan="3">២ = ត្រូវកែលម្អ​ (ក្រោមផែនការ)</td>
+        </tr>
+        <tr>
+            <td colspan="3">១=  ខ្សោយ (ក្រោមផែនការ)</td>
+        </tr>
+        <tr><td colspan="11" style="font-weight: bold;">ផ្នែកទី៤៖ លទ្ធផលវាយតម្លៃសរុប  (ប្រើនៅពេលវាយតម្លៃការងារ)</td></tr>
+        @php
             $overallResults = '';
             $color = '';
             $score = (float) $data->total_score_direct_chairman;
@@ -154,14 +172,24 @@
             }
         @endphp
         <tr>
-            <td colspan="4" align="right" style="font-weight: bold;">% ពិន្ទុវាយតម្លៃតាមគោលដៅ</td>
-            <td></td>
-            <td></td>
-            <td colspan="3" class="text-center">
-                {{$overallResults}}
-            </td>
-            <td></td>
-            <td></td>
-       </tr>
+            <th rowspan="2" colspan="8">% ពិន្ទុវាយតម្លៃតាមគោលដៅ</th>
+            <td colspan="2" align="center" style="font-weight: bold; background-color: #FFCCFF">លទ្ធផលរួម</td>
+            <td align="center" style="font-weight: bold; background-color: #FFCCFF">កម្រិតពិន្ទុ៖</td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center" style="color: red">{{$overallResults}}</td>
+            <td align="center" style="color: red">{{ $data->total_score_direct_chairman ?? 0 }}</td>
+        </tr>
+       <tr><td colspan="11" style="font-weight: bold;">ផ្នែកទី៥៖ យោបល់ និងសំណូមពរទូទៅរបស់បុគ្គលិក  (ប្រើនៅពេលវាយតម្លៃការងារ)</td></tr>
+        <tr>
+            <td colspan="3"style="font-weight: bold;">ក-ចំណុចខ្លាំង</td>
+            <td colspan="4" align="center" style="font-weight: bold;">ចំនុចដែលត្រូវប្រែ និងអភិវឌ្ឍន៍បុគ្គលិក </td>
+            <td colspan="4" align="center" style="font-weight: bold;">បំណងប្រាថ្នា និងផែនការអភិវឌ្ឍន៍មុខតំណែងក្នុងគ្រឹះស្ថានមីក្រូ ខេមា (រយៈពេល ៣ ទៅ ៥ ឆ្នាំ)</td>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+            <td colspan="4"></td>
+            <td colspan="4"></td>
+        </tr>
     </tbody>
 </table>

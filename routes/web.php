@@ -284,6 +284,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('performance-admin/kpi-report', [PerformanceAdminController::class,'kpiReport']);
     Route::get('performance-admin/kpi-export', [PerformanceAdminController::class,'reportExport']);
+    Route::get('performance-admin/kpi-export/{id}', [PerformanceAdminController::class,'kpiReportExportDetail']);
     
     Route::get('performance-admin/{id}', [PerformanceAdminController::class,'show']);
     Route::get('performance-admin/histories/{id}', [PerformanceAdminController::class,'histories']);

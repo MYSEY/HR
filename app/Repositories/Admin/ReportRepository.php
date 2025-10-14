@@ -7,6 +7,8 @@ use App\Models\FringeBenefit;
 use App\Models\GenerateAnnualSalaryIncreasement;
 use App\Models\Payroll;
 use App\Models\Performance;
+use App\Models\PerformanceAppraisal;
+use App\Models\permissions;
 use App\Models\TrainingDetailStaff;
 use App\Repositories\BaseRepository;
 use App\Traits\UploadFiles\UploadFIle;
@@ -333,58 +335,180 @@ class ReportRepository extends BaseRepository
         }
         return $query;
     }
-    public function getPAReport($request){
-      
-        // Base query with joins
+    public function getKpiReport($request, $permission){
         $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
-            ->leftJoin('options', 'users.gender', '=', 'options.id')
-            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
-            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
-            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
-            ->select(
-                'performances.*',
-                'users.position_id',
-                'users.department_id',
-                'users.branch_id',
-                'users.number_employee',
-                'users.employee_name_kh',
-                'users.employee_name_en',
-                'users.date_of_commencement',
-                'options.name_khmer as gender_name_khmer',
-                'options.name_english as gender_name_english',
-                'users.branch_id',
-                'departments.name_english as dep_name',
-                'departments.name_khmer as dep_name_kh',
-                'positions.name_english as positions_name',
-                'positions.name_khmer as positions_name_kh',
-                'branchs.branch_name_en',
-                'branchs.branch_name_kh',
-            )
-        ->where('performances.status', 'approved')
-        ->when($request->from_date, function ($query, $from_date) {
-            $query->where('performances.from_date', '>=', $from_date);
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->leftJoin('users as reviewEmployee', 'performances.review_employee_id', '=', 'reviewEmployee.id')
+        ->leftJoin('users as userApprove', 'performances.approved_by', '=', 'userApprove.id')
+         ->leftJoin('options', 'users.gender', '=', 'options.id')
+        ->select(
+            'performances.*',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'users.department_id',
+            'users.branch_id',
+            'users.line_manager',
+            'users.gender',
+            'users.date_of_commencement',
+            'options.name_khmer as gender_name_khmer',
+            'options.name_english as gender_name_english',
+
+            'departments.name_english as dep_name',
+            'departments.name_khmer as dep_name_khmer',
+            
+            'positions.name_english as positions_name',
+            'positions.name_khmer as positions_name_khmer',
+
+            'branchs.branch_name_en',
+            'branchs.branch_name_kh',
+
+            'reviewEmployee.number_employee as review_employee_number_employee',
+            'reviewEmployee.employee_name_kh as review_employee_name_kh',
+            'reviewEmployee.employee_name_en as review_employee_name_en',
+
+            'userApprove.number_employee as approve_number_employee',
+            'userApprove.employee_name_kh as approve_employee_name_kh',
+            'userApprove.employee_name_en as approve_employee_name_en',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
+
+            // HR Role: can only see their own data or subordinates if access denied
+            if ($RolePermission == 'HR' && $permission->is_access != "1") {
+                $query->where(function ($q) {
+                    $q->where("performances.employee_id", Auth::user()->id)
+                    ->orWhere("users.line_manager", Auth::user()->id);
+                });
+            }
+
+            // HOD or BM: can see same department and branch
+            if (in_array($RolePermission, ['HOD', 'BM'])) {
+                $query->where("users.department_id", Auth::user()->department_id)
+                    ->where("users.branch_id", Auth::user()->branch_id);
+            }
+
+            // DHOD or DBM: can see their own and those they manage
+            if (in_array($RolePermission, ['DHOD', 'DBM'])) {
+                $query->where(function ($q) {
+                    $q->where("performances.employee_id", Auth::user()->id)
+                    ->orWhere("users.line_manager", Auth::user()->id);
+                });
+            }
+
+            // Employee: can see only their own
+            if ($RolePermission == "Employee") {
+                $query->where("performances.employee_id", Auth::user()->id);
+            }
+
         })
-        ->when($request->to_date, function ($query, $to_date) {
-            $query->where('performances.to_date','<=', $to_date);
-        })
+        // 🔍 Search filters
         ->when($request->employee_id, function ($query, $employee_id) {
-            return $query->where('users.number_employee', $employee_id);
+            $query->where('users.number_employee', $employee_id);
         })
         ->when($request->employee_name, function ($query, $employee_name) {
-            return $query->where('users.employee_name_en', $employee_name);
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
         })
         ->when($request->branch_id, function ($query, $branch_id) {
-            return $query->where('users.branch_id', $branch_id);
+            $query->where('users.branch_id', $branch_id);
         })
         ->when($request->department_id, function ($query, $department_id) {
-            return $query->where('users.department_id', $department_id);
+            $query->where('users.department_id', $department_id);
         });
-    
+
         // Search filter
         $searchValue = request()->input('search.value');
         if (!empty($searchValue)) {
             $query->where(function ($q) use ($searchValue) {
                 $q->where('performances.id', 'like', "%{$searchValue}%")
+                ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
+                ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
+            });
+        }
+        return $query;
+    }
+    public function getPAReport($request, $permission){
+        $query = PerformanceAppraisal::leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
+        ->leftJoin('options', 'users.gender', '=', 'options.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+        ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+        ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->select(
+            'performance_appraisals.*',
+            'users.position_id',
+            'users.department_id',
+            'users.branch_id',
+            'users.line_manager',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+            'users.date_of_commencement',
+            'options.name_khmer as gender_name_khmer',
+            'options.name_english as gender_name_english',
+            'departments.name_english as dep_name',
+            'departments.name_khmer as dep_name_kh',
+            'positions.name_english as positions_name',
+            'positions.name_khmer as positions_name_kh',
+            'branchs.branch_name_en',
+            'branchs.branch_name_kh',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
+
+            // HR Role: can only see their own data or subordinates if access denied
+            if ($RolePermission == 'HR' && $permission->is_access != "1") {
+                $query->where(function ($q) {
+                    $q->where("performance_appraisals.employee_id", Auth::user()->id)
+                    ->orWhere("users.line_manager", Auth::user()->id);
+                });
+            }
+
+            // HOD or BM: can see same department and branch
+            if (in_array($RolePermission, ['HOD', 'BM'])) {
+                $query->where("users.department_id", Auth::user()->department_id)
+                    ->where("users.branch_id", Auth::user()->branch_id);
+            }
+
+            // DHOD or DBM: can see their own and those they manage
+            if (in_array($RolePermission, ['DHOD', 'DBM'])) {
+                $query->where(function ($q) {
+                    $q->where("performance_appraisals.employee_id", Auth::user()->id)
+                    ->orWhere("users.line_manager", Auth::user()->id);
+                });
+            }
+
+            // Employee: can see only their own
+            if ($RolePermission == "Employee") {
+                $query->where("performance_appraisals.employee_id", Auth::user()->id);
+            }
+
+        })
+        ->when($request->from_date, function ($query, $from_date) {
+            $query->where('performance_appraisals.from_date', '>=', $from_date);
+        })
+        ->when($request->to_date, function ($query, $to_date) {
+            $query->where('performance_appraisals.to_date','<=', $to_date);
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', $employee_id);
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('users.branch_id', $branch_id);
+        })
+        ->when($request->department_id, function ($query, $department_id) {
+            $query->where('users.department_id', $department_id);
+        });
+        
+        // Search filter
+        $searchValue = request()->input('search.value');
+        if (!empty($searchValue)) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('performance_appraisals.id', 'like', "%{$searchValue}%")
                 ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
                 ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
                 ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")

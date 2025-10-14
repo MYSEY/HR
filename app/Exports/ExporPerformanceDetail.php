@@ -48,18 +48,38 @@ class ExporPerformanceDetail implements FromView, WithEvents
                 $sheet->mergeCells('A1:K1');
 
                  // Header background
+                /** ផ្នែកទី១៖ */
                 $sheet->getStyle('A3:K3')->getFill()
                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
                     ->getStartColor()->setARGB('FF66FF66');
-                // Table header background
+                
+                /** ផ្នែកទី២៖ */
                 $sheet->getStyle('A7:K7')->getFill()
                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                    ->getStartColor()->setARGB('FF66FF66'); // FF = fully opaque
+                    ->getStartColor()->setARGB('FF66FF66');
 
-               
+                /** ផ្នែកទី៣៖ */
+                $backgroundWait = $highestRow - 10;
+                $sheet->getStyle("A$backgroundWait:K$backgroundWait")->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB('FF66FF66');
+
+                /** ផ្នែកទី៤៖ */
+                $backgroundWait = $highestRow - 5;
+                $sheet->getStyle("A$backgroundWait:K$backgroundWait")->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB('FF66FF66');
+
+                /** ផ្នែកទី៥៖ */
+                $background = $highestRow - 2;
+                $sheet->getStyle("A$background:K$background")->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB('FF66FF66');
 
                 $sheet->getStyle('A:Z')->getAlignment()->setWrapText(true);
-                $sheet->getStyle("C8:K$highestRow")->getAlignment()->setHorizontal('center');
+                
+                $centerRow = $highestRow - 10;
+                $sheet->getStyle("C8:K$centerRow")->getAlignment()->setHorizontal('center');
                 $sheet->getStyle("A8:K$highestRow")->getAlignment()->setVertical('center');
 
                 // 🧭 Set column widths
@@ -102,7 +122,8 @@ class ExporPerformanceDetail implements FromView, WithEvents
                 ]);
 
                 // 🧭 Center numeric columns
-                $sheet->getStyle("D7:K$highestRow")->getAlignment()->setHorizontal('center');
+                $sheet->getStyle("D7:K$centerRow")->getAlignment()->setHorizontal('center');
+
                 $sheet->getParent()->getDefaultStyle()->getFont()->setName('Khmer OS Battambang');
             }
         ];
