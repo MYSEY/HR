@@ -8,6 +8,7 @@ use App\Models\PaDetail;
 use App\Models\Department;
 use App\Exports\ExportKpis;
 use App\Models\Performance;
+use App\Models\permissions;
 use Illuminate\Http\Request;
 use App\Exports\DownloadKpis;
 use Illuminate\Support\Facades\DB;
@@ -72,8 +73,18 @@ class PerformanceAppraisalController extends Controller
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
                 });
             }
+
+            if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM'])) {
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("performance_appraisals.review_employee_id", Auth::user()->id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+
+            if (in_array(Auth::user()->RolePermission, ['Employee'])) {
+                $query->where('performance_appraisals.employee_id', Auth::user()->id);
+            }
         
-            $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
+            $recordsTotal = PerformanceAppraisal::where('status', 'approved')->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));

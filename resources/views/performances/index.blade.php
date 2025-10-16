@@ -197,7 +197,7 @@
             </div>
         </div>
         <!-- Delete Performane Modal -->
-        <div class="modal custom-modal fade" id="delete_performance" role="dialog">
+        <div class="modal custom-modal fade" id="deleteModal" role="dialog">
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -536,11 +536,11 @@
                 $("#btn-text-loading").css('display', 'block');
                 window.location.replace("{{ URL('performance') }}");
             });
-            $('.performanceDelete').on('click',function(){
+            $(document).on('click', '.performanceDelete', function (e) {
                 let id = $(this).data("id");
                 $('.e_id').val(id);
+                $('#deleteModal').modal('show');
             });
-
 
             $('body').on('click','#btnAccepted',function(){
                 var id = $(this).data("id");
@@ -770,7 +770,7 @@
                                         <a href="{{url('/performance')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
                                             <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')
                                         </a>
-                                        <a class="dropdown-item performanceDelete" href="#" data-toggle="modal" data-id="${row.id}" data-target="#delete_performance"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                        <a class="dropdown-item performanceDelete" href="#" data-toggle="modal" data-id="${row.id}"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                     </div>
                                 </div>
                             `;
