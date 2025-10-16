@@ -81,15 +81,26 @@ class PerformanceController extends Controller
                 });
             }
             
-            if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM'])) {
+            if (in_array(Auth::user()->RolePermission, ['HR','HRAdmin','HOD'])) {
                 $query->where("users.department_id", Auth::user()->department_id);
                 $query->where("performances.review_employee_id", Auth::user()->id);
                 $query->where("users.branch_id", Auth::user()->branch_id);
                 $query->where('performances.status', 'preparing');
             }
-
+            if (in_array(Auth::user()->RolePermission, ['BM'])){
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array(Auth::user()->RolePermission, ['DHOD','DBM'])){
+                $query->where("users.line_manager", Auth::user()->id);
+                $query->OrWhere("performances.employee_id", Auth::user()->id);
+            }
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
                 $query->where('performances.employee_id', Auth::user()->id);
+            }
+            if (in_array(Auth::user()->RolePermission, ['BOD','CEO'])){
+                $query->whereNot("users.id", Auth::user()->id);
+                $query->whereNot("roles.role_type", "Employee");
             }
 
             $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
