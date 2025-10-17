@@ -932,10 +932,10 @@
                                 <div class="dropdown dropdown-action">
                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="{{url('performance-admin')}}/${row.id}">
+                                        <a class="dropdown-item" href="{{url('performance-admin')}}/${row.id}/kpi-report">
                                             <i class="fa fa-regular fa-eye"></i> Preview
                                         </a>
-                                        <a class="dropdown-item" href="{{url("performance-admin/histories")}}/${row.id}" ><i class="fa fa-eye m-r-5"></i> @lang('lang.view_history')</a>
+                                        <a class="dropdown-item" href="{{url("performance-admin/histories")}}/${row.id}/kpi-report" ><i class="fa fa-eye m-r-5"></i> @lang('lang.view_history')</a>
                                         <a class="dropdown-item" href="{{url('performance-admin/kpi-export')}}/${row.id}">
                                             <i class="fa fa-arrow-circle-down"></i> Export
                                         </a>

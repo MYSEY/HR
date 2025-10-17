@@ -25,7 +25,7 @@
     <div class="row filter-btn"> 
         <div class="col-sm-12 col-md-12">
             <div style="display: flex" class="float-end">
-                <a href="{{ url('/performance-admin') }}" type="button" class="btn btn-icon btn-soft-success me-1">
+                <a href="{{ url($url) }}" type="button" class="btn btn-icon btn-soft-success me-1">
                     <i class="fa fa-angle-double-left"></i> @lang('lang.back')
                 </a>
             </div>
@@ -104,11 +104,14 @@
                                                     <td data-toggle="tooltip" data-html="true" title="{!! $item->reason !!}" >
                                                         {{ Str::limit($item->reason, 30, '...') }}
                                                     </td>
+                                                    @php
+                                                        $lastSegment = request()->segment(count(request()->segments()));
+                                                    @endphp
                                                     <td style="text-align: center;">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item" href="{{url('performance-admin/histories/detail')}}/{{$item->id}}">
+                                                                <a class="dropdown-item" href="{{url('performance-admin/histories-detail')}}/{{$item->id}}/1/{{$lastSegment}}">
                                                                     <i class="fa fa-regular fa-eye"></i> Preview
                                                                 </a>
                                                             </div>

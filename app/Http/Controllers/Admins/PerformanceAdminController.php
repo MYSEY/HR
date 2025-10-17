@@ -130,7 +130,7 @@ class PerformanceAdminController extends Controller
         // dd($data);
         return view('performance_admins.index',compact('data'));
     }
-    public function show($id)
+    public function show($id,$url)
     {
         $permission = self::permission();
         $data = Performance::with(['titles.purposes.performanceDetail'])
@@ -152,7 +152,11 @@ class PerformanceAdminController extends Controller
             'reviewEmployee.employee_name_kh as review_employee_name_kh',
             'reviewEmployee.employee_name_en as review_employee_name_en',
         )->where('performances.id',$id)->first();
-        return view('performance_admins.preview',compact('data','permission'));
+
+        if($url == "kpi-report"){
+            $url = 'performance-admin/kpi-report';
+        }
+        return view('performance_admins.preview',compact('data','permission','url'));
     }
     public function dataHistory(){
         $query = PerformanceHistory::with(['titles.purposes.performanceDetail'])
@@ -179,18 +183,21 @@ class PerformanceAdminController extends Controller
             );
         return $query;
     }
-    public function histories($id)
+    public function histories($id, $url)
     {
+        if($url == 'kpi-report'){
+            $url='performance-admin/kpi-report';
+        }
         $query = self::dataHistory();
         $datas = $query->where("performance_histories.performance_id", $id)->get();
-        return view('performance_admins.view_histories', compact('datas'));
+        return view('performance_admins.view_histories', compact('datas','url'));
     }
-    public function historiesDetail($id)
+    public function historiesDetail($id, $url, $urlpage)
     {
         $permission = false;
         $query = self::dataHistory();
         $data = $query->where("performance_histories.id", $id)->first();
-        return view('performance_admins.preview', compact('data','permission'));
+        return view('performance_admins.preview', compact('data','permission', 'url','urlpage'));
     }
    
     public function employees(Request $request)

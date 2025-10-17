@@ -278,7 +278,7 @@
                 
                 <input type="text" name="id" id="id" value="{{ $data->id }}" hidden>
                 <input type="text" name="employee_id" id="employee_id" value="{{ $data->employee_id }}" hidden>
-                <a href=" @if ($data->status =='approved') {{ url('performance-appraisal') }} @else {{ url('performance-appraisal') }} @endif" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+                <a href=" @if ($data->status =='approved') {{ url('performance/appraisal/pa-report') }} @else {{ url('performance-appraisal') }} @endif" class="btn btn-secondary btn-cancel">@if ($data->status =='approved') @lang('lang.back') @else @lang('lang.cancel')@endif</a>
             </div>
         </div>
     </div>

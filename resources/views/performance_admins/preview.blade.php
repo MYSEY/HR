@@ -217,7 +217,11 @@
                             </a>
                         @endif
                     @endif
-                    <a href=" @if ($permission) {{ url('performance-admin') }} @else {{ url('performance-admin/histories') }}/{{$data->performance_id}} @endif" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+                    @if ($url && $url == 1)
+                        <a href="{{url('performance-admin/histories')}}/{{$data->performance_id}}/{{$urlpage}}" class="btn btn-secondary btn-cancel">@lang('lang.back')</a>
+                    @else
+                        <a href="{{ url($url)}}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
+                    @endif
                 </div>
             </form>
         </div>
