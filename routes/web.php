@@ -38,7 +38,6 @@ use App\Http\Controllers\Admins\TrainingTypeController;
 use App\Http\Controllers\Admins\ExpenseReportController;
 use App\Http\Controllers\Admins\FnPaymentTermController;
 use App\Http\Controllers\Admins\FringeBenefitController;
-use App\Http\Controllers\Admins\PALevelReviewController;
 use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\ExpenseRequestController;
 use App\Http\Controllers\Admins\FNExchangeRateController;
@@ -648,17 +647,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/fn/expense/report', [ExpenseReportController::class,'index']);
     Route::post('/fn/expense/search', [ExpenseReportController::class,'filter']);
     Route::get('/fn/expense/report/export', [ExpenseReportController::class,'reportExport']);
-
-    // Block PA level review
-    Route::get('/pa/level/review', [PALevelReviewController::class,'index']);
-    Route::post('/pa/level//search', [PALevelReviewController::class,'']);
-    Route::get('/pa/level/create', [PALevelReviewController::class,'formCreate']);
-    Route::post('/pa/level/create', [PALevelReviewController::class,'create']);
-    Route::get('/pa/level/edit/{id}', [PALevelReviewController::class,'formEdit']);
-    Route::post('/pa/level/update', [PALevelReviewController::class,'update']);
-    Route::get('/pa/level//export', [PALevelReviewController::class,'']);
-    Route::get('/pa/level/view/{id}', [PALevelReviewController::class,'view']);
-    Route::post('/pa/level/delete', [PALevelReviewController::class,'destroy']);
     
     // Block backup database and file upload
     Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
