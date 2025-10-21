@@ -22,11 +22,13 @@ use App\Exports\ExportPerformance;
 use App\Models\PerformanceHistory;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Mail\SendEmail;
 use App\Models\PerformanceAppraisal;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PerformanceDetailHistory;
 use App\Repositories\Admin\ReportRepository;
+use Illuminate\Support\Facades\Mail;
 
 class PerformanceAdminController extends Controller
 {
@@ -296,6 +298,14 @@ class PerformanceAdminController extends Controller
         });
     }
 
+    public function sendEmail($asign_employee_id){
+        $user = User::where("id", $asign_employee_id)->first();
+        $datasSendEmail = [
+            'user'      => $user,
+            'type'      => "kpi",
+        ];
+        // Mail::to($user->email)->queue(new SendEmail($datasSendEmail, false));
+    }
     public function asign(Request $request)
     {
         DB::beginTransaction();
@@ -315,6 +325,8 @@ class PerformanceAdminController extends Controller
                     'message' => 'weight_must_be_exactly'
                 ]);
             }
+            // ✅ Start service email
+            self::sendEmail($request->asign_employee_id);
             DB::commit();
             return response()->json([
                 'success' => true,
@@ -352,6 +364,8 @@ class PerformanceAdminController extends Controller
                     ]);
                 }
             }
+            // ✅ Start service email
+            self::sendEmail($request->asign_employee_id);
             DB::commit();
             return response()->json([
                 'success' => true,
