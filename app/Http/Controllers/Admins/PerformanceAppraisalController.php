@@ -74,14 +74,15 @@ class PerformanceAppraisalController extends Controller
                 });
             }
 
-            if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM'])) {
+            if (in_array(Auth::user()->RolePermission, ['DHOD','DBM'])){
                 $query->where("users.department_id", Auth::user()->department_id);
-                $query->where("performance_appraisals.review_employee_id", Auth::user()->id);
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
 
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
                 $query->where('performance_appraisals.employee_id', Auth::user()->id);
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
             }
         
             $recordsTotal = PerformanceAppraisal::where('status', 'approved')->count();  // total records without filter

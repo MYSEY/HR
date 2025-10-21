@@ -249,7 +249,7 @@
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a href="{{url('performance-appraisal')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
-                                            <i class="fa fa-pencil m-r-5"></i> KPI
+                                            <i class="fa fa-pencil m-r-5"></i> Update Score
                                         </a>
                                     </div>
                                 </div>

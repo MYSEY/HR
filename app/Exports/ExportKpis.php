@@ -20,11 +20,11 @@ class ExportKpis implements FromCollection, WithColumnWidths, WithHeadings, With
 
     public function __construct($id)
     {
-        $data = PerformanceAppraisal::with(['users', 'PaDetail'])->where('status', 'approved')->where('performance_appraisals.id', $id)->get();
+        $data = PerformanceAppraisal::with(['users', 'performanceDetail'])->where('performance_appraisals.id', $id)->get();
         $i = 0;
         $dataPer = [];
         foreach ($data as $performance) {
-            foreach ($performance->PaDetail as $detail) {
+            foreach ($performance->performanceDetail as $detail) {
                 $i++;
                 $this->num = $i;
                 $dataPer[] = [

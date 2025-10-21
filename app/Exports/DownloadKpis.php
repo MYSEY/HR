@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\PaDetail;
+use App\Models\PerformanceAppraisal;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -20,11 +20,11 @@ class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, Wi
 
     public function __construct($id)
     {
-        $data = PaDetail::with(['users', 'PaDetail'])->where('status', 'approved')->get();
+        $data = PerformanceAppraisal::with(['users', 'performanceDetail'])->get();
         $i = 0;
         $dataPer = [];
         foreach ($data as $performance) {
-            foreach ($performance->PaDetail as $detail) {
+            foreach ($performance->performanceDetail as $detail) {
                 $i++;
                 $this->num = $i;
                 $dataPer[] = [

@@ -133,6 +133,7 @@
 @section('script')
     <script>
         var number_employee = null;
+        const userRole = "{{ Auth::user()->RolePermission }}";
         $(function(){
             $("#importKPI").on("click", function() {
                 $(".thanLess").hide();
@@ -323,26 +324,65 @@
                         orderable: true,
                         searchable: true,
                         render: function (data, type, row) {
-                            return `
+                            let actionHtml = `
                                 <div class="dropdown dropdown-action">
                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="{{url('performance-appraisal-preview')}}/${row.id}">
-                                            <i class="fa fa-regular fa-eye"></i> Preview KPI
+                                        <a class="dropdown-item" href="{{ url('performance-appraisal-preview') }}/${row.id}">
+                                            <i class="fa fa-regular fa-eye"></i> Preview
                                         </a>
-                                        <a class="dropdown-item" href="{{url('performance-appraisal')}}/${row.id}">
-                                            <i class="fa fa-regular fa-eye"></i> Update Progress
-                                        </a>
-                                        <a class="dropdown-item" href="{{url('performance/appraisal/export')}}/${row.id}">
-                                            <i class="fa fa-regular fa-eye"></i> Export
+                            `;
+
+                            // ✅ Add conditionally based on userRole
+                            if (userRole =='Employee') {
+                                actionHtml += `
+                                    <a class="dropdown-item" href="{{ url('performance-appraisal') }}/${row.id}">
+                                        <i class="fa fa-regular fa-pencil"></i> Update Progress
+                                    </a>
+                                `;
+                            }
+
+                            // ✅ Always add Export link
+                            actionHtml += `
+                                        <a class="dropdown-item" href="{{ url('performance/appraisal/export') }}/${row.id}">
+                                            <i class="fa fa-regular fa-download"></i> Export
                                         </a>
                                     </div>
                                 </div>
                             `;
+
+                            return actionHtml;
                         }
                     }
+
+                    // {
+                    //     data: null,
+                    //     name: 'action',
+                    //     orderable: true,
+                    //     searchable: true,
+                    //     render: function (data, type, row) {
+                    //         return `
+                    //             <div class="dropdown dropdown-action">
+                    //                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    //                     <i class="material-icons">more_vert</i>
+                    //                 </a>
+                    //                 <div class="dropdown-menu dropdown-menu-right">
+                    //                     <a class="dropdown-item" href="{{url('performance-appraisal-preview')}}/${row.id}">
+                    //                         <i class="fa fa-regular fa-eye"></i> Preview KPI
+                    //                     </a>
+                    //                     <a class="dropdown-item" href="{{url('performance-appraisal')}}/${row.id}">
+                    //                         <i class="fa fa-regular fa-eye"></i> Update Progress
+                    //                     </a>
+                    //                     <a class="dropdown-item" href="{{url('performance/appraisal/export')}}/${row.id}">
+                    //                         <i class="fa fa-regular fa-eye"></i> Export
+                    //                     </a>
+                    //                 </div>
+                    //             </div>
+                    //         `;
+                    //     }
+                    // }
                 ],
                 order: [[0, 'desc']],
                 initComplete: function() {

@@ -94,13 +94,16 @@ class PerformanceController extends Controller
             if (in_array(Auth::user()->RolePermission, ['DHOD','DBM'])){
                 $query->where("users.line_manager", Auth::user()->id);
                 $query->OrWhere("performances.employee_id", Auth::user()->id);
+                $query->where('performances.status', 'preparing');
             }
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
                 $query->where('performances.employee_id', Auth::user()->id);
+                $query->where('performances.status', 'preparing');
             }
             if (in_array(Auth::user()->RolePermission, ['BOD','CEO'])){
                 $query->whereNot("users.id", Auth::user()->id);
                 $query->whereNot("roles.role_type", "Employee");
+                $query->where('performances.status', 'preparing');
             }
 
             $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
