@@ -2,7 +2,7 @@
     <div class="card-header">
         <div>
             <div style="text-align: right" class="font-title">
-                <label style="font-size: 16px">Camma_FND_002</label><br>
+                <label style="font-size: 16px">CAMMA_FND_002</label><br>
             </div>
             <div style="text-align: center" class="font-title">
                 <label class="title">ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត</label><br>
