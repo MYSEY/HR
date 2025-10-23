@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use App\Models\User;
 use App\Models\Branchs;
+use Carbon\Traits\Date;
 use App\Models\PaDetail;
 use App\Models\Department;
 use App\Exports\ExportKpis;
@@ -355,15 +356,43 @@ class PerformanceAppraisalController extends Controller
             $dataArray = [];
             $dataUserLeaveArray = [];
             $employeeTotals = []; // hold totals for each employee
+            $scoreAchieved = 0;
             foreach ($dataKPI as $item) {
                 $i++;
                 if ($i != 1) {
                     $employee = User::where("number_employee", $item[0])->first();
                     if ($employee) {
+                        $goalText = trim($item[7] ?? '');
+                        $lines = preg_split('/\r\n|\r|\n/', $goalText);
+                        $scoreAchieved = null; // default
+                        foreach ($lines as $index => $line) {
+                            $parts = preg_split('/\s+/', trim($line));
 
-                        $score  = (float)($item[12] ?? 0);
-                        $live   = (float)($item[13] ?? 0);
-                        $chair  = (float)($item[14] ?? 0);
+                            // Expect exactly 2 numbers (min and max)
+                            if (count($parts) !== 2) {
+                                $isValidGoal = false;
+                                break;
+                            }
+
+                            [$minRaw, $maxRaw] = $parts;
+
+                            // Convert to numeric
+                            $min = (float) $minRaw;
+                            $max = (float) $maxRaw;
+                            $progress = $item[9]; // the value to compare
+                            
+                            if ($progress >= $min && $progress < $max) {
+                                $scoreAchieved = $index + 1; // mimic JS: index + 1
+                                break; // stop looping once found
+                            }else{
+                                $scoreAchieved = 5;
+                            }
+                        }
+                        
+                        $totalScore = ($item[10] * $scoreAchieved) / 100;
+                        $score  = $totalScore;
+                        $live   = $totalScore;
+                        $chair  = $totalScore;
 
                         // group sums per employee
                         $eid = $employee->id;
@@ -374,35 +403,66 @@ class PerformanceAppraisalController extends Controller
                         $employeeTotals[$eid]['ls'] += $live;
                         $employeeTotals[$eid]['dc'] += $chair;
 
-
+                        // ✅ After loop, apply sums per employee
+                        foreach ($employeeTotals as $employeeId => $sum) {
+                            PerformanceAppraisal::where('employee_id', $employeeId)->update([
+                                'total_score'             => $sum['s'],
+                                'total_score_live_staff'  => $sum['ls'],
+                                'total_score_direct_chairman' => $sum['dc'],
+                            ]);
+                        }
+                        
                         $updated = PaDetail::where('performance_id', $item[2])
                             ->where('title_id', $item[3])
                             ->where('purpose_id', $item[4])
                             ->where('key_kpi', $item[5]) // extra condition
                             ->update([
                                 'progress' => !empty($item[9]) ? $item[9] : null,
-                                'score_achieved' => !empty($item[10]) ? $item[10] : null,
-                                'score' => !empty($item[12]) ? $item[12] : null,
-                                'score_live_staff' => !empty($item[13]) ? $item[13] : null,
-                                'score_direct_chairman' => !empty($item[14]) ? $item[14] : null,
+                                'score_achieved' => $scoreAchieved,
+                                'score' => $score,
+                                'score_live_staff' => $live,
+                                'score_direct_chairman' => $chair,
                             ]);
                         if (!$updated) {
                             $dataArray[] = ["Row $i: No detail found for KPI {$item[5]}"];
                         }
-                       
+
+
+
+                        // $score  = (float)($item[12] ?? 0);
+                        // $live   = (float)($item[13] ?? 0);
+                        // $chair  = (float)($item[14] ?? 0);
+
+                        // // group sums per employee
+                        // $eid = $employee->id;
+                        // if (!isset($employeeTotals[$eid])) {
+                        //     $employeeTotals[$eid] = ['s' => 0, 'ls' => 0, 'dc' => 0];
+                        // }
+                        // $employeeTotals[$eid]['s']  += $score;
+                        // $employeeTotals[$eid]['ls'] += $live;
+                        // $employeeTotals[$eid]['dc'] += $chair;
+
+                        // $updated = PaDetail::where('performance_id', $item[2])
+                        //     ->where('title_id', $item[3])
+                        //     ->where('purpose_id', $item[4])
+                        //     ->where('key_kpi', $item[5]) // extra condition
+                        //     ->update([
+                        //         'progress' => !empty($item[9]) ? $item[9] : null,
+                        //         'score_achieved' => !empty($item[10]) ? $item[10] : null,
+                        //         'score' => !empty($item[12]) ? $item[12] : null,
+                        //         'score_live_staff' => !empty($item[13]) ? $item[13] : null,
+                        //         'score_direct_chairman' => !empty($item[14]) ? $item[14] : null,
+                        //     ]);
+                        // if (!$updated) {
+                        //     $dataArray[] = ["Row $i: No detail found for KPI {$item[5]}"];
+                        // }
                     } else {
                         $dataUserLeaveArray[] = [$item[0]]; // employee not found
                     }
                 }
             }
-            // ✅ After loop, apply sums per employee
-            foreach ($employeeTotals as $employeeId => $sum) {
-                PerformanceAppraisal::where('employee_id', $employeeId)->update([
-                    'total_score'             => $sum['s'],
-                    'total_score_live_staff'  => $sum['ls'],
-                    'total_score_direct_chairman' => $sum['dc'],
-                ]);
-            }
+
+            
             if($dataArray){
                 return response()->json(['error'=>$dataArray]);
             }

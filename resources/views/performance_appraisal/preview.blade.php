@@ -73,7 +73,12 @@
                                         <th style="min-width: 450px;">(KPI)</th>
                                         <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 250px;">គោលដៅ (Goal)</th>
+                                        <th style="min-width: 250px;">Progress</th>
                                         <th>ទម្ងន់ (Weight %)</th>
+                                        <th>ពិន្ទុសម្រេចបាន (Score Achieved)</th>
+                                        <th>ពិន្ទុ (Score)</th>
+                                        <th>បុគ្គលិកផ្ទាល់</th>
+                                        <th>ប្រធានផ្ទាល់</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbl_performance">
@@ -84,6 +89,11 @@
                                             </td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td>
                                         </tr>
                                         
                                         @foreach ($item->purposes as $purposeItem)
@@ -91,6 +101,11 @@
                                                 <td colspan="2" class="text-center">
                                                     <input type="text" class="form-control" value="{{ $purposeItem->name ?? '' }}" required>
                                                 </td>
+                                                <td colspan="1" class="text-center"></td>
+                                                <td colspan="1" class="text-center"></td>
+                                                <td colspan="1" class="text-center"></td>
+                                                <td colspan="1" class="text-center"></td>
+                                                <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
                                             </tr>
@@ -115,7 +130,22 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-center">
+                                                        <input type="text" step="any" class="form-control" id="progress" name="progress[]" value="{{$Detailitem->progress}}">
+                                                    </td>
+                                                    <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="number" step="any" class="form-control score_achieved" name="score_achieved[]" placeholder="0" value="{{$Detailitem->score_achieved}}" id="score_achieved" min="0" max="5" readonly>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="number" step="any" class="form-control score" name="score[]" placeholder="0" min="0" id="score" value="{{$Detailitem->score}}" readonly>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="number" step="any" class="form-control personnel_score" name="personnel_score[]" placeholder="0" value="{{$Detailitem->score_live_staff}}" min="0" id="personnel_score" readonly>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <input type="number" step="any" class="form-control direct_chairman" name="direct_chairman[]" placeholder="0" value="{{$Detailitem->score_direct_chairman}}" min="0" id="direct_chairman" readonly>
                                                     </td>
                                                 </tr>
                                             @endforeach
