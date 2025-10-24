@@ -433,6 +433,7 @@ return[
 	"general_expense"=>"ស្នើសុំចំណាយទូទៅ",
     "generate_leave_all_employee"=>"បង្កើតការឈប់សម្រាករបស់បុគ្គលិកទាំងអស់",
     "generate_annual_salary_increasement"=>"បង្កើតប្រាក់បៀវត្សរ៍ប្រចាំឆ្នាំ",
+    "generate_annual_bonus"=>"Generate Annual Bonus",
 	"hello"=>"សួស្តី",
 	"health_care"=>"ថែទាំសុខភាព",
 	"head_of_hr_and_admin_department"=>"ប្រធានផ្នែកធនធានមនុស្ស និងរដ្ឋបាល",

@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Admins;
 
 use App\Models\User;
 use App\Models\Branchs;
-use Carbon\Traits\Date;
 use App\Models\PaDetail;
 use App\Models\Department;
 use App\Exports\ExportKpis;
 use App\Models\Performance;
-use App\Models\permissions;
 use Illuminate\Http\Request;
 use App\Exports\DownloadKpis;
 use Illuminate\Support\Facades\DB;
