@@ -10,6 +10,7 @@ use App\Models\Performance;
 use App\Models\PerformanceAppraisal;
 use App\Models\permissions;
 use App\Models\TrainingDetailStaff;
+use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Traits\UploadFiles\UploadFIle;
 use Carbon\Carbon;
@@ -516,5 +517,46 @@ class ReportRepository extends BaseRepository
             });
         }
         return $query;
+    }
+    public function getStaffResigned($request){
+        $from_date = null;
+        $to_date = null;
+        if ($request->from_date) {
+            $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s');
+        }
+        if ($request->to_date) {
+            $to_date = Carbon::createFromDate($request->to_date)->format('Y-m-d H:i:s');
+        }
+
+        $employees = User::with("gender")->with('position')->with('branch')
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->whereNotIn('emp_status',['Upcoming', 'Cancel', '1','2','10','Probation'])
+        ->when($from_date, function ($query, $from_date) {
+            $query->where('resign_date', '>=', $from_date);
+        })
+        ->when($to_date, function ($query, $to_date) {
+            $query->where('resign_date', '<=', $to_date);
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('branch_id', $branch_id);
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+        })->orderBy('resign_date', 'desc')->get();
+        return $employees;
     }
 }

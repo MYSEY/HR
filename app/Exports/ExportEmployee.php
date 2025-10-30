@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Helpers\Helper;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -37,10 +38,10 @@ class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, 
                 "fdc_end" => $users->fdc_end ? Carbon::createFromDate($users->fdc_end)->format('d-m-Y') : "",
                 "udc_end_date" => $users->udc_end_date ? Carbon::createFromDate($users->udc_end_date)->format('d-m-Y') : "",
                 "resign_date" => $users->resign_date ? Carbon::createFromDate($users->resign_date)->format('d-m-Y'): "",
-                "resign_reason" => $users->resign_reason,
-                "branch_id" => $users->branch->branch_name_en,
-                "department_id" => $users->department->name_english,
-                "position_id" => $users->position->name_english,
+                "resign_reason" => $users->EmployeeResignReason == null ? $users->resign_reason : $users->EmployeeResignReason,
+                "branch_id" => Helper::getLang() == 'en' ? $users->branch->branch_name_en : $users->branch->branch_name_kh,
+                "department_id" => Helper::getLang() == 'en' ? $users->department->name_english : $users->department->name_khmer,
+                "position_id" => Helper::getLang() == 'en' ? $users->position->name_english : $users->position->name_khmer,
                 "position_type" => $users->positiontype ? $users->positiontype->name_english : "",
                 "unit" => $users->unit,
                 "level" => $users->level,

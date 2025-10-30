@@ -470,6 +470,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/reports/new_staff-report', [ReportsController::class,'newStaff']);
 
     Route::get('/reports/staff-resigned-report', [ReportsController::class,'staffResigned']);
+    Route::get('/reports/staff-resigned-report/export', [ReportsController::class,'staffResignedExport']);
     Route::post('/reports/staff-resigned-report', [ReportsController::class,'staffResigned']);
 
     Route::get('/reports/promoted-staff-report', [ReportsController::class,'staffPromoted']);
