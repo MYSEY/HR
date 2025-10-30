@@ -65,12 +65,12 @@
                         <span class="btn-text-search"><i class="fa fa-search"></i></span>
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
-                    {{-- @if ($permission->is_export== "1") --}}
+                    @if (permissionAccess("m7-s14","is_export")->value== "1")
                         <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
                             <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
                             <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                         </button>
-                    {{-- @endif --}}
+                    @endif
                     <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                         <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                         <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
