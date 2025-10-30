@@ -11,6 +11,7 @@ use App\Exports\ExportEForm;
 use App\Exports\ExportEmployeeReport;
 use App\Exports\ExportFringeBenefits;
 use App\Exports\ExportPA;
+use App\Exports\ExportStaffResign;
 use App\Exports\ExportTraining;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
@@ -160,50 +161,56 @@ class ReportsController extends Controller
         if (permissionAccess("m7-s14","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $join_date = null;
-        $leave_of_absence = null;
-        if ($request->join_date) {
-            $join_date = Carbon::createFromDate($request->join_date)->format('Y-m-d H:i:s');
-        }
-        if ($request->leave_of_absence) {
-            $leave_of_absence = Carbon::createFromDate($request->leave_of_absence)->format('Y-m-d H:i:s');
-        }
+        // $from_date = null;
+        // $to_date = null;
+        // if ($request->from_date) {
+        //     $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s');
+        // }
+        // if ($request->to_date) {
+        //     $to_date = Carbon::createFromDate($request->to_date)->format('Y-m-d H:i:s');
+        // }
 
-        $employees = User::with("gender")->with('position')->with('branch')
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'Employee') {
-                $query->where("id", Auth::user()->id);
-            }
-            if ($RolePermission == 'HOD') {
-                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
-            }
-            if ($RolePermission == 'BM') {
-                $query->where("branch_id", Auth::user()->branch_id);
-            }
-        })
-        ->whereNotIn('emp_status',['Upcoming', 'Cancel', '1','2','10','Probation'])
-        ->when($join_date, function ($query, $join_date) {
-            $query->where('date_of_commencement', '>=', $join_date);
-        })
-        ->when($leave_of_absence, function ($query, $leave_of_absence) {
-            $query->where('resign_date', '>=', $leave_of_absence);
-        })
-        ->when($request->branch_id, function ($query, $branch_id) {
-            $query->where('branch_id', $branch_id);
-        })
-        ->when($request->employee_id, function ($query, $employee_id) {
-            $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
-        })
-        ->when($request->employee_name, function ($query, $employee_name) {
-            $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-            $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
-        })->get();
+        // $employees = User::with("gender")->with('position')->with('branch')
+        // ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+        //     if ($RolePermission == 'Employee') {
+        //         $query->where("id", Auth::user()->id);
+        //     }
+        //     if ($RolePermission == 'HOD') {
+        //         $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
+        //     }
+        //     if ($RolePermission == 'BM') {
+        //         $query->where("branch_id", Auth::user()->branch_id);
+        //     }
+        // })
+        // ->whereNotIn('emp_status',['Upcoming', 'Cancel', '1','2','10','Probation'])
+        // ->when($from_date, function ($query, $from_date) {
+        //     $query->where('resign_date', '>=', $from_date);
+        // })
+        // ->when($to_date, function ($query, $to_date) {
+        //     $query->where('resign_date', '<=', $to_date);
+        // })
+        // ->when($request->branch_id, function ($query, $branch_id) {
+        //     $query->where('branch_id', $branch_id);
+        // })
+        // ->when($request->employee_id, function ($query, $employee_id) {
+        //     $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
+        // })
+        // ->when($request->employee_name, function ($query, $employee_name) {
+        //     $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        //     $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+        // })->orderBy('resign_date', 'desc')->get();
+
+        $employees = $this->reportRepo->getStaffResigned($request);
         $branch = Branchs::all();
         if ($request->research) {
             return response()->json(['employees'=>$employees]);
         }else {
             return view('reports.staff_resigned_report', compact('employees', 'branch'));
         }
+    }
+    public function staffResignedExport(Request $request) {
+        $employees = $this->reportRepo->getStaffResigned($request);
+        return Excel::download(new ExportStaffResign($employees), 'EmployeeResignReport.xlsx');
     }
 
     public function staffPromoted(Request $request){
