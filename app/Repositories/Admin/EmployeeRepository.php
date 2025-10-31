@@ -141,7 +141,7 @@ class EmployeeRepository extends BaseRepository
                     if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO'])){
                         if ($emp_status == "resign_reason") {
                             $query->with("resignStatus");
-                            $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
+                            $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel'])->orderBy('resign_date', 'desc'); 
                         }else if($emp_status == "FDC"){
                             $query->whereIn('emp_status', ['1','10']);
                         }else{

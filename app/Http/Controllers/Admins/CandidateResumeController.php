@@ -378,7 +378,7 @@ class CandidateResumeController extends Controller
             if ($request->hasFile('cv')) {
                 $file = $request->file('cv');
                 $filenameGuarant = time().'.'.$file->getClientOriginalName();
-                $file->move(public_path('uploads/images'), $filenameGuarant);
+                // $file->move(public_path('uploads/images'), $filenameGuarant);
             }else{
                 $filenameGuarant = $request->hidden_cv;
             }

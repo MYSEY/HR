@@ -20,10 +20,6 @@
                         <li class="breadcrumb-item active">@lang('lang.staff_resigned_reports')</li>
                     </ul>
                 </div>
-                <div class="col-auto float-end ms-auto">
-                </div>
-                <div class="col-auto float-end ms-auto">
-                </div>
             </div>
         </div>
     </div>
@@ -52,14 +48,14 @@
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="join_date" placeholder="@lang('lang.join_date')">
+                        <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="@lang('lang.from_date')">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="leave_of_absence" placeholder="@lang('lang.leave_of_absence')">
+                        <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="@lang('lang.to_date')">
                     </div>
                 </div>
             </div>
@@ -69,6 +65,12 @@
                         <span class="btn-text-search"><i class="fa fa-search"></i></span>
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
+                    @if (permissionAccess("m7-s14","is_export")->value== "1")
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                            <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
+                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                    @endif
                     <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                         <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                         <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -93,7 +95,7 @@
                                                     style="width: 94.0625px;">#</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                     colspan="1" aria-label="Employee ID: activate to sort column ascending"
-                                                    style="width: 94.0625px;">@lang('lang.id_card')</th>
+                                                    style="width: 94.0625px;">@lang('lang.employee_id')</th>
                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Employee name: activate to sort column descending"
@@ -176,17 +178,17 @@
             $("#btn-reset-text-loading").css('display', 'block');
             window.location.replace("{{ URL('reports/staff-resigned-report') }}");
         });
-        // $(".btn-export").on("click", function(){
-        //     var query = {
-        //         'employee_id': $("#employee_id").val(),
-        //         'employee_name': $("#employee_name").val(),
-        //         'branch_id': $("#branch_id").val(),
-        //         'from_date': $("#from_date").val(),
-        //         'to_date': $("#to_date").val(),
-        //     }
-        //     var url = "{{URL::to('motor-rentel/export')}}?" + $.param(query)
-        //     window.location = url;
-        // });
+        $(".btn_excel").on("click", function() {
+            let query = {
+                'employee_id': $("#employee_id").val(),
+                'employee_name': $("#employee_name").val(),
+                'branch_id': $("#branch_id").val(),
+                'from_date': $("#from_date").val(),
+                'to_date': $("#to_date").val(),
+            };
+            var url = "{{URL::to('reports/staff-resigned-report/export')}}?" + $.param(query)
+            window.location = url;
+        });
         $(".btn-search").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-search").hide();
@@ -196,8 +198,8 @@
                 'employee_id': $("#employee_id").val(),
                 'employee_name': $("#employee_name").val(),
                 'branch_id': $("#branch_id").val(),
-                'join_date': $("#join_date").val(),
-                'leave_of_absence': $("#leave_of_absence").val(),
+                'from_date': $("#from_date").val(),
+                'to_date': $("#to_date").val(),
             }).then(function(response) {
                 var rows = response.data.employees;
                 if (rows.length > 0) {
@@ -205,6 +207,7 @@
                     $(rows).each(function(e, row) {
                         let date_of_commencement = moment(row.date_of_commencement).format('D-MMM-YYYY');
                         let resign_date = moment(row.resign_date).format('D-MMM-YYYY');
+                        let resign_reason = row.employee_resign_reason ? row.employee_resign_reason : row.resign_reason ? row.resign_reason : "";
                         tr += '<tr class="odd">'+
                                     '<td class="ids">'+(e+1)+'</td>'+
                                     '<td>' + (row.number_employee) + '</td>'+
@@ -215,6 +218,7 @@
                                     '<td>'+( row.branch.branch_name_en )+'</td>'+
                                     '<td>'+( date_of_commencement )+'</td>'+
                                     '<td>'+( resign_date )+'</td>'+
+                                    '<td>'+( resign_reason )+'</td>'+
                                     '<td>'+( row.remark ? row.remark : "" )+'</td>'+
                                 '</tr>';
                     });

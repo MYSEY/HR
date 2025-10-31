@@ -43,6 +43,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $appends = ['employee_resign_reason'];
     protected $fillable = [
         'number_employee',
         'last_name_kh',
