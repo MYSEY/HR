@@ -559,7 +559,7 @@ class ReportsController extends Controller
         }
         if ($request->ajax()) {
             $query = $this->reportRepo->getPAReport($request, $permission);
-            $recordsTotal = PerformanceAppraisal::where('status', 'approved')->count();  // total records without filter
+            $recordsTotal = PerformanceAppraisal::where('status', 'new')->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
@@ -579,7 +579,7 @@ class ReportsController extends Controller
                 // Default order
                 $query->orderBy('performances.id', 'desc');
             }
-            $data = $query->where('performance_appraisals.status', 'approved')->orderBy('performance_appraisals.id', 'desc')->offset($start)->limit($limit)->get();
+            $data = $query->where('performance_appraisals.status', 'new')->orderBy('performance_appraisals.id', 'desc')->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw' => intval(request()->input('draw')),
                 'recordsTotal' => $recordsTotal,

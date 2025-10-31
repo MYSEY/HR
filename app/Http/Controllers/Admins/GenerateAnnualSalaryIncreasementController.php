@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Branchs;
 use App\Models\Payroll;
-use App\Models\Performance;
+use App\Models\PerformanceAppraisal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -101,11 +101,11 @@ class GenerateAnnualSalaryIncreasementController extends Controller
         
             // Get increasement settings for this year
             $data = AnnualSalaryIncreasement::where('increasement_year', $year)->orderBy('id')->get();
-        
+            
             // Get all approved performance records for that year/month
-            $performances = Performance::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'approved')->get();
+            $PerformanceAppraisal = PerformanceAppraisal::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'approved')->get();
         
-            foreach ($performances as $kpiPerform) {
+            foreach ($PerformanceAppraisal as $kpiPerform) {
                 $employeeId = $kpiPerform->employee_id;
         
                 // Find related payroll for employee in same year/month
@@ -182,12 +182,7 @@ class GenerateAnnualSalaryIncreasementController extends Controller
             $data = GenerateAnnualSalaryIncreasement::whereIn('id',explode(',', $request->id))->get();
             foreach ($data as $value) {
                 // Get related salary request IDs
-                $salaryRequest_ids = SalaryRequest::where('employee_id', $value->employee_id)
-                    ->where('type', 0)
-                    ->where('status', 1)
-                    ->pluck('id')
-                    ->toArray();
-
+                $salaryRequest_ids = SalaryRequest::where('employee_id', $value->employee_id)->where('type', 0)->where('status', 1)->pluck('id')->toArray();
                 // Update user salary
                 User::where('id', $value->employee_id)->update([
                     'basic_salary' => $value->basic_salary + $value->salary_increasement + $value->total_salary_request,
@@ -204,12 +199,12 @@ class GenerateAnnualSalaryIncreasementController extends Controller
 
                 // Update related SalaryRequests
                 SalaryRequest::where('employee_id', $value->employee_id)
-                    ->where('type', 0)
-                    ->where('status', 1)
-                    ->update([
-                        'status'     => 2, // consider using a constant like SalaryRequest::STATUS_APPROVED
-                        'updated_by' => Auth::id(),
-                    ]);
+                ->where('type', 0)
+                ->where('status', 1)
+                ->update([
+                    'status'     => 2, // consider using a constant like SalaryRequest::STATUS_APPROVED
+                    'updated_by' => Auth::id(),
+                ]);
             }
             DB::commit();
             return response()->json([

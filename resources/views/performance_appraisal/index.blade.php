@@ -347,7 +347,7 @@
                             // ✅ Always add Export link
                             actionHtml += `
                                         <a class="dropdown-item" href="{{ url('performance/appraisal/export') }}/${row.id}">
-                                            <i class="fa fa-regular fa-download"></i> Export
+                                            <i class="fa fa-regular fa-download"></i> Export Template
                                         </a>
                                     </div>
                                 </div>

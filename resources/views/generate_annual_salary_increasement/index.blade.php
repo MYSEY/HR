@@ -123,7 +123,7 @@
                         <div class="form-group">
                             <label>Year <span class="text-danger">*</span></label>
                             <div class="form-group ">
-                                <input class="form-control" type="month" id="increasement_year" name="increasement_year">
+                                <input class="form-control @error('increasement_year') is-invalid @enderror" type="month" id="increasement_year" name="increasement_year" required>
                             </div>
                         </div>
                         <div class="submit-section">

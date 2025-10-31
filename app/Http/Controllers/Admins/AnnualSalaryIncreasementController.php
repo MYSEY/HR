@@ -30,7 +30,7 @@ class AnnualSalaryIncreasementController extends Controller
      */
     public function create()
     {
-        //
+        return view('annual_salary_increasement.create');
     }
 
     /**
@@ -42,14 +42,29 @@ class AnnualSalaryIncreasementController extends Controller
     public function store(AnnualSalaryIncreasementRequest $request)
     {
         try {
-            $data = $request->all();
-            $data['created_by']    = Auth::user()->id;
-            AnnualSalaryIncreasement::create($data);
-            Toastr::success('Annual salary increasement created successfully.','Success');
-            return redirect()->back();
+            $rankingResults  = $request->input('ranking_work_result', []);
+            $totalScores     = $request->input('total_score', []);
+            $percentages     = $request->input('percentage', []);
+            $increasementYears = $request->input('increasement_year', []);
+
+            $createdBy = Auth::id();
+
+            foreach ($rankingResults as $key => $ranking) {
+                AnnualSalaryIncreasement::create([
+                    'ranking_work_result' => $ranking,
+                    'total_score'         => $totalScores[$key] ?? null,
+                    'percentage'          => $percentages[$key] ?? null,
+                    'increasement_year'   => $increasementYears[$key] ?? null,
+                    'created_by'          => $createdBy,
+                ]);
+            }
+
             DB::commit();
+            Toastr::success('Annual salary increasement(s) created successfully.', 'Success');
+            return redirect()->back();
         } catch (\Throwable $exp) {
-            Toastr::error('nnual salary increasement created fail.','Error');
+            DB::rollBack();
+            Toastr::error('Annual salary increasement creation failed.', 'Error');
             return redirect()->back();
         }
     }

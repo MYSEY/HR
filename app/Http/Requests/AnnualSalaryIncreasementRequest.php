@@ -24,9 +24,21 @@ class AnnualSalaryIncreasementRequest extends FormRequest
     public function rules()
     {
         return [
-            'ranking_work_result' => 'required|string|max:255',
-            'total_score' => 'required|string|max:255',
-            'percentage' => 'required|integer',
+            // 'ranking_work_result' => 'required|string|max:255',
+            // 'total_score' => 'required|string|max:255',
+            // 'percentage' => 'required|integer',
+
+            'ranking_work_result' => 'required|array',
+            'ranking_work_result.*' => 'required|string|max:255',
+
+            'total_score' => 'required|array',
+            'total_score.*' => 'required|string|max:255',
+
+            'percentage' => 'required|array',
+            'percentage.*' => 'required|integer|min:0|max:100',
+
+            'increasement_year' => 'nullable|array',
+            'increasement_year.*' => 'nullable|string|max:255',
         ];
     }
 }

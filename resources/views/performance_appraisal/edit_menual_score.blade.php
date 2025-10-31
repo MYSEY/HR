@@ -145,7 +145,7 @@
                         if (response.message == 'successfully') {
                             toastr.success(response.message, 'Success');
                             setTimeout(function() {
-                                window.location.href = "{{ url('performance-appraisal') }}";
+                                window.location.href = "{{ url('menual/score') }}";
                             }, 2000);
                         }
                     },

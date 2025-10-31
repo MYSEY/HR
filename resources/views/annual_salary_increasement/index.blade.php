@@ -11,7 +11,8 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_annual_salary_increasement"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    <a href="{{url('annual/salary/increasement/create')}}" class="btn add-btn me-2"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    {{-- <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_annual_salary_increasement"><i class="fa fa-plus"></i> @lang('lang.add_new')</a> --}}
                 </div>
             </div>
         </div>
