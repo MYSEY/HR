@@ -28,7 +28,8 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
                 "employee_name_kh" => $users->employee_name_kh,
                 "employee_name_en" => $users->employee_name_en,
                 "gender" => $users->EmployeeGender,
-                "position" => $users->EmployeePosition,
+                "position_kh" => $users->position->name_khmer,
+                "position_en" => $users->position->name_english,
                 "branch" => $users->EmployeeBranch,
                 "date_of_commencement" => $users->date_of_commencement ? Carbon::createFromDate($users->date_of_commencement)->format('d-m-Y') : "",
                 'resign_date'=> $users->resign_date ? Carbon::createFromDate($users->resign_date)->format('d-m-Y'): "",
@@ -62,9 +63,9 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
                 $drawing->setCoordinates('B1'); // Cell position
                 $drawing->setWorksheet($sheet->getDelegate()); // Bind to sheet
 
-                $sheet->getDelegate()->getStyle('A4:J4')->getFont()->setName('Khmer OS Battambang')
-                ->setSize(9)->setBold('A4:J4');
-                $event->sheet->getStyle('A4:J4')->applyFromArray([
+                $sheet->getDelegate()->getStyle('A4:K4')->getFont()->setName('Khmer OS Battambang')
+                ->setSize(9)->setBold('A4:K4');
+                $event->sheet->getStyle('A4:K4')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -74,19 +75,19 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
                 ]);
 
                 // block merge cells 
-                $sheet->mergeCells('A2:J2');
+                $sheet->mergeCells('A2:K2');
                 $sheet->setCellValue('A2', "CAMMA Microfinance Limited");
-                $sheet->getDelegate()->getStyle('A2:J2')->getFont()->setName('Khmer OS Muol Light')
-                ->setSize(12)->setUnderline('A2:J2');
-                $event->sheet->getDelegate()->getStyle('A2:J2')
+                $sheet->getDelegate()->getStyle('A2:K2')->getFont()->setName('Khmer OS Muol Light')
+                ->setSize(12)->setUnderline('A2:K2');
+                $event->sheet->getDelegate()->getStyle('A2:K2')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A3:J3');
+                $sheet->mergeCells('A3:K3');
                 $sheet->setCellValue('A3', "Staff resign report");
-                $sheet->getDelegate()->getStyle('A3:J3')->getFont()->setName('Arial')
+                $sheet->getDelegate()->getStyle('A3:K3')->getFont()->setName('Arial')
                 ->setSize(10);
-                $event->sheet->getDelegate()->getStyle('A3:J3')
+                $event->sheet->getDelegate()->getStyle('A3:K3')
                                 ->getAlignment()
                                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -95,7 +96,7 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
                 if ($this->totalRecord > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':J'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':K'.$n)->applyFromArray([
                             'font' => [
                                 'name' => 'Khmer OS Battambang', // Font name
                                 'size' => 9, // Font size
@@ -130,6 +131,7 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
             'H' => 15,
             'I' => 20,
             'J' => 50,
+            'K' => 50,
         ];
     }
     public function headings(): array
@@ -139,7 +141,8 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
             "Name Khmer",
             "Name English",
             "Gender",
-            "Position",
+            "Position Khmer",
+            "Position English",
             "Location",
             "Join Date",
             "Resigned Date",
