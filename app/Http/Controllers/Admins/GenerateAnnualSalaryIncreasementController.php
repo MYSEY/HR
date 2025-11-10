@@ -31,7 +31,7 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                 ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
                 ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
                 ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
-                ->leftJoin('performances', 'generate_annual_salary_increasements.performance_id', '=', 'performances.id')
+                ->leftJoin('performance_appraisals', 'generate_annual_salary_increasements.performance_id', '=', 'performance_appraisals.id')
                 ->select(
                     'generate_annual_salary_increasements.*',
                     'users.number_employee',
@@ -41,9 +41,9 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                     'departments.name_english as dep_name',
                     'positions.name_english as positions_name',
                     'branchs.branch_name_en',
-                    'performances.total_score',
-                    'performances.total_score_live_staff',
-                    'performances.total_score_direct_chairman',
+                    'performance_appraisals.total_score',
+                    'performance_appraisals.total_score_live_staff',
+                    'performance_appraisals.total_score_direct_chairman',
                 );
         
             // Search filter
@@ -101,18 +101,24 @@ class GenerateAnnualSalaryIncreasementController extends Controller
         
             // Get increasement settings for this year
             $data = AnnualSalaryIncreasement::where('increasement_year', $year)->orderBy('id')->get();
-            
+            if ($data->isEmpty()) {
+                Toastr::error('Not annual salary increasement found for the selected year.', 'Error');
+                return redirect()->back();
+            }
             // Get all approved performance records for that year/month
-            $PerformanceAppraisal = PerformanceAppraisal::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'approved')->get();
-        
+            $PerformanceAppraisal = PerformanceAppraisal::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'new')->get();
+            if ($PerformanceAppraisal->isEmpty()) {
+                Toastr::error('Not have kpi found for the selected year.', 'Error');
+                return redirect()->back();
+            }
             foreach ($PerformanceAppraisal as $kpiPerform) {
                 $employeeId = $kpiPerform->employee_id;
         
                 // Find related payroll for employee in same year/month
-                $payroll = Payroll::where('employee_id', $employeeId)->whereYear('payment_date', $year)->whereMonth('payment_date', $month)->first();
-        
+                $payroll = Payroll::where('employee_id', $employeeId)->whereYear('payment_date', $year)->whereMonth('payment_date', $month)->first();        
                 if (!$payroll) {
-                    continue; // Skip if payroll not found
+                    Toastr::error('Not salary record found for this employee in the selected month and year.', 'Error');
+                    return back();
                 }
         
                 // KPI Score
@@ -133,9 +139,8 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                 // Get employee start date
                 $user = User::find($employeeId);
                 $dateOfCommencement = $user && $user->date_of_commencement ? Carbon::parse($user->date_of_commencement) : Carbon::create($year, 1, 1);
-        
                 $endOfYear = Carbon::create($year, 12, 31);
-        
+                
                 // Only calculate if worked at least 3 months
                 $months = $dateOfCommencement->diffInMonths($endOfYear) + 1;
                 if ($months > 2) {
@@ -145,7 +150,6 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                     if ($totalWorkingDays > $daysInYear) {
                         $totalWorkingDays = $daysInYear;
                     }
-        
                     // Final increasement calculation
                     $totalsSalaryIncreasement = ($payroll->basic_salary * $interest * $totalWorkingDays) / $daysInYear;
         

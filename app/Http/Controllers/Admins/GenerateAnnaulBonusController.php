@@ -8,7 +8,9 @@ use App\Models\Performance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\GenerateAnnaulBonus;
 use App\Http\Controllers\Controller;
+use App\Models\PerformanceAppraisal;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,8 +21,55 @@ class GenerateAnnaulBonusController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->ajax()) {
+            // Base query with joins
+            $query = GenerateAnnaulBonus::leftJoin('users', 'generate_annaul_bonuses.employee_id', '=', 'users.id')
+                ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+                ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+                ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+                ->leftJoin('performance_appraisals', 'generate_annaul_bonuses.performance_id', '=', 'performance_appraisals.id')
+                ->select(
+                    'generate_annaul_bonuses.*',
+                    'users.number_employee',
+                    'users.employee_name_kh',
+                    'users.employee_name_en',
+                    'users.date_of_commencement',
+                    'departments.name_english as dep_name',
+                    'positions.name_english as positions_name',
+                    'branchs.branch_name_en',
+                    'performance_appraisals.total_score',
+                    'performance_appraisals.total_score_live_staff',
+                    'performance_appraisals.total_score_direct_chairman',
+                );
+        
+            // Search filter
+            $searchValue = request()->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('users.employee_name_en', 'like', "%{$searchValue}%")
+                      ->orWhere('users.number_employee', 'like', "%{$searchValue}%")
+                      ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                      ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
+                      ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
+                });
+            }
+        
+            // Pagination
+            $recordsTotal = GenerateAnnaulBonus::count();
+            $recordsFiltered = $query->count();
+            $start = intval(request()->input('start', 0));
+            $limit = intval(request()->input('length', 10));
+            $data = $query->orderBy('generate_annaul_bonuses.id', 'desc')->offset($start)->limit($limit)->get();
+            // ✅ Return JSON for DataTables
+            return response()->json([
+                'draw' => intval(request()->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }  
         return view('generate_annual_bonus.index');
     }
 
@@ -49,12 +98,11 @@ class GenerateAnnaulBonusController extends Controller
             $data = AnnualBonu::where('increasement_year', $year)->orderBy('id')->get();
 
             // Get all approved performance records for that year/month
-            $performances = Performance::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'approved')->get();
-            foreach ($performances as $kpiPerform) {
+            $PerformanceAppraisal = PerformanceAppraisal::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'new')->get();
+            foreach ($PerformanceAppraisal as $kpiPerform) {
                 $employeeId = $kpiPerform->employee_id;
                 // KPI Score
                 $kpiScores = (float) $kpiPerform->total_score_direct_chairman;
-
                 // Match KPI score with increasement range
                 $interest = 0;
                 $total_percentage = 0;
@@ -82,29 +130,27 @@ class GenerateAnnaulBonusController extends Controller
                     }
                     $totalsAnnaulBonus = (400/365) * $totalWorkingDays;
 
-                    dd([
+                    // dd([
+                    //     'employee_id' => $employeeId,
+                    //     'performance_id' => $kpiPerform->id,
+                    //     'increasement_of_year' => $request->increasement_year,
+                    //     'annaul_bonus' => $totalsAnnaulBonus,
+                    //     'percentage' => $total_percentage,
+                    //     'created_by' => Auth::id(),
+                    // ]);
+                    // Final salary increasement calculation
+                    
+                    // Replace old record for this employee/year-month
+                    GenerateAnnaulBonus::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->delete();
+    
+                    GenerateAnnaulBonus::create([
                         'employee_id' => $employeeId,
                         'performance_id' => $kpiPerform->id,
                         'increasement_of_year' => $request->increasement_year,
-                        'score' => $kpiScores,
                         'annaul_bonus' => $totalsAnnaulBonus,
                         'percentage' => $total_percentage,
                         'created_by' => Auth::id(),
                     ]);
-                    // Final salary increasement calculation
-                    
-                    // Replace old record for this employee/year-month
-                    // GenerateAnnualSalaryIncreasement::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->delete();
-    
-                    // GenerateAnnualSalaryIncreasement::create([
-                    //     'employee_id' => $employeeId,
-                    //     'performance_id' => $kpiPerform->id,
-                    //     'basic_salary' => $payroll->basic_salary,
-                    //     'increasement_of_year' => $request->increasement_year,
-                    //     'salary_increasement' => $totalsAnnaulBonus,
-                    //     'percentage' => $total_percentage,
-                    //     'created_by' => Auth::id(),
-                    // ]);
                 }
             }
             DB::commit();

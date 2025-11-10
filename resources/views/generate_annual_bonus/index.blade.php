@@ -75,7 +75,7 @@
                                     Approved
                                 </a>
                                 <br>
-                                <table id="tbl_generate_annual_salary_increas" class="table table-striped custom-table mb-0 datatable dataTable no-footer" aria-describedby="DataTables_Table_0_info">
+                                <table id="tbl_generate_annual_bonus" class="table table-striped custom-table mb-0 datatable dataTable no-footer" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
                                             <th>
@@ -90,11 +90,10 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="department: activate to sort column ascending">@lang('lang.department')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="position: activate to sort column ascending">@lang('lang.position')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="date_of_commencement: activate to sort column ascending">@lang('lang.date_of_commencement')</th>
-                                            {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="basic_salary: activate to sort column ascending">@lang('lang.basic_salary')</th> --}}
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ពិន្ទុ</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">បុគ្គលិកផ្ទាល់</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ប្រធានផ្ទាល់</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 50.825px;">@lang('lang.salary_increasement')</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Bonus</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -253,10 +252,10 @@
     }
     function dataTables() {
         $('#loading-overlay').show();
-        if ($.fn.DataTable.isDataTable('#tbl_generate_annual_salary_increas')) {
-            $('#tbl_generate_annual_salary_increas').DataTable().clear().destroy();
+        if ($.fn.DataTable.isDataTable('#tbl_generate_annual_bonus')) {
+            $('#tbl_generate_annual_bonus').DataTable().clear().destroy();
         }
-        $('#tbl_generate_annual_salary_increas').DataTable({
+        $('#tbl_generate_annual_bonus').DataTable({
             destroy: true,
             pageLength: 10,
             processing: true,
@@ -264,7 +263,7 @@
             order: [[0, 'desc']],
             lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
             ajax: {
-                url: '{{ URL("generate/annual/salary/increasement") }}',
+                url: '{{ URL("generate/annual/bonus") }}',
                 type: 'GET',
             },
             columns: [
@@ -311,18 +310,15 @@
                     }
                 },
                 {
-                    data: 'salary_increasement',
-                    name: 'salary_increasement',
-                    render: function (data) {
-                        return `<span class="badge bg-inverse-success">${data}</span>`;
-                    }
+                    data: 'annaul_bonus',
+                    name: 'annaul_bonus',
                 }
             ],
             initComplete: function() {
                 $('#loading-overlay').hide();
             }
         });
-        $('#tbl_generate_annual_salary_increas').on('processing.dt', function (e, settings, processing) {
+        $('#tbl_generate_annual_bonus').on('processing.dt', function (e, settings, processing) {
             if (processing) {
                 $('#loading-overlay').show();
             } else {
