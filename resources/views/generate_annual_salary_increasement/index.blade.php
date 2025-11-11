@@ -179,9 +179,7 @@
             $(".sub_chk:checked").each(function() {
                 allVals.push($(this).attr('data-id'));
             });
-            var id = allVals.join(",");
-            console.log(id);
-            
+            var id = allVals.join(",");            
             if(allVals.length <=0)
             {
                 $.alert({
