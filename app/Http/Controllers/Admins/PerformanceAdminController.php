@@ -101,15 +101,10 @@ class PerformanceAdminController extends Controller
                 $query->whereNot('performances.status', 'approved');
             }
 
-            if (in_array(Auth::user()->RolePermission, ['BOD','CEO','HOD','DHOD','BM','DBM'])) {
+            if (in_array(Auth::user()->RolePermission, ['BOD','CEO','HOD','DHOD','BM','DBM','Employee'])) {
                 $query->where('performances.review_employee_id', Auth::user()->id);
                 $query->whereNot('performances.status', 'preparing');
                 $query->whereNot('performances.status', 'approved');
-            }
-            if (in_array(Auth::user()->RolePermission, ['Employee'])) {
-                $query->where('performances.employee_id', Auth::user()->id);
-                // $query->whereNot('performances.status', 'approved');
-                $query->where('performances.status','!=','preparing');
             }
             $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
             $recordsFiltered = $query->count();
@@ -128,6 +123,14 @@ class PerformanceAdminController extends Controller
         $branch = Branchs::all();
         $department = Department::all();
         return view('performance_admins.index',compact('branch','department'));
+        if (in_array(Auth::user()->RolePermission, ['Employee'])) {
+            $query->where('performances.employee_id', Auth::user()->id);
+        }
+        // ->groupBy('performances.employee_id')
+        // Fetch paginated data
+        $data = $query->get();
+        // dd($data);
+        return view('performance_admins.index',compact('data'));
     }
     public function show($id,$url)
     {

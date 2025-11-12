@@ -778,6 +778,7 @@ return[
 	"performance_review"=>"Performance Review",
 	"performance_appraisal"=>"Performance Appraisal",
 	"performance_appraisal_report"=>"Performance Appraisal Report",
+	"performance_appraisal_review"=>"Performance Appraisal Reveiw",
     "qty"=>"Qty",
     "quantity"=>"Quantity",
     "review"=>"Review",

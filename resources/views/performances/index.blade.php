@@ -168,12 +168,12 @@
                                 <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            <th>
+                                            {{-- <th>
                                                 <div class="custom-control custom-checkbox custom-control-inline big-checkbox">
                                                     <input type="checkbox" class="custom-control-input checkAll" name="checkAll" id="checkAll" onClick="toggle(this)">
                                                     <label class="custom-control-label" for="checkAll"></label>
                                                 </div>
-                                            </th>
+                                            </th> --}}
                                             <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
                                             <th class="sorting sorting_asc stuck-scroll-4">@lang('lang.employee_name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
@@ -686,18 +686,18 @@
                     }
                 },
                 columns: [
-                    {
-                        data: 'id',
-                        name: 'id',
-                        orderable: false,
-                        searchable: false,
-                        render: function(data, type, row) {
-                            return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
-                                <input type="checkbox" class="custom-control-input sub_chk" name="checkbox" data-status="${row.status}" data-id="${data}" id="${data}" value="${data}">
-                                <label class="custom-control-label" for="${data}"></label>
-                            </div>`;
-                        }
-                    },
+                    // {
+                    //     data: 'id',
+                    //     name: 'id',
+                    //     orderable: false,
+                    //     searchable: false,
+                    //     render: function(data, type, row) {
+                    //         return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
+                    //             <input type="checkbox" class="custom-control-input sub_chk" name="checkbox" data-status="${row.status}" data-id="${data}" id="${data}" value="${data}">
+                    //             <label class="custom-control-label" for="${data}"></label>
+                    //         </div>`;
+                    //     }
+                    // },
                     { 
                         data: 'number_employee', 
                         name: 'number_employee',

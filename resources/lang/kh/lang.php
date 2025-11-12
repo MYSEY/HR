@@ -753,6 +753,9 @@ return[
 	"performance"=>"Performance",
 	"performance_review"=>"Performance Review",
 	"performance_appraisal"=>"ទម្រង់វាយតម្លៃ",
+	"performance_appraisal_report"=>"Performance Appraisal Report",
+	"performance_appraisal_review"=>"Performance Appraisal Reveiw",
+
 	"adjustment_date"=>"កាលបរិច្ឆេទ",
 	"add_adjustment"=>"Add Adjustment",
 	"adjustment_to"=>"Adjustment To",
