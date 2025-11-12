@@ -18,7 +18,8 @@ class AnnualBonuConfigeController extends Controller
      */
     public function index()
     {
-        $data = AnnualBonu::all();
+        $currentYear = now()->year;
+        $data = AnnualBonu::whereYear('increasement_year', $currentYear)->get();
         return view('annual_bonus.index',compact('data'));
     }
 
@@ -102,7 +103,7 @@ class AnnualBonuConfigeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         try {
             $data = $request->only(['criteria','discription','total_score', 'percentage','increasement_year']);

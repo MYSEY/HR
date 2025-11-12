@@ -19,7 +19,8 @@ class AnnualSalaryIncreasementController extends Controller
      */
     public function index()
     {
-        $data = AnnualSalaryIncreasement::all();
+        $currentYear = now()->year;
+        $data = AnnualSalaryIncreasement::whereYear('increasement_year', $currentYear)->get();
         return view('annual_salary_increasement.index',compact('data'));
     }
 
