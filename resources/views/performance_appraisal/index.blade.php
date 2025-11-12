@@ -10,11 +10,11 @@
                         <li class="breadcrumb-item active">@lang('lang.performance_appraisal')</li>
                     </ul>
                 </div>
-                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
+                @if (Auth::user()->RolePermission == 'Employee' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'DBM' || Auth::user()->RolePermission == 'developer')
                     <div class="col-auto float-end ms-auto">
-                        @if (permissionAccess("m4-s2","is_import")->value == "1")
+                        {{-- @if (permissionAccess("m4-s2","is_import")->value == "1") --}}
                             <a href="#" class="btn add-btn" data-toggle="modal" id="importKPI"><i class="fa fa-plus"></i>@lang('lang.import')</a>
-                        @endif
+                        {{-- @endif --}}
                     </div>
                 @endif
             </div>
@@ -64,11 +64,13 @@
                         <span class="btn-txt"><i class="fa fa-search"></i></span>
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
-                    @if (permissionAccess("m4-s2","is_export")->value == "1")
-                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
-                            <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
-                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                        </button>
+                    @if (Auth::user()->RolePermission == 'Employee' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'DBM' || Auth::user()->RolePermission == 'developer')
+                        {{-- @if (permissionAccess("m4-s2","is_export")->value == "1") --}}
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                                <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
+                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            </button>
+                        {{-- @endif --}}
                     @endif
                     <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                         <span class="btn-text-reset"><i class="fa fa-undo"></i></span>

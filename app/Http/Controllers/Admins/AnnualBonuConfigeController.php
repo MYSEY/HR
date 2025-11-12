@@ -29,7 +29,7 @@ class AnnualBonuConfigeController extends Controller
      */
     public function create()
     {
-        //
+       return view('annual_bonus.create');
     }
 
     /**
@@ -41,14 +41,31 @@ class AnnualBonuConfigeController extends Controller
     public function store(Request $request)
     {
         try {
-            $data = $request->all();
-            $data['created_by']    = Auth::user()->id;
-            AnnualBonu::create($data);
-            Toastr::success('Annual bonus created successfully.','Success');
-            return redirect()->back();
+            $criteriaList       = $request->input('criteria', []);
+            $descriptions       = $request->input('discription', []);
+            $totalScores        = $request->input('total_score', []);
+            $percentages        = $request->input('percentage', []);
+            $increasementYears  = $request->input('increasement_year', []);
+
+            $createdBy = Auth::id();
+
+            foreach ($criteriaList as $key => $criteria) {
+                AnnualBonu::create([
+                    'criteria'          => $criteria,
+                    'discription'       => $descriptions[$key] ?? null,
+                    'total_score'       => $totalScores[$key] ?? null,
+                    'percentage'        => $percentages[$key] ?? null,
+                    'increasement_year' => $increasementYears[$key] ?? null,
+                    'created_by'        => $createdBy,
+                ]);
+            }
+
             DB::commit();
+            Toastr::success('Annual bonus record(s) created successfully.', 'Success');
+            return redirect()->back();
         } catch (\Throwable $exp) {
-            Toastr::error('nnual bonus created fail.','Error');
+            DB::rollBack();
+            Toastr::error('Annual bonus creation failed.', 'Error');
             return redirect()->back();
         }
     }
