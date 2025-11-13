@@ -145,11 +145,13 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                 $months = $dateOfCommencement->diffInMonths($endOfYear) + 1;
                 if ($months > 2) {
                     $totalWorkingDays = $dateOfCommencement->diffInDays($endOfYear) + 1;
-                    $daysInYear = $endOfYear->isLeapYear() ? 366 : 365;
+                    $daysInYear = 365;
+                    // $daysInYear = $endOfYear->isLeapYear() ? 365 : 365;
         
-                    if ($totalWorkingDays > $daysInYear) {
-                        $totalWorkingDays = $daysInYear;
-                    }
+                    // if ($totalWorkingDays > $daysInYear) {
+                    //     $totalWorkingDays = $daysInYear;
+                    // }
+                    
                     // Final increasement calculation
                     $totalsSalaryIncreasement = ($payroll->basic_salary * $interest * $totalWorkingDays) / $daysInYear;
         

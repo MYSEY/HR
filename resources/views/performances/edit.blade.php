@@ -120,8 +120,15 @@
                                                 <td class="text-center">
                                                     <input type="number" step="any" class="form-control required weight" name="weight[]" id="weight" placeholder="%" value="{{ $Detailitem->weight }}" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                 </td>
+                                                @php
+                                                    if (in_array(Auth::user()->RolePermission, ['admin', 'HRAdmin', 'developer', 'DHOD', 'DBM'])) {
+                                                        $canEdit = 0;
+                                                    } else {
+                                                        $canEdit = $Detailitem->is_lock;
+                                                    }
+                                                @endphp
                                                 <td class="text-center">
-                                                    <select class="form-control" name="is_lock[]" id="is_lock" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                    <select class="form-control" name="is_lock[]" id="is_lock" {{ $canEdit == 1 ? 'disabled' : '' }}>
                                                         <option value="0" {{ $Detailitem->is_lock == 0 ? 'selected' : '' }}>No</option>
                                                         <option value="1" {{ $Detailitem->is_lock == 1 ? 'selected' : '' }}>Yes</option>
                                                     </select>
