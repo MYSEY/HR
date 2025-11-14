@@ -532,7 +532,7 @@ return[
     "kpi_process"=>"KPI Process",
     "kpi_report"=>"KPI Report",
     "KNY_/_pchum_ben"=>"KNY / Pchum Ben",
-    "kpi_year"=>"KIP Year",
+    "kpi_year"=>"KPI Year",
     "list"=>"List",
     "lay_off"=>"Lay Off",
     "last_name"=> "Last Name",

@@ -510,7 +510,7 @@ return[
     "khum_name_en"=>"Khum Name EN",
     "khum_name_latin"=>"Khum Name Latin",
 	"khm_pchum_reports"=>"របាយការណ៍ ប្រាក់ឧបត្ថម្ភចូលឆ្នាំខ្មែរ និង ភ្ជុំបិណ្ឌ",
-	"kpi_year"=>"KIP Year",
+	"kpi_year"=>"KPI Year",
 	"kpi_process"=>"KPI Process",
     "kpi_report"=>"KPI Report",
 	"kh"=>"ខ្មែរ",

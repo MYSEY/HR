@@ -132,7 +132,7 @@ class GenerateAnnualSalaryIncreasementController extends Controller
         
                 // KPI Score
                 $kpiScores = (float) $kpiPerform->total_score_direct_chairman;
-        
+                
                 // Match KPI score with increasement range
                 $interest = 0;
                 $total_percentage = 0;

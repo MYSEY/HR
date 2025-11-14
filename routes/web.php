@@ -303,9 +303,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('performance/{id}/edit', [PerformanceController::class,'edit']);
     Route::post('performance/update', [PerformanceController::class,'update']);
     Route::post('performance/delete', [PerformanceController::class,'destroy']);
-    Route::post('performance/approve', [PerformanceController::class,'performanceApprove']);
+    Route::post('performance/assign', [PerformanceController::class,'performanceAssign']);
     Route::post('performance/accepted', [PerformanceController::class,'performanceAccepted']);
-    Route::post('performance/approved/all', [PerformanceController::class,'performanceApproveAll']);
+    Route::post('performance/assign/all', [PerformanceController::class,'performanceAssignAll']);
     Route::post('performance/import', [PerformanceController::class,'performanceImport']);
 
     //performance Appraisal

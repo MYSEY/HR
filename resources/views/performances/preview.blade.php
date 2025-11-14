@@ -206,7 +206,7 @@
                 <div class="submit-section mb-2">
                     <input type="text" name="performance_id" id="performance_id" value="{{ $data->id }}" hidden>
                     <a href="{{ url('performance') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
-                    <a href="javascript:" class="btn btn-success" id="btn_accepted">@lang('lang.accepted')</a>
+                    <a href="javascript:" class="btn btn-success" id="btnAccepted">@lang('lang.accepted')</a>
                 </div>
             </form>
         </div>
@@ -216,112 +216,61 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(document).ready(function () {
-        $("#btn_accepted").on('click',function(){
+        $("#btnAccepted").on('click',function(){
             var id = $("#performance_id").val();
-            var actionBtn = "";
-            var formContent = "";
-            var columnClassText = 'col-md-4';
-            columnClassText = 'col-md-6'
-            formContent = ''+
-                '<form id="add-style">'+
-                    '<div class="mt-2">'+
-                        '<label class="container-checkbox">Review'+
-                            '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
-                        '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                    '</div>'+
-                    '<div class="form-group">'+
-                        '<label>@lang("lang.employee")</label>'+
-                        '<select class="select form-control hr-select2-option employee_id" id="employee_id">'+
-                            '<option value="">-- @lang("lang.select") --</option>'+
-                            '@foreach ($employee as $item)'+
-                                '<option value="{{ $item->id }}">{{ $item->employee_name_en }}</option>'+
-                            '@endforeach'+
-                        '</select>'+
-                    '</div>'+
-                    '<div class="form-group">' +
-                        '<label>@lang("lang.remark")</label>' +
-                        '<textarea class="form-control remark" rows="4" placeholder="Enter remark..."></textarea>' +
-                    '</div>' +
-                '</form>';
-            actionBtn = {
-                text: 'Submit',
-                btnClass: 'btn-green',
-                action: function() {
-                    this.$content.find('.remark').css("border-color","#e3e3e3");
-                    var employee_id = this.$content.find('.employee_id').val();
-                    let status = this.$content.find('.action-asign:checked').val();
-                    let remark = this.$content.find('.remark').val();
-                    if (!status) {
-                        $.alert({
-                            title: '<span class="text-danger">@lang("lang.requiered")</span>',
-                            content: 'Check action for asign!',
-                        });
-                        return false;
-                    }
-                    if (!employee_id) {
-                        $.alert({
-                            title: '<span class="text-danger">@lang("lang.requiered")</span>',
-                            content: 'Please select employee for asign!',
-                        });
-                        return false;
-                    }
-                    $('#modal-loading').modal('show');
-                    axios.post('{{ URL("performance/accepted") }}', {
-                        'id': id,
-                        'status': status,
-                        'employee_id': employee_id,
-                        'reason': remark,
-                    }).then(function(response) {
-                        $('#modal-loading').modal('hide');
-                        if (response.data.success) {
-                            new Noty({
-                                title: "",
-                                text: '@lang("lang.the_process_has_been_successfully")',
-                                type: "success",
-                                icon: true
-                            }).show();
-                            window.location.replace("{{ URL('performance') }}");
-                        } else if(response.data.message == 'weight_must_be_exactly'){
-                            new Noty({
-                                title: "",
-                                text: 'Total weight must be exactly 100% before approval.',
-                                type: "error",
-                                icon: true,
-                                timeout: 3000,
-                            }).show();
-                        }
-                    }).catch(function(error) {
-                        $('#modal-loading').modal('hide');
-                        new Noty({
-                            title: "",
-                            text: '@lang("lang.something_went_wrong_please_try_again_later")',
-                            type: "error",
-                            icon: true,
-                            timeout: 3000,
-                        }).show();
-                    });
-                }
-            }
             $.confirm({
                 title: '@lang("lang.accepted")',
-                contentClass: 'text-center',
-                columnClass: columnClassText,
-                content: formContent,
+                content: 'Are you sure want to accepted this performance?',
                 type: "blue",
                 buttons: {
-                    confirm: actionBtn,
+                    submit: {
+                        text: 'Submit',
+                        btnClass: 'btn-green',
+                        action: function () {
+                            $('#modal-loading').modal('show');
+                            axios.post('{{ URL("performance/accepted") }}', {
+                                id: id,
+                            })
+                            .then(function (response) {
+                                $('#modal-loading').modal('hide');
+                                if (response.data.success) {
+                                    new Noty({
+                                        text: '@lang("lang.the_process_has_been_successfully")',
+                                        type: "success",
+                                        timeout: 2500
+                                    }).show();
+                                    window.location.replace("{{ URL('performance') }}");
+                                    return;
+                                }
+                                // Validation Error: Weight must be 100%
+                                if (response.data.message === 'weight_must_be_exactly') {
+                                    new Noty({
+                                        text: 'Total weight must be exactly 100% before approval.',
+                                        type: "error",
+                                        timeout: 3000
+                                    }).show();
+                                    return;
+                                }
+                                // Other backend errors
+                                new Noty({
+                                    text: response.data.message || 'Unknown error',
+                                    type: "error"
+                                }).show();
+                            })
+                            .catch(function (error) {
+                                $('#modal-loading').modal('hide');
+                                new Noty({
+                                    text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                    type: "error",
+                                    timeout: 3000
+                                }).show();
+                            });
+                        }
+                    },
                     cancel: {
                         text: 'Cancel',
-                        btnClass: 'btn-secondary btn-sm',
-                    },
-                },
-                onContentReady: function () {
-                    // ✅ Initialize Select2 inside the modal
-                    this.$content.find('.hr-select2-option').select2({
-                        width: '100%',
-                        dropdownParent: this.$content, // <-- IMPORTANT
-                        placeholder: '-- Select Employee --'
-                    });
+                        btnClass: 'btn-secondary btn-sm'
+                    }
                 }
             });
         });

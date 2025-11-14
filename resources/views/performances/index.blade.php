@@ -158,9 +158,9 @@
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
-                {{-- <a href="javascript:void(0);" class="btn btn-sm btn-secondary mb-3" id="btnApprovedAll">
-                    Approved
-                </a> --}}
+                <a href="javascript:void(0);" class="btn btn-sm btn-secondary mb-3" id="btnAssignAll">
+                    Assign All
+                </a>
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
@@ -168,12 +168,12 @@
                                 <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            {{-- <th>
+                                            <th>
                                                 <div class="custom-control custom-checkbox custom-control-inline big-checkbox">
                                                     <input type="checkbox" class="custom-control-input checkAll" name="checkAll" id="checkAll" onClick="toggle(this)">
                                                     <label class="custom-control-label" for="checkAll"></label>
                                                 </div>
-                                            </th> --}}
+                                            </th>
                                             <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
                                             <th class="sorting sorting_asc stuck-scroll-4">@lang('lang.employee_name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
@@ -238,6 +238,8 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 @section('script')
     <script>
+        window.rolePermission = "{{ Auth::user()->RolePermission }}";
+        window.userId = "{{ Auth::user()->id }}";
         var number_employee = null;
         var employee_name = null;
         var branch_id = null;
@@ -262,294 +264,17 @@
                     $(".sub_chk:not(:disabled)").prop("checked", false);
                 }
             });
-            // $('body').on('click', '#btnAsignTo', function() {
-            //     var id = $(this).data("id");
-            //     var employee_old = $(this).data("name");
-            //     var get_employee_id = $(this).data("employeeid");
-            //     var status = $(this).data("status");
-            //     var actionBtn = "";
-            //     var titleText = "";
-            //     var formContent = "";
-            //     var columnClassText = 'col-md-4';
-            //     if (status == "accepted") {
-            //         titleText = '@lang("lang.asign_to")';
-            //         columnClassText = 'col-md-6'
-            //         formContent = ''+
-            //             '<form id="add-style">'+
-            //                 '<div class="mt-2">'+
-            //                     '<label class="container-checkbox">Review'+
-            //                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
-            //                     '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-            //                 '</div>'+
-            //                 '<div class="form-group">'+
-            //                     '<label>@lang("lang.employee")</label>'+
-            //                     '<select class="select form-control hr-select2-option employee_id" id="employee_id">'+
-            //                         '<option value="">-- @lang("lang.select") --</option>'+
-            //                         '@foreach ($employee as $item)'+
-            //                             '<option value="{{ $item->id }}">{{ $item->employee_name_en }}</option>'+
-            //                         '@endforeach'+
-            //                     '</select>'+
-            //                 '</div>'+
-            //                 '<div class="form-group">' +
-            //                     '<label>@lang("lang.remark")</label>' +
-            //                     '<textarea class="form-control remark" rows="4" placeholder="Enter remark..."></textarea>' +
-            //                 '</div>' +
-            //             '</form>';
-            //         actionBtn = {
-            //             text: 'Submit',
-            //             btnClass: 'btn-green',
-            //             action: function() {
-            //                 this.$content.find('.remark').css("border-color","#e3e3e3");
-            //                 var employee_id = this.$content.find('.employee_id').val();
-            //                 let status = this.$content.find('.action-asign:checked').val();
-            //                 let remark = this.$content.find('.remark').val();
-            //                 if (!status) {
-            //                     $.alert({
-            //                         title: '<span class="text-danger">@lang("lang.requiered")</span>',
-            //                         content: 'Check action for asign!',
-            //                     });
-            //                     return false;
-            //                 }
-            //                 if (!employee_id) {
-            //                     $.alert({
-            //                         title: '<span class="text-danger">@lang("lang.requiered")</span>',
-            //                         content: 'Please select employee for asign!',
-            //                     });
-            //                     return false;
-            //                 }
-            //                 $('#modal-loading').modal('show');
-            //                 axios.post('{{ URL("performance/approve") }}', {
-            //                     'id': id,
-            //                     'status': status,
-            //                     'employee_id': employee_id,
-            //                     'reason': remark,
-            //                 }).then(function(response) {
-            //                     $('#modal-loading').modal('hide');
-            //                     if (response.data.success) {
-            //                         new Noty({
-            //                             title: "",
-            //                             text: '@lang("lang.the_process_has_been_successfully")',
-            //                             type: "success",
-            //                             icon: true
-            //                         }).show();
-            //                         window.location.replace("{{ URL('performance') }}");
-            //                     } else if(response.data.message == 'weight_must_be_exactly'){
-            //                         new Noty({
-            //                             title: "",
-            //                             text: 'Total weight must be exactly 100% before approval.',
-            //                             type: "error",
-            //                             icon: true,
-            //                             timeout: 3000,
-            //                         }).show();
-            //                     }
-            //                 }).catch(function(error) {
-            //                     $('#modal-loading').modal('hide');
-            //                     new Noty({
-            //                         title: "",
-            //                         text: '@lang("lang.something_went_wrong_please_try_again_later")',
-            //                         type: "error",
-            //                         icon: true,
-            //                         timeout: 3000,
-            //                     }).show();
-            //                 });
-            //             }
-            //         }
-            //     }
-            //     $.confirm({
-            //         title: titleText,
-            //         contentClass: 'text-center',
-            //         columnClass: columnClassText,
-            //         content: formContent,
-            //         buttons: {
-            //             confirm: actionBtn,
-            //             cancel: {
-            //                 text: 'Cancel',
-            //                 btnClass: 'btn-secondary btn-sm',
-            //             },
-            //         },
-            //         onContentReady: function () {
-            //             // ✅ Initialize Select2 inside the modal
-            //             this.$content.find('.hr-select2-option').select2({
-            //                 width: '100%',
-            //                 dropdownParent: this.$content, // <-- IMPORTANT
-            //                 placeholder: '-- Select Employee --'
-            //             });
-            //         }
-            //     });
-            // });
-
-            // $('body').on('click','#btnApprovedAll',function(){
-            //     var userid = $(this).data("userid");
-            //     var allVals = [];
-            //     $(".sub_chk:checked:not(:disabled)").each(function() {
-            //         allVals.push($(this).attr('data-id'));
-            //     });
-                
-            //     var performance_id = allVals.join(",");
-            //     if(allVals.length <=0)
-            //     {
-            //         $.alert({
-            //             title: '@lang("lang.approve")!',
-            //             content: '@lang("lang.please_select_item_befor").',
-            //             type: 'red',
-            //         });
-            //     }  else {
-            //         var actionBtn = "";
-            //         var titleText = "";
-            //         var formContent = "";
-            //         var columnClassText = 'col-md-4';
-            //         titleText = '@lang("lang.asign_to_employee")';
-            //         columnClassText = 'col-md-6'
-            //         formContent = ''+
-            //             '<form id="add-style">'+
-            //                 '<div class="mt-2">'+
-            //                     '<label class="container-checkbox">Review'+
-            //                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
-            //                     '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-            //                 '<div class="form-group">'+
-            //                     '<label>@lang("lang.employee")</label>'+
-            //                     '<select class="form-control hr-select2-option-emp-role form-select employee_id" id="employee_id">'+
-                                
-            //                     '</select>'+
-            //                 '</div>'+
-            //                 '<div class="form-group">'+
-            //                     '<label>@lang("lang.remark")</label>'+
-            //                     '<textarea class="form-control remark" rows="4" placeholder="Enter remark..."></textarea>'+
-            //                 '</div>'+
-            //             '</form>';
-            //         actionBtn = {
-            //             text: 'Submit',
-            //             btnClass: 'btn-green',
-            //             action: function() {
-            //                 this.$content.find('.remark').css("border-color","#e3e3e3");
-            //                 var employee_id = this.$content.find('.employee_id').val();
-            //                 let status = this.$content.find('.action-asign:checked').val();
-            //                 let remark = this.$content.find('.remark').val();
-            //                 if (!status) {
-            //                     $.alert({
-            //                         title: '<span class="text-danger">@lang("lang.requiered")</span>',
-            //                         content: 'Check action for asign!',
-            //                     });
-            //                     return false;
-            //                 }
-            //                 if (!employee_id) {
-            //                     $.alert({
-            //                         title: '<span class="text-danger">@lang("lang.requiered")</span>',
-            //                         content: 'Please select employee for asign!',
-            //                     });
-            //                     return false;
-            //                 }
-            //                 $('#modal-loading').modal('show');
-            //                 axios.post('{{ URL("performance/approved/all") }}', {
-            //                     'performance_id': performance_id,
-            //                     'status': status,
-            //                     'employee_id': employee_id,
-            //                     'reason': remark,
-            //                 }).then(function(response) {
-            //                     $('#modal-loading').modal('hide');
-            //                     if (response.data.success) {
-            //                         new Noty({
-            //                             title: "",
-            //                             text: '@lang("lang.the_process_has_been_successfully")',
-            //                             type: "success",
-            //                             icon: true
-            //                         }).show();
-            //                         window.location.replace("{{ URL('performance-admin') }}");
-            //                     } else if(response.data.message == 'weight_must_be_exactly'){
-            //                         new Noty({
-            //                             title: "",
-            //                             text: 'Total weight must be exactly 100% before approval.',
-            //                             type: "error",
-            //                             icon: true,
-            //                             timeout: 3000,
-            //                         }).show();
-            //                     }
-            //                 }).catch(function(error) {
-            //                     $('#modal-loading').modal('hide');
-            //                     new Noty({
-            //                         title: "",
-            //                         text: '@lang("lang.something_went_wrong_please_try_again_later")',
-            //                         type: "error",
-            //                         icon: true,
-            //                         timeout: 3000,
-            //                     }).show();
-            //                 });
-            //             }
-            //         }
-            //         $.confirm({
-            //             title: titleText,
-            //             contentClass: 'text-center',
-            //             columnClass: columnClassText,
-            //             content: formContent,
-            //             buttons: {
-            //                 confirm: actionBtn,
-            //                 cancel: {
-            //                     text: '@lang("lang.cancel")',
-            //                     action: function () {
-            //                         // Action for cancel button (if needed)
-            //                     }
-            //                 }
-            //             },
-            //             onContentReady: function () {
-            //                 var jc = this;
-            //                 this.$content.find('form').on('submit', function (e) {
-            //                     e.preventDefault();
-            //                     jc.$$formSubmit.trigger('click');
-            //                 });
-            //             }
-            //         });
-            //         $(document).ready(function(){
-            //             $('.hr-select2-option-emp-role').each(function() {
-            //                 $(this).select2({
-            //                     width: '100%',
-            //                     dropdownParent: $(this).parent(),
-            //                 })
-            //             });
-            //             $.ajax({
-            //                 type: "GET",
-            //                 url: "{{ url('/performance-admin/employees') }}",
-            //                 data: {
-            //                     'get_employee_id': userid,
-            //                 },
-            //                 dataType: "JSON",
-            //                 success: function(response) {
-            //                     let datas = response.datas;
-            //                     $('#employee_id').html('<option selected value=""> -- @lang("lang.select") --</option>');
-            //                     if (datas != '') {
-            //                         $.each(datas, function(i, item) {
-            //                             $('#employee_id').append($('<option>', {
-            //                                 value: item.id,
-            //                                 html: item.employee_name_en + '&nbsp;&nbsp;' + '(' + '&nbsp;'+ item.department.name_english + '&nbsp;)'
-            //                             }));
-            //                         });
-            //                     }
-            //                 }
-            //             });
-            //         });
-            //     }
-            // });
-            // Initialize only once
-            dataTables();
-            $(".reset-btn").on("click", function() {
-                $(this).prop('disabled', true);
-                $(".btn-text-reset").hide();
-                $("#btn-text-loading").css('display', 'block');
-                window.location.replace("{{ URL('performance') }}");
-            });
-            $(document).on('click', '.performanceDelete', function (e) {
-                let id = $(this).data("id");
-                $('.e_id').val(id);
-                $('#deleteModal').modal('show');
-            });
-
-            $('body').on('click','#btnAccepted',function(){
+            $('body').on('click', '#btnAsignTo', function() {
                 var id = $(this).data("id");
+                var employee_old = $(this).data("name");
                 var get_employee_id = $(this).data("employeeid");
                 var status = $(this).data("status");
                 var actionBtn = "";
+                var titleText = "";
                 var formContent = "";
                 var columnClassText = 'col-md-4';
-                if (status == "preparing") {
+                if (status == "accepted") {
+                    titleText = '@lang("lang.asign_to")';
                     columnClassText = 'col-md-6'
                     formContent = ''+
                         '<form id="add-style">'+
@@ -595,7 +320,7 @@
                                 return false;
                             }
                             $('#modal-loading').modal('show');
-                            axios.post('{{ URL("performance/accepted") }}', {
+                            axios.post('{{ URL("performance/assign") }}', {
                                 'id': id,
                                 'status': status,
                                 'employee_id': employee_id,
@@ -633,11 +358,10 @@
                     }
                 }
                 $.confirm({
-                    title: '@lang("lang.accepted")',
+                    title: titleText,
                     contentClass: 'text-center',
                     columnClass: columnClassText,
                     content: formContent,
-                    type: "blue",
                     buttons: {
                         confirm: actionBtn,
                         cancel: {
@@ -652,6 +376,211 @@
                             dropdownParent: this.$content, // <-- IMPORTANT
                             placeholder: '-- Select Employee --'
                         });
+                    }
+                });
+            });
+
+            $('body').on('click','#btnAssignAll',function(){
+                var id = $(this).data("id");
+                var employee_old = $(this).data("name");
+                var get_employee_id = $(this).data("employeeid");
+                var status = $(this).data("status");
+                
+                var userid = $(this).data("userid");
+                var allVals = [];
+                $(".sub_chk:checked:not(:disabled)").each(function() {
+                    allVals.push($(this).attr('data-id'));
+                });
+                
+                var performance_id = allVals.join(",");
+                if(allVals.length <=0)
+                {
+                    $.alert({
+                        title: '@lang("lang.assign")!',
+                        content: '@lang("lang.please_select_item_befor").',
+                        type: 'red',
+                    });
+                }  else {
+                    var actionBtn = "";
+                    var titleText = "";
+                    var formContent = "";
+                    var columnClassText = 'col-md-4';
+                    titleText = '@lang("lang.asign_to_employee")';
+                    columnClassText = 'col-md-6'
+                    formContent = ''+
+                        '<form id="add-style">'+
+                            '<div class="mt-2">'+
+                                '<label class="container-checkbox">Review'+
+                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
+                                '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                                '<label>@lang("lang.employee")</label>'+
+                                '<select class="select form-control hr-select2-option employee_id" id="employee_id">'+
+                                    '<option value="">-- @lang("lang.select") --</option>'+
+                                    '@foreach ($employee as $item)'+
+                                        '<option value="{{ $item->id }}">{{ $item->employee_name_en }}</option>'+
+                                    '@endforeach'+
+                                '</select>'+
+                            '</div>'+
+                            '<div class="form-group">' +
+                                '<label>@lang("lang.remark")</label>' +
+                                '<textarea class="form-control remark" rows="4" placeholder="Enter remark..."></textarea>' +
+                            '</div>' +
+                        '</form>';
+                    actionBtn = {
+                        text: 'Submit',
+                        btnClass: 'btn-green',
+                        action: function() {
+                            this.$content.find('.remark').css("border-color","#e3e3e3");
+                            var employee_id = this.$content.find('.employee_id').val();
+                            let status = this.$content.find('.action-asign:checked').val();
+                            let remark = this.$content.find('.remark').val();
+                            if (!status) {
+                                $.alert({
+                                    title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                    content: 'Check action for asign!',
+                                });
+                                return false;
+                            }
+                            if (!employee_id) {
+                                $.alert({
+                                    title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                    content: 'Please select employee for asign!',
+                                });
+                                return false;
+                            }
+                            $('#modal-loading').modal('show');
+                            axios.post('{{ URL("performance/assign/all") }}', {
+                                'performance_id': performance_id,
+                                'status': status,
+                                'employee_id': employee_id,
+                                'reason': remark,
+                            }).then(function(response) {
+                                $('#modal-loading').modal('hide');
+                                if (response.data.success) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
+                                        type: "success",
+                                        icon: true
+                                    }).show();
+                                    window.location.replace("{{ URL('performance-admin') }}");
+                                } else if(response.data.message == 'weight_must_be_exactly'){
+                                    new Noty({
+                                        title: "",
+                                        text: 'Total weight must be exactly 100% before approval.',
+                                        type: "error",
+                                        icon: true,
+                                        timeout: 3000,
+                                    }).show();
+                                }
+                            }).catch(function(error) {
+                                $('#modal-loading').modal('hide');
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                    type: "error",
+                                    icon: true,
+                                    timeout: 3000,
+                                }).show();
+                            });
+                        }
+                    }
+                    $.confirm({
+                        title: titleText,
+                        contentClass: 'text-center',
+                        columnClass: columnClassText,
+                        content: formContent,
+                        buttons: {
+                            confirm: actionBtn,
+                            cancel: {
+                                text: '@lang("lang.cancel")',
+                                action: function () {
+                                    // Action for cancel button (if needed)
+                                }
+                            }
+                        },
+                        onContentReady: function () {
+                            // ✅ Initialize Select2 inside the modal
+                            this.$content.find('.hr-select2-option').select2({
+                                width: '100%',
+                                dropdownParent: this.$content, // <-- IMPORTANT
+                                placeholder: '-- Select Employee --'
+                            });
+                        }
+                    });
+                }
+            });
+            // Initialize only once
+            dataTables();
+            $(".reset-btn").on("click", function() {
+                $(this).prop('disabled', true);
+                $(".btn-text-reset").hide();
+                $("#btn-text-loading").css('display', 'block');
+                window.location.replace("{{ URL('performance') }}");
+            });
+            $(document).on('click', '.performanceDelete', function (e) {
+                let id = $(this).data("id");
+                $('.e_id').val(id);
+                $('#deleteModal').modal('show');
+            });
+
+            $('body').on('click', '#btnAccepted', function () {
+                const id = $(this).data("id");
+                $.confirm({
+                    title: '@lang("lang.accepted")',
+                    content: 'Are you sure want to accepted this performance?',
+                    type: "blue",
+                    buttons: {
+                        submit: {
+                            text: 'Submit',
+                            btnClass: 'btn-green',
+                            action: function () {
+                                $('#modal-loading').modal('show');
+                                axios.post('{{ URL("performance/accepted") }}', {
+                                    id: id,
+                                })
+                                .then(function (response) {
+                                    $('#modal-loading').modal('hide');
+                                    if (response.data.success) {
+                                        new Noty({
+                                            text: '@lang("lang.the_process_has_been_successfully")',
+                                            type: "success",
+                                            timeout: 2500
+                                        }).show();
+                                        window.location.replace("{{ URL('performance') }}");
+                                        return;
+                                    }
+                                    // Validation Error: Weight must be 100%
+                                    if (response.data.message === 'weight_must_be_exactly') {
+                                        new Noty({
+                                            text: 'Total weight must be exactly 100% before approval.',
+                                            type: "error",
+                                            timeout: 3000
+                                        }).show();
+                                        return;
+                                    }
+                                    // Other backend errors
+                                    new Noty({
+                                        text: response.data.message || 'Unknown error',
+                                        type: "error"
+                                    }).show();
+                                })
+                                .catch(function (error) {
+                                    $('#modal-loading').modal('hide');
+                                    new Noty({
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                        type: "error",
+                                        timeout: 3000
+                                    }).show();
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            btnClass: 'btn-secondary btn-sm'
+                        }
                     }
                 });
             });
@@ -683,21 +612,30 @@
                         d.employee_name = $('input[name="employee_name"]').val();
                         d.branch_id = $('select[name="branch_id"]').val();
                         d.department_id = $('select[name="department_id"]').val();
+                    },
+                    dataSrc: function (json) {
+                        userPermission = json.permission || {}; // 👈 Save permission
+                        userIdLog = json.userIdLog;
+                        return json.data;
                     }
                 },
                 columns: [
-                    // {
-                    //     data: 'id',
-                    //     name: 'id',
-                    //     orderable: false,
-                    //     searchable: false,
-                    //     render: function(data, type, row) {
-                    //         return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
-                    //             <input type="checkbox" class="custom-control-input sub_chk" name="checkbox" data-status="${row.status}" data-id="${data}" id="${data}" value="${data}">
-                    //             <label class="custom-control-label" for="${data}"></label>
-                    //         </div>`;
-                    //     }
-                    // },
+                    {
+                        data: 'id',
+                        name: 'id',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row) {
+                            let disabledAttr = "";
+                            if (row.status == "preparing") {
+                                disabledAttr = "disabled";
+                            }
+                            return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
+                                <input type="checkbox" class="custom-control-input sub_chk" ${disabledAttr} name="checkbox" data-status="${row.status}" data-id="${data}" id="${data}" value="${data}">
+                                <label class="custom-control-label" for="${data}"></label>
+                            </div>`;
+                        }
+                    },
                     { 
                         data: 'number_employee', 
                         name: 'number_employee',
@@ -736,22 +674,78 @@
                         orderable: true,
                         searchable: true,
                         render: function (data, type, row) {
-                            if (row.status === 'preparing') {
+                            // 1️⃣ ROLE: DHOD / DBM (Manager-level)
+                            if (['DHOD', 'DBM','HOD','BM','BOD'].includes(window.rolePermission)) {
+                                // Manager only controls their employee or themselves
+                                const isOwner = row.line_manager == window.userId || row.employee_id == window.userId;
+                                if (isOwner) {
+                                    // 📌 If status = accepted → show "Assign to"
+                                    if (row.status === 'accepted') {
+                                        return `
+                                            <div class="dropdown action-label">
+                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" 
+                                                href="#" data-toggle="dropdown">
+                                                    <i class="fa fa-dot-circle-o text-success"></i>
+                                                    <span>Accepted</span>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" 
+                                                    id="btnAsignTo" 
+                                                    data-id="${row.id}" 
+                                                    data-status="${row.status}">
+                                                        <i class="fa fa-dot-circle-o text-primary"></i>
+                                                        <span>@lang("lang.asign_to")</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }
+                                    // 📌 If status = preparing → manager cannot change → just show
+                                    if (row.status === 'preparing') {
+                                        return `
+                                            <span class="badge badge-warning">Preparing</span>
+                                        `;
+                                    }
+                                }
+                                // Not owner → show only view
                                 return `
-                                    <div class="dropdown action-label">
-                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="true">
-                                            <i class="fa fa-dot-circle-o text-warning"></i>
-                                            <span>Preparing</span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" data-id="${row.id}" data-status="${row.status}" href="javascript:void(0)" id="btnAccepted">
-                                                <i class="fa fa-dot-circle-o text-success"></i>
-                                                <span>@lang('lang.accepted')</span>
-                                            </a>
-                                        </div>
-                                    </div>
+                                    <span class="badge badge-info">${row.status}</span>
                                 `;
                             }
+                            // 2️⃣ ROLE: Normal users
+                            else {
+                                // PREPARING → User can accept
+                                if (row.status === 'preparing') {
+                                    return `
+                                        <div class="dropdown action-label">
+                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" 
+                                            href="#" data-toggle="dropdown">
+                                                <i class="fa fa-dot-circle-o text-warning"></i>
+                                                <span>Preparing</span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" 
+                                                id="btnAccepted" 
+                                                data-id="${row.id}" 
+                                                data-status="${row.status}">
+                                                    <i class="fa fa-dot-circle-o text-success"></i>
+                                                    <span>@lang('lang.accepted')</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+                                // ACCEPTED → Normal user cannot change
+                                if (row.status === 'accepted') {
+                                    return `
+                                        <span class="badge badge-info">Accepted</span>
+                                    `;
+                                }
+                            }
+                            // 3️⃣ DEFAULT fallback
+                            return `
+                                <span class="badge badge-secondary">Unknown</span>
+                            `;
                         }
                     },
                     {
