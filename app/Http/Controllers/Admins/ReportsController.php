@@ -533,7 +533,7 @@ class ReportsController extends Controller
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
-            $data = $query->orderBy('generate_annual_salary_increasements.id', 'desc')->offset($start)->limit($limit)->get();
+            $data = $query->where("generate_annual_salary_increasements.status", "approved")->orderBy('generate_annual_salary_increasements.id', 'desc')->offset($start)->limit($limit)->get();
             // ✅ Return JSON for DataTables
             return response()->json([
                 'draw' => intval(request()->input('draw')),
@@ -547,7 +547,7 @@ class ReportsController extends Controller
     }
     public function AnnualSalaryIncreasementExport(Request $request){
         $query = $this->reportRepo->getAnnualSalaryIncreasementReport($request);
-        $data = $query->orderBy('generate_annual_salary_increasements.id', 'desc')->get();
+        $data = $query->where("generate_annual_salary_increasements.status", "approved")->orderBy('generate_annual_salary_increasements.id', 'desc')->get();
         $export = new ExportAnnualSalaryIncreasement($data);
         return Excel::download($export, 'annual_salary_increasement.xlsx');
     }

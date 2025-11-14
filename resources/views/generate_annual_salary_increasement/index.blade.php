@@ -57,6 +57,10 @@
                         <span class="btn-txt"><i class="fa fa-search"></i></span>
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                        <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
+                        <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                    </button>
                     <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                         <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -167,6 +171,17 @@
             department_id = $('#department_id').val();
             $('#tbl_generate_annual_salary_increas').DataTable().ajax.reload(null, false);
         });
+        $(".btn_excel").on("click", function() {
+                let query = {
+                    "_token": "{{ csrf_token() }}",
+                    number_employee : $('#employee_id').val(),
+                    employee_name : $('#employee_name').val(),
+                    branch_id : $('#branch_id').val(),
+                    department_id : $('#department_id').val(),
+                };
+                var url = "{{URL::to('generate/annual/salary/increasement/download')}}?" + $.param(query)
+                window.location = url;
+            });
         $('.checkAll').on('click', function(e) {
             if($(this).is(':checked',true)){
                 $(".sub_chk").prop('checked', true);

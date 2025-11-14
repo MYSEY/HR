@@ -321,6 +321,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('performance/appraisal/pa-export', [ReportsController::class,'PaReportExport']);
     Route::get('performance/appraisal/pa-export/{id}', [ReportsController::class,'PaReportExportDetail']);
 
+    Route::get('generate/annual/salary/increasement/download', [GenerateAnnualSalaryIncreasementController::class,'export']);
     Route::resource('annual/salary/increasement', AnnualSalaryIncreasementController::class);
     Route::resource('generate/annual/salary/increasement', GenerateAnnualSalaryIncreasementController::class);
     Route::post('generate/annual/salary/increasement/approved', [GenerateAnnualSalaryIncreasementController::class,'annualSalaryIncreasementApproved']);
