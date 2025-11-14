@@ -286,7 +286,7 @@ class ReportRepository extends BaseRepository
     public function getAnnualSalaryIncreasementReport($request){
       
         // Base query with joins
-        $query = GenerateAnnualSalaryIncreasement::where("generate_annual_salary_increasements.status", "approved")->leftJoin('users', 'generate_annual_salary_increasements.employee_id', '=', 'users.id')
+        $query = GenerateAnnualSalaryIncreasement::leftJoin('users', 'generate_annual_salary_increasements.employee_id', '=', 'users.id')
             ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
             ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
             ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')

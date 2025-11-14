@@ -15,14 +15,23 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\AnnualSalaryIncreasement;
 use App\Models\GenerateAnnualSalaryIncreasement;
 use App\Models\SalaryRequest;
+use App\Repositories\Admin\ReportRepository;
+use App\Exports\ExportAnnualSalaryIncreasement;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class GenerateAnnualSalaryIncreasementController extends Controller
 {
+    private $reportRepo;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct(ReportRepository $reportRepo)
+    {
+        $this->reportRepo = $reportRepo;
+    }
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -269,5 +278,11 @@ class GenerateAnnualSalaryIncreasementController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function export(Request $request){
+        $query = $this->reportRepo->getAnnualSalaryIncreasementReport($request);
+        $data = $query->where("generate_annual_salary_increasements.status", "!=", "approved")->orderBy('generate_annual_salary_increasements.id', 'desc')->get();
+        $export = new ExportAnnualSalaryIncreasement($data);
+        return Excel::download($export, 'annual_salary_increasement.xlsx');
     }
 }
