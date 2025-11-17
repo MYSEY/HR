@@ -59,11 +59,11 @@ class ConfigeAnnualBonuByBranchCongroller extends Controller
             }
 
             DB::commit();
-            Toastr::success('Annual salary increasement(s) created successfully.', 'Success');
+            Toastr::success('Annual bouns created successfully.', 'Success');
             return redirect()->back();
         } catch (\Throwable $exp) {
             DB::rollBack();
-            Toastr::error('Annual salary increasement creation failed.', 'Error');
+            Toastr::error('Annual bonus creation failed.', 'Error');
             return redirect()->back();
         }
     }
@@ -105,7 +105,17 @@ class ConfigeAnnualBonuByBranchCongroller extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $data = $request->only(['branch_id', 'percentage','year']);
+            $data['updated_by'] = Auth::user()->id;
+            AnnualBonuBranch::where('id', $request->id)->update($data);
+            DB::commit(); // commit transaction
+            Toastr::success('Annual bonus updated successfully.','Success');
+            return redirect()->back();
+        } catch (\Throwable $exp) {
+            Toastr::error('nnual bonus created fail.','Error');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -116,6 +126,14 @@ class ConfigeAnnualBonuByBranchCongroller extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            AnnualBonuBranch::destroy($id);
+            Toastr::success('Annual bonus deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Annual bonus delete fail.','Error');
+            return redirect()->back();
+        }
     }
 }

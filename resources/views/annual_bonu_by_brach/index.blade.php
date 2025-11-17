@@ -123,7 +123,7 @@
                             <p>@lang('lang.are_you_sure_want_to_delete')?</p>
                         </div>
                         <div class="modal-btn delete-action">
-                            <form action="{{url('annual/bonus/delete')}}" method="POST">
+                            <form action="{{url('confige/annual/bonus/branch/delete')}}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="id" class="e_id" value="">
