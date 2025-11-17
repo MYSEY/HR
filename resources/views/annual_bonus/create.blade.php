@@ -91,7 +91,7 @@
         $(document).on('click', '.addRecord', function(e) {
             e.preventDefault();
             // Insert the new record row BEFORE the grand total row
-            $("#tbl_annual_bonus tbody tr:first").after(addRecord());
+            $("#tbl_annual_bonus tbody tr:last").after(addRecord());
         });
     });
 

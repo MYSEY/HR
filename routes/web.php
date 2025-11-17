@@ -39,6 +39,7 @@ use App\Http\Controllers\Admins\ExpenseReportController;
 use App\Http\Controllers\Admins\FnPaymentTermController;
 use App\Http\Controllers\Admins\FringeBenefitController;
 use App\Http\Controllers\Admins\PayrollReportController;
+use App\Http\Controllers\Admins\SalaryRequestController;
 use App\Http\Controllers\Admins\ExpenseRequestController;
 use App\Http\Controllers\Admins\FNExchangeRateController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
@@ -52,6 +53,7 @@ use App\Http\Controllers\Admins\MotorAdjustmentController;
 use App\Http\Controllers\Admins\ProvinceAddressController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\DistrictsAddressController;
+use App\Http\Controllers\Admins\PerformanceAdminController;
 use App\Http\Controllers\Admins\AnnualBonuConfigeController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
 use App\Http\Controllers\Admins\FnRegularExspenseController;
@@ -59,10 +61,9 @@ use App\Http\Controllers\Admins\CategoryPermissionController;
 use App\Http\Controllers\Admins\GenerateAnnaulBonusController;
 use App\Http\Controllers\Admins\PerformanceAppraisalController;
 use App\Http\Controllers\Admins\AnnualSalaryIncreasementController;
+use App\Http\Controllers\Admins\ConfigeAnnualBonuByBranchCongroller;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
 use App\Http\Controllers\Admins\GenerateAnnualSalaryIncreasementController;
-use App\Http\Controllers\Admins\PerformanceAdminController;
-use App\Http\Controllers\Admins\SalaryRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -327,6 +328,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('generate/annual/salary/increasement/approved', [GenerateAnnualSalaryIncreasementController::class,'annualSalaryIncreasementApproved']);
 
     Route::resource('annual/bonus', AnnualBonuConfigeController::class);
+    Route::resource('confige/annual/bonus/branch', ConfigeAnnualBonuByBranchCongroller::class);
     Route::resource('generate/annual/bonus', GenerateAnnaulBonusController::class);
 
     // Motor Rental
