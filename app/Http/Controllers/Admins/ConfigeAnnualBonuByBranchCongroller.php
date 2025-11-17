@@ -20,7 +20,8 @@ class ConfigeAnnualBonuByBranchCongroller extends Controller
     public function index()
     {
         $data = AnnualBonuBranch::with('branch')->get();
-        return view('annual_bonu_by_brach.index',compact('data'));
+        $branches = Branchs::all();
+        return view('annual_bonu_by_brach.index',compact('data','branches'));
     }
 
     /**
@@ -86,7 +87,13 @@ class ConfigeAnnualBonuByBranchCongroller extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = AnnualBonuBranch::findOrFail($id);
+        $branches = Branchs::all();
+        return response()->json([
+            'success'=>$data,
+            'branches'=>$branches,
+
+        ]);
     }
 
     /**

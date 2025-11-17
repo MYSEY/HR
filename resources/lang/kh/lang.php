@@ -104,6 +104,7 @@ return[
 	"asign_to"=>"ផ្ទេរសិទ្ធិឲ្យ",
 	"assign_line_manager"=>"ចាត់តាំងអ្នកគ្រប់គ្រងបន្ទាត់ថ្មី",
 	"annual_bonus"=>"ប្រាក់លើកទឹកចិត្តប្រចាំឆ្នាំ",
+	"annual_bonus_by_branch"=>"Annual Bonus By Branch",
 	"address_km"=>"Address KM",
 	"address_latin"=>"Address Latin",
 	"address_en"=>"Address EN",

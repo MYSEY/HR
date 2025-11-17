@@ -73,21 +73,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        {{-- <form action="{{url('annual/bonus')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <form action="{{url('confige/annual/bonus/branch')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="id" id="e_id" class="e_id" value="">
                             <div class="form-group">
-                                <label>Criteria <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('criteria') is-invalid @enderror" id="e_criteria" name="criteria" required>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.discription') <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('discription') is-invalid @enderror" name="discription" id="e_discription" rows="3" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Total Score <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('total_score') is-invalid @enderror" id="e_total_score" name="total_score" required>
+                                <label>@lang('lang.branch') <span class="text-danger">*</span></label>
+                                <select class="form-control hr-select2-option requered" id="e_branch_id" name="branch_id" value="{{old('branch_id')}}" required>
+                                    <option selected disabled value=""> --@lang('lang.select')--</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label>Percentage <span class="text-danger">*</span></label>
@@ -99,9 +93,9 @@
                             @endphp
                             <div class="form-group">
                                 <label>Year <span class="text-danger">*</span></label>
-                                <select name="increasement_year" class="form-control" id="e_increasement_year">
+                                <select name="year" class="form-control" id="e_year">
                                     @for ($year = $startYear; $year <= $endYear; $year++)
-                                        <option value="{{ $year }}"  {{ old('increasement_year', date('Y')) == $year ? 'selected' : '' }}>
+                                        <option value="{{ $year }}"  {{ old('year', date('Y')) == $year ? 'selected' : '' }}>
                                             {{ $year }}
                                         </option>
                                     @endfor
@@ -113,7 +107,7 @@
                                     <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
-                        </form> --}}
+                        </form>
                     </div>
                 </div>
             </div>
@@ -157,18 +151,21 @@
             let id = $(this).data("id");
             $.ajax({
                 type: "GET",
-                url: "{{ url('annual/bonus') }}/" + id + "/edit",
+                url: "{{ url('confige/annual/bonus/branch') }}/" + id + "/edit",
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
+                        $.each(response.branches, function (index, item) {
+                            let selected = (item.id == response.success.branch_id) ? 'selected' : '';                            
+                            $('#e_branch_id').append(
+                                `<option value="${item.id}" ${selected}>${item.branch_name_en}</option>`
+                            );
+                        });
                         $('#e_id').val(response.success.id);
-                        $('#e_criteria').val(response.success.criteria);
-                        $('#e_discription').val(response.success.discription);
-                        $('#e_total_score').val(response.success.total_score);
                         $('#e_percentage').val(response.success.percentage);
-                        $('#e_increasement_year').val(response.success.increasement_year);
+                        $('#e_year').val(response.success.year);
                         // dynamically set action URL for PUT request
-                        $('#edit_annual_bonus form').attr('action', "{{ url('annual/bonus') }}/" + id);
+                        $('#edit_annual_bonus form').attr('action', "{{ url('confige/annual/bonus/branch') }}/" + id);
                         $('#edit_annual_bonus').modal('show');
                     }
                 }
@@ -177,8 +174,7 @@
 
         $('.delete').on('click',function(){
             let id = $(this).data("id");
-            $('#delete_department form').attr('action', "{{ url('annual/bonus') }}/" + id);
-
+            $('#delete_department form').attr('action', "{{ url('confige/annual/bonus/branch') }}/" + id);
             $('.e_id').val(id);
         });
     });

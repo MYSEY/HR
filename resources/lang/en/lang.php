@@ -100,6 +100,7 @@ return[
 	"assigned_to_me"=>"Assigned to me",
 	"assign_new_line_manager"=>"Assign new line manager",
 	"annual_bonus"=>"Annual Bonus",
+	"annual_bonus_by_branch"=>"Annual Bonus By Branch",
 	"address_km"=>"Address KM",
 	"address_latin"=>"Address Latin",
 	"address_en"=>"Address EN",
