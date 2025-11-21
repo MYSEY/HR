@@ -58,14 +58,18 @@
                             <option value="2">@lang('lang.irregular_expense')</option>
                         </select>
                     </div>
-                    <div class="form-group" id="col-branch">
-                        <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
-                            @foreach ($locations as $item)
-                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
-                            @endforeach
-                        </select>
+                    @if ($permission->is_access == 1)
+                        <div class="form-group" id="col-branch">
+                            <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                                @foreach ($locations as $item)
+                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                                @endforeach
+                            </select>
                     </div>
+                    @endif
+                    
+
                 </div>
             </div>
         </div>
@@ -325,6 +329,8 @@
             document.getElementById("GEXP_remark").innerHTML = nl2brWithIndent(datas.remark);
             $(".p_payment_term").text(datas.payment_term);
 
+            $(".p_approved_by").text("");
+            $(".p_date_approve").text("");
             if (datas.approver_employee_name_kh) {
                 $(".p_approved_by").text(datas.approver_employee_name_kh);
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
@@ -333,6 +339,8 @@
             $(".p_request_by").text(datas.expense_request.request_by.employee_name_kh);
             let p_data_request = moment(datas.date_request).format('YYYY-MM-DD');
             $(".p_data_request").text(p_data_request);
+            $(".p_review_by").text("");
+            $(".p_data_review").text("");
             if(datas.reviewby_employee_name_kh){
                 $(".p_review_by").text(datas.reviewby_employee_name_kh);
                 let p_data_review = moment(datas.date_review).format('YYYY-MM-DD');
@@ -411,6 +419,8 @@
             $(".p_convertNumberDollar").text(convertNumber);
             document.getElementById("TEXP_remark").innerHTML = nl2brWithIndent(datas.remark);
             $(".p_payment_term").text(datas.payment_term);
+            $(".p_approved_by").text("");
+            $(".p_date_approve").text("");
             if (datas.approver_employee_name_kh) {
                 $(".p_approved_by").text(datas.approver_employee_name_kh);
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
@@ -419,6 +429,8 @@
             $(".p_request_by").text(datas.expense_request.request_by.employee_name_kh);
             let p_data_request = moment(datas.date_request).format('YYYY-MM-DD');
             $(".p_data_request").text(p_data_request);
+            $(".p_review_by").text("");
+            $(".p_data_review").text("");
             if(datas.reviewby_employee_name_kh){
                 $(".p_review_by").text(datas.reviewby_employee_name_kh);
                 let p_data_review = moment(datas.date_review).format('YYYY-MM-DD');

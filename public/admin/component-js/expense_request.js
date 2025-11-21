@@ -148,6 +148,9 @@ $(document).ready(function() {
         if (exp_LSOC) {
             amount = ((exp_LSOC*tax)/100);
         }
+        if (tax) {
+            $("#withholding_tax_text_usd").text(tax);
+        }
         $("#exp_tax_wht_dollar").val(amount);
         totalPaidDollar();
     });
@@ -157,6 +160,9 @@ $(document).ready(function() {
         let amount = 0;
         if (exp_LSOC) {
             amount = ((exp_LSOC*tax)/100);
+        }
+        if (tax) {
+            $("#withholding_tax_text_riel").text(tax);
         }
         $("#exp_tax_wht_rial").val(amount);
         totalPaidRial();
@@ -168,6 +174,9 @@ $(document).ready(function() {
         if (exp_total_cost) {
             amount = ((exp_total_cost*tax)/100);
         }
+        if (tax) {
+            $("#exp_tax_wbt_text_usd").text(tax);
+        }
         $("#exp_tax_wbt_dollar").val(amount);
         totalPaidDollar();
     });
@@ -177,15 +186,34 @@ $(document).ready(function() {
         if (exp_total_cost) {
             amount = ((exp_total_cost*tax)/100);
         }
+        if (tax) {
+            $("#exp_tax_wbt_text_riel").text(tax);
+        }
         $("#exp_tax_wbt_rial").val(amount);
         totalPaidRial();
     });
     // **** exp total paid dollar ****//
     $(".exp_total_paid").on("change", function(){
         totalPaidDollar();
+
+        let taxpaid = $(this).data("taxpaid");
+        if(taxpaid == 1){
+            $("#withholding_tax_text_usd").text("");
+        }
+        if(taxpaid == 3){
+            $("#exp_tax_wbt_text_usd").text("");
+        }
+        
     });
     $(".exp_total_paid_rial").on("change", function(){
         totalPaidRial();
+        let taxpaid = $(this).data("taxpaid");
+        if(taxpaid == 2){
+            $("#withholding_tax_text_riel").text("");
+        }
+        if(taxpaid == 4){
+            $("#exp_tax_wbt_text_riel").text("");
+        }
     });
 
     // **** Submit request Expense ****//
@@ -376,6 +404,12 @@ $(document).ready(function() {
         }else{
             // Function to get field values (fallback to 0)
             let special_fixed_asset = $(".special_fixed_asset:checked").val();
+
+            const withholding_tax_text_usd = $("#withholding_tax_text_usd").text();
+            const withholding_tax_text_riel = $("#withholding_tax_text_riel").text();
+            const exp_tax_wbt_text_usd = $("#exp_tax_wbt_text_usd").text();
+            const exp_tax_wbt_text_riel = $("#exp_tax_wbt_text_riel").text();
+
             let getVal = (id) => $("#" + id).val() || 0;
             // Append other form fields
             form_data.append("type", type);
@@ -393,8 +427,12 @@ $(document).ready(function() {
             form_data.append("ge_cost_lso_riel", getVal("exp_LSOC_rial"));
             form_data.append("ge_total_cost_usd", getVal("exp_total_cost_dollar"));
             form_data.append("ge_total_cost_riel", getVal("exp_total_cost_rial"));
+            form_data.append("percentage_tax_wht_usd", withholding_tax_text_usd);
+            form_data.append("percentage_tax_wht_riel", withholding_tax_text_riel);
             form_data.append("ge_tax_usd", getVal("exp_tax_wht_dollar"));
             form_data.append("tax_riel", getVal("exp_tax_wht_rial"));
+            form_data.append("percentage_tax_wbt_usd", exp_tax_wbt_text_usd);
+            form_data.append("percentage_tax_wbt_riel", exp_tax_wbt_text_riel);
             form_data.append("ge_tax_fringe_benefit_usd", getVal("exp_tax_wbt_dollar"));
             form_data.append("tax_fringe_benefit_riel", getVal("exp_tax_wbt_rial"));
             form_data.append("ge_vat_reverse_charge_usd", getVal("exp_reverse_charge_usd"));

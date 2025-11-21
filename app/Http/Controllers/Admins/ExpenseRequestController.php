@@ -964,8 +964,12 @@ class ExpenseRequestController extends Controller
             $data["ge_cost_lso_riel"]               = $request->ge_cost_lso_riel;
             $data["ge_total_cost_usd"]              = $request->ge_total_cost_usd;
             $data["ge_total_cost_riel"]             = $request->ge_total_cost_riel;
+            $data["percentage_tax_wht_usd"]         = $request->percentage_tax_wht_usd;
+            $data["percentage_tax_wht_riel"]        = $request->percentage_tax_wht_riel;
             $data["ge_tax_usd"]                     = $request->ge_tax_usd;
             $data["tax_riel"]                       = $request->tax_riel;
+            $data["percentage_tax_wbt_usd"]         = $request->percentage_tax_wbt_usd;
+            $data["percentage_tax_wbt_riel"]        = $request->percentage_tax_wbt_riel;
             $data["ge_tax_fringe_benefit_usd"]      = $request->ge_tax_fringe_benefit_usd;
             $data["tax_fringe_benefit_riel"]        = $request->tax_fringe_benefit_riel;
             $data["ge_vat_reverse_charge_usd"]      = $request->ge_vat_reverse_charge_usd;

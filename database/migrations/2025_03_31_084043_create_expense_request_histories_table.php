@@ -31,8 +31,12 @@ return new class extends Migration
             $table->decimal('ge_cost_lso_riel',50,2)->default(0);
             $table->decimal('ge_total_cost_usd',50,2)->default(0);
             $table->decimal('ge_total_cost_riel',50,2)->default(0);
+            $table->integer('percentage_tax_wht_usd')->nullable();
+            $table->integer('percentage_tax_wht_riel')->nullable();
             $table->decimal('ge_tax_usd',50,2)->default(0);
             $table->decimal('tax_riel',50,2)->default(0);
+            $table->integer('percentage_tax_wbt_usd')->nullable();
+            $table->integer('percentage_tax_wbt_riel')->nullable();
             $table->decimal('ge_tax_fringe_benefit_usd',50,2)->default(0);
             $table->decimal('tax_fringe_benefit_riel',50,2)->default(0);
             $table->decimal('ge_vat_reverse_charge_usd',50,2)->default(0);
