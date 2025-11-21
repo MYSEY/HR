@@ -20,6 +20,7 @@ class AnnualBonuBranch extends Model
         'branch_id',
         'percentage',
         'year',
+        'number_of_months_bereceived',
         'created_by',
         'updated_by',
         'deleted_at',

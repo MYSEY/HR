@@ -29,6 +29,7 @@
                                             <th class="sorting sorting_asc stuck-scroll-4">#</th>
                                             <th class="sorting stuck-scroll-4">@lang('lang.branch')</th>
                                             <th class="sorting sorting_asc stuck-scroll-4">គិតជាភាគរយ</th>
+                                            <th class="sorting sorting_asc stuck-scroll-4">Number of months to be received</th>
                                             <th class="sorting sorting_asc stuck-scroll-4">Year</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                         </tr>
@@ -39,6 +40,7 @@
                                                 <td>{{$item->id}}</td>
                                                 <td>{{$item->branch ? $item->branch->branch_name_en : ''}}</td>
                                                 <td>{{$item->percentage}}%</td>
+                                                <td>{{$item->number_of_months_bereceived}}</td>
                                                 <td>{{$item->year}}</td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
@@ -67,7 +69,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">@lang('lang.annual_salary_increasement')</h5>
+                        <h5 class="modal-title">@lang('lang.annual_bonus_by_branch')</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -86,6 +88,10 @@
                             <div class="form-group">
                                 <label>Percentage <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('percentage') is-invalid @enderror" id="e_percentage" name="percentage" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Number of months to be received <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control @error('number_of_months_bereceived') is-invalid @enderror" id="e_number_of_months_bereceived" name="number_of_months_bereceived" required>
                             </div>
                             @php
                                 $startYear = 2020;
@@ -163,6 +169,7 @@
                         });
                         $('#e_id').val(response.success.id);
                         $('#e_percentage').val(response.success.percentage);
+                        $('#e_number_of_months_bereceived').val(response.success.number_of_months_bereceived);
                         $('#e_year').val(response.success.year);
                         // dynamically set action URL for PUT request
                         $('#edit_annual_bonus form').attr('action', "{{ url('confige/annual/bonus/branch') }}/" + id);

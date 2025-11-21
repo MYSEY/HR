@@ -483,13 +483,21 @@ class EmployeePayrollController extends Controller
                     //function difinde day first working
                     if ($joinDate == $paymentDate) {
                         //total day in monthsd
-                        $start_date = Carbon::createFromDate($item->date_of_commencement);
-                        $endMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth();
-                        $end_date = Date::createFromDate($endMonth);
-                        $commencementDate   = Carbon::parse($start_date);
-                        $resumptionDate     = Carbon::parse($end_date);
-                        $isCommencementWeekday = !$commencementDate->isWeekend();
-                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + ($isCommencementWeekday ? 1 : 0);
+                        // $start_date = Carbon::createFromDate($item->date_of_commencement);
+                        // $endMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth();
+                        // $end_date = Date::createFromDate($endMonth);
+                        // $commencementDate   = Carbon::parse($start_date);
+                        // $resumptionDate     = Carbon::parse($end_date);
+                        // $isCommencementWeekday = !$commencementDate->isWeekend();
+                        // $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + ($isCommencementWeekday ? 1 : 0);
+
+                        $start_date = Carbon::parse($item->date_of_commencement);
+                        $end_date   = $start_date->copy()->endOfMonth();
+                        // Count working days (Mon–Fri)
+                        $toDays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+                            return !$date->isWeekend(); // Exclude Saturday/Sunday
+                        }, $end_date);
+                        
                         $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('d');
                         $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
                         $startendMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth()->format('d');
@@ -549,6 +557,7 @@ class EmployeePayrollController extends Controller
                             $totalBasicSalary = $item->basic_salary;
                         }
                     }
+                    dd($totalBasicSalary);
                     //fuction check Monthly/Quarterly Incentive
                     if (array_key_exists($item->number_employee, $dadaArrayIncentive)) {
                         $monthlyQuarterlyIncentive = $dadaArrayIncentive[$item->number_employee]['incentive'];

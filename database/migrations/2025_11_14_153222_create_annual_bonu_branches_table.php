@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('branch_id');
             $table->integer('percentage');
             $table->year('year');
+            $table->integer('number_of_months_bereceived')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

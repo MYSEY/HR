@@ -25,9 +25,10 @@
                             <table class="table table-bordered review-table mb-0" id="tbl_confige_annual_bonus">
                                 <thead>
                                     <tr>
-                                        <th class="sorting">@lang('lang.branch')</th>
+                                        <th class="sorting" style="width: 30%">@lang('lang.branch')</th>
                                         <th class="sorting">គិតជាភាគរយ</th>
-                                        <th class="sorting">Year</th>
+                                        <th class="sorting">Number of months to be received</th>
+                                        <th class="sorting" style="width: 20%">Year</th>
                                         <th style="width: 5%">@lang('lang.action')</th>
                                     </tr>
                                 </thead>
@@ -47,6 +48,9 @@
                                         </td>
                                         <td>
                                             <input type="number" class="form-control @error('percentage') is-invalid @enderror" id="percentage[]" name="percentage[]" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control @error('number_of_months_bereceived') is-invalid @enderror" id="number_of_months_bereceived[]" name="number_of_months_bereceived[]" required>
                                         </td>
                                         <td>
                                             <select name="year[]" id="year[]" class="form-control">
@@ -104,6 +108,9 @@
                 </td>
                 <td>
                     <input type="number" class="form-control" id="percentage[]" name="percentage[]" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control @error('number_of_months_bereceived') is-invalid @enderror" id="number_of_months_bereceived[]" name="number_of_months_bereceived[]" required>
                 </td>
                 <td>
                     <select name="year[]" id="year[]" class="form-control">

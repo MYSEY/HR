@@ -90,10 +90,14 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="department: activate to sort column ascending">@lang('lang.department')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="position: activate to sort column ascending">@lang('lang.position')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="date_of_commencement: activate to sort column ascending">@lang('lang.date_of_commencement')</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ពិន្ទុ</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">បុគ្គលិកផ្ទាល់</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ប្រធានផ្ទាល់</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Bonus</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="basice_salary: activate to sort column ascending">@lang('lang.basice_salary')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="total_working_day: activate to sort column ascending">Total Working Day</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="incentive: activate to sort column ascending">%​ប្រាក់លើកទឹកចិត្ត</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="pa_score: activate to sort column ascending">PA Score</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="of_incentive_by_pa: activate to sort column ascending">% of Incentive by PA</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="achieved_vs_pa: activate to sort column ascending">% សម្រេចធៀបនឹង%PA</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="number_months_received: activate to sort column ascending">Number of months to be received</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Annual incentive allowance</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -289,29 +293,39 @@
                     name: 'date_of_commencement'
                 },
                 {
-                    data: 'total_score',
-                    name: 'total_score',
-                    render: function (data) {
-                        return `<span class="badge bg-inverse-success">${data}</span>`;
+                    data: 'basice_salary',
+                    name: 'basice_salary'
+                },
+                {
+                    data: 'working_days_per_year',
+                    name: 'working_days_per_year'
+                },
+                {
+                    data: 'incentive',
+                    name: 'incentive'
+                },
+                {
+                    data: 'pa_score',
+                    name: 'pa_score',
+                    render: function(data, type, row) {
+                        return Number(data).toFixed(2);
                     }
                 },
                 {
-                    data: 'total_score_live_staff',
-                    name: 'total_score_live_staff',
-                    render: function (data) {
-                        return `<span class="badge bg-inverse-success">${data}</span>`;
-                    }
+                    data: 'of_incentive_by_pa',
+                    name: 'of_incentive_by_pa'
                 },
                 {
-                    data: 'total_score_direct_chairman',
-                    name: 'total_score_direct_chairman',
-                    render: function (data) {
-                        return `<span class="badge bg-inverse-success">${data}</span>`;
-                    }
+                    data: 'achieved_vs_pa',
+                    name: 'achieved_vs_pa'
                 },
                 {
-                    data: 'annaul_bonus',
-                    name: 'annaul_bonus',
+                    data: 'number_months_received',
+                    name: 'number_months_received'
+                },
+                {
+                    data: 'total_bounus',
+                    name: 'total_bounus',
                 }
             ],
             initComplete: function() {

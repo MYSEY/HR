@@ -18,10 +18,16 @@ return new class extends Migration
             $table->id();
             $table->integer('employee_id');
             $table->integer('performance_id');
+            $table->decimal('basice_salary',50,2)->default(0);
+            $table->integer('working_days_per_year')->nullable();
+            $table->integer('incentive')->nullable();
+            $table->integer('pa_score')->nullable();
+            $table->integer('of_incentive_by_pa')->nullable();
+            $table->integer('achieved_vs_pa')->nullable();
+            $table->integer('number_months_received')->nullable();
+            $table->decimal('total_bounus',50,2)->default(0);
             $table->string('status')->nullable();
-            $table->decimal('annaul_bonus',50,2)->default(0);
             $table->string('increasement_of_year');
-            $table->integer('percentage');
             $table->bigInteger('approved_by')->unsigned()->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

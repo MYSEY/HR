@@ -3,16 +3,20 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Models\User;
+use App\Models\Payroll;
 use App\Models\AnnualBonu;
 use App\Models\Performance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Models\AnnualBonuBranch;
 use Illuminate\Support\Facades\DB;
 use App\Models\GenerateAnnaulBonus;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\PerformanceAppraisal;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Round;
 
 class GenerateAnnaulBonusController extends Controller
 {
@@ -93,10 +97,6 @@ class GenerateAnnaulBonusController extends Controller
     {
         try{
             [$year, $month] = explode('-', $request->increasement_year);
-
-            // Get increasement settings
-            $data = AnnualBonu::where('increasement_year', $year)->orderBy('id')->get();
-
             // Get all approved performance records for that year/month
             $PerformanceAppraisal = PerformanceAppraisal::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'new')->get();
             foreach ($PerformanceAppraisal as $kpiPerform) {
@@ -104,52 +104,98 @@ class GenerateAnnaulBonusController extends Controller
                 // KPI Score
                 $kpiScores = (float) $kpiPerform->total_score_direct_chairman;
                 // Match KPI score with increasement range
-                $interest = 0;
-                $total_percentage = 0;
-                foreach ($data as $item) {
+                
+               // Get increasement settings
+                $dataBonusByEmployee = AnnualBonu::where('increasement_year', $year)->orderBy('id')->get();
+                $ofIncentivebyPA = 0;
+                foreach ($dataBonusByEmployee as $item) {
                     [$min, $max] = array_map('floatval', explode('-', $item->total_score));
                     if ($kpiScores >= $min && $kpiScores <= $max) {
-                        $interest = $item->percentage / 100;
-                        $total_percentage = $item->percentage;
+                        $ofIncentivebyPA = $item->percentage;
                         break;
                     }
                 }
 
                 // Working days adjustment
-                $user = User::find($employeeId);
-                $dateOfCommencement = $user && $user->date_of_commencement ? Carbon::parse($user->date_of_commencement) : Carbon::create($year, 1, 1);
-                $endOfYear = Carbon::create($year, 12, 31);
-                $months = $dateOfCommencement->diffInMonths($endOfYear) + 1; // +1 if inclusive
-                if ($months > 2) {
-                    $endOfYear = Carbon::create($year, 12, 31);
-                    $totalWorkingDays = $dateOfCommencement->diffInDays($endOfYear) + 1;
-                    $daysInYear = $endOfYear->isLeapYear() ? 366 : 365;
-    
-                    if ($totalWorkingDays > $daysInYear) {
-                        $totalWorkingDays = $daysInYear;
-                    }
-                    $totalsAnnaulBonus = (400/365) * $totalWorkingDays;
+                $employee = User::find($employeeId);
+                $dataBonuByBranch = AnnualBonuBranch::where('branch_id', $employee->branch_id)->where('year', $request->increasement_year)->first();      // use first() instead of get()
+                $percentageByBranch = $dataBonuByBranch ? $dataBonuByBranch->percentage : 0;
 
+                // Find related payroll for employee in same year/month
+                $payroll = Payroll::where('employee_id', $employeeId)->whereYear('payment_date', $year)->whereMonth('payment_date', $month)->first();        
+                if (!$payroll) {
+                    Toastr::error('Not salary record found for this employee in the selected month and year.', 'Error');
+                    return back();
+                }
+
+                $start = Carbon::parse($kpiPerform->from_date);
+                $end   = Carbon::parse($kpiPerform->to_date);
+                // swap if reversed
+                if ($end->lt($start)) {
+                    [$start, $end] = [$end, $start];
+                }
+                // Move start to 1st day of next month if it does not start on day 1
+                if ($start->day > 1) {
+                    $start = $start->copy()->startOfMonth()->addMonth();
+                }
+                // Move end to last day of previous month if it does not end on last day
+                if ($end->day < $end->endOfMonth()->day) {
+                    $end = $end->copy()->subMonth()->endOfMonth();
+                }
+                // Calculate full months only
+                $kpiMonths = $start->diffInMonths($end) + 1;
+                if ($kpiMonths >= 2) {
+                    // Final result
+                    $totalPercentage = ($ofIncentivebyPA * $percentageByBranch) / 100;
+                    $NumberofMonthsReceived = $dataBonuByBranch ? $dataBonuByBranch->number_of_months_bereceived : 0;
+                    // Incentive allowance for full year
+                    $annualIncentiveAllowance = ($payroll->basic_salary * $totalPercentage / 100) * $NumberofMonthsReceived;
+                    $dateOfCommencement = $employee && $employee->date_of_commencement ? Carbon::parse($employee->date_of_commencement) : Carbon::create($year, 1, 1);
+                    $endOfYear = Carbon::create($year, 12, 31);
+                    // Count working days inside the selected year
+                    $workingDays = $dateOfCommencement->diffInDays($endOfYear) + 1;
+                    $daysInYear = $endOfYear->isLeapYear() ? 365 : 365;
+                    // Cap days if join date < selected year
+                    if ($workingDays >= $daysInYear) {
+                        $totalWorkingDays = $daysInYear;
+                    }else{
+                        $totalWorkingDays = $workingDays;
+                    }
+                    // Prorate bonus by number of days worked
+                    $totalBounus = (round($annualIncentiveAllowance,2) / $daysInYear) * $totalWorkingDays;
+                    $workingDaysperYear = $dateOfCommencement->diffInDays($endOfYear) + 1;
+
+                    // Save report info (debug)
                     // dd([
                     //     'employee_id' => $employeeId,
                     //     'performance_id' => $kpiPerform->id,
-                    //     'increasement_of_year' => $request->increasement_year,
-                    //     'annaul_bonus' => $totalsAnnaulBonus,
-                    //     'percentage' => $total_percentage,
+                    //     'basic_salary' => $payroll->basic_salary,
+                    //     'working_days_per_year' => $workingDaysperYear,
+                    //     '% Incentive' => $percentageByBranch,
+                    //     'PA Score' => $kpiScores,
+                    //     '% of Incentive by PA' => $ofIncentivebyPA,
+                    //     '% Achieved vs. %PA' => $totalPercentage,
+                    //     'Number of months to be received' => $NumberofMonthsReceived,
+                    //     'total_bounus' => $totalBounus,
                     //     'created_by' => Auth::id(),
                     // ]);
-                    // Final salary increasement calculation
-                    
-                    // Replace old record for this employee/year-month
+
+                    // Replace old record for this employee/year
                     GenerateAnnaulBonus::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->delete();
-    
+                    // Insert new calculation
                     GenerateAnnaulBonus::create([
-                        'employee_id' => $employeeId,
-                        'performance_id' => $kpiPerform->id,
-                        'increasement_of_year' => $request->increasement_year,
-                        'annaul_bonus' => $totalsAnnaulBonus,
-                        'percentage' => $total_percentage,
-                        'created_by' => Auth::id(),
+                        "employee_id" => $employeeId,
+                        "performance_id" => $kpiPerform->id,
+                        "basice_salary" => $payroll->basic_salary,
+                        "working_days_per_year" => $workingDaysperYear,
+                        "incentive" => $percentageByBranch,
+                        "pa_score" => $kpiScores,
+                        "of_incentive_by_pa" => $ofIncentivebyPA,
+                        "achieved_vs_pa" => $totalPercentage,
+                        "number_months_received" => $NumberofMonthsReceived,
+                        "increasement_of_year" => $request->increasement_year,
+                        "total_bounus" => $totalBounus,
+                        "created_by" => Auth::id(),
                     ]);
                 }
             }

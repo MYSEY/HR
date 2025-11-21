@@ -92,7 +92,6 @@ class ConfigeAnnualBonuByBranchCongroller extends Controller
         return response()->json([
             'success'=>$data,
             'branches'=>$branches,
-
         ]);
     }
 
@@ -106,7 +105,7 @@ class ConfigeAnnualBonuByBranchCongroller extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $data = $request->only(['branch_id', 'percentage','year']);
+            $data = $request->only(['branch_id', 'percentage','number_of_months_bereceived','year']);
             $data['updated_by'] = Auth::user()->id;
             AnnualBonuBranch::where('id', $request->id)->update($data);
             DB::commit(); // commit transaction

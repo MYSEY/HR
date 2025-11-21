@@ -19,7 +19,8 @@ class AnnualBonuConfigeController extends Controller
     public function index()
     {
         $currentYear = now()->year;
-        $data = AnnualBonu::whereYear('increasement_year', $currentYear)->get();
+        $data = AnnualBonu::all();
+        // $data = AnnualBonu::whereYear('increasement_year', $currentYear)->get();
         return view('annual_bonus.index',compact('data'));
     }
 
