@@ -184,7 +184,7 @@
                                         </button>
                                         {{-- Show the file name (from DB or newly selected) --}}
                                         <input type="text" id="IrregularFileName" class="form-control form-control-lg"
-                                               placeholder="No file selected" readonly value="{{ $viewFile }}">
+                                               placeholder="PDF តែមួយ File" readonly value="{{ $viewFile }}">
                                         {{-- Hidden file input for uploading new file --}}
                                         <input type="file" name="IrregularFile" class="d-none" id="IrregularFile" onchange="updateFileName(this)">
                                     
@@ -323,8 +323,8 @@
                                 <div class="col-sm-3">
                                     <div class="input-group" style="margin-bottom: 0.4rem !important;">
                                         <span class="input-group-text">$</span>
-                                        <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid" value="{{$data->ge_tax_usd}}" placeholder="0.00" id="exp_tax_wht_dollar">
-                                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                        <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid" data-taxpaid="1" value="{{$data->ge_tax_usd}}" placeholder="0.00" id="exp_tax_wht_dollar">
+                                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span id="withholding_tax_text_usd">{{$data->percentage_tax_wht_usd}}</span>%</button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             @if (count($taxWHT)>0)
                                                 @foreach ($taxWHT as $item)
@@ -338,8 +338,8 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group" style="margin-bottom: 0.4rem !important;">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid_rial" value="{{$data->tax_riel}}" placeholder="0.00" id="exp_tax_wht_rial">
-                                            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                            <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid_rial" data-taxpaid="2" value="{{$data->tax_riel}}" placeholder="0.00" id="exp_tax_wht_rial">
+                                            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span id="withholding_tax_text_riel">{{$data->percentage_tax_wht_riel}}</span>%</button>
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 @if (count($taxWHT)>0)
                                                     @foreach ($taxWHT as $item)
@@ -357,8 +357,8 @@
                                 <div class="col-sm-3">
                                     <div class="input-group" style="margin-bottom: 0.4rem !important;">
                                         <span class="input-group-text">$</span>
-                                        <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid" value="{{$data->ge_tax_fringe_benefit_usd}}" placeholder="0.00" id="exp_tax_wbt_dollar">
-                                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                        <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid" data-taxpaid="3" value="{{$data->ge_tax_fringe_benefit_usd}}" placeholder="0.00" id="exp_tax_wbt_dollar">
+                                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span id="exp_tax_wbt_text_usd">{{$data->percentage_tax_wbt_usd}}</span>%</button>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             @if (count($taxeFBT)>0)
                                                 @foreach ($taxeFBT as $item)
@@ -372,8 +372,8 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group" style="margin-bottom: 0.4rem !important;">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid_rial" value="{{$data->tax_fringe_benefit_riel}}" placeholder="0.00" id="exp_tax_wbt_rial">
-                                            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                            <input type="text" class="form-control khmer-toEnglish-number-only exp_total_paid_rial" data-taxpaid="4" value="{{$data->tax_fringe_benefit_riel}}" placeholder="0.00" id="exp_tax_wbt_rial">
+                                            <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span id="exp_tax_wbt_text_riel">{{$data->percentage_tax_wbt_riel}}</span>%</button>
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 @if (count($taxeFBT)>0)
                                                     @foreach ($taxeFBT as $item)
