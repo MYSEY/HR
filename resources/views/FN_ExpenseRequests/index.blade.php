@@ -104,6 +104,8 @@
     $(function() {
         $(".btn-review").on("click", function () {
             var datas = $(this).data('datas');
+            $(".percentage_tax_wht_usd").text("");
+            $(".percentage_tax_wht_riel").text("");
             var reference = $(this).attr('data-reference');
             $("#v_reference").html(reference);
             $('#v-btn-reject').data('id', datas.id);
@@ -139,6 +141,13 @@
             }else{
                 $("#v_expense_type").text("សរុបចំណាយ (១+២)");
                 $("#v_total_cost_text").text("ពន្ធកាត់ទុក");
+                if (datas.ge_tax_usd && datas.percentage_tax_wht_usd) {
+                    $(".percentage_tax_wht_usd").text("(ដុល្លា "+ datas.percentage_tax_wht_usd+"%)");
+                }
+                if (datas.tax_riel && datas.percentage_tax_wht_riel) {
+                    $(".percentage_tax_wht_riel").text("(រៀល "+ datas.percentage_tax_wht_riel+"%)");
+                }
+                
                 $("#v_suppliers").text("៦. បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឬ (៣-(៤+៥))");
                 convertNumberKH = convertNumberToWordsExp(datas.ge_total_amount_riel,"rial");
                 $("#block_fringe_benefit").css("display","block");
@@ -489,6 +498,8 @@
             $(".p_convertNumberRiel").text(convertNumberRiel);
             document.getElementById("GEXP_remark").innerHTML = nl2brWithIndent(datas.remark);
             $(".p_payment_term").text(datas.payment_term);
+            $(".p_approved_by").text("");
+            $(".p_date_approve").text("");
             if (datas.approve_by) {
                 $(".p_approved_by").text(datas.approve_by.employee_name_kh);
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
@@ -497,6 +508,8 @@
             $(".p_request_by").text(datas.request_by.employee_name_kh);
             let p_data_request = moment(datas.date_request).format('YYYY-MM-DD');
             $(".p_data_request").text(p_data_request);
+            $(".p_review_by").text("");
+            $(".p_data_review").text("");
             if(datas.review_by){
                 $(".p_review_by").text(datas.review_by.employee_name_kh);
                 let p_data_review = moment(datas.date_review).format('YYYY-MM-DD');
@@ -603,6 +616,8 @@
             $(".p_convertNumberDollar").text(convertNumber);
             document.getElementById("TEXP_remark").innerHTML = nl2brWithIndent(datas.remark);
             $(".p_payment_term").text(datas.payment_term);
+            $(".p_approved_by").text("");
+            $(".p_date_approve").text("");
             if (datas.approve_by) {
                 $(".p_approved_by").text(datas.approve_by.employee_name_kh);
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
@@ -611,6 +626,9 @@
             $(".p_request_by").text(datas.request_by.employee_name_kh);
             let p_data_request = moment(datas.date_request).format('YYYY-MM-DD');
             $(".p_data_request").text(p_data_request);
+
+            $(".p_review_by").text("");
+            $(".p_data_review").text("");
             if(datas.review_by){
                 $(".p_review_by").text(datas.review_by.employee_name_kh);
                 let p_data_review = moment(datas.date_review).format('YYYY-MM-DD');

@@ -110,33 +110,33 @@ trait GeneratingCode
          ];
      }
 
-     //*** Generate employee
-    public function generateFlowID()
-    {
-        $currentYear = Carbon::now();
-        $count = 0;
-        $getFlowID = PAFlow::orderBy('id','DESC')->select('flow_id')->get();
-        if (!empty($getFlowID)) {
-            for ($i = 0; $i < count($getFlowID); $i++) {
-                $current = (int) substr($getFlowID[$i]->flow_id,8);
-                if ($i + 1 < count($getFlowID)) {
-                    $next = (int) substr($getFlowID[$i + 1]->flow_id,8);
-                }
+     //*** Generate flow id
+    // public function generateFlowID()
+    // {
+    //     $currentYear = Carbon::now();
+    //     $count = 0;
+    //     $getFlowID = PAFlow::orderBy('id','DESC')->select('flow_id')->get();
+    //     if (!empty($getFlowID)) {
+    //         for ($i = 0; $i < count($getFlowID); $i++) {
+    //             $current = (int) substr($getFlowID[$i]->flow_id,8);
+    //             if ($i + 1 < count($getFlowID)) {
+    //                 $next = (int) substr($getFlowID[$i + 1]->flow_id,8);
+    //             }
                 
-                if (isset($next) && $current + 1 != $next) {
-                    $count = (int) substr($getFlowID[$i]->flow_id,8);
-                    break;
-                } else {
-                    $count = (int) substr($getFlowID[$i]->flow_id,8);
-                }
-            }
-        }
+    //             if (isset($next) && $current + 1 != $next) {
+    //                 $count = (int) substr($getFlowID[$i]->flow_id,8);
+    //                 break;
+    //             } else {
+    //                 $count = (int) substr($getFlowID[$i]->flow_id,8);
+    //             }
+    //         }
+    //     }
         
-        do {
-            $flowID = "F".str_pad(($count+ 1), 3, "0", STR_PAD_LEFT);
-            $alreadyExist = PAFlow::select('flow_id')->where('flow_id', $flowID)->first()->flow_id ?? null;
-            $count++;
-        } while ($alreadyExist);
-        return $flowID;
-    }
+    //     do {
+    //         $flowID = "F".str_pad(($count+ 1), 3, "0", STR_PAD_LEFT);
+    //         $alreadyExist = PAFlow::select('flow_id')->where('flow_id', $flowID)->first()->flow_id ?? null;
+    //         $count++;
+    //     } while ($alreadyExist);
+    //     return $flowID;
+    // }
 }

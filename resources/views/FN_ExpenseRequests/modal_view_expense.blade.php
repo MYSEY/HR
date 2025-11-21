@@ -84,7 +84,7 @@
                     </div>
                     <div class="row">
                         <label class="col-form-label col-sm-1"></label>
-                        <label class="col-form-label col-sm-6">៤. <span id="v_total_cost_text"></span> <span style="float: right">:</span></label>
+                        <label class="col-form-label col-sm-6">៤. <span id="v_total_cost_text"></span> <span class="percentage_tax_wht_usd"></span> <span class="percentage_tax_wht_riel"></span> <span style="float: right">:</span></label>
                         <label class="col-form-label col-sm-2" id="v_tax_usd"> </label>
                         <label class="col-form-label col-sm-3" id="v_tax_riel"> </label>
                     </div>
