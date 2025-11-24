@@ -106,6 +106,9 @@ class PerformanceAdminController extends Controller
                 $query->whereNot('performances.status', 'preparing');
                 $query->whereNot('performances.status', 'approved');
             }
+            if (in_array(Auth::user()->RolePermission, ['Employee'])) {
+                $query->where('performances.employee_id', Auth::user()->id);
+            }
             $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
@@ -123,14 +126,6 @@ class PerformanceAdminController extends Controller
         $branch = Branchs::all();
         $department = Department::all();
         return view('performance_admins.index',compact('branch','department'));
-        if (in_array(Auth::user()->RolePermission, ['Employee'])) {
-            $query->where('performances.employee_id', Auth::user()->id);
-        }
-        // ->groupBy('performances.employee_id')
-        // Fetch paginated data
-        $data = $query->get();
-        // dd($data);
-        return view('performance_admins.index',compact('data'));
     }
     public function show($id,$url)
     {

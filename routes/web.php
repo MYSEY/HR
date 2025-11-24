@@ -311,6 +311,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     //performance Appraisal
     Route::resource('performance-appraisal', PerformanceAppraisalController::class);
+    Route::post('performance-appraisal/asign', [PerformanceAppraisalController::class,'paAsign']);
+    Route::post('performance-appraisal/approved', [PerformanceAppraisalController::class,'paApproved']);
+    Route::post('performance-appraisal/return', [PerformanceAppraisalController::class,'paReturn']);
     Route::post('performance/appraisal/update/score', [PerformanceAppraisalController::class,'updateKpiScore']);
     Route::get('performance/appraisal/export/{id}', [PerformanceAppraisalController::class,'performanceAppraisalExport']);
     Route::post('performance/appraisal/import', [PerformanceAppraisalController::class,'performanceAppraisalImport']);

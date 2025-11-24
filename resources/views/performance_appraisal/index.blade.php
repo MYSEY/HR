@@ -1,4 +1,80 @@
 @extends('layouts.master')
+<style>
+    .big-checkbox .custom-control-input {
+        transform: scale(1.5); /* make checkbox 1.5x bigger */
+        margin-right: 8px;
+    }
+    .big-checkbox .custom-control-label {
+        font-size: 18px; /* adjust label text if you add one */
+    }
+    .container-checkbox {
+        /* display: block; */
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        font-size: 15px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    .container-checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 1;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        border: solid 1px #ccc;
+        background-color: #fff;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container-checkbox:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container-checkbox input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container-checkbox .checkmark:after {
+        left: 7px;
+        top: 4px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+</style>
 @section('content')
     <div class="">
         <div class="page-header">
@@ -99,11 +175,13 @@
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.from_date')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.to_date')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.kpi_year')</th>
-                                                        <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ពិន្ទុ</th>
+                                                    <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ពិន្ទុ</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">បុគ្គលិកផ្ទាល់</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ប្រធានផ្ទាល់</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Overall Results</th>
-                                                    <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
+                                                    <th>@lang('lang.status')</th>
+                                                    <th>@lang('lang.review_by')</th>
+                                                    <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.asign_to')</th>
                                                     <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                                 </tr>
                                             </thead>
@@ -168,6 +246,254 @@
                 $("#btn-text-loading").css('display', 'block');
                 window.location.replace("{{ URL('performance-appraisal') }}");
             });
+            $('body').on('click', '.btn-asign', function() {
+                var pa_id = $(this).data("id");
+                var employee_old = $(this).data("name");
+                var get_employee_id = $(this).data("employeeid");
+                var status = $(this).data("status");
+                var actionBtn = "";
+                var titleText = "";
+                var formContent = "";
+                var columnClassText = 'col-md-4';
+                if (status == "new" || status == 1 || status == 2 || status == 3) {
+                    titleText = '@lang("lang.asign_to_employee")';
+                    columnClassText = 'col-md-6'
+                    formContent = ''+
+                        '<form id="add-style">'+
+                            '<div class="mt-2">'+
+                                '<label class="container-checkbox">Review'+
+                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
+                                '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                                '<label class="container-checkbox">Verify'+
+                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
+                                '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                                '<label class="container-checkbox">Approve'+
+                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
+                                '</label>'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                                '<label>@lang("lang.employee")</label>'+
+                                '<select class="form-control hr-select2-option-emp-role form-select asign_employee_id" id="asign_employee_id">'+
+                                
+                                '</select>'+
+                            '</div>'+
+                            '<div class="form-group">' +
+                                '<label>@lang("lang.remark")</label>' +
+                                '<textarea class="form-control remark" rows="4" placeholder="Enter remark..."></textarea>' +
+                            '</div>' +
+                        '</form>';
+                    actionBtn = {
+                        text: 'Submit',
+                        btnClass: 'btn-green',
+                        action: function() {
+                            this.$content.find('.remark').css("border-color","#e3e3e3");
+                            var asign_employee_id = this.$content.find('.asign_employee_id').val();
+                            let actionAsign = this.$content.find('.action-asign:checked').val();
+                            let remark = this.$content.find('.remark').val();
+                            if (!actionAsign) {
+                                $.alert({
+                                    title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                    content: 'Check action for asign!',
+                                });
+                                return false;
+                            }
+                            if (!asign_employee_id) {
+                                $.alert({
+                                    title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                    content: 'Please select employee for asign!',
+                                });
+                                return false;
+                            }
+                            $('#modal-loading').modal('show');
+                            axios.post('{{ URL("performance-appraisal/asign") }}', {
+                                'id': pa_id,
+                                'actionAsign': actionAsign,
+                                'asign_employee_id': asign_employee_id,
+                                'reason': remark,
+                            }).then(function(response) {
+                                $('#modal-loading').modal('hide');
+                                if (response.data.success) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
+                                        type: "success",
+                                        icon: true
+                                    }).show();
+                                    window.location.replace("{{ URL('performance-appraisal') }}");
+                                } else if(response.data.message == 'weight_must_be_exactly'){
+                                    new Noty({
+                                        title: "",
+                                        text: 'Total weight must be exactly 100% before approval.',
+                                        type: "error",
+                                        icon: true,
+                                        timeout: 3000,
+                                    }).show();
+                                }
+                            }).catch(function(error) {
+                                $('#modal-loading').modal('hide');
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                    type: "error",
+                                    icon: true,
+                                    timeout: 3000,
+                                }).show();
+                            });
+                        }
+                    }
+                }
+                if (status === 3) {
+                    titleText = '@lang("lang.employee_pa")';
+                    formContent = ''+
+                        '<form>'+
+                            '<span >Are you sure want to Approved or Return?</span>'+
+                            '<div class="form-group">' +
+                                '<label>@lang("lang.remark") <span class="text-danger">*</span></label>' +
+                                '<textarea class="form-control remark" rows="4" placeholder="Enter remark..."></textarea>' +
+                            '</div>' +
+                        '</form>';
+                    actionBtn =  {
+                        text: 'Approve',
+                        btnClass: 'btn-green',
+                        action: function() {
+                            let remark = this.$content.find('.remark').val();
+                            $('#modal-loading').modal('show');
+                            axios.post('{{ URL("performance-appraisal/approved") }}', {
+                                'id': pa_id,
+                                'actionAsign': "approved",
+                                'reason': remark,
+                            }).then(function(response) {
+                                $('#modal-loading').modal('hide');
+                                if (response.data.success) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
+                                        type: "success",
+                                        icon: true
+                                    }).show();
+                                    window.location.replace("{{ URL('performance-appraisal') }}");
+                                } else if(response.data.message == 'weight_must_be_exactly'){
+                                    new Noty({
+                                        title: "",
+                                        text: 'Total weight must be exactly 100% before approval.',
+                                        type: "error",
+                                        icon: true,
+                                        timeout: 3000,
+                                    }).show();
+                                }
+                            }).catch(function(error) {
+                                $('#modal-loading').modal('hide');
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                    type: "error",
+                                    icon: true,
+                                    timeout: 3000,
+                                }).show();
+                            });
+                        }
+                    }
+                }
+                $.confirm({
+                    title: titleText,
+                    contentClass: 'text-center',
+                    columnClass: columnClassText,
+                    content: formContent,
+                    buttons: {
+                        confirm: actionBtn,
+                        danger: {
+                            text: 'Return',
+                            btnClass: 'add-btn-status',
+                            action: function() {
+                                var asign_employee_id = this.$content.find('.asign_employee_id').val();
+                                let remark = this.$content.find('.remark').val();
+                                if (!remark) {
+                                    this.$content.find('.remark').css("border-color","#dc3545");
+                                    $.alert({
+                                        title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                        content: 'Please to remark!',
+                                    });
+                                    return false;
+                                }
+                                $('#modal-loading').modal('show');
+                                axios.post('{{ URL("performance-appraisal/return") }}', {
+                                    'id': pa_id,
+                                    'actionAsign': 4,
+                                    'asign_employee_id': asign_employee_id,
+                                    'reason': remark,
+                                }).then(function(response) {
+                                    $('#modal-loading').modal('hide');
+                                    if (response.data.success) {
+                                        new Noty({
+                                            title: "",
+                                            text: '@lang("lang.the_process_has_been_successfully")',
+                                            type: "success",
+                                            icon: true
+                                        }).show();
+                                        window.location.replace("{{ URL('performance-admin') }}");
+                                    } else if(response.data.message == 'weight_must_be_exactly'){
+                                        new Noty({
+                                            title: "",
+                                            text: 'Total weight must be exactly 100% before approval.',
+                                            type: "error",
+                                            icon: true,
+                                            timeout: 3000,
+                                        }).show();
+                                    }
+                                }).catch(function(error) {
+                                    $('#modal-loading').modal('hide');
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                        type: "error",
+                                        icon: true,
+                                        timeout: 3000,
+                                    }).show();
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            btnClass: 'btn-secondary btn-sm',
+                        },
+                    },
+                    onContentReady: function() {
+                        var jc = this;
+                        this.$content.find('form').on('submit', function(e) {
+                            e.preventDefault();
+                            jc.$$formSubmit.trigger('click');
+                        });
+                    }
+                });
+                $(document).ready(function(){
+                    $('.hr-select2-option-emp-role').each(function() {
+                        $(this).select2({
+                            width: '100%',
+                            dropdownParent: $(this).parent(),
+                        })
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url('/performance-admin/employees') }}",
+                        data: {
+                            'get_employee_id': get_employee_id
+                        },
+                        dataType: "JSON",
+                        success: function(response) {
+                            let datas = response.datas;
+                            $('#asign_employee_id').html('<option selected value=""> -- @lang("lang.select") --</option>');
+                            if (datas != '') {
+                                $.each(datas, function(i, item) {
+                                    $('#asign_employee_id').append($('<option>', {
+                                        value: item.id,
+                                        html: item.employee_name_en + '&nbsp;&nbsp;' + '(' + '&nbsp;'+ item.department.name_english + '&nbsp;)'
+                                    }));
+                                });
+                            }
+                        }
+                    });
+                });
+            });
         });
 
         function dataTables() {
@@ -191,6 +517,11 @@
                         d.employee_name = $('input[name="employee_name"]').val();
                         d.branch_id = $('select[name="branch_id"]').val();
                         d.department_id = $('select[name="department_id"]').val();
+                    },
+                    dataSrc: function (json) {
+                        userPermission = json.permission || {}; // 👈 Save permission
+                        userIdLog = json.userIdLog;                        
+                        return json.data;
                     }
                 },
                 "order": [
@@ -309,15 +640,70 @@
                     {
                         data: 'status',
                         name: 'status',
-                        orderable: true,
-                        searchable: true,
+                        orderable: false,
+                        searchable: false,
+                        className: 'stuck-scroll-3',
                         render: function (data, type, row) {
+                            let statusText = "";
+                            if (row.status == "preparing") {
+                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Preparing</span>';
+                            }
+                            if (row.status == "1") {
+                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending Review</span>';
+                            }
+                            if (row.status == "2") {
+                                statusText = '<span class="badge bg-inverse-warning" style="font-size: 13px;">Pending Verify</span>';
+                            }
+                            if (row.status == "3") {
+                                statusText = '<span class="badge bg-inverse-warning" style="font-size: 13px;">Pending Approve</span>';
+                            }
+                            if (row.status == "4") {
+                                statusText = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Return</span>';
+                            }
+                            if (row.status == "approved") {
+                                statusText = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
+                            }
                             return `
-                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="javascript:void(0)">
-                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                    <span>${ row.status == 'new' ? 'New' : '' }</span>
-                                </a>
+                                ${statusText}
                             `;
+                        }
+                    },
+                    {
+                        data: 'review_employee_name_en',
+                        name: 'review_by',
+                        render: function (data, type, row) {
+                            return row.review_employee_name_en;
+                        }
+                    },
+                    {
+                        data: null,
+                        name: 'asign_to',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            let textBtn = "@lang('lang.asign_to')";
+                            if (row.status == 4) {
+                                textBtn = "@lang('lang.approved')";
+                            }
+                            if (userIdLog == data.review_employee_id || userPermission.is_access == 1 && (row.status !="preparing" && row.status != "approved")) {
+                                return `
+                                    <a class="btn btn-white btn-sm btn-rounded btn-asign" 
+                                    data-id="${row.id}" 
+                                    data-name="${row.review_employee_name_en}" 
+                                    data-employeeid="${row.employee_id}"
+                                    data-status="${row.status}" 
+                                    href="#" aria-expanded="false">
+                                        <i class="fa fa-dot-circle-o text-success"></i>
+                                        <span>${textBtn}</span>
+                                    </a>
+                                `;
+                            } else {
+                                return `
+                                    <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                        <i class="fa fa-dot-circle-o text-danger"></i> <span>You can't asign</span>
+                                    </a>
+                                `;
+                            }
                         }
                     },
                     {
@@ -354,37 +740,9 @@
                                     </div>
                                 </div>
                             `;
-
                             return actionHtml;
                         }
                     }
-
-                    // {
-                    //     data: null,
-                    //     name: 'action',
-                    //     orderable: true,
-                    //     searchable: true,
-                    //     render: function (data, type, row) {
-                    //         return `
-                    //             <div class="dropdown dropdown-action">
-                    //                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    //                     <i class="material-icons">more_vert</i>
-                    //                 </a>
-                    //                 <div class="dropdown-menu dropdown-menu-right">
-                    //                     <a class="dropdown-item" href="{{url('performance-appraisal-preview')}}/${row.id}">
-                    //                         <i class="fa fa-regular fa-eye"></i> Preview KPI
-                    //                     </a>
-                    //                     <a class="dropdown-item" href="{{url('performance-appraisal')}}/${row.id}">
-                    //                         <i class="fa fa-regular fa-eye"></i> Update Progress
-                    //                     </a>
-                    //                     <a class="dropdown-item" href="{{url('performance/appraisal/export')}}/${row.id}">
-                    //                         <i class="fa fa-regular fa-eye"></i> Export
-                    //                     </a>
-                    //                 </div>
-                    //             </div>
-                    //         `;
-                    //     }
-                    // }
                 ],
                 order: [[0, 'desc']],
                 initComplete: function() {

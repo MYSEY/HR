@@ -8,8 +8,10 @@ use App\Models\PaDetail;
 use App\Models\Department;
 use App\Exports\ExportKpis;
 use App\Models\Performance;
+use App\Models\permissions;
 use Illuminate\Http\Request;
 use App\Exports\DownloadKpis;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\PerformanceAppraisal;
@@ -25,14 +27,23 @@ class PerformanceAppraisalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function permission(){
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "performance-admin")->first();
+        return $permission;
+    }
     public function index(Request $request)
     {
+        $permission = self::permission();
+        if (!$permission) {
+            return view('upgrade.access_page');
+        }
         if (request()->ajax()) {
             // Define the base query
             $query = PerformanceAppraisal::leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
                 ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
                 ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
                 ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+                ->leftJoin('users as reviewEmployee', 'performance_appraisals.review_employee_id', '=', 'reviewEmployee.id')
                 ->select(
                     'performance_appraisals.*',
                     'users.position_id',
@@ -41,13 +52,14 @@ class PerformanceAppraisalController extends Controller
                     'users.number_employee',
                     'users.employee_name_kh',
                     'users.employee_name_en',
-                    'users.branch_id',
                     'departments.name_english as dep_name',
                     'positions.name_english as positions_name',
                     'branchs.branch_name_en',
                     'branchs.branch_name_kh',
+                    'reviewEmployee.number_employee as review_employee_number_employee',
+                    'reviewEmployee.employee_name_kh as review_employee_name_kh',
+                    'reviewEmployee.employee_name_en as review_employee_name_en',
                 )
-            ->where('performance_appraisals.status', 'new')
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -72,19 +84,27 @@ class PerformanceAppraisalController extends Controller
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
                 });
             }
+            
+            if (in_array(Auth::user()->RolePermission, ['HR'])) {
+                $query->where("performance_appraisals.review_employee_id", Auth::user()->id);
+                $query->whereNot('performance_appraisals.status', 'new');
+                $query->whereNot('performance_appraisals.status', 'approved');
+            }
 
-            if (in_array(Auth::user()->RolePermission, ['DHOD','DBM'])){
-                $query->where("users.department_id", Auth::user()->department_id);
-                $query->where("users.branch_id", Auth::user()->branch_id);
+            if (in_array(Auth::user()->RolePermission, ['BOD','CEO','HOD','DHOD','BM','DBM'])) {
+                $query->where('performance_appraisals.review_employee_id', Auth::user()->id);
+                $query->whereNot('performance_appraisals.status', 'new');
+                $query->whereNot('performance_appraisals.status', 'approved');
             }
 
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
                 $query->where('performance_appraisals.employee_id', Auth::user()->id);
                 $query->where("users.department_id", Auth::user()->department_id);
                 $query->where("users.branch_id", Auth::user()->branch_id);
+                // $query->whereIn('performance_appraisals.status', ['approved','new']);
             }
         
-            $recordsTotal = PerformanceAppraisal::where('status', 'approved')->count();  // total records without filter
+            $recordsTotal = PerformanceAppraisal::where('status', 'new')->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
@@ -110,6 +130,8 @@ class PerformanceAppraisalController extends Controller
             return response()->json([
                 'draw' => intval(request()->input('draw')),
                 'recordsTotal' => $recordsTotal,
+                'permission'=>$permission,
+                'userIdLog'=>Auth::user()->id,
                 'recordsFiltered' => $recordsFiltered,
                 'data' => $data
             ]);
@@ -311,6 +333,87 @@ class PerformanceAppraisalController extends Controller
         }
     }
 
+    public function paAsign(Request $request)
+    {
+        DB::beginTransaction();
+        try{
+            $performance = PerformanceAppraisal::findOrFail($request->id);
+            $performance->update([
+                'status'                => $request->actionAsign,
+                'reason'                => $request->reason,
+                'review_employee_id'    => $request->asign_employee_id,
+                'review_date'           => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_by'            => Auth::id(),
+            ]);
+            // ✅ Start service email
+            self::sendEmail($request->asign_employee_id);
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Asing successfully successfully!',
+                'status'  => 200
+            ]);
+        }catch(\Exception $e){
+            DB::rollBack();
+            return response()->json(['message' => 'Something went wrong', 'error' => $e->getMessage()], 500);
+        }
+    }
+    public function paApproved(Request $request)
+    {
+        DB::beginTransaction();
+        try{
+            $performance = PerformanceAppraisal::findOrFail($request->id);
+            $performance->update([
+                'reason'        => $request->reason,
+                'approved_by'   => Auth::id(),
+                'status'        => $request->actionAsign,
+                'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_by'    => Auth::id(),
+            ]);
+            // ✅ Start service email
+            self::sendEmail($request->asign_employee_id);
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Asing successfully successfully!',
+                'status'  => 200
+            ]);
+        }catch(\Exception $e){
+            DB::rollBack();
+            return response()->json(['message' => 'Something went wrong', 'error' => $e->getMessage()], 500);
+        }
+    }
+    public function sendEmail($asign_employee_id){
+        $user = User::where("id", $asign_employee_id)->first();
+        $datasSendEmail = [
+            'user'      => $user,
+            'type'      => "kpi",
+        ];
+        // Mail::to($user->email)->queue(new SendEmail($datasSendEmail, false));
+    }
+    public function paReturn(Request $request)
+    {
+        DB::beginTransaction();
+        try{
+            $paPerformance = PerformanceAppraisal::findOrFail($request->id);
+            $paPerformance->update([
+                'status'                => $request->actionAsign,
+                'review_employee_id'    => $request->asign_employee_id,
+                'reason'                => $request->reason,
+                'reject_date'           => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_by'            => Auth::id(),
+            ]);
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Return successfully successfully!',
+                'status'  => 200
+            ]);
+        }catch(\Exception $e){
+            DB::rollBack();
+            return response()->json(['message' => 'Something went wrong', 'error' => $e->getMessage()], 500);
+        }
+    }
     public function updateKpiScore(Request $request){
         try {
             PerformanceAppraisal::where('employee_id',$request->employee_id)->where('id',$request->id)->update([

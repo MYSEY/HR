@@ -840,7 +840,7 @@
                             </div>`;
                         }
                     },
-                     {
+                    {
                         data: 'status',
                         name: 'status',
                         orderable: false,
@@ -927,9 +927,9 @@
                                 `;
                             } else {
                                 return `
-                                        <a class="btn btn-white btn-sm btn-rounded" href="#">
-                                            <i class="fa fa-dot-circle-o text-danger"></i> <span>You can't asign</span>
-                                        </a>
+                                    <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                        <i class="fa fa-dot-circle-o text-danger"></i> <span>You can't asign</span>
+                                    </a>
                                 `;
                             }
                         }

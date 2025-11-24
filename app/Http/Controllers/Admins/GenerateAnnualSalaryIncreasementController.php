@@ -144,29 +144,48 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                         break;
                     }
                 }
-        
-                // Get employee start date
-                $user = User::find($employeeId);
-                $dateOfCommencement = $user && $user->date_of_commencement ? Carbon::parse($user->date_of_commencement) : Carbon::create($year, 1, 1);
-                $endOfYear = Carbon::create($year, 12, 31);
-                
-                // Only calculate if worked at least 3 months
-                $months = $dateOfCommencement->diffInMonths($endOfYear) + 1;
-                if ($months > 2) {
+               
+                $start = Carbon::parse($kpiPerform->from_date);
+                $end   = Carbon::parse($kpiPerform->to_date);
+                // swap if reversed
+                if ($end->lt($start)) {
+                    [$start, $end] = [$end, $start];
+                }
+                // Move start to 1st day of next month if it does not start on day 1
+                if ($start->day > 1) {
+                    $start = $start->copy()->startOfMonth()->addMonth();
+                }
+                // Move end to last day of previous month if it does not end on last day
+                if ($end->day < $end->endOfMonth()->day) {
+                    $end = $end->copy()->subMonth()->endOfMonth();
+                }
+                // Calculate full months only
+                $kpiMonths = $start->diffInMonths($end) + 1;
+
+                if ($kpiMonths >= 2) {
+                    // Get employee start date
+                    $user = User::find($employeeId);
+                    $dateOfCommencement = $user && $user->date_of_commencement ? Carbon::parse($user->date_of_commencement) : Carbon::create($year, 1, 1);
+                    $endOfYear = Carbon::create($year, 12, 31);
+                    
                     $totalWorkingDays = $dateOfCommencement->diffInDays($endOfYear) + 1;
                     $daysInYear = 365;
-                    // $daysInYear = $endOfYear->isLeapYear() ? 365 : 365;
-        
-                    // if ($totalWorkingDays > $daysInYear) {
-                    //     $totalWorkingDays = $daysInYear;
-                    // }
-                    
                     // Final increasement calculation
                     $totalsSalaryIncreasement = ($payroll->basic_salary * $interest * $totalWorkingDays) / $daysInYear;
-        
+                    // dd([
+                    //     'employee_id' => $employeeId,
+                    //     'performance_id' => $kpiPerform->id,
+                    //     'basic_salary' => $payroll->basic_salary,
+                    //     'KPI Scores' => $kpiScores,
+                    //     'totalWorkingDays' => $totalWorkingDays,
+                    //     'increasement_of_year' => $request->increasement_year,
+                    //     'salary_increasement' => $totalsSalaryIncreasement,
+                    //     'percentage' => $total_percentage,
+                    //     'status' => 'pending',
+                    //     'created_by' => Auth::id(),
+                    // ]);
                     // Remove old record if exists for this employee/year
                     GenerateAnnualSalaryIncreasement::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->delete();
-        
                     // Insert new record
                     GenerateAnnualSalaryIncreasement::create([
                         'employee_id' => $employeeId,
