@@ -94,7 +94,7 @@ class PerformanceAdminController extends Controller
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
                 });
             }
-
+            
             if (in_array(Auth::user()->RolePermission, ['HR']) && $permission->is_access != "1") {
                 $query->where("performances.review_employee_id", Auth::user()->id);
                 $query->whereNot('performances.status', 'preparing');

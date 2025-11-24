@@ -98,7 +98,7 @@ class GenerateAnnaulBonusController extends Controller
         try{
             [$year, $month] = explode('-', $request->increasement_year);
             // Get all approved performance records for that year/month
-            $PerformanceAppraisal = PerformanceAppraisal::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'new')->get();
+            $PerformanceAppraisal = PerformanceAppraisal::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'approved')->get();
             foreach ($PerformanceAppraisal as $kpiPerform) {
                 $employeeId = $kpiPerform->employee_id;
                 // KPI Score

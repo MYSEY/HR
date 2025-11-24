@@ -115,7 +115,7 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                 return redirect()->back();
             }
             // Get all approved performance records for that year/month
-            $PerformanceAppraisal = PerformanceAppraisal::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'new')->get();
+            $PerformanceAppraisal = PerformanceAppraisal::whereYear('to_date', $year)->whereMonth('to_date', $month)->where('status', 'approved')->get();
             if ($PerformanceAppraisal->isEmpty()) {
                 Toastr::error('Not have kpi found for the selected year.', 'Error');
                 return redirect()->back();
