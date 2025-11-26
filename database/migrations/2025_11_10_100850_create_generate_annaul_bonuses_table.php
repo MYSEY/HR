@@ -25,10 +25,11 @@ return new class extends Migration
             $table->integer('of_incentive_by_pa')->nullable();
             $table->integer('achieved_vs_pa')->nullable();
             $table->integer('number_months_received')->nullable();
-            $table->decimal('total_bounus',50,2)->default(0);
+            $table->decimal('total_annaul_bounus',50,2)->default(0);
             $table->string('status')->nullable();
             $table->string('increasement_of_year');
             $table->bigInteger('approved_by')->unsigned()->nullable();
+            $table->dateTime('approved_at')->unsigned()->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

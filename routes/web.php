@@ -333,6 +333,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::resource('annual/bonus', AnnualBonuConfigeController::class);
     Route::resource('confige/annual/bonus/branch', ConfigeAnnualBonuByBranchCongroller::class);
     Route::resource('generate/annual/bonus', GenerateAnnaulBonusController::class);
+    Route::post('generate/annual/bonus/approved', [GenerateAnnaulBonusController::class,'approved']);
+    Route::get('annual-bonus-download', [GenerateAnnaulBonusController::class,'annaulBonusDownload']);
 
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);

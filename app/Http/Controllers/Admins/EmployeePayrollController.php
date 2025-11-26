@@ -557,7 +557,7 @@ class EmployeePayrollController extends Controller
                             $totalBasicSalary = $item->basic_salary;
                         }
                     }
-                    dd($totalBasicSalary);
+                    
                     //fuction check Monthly/Quarterly Incentive
                     if (array_key_exists($item->number_employee, $dadaArrayIncentive)) {
                         $monthlyQuarterlyIncentive = $dadaArrayIncentive[$item->number_employee]['incentive'];

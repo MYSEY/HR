@@ -42,12 +42,12 @@
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                 @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
                     <div class="form-group">
-                        {{-- <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                        <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
                             <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
                             @foreach ($branch as $item)
                                 <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
                             @endforeach
-                        </select> --}}
+                        </select>
                     </div>
                 @endif
             </div>
@@ -56,6 +56,10 @@
                     <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
                         <span class="btn-txt"><i class="fa fa-search"></i></span>
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                        <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
+                        <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
                     <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                         <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
@@ -90,7 +94,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="department: activate to sort column ascending">@lang('lang.department')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="position: activate to sort column ascending">@lang('lang.position')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="date_of_commencement: activate to sort column ascending">@lang('lang.date_of_commencement')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="basice_salary: activate to sort column ascending">@lang('lang.basice_salary')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="basic_salary: activate to sort column ascending">@lang('lang.basic_salary')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="total_working_day: activate to sort column ascending">Total Working Day</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="incentive: activate to sort column ascending">%​ប្រាក់លើកទឹកចិត្ត</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="pa_score: activate to sort column ascending">PA Score</th>
@@ -98,6 +102,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="achieved_vs_pa: activate to sort column ascending">% សម្រេចធៀបនឹង%PA</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="number_months_received: activate to sort column ascending">Number of months to be received</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Annual incentive allowance</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -154,7 +159,21 @@
 @section('script')
 <script>
     $(function(){
-        // Initialize only once
+        var number_employee = null;
+        $(".btn_excel").on("click", function() {
+            let query = {
+                branch_id: $("#branch_id").val(),
+                department_id: $("#department_id").val(),
+                employee_id: $("#employee_id").val(),
+                employee_name: $("#employee_name").val(),
+            };
+            var url = "{{URL::to('annual-bonus-download')}}?" + $.param(query)
+            window.location = url;
+        });
+        $('.btn-search').on('click', function() {
+            $('#tbl_generate_annual_bonus').DataTable().ajax.reload(null, false);
+        });
+        
         dataTables();
         $('.checkAll').on('click', function(e) {
             if($(this).is(':checked',true)){
@@ -169,8 +188,6 @@
                 allVals.push($(this).attr('data-id'));
             });
             var id = allVals.join(",");
-            console.log(id);
-            
             if(allVals.length <=0)
             {
                 $.alert({
@@ -188,7 +205,7 @@
                             text: 'ok',
                             btnClass: 'btn-blue',
                             action: function () {
-                                axios.post('{{ URL("generate/annual/salary/increasement/approved") }}', {
+                                axios.post('{{ URL("generate/annual/bonus/approved") }}', {
                                     'id': id,
                                 }).then(function (response) {
                                     if (response.data.success) {
@@ -199,25 +216,8 @@
                                             icon: true
                                         }).show();
                                         setTimeout(() => {
-                                            window.location.replace("{{ URL('generate/annual/salary/increasement') }}");
+                                            window.location.replace("{{ URL('generate/annual/bonus') }}");
                                         }, 1500);
-                                    } else if (response.data.message === 'weight_must_be_exactly') {
-                                        new Noty({
-                                            title: "",
-                                            text: 'Total weight must be exactly 100% before approval.',
-                                            type: "error",
-                                            icon: true
-                                        }).show();
-                                        setTimeout(() => {
-                                            window.location.replace("{{ URL('generate/annual/salary/increasement') }}");
-                                        }, 2000);
-                                    } else {
-                                        new Noty({
-                                            title: "",
-                                            text: 'Something went wrong. Please try again.',
-                                            type: "error",
-                                            icon: true
-                                        }).show();
                                     }
                                     dataTables();
                                 }).catch(function (error) {
@@ -269,6 +269,12 @@
             ajax: {
                 url: '{{ URL("generate/annual/bonus") }}',
                 type: 'GET',
+                data: function (d) {
+                    d.employee_id = $('input[name="employee_id"]').val();
+                    d.employee_name = $('input[name="employee_name"]').val();
+                    d.branch_id = $('select[name="branch_id"]').val();
+                    d.department_id = $('select[name="department_id"]').val();
+                },
             },
             columns: [
                 {
@@ -276,6 +282,7 @@
                     name: 'id',
                     orderable: false,
                     searchable: false,
+                    className: 'stuck-scroll-3',
                     render: function(data, type, row) {
                         return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
                             <input type="checkbox" class="custom-control-input sub_chk" name="checkbox" data-id="${data}" id="${data}" value="${data}">
@@ -283,8 +290,16 @@
                         </div>`;
                     }
                 },
-                { data: 'number_employee', name: 'number_employee' },
-                { data: 'employee_name_kh', name: 'employee_name_kh' },
+                { 
+                    data: 'number_employee', 
+                    name: 'number_employee',
+                    className: 'stuck-scroll-3',
+                },
+                { 
+                    data: 'employee_name_kh', 
+                    name: 'employee_name_kh',
+                    className: 'stuck-scroll-3',
+                },
                 { data: 'branch_name_en', name: 'branch_name_en' },
                 { data: 'dep_name', name: 'dep_name' },
                 { data: 'positions_name', name: 'positions_name' },
@@ -324,8 +339,17 @@
                     name: 'number_months_received'
                 },
                 {
-                    data: 'total_bounus',
-                    name: 'total_bounus',
+                    data: 'total_annaul_bounus',
+                    name: 'total_annaul_bounus',
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        return `<span class="badge bg-inverse-info" style="font-size: 13px;">${data === "pending" ? "Pending" : "Approved"}</span>`;
+                    }
                 }
             ],
             initComplete: function() {

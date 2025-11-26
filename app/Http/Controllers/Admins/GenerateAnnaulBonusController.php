@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Models\User;
+use App\Models\Branchs;
 use App\Models\Payroll;
 use App\Models\AnnualBonu;
 use App\Models\Performance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\AnnualBonuBranch;
+use App\Exports\ExportAnnualBonus;
 use Illuminate\Support\Facades\DB;
 use App\Models\GenerateAnnaulBonus;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +18,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PerformanceAppraisal;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Round;
 
 class GenerateAnnaulBonusController extends Controller
@@ -36,6 +39,7 @@ class GenerateAnnaulBonusController extends Controller
                 ->leftJoin('performance_appraisals', 'generate_annaul_bonuses.performance_id', '=', 'performance_appraisals.id')
                 ->select(
                     'generate_annaul_bonuses.*',
+                    'users.id',
                     'users.number_employee',
                     'users.employee_name_kh',
                     'users.employee_name_en',
@@ -47,7 +51,15 @@ class GenerateAnnaulBonusController extends Controller
                     'performance_appraisals.total_score_live_staff',
                     'performance_appraisals.total_score_direct_chairman',
                 );
-        
+            $query->when($request->employee_id, function ($query, $employee_id) {
+                return $query->where('generate_annaul_bonuses.employee_id', $employee_id);
+            });
+            $query->when($request->employee_name, function ($query, $employee_name) {
+                return $query->where('users.employee_name_en', $employee_name);
+            });
+            $query->when($request->branch_id, function ($query, $branch_id) {
+                return $query->where('users.branch_id', $branch_id);
+            });
             // Search filter
             $searchValue = request()->input('search.value');
             if (!empty($searchValue)) {
@@ -74,7 +86,8 @@ class GenerateAnnaulBonusController extends Controller
                 'data' => $data
             ]);
         }  
-        return view('generate_annual_bonus.index');
+        $branch = Branchs::all();
+        return view('generate_annual_bonus.index',compact('branch'));
     }
 
     /**
@@ -162,7 +175,7 @@ class GenerateAnnaulBonusController extends Controller
                         $totalWorkingDays = $workingDays;
                     }
                     // Prorate bonus by number of days worked
-                    $totalBounus = (round($annualIncentiveAllowance,2) / $daysInYear) * $totalWorkingDays;
+                    $totalAnnaulBounus = (round($annualIncentiveAllowance,2) / $daysInYear) * $totalWorkingDays;
                     $workingDaysperYear = $dateOfCommencement->diffInDays($endOfYear) + 1;
 
                     // Save report info (debug)
@@ -176,7 +189,7 @@ class GenerateAnnaulBonusController extends Controller
                     //     '% of Incentive by PA' => $ofIncentivebyPA,
                     //     '% Achieved vs. %PA' => $totalPercentage,
                     //     'Number of months to be received' => $NumberofMonthsReceived,
-                    //     'total_bounus' => $totalBounus,
+                    //     'total_bounus' => $totalAnnaulBounus,
                     //     'created_by' => Auth::id(),
                     // ]);
 
@@ -194,7 +207,8 @@ class GenerateAnnaulBonusController extends Controller
                         "achieved_vs_pa" => $totalPercentage,
                         "number_months_received" => $NumberofMonthsReceived,
                         "increasement_of_year" => $request->increasement_year,
-                        "total_bounus" => $totalBounus,
+                        "total_annaul_bounus" => $totalAnnaulBounus,
+                        "status" => 'pendding',
                         "created_by" => Auth::id(),
                     ]);
                 }
@@ -252,5 +266,33 @@ class GenerateAnnaulBonusController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+   public function approved(Request $request)
+    {
+        DB::beginTransaction(); // ⬅ Start transaction
+        try {
+            $ids = explode(',', $request->id);
+            GenerateAnnaulBonus::whereIn('id', $ids)->update([
+                'status' => 'approved',
+                'approved_by' => Auth::id(),
+                'approved_at' => now(),
+            ]);
+            DB::commit(); // ⬅ Save all
+            return response()->json([
+                'success' => true,
+                'message' => 'Approve successfully!',
+                'status'  => 200
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollBack(); // ⬅ Roll back if error
+            return response()->json([
+                'error'     => 'Updated status failed.',
+                'exception' => $exp->getMessage()
+            ], 500);
+        }
+    }
+    public function annaulBonusDownload(Request $request){
+        return Excel::download(new ExportAnnualBonus($request), 'Annual Bonus.xlsx');
     }
 }

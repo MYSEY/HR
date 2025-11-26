@@ -21,10 +21,11 @@ class GenerateAnnaulBonus extends Model
         'of_incentive_by_pa',
         'achieved_vs_pa',
         'number_months_received',
-        'total_bounus',
+        'total_annaul_bounus',
         'status',
         'increasement_of_year',
         'approved_by',
+        'approved_at',
         'created_by',
         'updated_by',
     ];
