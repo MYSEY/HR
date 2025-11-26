@@ -75,6 +75,9 @@ ol.s {list-style-type: inherit;}
     margin-top: -15px;
     font-size: 12px;
 }
+.set-fontss{
+    font-family:'Khmer OS Muol Light', serif;
+}
 .font-title, .title{
     font-family: 'Khmer OS Muol Light', serif;
     font-size: 18px;
