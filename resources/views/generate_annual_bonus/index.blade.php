@@ -317,7 +317,10 @@
                 },
                 {
                     data: 'incentive',
-                    name: 'incentive'
+                    name: 'incentive',
+                    render: function(data, type, row) {
+                        return data + '%';
+                    }
                 },
                 {
                     data: 'pa_score',
@@ -328,11 +331,17 @@
                 },
                 {
                     data: 'of_incentive_by_pa',
-                    name: 'of_incentive_by_pa'
+                    name: 'of_incentive_by_pa',
+                    render: function(data, type, row) {
+                        return data + '%';
+                    }
                 },
                 {
                     data: 'achieved_vs_pa',
-                    name: 'achieved_vs_pa'
+                    name: 'achieved_vs_pa',
+                    render: function(data, type, row) {
+                        return data + '%';
+                    }
                 },
                 {
                     data: 'number_months_received',
