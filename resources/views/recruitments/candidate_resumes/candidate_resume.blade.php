@@ -1398,7 +1398,8 @@
                                 num ++;
                             }else{
                                 let dataAprove = false;
-                                if (staff_result.id_card_number && staff_result.position_type && staff_result.department_id) {
+                                // if (staff_result.id_card_number && staff_result.position_type && staff_result.department_id) {
+                                if (staff_result.id_card_number && staff_result.department_id) {
                                     dataAprove = true;
                                 }
                                 let dropdown_action = "";
@@ -1619,13 +1620,14 @@
                                                     '<td>'+
                                                         '<span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>'+
                                                     '</td>'+
+                                                    '<td>'+emp.resign_reason+'</td>'+
                                                     '<td class="text-end">'+
                                                         (btn_delete)+
                                                     '</td>'+
                                                 '</tr>';
                         });
                     }else{
-                        tr_upcoming_cancel = '<tr><td colspan=16 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                        tr_upcoming_cancel = '<tr><td colspan=17 align="center">@lang("lang.no_record_to_display")</td></tr>';
                     }
                 }
                 $(".tbl-short-list tbody").html(tr);

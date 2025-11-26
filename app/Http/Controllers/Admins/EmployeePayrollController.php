@@ -453,11 +453,18 @@ class EmployeePayrollController extends Controller
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
-                    payrollPreview::where('employee_id',$item->id)->delete();
-                    PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
-                    GrossSalaryPay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
-                    SeverancePay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
-                    PreviewBonus::where('employee_id',$item->id)->delete();
+                    // payrollPreview::where('employee_id',$item->id)->delete();
+                    // PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
+                    // GrossSalaryPay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
+                    // SeverancePay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
+                    // PreviewBonus::where('employee_id',$item->id)->delete();
+                    $paymentMonth = date('m-Y', strtotime($request->payment_date));
+                    payrollPreview::where('employee_id', $item->id)->delete();
+                    PreviewNationalSocialSecurityFund::where('employee_id', $item->id)->delete();
+                    GrossSalaryPay::where('number_employee', $item->number_employee)->whereRaw("DATE_FORMAT(payment_date, '%m-%Y') = ?", [$paymentMonth])->delete();
+                    SeverancePay::where('number_employee', $item->number_employee)->whereRaw("DATE_FORMAT(payment_date, '%m-%Y') = ?", [$paymentMonth])->delete();
+                    PreviewBonus::where('employee_id', $item->id)->delete();
+
                     //function first month join work
                     $totalFirstSeverancPay = 0;
                     $totalBaseSalaryRecived = 0;
@@ -483,13 +490,21 @@ class EmployeePayrollController extends Controller
                     //function difinde day first working
                     if ($joinDate == $paymentDate) {
                         //total day in monthsd
-                        $start_date = Carbon::createFromDate($item->date_of_commencement);
-                        $endMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth();
-                        $end_date = Date::createFromDate($endMonth);
-                        $commencementDate   = Carbon::parse($start_date);
-                        $resumptionDate     = Carbon::parse($end_date);
-                        $isCommencementWeekday = !$commencementDate->isWeekend();
-                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + ($isCommencementWeekday ? 1 : 0);
+                        // $start_date = Carbon::createFromDate($item->date_of_commencement);
+                        // $endMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth();
+                        // $end_date = Date::createFromDate($endMonth);
+                        // $commencementDate   = Carbon::parse($start_date);
+                        // $resumptionDate     = Carbon::parse($end_date);
+                        // $isCommencementWeekday = !$commencementDate->isWeekend();
+                        // $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + ($isCommencementWeekday ? 1 : 0);
+
+                        $start_date = Carbon::parse($item->date_of_commencement);
+                        $end_date   = $start_date->copy()->endOfMonth();
+                        // Count working days (Mon–Fri)
+                        $toDays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+                            return !$date->isWeekend(); // Exclude Saturday/Sunday
+                        }, $end_date);
+
                         $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('d');
                         $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
                         $startendMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth()->format('d');
@@ -513,7 +528,7 @@ class EmployeePayrollController extends Controller
                     } else {
                         if ($item->emp_status == 1) {
                             $joinPassProbation = Carbon::createFromDate($item->fdc_date)->format('d');
-                            if($joinPassProbation == 1){
+                            if($joinPassProbation == '01'){
                                 $totalBasicSalary = $item->basic_salary;
                             }else{
                                 $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
@@ -585,7 +600,7 @@ class EmployeePayrollController extends Controller
                     } else {
                        $totalParkAllowance = 0;
                     }
-                   
+                    
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
@@ -626,6 +641,7 @@ class EmployeePayrollController extends Controller
                             $totalBunus = $dataBonus->total_allowance ?? 0;
                         }
                     }
+    
                     // function sum benefit age children <= 18
                     $dataDateOfBirth = [];
                     $dataChildren = ChildrenInfor::where('employee_id',$item->id)->get();

@@ -658,11 +658,11 @@
         <div style="display: flex">
             <div class="payslip-title-center" style="margin-left: 5%">
                 <label class="label-subs" style="margin-left: 25"><strong>និយោជិត</strong></label><br><br><br><br><br>
-                <label>ឈ្នោះ  <span class="set-font pr_name" style="font-size: 14px !important"></span></label>
+                <label class="set-fontss">ឈ្មោះ  <span class="set-font pr_name" style="font-size: 14px !important"></span></label>
             </div>
             <div class="payslip-title-center" style="margin-left: 30%">
                 <label class="label-subs"><strong>និយោជក/នាយក នាយកដ្ឋានធនធានមនុស្ស និងរដ្ឋបាល</strong></label><br><br><br><br><br>
-                <label style="float: right">ឈ្នោះ..................................</label>
+                <label class="set-fontss" style="float: right">ឈ្មោះ..................................</label>
             </div>
         </div>
     </div>

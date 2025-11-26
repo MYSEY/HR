@@ -126,7 +126,7 @@
                                                             <td class="name_en">{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
                                                             <td class="number_phone">{{$item->type == 1 ? $item->EmployeeIn->personal_phone_number : $item->number_phone}}</td>
                                                             <td class="email">{{$item->type == 1 ? $item->EmployeeIn->email : $item->email}}</td>
-                                                            <td >{{$item->type == 1 ? $item->EmployeeIn->remark : $item->remark}}</td>
+                                                            <td >{{$item->type == 1 ? "" : $item->remark}}</td>
                                                             <td>
                                                                 <input type="hidden" class="status" value="{{$item->status}}">
                                                                 <div class="dropdown action-label">
@@ -656,7 +656,7 @@
                             '<td class="name_en">'+(row.type == 1 ? row.employee_name_en : row.name_en)+'</td>'+
                             '<td class="number_phone">'+(row.type == 1 ? row.personal_phone_number : row.number_phone)+'</td>'+
                             '<td class="email">'+(row.type == 1 ? row.user_email ? row.user_email: ""  : row.email ? row.email : "")+'</td>'+
-                            '<td >'+(row.type == 1 ? row.user_remark ? row.user_remark : "" : row.remark ? row.remark : "")+'</td>'+
+                            '<td >'+(row.type == 1 ? "" : row.remark ? row.remark : "")+'</td>'+
                             '<td>'+
                                 '<input type="hidden" class="status" value="'+(row.status)+'">'+
                                 '<div class="dropdown action-label">'+

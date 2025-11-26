@@ -63,7 +63,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@lang('lang.course_fee')</label>
-                                <input class="form-control @error('cost_price') is-invalid @enderror" type="number" id="e_cost_price" name="cost_price">
+                                <input class="form-control @error('cost_price') is-invalid @enderror" type="number" step="any" id="e_cost_price" name="cost_price">
                             </div>
                         </div>
                         <div class="col-sm-6 hidden" id="e_inp_contract">
