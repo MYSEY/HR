@@ -368,7 +368,6 @@
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
-@section('script')
 <script>
     var lang = @json(Helper::getLang());
     var number_employee = null;
@@ -385,7 +384,7 @@
             branch_id = $('#branch_id').val();
             filter_month = $('#filter_month').val();
             // Reload DataTable with the filter values
-            $('#btl_payroll_resign').DataTable().ajax.reload(null, false); 
+            $('#btl_payroll_resign').DataTable().ajax.reload(); 
         });
         
         $(".btn_excel").on("click", function() {
@@ -497,7 +496,7 @@
                 });
             }
         });
-        $('#btl_payroll_resign').on('click', '.btnDelete', function() {
+        $('.btnDelete').on('click',function(){
             var number_employee = $(this).attr('data-id');
             $.confirm({
                 title: '@lang("lang.delete")!',
@@ -575,16 +574,22 @@
         });
     });
     
+   
     function dataTables() {
         $('#loading-overlay').show();
-        // Check if DataTable instance exists, then destroy it
-        if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
-            $('#DataTables_Table_0').DataTable().clear().destroy();
+        let table = $('#btl_payroll_resign');
+        
+        // ✅ Properly destroy existing instance before reinitializing
+        if ($.fn.DataTable.isDataTable(table)) {
+            table.DataTable().clear().destroy();
+            table.html(''); // clear headers as well
         }
-        $('#btl_payroll_resign').DataTable({
+
+        table.DataTable({
             pageLength: 10,
             processing: true,
             serverSide: true,
+            destroy: true, // <-- IMPORTANT SAFEGUARD
             order: [[0, 'desc']],
             lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
             ajax: {
@@ -837,34 +842,29 @@
                     render: function(data, type, row) {
                         let buttons = '';
                         if (row.id) {
-                            if (isDelete == 1) {
-                                buttons += `<button class="btn btn-danger btn-sm btnDelete" type="button" data-id="${row.users?.number_employee}">Delete</button>`;
+                            if (isDelete ==1) {
+                                buttons += `<button class="btn btn-danger btn-sm btnDelete" type="button" data-id="'+row.users?.number_employee+'">Delete</button>`;
                             }
                             if (isApprove == 1) {
-                                buttons += `<button type="button" class="btn btn-success btn-sm btn_approved" data-id="${row.users?.number_employee}">@lang("lang.approve")</button>`;
+                                buttons += '<button type="button" class="btn btn-success btn-sm btn_approved" href="#" data-id="'+row.users?.number_employee+'">@lang("lang.approve")</button>';
                             }
                         }
-                        return buttons;
+                        return buttons || '';
                     },
                     orderable: false,
                     searchable: false
                 }
             ],
-            order: [[0, 'desc']],
             initComplete: function() {
                 $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
             }
         });
-        $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
-            if (processing) {
-                $('#loading-overlay').show();
-            } else {
-                $('#loading-overlay').hide();
-            }
+        // ✅ Show/hide loading spinner on DataTable processing
+        table.on('processing.dt', function (e, settings, processing) {
+            $('#loading-overlay').toggle(processing);
         });
     }
     function formatCurrencyKH(currency) {
         return parseInt(currency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
-@endsection
