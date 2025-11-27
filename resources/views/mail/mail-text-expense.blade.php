@@ -5,8 +5,30 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     {{-- <meta name="viewport"> --}}
     <title>{{$data["data"]["title"]}}</title>
+    <style>
+        body {
+            font-family: 'Khmer OS Battambang', Tahoma, sans-serif;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            color: #000;
+        }
+        table {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            font-size: 14px;
+            font-family: 'Khmer OS Battambang', Tahoma, sans-serif;
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+        p, ul, li, label {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
 </head>
-{{-- <body style="font-family:'Khmer OS Battambang',Tahoma,sans-serif; background-color:#f9f9f9; padding:20px;"> --}}
 <body>
     <table style="max-width:600px; margin:0 auto;  padding:20px;">
         <tr>
