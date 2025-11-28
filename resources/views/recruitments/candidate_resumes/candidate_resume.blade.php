@@ -263,39 +263,64 @@
             let description = "@lang('lang.are_you_sure_want_to_approve')?";
             let text_label = "";
             let button_ok = {
-                        text: '@lang("lang.ok")',
-                        btnClass: 'add-btn-status',
-                        action: function () {
-                            var id = this.$content.find('.id').val();
-                            axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
-                                'id': id,
-                                'status': "Upcoming",
-                            }).then(function(response) {
-                                new Noty({
-                                    title: "",
-                                    text: "@lang('lang.the_process_has_been_successfully').",
-                                    type: "success",
-                                    timeout: 3000,
-                                    icon: true
-                                }).show(); 
-                                showDatas("4");
-                                $("#dataProcessing").text(response.data.dataProcessing);
-                                $("#dataUpcoming").text(response.data.totalUpcomings);
-                            }).catch(function(error) {
-                                new Noty({
-                                    title: "",
-                                    text: "@lang('lang.something_went_wrong_please_try_again_later').",
-                                    type: "error",
-                                    icon: true
-                                }).show();
-                            });
-                        }
-                    };
+                text: '@lang("lang.ok")',
+                btnClass: 'add-btn-status',
+                action: function () {
+                    var jc = this;
+                    var okBtn  = this.buttons.button_ok; 
+                    var cancelBtn = this.buttons.cancel;
+                    okBtn.setText('@lang("lang.loading")...');
+
+                    okBtn.disable();
+                    cancelBtn.disable();
+
+                    var id = this.$content.find('.id').val();
+
+                    axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
+                        'id': id,
+                        'status': "Upcoming",
+                    }).then(function(response) {
+
+                        new Noty({
+                            title: "",
+                            text: "@lang('lang.the_process_has_been_successfully').",
+                            type: "success",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+
+                        showDatas("4");
+                        $("#dataProcessing").text(response.data.dataProcessing);
+                        $("#dataUpcoming").text(response.data.totalUpcomings);
+
+                        // okBtn.enable();    // Enable button
+                        cancelBtn.enable();
+                        okBtn.setText('@lang("lang.ok")');
+                        jc.close();                    // Close popup
+
+                    }).catch(function(error) {
+
+                        new Noty({
+                            title: "",
+                            text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                            type: "error",
+                            icon: true
+                        }).show();
+
+                        okBtn.enable();   // Enable on error
+                        cancelBtn.enable();
+                        okBtn.setText('@lang("lang.ok")');
+                    });
+                    return false;
+                }
+            };
+
             if (id_card == "false") {
                 text_label = '<label>@lang("lang.you_cannot_aprove").</label>';
                 description = "@lang('lang.please_enter_all_requried_information').";
                 button_ok = "";
             }
+
             $.confirm({
                 icon: 'fa fa-warning',
                 title: '@lang("lang.approve")',
@@ -305,8 +330,8 @@
                 '<form action="" class="formName">' +
                     '<div class="form-group" style="text-align: center">' +
                         (text_label)+
-                        '<label>'+(description)+'</label>' +
-                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                        '<label>'+ (description) +'</label>' +
+                        '<input type="hidden" class="form-control id" value="'+id+'">'+
                     '</div>' +
                 '</form>',
                 onOpenBefore: function () {
@@ -328,6 +353,7 @@
                 }
             });
         });
+
         $(document).on('click','.btn_cancel', function(){
             let id = $(this).data("id");
             $.confirm({
