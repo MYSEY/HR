@@ -45,14 +45,14 @@
                                                         <td class="amount_riel">{{number_format($item->amount_riel)}}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                         <td class="text-end">
-                                                            @if (permissionAccess("m8-s2","is_update")->value == "1" || permissionAccess("m8-s2","is_delete")->value == "1")
+                                                            @if ($permission->is_update == "1" || $permission->is_delete == "1")
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                                        @if (permissionAccess("m8-s2","is_update")->value == "1")
+                                                                        @if ($permission->is_update == "1")
                                                                         <a class="dropdown-item update"  data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                         @endif
-                                                                        @if (permissionAccess("m8-s2","is_delete")->value == "1")
+                                                                        @if ($permission->is_delete == "1")
                                                                         <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_echange_rate"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                         @endif
                                                                     </div>
