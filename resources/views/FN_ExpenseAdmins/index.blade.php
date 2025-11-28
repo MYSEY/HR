@@ -19,7 +19,9 @@
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-sm btn-success btn_approved_all mt-3" href="#" data-id="">Remove Approved</button>
+    @if ($permission->is_approve == "1")
+        <button type="button" class="btn btn-sm btn-success btn_approved_all mt-3" href="#" data-id="">Remove Approved</button>
+    @endif
     <div class="content">
         <div class="row">
             <div class="col-md-12">

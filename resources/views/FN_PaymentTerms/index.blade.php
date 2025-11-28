@@ -36,27 +36,35 @@
                                     <tr>
                                         <td>{{$item->title}}</td>
                                         <td>
-                                            <div class="dropdown action-label">
+                                            @if ($permission->is_update == "1")
+                                                <div class="dropdown action-label">
+                                                    @if ($item->status==1)
+                                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fa fa-dot-circle-o text-success"></i>
+                                                            <span>@lang('lang.active')</span>
+                                                        </a>
+                                                    @elseif ($item->status==0)
+                                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fa fa-dot-circle-o text-danger"></i>
+                                                            <span>@lang('lang.inactive')</span>
+                                                        </a>
+                                                    @endif
+                                                        <div class="dropdown-menu dropdown-menu-right" id="btn-status">
+                                                            <a class="dropdown-item" data-id="{{$item->id}}" data-name="1" data-status-old="{{$item->status}}" href="#">
+                                                                <i class="fa fa-dot-circle-o text-success"></i> @lang('lang.active')
+                                                            </a>
+                                                            <a class="dropdown-item" data-id="{{$item->id}}" data-name="0" data-status-old="{{$item->status}}" href="#">
+                                                                <i class="fa fa-dot-circle-o text-danger"></i> @lang('lang.inactive')
+                                                            </a>
+                                                        </div>
+                                                </div>
+                                            @else
                                                 @if ($item->status==1)
-                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fa fa-dot-circle-o text-success"></i>
-                                                        <span>@lang('lang.active')</span>
-                                                    </a>
+                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.active')</span>
                                                 @elseif ($item->status==0)
-                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fa fa-dot-circle-o text-danger"></i>
-                                                        <span>@lang('lang.inactive')</span>
-                                                    </a>
+                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.inactive')</span>
                                                 @endif
-                                                    <div class="dropdown-menu dropdown-menu-right" id="btn-status">
-                                                        <a class="dropdown-item" data-id="{{$item->id}}" data-name="1" data-status-old="{{$item->status}}" href="#">
-                                                            <i class="fa fa-dot-circle-o text-success"></i> @lang('lang.active')
-                                                        </a>
-                                                        <a class="dropdown-item" data-id="{{$item->id}}" data-name="0" data-status-old="{{$item->status}}" href="#">
-                                                            <i class="fa fa-dot-circle-o text-danger"></i> @lang('lang.inactive')
-                                                        </a>
-                                                    </div>
-                                            </div>
+                                            @endif
                                         </td>
                                         <td>{{$item->description}}</td>
                                         <td style="text-align: center;">

@@ -34,11 +34,13 @@ class ExpenseReportController extends Controller
     }
     public function filter(Request $request){
         $datas = $this->dataRequests->getDataByLocation($request);
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/expense/report")->first();
         // Check if it's a paginated response
         if ($datas instanceof \Illuminate\Pagination\LengthAwarePaginator) {
             // If it's paginated, return the necessary pagination metadata
             return response()->json([
                 'data' => $datas->items(), // Only send the data items
+                'permission' => $permission,
                 'pagination' => [
                     'current_page' => $datas->currentPage(),
                     'last_page' => $datas->lastPage(),
