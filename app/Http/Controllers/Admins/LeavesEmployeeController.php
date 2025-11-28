@@ -259,6 +259,7 @@ class LeavesEmployeeController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
+
         try {
             $duplicate  = self::duplicateLeace($request, Auth::user()->id);
             if ($duplicate) {
@@ -368,9 +369,9 @@ class LeavesEmployeeController extends Controller
                     'default_sick_leave'  => 0,
                     'default_special_leave'  => 0,
                     'default_unpaid_leave'  => 0,
-                    'total_annual_leave'    => $LeaveAllocation['total_annual_leave'] = 0 - $request->number_of_day,
-                    'total_sick_leave'  => 0,
-                    'total_special_leave'  => 0,
+                    'total_annual_leave'    => $LeaveType->type == "annual_leave" ? $LeaveAllocation['total_annual_leave'] = 0 - $request->number_of_day : 0,
+                    'total_sick_leave'  => $LeaveType->type == "sick_leave" ? $LeaveAllocation['total_sick_leave'] = 0 - $request->number_of_day : 0,
+                    'total_special_leave'  => $LeaveType->type == "special_leave" ? $LeaveAllocation['total_special_leave'] = 0 - $request->number_of_day : 0,
                     'total_unpaid_leave'  => 0,
                     'created_by'  => Auth::user()->id,
                 ]);
@@ -396,8 +397,6 @@ class LeavesEmployeeController extends Controller
             $mail_message = ModelsMail::first();
             if ($line_manager2 && $mail_message) {
                 if ($line_manager2) {
-                    // $datasSendEmail['mail_message'] = $mail_message;
-                    // $datasSendEmail['staff_request'] = $staff_request;
                     $datasSendEmail = [
                         'mail_message'      => $mail_message,
                         'staff_request'     => $staff_request,
@@ -405,29 +404,28 @@ class LeavesEmployeeController extends Controller
                         'end_date'          => $request->end_date,
                         'number_of_day'     => $request->number_of_day,
                     ];
-                    // Mail::mailer('mailer2')->to("hshong9666@gmail.com")->queue(new SendEmail($datasSendEmail, true));
-                    // if ($manager1) {
-                    //     $recipients = [$manager1->email, $line_manager2->email];
-                    //     if ($manager1->email != $line_manager2->email) {
-                    //         foreach ($recipients as $email) {
-                    //             $btn_approve = false;
-                    //             if($email != $manager1->email){
-                    //                 $btn_approve = true;
-                    //             }
-                    //             if($email){
-                    //                 Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
-                    //             }
-                    //         }
-                    //     }else{
-                    //         if($line_manager2->email){
-                    //             Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
-                    //         }
-                    //     }
-                    // }else{
-                    //     if($line_manager2->email){
-                    //         Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
-                    //     }
-                    // }
+                    if ($manager1) {
+                        $recipients = [$manager1->email, $line_manager2->email];
+                        if ($manager1->email != $line_manager2->email) {
+                            foreach ($recipients as $email) {
+                                $btn_approve = false;
+                                if($email != $manager1->email){
+                                    $btn_approve = true;
+                                }
+                                if($email){
+                                    Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
+                                }
+                            }
+                        }else{
+                            if($line_manager2->email){
+                                Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail, true));
+                            }
+                        }
+                    }else{
+                        if($line_manager2->email){
+                            Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail,true));
+                        }
+                    }
 
                 }
             }
@@ -613,17 +611,17 @@ class LeavesEmployeeController extends Controller
                                     $btn_approve = true;
                                 }
                                 if($email){
-                                    // Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
+                                    Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
                                 }
                             }
                         }else{
                             if($line_manager2->email){
-                                // Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
+                                Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail, true));
                             }
                         }
                     }else{
                         if($line_manager2->email){
-                            // Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
+                            Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail,true));
                         }
                     }
                 }
