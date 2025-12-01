@@ -165,51 +165,6 @@ class LeavesAdminController extends Controller
     public function filter(Request $request)
     {
         if ($request->condiction_tab == 3) {
-            // $LeaveAllocation = LeaveAllocation::with("employee")->with("createdBy")
-            // ->leftJoin('users', 'leave_allocations.employee_id', '=', 'users.id')
-            // ->select(
-            //     'leave_allocations.*',
-            //     'users.number_employee',
-            //     'users.employee_name_en',
-            //     'users.employee_name_kh',
-            //     'users.department_id',
-            //     'users.branch_id',
-            // )
-            // ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            //     if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
-            //         $query->where("users.id", Auth::user()->id);
-            //         $query->orWhere("users.line_manager", Auth::user()->id);
-            //     }else if ($RolePermission == 'BM') {
-            //         $query->where("users.id", Auth::user()->line_manager);
-            //         $query->orWhere("users.branch_id", Auth::user()->branch_id);
-            //     }else if($RolePermission == 'HOD'){
-            //         if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
-            //             $query->where("users.department_id", Auth::user()->department_id);
-            //             $query->whereNot("users.id", Auth::user()->id);
-            //         }else{
-            //             $query->where("users.id", Auth::user()->id);
-            //             $query->orWhere("users.line_manager", Auth::user()->id);
-            //         }
-            //     }else if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
-            //         $query->where("users.id", Auth::user()->id);
-            //         $query->orWhere("users.line_manager", Auth::user()->id);
-            //     }else if($RolePermission == 'Employee'){
-            //         $query->where("users.id", Auth::user()->line_manager);
-            //         // $query->orWhere("users.line_manager", Auth::user()->line_manager);
-            //     }
-            // })
-            // ->when($request->employee_id, function ($query, $employee_id) {
-            //     $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
-            // })
-            // ->when($request->employee_name, function ($query, $employee_name) {
-            //     $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-            // })
-            // ->when($request->department_id, function ($query, $department) {
-            //     $query->where('users.department_id', $department);
-            // })
-            // ->when($request->branch_id, function ($query, $branch) {
-            //     $query->where('users.branch_id', $branch);
-            // })->orderBy('id', 'DESC')->get();
             $LeaveAllocation = $this->dataRequests->getLeaveAllocation($request);
             return response()->json([
                 'LeaveAllocations'=>$LeaveAllocation,
@@ -838,31 +793,6 @@ class LeavesAdminController extends Controller
                         'year_3'                    => $item[8],
                         'created_by'    => Auth::user()->id,
                     ]);
-
-                    // if ($employee) {
-                    //     $dbDate = Carbon::parse($employee->date_of_commencement);
-                    //     $diffYears = Carbon::now()->diffInYears($dbDate);
-                    //     $defaultDays = $item[2];
-                    //     if ($diffYears == 1) {
-                    //         $totalDays = $defaultDays;
-                    //     }elseif($diffYears == 2){
-                    //         $totalDays = $defaultDays;
-                    //     }elseif($diffYears == 3){
-                    //         $totalDays = $defaultDays;
-                    //     }elseif($diffYears == 4){
-                    //         $totalDays = $defaultDays + 1;
-                    //     } elseif($diffYears == 5) {
-                    //         $totalDays = $defaultDays + 1;
-                    //     }elseif($diffYears == 6){
-                    //         $totalDays = $defaultDays + 1;
-                    //     }elseif($diffYears == 7){
-                    //     }elseif($diffYears == 8){
-                    //         $totalDays = $defaultDays + 2;
-                    //     }elseif($diffYears == 9){
-                    //     }else if($diffYears > 10){
-                    //         $totalDays = $defaultDays + 3;
-                    //     }
-                    // }
                 }
             }
             if($dataArray){

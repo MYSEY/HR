@@ -40,13 +40,13 @@ class DashboadController extends Controller
                         $q->where('status', 'pending_approve')
                        ->whereJsonContains('approve_by', (string)$user->id);
                     })->orWhere(function ($q) use ($user) {
-                        if($user->branch->abbreviations == "HQ"){
+                        if($user->branch->abbreviations != "HQ"){
                             $q->where('status', '!=', 'pending_approve')
-                            ->where('location_review', $user->department_id)
+                            ->where('location_review', $user->branch_id)
                             ->whereJsonContains('position_review', $user->position_id);
                         }else{
                             $q->where('status', '!=', 'pending_approve')
-                            ->where('location_review', $user->branch_id)
+                            ->where('location_review', $user->department_id)
                             ->whereJsonContains('position_review', $user->position_id);
                         }
                     });

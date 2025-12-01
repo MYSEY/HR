@@ -223,12 +223,14 @@
                                                     {{$item->expenseRequest->createdBy ? $item->expenseRequest->createdBy->employee_name_en: ""}}
                                                 </td>
                                                 <td style="text-align: center;">
-                                                    <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item {{ $item->type == '2' ? 'btn-TEXP-print' : 'btn-GEXP-print'}}" href="#" data-datas="{{$item}}"><i class="fa fa-print fa-lg m-r-5"></i> @lang('lang.print')</a>
+                                                    @if ($permission->is_print == "1")
+                                                        <div class="dropdown dropdown-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item {{ $item->type == '2' ? 'btn-TEXP-print' : 'btn-GEXP-print'}}" href="#" data-datas="{{$item}}"><i class="fa fa-print fa-lg m-r-5"></i> @lang('lang.print')</a>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -506,6 +508,8 @@
             dataType: 'JSON',
             success: function(response){
                 let datas = response.data;
+                let permission = response.permission;
+                
                 var tr = "";
                 let num = 0;
                 let status = "";
@@ -570,11 +574,15 @@
 
                         referenceTd += '</td>';
                         let printClass = item.type == "2" ? "btn-TEXP-print" : "btn-GEXP-print";
-                        let btn = '<div class="dropdown-menu dropdown-menu-right">'+
+                        let btn = '';
+                        if (permission.is_print == "1") {
+                            btn = '<div class="dropdown-menu dropdown-menu-right">'+
                                     '<a class="dropdown-item ' + printClass + '" href="#" data-datas=\'' + JSON.stringify(item) + '\'>' +
                                         '<i class="fa fa-print fa-lg m-r-5"></i> ' + '@lang("lang.print")' +
                                     '</a>' +
                                 '</div>';
+                        }
+                        
 
                         tr +='<tr class="odd">'+
                             '<td class="ids stuck-scroll-3">'+(num)+'</td>'+

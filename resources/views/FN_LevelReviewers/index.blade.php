@@ -69,12 +69,12 @@
                             <span class="btn-txt"><i class="fa fa-search"></i></span>
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                         </button>
-                        {{-- @if ($permission->is_export == "1") --}}
+                        @if ($permission->is_export == "1")
                             <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
                                 <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
-                        {{-- @endif --}}
+                        @endif
                         <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                             <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                             <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -146,9 +146,13 @@
                                             <div class="dropdown dropdown-action">
                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item update" href="{{url("fn/level-reviewer/edit",$item->group_id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                    @if ($permission->is_update == "1")
+                                                        <a class="dropdown-item update" href="{{url("fn/level-reviewer/edit",$item->group_id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                    @endif
                                                     <a class="dropdown-item btn-review" href="{{url("fn/level-reviewer/view",$item->group_id)}}"><i class="fa fa-eye m-r-5"></i> @lang('lang.review')</a>
-                                                    <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->group_id}}" data-target="#delete_level"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                    @if ($permission->is_delete == "1")
+                                                        <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->group_id}}" data-target="#delete_level"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>

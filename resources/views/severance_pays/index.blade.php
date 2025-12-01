@@ -236,7 +236,7 @@
                 if (data.length > 0) {
                     data.map((row) => {
                         let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                        let contract_deadline = moment(row.users.fdc_end).format('D-MMM-YYYY')
+                        let contract_deadline = moment(row.users.fdc_date).format('D-MMM-YYYY')
                         let payment_date = moment(row.payment_date).format('D-MMM-YYYY')
                         tr +='<tr class="odd">'+
                             '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee)+'</a></td>'+
