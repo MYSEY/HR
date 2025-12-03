@@ -561,6 +561,7 @@ return[
     "leave"=>"Leave",
     "leave_balance"=>"Leave balance",
     "leave_allocation"=>"Staff Leave Records",
+    "staff_leave_report"=>"Staff Leave Report",
     "leave_reason"=>"Leave Reason",
     "leave_type"=>"Leave Type",
     "leave_requests"=>"Leave Request",

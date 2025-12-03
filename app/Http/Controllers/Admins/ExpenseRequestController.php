@@ -333,39 +333,38 @@ class ExpenseRequestController extends Controller
             'data'              => $dataSend["data"],
             'type'              => "expense",
         ];
-        // Mail::mailer('mailer2')->to("thyvan.vuth@camma.com.kh")->queue(new SendEmail($datasSendEmail, true));
-        // $condiction = $dataSend["condiction"];
-        // if($dataSend["data"]["status"] == "reject" || $dataSend["data"]["status"] == "approve"){
-        //     Mail::to($emailUserRequest)->queue(new SendEmail($datasSendEmail, true));
-        // }else{
-        //     $userALertEmail =  User::whereIn("position_id", $condiction["position_id"])
-        //         ->when($condiction["department_id"], function ($query, $department_id) {
-        //             $query->where('department_id', $department_id);
-        //         })
-        //         ->when($condiction["branch_id"], function ($query, $branch_id) {
-        //             $query->where('branch_id', $branch_id);
-        //         })
-        //         ->when($condiction["approve_by"], function ($query, $approve_by) {
-        //             $query->whereIn('id', $approve_by);
-        //         })
-        //         ->when($condiction["request_by"], function ($query, $request_by) {
-        //             $query->where('id', $request_by);
-        //         })
-        //         ->select(
-        //             'number_employee',
-        //             'department_id',
-        //             'email',
-        //             'branch_id'
-        //         )
-        //     ->get();
-        //     $data = [];
-        //     foreach ($userALertEmail as $user) {
-        //         if($user->email != $emailUserRequest){
-        //             $data[] = $user->email;
-        //             Mail::mailer('mailer2')->to($user->email)->queue(new SendEmail($datasSendEmail, true));
-        //         }
-        //     }
-        // }
+        $condiction = $dataSend["condiction"];
+        if($dataSend["data"]["status"] == "reject" || $dataSend["data"]["status"] == "approve"){
+            Mail::to($emailUserRequest)->queue(new SendEmail($datasSendEmail, true));
+        }else{
+            $userALertEmail =  User::whereIn("position_id", $condiction["position_id"])
+                ->when($condiction["department_id"], function ($query, $department_id) {
+                    $query->where('department_id', $department_id);
+                })
+                ->when($condiction["branch_id"], function ($query, $branch_id) {
+                    $query->where('branch_id', $branch_id);
+                })
+                ->when($condiction["approve_by"], function ($query, $approve_by) {
+                    $query->whereIn('id', $approve_by);
+                })
+                ->when($condiction["request_by"], function ($query, $request_by) {
+                    $query->where('id', $request_by);
+                })
+                ->select(
+                    'number_employee',
+                    'department_id',
+                    'email',
+                    'branch_id'
+                )
+            ->get();
+            $data = [];
+            foreach ($userALertEmail as $user) {
+                if($user->email != $emailUserRequest){
+                    $data[] = $user->email;
+                    Mail::mailer('mailer2')->to($user->email)->queue(new SendEmail($datasSendEmail, true));
+                }
+            }
+        }
     }
     /**
      * Store a newly created resource in storage.
@@ -1351,7 +1350,8 @@ class ExpenseRequestController extends Controller
                 ]
             ];
             $approveByArray = json_decode($data->approve_by);
-            if (in_array(Auth::user()->id, $approveByArray) && $data->status== "pending_approve") {
+            if (in_array((string)Auth::user()->id, $approveByArray) && $data->status == "pending_approve") {
+            // if (in_array(Auth::user()->id, $approveByArray) && $data->status== "pending_approve") {
                 $data['position_review']    = [];
                 $data['review_type']        = null;
                 $data['status']             = 'approved';

@@ -31,7 +31,7 @@ class ExpenseAdminController extends Controller
             'users.position_id',
             'users.branch_id as user_branch_id',
             'users.department_id as user_department_id',
-            'users.line_manager',
+            'users.line_manager as user_line_manager',
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if (permissionAccess("m13-s3","is_access")->value == 1) {
@@ -40,14 +40,19 @@ class ExpenseAdminController extends Controller
                 if (in_array($RolePermission, ['HOD', 'BM', 'HRAdmin'])) {
                     $query->where("users.department_id", Auth::user()->department_id)
                         ->where("users.branch_id", Auth::user()->branch_id);
-                } elseif (in_array($RolePermission, ['DHOD', 'DBM'])) {
+                }
+                if ($RolePermission == "Employee") {
                     $query->where("expense_requests.request_by", Auth::user()->id);
-                    $query->orWhere("users.line_manager", Auth::user()->id);
-                } elseif ($RolePermission == "Employee") {
-                    $query->where("expense_requests.request_by", Auth::user()->id);
-                } elseif ($RolePermission == 'HR') {
-                    $query->where("expense_requests.request_by", Auth::user()->id);
-                    $query->orWhere("users.line_manager", Auth::user()->id);
+                }
+                if (in_array($RolePermission, ['HR','DHOD', 'DBM'])){
+                 // group the OR where
+                    $query->where(function ($q) {
+                        $q->where("users.line_manager", Auth::user()->id)   // team under me
+                        ->orWhere("expense_requests.request_by", Auth::user()->id); // my own
+                    });
+                    // extra filters
+                    $query->where("users.branch_id", Auth::user()->branch_id)
+                        ->where("users.department_id", Auth::user()->department_id);
                 }
             }
         })

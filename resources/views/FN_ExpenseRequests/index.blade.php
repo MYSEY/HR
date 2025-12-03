@@ -163,6 +163,16 @@
             if (datas.expense_type == "2") {  
                 text_expense_type = "Irregular Expense";
             }
+            if (datas.expense_type == "0") { 
+                let asset = "";
+                if (datas.special_asset == "0") {
+                    asset = "Non fixed asset"
+                }
+                if (datas.special_asset == "1") {
+                    asset = "Fixed asset"
+                }
+                text_expense_type = "Special Expense "+"("+asset+")";
+            }
             $(".type_request_expense").text(text_expense_type);
             $("#v_kind_regard").val(datas.kind_regard);
             $("#v_subject").val(datas.subject);
@@ -472,7 +482,7 @@
             $('.number_supplier').text('៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
-            
+            $(".p_location_create").text("");
             $(".expense_tracking_id").text(datas.tracking_id);
             $(".p_kind_regard").text(datas.kind_regard);
             $(".p_subject").text(datas.subject);
@@ -499,6 +509,7 @@
             $(".p_payment_term").text(datas.payment_term);
             $(".p_approved_by").text("");
             $(".p_date_approve").text("");
+            $(".p_location_create").text(datas.request_by.branch.branch_name_kh);
             if (datas.approve_by) {
                 $(".p_approved_by").text(datas.approve_by.employee_name_kh);
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
@@ -591,6 +602,7 @@
             $('.number_supplier').text('៥ បើកជូនអ្នកផ្គត់ផ្គង់ (៤)');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
+            $(".p_location_create").text("");
             $(".expense_tracking_id").text(datas.tracking_id);
             $(".p_kind_regard").text(datas.kind_regard);
             $(".p_subject").text(datas.subject);
@@ -617,6 +629,7 @@
             $(".p_payment_term").text(datas.payment_term);
             $(".p_approved_by").text("");
             $(".p_date_approve").text("");
+            $(".p_location_create").text(datas.request_by.branch.branch_name_kh);
             if (datas.approve_by) {
                 $(".p_approved_by").text(datas.approve_by.employee_name_kh);
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
