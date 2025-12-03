@@ -307,6 +307,7 @@
             $('.number_supplier').text('៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
+            $(".p_location_create").text("");
             $(".expense_tracking_id").text(datas.tracking_id);
             $(".p_kind_regard").text(datas.kind_regard);
             $(".p_subject").text(datas.subject);
@@ -333,6 +334,7 @@
 
             $(".p_approved_by").text("");
             $(".p_date_approve").text("");
+            $(".p_location_create").text(datas.expense_request.request_by.branch.branch_name_kh);
             if (datas.approver_employee_name_kh) {
                 $(".p_approved_by").text(datas.approver_employee_name_kh);
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
@@ -398,6 +400,7 @@
             $('.number_supplier').text('៥ បើកជូនអ្នកផ្គត់ផ្គង់ (៤)');
             $('#modal-loading').modal('show');
             var datas = $(this).data('datas');
+            $(".p_location_create").text("");
             $(".expense_tracking_id").text(datas.tracking_id);
             $(".p_kind_regard").text(datas.kind_regard);
             $(".p_subject").text(datas.subject);
@@ -423,6 +426,7 @@
             $(".p_payment_term").text(datas.payment_term);
             $(".p_approved_by").text("");
             $(".p_date_approve").text("");
+            $(".p_location_create").text(datas.expense_request.request_by.branch.branch_name_kh);
             if (datas.approver_employee_name_kh) {
                 $(".p_approved_by").text(datas.approver_employee_name_kh);
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');

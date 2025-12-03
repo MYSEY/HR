@@ -47,38 +47,6 @@ class LeavesAdminController extends Controller
         $location = Branchs::get();
         $department = Department::get();
         $LeaveAllocation = $this->dataRequests->getLeaveAllocation($request);
-        // $LeaveAllocation = LeaveAllocation::with("employee")
-        // ->leftJoin('users', 'leave_allocations.employee_id', '=', 'users.id')
-        // ->select(
-        //     'leave_allocations.*',
-        //     'users.line_manager',
-        //     'users.department_id',
-        //     'users.branch_id',
-        // )
-        // ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-        //     if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
-        //         $query->where("users.id", Auth::user()->id);
-        //         $query->orWhere("users.line_manager", Auth::user()->id);
-        //     }else if ($RolePermission == 'BM') {
-        //         $query->where("users.id", Auth::user()->line_manager);
-        //         $query->orWhere("users.branch_id", Auth::user()->branch_id);
-        //     }else if($RolePermission == 'HOD'){
-        //         if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
-        //             $query->where("users.department_id", Auth::user()->department_id);
-        //             $query->whereNot("users.id", Auth::user()->id);
-        //         }else{
-        //             $query->where("users.id", Auth::user()->id);
-        //             $query->orWhere("users.line_manager", Auth::user()->id);
-        //         }
-        //     }else if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
-        //         $query->where("users.id", Auth::user()->id);
-        //         $query->orWhere("users.line_manager", Auth::user()->id);
-        //     }else if($RolePermission == 'Employee'){
-        //         $query->where("users.id", Auth::user()->line_manager);
-        //         // $query->orWhere("users.line_manager", Auth::user()->line_manager);
-        //     }
-        // })->get();
-
         $dataLeaveRequest = LeaveRequest::with(["employee", "handover", "createdBy", "leaveType","LeaveAllocation"])->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"])
             ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
             ->select(
@@ -108,7 +76,8 @@ class LeavesAdminController extends Controller
                     }
                 }
                 
-            })->orderBy('id', 'DESC')->get();
+            })->orderBy('id', 'DESC')->limit(10)->get();
+        $sumByEmployee = $this->dataRequests->getLeaveReports($request);
         $requestCancels = LeaveRequest::with("employee")->with("handover")
             ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
             ->select(
@@ -141,7 +110,7 @@ class LeavesAdminController extends Controller
                     }
                 }
             })->orderBy('id', 'DESC')->get();
-        return view('leaves_admin.index', compact('location', 'department', 'LeaveAllocation', 'dataLeaveRequest', 'requestCancels'));
+        return view('leaves_admin.index', compact('location', 'department', 'LeaveAllocation', 'dataLeaveRequest', 'requestCancels', 'sumByEmployee'));
     }
 
     public function detail(Request $request) {
@@ -168,6 +137,11 @@ class LeavesAdminController extends Controller
             $LeaveAllocation = $this->dataRequests->getLeaveAllocation($request);
             return response()->json([
                 'LeaveAllocations'=>$LeaveAllocation,
+            ]);
+        }elseif($request->condiction_tab == 4){
+            $sumByEmployee = $this->dataRequests->getLeaveReports($request);
+            return response()->json([
+                'success'=>$sumByEmployee,
             ]);
         }else{
             $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")->with("handover")->with("createdBy")->with("approve")
@@ -805,8 +779,12 @@ class LeavesAdminController extends Controller
     }
 
     public function ExportLeaveAllocation(Request $request){
-        $data = $this->dataRequests->getLeaveAllocation($request);;
-        $export = new ExporLeaveAllocation($data);
+        if($request->condiction_tab == 4){
+            $data = $this->dataRequests->getLeaveReports($request);
+        }else{
+           $data = $this->dataRequests->getLeaveAllocation($request); 
+        }
+        $export = new ExporLeaveAllocation($data, $request);
         return Excel::download($export, 'Leave Records.xlsx');
     }
 }

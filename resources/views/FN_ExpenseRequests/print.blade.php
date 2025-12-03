@@ -144,7 +144,7 @@
                     </td></tr>
                 </table>
                 <div style="float: right">
-                    <label style="font-size: 16px;">ភ្នំពេញ, ថ្ងៃទី <span class="p_day"></span> ខែ <span class="p_month"></span> ឆ្នាំ <span class="p_year"></span></label>
+                    <label style="font-size: 16px;"><span class="p_location_create"></span>, ថ្ងៃទី <span class="p_day"></span> ខែ <span class="p_month"></span> ឆ្នាំ <span class="p_year"></span></label>
                 </div>
             </div>
         </div><br>

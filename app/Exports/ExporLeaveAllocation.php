@@ -17,46 +17,77 @@ class ExporLeaveAllocation implements FromCollection,WithColumnWidths, WithHeadi
 {
     protected $export_datas;
     protected $totalRecord;
+    protected $condiction_tab;
+    protected $start_date;
+    protected $end_date;
 
-    public function __construct($export_data)
+    public function __construct($export_data,$request)
     {
         $this->totalRecord = count($export_data);
+        $this->condiction_tab = $request->condiction_tab;
+        $this->start_date = $request->start_date;
+        $this->end_date = $request->end_date;
         $i = 0;
         $dataExport = [];
+        if($request->condiction_tab == 4){
+            foreach ($export_data as $leave) {
+                $i++;
+                $join_date = Carbon::createFromDate($leave->employee->date_of_commencement)->format('d-m-Y');
+                $dataExport[] = [
+                    "number"                            => $i,
+                    "employee_name"                     => ($leave->employee->employee_name_en ?? ""),
+                    "department"                        => $leave->employee->department->name_english,
+                    "location"                          => $leave->employee->branch->branch_name_en,
+                    "join_date"                         => $join_date,
+                    "day_taken1"                        => $leave->total_number_al,          
+                    "balance1"                          => $leave->LeaveAllocation->total_annual_leave,         
+                    "day_taken2"                        => "$leave->total_number_sl",           
+                    "balance2"                          => $leave->LeaveAllocation->total_sick_leave,         
+                    "day_taken3"                        => "$leave->total_number_sp",          
+                    "balance3"                          => $leave->LeaveAllocation->total_special_leave,        
+                    "day_taken4"                        => "$leave->total_number_ul",           
+                    "balance4"                          => $leave->LeaveAllocation->total_unpaid_leave,         
+                    "year_1"                            => $leave->LeaveAllocation->year_1,
+                    "year_2"                            => $leave->LeaveAllocation->year_2,        
+                    "year_3"                            => $leave->LeaveAllocation->year_2,
+                ];
+            }
+            $this->export_datas = $dataExport;
+        }else{
+            foreach ($export_data as $leave) {
+                        $i++;
+                        $join_date = Carbon::createFromDate($leave->employee->date_of_commencement)->format('d-m-Y');
+                        $default_annual_leave = ($leave->default_annual_leave - $leave->total_annual_leave);
+                        $total_annual_leave = $leave->total_annual_leave;
+                        $default_sick_leave = ($leave->default_sick_leave - $leave->total_sick_leave);
+                        $total_sick_leave = $leave->total_sick_leave;
+                        $default_special_leave = ($leave->default_special_leave -$leave->total_special_leave);
+                        $total_special_leave = $leave->total_special_leave;
+                        $default_unpaid_leave = $leave->default_unpaid_leave - $leave->total_unpaid_leave;
+                        $total_unpaid_leave =  $leave->total_unpaid_leave ;
 
-        foreach ($export_data as $leave) {
-           
-            $i++;
-            $join_date = Carbon::createFromDate($leave->employee->date_of_commencement)->format('d-m-Y');
-            $default_annual_leave = ($leave->default_annual_leave - $leave->total_annual_leave);
-            $total_annual_leave = $leave->total_annual_leave;
-            $default_sick_leave = ($leave->default_sick_leave - $leave->total_sick_leave);
-            $total_sick_leave = $leave->total_sick_leave;
-            $default_special_leave = ($leave->default_special_leave -$leave->total_special_leave);
-            $total_special_leave = $leave->total_special_leave;
-            $default_unpaid_leave = $leave->default_unpaid_leave - $leave->total_unpaid_leave;
-            $total_unpaid_leave =  $leave->total_unpaid_leave ;
-
-            $dataExport[] = [
-                "number"                            => $i,
-                "employee_name"                     => ($leave->employee->employee_name_en ?? ""),
-                "department"                        => $leave->employee->department->name_english,
-                "location"                          => $leave->employee->branch->branch_name_en,
-                "join_date"                         => $join_date,
-                "day_taken1"                        => $default_annual_leave,          
-                "balance1"                          => $total_annual_leave,         
-                "day_taken2"                        => "$default_sick_leave",           
-                "balance2"                          => $total_sick_leave,         
-                "day_taken3"                        => "$default_special_leave",          
-                "balance3"                          => $total_special_leave,        
-                "day_taken4"                        => "$default_unpaid_leave",           
-                "balance4"                          => $total_unpaid_leave,         
-                "year_1"                            => $leave->year_1,
-                "year_2"                            => $leave->year_2,        
-                "year_3"                            => $leave->year_3,
-            ];
+                        $dataExport[] = [
+                            "number"                            => $i,
+                            "employee_name"                     => ($leave->employee->employee_name_en ?? ""),
+                            "department"                        => $leave->employee->department->name_english,
+                            "location"                          => $leave->employee->branch->branch_name_en,
+                            "join_date"                         => $join_date,
+                            "day_taken1"                        => $default_annual_leave,          
+                            "balance1"                          => $total_annual_leave,         
+                            "day_taken2"                        => "$default_sick_leave",           
+                            "balance2"                          => $total_sick_leave,         
+                            "day_taken3"                        => "$default_special_leave",          
+                            "balance3"                          => $total_special_leave,        
+                            "day_taken4"                        => "$default_unpaid_leave",           
+                            "balance4"                          => $total_unpaid_leave,         
+                            "year_1"                            => $leave->year_1,
+                            "year_2"                            => $leave->year_2,        
+                            "year_3"                            => $leave->year_3,
+                        ];
+                    }
+                    $this->export_datas = $dataExport;
         }
-        $this->export_datas = $dataExport;
+        
     }
     /**
     * @return \Illuminate\Support\Collection
@@ -137,7 +168,19 @@ class ExporLeaveAllocation implements FromCollection,WithColumnWidths, WithHeadi
                 $date = Carbon::now()->format('d-M-Y');
 
                 $sheet->mergeCells('A3:P3');
-                $sheet->setCellValue('A3', "Expot as of on: ".$date);
+                if($this->condiction_tab == 4){
+                    $end_date = '';
+                    if($this->end_date){
+                        $end_date= ' - '.$this->end_date;
+                    }
+                    $start_date = 'All ';
+                    if($this->start_date){
+                        $start_date = $this->start_date;
+                    }
+                    $sheet->setCellValue('A3', "Export as of on: ".$start_date.$end_date);
+                }else{
+                    $sheet->setCellValue('A3', "Export as of on: ".$date);
+                }
                 $sheet->getDelegate()->getStyle('A3:P3')->getFont()->setName('Khmer OS Freehand')
                 ->setSize(10)->setBold('A3:P3');
                 $event->sheet->getDelegate()->getStyle('A3:P3')

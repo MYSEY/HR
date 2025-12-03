@@ -544,6 +544,7 @@ return[
     "leave"=>"ឈប់សម្រាក",
 	"leave_balance"=>"ចំនួនច្បាប់នៅសល់",
 	"leave_allocation"=>"Leave Allocation",
+	"staff_leave_report"=>"របាយការណ៍ច្បាប់បុគ្គលិក",
     "leave_type"=>"ប្រភេទការឈប់សម្រាក",
 	"leave_requests"=>"ការស្នើសុំឈប់សម្រាក",
     "leave_reason"=>"ហេតុផល",
