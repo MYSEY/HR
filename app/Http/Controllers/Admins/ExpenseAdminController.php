@@ -33,18 +33,36 @@ class ExpenseAdminController extends Controller
             'users.department_id as user_department_id',
             'users.line_manager as user_line_manager',
         )
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if (permissionAccess("m13-s3","is_access")->value == 1) {
-                // $query->where('expense_requests.status', "approved");
+        ->when(Auth::user(), function ($query, $user) use ($permission) {
+            if ($permission->is_access == 1) {
+                if ($user->department->abbreviations =="A&FDpt") {
+                    # code...
+                }else{
+                    if (in_array($user->RolePermission, ['HRAdmin', 'HOD', 'DHOD', 'HR'])) {
+                        $query->where("users.department_id", Auth::user()->department_id);
+                    }
+                    if(in_array($user->RolePermission, ['BM', 'DBM'])){
+                        $query->where("users.department_id", Auth::user()->department_id)
+                        ->where("users.branch_id", Auth::user()->branch_id);
+                    }
+                    if($user->RolePermission == 'Employee'  && $user->branch->abbreviations == "HQ"){
+                        $query->where("users.department_id", Auth::user()->department_id);
+                    }
+                    if($user->RolePermission == 'Employee'  && $user->branch->abbreviations != "HQ"){
+                        $query->where("users.department_id", Auth::user()->department_id)
+                        ->where("users.branch_id", Auth::user()->branch_id);
+                    }
+                }
             }else{
-                if (in_array($RolePermission, ['HOD', 'BM', 'HRAdmin'])) {
+                if (in_array($user->RolePermission, ['HOD','HRAdmin'])) {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                        // ->where("users.branch_id", Auth::user()->branch_id);
+                }
+                if (in_array($user->RolePermission, ['BM'])) {
                     $query->where("users.department_id", Auth::user()->department_id)
                         ->where("users.branch_id", Auth::user()->branch_id);
                 }
-                if ($RolePermission == "Employee") {
-                    $query->where("expense_requests.request_by", Auth::user()->id);
-                }
-                if (in_array($RolePermission, ['HR','DHOD', 'DBM'])){
+                if (in_array($user->RolePermission, ['HR','DHOD', 'DBM'])){
                  // group the OR where
                     $query->where(function ($q) {
                         $q->where("users.line_manager", Auth::user()->id)   // team under me
@@ -53,6 +71,9 @@ class ExpenseAdminController extends Controller
                     // extra filters
                     $query->where("users.branch_id", Auth::user()->branch_id)
                         ->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($user->RolePermission == "Employee") {
+                    $query->where("expense_requests.request_by", Auth::user()->id);
                 }
             }
         })
