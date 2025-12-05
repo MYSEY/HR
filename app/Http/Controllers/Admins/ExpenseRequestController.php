@@ -73,7 +73,6 @@ class ExpenseRequestController extends Controller
             })
             ->orderBy('id', 'DESC')
             ->get();
-            // dd($dataAsign);
         return view('FN_ExpenseRequests.index',compact(['permission','datas', 'dataAsign']));
     }
 
@@ -361,7 +360,7 @@ class ExpenseRequestController extends Controller
             foreach ($userALertEmail as $user) {
                 if($user->email != $emailUserRequest){
                     $data[] = $user->email;
-                    Mail::mailer('mailer2')->to($user->email)->queue(new SendEmail($datasSendEmail, true));
+                    Mail::to($user->email)->queue(new SendEmail($datasSendEmail, true));
                 }
             }
         }
@@ -431,9 +430,6 @@ class ExpenseRequestController extends Controller
                             $dataCheckLevelView["type"] = ($positionReview->type + 1);
                             $dataCheckLevelView["position_request"] = null;
                             $positionReview = self::lovelReview($dataCheckLevelView);
-                            // if(!$positionReview){
-                            //     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
-                            // }
                         } 
                     }
                     if($positionReview){
@@ -465,9 +461,6 @@ class ExpenseRequestController extends Controller
                             $dataCheckLevelView["type"] = ($positionReview->type + 1);
                             $dataCheckLevelView["position_request"] = null;
                             $positionReview = self::lovelReview($dataCheckLevelView);
-                            // if(!$positionReview){
-                            //     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
-                            // }
                         }   
                     }
                     if($positionReview){
@@ -531,7 +524,7 @@ class ExpenseRequestController extends Controller
             $dataSendEmail["data"]["amount_usd"] = $request->ge_total_amount_usd;
             $dataSendEmail["data"]["amount_kh"] = $request->ge_total_amount_riel;
             $dataSendEmail["data"]["request_by"] = Auth::user()->employee_name_kh;
-            self::sendEmail($dataSendEmail, Auth::user()->email);
+            // self::sendEmail($dataSendEmail, Auth::user()->email);
             //*** end **/
             
             $data['tracking_id']        = $this->generateExpenseCode(Carbon::today())['tracking_id'];
@@ -566,6 +559,16 @@ class ExpenseRequestController extends Controller
                 }
             }
             DB::commit();
+            
+            // After commit, email cannot affect data saving anymore
+            DB::afterCommit(function () use ($dataSendEmail) {
+                try {
+                    self::sendEmail($dataSendEmail, Auth::user()->email);
+                } catch (\Exception $e) {
+                    Log::error("Email failed after commit: " . $e->getMessage());
+                }
+            });
+
             return response()->json(['message' => 'The process has been successfully.', 'status'=>200]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -949,7 +952,6 @@ class ExpenseRequestController extends Controller
                 // $dataSendEmail["condiction"]["approve_by"]= [$request->approve_by];
             }
            
-            
             // $data["approve_by"]                     = $request->approve_by;
             $data["type"]                           = $request->type;
             $data["expense_type"]                   = $request->expense_type;
@@ -985,9 +987,17 @@ class ExpenseRequestController extends Controller
             $dataSendEmail["data"]["amount_usd"] = $request->ge_total_amount_usd;
             $dataSendEmail["data"]["amount_kh"] = $request->ge_total_amount_riel;
             $dataSendEmail["data"]["request_by"] = Auth::user()->employee_name_kh;
-            self::sendEmail($dataSendEmail, Auth::user()->email);
+            // self::sendEmail($dataSendEmail, Auth::user()->email);
             /// *** end **/
             DB::commit();
+             // After commit, email cannot affect data saving anymore
+            DB::afterCommit(function () use ($dataSendEmail) {
+                try {
+                    self::sendEmail($dataSendEmail, Auth::user()->email);
+                } catch (\Exception $e) {
+                    Log::error("Email failed after commit: " . $e->getMessage());
+                }
+            });
             return response()->json(['message' => 'Update successfully.', 'status'=>200]);
         }catch(\Exception $e){
             DB::rollBack();
@@ -1053,9 +1063,6 @@ class ExpenseRequestController extends Controller
                             $dataCheckLevelView["type"] = ($positionReview->type + 1);
                             $dataCheckLevelView["position_request"] = null;
                             $positionReview = self::lovelReview($dataCheckLevelView);
-                            // if(!$positionReview){
-                            //     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
-                            // }
                         }   
                     }
                     if($positionReview){
@@ -1085,9 +1092,6 @@ class ExpenseRequestController extends Controller
                             $dataCheckLevelView["type"] = ($positionReview->type + 1);
                             $dataCheckLevelView["position_request"] = null;
                             $positionReview = self::lovelReview($dataCheckLevelView);
-                            // if(!$positionReview){
-                            //     return response()->json(['message' => 'Please contact the finance team to set up a level review.', 'status'=>404]);
-                            // }
                         }   
                     }
                     if($positionReview){
@@ -1303,9 +1307,17 @@ class ExpenseRequestController extends Controller
             $dataSendEmail["data"]["amount_usd"] = $request->ge_total_amount_usd;
             $dataSendEmail["data"]["amount_kh"] = $request->ge_total_amount_riel;
             $dataSendEmail["data"]["request_by"] = Auth::user()->employee_name_kh;
-            self::sendEmail($dataSendEmail, Auth::user()->email);
+            // self::sendEmail($dataSendEmail, Auth::user()->email);
             /// *** end **/
             DB::commit();
+             // After commit, email cannot affect data saving anymore
+            DB::afterCommit(function () use ($dataSendEmail) {
+                try {
+                    self::sendEmail($dataSendEmail, Auth::user()->email);
+                } catch (\Exception $e) {
+                    Log::error("Email failed after commit: " . $e->getMessage());
+                }
+            });
             return response()->json(['message' => 'Update successfully.', 'status'=>200]);
         }catch(\Exception $e){
             DB::rollBack();
@@ -1337,7 +1349,7 @@ class ExpenseRequestController extends Controller
                     "request_by"=> "",
                 ],
                 "data" =>[
-                    "title" => "សំណើស្នើសុំចំណាយត្រូវបានបដិសេធ",
+                    "title" => "សំណើស្នើសុំចំណាយ",
                     "status" => "pending",
                     "tracking_id" => "",
                     "date" => "",
@@ -1350,6 +1362,7 @@ class ExpenseRequestController extends Controller
                 ]
             ];
             $approveByArray = json_decode($data->approve_by);
+            $email = "";
             if (in_array((string)Auth::user()->id, $approveByArray) && $data->status == "pending_approve") {
             // if (in_array(Auth::user()->id, $approveByArray) && $data->status== "pending_approve") {
                 $data['position_review']    = [];
@@ -1361,7 +1374,8 @@ class ExpenseRequestController extends Controller
                     $dataSendEmail["data"]["title"]= "សំណើស្នើសុំចំណាយត្រូវបានអនុម័ត";
                     $dataSendEmail["data"]["tracking_id"]= $data->tracking_id;
                     $dataSendEmail["data"]["status"]= "approve";
-                    self::sendEmail($dataSendEmail, $data->requestBy->email);
+                    $email = $data->requestBy->email;
+                    // self::sendEmail($dataSendEmail, $data->requestBy->email);
                 }
             }else{
                 $exchange = FNExchangeRate::first();
@@ -1446,7 +1460,12 @@ class ExpenseRequestController extends Controller
                     }
                     $data['verify_print']        = null;
                 }
-                self::sendEmail($dataSendEmail, Auth::user()->email);
+                $email = Auth::user()->email;
+                $dataSendEmail["data"]["subject"] = $data->subject;
+                $dataSendEmail["data"]["amount_usd"] = $data->ge_total_amount_usd;
+                $dataSendEmail["data"]["amount_kh"] = $data->ge_total_amount_riel;
+                $dataSendEmail["data"]["request_by"] = $data->requestBy->employee_name_kh;
+                // self::sendEmail($dataSendEmail, Auth::user()->email);
             }
             ExpenseRequestHistory::create($dataHistory);
             $data["reason"]                 = $request->remark;
@@ -1454,6 +1473,14 @@ class ExpenseRequestController extends Controller
             $data['updated_by']             = Auth::user()->id;
             $data->save();
             DB::commit();
+            // After commit, email cannot affect data saving anymore
+            DB::afterCommit(function () use ($dataSendEmail, $email) {
+                try {
+                    self::sendEmail($dataSendEmail, $email);
+                } catch (\Exception $e) {
+                    Log::error("Email failed after commit: " . $e->getMessage());
+                }
+            });
             return response()->json(['message' => 'Update successfully.', 'status'=>200]);
         }catch(\Exception $e){
             DB::rollBack();
@@ -1555,12 +1582,13 @@ class ExpenseRequestController extends Controller
                 }
                 
             };
-
+            $email = "";
             $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
             $dataSendEmail["data"]["reason"] = $request->remark;
             $dataSendEmail["data"]["review"] = $data->review_type;
             if ($data->requestBy && $data->requestBy->email) {
-                self::sendEmail($dataSendEmail, $data->requestBy->email);
+                $email = $data->requestBy->email;
+                // self::sendEmail($dataSendEmail, $data->requestBy->email);
             }
            
             ExpenseRequestHistory::create($dataHistory);
@@ -1585,6 +1613,15 @@ class ExpenseRequestController extends Controller
             $data['updated_by']             = Auth::user()->id;
             $data->save();
             DB::commit();
+            if ($data->requestBy && $data->requestBy->email) {
+                DB::afterCommit(function () use ($dataSendEmail, $email) {
+                    try {
+                        self::sendEmail($dataSendEmail, $email);
+                    } catch (\Exception $e) {
+                        Log::error("Email failed after commit: " . $e->getMessage());
+                    }
+                });
+            }
             return response()->json(['message' => 'Rejected successfully.']);
         }catch(\Exception $e){
             DB::rollBack();
