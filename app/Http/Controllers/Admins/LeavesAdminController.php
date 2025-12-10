@@ -615,7 +615,7 @@ class LeavesAdminController extends Controller
     }
     public function CreateGenerateLeave(Request $request){
         try {
-            $employee = User::whereIn('emp_status',['1','10','2'])->get();
+            $employee = User::whereIn('emp_status',['1','10','2'])->where("number_employee", "170-155")->get();
             if ($employee) {
                 foreach ($employee as $item) {
                     // $date = "2022-08-01";
@@ -631,7 +631,7 @@ class LeavesAdminController extends Controller
                         $remain_year_1 = $data->year_1;
                         $remain_year_2 = $data->year_2;
                         $remain_year_3 = $data->year_3;
-                        if($diffYears < 0){
+                        if($diffYears){
                             $remainingDay = $data->total_annual_leave;
                             $calculateAnnualLeave = self::calculateAnnualLeave($diffYears, $remainingDay);
                             $totalAnnualLeave = $calculateAnnualLeave['total'];
@@ -643,7 +643,6 @@ class LeavesAdminController extends Controller
                             $remain_year_3 = $rotated["remain_year_3"];
                             $defaultDays = $totalAnnualLeave;
                         }
-                        
 
                         // *** old code for condition **/
                         // $defaultDays = $request->annual_leave;
