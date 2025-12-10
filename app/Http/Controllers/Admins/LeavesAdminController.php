@@ -763,6 +763,7 @@ class LeavesAdminController extends Controller
                             'year_1'  => $remain_year_1,
                             'year_2'  => $remain_year_2,
                             'year_3'  => $remain_year_3,
+                            'created_at'=>Carbon::now()
                         ]);
                     }
                 }
