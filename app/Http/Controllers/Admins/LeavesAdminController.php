@@ -615,7 +615,7 @@ class LeavesAdminController extends Controller
     }
     public function CreateGenerateLeave(Request $request){
         try {
-            $employee = User::whereIn('emp_status',['1','10','2'])->where("number_employee", "170-155")->get();
+            $employee = User::whereIn('emp_status',['1','10','2'])->get();
             if ($employee) {
                 foreach ($employee as $item) {
                     // $date = "2022-08-01";
