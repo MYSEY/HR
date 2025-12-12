@@ -36,48 +36,52 @@
             </div>
         </div>
         <div class="row filter-row-btn">
-            <div class="col-sm-6 col-md-3">
-                <div class="form-group cls-research">
-                    <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="form-group cls-research">
+                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                        </div>
+                    </div>
+                    @if (in_array(Auth::user()->RolePermission, ['BOD', 'CEO','HR','HRAdmin','admin']))
+                        <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 leave-disply-search" style="display: none">
+                            <div class="form-group">
+                                <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n3" name="department_id">
+                                    <option value="" data-select2-id="select2-data-2-c0n3">@lang('lang.department')</option>
+                                    @foreach ($department as $item)
+                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 leave-disply-search" style="display: none">
+                            <div class="form-group">
+                                <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                                    <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.location')</option>
+                                    @foreach ($location as $item)
+                                        <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    @endif
+                    <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 leave-disply-date" style="display: none">
+                        <div class="form-group">
+                            <div class="cal-icon">
+                                <input class="form-control floating datetimepicker" type="text" id="start_date" placeholder="@lang('lang.start_date')">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 leave-disply-date" style="display: none">
+                        <div class="form-group">
+                            <div class="cal-icon">
+                                <input class="form-control floating datetimepicker" type="text" id="end_date" placeholder="@lang('lang.end_date')">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
-                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group leave-disply-search" style="display: none">
-                        <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n3" name="department_id">
-                            <option value="" data-select2-id="select2-data-2-c0n3">@lang('lang.department')</option>
-                            @foreach ($department as $item)
-                                <option value="{{$item->id}}">{{$item->name_english}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group leave-disply-search" style="display: none">
-                        <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.location')</option>
-                            @foreach ($location as $item)
-                                <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            @endif
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 leave-disply-date" style="display: none">
-                <div class="form-group">
-                    <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="start_date" placeholder="@lang('lang.start_date')">
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 leave-disply-date" style="display: none">
-                <div class="form-group">
-                    <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="end_date" placeholder="@lang('lang.end_date')">
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-12">
+            <div class="col-md-2">
                 <div style="display: flex" class="float-end">
                     <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" data-userid="{{Auth::user()->id}}" data-condiction="{{Auth::user()->RolePermission}}" id="icon-search-download-reload">
                         <span class="btn-text-search"><i class="fa fa-search"></i></span>

@@ -208,6 +208,12 @@ class LeaveRepository extends BaseRepository
             ->when($request->employee_name, function ($query, $employee_name) {
                 $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
             })
+            ->when($request->department_id, function ($query, $department) {
+                $query->where('users.department_id', $department);
+            })
+            ->when($request->branch_id, function ($query, $branch) {
+                $query->where('users.branch_id', $branch);
+            })
             ->groupBy('employee_id')->get();
         return $sumByEmployee;
     }
