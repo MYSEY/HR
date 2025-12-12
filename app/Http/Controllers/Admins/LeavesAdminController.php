@@ -574,8 +574,16 @@ class LeavesAdminController extends Controller
         $SpecialLeave = LeaveType::where('type','special_leave')->first();
         return view('leaves_admin.generat_leave',compact('AnnualLeave','SickLeave','SpecialLeave','data'));
     }
-    public static function calculateAnnualLeave($diffYears, $remainingDay)
+    public static function calculateAnnualLeave($dbDate, $remainingDay)
     {
+        $totalMonths = Carbon::now()->diffInMonths($dbDate);
+        $diffYears   = intdiv($totalMonths, 12);
+        $remainMonths = $totalMonths % 12;
+
+        // If they worked more than 0 month → treat as next year
+        if ($remainMonths > 0) {
+            $diffYears += 1;
+        }
         // 1–3 years
         if ($diffYears <= 3) {
             $max = 0;
@@ -618,7 +626,7 @@ class LeavesAdminController extends Controller
             $employee = User::whereIn('emp_status',['1','10','2'])->get();
             if ($employee) {
                 foreach ($employee as $item) {
-                    // $date = "2022-08-01";
+                    // $dbDate = "2021-01-01";
                     $dbDate = Carbon::parse($item->date_of_commencement);
                     // $diffYears = 3;
                     $diffYears = Carbon::now()->diffInYears($dbDate);
@@ -633,7 +641,7 @@ class LeavesAdminController extends Controller
                         $remain_year_3 = $data->year_3;
                         if($diffYears){
                             $remainingDay = $data->total_annual_leave;
-                            $calculateAnnualLeave = self::calculateAnnualLeave($diffYears, $remainingDay);
+                            $calculateAnnualLeave = self::calculateAnnualLeave($dbDate, $remainingDay);
                             $totalAnnualLeave = $calculateAnnualLeave['total'];
                             $max = $calculateAnnualLeave['max'];
                             // Step 2: rotate remain_year_1..3
