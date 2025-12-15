@@ -523,6 +523,7 @@
             condiction_tab = $(this).data('tab-id');
         });
         $("#tab_leave_report").on("click", function () {
+            $(".leave-disply-search").css("display","block");
             $(".leave-disply-date").css("display","block");
             $(".btn_approved_all").css("display","none");
             $(".btn_excel").css("display","block");

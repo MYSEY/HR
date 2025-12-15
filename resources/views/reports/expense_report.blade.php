@@ -321,6 +321,8 @@
             $(".p_ge_total_cost_kh").text(formatNumber(datas.ge_total_cost_riel));
             $(".p_ge_tax_usd").text(formatNumber(datas.ge_tax_usd));
             $(".p_ge_tax_kh").text(formatNumber(datas.tax_riel));
+            $(".p_tax_fringe_benefit_usd").text(formatNumber(datas.ge_tax_fringe_benefit_usd));
+            $(".p_tax_fringe_benefit_riel").text(formatNumber(datas.tax_fringe_benefit_riel));
             $(".p_ge_vat_reverse_charge_usd").text(formatNumber(datas.ge_vat_reverse_charge_usd));
             $(".p_ge_vat_reverse_charge_kh").text(formatNumber(datas.vat_reverse_charge_riel));
             $(".p_ge_total_amount_usd").text(formatNumber(datas.ge_total_amount_usd));

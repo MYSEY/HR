@@ -334,9 +334,14 @@ class ExpenseRequestController extends Controller
         ];
         $condiction = $dataSend["condiction"];
         if($dataSend["data"]["status"] == "reject" || $dataSend["data"]["status"] == "approve"){
-            Mail::to($emailUserRequest)->queue(new SendEmail($datasSendEmail, true));
+            if($emailUserRequest){
+                Mail::to($emailUserRequest)->queue(new SendEmail($datasSendEmail, true));
+            }
         }else{
-            $userALertEmail =  User::whereIn("position_id", $condiction["position_id"])
+            $userALertEmail =  User::
+                when($condiction["position_id"], function ($query, $position_id) {
+                    $query->whereIn('position_id', $position_id);
+                })
                 ->when($condiction["department_id"], function ($query, $department_id) {
                     $query->where('department_id', $department_id);
                 })
@@ -344,7 +349,8 @@ class ExpenseRequestController extends Controller
                     $query->where('branch_id', $branch_id);
                 })
                 ->when($condiction["approve_by"], function ($query, $approve_by) {
-                    $query->whereIn('id', $approve_by);
+                    $approveBy = json_decode($approve_by, true);
+                    $query->whereIn('id', $approveBy);
                 })
                 ->when($condiction["request_by"], function ($query, $request_by) {
                     $query->where('id', $request_by);
@@ -357,12 +363,15 @@ class ExpenseRequestController extends Controller
                 )
             ->get();
             $data = [];
-            foreach ($userALertEmail as $user) {
-                if($user->email != $emailUserRequest){
-                    $data[] = $user->email;
-                    Mail::to($user->email)->queue(new SendEmail($datasSendEmail, true));
+            if(count($userALertEmail)>0){
+                foreach ($userALertEmail as $user) {
+                    if($user->email != $emailUserRequest){
+                        $data[] = $user->email;
+                        Mail::to($user->email)->queue(new SendEmail($datasSendEmail, true));
+                    }
                 }
             }
+            
         }
     }
     /**
@@ -1370,13 +1379,13 @@ class ExpenseRequestController extends Controller
                 $data['status']             = 'approved';
                 $data['final_approve_by']   = Auth::user()->id;
                 $data['date_approve']       = ($request->approve_date ? $request->approve_date : Carbon::createFromDate()->format('Y-m-d H:i'));
-                if ($data->requestBy && $data->requestBy->email) {
+                // if ($data->requestBy && $data->requestBy->email) {
                     $dataSendEmail["data"]["title"]= "សំណើស្នើសុំចំណាយត្រូវបានអនុម័ត";
                     $dataSendEmail["data"]["tracking_id"]= $data->tracking_id;
                     $dataSendEmail["data"]["status"]= "approve";
-                    $email = $data->requestBy->email;
+                    $email = $data->requestBy ? $data->requestBy->email : "";
                     // self::sendEmail($dataSendEmail, $data->requestBy->email);
-                }
+                // }
             }else{
                 $exchange = FNExchangeRate::first();
                 $amount = 0;

@@ -87,6 +87,9 @@
                                 <td class="table_tr_" colspan="2">៤ ពន្ធកាត់ទុក</td>
                             </tr>
                             <tr>
+                                <td class="table_tr_" colspan="2"><span style="margin-left: 4%"> ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម</span></td>
+                            </tr>
+                            <tr>
                                 <td class="table_tr_" colspan="2">៥ អាករជំនួស (VAT Reverse Charge) ១០% </td>
                             </tr>
                             <tr>
@@ -118,6 +121,10 @@
                             <tr>
                                 <td class="table_tr">: $ <span class="p_ge_tax_usd"></span></td>
                                 <td class="table_tr">៛ <span class="p_ge_tax_kh"></span></td>
+                            </tr>
+                             <tr>
+                                <td class="table_tr">: $ <span class="p_tax_fringe_benefit_usd"></span></td>
+                                <td class="table_tr">៛ <span class="p_tax_fringe_benefit_riel"></span></td>
                             </tr>
                             <tr>
                                 <td class="table_tr">: $ <span class="p_ge_vat_reverse_charge_usd"></span></td>
