@@ -35,6 +35,7 @@ class ExporLeaveAllocation implements FromCollection,WithColumnWidths, WithHeadi
                 $join_date = Carbon::createFromDate($leave->employee->date_of_commencement)->format('d-m-Y');
                 $dataExport[] = [
                     "number"                            => $i,
+                    "employee_id"                       => ($leave->employee->number_employee ?? ""),
                     "employee_name"                     => ($leave->employee->employee_name_en ?? ""),
                     "department"                        => $leave->employee->department->name_english,
                     "location"                          => $leave->employee->branch->branch_name_en,
@@ -68,6 +69,7 @@ class ExporLeaveAllocation implements FromCollection,WithColumnWidths, WithHeadi
 
                         $dataExport[] = [
                             "number"                            => $i,
+                            "employee_id"                       => ($leave->employee->number_employee ?? ""),
                             "employee_name"                     => ($leave->employee->employee_name_en ?? ""),
                             "department"                        => $leave->employee->department->name_english,
                             "location"                          => $leave->employee->branch->branch_name_en,
@@ -124,6 +126,7 @@ class ExporLeaveAllocation implements FromCollection,WithColumnWidths, WithHeadi
             'N' => 20,      
             'O' => 20,      
             'P' => 20,     
+            'Q' => 20,     
         ];
     }
 
@@ -131,6 +134,7 @@ class ExporLeaveAllocation implements FromCollection,WithColumnWidths, WithHeadi
     {
         return [
                 "#",
+                "Employee ID" ,
                 "Employee Name" ,
                 "Department",
                 "Location",
@@ -156,18 +160,18 @@ class ExporLeaveAllocation implements FromCollection,WithColumnWidths, WithHeadi
                 $sheet = $event->sheet;
 
                 // block merge cells 
-                $sheet->mergeCells('A2:P2');
+                $sheet->mergeCells('A2:Q2');
                 $sheet->setCellValue('A2', "LEAVE APPLICATION");
-                $sheet->getDelegate()->getStyle('A2:P2')->getFont()->setName('Khmer OS Muol Light')
-                ->setSize(12)->setBold('A2:P2')->setUnderline('A2:P2');
-                $event->sheet->getDelegate()->getStyle('A2:P2')
+                $sheet->getDelegate()->getStyle('A2:Q2')->getFont()->setName('Khmer OS Muol Light')
+                ->setSize(12)->setBold('A2:Q2')->setUnderline('A2:Q2');
+                $event->sheet->getDelegate()->getStyle('A2:Q2')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $month = Carbon::now()->format('M');
                 $date = Carbon::now()->format('d-M-Y');
 
-                $sheet->mergeCells('A3:P3');
+                $sheet->mergeCells('A3:Q3');
                 if($this->condiction_tab == 4){
                     $end_date = '';
                     if($this->end_date){
@@ -181,9 +185,9 @@ class ExporLeaveAllocation implements FromCollection,WithColumnWidths, WithHeadi
                 }else{
                     $sheet->setCellValue('A3', "Export as of on: ".$date);
                 }
-                $sheet->getDelegate()->getStyle('A3:P3')->getFont()->setName('Khmer OS Freehand')
-                ->setSize(10)->setBold('A3:P3');
-                $event->sheet->getDelegate()->getStyle('A3:P3')
+                $sheet->getDelegate()->getStyle('A3:Q3')->getFont()->setName('Khmer OS Freehand')
+                ->setSize(10)->setBold('A3:Q3');
+                $event->sheet->getDelegate()->getStyle('A3:Q3')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
