@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\CBS;
 
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExportCOPerformance;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpParser\Node\Stmt\TryCatch;
 
 class COPerformanceController extends Controller
 {
@@ -169,7 +171,6 @@ class COPerformanceController extends Controller
             })
             ->where('LC.OutstandingAmountAS', '>', 0)
             ->where('LC.AssetClass', '>=', 0)
-            // ->where('LC.ContractOfficerID','170-125')
             ->groupBy(
                 'LC.ContractOfficerID',
                 'LC.Currency',
@@ -194,6 +195,7 @@ class COPerformanceController extends Controller
             $countQuery = clone $query;
             $recordsTotal = DB::connection('pgsql')->table(DB::raw("({$countQuery->toSql()}) as sub"))->mergeBindings($countQuery)->count();
             $recordsFiltered = DB::connection('pgsql')->table(DB::raw("({$countQuery->toSql()}) as sub"))->mergeBindings($countQuery)->count();
+
             $start = intval(request('start', 0));
             $limit = intval(request('length', 10));
 
@@ -410,13 +412,6 @@ class COPerformanceController extends Controller
                 'recordsFiltered' => $recordsFiltered,
                 'data' => $finalData
             ]);
-            
-            // return response()->json([
-            //     'draw' => intval(request('draw')),
-            //     'recordsTotal' => $recordsTotal,
-            //     'recordsFiltered' => $recordsFiltered,
-            //     'data' => $data
-            // ]);
         }
 
         
@@ -447,6 +442,20 @@ class COPerformanceController extends Controller
         return view('CBS.loans.co_performance',compact('branch','AssetClass'));
     }
     public function coPerformanceDownload(Request $request){
-        return Excel::download(new ExportCOPerformance($request), 'COPerformance.xlsx');
+        try {
+            $data = DB::connection('pgsql')->table('MKT_DATES')->select('ID', 'LastSystemDate')->first();
+            // Convert to Carbon
+            $date = Carbon::parse($data->LastSystemDate);
+            // Add current time
+            $dateTime = $date->format('Y-m-d') . '-' . now()->format('H-i-s');
+            // File name
+            $fileName = "CO Performance {$dateTime}.xlsx";
+            return Excel::download(
+                new ExportCOPerformance($request),
+                $fileName
+            );
+        } catch (\Throwable $th) {
+            throw $th;
+        }           
     }
 }

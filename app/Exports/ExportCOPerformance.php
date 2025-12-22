@@ -213,7 +213,9 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             'ParAmtAS' => 0,
             'OutPARRate' => 0,
         ];
-
+        // GRAND TOTAL
+        // $grand = $sub;
+        $grand = array_fill_keys(array_keys($sub), 0);
         foreach ($data as $row) {
 
             // -----------------------------
@@ -227,23 +229,22 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             $pdPrincipal = (float) $row->TotalPDPrincipal;
             $pdInterest  = (float) $row->TotalPDInterest;
             $pdPenalty   = (float) $row->TotalPDPenalty;
-            $Loans   =  $row->Loans;
             $OutstandingAmt   =  $row->OutstandingAmt;
-            $OutPARs   =  $row->OutPARs;
             $ParAmtAS   =  $row->ParAmtAS;
 
             // -----------------------------
             // ✅ CONVERT KHR → USD
             // -----------------------------
             if ($row->Currency === 'KHR') {
-                $disbursed   *= $exchangeRate;
-                $outstanding *= $exchangeRate;
-                $loanBalance *= $exchangeRate;
-                $parAmount   *= $exchangeRate;
-
-                $pdPrincipal *= $exchangeRate;
-                $pdInterest  *= $exchangeRate;
-                $pdPenalty   *= $exchangeRate;
+                $disbursed      *= $exchangeRate;
+                $outstanding    *= $exchangeRate;
+                $loanBalance    *= $exchangeRate;
+                $parAmount      *= $exchangeRate;
+                $pdPrincipal    *= $exchangeRate;
+                $pdInterest     *= $exchangeRate;
+                $pdPenalty      *= $exchangeRate;
+                $OutstandingAmt *= $exchangeRate;
+                $ParAmtAS       *= $exchangeRate;
             }
 
             // -----------------------------
@@ -251,14 +252,7 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             // -----------------------------
             if ($currentCO !== null && $currentCO !== $row->ContractOfficerID) {
 
-                $parRate    = $sub['outstanding'] > 0 ? ($sub['par_amt'] / $sub['outstanding']) * 100 : 0;
-                $arrearRate = $sub['outstanding'] > 0 ? ($sub['pd_principal'] / $sub['outstanding']) * 100 : 0;
-
-                $OutPARRate = 0;
-                if ($sub['ParAmtAS'] > 0) {
-                    $OutPARRate = $sub['ParAmtAS'] / $sub['OutstandingAmt'];
-                }
-                
+                // 👉 print SubTotal row
                 $dataExcel[] = [
                     '',
                     'SubTotal',
@@ -270,23 +264,24 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
                     round($sub['loan_balance'], 2),
                     $sub['pars'],
                     round($sub['par_amt'], 2),
-                    round($parRate, 2) . '%',
                     round($sub['pd_principal'], 2),
                     round($sub['pd_interest'], 2),
                     round($sub['pd_penalty'], 2),
-                    round($arrearRate, 2) . '%',
-                    $sub['Loans'], 
-                    $sub['OutstandingAmt'], 
-                    $sub['OutPARs'], 
-                    $sub['ParAmtAS'], 
-                    round($OutPARRate, 2) . '%',
+                    $sub['Loans'],
+                    round($sub['OutstandingAmt'], 2),
+                    $sub['OutPARs'],
+                    round($sub['ParAmtAS'], 2),
                 ];
 
-                // reset subtotal
+                // 👉 add ONLY subtotal to grand total
                 foreach ($sub as $k => $v) {
-                    $sub[$k] = 0;
+                    $grand[$k] += $v;
                 }
+
+                // reset subtotal
+                $sub = array_fill_keys(array_keys($sub), 0);
             }
+
 
             $currentCO = $row->ContractOfficerID;
 
@@ -329,11 +324,64 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             $sub['pd_principal'] += $pdPrincipal;
             $sub['pd_interest']  += $pdInterest;
             $sub['pd_penalty']   += $pdPenalty;
-            $sub['Loans']   += $Loans;
-            $sub['OutstandingAmt']   += $OutstandingAmt;
-            $sub['OutPARs']   += $OutPARs;
-            $sub['ParAmtAS']   += $ParAmtAS;
+            $sub['Loans']        += $row->Loans;
+            $sub['OutstandingAmt'] += $OutstandingAmt;
+            $sub['OutPARs']      += $row->OutPARs;
+            $sub['ParAmtAS']     += $ParAmtAS;
+
+            // foreach ($grand as $k => $v) {
+            //     $grand[$k] += $sub[$k] - ($sub[$k] - $sub[$k]);
+            // }
         }
+
+        // ==========================
+        // GRAND TOTAL ROW
+        // ==========================
+        if ($currentCO !== null) {
+
+            $dataExcel[] = [
+                '',
+                'SubTotal',
+                'USD',
+                $sub['borrowers'],
+                $sub['total_loans'],
+                round($sub['disbursed'], 2),
+                round($sub['outstanding'], 2),
+                round($sub['loan_balance'], 2),
+                $sub['pars'],
+                round($sub['par_amt'], 2),
+                round($sub['pd_principal'], 2),
+                round($sub['pd_interest'], 2),
+                round($sub['pd_penalty'], 2),
+                $sub['Loans'],
+                round($sub['OutstandingAmt'], 2),
+                $sub['OutPARs'],
+                round($sub['ParAmtAS'], 2),
+            ];
+
+            foreach ($sub as $k => $v) {
+                $grand[$k] += $v;
+            }
+        }
+        $dataExcel[] = [
+            '',
+            'GrandTotal',
+            'USD',
+            $grand['borrowers'],
+            $grand['total_loans'],
+            round($grand['disbursed'], 2),
+            round($grand['outstanding'], 2),
+            round($grand['loan_balance'], 2),
+            $grand['pars'],
+            round($grand['par_amt'], 2),
+            round($grand['pd_principal'], 2),
+            round($grand['pd_interest'], 2),
+            round($grand['pd_penalty'], 2),
+            $grand['Loans'],
+            round($grand['OutstandingAmt'], 2),
+            $grand['OutPARs'],
+            round($grand['ParAmtAS'], 2),
+        ];
 
         $this->export_datas = $dataExcel;
     }

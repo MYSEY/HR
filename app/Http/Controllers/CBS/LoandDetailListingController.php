@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CBS;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
@@ -198,6 +199,13 @@ class LoandDetailListingController extends Controller
         return view('CBS.loans.loan_listing',compact('branch'));
     }
     public function download(Request $request){
-        return Excel::download(new ExportLoanDetailListing($request), 'Loan Detail Listing.xlsx');
+        $data = DB::connection('pgsql')->table('MKT_DATES')->select('ID', 'LastSystemDate')->first();
+        // Convert to Carbon
+        $date = Carbon::parse($data->LastSystemDate);
+        // Add current time
+        $dateTime = $date->format('Y-m-d') . '-' . now()->format('H-i-s');
+        // File name
+        $fileName = "Loan Detail Listing {$dateTime}.xlsx";
+        return Excel::download(new ExportLoanDetailListing($request), $fileName);
     }
 }
