@@ -36,36 +36,52 @@
             </div>
         </div>
         <div class="row filter-row-btn">
-            <div class="col-sm-6 col-md-3">
-                <div class="form-group cls-research">
-                    <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="form-group cls-research">
+                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                        </div>
+                    </div>
+                    @if (in_array(Auth::user()->RolePermission, ['BOD', 'CEO','HR','HRAdmin','admin']))
+                        <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 leave-disply-search" style="display: none">
+                            <div class="form-group">
+                                <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n3" name="department_id">
+                                    <option value="" data-select2-id="select2-data-2-c0n3">@lang('lang.department')</option>
+                                    @foreach ($department as $item)
+                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 leave-disply-search" style="display: none">
+                            <div class="form-group">
+                                <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                                    <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.location')</option>
+                                    @foreach ($location as $item)
+                                        <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    @endif
+                    <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 leave-disply-date" style="display: none">
+                        <div class="form-group">
+                            <div class="cal-icon">
+                                <input class="form-control floating datetimepicker" type="text" id="start_date" placeholder="@lang('lang.start_date')">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 leave-disply-date" style="display: none">
+                        <div class="form-group">
+                            <div class="cal-icon">
+                                <input class="form-control floating datetimepicker" type="text" id="end_date" placeholder="@lang('lang.end_date')">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
-                    <div class="form-group leave-disply-search" style="display: none">
-                        <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n3" name="department_id">
-                            <option value="" data-select2-id="select2-data-2-c0n3">@lang('lang.department')</option>
-                            @foreach ($department as $item)
-                                <option value="{{$item->id}}">{{$item->name_english}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                @endif
-            </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
-                    <div class="form-group leave-disply-search" style="display: none">
-                        <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.location')</option>
-                            @foreach ($location as $item)
-                                <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                @endif
-            </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-12">
+            <div class="col-md-2">
                 <div style="display: flex" class="float-end">
                     <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" data-userid="{{Auth::user()->id}}" data-condiction="{{Auth::user()->RolePermission}}" id="icon-search-download-reload">
                         <span class="btn-text-search"><i class="fa fa-search"></i></span>
@@ -105,6 +121,9 @@
                         {{-- @endif --}}
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-bs-toggle="tab" id="tab_leave_allocations" href="#leave_allocations" aria-selected="false" data-tab-id="3" role="tab" tabindex="-1">@lang('lang.leave_allocation')</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" id="tab_leave_report" href="#leave_reports" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">@lang('lang.staff_leave_report')</a>
                         </li>
                     </ul>
                     @if (Auth::user()->RolePermission == 'HRAdmin')
@@ -396,6 +415,83 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="tab-pane show" id="leave_reports" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <table class="table table-striped custom-table mb-0 w-100"
+                                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="sorting sorting_asc vertical-center stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" aria-sort="ascending" aria-label="#: activate to sort column descending">@lang('lang.employee_id')</th>
+                                                                <th class="sorting sorting_asc vertical-center stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" aria-sort="ascending" aria-label="#: activate to sort column descending">@lang('lang.employee_name')</th>
+                                                                @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
+                                                                    <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                        rowspan="2" aria-sort="ascending"
+                                                                        aria-label="department: activate to sort column descending">@lang('lang.department')</th>
+                                                                    <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                        rowspan="2" aria-sort="ascending"
+                                                                        aria-label="location: activate to sort column descending">@lang('lang.location')</th>
+                                                                @endif
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    colspan="2" aria-label="Annual: activate to sort column descending"
+                                                                    style="text-align: center">@lang('lang.annual_leave')</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    colspan="2"  aria-sort="ascending" aria-label="Sick: activate to sort column descending"
+                                                                    style="text-align: center">@lang('lang.sick_leave')</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
+                                                                    style="text-align: center">@lang('lang.special_leave')</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    colspan="3" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
+                                                                    style="text-align: center">@lang('lang.carried_forward_leave')</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>@lang('lang.day_taken')</th>
+                                                                <th>@lang('lang.balance')</th>
+                                                                <th>@lang('lang.day_taken')</th>
+                                                                <th>@lang('lang.balance')</th>
+                                                                <th>@lang('lang.day_taken')</th>
+                                                                <th>@lang('lang.balance')</th>
+                                                                <th>@lang('lang.year_1')</th>
+                                                                <th>@lang('lang.year_2')</th>
+                                                                <th>@lang('lang.year_3')</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (count($sumByEmployee) > 0)
+                                                                @foreach ($sumByEmployee as $key=>$leave)
+                                                                    <tr class="odd">
+                                                                        <td class="stuck-scroll-3">{{$leave->employee->number_employee ?? ""}}</td>
+                                                                        <td class="stuck-scroll-3">{{$leave->employee->employee_name_en ?? ""}}</td>
+                                                                        @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
+                                                                            <td>{{$leave->employee->department->name_english}}</td>
+                                                                            <td>{{$leave->employee->branch->branch_name_en}}</td>
+                                                                        @endif
+                                                                        <td>{{$leave->total_number_al}}</td>
+                                                                        <td>{{$leave->LeaveAllocation->total_annual_leave}}</td>
+                                                                        <td>{{$leave->total_number_sl}}</td>
+                                                                        <td>{{$leave->LeaveAllocation->total_sick_leave}}</td>
+                                                                        <td>{{$leave->total_number_sp}}</td>
+                                                                        <td>{{$leave->LeaveAllocation->total_special_leave}}</td>
+                                                                        <td>{{$leave->LeaveAllocation->year_1}}</td>
+                                                                        <td>{{$leave->LeaveAllocation->year_2}}</td>
+                                                                        <td>{{$leave->LeaveAllocation->year_3}}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -422,12 +518,21 @@
         $("#tab_leave_allocations").on("click", function () {
             $(".leave-disply-search").css("display","block");
             $(".btn_approved_all").css("display","none");
+            $(".leave-disply-date").css("display","none");
+            $(".btn_excel").css("display","block");
+            condiction_tab = $(this).data('tab-id');
+        });
+        $("#tab_leave_report").on("click", function () {
+            $(".leave-disply-search").css("display","block");
+            $(".leave-disply-date").css("display","block");
+            $(".btn_approved_all").css("display","none");
             $(".btn_excel").css("display","block");
             condiction_tab = $(this).data('tab-id');
         });
         $(".tab_leave_none").on("click", function () {
             $(".btn_excel").css("display","none");
             $(".leave-disply-search").css("display","none");
+            $(".leave-disply-date").css("display","none");
             condiction_tab = $(this).data('tab-id');
             if (condiction_tab == 1) {
                 $(".btn_approved_all").css("display","block");
@@ -442,14 +547,28 @@
         });
 
         $(".btn_excel").on("click", function () {
-            var query = {
-                'employee_name': $("#employee_name").val(),
-                'status': null,
-                'department_id': $("#department_id").val(),
-                'branch_id': $("#branch_id").val(),
-                'start_date': null,
-                'end_date': null,
+            if(condiction_tab == 4){
+                var query = {
+                    'employee_name': $("#employee_name").val(),
+                    'status': null,
+                    'condiction_tab': condiction_tab,
+                    'department_id': $("#department_id").val(),
+                    'branch_id': $("#branch_id").val(),
+                    'start_date': $("#start_date").val(),
+                    'end_date': $("#end_date").val(),
+                }
+            }else{
+                var query = {
+                    'employee_name': $("#employee_name").val(),
+                    'status': null,
+                    "condiction_tab":null,
+                    'department_id': $("#department_id").val(),
+                    'branch_id': $("#branch_id").val(),
+                    'start_date': null,
+                    'end_date': null,
+                }
             }
+            
             var url = "{{URL::to('leaves/admin/export-allocation')}}?" + $.param(query)
             window.location = url;
         });
@@ -597,7 +716,6 @@
             $("#btn-text-loading").css('display', 'block');
             var condistion = $(this).data("condiction"); 
             var userId = $(this).data("userid");
-
             let is_approve = "{{ Helper::permissionAccess('m10-s1','is_approve') }}";
             let is_reject = "{{ Helper::permissionAccess('m10-s1','is_reject') }}";
 
@@ -606,6 +724,8 @@
                 'employee_name': $("#employee_name").val(),
                 'department_id': $("#department_id").val(),
                 'branch_id': $("#branch_id").val(),
+                'start_date': $("#start_date").val(),
+                'end_date': $("#end_date").val(),
             }).then(function(response) {
                 if (condiction_tab == 3) {
                     var Leave_allocations = response.data.LeaveAllocations;
@@ -640,7 +760,38 @@
                         var tr_allocation = '<tr><td colspan=14 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                     }
                     $("#leave_allocations tbody").html(tr_allocation);
-                }else{
+                }else if(condiction_tab == 4){
+                    var Leave_reports = response.data.success;
+                    if (Leave_reports.length > 0) {
+                        var tr_leave_report = "";
+                        var td_allocation = "";
+                    
+                        $(Leave_reports).each(function (e, row) {
+                            if (condistion == "HRAdmin" || condistion == "HR" ) {
+                                td_allocation = '<td>'+(row.employee.department.name_english)+'</td><td>'+(row.employee.branch.branch_name_en)+'</td>';             
+                            }
+                            tr_leave_report += '<tr class="odd">'+
+                                '<td class="stuck-scroll-3">'+(row.employee.number_employee)+'</td>'+
+                                '<td class="stuck-scroll-3">'+(row.employee.employee_name_en)+'</td>'+
+                                (td_allocation)+
+                                '<td>'+(row.total_number_al)+'</td>'+
+                                '<td>'+(row.leave_allocation.total_annual_leave)+'</td>'+
+                                '<td>'+(row.total_number_sl)+'</td>'+
+                                '<td>'+(row.leave_allocation.total_sick_leave)+'</td>'+
+                                '<td>'+(row.total_number_sp)+'</td>'+
+                                '<td>'+(row.leave_allocation.total_special_leave)+'</td>'+
+                                '<td>'+(row.leave_allocation.year_1)+'</td>'+
+                                '<td>'+(row.leave_allocation.year_2)+'</td>'+
+                                '<td>'+(row.leave_allocation.year_3)+'</td>'+
+                        '</tr>';
+                        });
+
+                    }else{
+                        var tr_leave_report = '<tr><td colspan=13 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
+                    $("#leave_reports tbody").html(tr_leave_report);
+                }
+                else{
                     var rows = response.data.success;
                     if (rows.length > 0) {
                        

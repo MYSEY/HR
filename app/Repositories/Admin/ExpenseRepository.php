@@ -6,6 +6,7 @@ use App\Models\ExpenseRequest;
 use App\Models\FnDetailLocation;
 use App\Models\LeaveAllocation;
 use App\Models\LeaveRequest;
+use App\Models\permissions;
 use App\Repositories\BaseRepository;
 use App\Traits\UploadFiles\UploadFIle;
 use Carbon\Carbon;
@@ -35,6 +36,7 @@ class ExpenseRepository extends BaseRepository
     }
 
     public function getDataByLocation($request){
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/expense/report")->first();
         $datasDetails = FnDetailLocation::with(["expenseRequest", "location", "department"])
         
         ->leftJoin('expense_requests', 'fn_detail_locations.expense_request_id', '=', 'expense_requests.id')
@@ -63,25 +65,47 @@ class ExpenseRepository extends BaseRepository
             'approver.department_id as approver_department_id',
             'approver.line_manager as approver_line_manager'
         )
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if (permissionAccess("m13-s3","is_access")->value == 1) {
-                $query->where('expense_requests.status', "approved");
+        ->when(Auth::user(), function ($query, $user) use ($permission) {
+            if ($permission->is_access == 1) {
+                if ($user->department->abbreviations =="A&FDpt") {
+                    # code...
+                }else{
+                    if (in_array($user->RolePermission, ['HRAdmin', 'HOD', 'DHOD', 'HR'])) {
+                        $query->where("users.department_id", Auth::user()->department_id);
+                    }
+                    if(in_array($user->RolePermission, ['BM', 'DBM'])){
+                        $query->where("users.department_id", Auth::user()->department_id)
+                        ->where("users.branch_id", Auth::user()->branch_id);
+                    }
+                    if($user->RolePermission == 'Employee'  && $user->branch->abbreviations == "HQ"){
+                        $query->where("users.department_id", Auth::user()->department_id);
+                    }
+                    if($user->RolePermission == 'Employee'  && $user->branch->abbreviations != "HQ"){
+                        $query->where("users.department_id", Auth::user()->department_id)
+                        ->where("users.branch_id", Auth::user()->branch_id);
+                    }
+                }
+                
             }else{
-                if (in_array($RolePermission, ['HOD', 'BM', 'HRAdmin'])) {
-                    $query->where('expense_requests.status', "approved");
+                if (in_array($user->RolePermission, ['HOD', 'HRAdmin'])) {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                }
+                if (in_array($user->RolePermission, ['BM'])) {
                     $query->where("users.department_id", Auth::user()->department_id)
                         ->where("users.branch_id", Auth::user()->branch_id);
-                } elseif (in_array($RolePermission, ['DHOD', 'DBM'])) {
-                    $query->where('expense_requests.status', "approved");
+                }
+                if (in_array($user->RolePermission, ['HR','DHOD', 'DBM'])){
+                 // group the OR where
+                    $query->where(function ($q) {
+                        $q->where("users.line_manager", Auth::user()->id)   // team under me
+                        ->orWhere("expense_requests.request_by", Auth::user()->id); // my own
+                    });
+                    // extra filters
+                    $query->where("users.branch_id", Auth::user()->branch_id)
+                        ->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($user->RolePermission == "Employee") {
                     $query->where("expense_requests.request_by", Auth::user()->id);
-                    $query->orWhere("users.line_manager", Auth::user()->id);
-                } elseif ($RolePermission == "Employee") {
-                    $query->where('expense_requests.status', "approved");
-                    $query->where("expense_requests.request_by", Auth::user()->id);
-                } elseif ($RolePermission == 'HR') {
-                    $query->where('expense_requests.status', "approved");
-                    $query->where("expense_requests.request_by", Auth::user()->id);
-                    $query->orWhere("users.line_manager", Auth::user()->id);
                 }
             }
         })

@@ -87,6 +87,9 @@
                                 <td class="table_tr_" colspan="2">៤ ពន្ធកាត់ទុក</td>
                             </tr>
                             <tr>
+                                <td class="table_tr_" colspan="2"><span style="margin-left: 4%"> ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម</span></td>
+                            </tr>
+                            <tr>
                                 <td class="table_tr_" colspan="2">៥ អាករជំនួស (VAT Reverse Charge) ១០% </td>
                             </tr>
                             <tr>
@@ -119,6 +122,10 @@
                                 <td class="table_tr">: $ <span class="p_ge_tax_usd"></span></td>
                                 <td class="table_tr">៛ <span class="p_ge_tax_kh"></span></td>
                             </tr>
+                             <tr>
+                                <td class="table_tr">: $ <span class="p_tax_fringe_benefit_usd"></span></td>
+                                <td class="table_tr">៛ <span class="p_tax_fringe_benefit_riel"></span></td>
+                            </tr>
                             <tr>
                                 <td class="table_tr">: $ <span class="p_ge_vat_reverse_charge_usd"></span></td>
                                 <td class="table_tr">៛ <span class="p_ge_vat_reverse_charge_kh"></span></td>
@@ -144,7 +151,7 @@
                     </td></tr>
                 </table>
                 <div style="float: right">
-                    <label style="font-size: 16px;">ភ្នំពេញ, ថ្ងៃទី <span class="p_day"></span> ខែ <span class="p_month"></span> ឆ្នាំ <span class="p_year"></span></label>
+                    <label style="font-size: 16px;"><span class="p_location_create"></span>, ថ្ងៃទី <span class="p_day"></span> ខែ <span class="p_month"></span> ឆ្នាំ <span class="p_year"></span></label>
                 </div>
             </div>
         </div><br>

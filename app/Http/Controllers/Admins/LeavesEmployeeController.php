@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -388,7 +389,7 @@ class LeavesEmployeeController extends Controller
             $data['created_by'] = Auth::user()->id;
             
             LeaveRequest::create($data);
-            
+            DB::commit();
             // for send email
             $manager1 = User::where("id", Auth::user()->line_manager)->first();
             $line_manager2 = User::where("id", $data['next_approver'])->first();
@@ -413,23 +414,47 @@ class LeavesEmployeeController extends Controller
                                     $btn_approve = true;
                                 }
                                 if($email){
-                                    Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
+                                    // After commit, email cannot affect data saving anymore
+                                    DB::afterCommit(function () use ($email,$datasSendEmail,$btn_approve) {
+                                        try {
+                                           Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
+                                        } catch (\Exception $e) {
+                                            Log::error("Email failed after commit: " . $e->getMessage());
+                                        }
+                                    });
                                 }
                             }
                         }else{
                             if($line_manager2->email){
-                                Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail, true));
+                                $email = $line_manager2->email;
+                                $btn_approve = true;
+                                DB::afterCommit(function () use ($email,$datasSendEmail,$btn_approve) {
+                                    try {
+                                        Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
+                                    } catch (\Exception $e) {
+                                        Log::error("Email failed after commit: " . $e->getMessage());
+                                    }
+                                });
+                                // Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail, true));
                             }
                         }
                     }else{
                         if($line_manager2->email){
-                            Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail,true));
+                            $email = $line_manager2->email;
+                            $btn_approve = true;
+                            DB::afterCommit(function () use ($email,$datasSendEmail,$btn_approve) {
+                                try {
+                                    Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
+                                } catch (\Exception $e) {
+                                    Log::error("Email failed after commit: " . $e->getMessage());
+                                }
+                            });
+                            // Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail,true));
                         }
                     }
 
                 }
             }
-            DB::commit();
             return response()->json([
                 'success'=>'leave_request_created_successfully',
                 'status'=>200,
@@ -589,7 +614,7 @@ class LeavesEmployeeController extends Controller
             $staff_request = User::where("id", $request->employee_id)->with("position")->with("branch")->first();
             $manager1 = User::where("id", $staff_request->line_manager)->first();
             $line_manager2 = User::where("id", $data['next_approver'])->first();
-            
+            DB::commit();
             $mail_message = ModelsMail::first();
             if ($line_manager2 && $mail_message) {
                 if ($line_manager2) {
@@ -611,22 +636,46 @@ class LeavesEmployeeController extends Controller
                                     $btn_approve = true;
                                 }
                                 if($email){
-                                    Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
+                                    DB::afterCommit(function () use ($email,$datasSendEmail,$btn_approve) {
+                                        try {
+                                           Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
+                                        } catch (\Exception $e) {
+                                            Log::error("Email failed after commit: " . $e->getMessage());
+                                        }
+                                    });
+                                    // Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
                                 }
                             }
                         }else{
                             if($line_manager2->email){
-                                Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail, true));
+                                $email = $line_manager2->email;
+                                $btn_approve = true;
+                                DB::afterCommit(function () use ($email,$datasSendEmail,$btn_approve) {
+                                    try {
+                                        Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
+                                    } catch (\Exception $e) {
+                                        Log::error("Email failed after commit: " . $e->getMessage());
+                                    }
+                                });
+                                // Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail, true));
                             }
                         }
                     }else{
                         if($line_manager2->email){
-                            Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail,true));
+                            $email = $line_manager2->email;
+                            $btn_approve = true;
+                            DB::afterCommit(function () use ($email,$datasSendEmail,$btn_approve) {
+                                try {
+                                    Mail::to($email)->queue(new SendEmail($datasSendEmail, $btn_approve));
+                                } catch (\Exception $e) {
+                                    Log::error("Email failed after commit: " . $e->getMessage());
+                                }
+                            });
+                            // Mail::to($line_manager2->email)->queue(new SendEmail($datasSendEmail,true));
                         }
                     }
                 }
             }
-            DB::commit();
             return response()->json([
                 'success'=>'leave_request_created_successfully',
                 'status'=>200,

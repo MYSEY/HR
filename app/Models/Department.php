@@ -26,6 +26,7 @@ class Department extends Model
         'direct_manager_id',
         'name_khmer',
         'name_english',
+        'abbreviations',
         'parent_id',
         'head_department',
         'created_by',
