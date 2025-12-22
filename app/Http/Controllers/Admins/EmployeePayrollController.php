@@ -72,7 +72,6 @@ class EmployeePayrollController extends Controller
         if ($request->filter_month) {
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
         }
-        // dd($request->employee_id);
         if (request()->ajax()) {
             // Define the base query
             $query = payrollPreview::leftJoin('users', 'payroll_previews.employee_id', '=', 'users.id')
@@ -504,11 +503,7 @@ class EmployeePayrollController extends Controller
                         $toDays = $start_date->diffInDaysFiltered(function (Carbon $date) {
                             return !$date->isWeekend(); // Exclude Saturday/Sunday
                         }, $end_date);
-<<<<<<< HEAD
-                        
-=======
 
->>>>>>> 08c907f360e83db8af20a662a580df78c4057b9d
                         $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('d');
                         $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
                         $startendMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth()->format('d');
@@ -1331,6 +1326,1014 @@ class EmployeePayrollController extends Controller
             return redirect()->back();
         }
     }
+    // public function store(Request $request)
+    // {
+    //     try{
+    //         //function import annual_bonus
+    //         $dadaArrayAnnualBonus = [];
+    //         if (file_exists($request->annual_bonus)) {
+    //             $file_annual_bonus = $request->annual_bonus;
+    //             $extension = $request->annual_bonus->extension();
+    //             $spreadsheet_annual_bonus = IOFactory::load($file_annual_bonus);
+    //             $dataImportAnnualBonus =  $spreadsheet_annual_bonus->getSheetByName('Annual Bonus')->toArray();
+    //             if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+    //                 $index = 0;
+    //                 foreach ($dataImportAnnualBonus as $rowOther) {
+    //                     $index++;
+    //                     if ($index != 1) {
+    //                         $dataAnnualBonus = User::where("number_employee", $rowOther[0])->first();
+    //                         if($dataAnnualBonus){
+    //                             $dadaArrayAnnualBonus[$dataAnnualBonus->number_employee] = [
+    //                                 'annual_bonus' => $rowOther[2]
+    //                             ];
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         //function import other benefit
+    //         $dadaArrayOtherBenefit = [];
+    //         if (file_exists($request->other_benefits)) {
+    //             $file_other_benefits = $request->other_benefits;
+    //             $spreadsheet_other_benefits = IOFactory::load($file_other_benefits);
+    //             $otherBenefits =  $spreadsheet_other_benefits->getSheetByName('Other Benefits')->toArray();
+    //             $filesize = filesize($file_other_benefits);
+    //             $extension = $request->other_benefits->extension();
+    //             $index = 0;
+    //             foreach ($otherBenefits as $rowOther) {
+    //                 $index++;
+    //                 if ($index != 1) {
+    //                     $otherBenefitEmployee = User::where("number_employee", $rowOther[0])->first();
+    //                     if($otherBenefitEmployee){
+    //                         $dadaArrayOtherBenefit[$otherBenefitEmployee->number_employee] = [
+    //                             'other_benefit' => $rowOther[2]
+    //                         ];
+    //                     }
+    //                 }
+    //             }
+    //         }
+        
+    //         // function import incentive
+    //         $dadaArrayIncentive = [];
+    //         if (file_exists($request->file_incentive)) {
+    //             $fileIincentive = $request->file_incentive;
+    //             $spreadsheet = IOFactory::load($fileIincentive);
+    //             $Incentive =  $spreadsheet->getSheetByName('Incentive Bonus')->toArray();
+    //             $iIn = 0;
+    //             foreach ($Incentive as $itemIncen) {
+    //                 $iIn++;
+    //                 if ($iIn != 1) {
+    //                     $employeeIncentive = User::where("number_employee", $itemIncen[0])->first();
+    //                     if($employeeIncentive){
+    //                         $dadaArrayIncentive[$employeeIncentive->number_employee] = [
+    //                             'incentive' => $itemIncen[2]
+    //                         ];
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         // function import Loan
+    //         $dadaArrayLoan = [];
+    //         if (file_exists($request->file_loan)) {
+    //             $fileLoan = $request->file_loan;
+    //             $spreadsheet = IOFactory::load($fileLoan);
+    //             $staffLoan =  $spreadsheet->getSheetByName('Loan')->toArray();
+    //             $iIn = 0;
+    //             foreach ($staffLoan as $itemLoan) {
+    //                 $iIn++;
+    //                 if ($iIn != 1) {
+    //                     $employeeIncentive = User::where("number_employee", $itemLoan[0])->first();
+    //                     if($employeeIncentive){
+    //                         $dadaArrayLoan[$employeeIncentive->number_employee] = [
+    //                             'laon_amount' => $itemLoan[2]
+    //                         ];
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         //function upload staff book amount
+    //         $dadaArrayStaffBook = [];
+    //         if (file_exists($request->staff_book)) {
+    //             $file_staff_book = $request->staff_book;
+    //             $extension = $request->staff_book->extension();
+    //             $spreadsheet_staff_book = IOFactory::load($file_staff_book);
+    //             $dataImportStaffBook =  $spreadsheet_staff_book->getSheetByName('Staff Book')->toArray();
+    //             if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+    //                 $index = 0;
+    //                 foreach ($dataImportStaffBook as $itemStaffBook) {
+    //                     $index++;
+    //                     if ($index != 1) {
+    //                         $dataStaffBook = User::where("number_employee", $itemStaffBook[0])->first();
+    //                         if($dataStaffBook){
+    //                             $dadaArrayStaffBook[$dataStaffBook->number_employee] = [
+    //                                 'total_staff_book' => $itemStaffBook[2]
+    //                             ];
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         //function upload parking allowance
+    //         $dadaArrayParkingAllowance = [];
+    //         if (file_exists($request->parking_allowance)) {
+    //             $fileParkingAllowance = $request->parking_allowance;
+    //             $extension = $request->parking_allowance->extension();
+    //             $spreadsheet_parking_allowance = IOFactory::load($fileParkingAllowance);
+    //             $parkingAllowance =  $spreadsheet_parking_allowance->getSheetByName('parking allowance')->toArray();
+    //             if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+    //                 $index = 0;
+    //                 foreach ($parkingAllowance as $itemPar) {
+    //                     $index++;
+    //                     if ($index != 1) {
+    //                         $dataParkAll = User::where("number_employee", $itemPar[0])->first();
+    //                         if($dataParkAll){
+    //                             $dadaArrayParkingAllowance[$dataParkAll->number_employee] = [
+    //                                 'totalParkingAllowance' => $itemPar[2]
+    //                             ];
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
+    //         if (!$employee->isEmpty()) {
+    //             foreach ($employee as $item) {
+    //                 // payrollPreview::where('employee_id',$item->id)->delete();
+    //                 // PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
+    //                 // GrossSalaryPay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
+    //                 // SeverancePay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
+    //                 // PreviewBonus::where('employee_id',$item->id)->delete();
+    //                 $paymentMonth = date('m-Y', strtotime($request->payment_date));
+    //                 payrollPreview::where('employee_id', $item->id)->delete();
+    //                 PreviewNationalSocialSecurityFund::where('employee_id', $item->id)->delete();
+    //                 GrossSalaryPay::where('number_employee', $item->number_employee)->whereRaw("DATE_FORMAT(payment_date, '%m-%Y') = ?", [$paymentMonth])->delete();
+    //                 SeverancePay::where('number_employee', $item->number_employee)->whereRaw("DATE_FORMAT(payment_date, '%m-%Y') = ?", [$paymentMonth])->delete();
+    //                 PreviewBonus::where('employee_id', $item->id)->delete();
+
+    //                 //function first month join work
+    //                 $totalFirstSeverancPay = 0;
+    //                 $totalBaseSalaryRecived = 0;
+    //                 $totalBasicSalary = 0;
+    //                 $monthlyQuarterlyIncentive = 0;
+    //                 $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('m-y');
+    //                 $paymentDate = Carbon::createFromDate($request->payment_date)->format('m-y');
+
+    //                 //function ajustment
+    //                 $dataPayrollAdjustment = PayrollAdjustment::where('employee_id',$item->id)->get();
+    //                 $adjustmentIncludeTaxe = 0;
+    //                 $adjustmentExcludeTaxe = 0;
+    //                 foreach ($dataPayrollAdjustment as $valueAdjust) {
+    //                     $adjustmentDate = Carbon::createFromDate($valueAdjust->adjustment_date)->format('m-y');
+    //                     if($adjustmentDate == $paymentDate){
+    //                         if ($valueAdjust->adjustment_type == 'include_taxe') {
+    //                             $adjustmentIncludeTaxe = $valueAdjust->amount;
+    //                         }else{
+    //                             $adjustmentExcludeTaxe = $valueAdjust->amount;
+    //                         }
+    //                     }
+    //                 }
+    //                 //function difinde day first working
+    //                 if ($joinDate == $paymentDate) {
+    //                     //total day in monthsd
+    //                     // $start_date = Carbon::createFromDate($item->date_of_commencement);
+    //                     // $endMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth();
+    //                     // $end_date = Date::createFromDate($endMonth);
+    //                     // $commencementDate   = Carbon::parse($start_date);
+    //                     // $resumptionDate     = Carbon::parse($end_date);
+    //                     // $isCommencementWeekday = !$commencementDate->isWeekend();
+    //                     // $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + ($isCommencementWeekday ? 1 : 0);
+
+    //                     $start_date = Carbon::parse($item->date_of_commencement);
+    //                     $end_date   = $start_date->copy()->endOfMonth();
+    //                     // Count working days (Mon–Fri)
+    //                     $toDays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+    //                         return !$date->isWeekend(); // Exclude Saturday/Sunday
+    //                     }, $end_date);
+
+    //                     $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('d');
+    //                     $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
+    //                     $startendMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth()->format('d');
+    //                     if ($joinDate==1) {
+    //                         $totalBasicSalary = $item->basic_salary;
+    //                     } else {
+    //                         if ($startMonth == 02 && $startendMonth == 28 || $startendMonth == 29) {
+    //                             if ($toDays == 21) {
+    //                                 $totalBasicSalary = $item->basic_salary;
+    //                             } else {
+    //                                 $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
+    //                             }
+    //                         }else{
+    //                             if ($toDays >= 22) {
+    //                                 $totalBasicSalary = $item->basic_salary;
+    //                             }else{
+    //                                 $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
+    //                             }
+    //                         }
+    //                     }
+    //                 } else {
+    //                     if ($item->emp_status == 1) {
+    //                         $joinPassProbation = Carbon::createFromDate($item->fdc_date)->format('d');
+    //                         if($joinPassProbation == '01'){
+    //                             $totalBasicSalary = $item->basic_salary;
+    //                         }else{
+    //                             $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
+    //                             $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
+    //                             if($monthToPay == $currentMonthToPay){
+    //                                 //function get first severance pay
+    //                                 $endMonth = Carbon::createFromDate($item->fdc_date)->format('m');
+    //                                 $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+    //                                 //find start date employee join date
+    //                                 $date_of_month = Carbon::createFromDate($item->fdc_date)->format('Y-m');
+    //                                 $currentYear = $date_of_month.'-'.$totalDayInMonth;
+    //                                 //find total working day in month
+    //                                 $startDate = Carbon::parse($item->fdc_date);
+    //                                 $endDate = Carbon::parse($currentYear);
+    //                                 //total day in  passt probation and total salary passt probation days
+    //                                 $totalNewDays = $startDate->diffInDays($endDate) + 1;
+    //                                 //total day in  probation and total salary in probation days
+    //                                 $totalOldDay = $totalDayInMonth - $totalNewDays;
+    //                                 //old salary
+    //                                 $oldSalary = ($item->pre_salary * $totalOldDay) / $totalDayInMonth;
+
+    //                                 $newSalary = 0;
+    //                                 if ($totalOldDay) {
+    //                                     $newSalary = ($item->basic_salary * $totalNewDays) / $totalDayInMonth;
+    //                                 }
+    //                                 $totalBaseSalaryRecived = round($oldSalary,2) + round($newSalary,2);
+    //                                 $totalFirstSeverancPay = round($oldSalary,2);
+    //                             }else{
+    //                                 $totalBasicSalary = $item->basic_salary;
+    //                             }
+    //                         }
+    //                     }else{
+    //                         $totalBasicSalary = $item->basic_salary;
+    //                     }
+    //                 }
+    //                 //fuction check Monthly/Quarterly Incentive
+    //                 if (array_key_exists($item->number_employee, $dadaArrayIncentive)) {
+    //                     $monthlyQuarterlyIncentive = $dadaArrayIncentive[$item->number_employee]['incentive'];
+    //                 } else {
+    //                    $monthlyQuarterlyIncentive = 0;
+    //                 }
+    //                 //fuction check Annual Bonus
+    //                 if (array_key_exists($item->number_employee, $dadaArrayAnnualBonus)) {
+    //                     $annualBonus = $dadaArrayAnnualBonus[$item->number_employee]['annual_bonus'];
+    //                 } else {
+    //                    $annualBonus = 0;
+    //                 }
+    //                 //fuction check Other benefit
+    //                 if (array_key_exists($item->number_employee, $dadaArrayOtherBenefit)) {
+    //                     $otherBenefit = $dadaArrayOtherBenefit[$item->number_employee]['other_benefit'];
+    //                 } else {
+    //                    $otherBenefit = 0;
+    //                 }
+    //                 //fuction check laon amount
+    //                 if (array_key_exists($item->number_employee, $dadaArrayLoan)) {
+    //                     $LoanAmount = $dadaArrayLoan[$item->number_employee]['laon_amount'];
+    //                 } else {
+    //                    $LoanAmount = 0;
+    //                 }
+    //                 //fuction check staff book
+    //                 if (array_key_exists($item->number_employee, $dadaArrayStaffBook)) {
+    //                     $totalStaffBook = $dadaArrayStaffBook[$item->number_employee]['total_staff_book'];
+    //                 } else {
+    //                    $totalStaffBook = 0;
+    //                 }
+    //                 //fuction check staff book
+    //                 if (array_key_exists($item->number_employee, $dadaArrayParkingAllowance)) {
+    //                     $totalParkAllowance = $dadaArrayParkingAllowance[$item->number_employee]['totalParkingAllowance'];
+    //                 } else {
+    //                    $totalParkAllowance = 0;
+    //                 }
+                    
+    //                 //calculated khmer_new_year and pchumBen_bonus
+    //                 $totalBunus = 0;
+    //                 if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
+    //                     $dataHolidayBunuse = Holiday::where('type','bonus')->whereYear('created_at', now()->year)->get();
+    //                     foreach ($dataHolidayBunuse as $value) {
+    //                         $userJoinDate = $item->date_of_commencement;
+    //                         $dayOfYear = 365;
+    //                         $fromDate = Carbon::parse($userJoinDate);
+    //                         $toDate = Carbon::parse($value->from);
+
+    //                         $totalStartDays = $fromDate->diffInDays($toDate) + 1;
+    //                         $hildayMonth = Carbon::createFromDate($value->period_month)->format('Y-m');
+    //                         $hildayDays = Carbon::createFromDate($value->period_month)->format('Y-m');
+    //                         $payMonth = Carbon::createFromDate($request->payment_date)->format('Y-m');
+    //                         $payDays = Carbon::createFromDate($request->payment_date)->format('Y-m');
+    //                         $bounsType = $value->title;
+    //                         if($hildayMonth == $payMonth && $hildayDays >= $payDays){
+    //                             if ($totalStartDays > $dayOfYear) {
+    //                                 $percent = $value->amount_percent / 100;
+    //                                 $totalAllowanceBunus = ($item->basic_salary * $percent);
+    //                             } else {
+    //                                 $totalPercent = ($item->basic_salary * $value->amount_percent) / 100;
+    //                                 $percentSalary = $totalPercent * $totalStartDays;
+    //                                 $totalAllowanceBunus = $percentSalary / $dayOfYear;
+    //                             }
+    //                             $dataBonus = PreviewBonus::create([
+    //                                 'employee_id'               => $item->id,
+    //                                 'number_employee'           => $item->number_employee,
+    //                                 'number_of_working_days'    => $totalStartDays,
+    //                                 'base_salary'               => $item->basic_salary,
+    //                                 'base_salary_received'      => $item->basic_salary,
+    //                                 'total_allowance'           => $totalAllowanceBunus,
+    //                                 'bouns_type'                => $bounsType,
+    //                                 'payment_date'              => $request->payment_date,
+    //                                 'created_by'                => Auth::user()->id,
+    //                             ]);
+    //                         }
+    //                         $totalBunus = $dataBonus->total_allowance ?? 0;
+    //                     }
+    //                 }
+    
+    //                 // function sum benefit age children <= 18
+    //                 $dataDateOfBirth = [];
+    //                 $dataChildren = ChildrenInfor::where('employee_id',$item->id)->get();
+    //                 foreach ($dataChildren as $value) {
+    //                     // $yearsOfChild = Carbon::parse($value->date_of_birth)->age;
+    //                     $birth_date = $value->date_of_birth;
+    //                     $current_date = date('Y-m-d');
+    //                     $birth_timestamp = strtotime($birth_date);
+    //                     $current_timestamp = strtotime($current_date);
+    //                     $diff_seconds = $current_timestamp - $birth_timestamp;
+    //                     $age_years = $diff_seconds / (60 * 60 * 24 * 365.25);
+    //                     $yearsOfChild = round($age_years);
+    //                     if ($yearsOfChild <= 18) {
+    //                         $dataDateOfBirth[] = $value;
+    //                     }
+    //                 }
+                    
+    //                 //function children allowance
+    //                 $number_of_children = count($dataDateOfBirth);
+    //                 $childrenAllowance = ChildrenAllowance::first();
+    //                 $totalChildAllowance = 0;
+    //                 if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
+    //                     if ($number_of_children) {
+    //                         if ($number_of_children == 0) {
+    //                             $totalChildAllowance = 0;
+    //                         } else if($number_of_children == 1) {
+    //                             $totalChildAllowance = $childrenAllowance->total_children_allowance * 1;
+    //                         }else if($number_of_children == 2){
+    //                             $totalChildAllowance = $childrenAllowance->total_children_allowance * 2;
+    //                         }else if($number_of_children == 3){
+    //                             $totalChildAllowance = $childrenAllowance->total_children_allowance * 3;
+    //                         }else if($number_of_children == 4){
+    //                             $totalChildAllowance = $childrenAllowance->total_children_allowance * 4;
+    //                         }
+    //                     }
+    //                 }
+                    
+    //                 //calcute last severance pay 1
+    //                 $SeverancePay1 = null;
+    //                 $SeverancePay2 = null;
+    //                 $totalSeniority = 0;
+    //                 $basic1 = 0;
+    //                 $basic2 = 0;
+    //                 $type_fdc1 = null;
+    //                 $type_fdc2 = null;
+    //                 $type_udc = null;
+    //                 $totalSeverancyPaySalary = $totalBaseSalaryRecived != 0 ? $totalBaseSalaryRecived : $totalBasicSalary;
+    //                 $totalSalarySeverancyPay = $totalSeverancyPaySalary + $adjustmentIncludeTaxe + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+    //                 $totalSeverancePay = $totalFirstSeverancPay != 0 ? $totalFirstSeverancPay : $totalBasicSalary;
+    //                 $totalOtherBenefit = $totalSeverancePay + $adjustmentIncludeTaxe + $monthlyQuarterlyIncentive + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+    //                 //function difinde day end FDC
+    //                 if ($item->emp_status == 1 || $item->emp_status == 10) {
+    //                     $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
+    //                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
+    //                     if($endContractDeadline == $paymentDate){
+    //                         $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
+    //                         $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+    //                         $contract_deadline = Carbon::createFromDate($item->fdc_end)->format('Y-m');
+    //                         $currentYear = $contract_deadline.'-'.$totalDayInMonth;
+    //                         // new salary and new total days
+    //                         $startDate = Carbon::parse($item->fdc_end);
+    //                         $endDate = Carbon::parse($currentYear);
+    //                         $totalNewDays = $startDate->diffInDays($endDate);
+    //                         $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalNewDays;
+    //                         //old salary and total old days
+    //                         $totalOldDay = $totalDayInMonth - $totalNewDays;
+    //                         $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
+    //                         $type_fdc2 = 'FDC-2';
+    //                         if ($item->emp_status == 10) {
+    //                             $type_fdc1 = 'FDC-1';
+    //                         }
+
+    //                        // Start date = contract end date
+    //                         $start_working_day_date = Carbon::parse($item->fdc_end);
+    //                         // End date = end of the same month as the contract end
+    //                         $end_working_day_date = $start_working_day_date->copy()->endOfMonth();
+    //                         // Calculate working days (Monday–Friday)
+    //                         $workingDays = $start_working_day_date->diffInWeekdays($end_working_day_date);
+    //                         // Include start date if it's a weekday
+    //                         if (!$start_working_day_date->isWeekend()) {
+    //                             $workingDays += 1;
+    //                         }
+    //                         if ($workingDays >= 21) {
+    //                             $type_udc = 'UDC';
+    //                         }
+                            
+    //                         $totalSeniority = $totalSalarySeverancyPay;
+    //                         $basic1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
+    //                         $basic2 = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
+    //                         $totalBaseSalaryRecived =  $basic1 + $basic2;
+    //                     }
+    //                 }
+    //                 $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
+    //                 $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
+    //                 $totalSeverancePay2 = $SeverancePay2;
+    //                 $totalBasicSalaryLast = $totalBaseSalaryRecived != 0 ? $totalBaseSalaryRecived : $totalBasicSalary;
+    //                 $totalGrossSalary = (round($totalSeverancyPaySalary,2) + $adjustmentIncludeTaxe + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance);
+    //                 //function check severanc pay
+    //                 if($item->emp_status == 1){
+    //                     $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
+    //                 }
+    //                 if($item->emp_status == 10){
+    //                     $dataTotalSeverancePay2 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
+    //                 }
+                    
+    //                 if ($item->emp_status == 'Probation') {
+    //                     $type_fdc1 = null;
+    //                     $totalSeverancePay1 = 0;
+    //                 } 
+    //                 if($item->emp_status == 1) {
+    //                     $type_fdc1 = 'FDC-1';
+    //                 }
+    //                 if($item->emp_status == 10){
+    //                     $type_fdc1 = null;
+    //                     $totalSeniority = $totalSalarySeverancyPay;
+    //                     $type_fdc2 = 'FDC-2';
+    //                     $totalSeverancePay1 = 0;
+    //                     $totalSeverancePay2 = $dataTotalSeverancePay2 != null ? $dataTotalSeverancePay2 : $totalSalarySeverancyPay;
+    //                 }
+    //                 if($item->emp_status == 2){
+    //                     $type_udc = 'UDC';
+    //                     $totalSeverancePay1 = $totalSeverancePay1;
+    //                     $totalSeverancePay2 = 0;
+    //                     $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
+    //                     $totalSeniority = $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
+    //                 }
+                    
+    //                 //sum salary and sum other benefit befor tax free
+    //                 $dataGrossSalary = GrossSalaryPay::create([
+    //                     'employee_id'               => $item->id,
+    //                     'number_employee'           => $item->number_employee,
+    //                     'basic_salary'              => $item->basic_salary,
+    //                     'total_gross_salary'        => round($totalGrossSalary,2),
+    //                     'total_fdc1'                => round($totalSeverancePay1,2),
+    //                     'total_fdc2'                => round($totalSeverancePay2,2),
+    //                     'total_seniority'           => round($totalSeniority,2),
+    //                     'payment_date'              => $request->payment_date,
+    //                     'type_fdc1'                 => $type_fdc1,
+    //                     'type_fdc2'                 => $type_fdc2,
+    //                     'type_udc'                  => $type_udc,
+    //                     'created_by'                => Auth::user()->id
+    //                 ]);
+
+    //                 //function Seniority pay
+    //                 $seniorityPayableTax = 0;
+    //                 $taxExemptionSalary = 0;
+    //                 $totaltaxableSalary = 0;
+    //                 if ($item->emp_status == 2) {
+    //                     $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
+    //                     $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
+    //                     if ($currentDate == 6 || $currentDate == 12) {
+    //                         // $nextYear = Carbon::parse()->format('Y');
+    //                         $nextYear = Carbon::createFromDate($request->payment_date)->format('Y');
+    //                         $currentYear = null;
+    //                         $currentMonth = null;
+    //                         if($currentDate == 6){  
+    //                             $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
+    //                         }
+    //                         if ($currentDate == 12) {
+    //                             $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
+    //                         }
+    //                         $totalSalary = GrossSalaryPay::where('employee_id', $item->id)->where('type_udc','UDC')->when($currentYear ,function ($query, $udc_end_date) {
+    //                             $query->where('payment_date', '>=',$udc_end_date);
+    //                         })->when($currentMonth, function($query, $currentMonth){
+    //                             $query->where('payment_date', '>=',$currentMonth);
+    //                         })->pluck('total_seniority')->avg();
+
+    //                         $totalAVG = (round($totalSalary,2) * 7.5) / 22;
+    //                         $totalSalaryReceive = $totalAVG;
+    //                         // $totalSalaryReceive = ceil($totalAVG);
+    //                         $totalGrossExchange = 2000000 / $request->exchange_rate;
+                            
+    //                         $totalGrossInclucTax = round($totalGrossExchange,2);
+    //                         if ($totalSalaryReceive > $totalGrossInclucTax) {
+    //                             $taxExemptionSalary = $totalGrossInclucTax;
+    //                         } else {
+    //                             $taxExemptionSalary = $totalSalaryReceive;
+    //                         }
+    //                         if ($totalSalaryReceive > $totalGrossInclucTax) {
+    //                             $totaltaxableSalary = $totalSalaryReceive - $totalGrossInclucTax;
+    //                         } else {
+    //                             $totaltaxableSalary = 0;
+    //                         }
+    //                         $paymentOfMonth = $PaymentOfMonth;
+    //                         Seniority::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
+    //                         $seniority = Seniority::create([
+    //                             'employee_id'           => $item->id,
+    //                             'number_employee'       => $item->number_employee,
+    //                             'total_average_salary'  => $totalSalary,
+    //                             'total_salary_receive'  => $totalSalaryReceive,
+    //                             'tax_exemption_salary'  => $taxExemptionSalary,
+    //                             'taxable_salary'        => $totaltaxableSalary,
+    //                             'payment_of_month'      => $paymentOfMonth,
+    //                             'payment_date'          => $request->payment_date,
+    //                             'created_by'            => Auth::user()->id,
+    //                         ]);
+    //                         $seniorityPayableTax = $seniority->taxable_salary ?? 0;
+    //                         $taxExemptionSalary = $seniority->tax_exemption_salary ?? 0;
+    //                     }
+    //                 }
+
+    //                 if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
+    //                     $totalGrossSalaryBeforpension = $totalGrossSalary + $totaltaxableSalary;
+    //                 }else{
+    //                     $totalGrossSalaryBeforpension = $dataGrossSalary->total_gross_salary + $totaltaxableSalary;
+    //                 }
+                    
+    //                 // function get age employee <= 60 National Social Security Fund (NSSF) Formula
+    //                 $pension_contribution = 0;
+    //                 if($item->is_type_nssf != 1){
+    //                     $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
+    //                     if ($exchangNSSF) {
+    //                         $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalaryBeforpension,2);
+    //                         if ($totalExchangeRielPreTax) {
+    //                             if ($totalExchangeRielPreTax >= 1200000) {
+    //                                 $averageWage    = 1200000;
+    //                             }else if($totalExchangeRielPreTax >= 400000){
+    //                                 $averageWage    = $totalExchangeRielPreTax;
+    //                             }else{
+    //                                 $averageWage = 400000;
+    //                             }
+    //                         }else{
+    //                             $averageWage = 0;
+    //                         }
+    //                         $occupationalRisk = (0.008 * $averageWage);
+    //                         $healthCare = (0.026 * $averageWage);
+    //                         $workerContributionUsd = ($averageWage * 0.02);
+
+    //                         $workerContributionRiel = 0;
+    //                         $age = Carbon::createFromDate($item->date_of_birth)->format('Y-m-d');
+    //                         $yearsOfEmployee = Carbon::parse($age)->age;
+    //                         if($yearsOfEmployee < 60){
+    //                             $workerContributionRiel = round($workerContributionUsd,0) / $exchangNSSF->amount_riel;
+    //                         }
+    //                         $dataNSSF = PreviewNationalSocialSecurityFund::create([
+    //                             'employee_id'                   => $item->id,
+    //                             'number_employee'               => $item->number_employee,
+    //                             'total_pre_tax_salary_usd'      => round($totalGrossSalaryBeforpension,2),
+    //                             'total_pre_tax_salary_riel'     => $totalExchangeRielPreTax,
+    //                             'total_average_wage'            => $averageWage,
+    //                             'total_occupational_risk'       => $occupationalRisk,
+    //                             'total_health_care'             => $healthCare,
+    //                             'pension_contribution_usd'      => round($workerContributionUsd,0),
+    //                             'pension_contribution_riel'     => $workerContributionRiel,
+    //                             'corporate_contribution'        => round($workerContributionUsd,0),
+    //                             'exchange_rate'                 => $exchangNSSF->amount_riel,
+    //                             'payment_date'                  => $request->payment_date,
+    //                             'created_by'                    => Auth::user()->id,
+    //                         ]);
+    //                     }
+    //                     $pension_contribution = round($dataNSSF->pension_contribution_riel,2);
+    //                 }
+
+    //                 //function ដក​ pensin fund
+    //                 $totalGrossAfterPension = $totalGrossSalaryBeforpension - $pension_contribution;
+    //                 // functin exchange riel rate gross salary after tax
+    //                 $totalExchangeRiel = round($totalGrossAfterPension, 2) * $request->exchange_rate;
+    //                 //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
+    //                 $totalChargesReducedChild = $childrenAllowance->reduced_burden_children;
+    //                 $totalChargesReducedSpouse = $childrenAllowance->spouse_allowance;
+    //                 //not have child and sposes child 1
+    //                 if($number_of_children == 0 && $item->spouse == 0){
+    //                     $totalChargesReduced = 0;
+    //                 }else if($number_of_children == 0 && $item->spouse == 0){
+    //                     $totalChargesReduced = $totalChargesReducedSpouse;
+    //                 }else if($number_of_children == 1 && $item->spouse == 0){
+    //                     $totalChargesReduced = $totalChargesReducedChild;
+    //                 }else if($number_of_children == 0 && $item->spouse == 1){
+    //                     $totalChargesReduced = $totalChargesReducedSpouse;
+    //                 }else if($number_of_children == 1 && $item->spouse == 1){
+    //                     $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+    //                 }else if($number_of_children == 2 && $item->spouse == 0){
+    //                     $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
+    //                 }else if($number_of_children == 2 && $item->spouse == 1){
+    //                     $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+    //                 }else if($number_of_children == 3 && $item->spouse == 0){
+    //                     $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
+    //                 }else if($number_of_children == 3 && $item->spouse == 1){
+    //                     $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+    //                 }else if($number_of_children == 4 && $item->spouse == 0){
+    //                     $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
+    //                 }else if($number_of_children == 4 && $item->spouse == 1){
+    //                     $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+    //                 }
+                    
+    //                 //កាត់មូលដ្ឋានគិតពន្ធ
+    //                 if ($number_of_children == 0 && $item->spouse == 0) {
+    //                     $totalTtaxBbaseRiel = $totalExchangeRiel;
+    //                 } else if($number_of_children == 1 && $item->spouse == 0) {
+    //                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+    //                 }else if($number_of_children == 0 && $item->spouse == 1) {
+    //                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+    //                 }else if($number_of_children == 1 && $item->spouse == 1) {
+    //                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+    //                 }else if($number_of_children == 2 &&  $item->spouse == 0){
+    //                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+    //                 }else if($number_of_children == 2 &&  $item->spouse == 1){
+    //                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+    //                 }else if($number_of_children == 3 &&  $item->spouse == 0){
+    //                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+    //                 }else if($number_of_children == 3 &&  $item->spouse == 1){
+    //                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+    //                 }else if($number_of_children == 4 &&  $item->spouse == 0){
+    //                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+    //                 }else if($number_of_children == 4 &&  $item->spouse == 1){
+    //                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+    //                 }
+                    
+    //                 $children = $number_of_children;
+    //                 // អត្រា ពន្ធ(%)
+    //                 if ($number_of_children == 0 && $item->spouse == 0) {
+    //                     if($totalExchangeRiel > 0 && $totalExchangeRiel <= 1500000){
+    //                         $totalTax = 0;
+    //                     }elseif($totalExchangeRiel > 1500001 && $totalExchangeRiel <= 2000000){
+    //                         $totalTax = 5;
+    //                     }elseif($totalExchangeRiel > 2000001 && $totalExchangeRiel <= 8500000){
+    //                         $totalTax = 10;
+    //                     }elseif($totalExchangeRiel > 8500001 && $totalExchangeRiel <= 12500000){
+    //                         $totalTax = 15;
+    //                     }else{
+    //                         $totalTax = 20;
+    //                     }
+                        
+    //                     if($totalExchangeRiel <= 1500000){
+    //                         $totalSalaryTaxRiel = 0;
+    //                     }elseif($totalExchangeRiel > 1500001 && $totalExchangeRiel <= 2000000){
+    //                         $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 75000;
+    //                     }elseif($totalExchangeRiel > 2000001 && $totalExchangeRiel <= 8500000){
+    //                         $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 175000;
+    //                     }elseif($totalExchangeRiel > 8500001 && $totalExchangeRiel <= 12500000){
+    //                         $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 600000;
+    //                     }else{
+    //                         $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 1225000;
+    //                     }
+    //                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+    //                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+
+    //                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+    //                     $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
+    //                 } else if($number_of_children == 1 && $item->spouse == 0) {
+    //                     if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+    //                         $totalTax = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalTax = 5;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalTax = 10;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalTax = 15;
+    //                     }else{
+    //                         $totalTax = 20;
+    //                     }
+                        
+    //                     if($totalTtaxBbaseRiel <= 1500000){
+    //                         $totalSalaryTaxRiel = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+    //                     }else{
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+    //                     }
+
+    //                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+    //                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    
+    //                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+    //                     $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
+    //                 }else if($number_of_children == 0 && $item->spouse == 1) {
+    //                     if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+    //                         $totalTax = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalTax = 5;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalTax = 10;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalTax = 15;
+    //                     }else{
+    //                         $totalTax = 20;
+    //                     }
+                        
+    //                     if($totalTtaxBbaseRiel <= 1500000){
+    //                         $totalSalaryTaxRiel = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+    //                     }else{
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+    //                     }
+    //                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+    //                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    
+    //                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+    //                     $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
+    //                 }else if($number_of_children == 1 && $item->spouse == 1) {
+    //                     if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+    //                         $totalTax = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalTax = 5;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalTax = 10;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalTax = 15;
+    //                     }else{
+    //                         $totalTax = 20;
+    //                     }
+                        
+    //                     if($totalTtaxBbaseRiel <= 1500000){
+    //                         $totalSalaryTaxRiel = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+    //                     }else{
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+    //                     }
+    //                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+    //                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    //                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+    //                     $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
+    //                 }else if($number_of_children == 2 && $item->spouse == 0){
+    //                     if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+    //                         $totalTax = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalTax = 5;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalTax = 10;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalTax = 15;
+    //                     }else{
+    //                         $totalTax = 20;
+    //                     }
+                        
+    //                     if($totalTtaxBbaseRiel <= 1500000){
+    //                         $totalSalaryTaxRiel = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+    //                     }else{
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+    //                     }
+    //                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+    //                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    //                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+    //                     $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
+    //                 }else if($number_of_children == 2 && $item->spouse == 1){
+    //                     if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+    //                         $totalTax = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalTax = 5;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalTax = 10;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalTax = 15;
+    //                     }else{
+    //                         $totalTax = 20;
+    //                     }
+                        
+    //                     if($totalTtaxBbaseRiel <= 1500000){
+    //                         $totalSalaryTaxRiel = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+    //                     }else{
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+    //                     }
+    //                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+    //                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    //                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+    //                     $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
+    //                 }else if($number_of_children == 3 && $item->spouse == 0){
+    //                     if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+    //                         $totalTax = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalTax = 5;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalTax = 10;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalTax = 15;
+    //                     }else{
+    //                         $totalTax = 20;
+    //                     }
+                        
+    //                     if($totalTtaxBbaseRiel <= 1500000){
+    //                         $totalSalaryTaxRiel = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+    //                     }else{
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+    //                     }
+
+    //                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+    //                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    //                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+    //                     $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
+    //                 }else if($number_of_children == 3 && $item->spouse == 1){
+    //                     if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+    //                         $totalTax = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalTax = 5;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalTax = 10;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalTax = 15;
+    //                     }else{
+    //                         $totalTax = 20;
+    //                     }
+                        
+    //                     if($totalTtaxBbaseRiel <= 1500000){
+    //                         $totalSalaryTaxRiel = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+    //                     }else{
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+    //                     }
+    //                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+    //                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    //                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+    //                     $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
+    //                 }else if($number_of_children == 4 && $item->spouse == 0){
+    //                     if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+    //                         $totalTax = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalTax = 5;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalTax = 10;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalTax = 15;
+    //                     }else{
+    //                         $totalTax = 20;
+    //                     }
+                        
+    //                     if($totalTtaxBbaseRiel <= 1500000){
+    //                         $totalSalaryTaxRiel = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+    //                     }else{
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+    //                     }
+    //                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+    //                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    //                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+    //                     $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
+    //                 }else if($number_of_children == 4 && $item->spouse == 1){
+    //                     if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+    //                         $totalTax = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalTax = 5;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalTax = 10;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalTax = 15;
+    //                     }else{
+    //                         $totalTax = 20;
+    //                     }
+                        
+    //                     if($totalTtaxBbaseRiel <= 1500000){
+    //                         $totalSalaryTaxRiel = 0;
+    //                     }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+    //                     }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+    //                     }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+    //                     }else{
+    //                         $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+    //                     }
+    //                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+    //                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    //                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+    //                     $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
+    //                 }
+    //                 //function Severance Pay ti 1
+    //                 $totalSeverancePay = 0;
+    //                 $monthEndDate = Carbon::createFromDate($item->fdc_end)->format('Y-m');
+    //                 $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
+    //                 if($item->emp_status == 1){
+    //                     if($monthEndDate == $paymentDate){
+    //                         $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->whereNotNull('type_fdc1')->sum('total_fdc1');
+    //                         $totalContractSeverancePay = $dataSeveranc * 0.05;
+    //                         $dataSeverance = SeverancePay::create([
+    //                             'employee_id'                   => $item->id,
+    //                             'number_employee'               => $item->number_employee,
+    //                             'total_severanec_pay'           => round($dataSeveranc,2),
+    //                             'total_contract_severance_pay'  => round($totalContractSeverancePay,2),
+    //                             'payment_date'                  => $request->payment_date,
+    //                             'type'                          => 'FDC-1',
+    //                             'created_by'                    => Auth::user()->id,
+    //                         ]);
+    //                         $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
+    //                     }
+    //                 }
+
+    //                 if($item->emp_status == 10){
+    //                     if($monthEndDate == $paymentDate){
+    //                         $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->where('number_employee',$item->number_employee)->whereNotNull('type_fdc2')->sum('total_fdc2');
+    //                         $totalContractSeverancePay = $dataSeveranc * 0.05;
+    //                         $dataSeverance = SeverancePay::create([
+    //                             'employee_id'                   => $item->id,
+    //                             'number_employee'               => $item->number_employee,
+    //                             'total_severanec_pay'           => round($dataSeveranc,),
+    //                             'total_contract_severance_pay'  => round($totalContractSeverancePay,2),
+    //                             'payment_date'                  => $request->payment_date,
+    //                             'type'                          => 'FDC-2',
+    //                             'created_by'                    => Auth::user()->id,
+    //                         ]);
+    //                         $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
+    //                     }
+    //                 }
+    //                 $totalSalaryBeforPension = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary + $totalParkAllowance;
+    //                 $totalNetSalary = $totalSalaryBeforPension - $LoanAmount - $totalStaffBook;
+    //                 $data   = $request->all();
+    //                 $data['employee_id']                    = $item->id;
+    //                 $data['number_employee']                = $item->number_employee;
+    //                 $data['basic_salary']                   = $item->basic_salary;
+    //                 $data['spouse']                         = $item->spouse;
+    //                 $data['children']                       = $children;
+    //                 $data['total_gross_salary']             = $totalBasicSalaryLast;
+    //                 $data['total_child_allowance']          = $totalChildAllowance;
+    //                 $data['phone_allowance']                = $item->phone_allowance;
+    //                 $data['total_kny_phcumben']             = $totalBunus;
+    //                 $data['monthly_quarterly_bonuses']      = $monthlyQuarterlyIncentive;
+    //                 $data['annual_incentive_bonus']         = $annualBonus;
+    //                 $data['other_benefits']                 = $otherBenefit;
+    //                 $data['total_severance_pay']            = round($totalSeverancePay,3);
+    //                 $data['seniority_pay_included_tax']     = $seniorityPayableTax;
+    //                 $data['total_gross']                    = $totalGrossSalaryBeforpension;
+    //                 $data['total_pension_fund']             = $pension_contribution;
+    //                 $data['base_salary_received_usd']       = $totalGrossAfterPension;
+    //                 $data['base_salary_received_riel']      = round($totalExchangeRiel, 3);
+    //                 $data['total_tax_base_riel']            = round($totalTtaxBbaseRiel, 3);
+    //                 $data['total_charges_reduced']          = $totalChargesReduced;
+    //                 $data['total_rate']                     = $totalTax;
+    //                 $data['seniority_pay_excluded_tax']     = $taxExemptionSalary;
+    //                 $data['total_salary_tax_riel']          = round($totalSalaryTaxRiel,3);
+    //                 $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
+    //                 $data['loan_amount']                    = $LoanAmount;
+    //                 $data['total_staff_book']               = $totalStaffBook;
+    //                 $data['adjustment']                     = $adjustmentExcludeTaxe;
+    //                 $data['adjustment_include_taxe']        = $adjustmentIncludeTaxe;
+    //                 $data['total_amount_car']               = $totalParkAllowance;
+    //                 $data['total_salary']                   = $totalNetSalary;
+    //                 $data['exchange_rate']                  = $request->exchange_rate;
+    //                 $data['created_by']                     = Auth::user()->id;
+    //                 payrollPreview::create($data);
+    //             }
+    //             Toastr::success('Created payroll successfully.','Success');
+    //             return redirect()->back();
+    //             DB::commit();
+    //         } else {
+    //             DB::rollback();
+    //             Toastr::error('Can not employee payroll','Error');
+    //             return redirect()->back();
+    //         }
+    //     }catch(\Exception $e){
+    //         DB::rollback();
+    //         Toastr::error('Payroll created fail','Error');
+    //         return redirect()->back();
+    //     }
+    // }
     public function payrollStaffResign(Request $request){
         if (permissionAccess("m4-s7","is_view")->value != "1") {
             return view('upgrade.access_page');

@@ -151,11 +151,24 @@
                                                     <textarea rows="7" class="form-control" placeholder="Enter text here" readonly>{{$Detailitem->action_plan}}</textarea>
                                                 </td>
                                                 <td class="text-center">
-                                                    <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>
+                                                    {{-- <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>
                                                         <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
                                                         <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
                                                         <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
                                                         <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
+                                                    </select> --}}
+                                                    <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>
+                                                        <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
+                                                        <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
+
+                                                        <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
+                                                        <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
+
+                                                        <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
+                                                        <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
+
+                                                        <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
+                                                        <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
                                                     </select>
                                                     <div class="goal-input-wrapper mt-1">
                                                         <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal" readonly>{{ $Detailitem->goal }}</textarea>
@@ -292,7 +305,7 @@
             let goal = $row.find('.goal').val();
             let progress = $(this).val();
             let goalType = $row.find('.goal_type').val();
-
+            
             let scoreAchieved = 0;
             if (!goal || !progress) return;
 
@@ -301,29 +314,77 @@
             let lastMax = null;   // store last max to compare
 
             const getParsedValue = (val, type) => {
+                if (!val) return null;
+                val = val.toString().trim();
+
                 switch (type) {
-                    case 'date':
+                    case 'date_increment':
+                    case 'date_decrement':
                         return Date.parse(val);
-                    case 'percent':
+
+                    case 'percent_increment':
+                    case 'percent_decrement':
                         return parseFloat(val.replace('%', ''));
-                    case 'currency':
+
+                    case 'currency_increment':
+                    case 'currency_decrement':
                         return parseFloat(val.replace(/[^\d.]/g, ''));
+
+                    case 'number_increment':
+                    case 'number_decrement':
+                        return parseFloat(val); // NO replace needed
+
                     default:
                         return parseFloat(val);
                 }
             };
-
             const input = getParsedValue(progress, goalType);
             lines.forEach((element, index) => {
                 let [minRaw, maxRaw] = element.trim().split(/\s+/);
                 let min = getParsedValue(minRaw, goalType);
                 let max = getParsedValue(maxRaw, goalType);
                 lastMax = max;
-                if (!isNaN(input) && input >= min && input <= max) {
+                if (isNaN(input) || isNaN(min) || isNaN(max)) return;
+                let matched = false;
+                // Increment types → value increases
+                if (goalType.includes("increment")) {
+                    if (input >= min && input <= max) matched = true;
+                }
+                // Decrement types → value decreases
+                if (goalType.includes("decrement")) {
+                    if (input <= min && input <= max) matched = true;
+                }
+                if (matched) {
                     scoreAchieved = index + 1;
-                    return false; // stop looping
+                    return false; // stop loop
                 }
             });
+
+
+            // const getParsedValue = (val, type) => {
+            //     switch (type) {
+            //         case 'date':
+            //             return Date.parse(val);
+            //         case 'percent':
+            //             return parseFloat(val.replace('%', ''));
+            //         case 'currency':
+            //             return parseFloat(val.replace(/[^\d.]/g, ''));
+            //         default:
+            //             return parseFloat(val);
+            //     }
+            // };
+
+            // const input = getParsedValue(progress, goalType);
+            // lines.forEach((element, index) => {
+            //     let [minRaw, maxRaw] = element.trim().split(/\s+/);
+            //     let min = getParsedValue(minRaw, goalType);
+            //     let max = getParsedValue(maxRaw, goalType);
+            //     lastMax = max;
+            //     if (!isNaN(input) && input >= min && input <= max) {
+            //         scoreAchieved = index + 1;
+            //         return false; // stop looping
+            //     }
+            // });
 
             // Check for exceeding max range
             // if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {

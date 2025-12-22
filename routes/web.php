@@ -27,6 +27,7 @@ use App\Http\Controllers\Admins\LeaveTypeController;
 use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\FnApprovalController;
 use App\Http\Controllers\Admins\PermissionController;
+use App\Http\Controllers\CBS\COPerformanceController;
 use App\Http\Controllers\Admins\ActivityLogController;
 use App\Http\Controllers\Admins\LeavesAdminController;
 use App\Http\Controllers\Admins\MotorRentelController;
@@ -44,6 +45,7 @@ use App\Http\Controllers\Admins\ExpenseRequestController;
 use App\Http\Controllers\Admins\FNExchangeRateController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\VillageAddressController;
+use App\Http\Controllers\CBS\LoandDetailListingController;
 use App\Http\Controllers\Admins\CandidateResumeController;
 use App\Http\Controllers\Admins\ConmmuneAddressController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
@@ -85,6 +87,15 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/page/not-found', function() {
         return view('upgrade.feature_not_available');
     });
+
+    // CBS Report Routes
+    Route::prefix('cbs/report')->group(function () {
+        Route::get('loan/detail/listing',[LoandDetailListingController::class,'loanDetailListing']);
+        Route::get('loan/detail/listing/download',[LoandDetailListingController::class,'download']);
+        Route::get('co-performance',[COPerformanceController::class,'coPerformance']);
+        Route::get('co-performance/download',[COPerformanceController::class,'coPerformanceDownload']);
+    });
+    
     Route::get('admin/activity-log', [ActivityLogController::class,'index']);
     Route::get('/dashboad/employee', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboad.employee');
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);

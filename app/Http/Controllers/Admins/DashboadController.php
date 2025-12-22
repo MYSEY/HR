@@ -8,19 +8,19 @@ use App\Models\Option;
 use App\Models\Branchs;
 use App\Models\Holiday;
 use App\Models\Training;
+use App\Models\Department;
 use App\Models\Transferred;
 use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
 use App\Models\StaffPromoted;
+use App\Models\ExpenseRequest;
 use App\Models\CandidateResume;
 use App\Models\LeaveAllocation;
 use App\Models\RecruitmentPlan;
-use App\Http\Controllers\Controller;
-use App\Models\Department;
-use App\Models\ExpenseRequest;
-use App\Repositories\Admin\EmployeeRepository;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\Admin\EmployeeRepository;
 
 class DashboadController extends Controller
 {

@@ -78,6 +78,19 @@ return [
             'search_path' => 'public',
             'sslmode' => 'prefer',
         ],
+        
+        'pgsql' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST_PG'),
+            'port' => env('DB_PORT_PG'),
+            'database' => env('DB_DATABASE_PG'),
+            'username' => env('DB_USERNAME_PG'),
+            'password' => env('DB_PASSWORD_PG'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',

@@ -110,6 +110,8 @@
     <link href="{{ asset('admin/css/select2.min.css') }}" rel="stylesheet" type="text/css">
 
     <link href="{{ asset('admin/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+
 
     <link href="{{ asset('admin/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css">
 
@@ -291,8 +293,11 @@
 
     <script src="{{ asset('/admin/js/select2.min.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('/admin/js/dataTables.bootstrap4.min.js') }}"></script>
+    {{-- <script src="{{ asset('/admin/js/jquery.dataTables.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('/admin/js/dataTables.bootstrap4.min.js') }}"></script> --}}
+
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 
     <script src="{{ asset('/admin/js/bootstrap-datetimepicker.min.js') }}"></script>
     <script src="{{ asset('/admin/js/daterangepicker.js') }}"></script>
@@ -326,11 +331,12 @@
     <script type="text/javascript" src="{{ asset('/admin/js/noty.min.js') }}"></script>
     <script src="{{asset('/admin/js/bootstrap3-typeahead.min.js')}}"></script>
 
+
     <script>
         var rolePermission = $("#rolePermission").val();
         if (rolePermission != "HRAdmin") {
             let idleTime = 0;
-            const maxIdleTime = 5 * 60 * 1000; // 5 minutes (in milliseconds)
+            const maxIdleTime = 60 * 60 * 1000; // 5 minutes (in milliseconds)
         
             function resetIdleTimer() {
                 clearTimeout(idleTime);

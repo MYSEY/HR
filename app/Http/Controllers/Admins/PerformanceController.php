@@ -231,7 +231,6 @@ class PerformanceController extends Controller
                         ]);
         
                         foreach ($titleItem['dataPurpose'] as $purposeItem) {
-        
                             $purpose = Purpose::create([
                                 'performance_id' => $performance->id,
                                 'title_id'       => $title->id,
@@ -240,45 +239,77 @@ class PerformanceController extends Controller
                             ]);
         
                             foreach ($purposeItem['dataKPi'] as $kpi) {
-        
                                 /* ---- Validate goal lines -------------------------------- */
                                 $isValidGoal = true;
                                 $goalType    = $kpi['goal_type'];           // number|currency|percent|date
                                 $lines       = explode("\n", $kpi['goal']);
         
+                                // foreach ($lines as $line) {
+                                //     $parts = preg_split('/\s+/', trim($line));
+                                //     if (count($parts) !== 2) { $isValidGoal = false; break; }
+                                //     [$min, $max] = $parts;
+                                //     switch ($goalType) {
+                                //         case 'number':
+                                //         case 'currency':
+                                //         case 'percent':
+                                //             if (!is_numeric($min) || !is_numeric($max)) {
+                                //                 $isValidGoal = false;
+                                //             }
+                                //             break;
+                                //         case 'date':
+                                //             try {
+                                //                 $d1 = \Carbon\Carbon::createFromFormat('Y-m-d', $min);
+                                //                 $d2 = \Carbon\Carbon::createFromFormat('Y-m-d', $max);
+        
+                                //                 if ($d1->format('Y-m-d') !== $min || $d2->format('Y-m-d') !== $max) {
+                                //                     $isValidGoal = false;
+                                //                 }
+                                //             } catch (\Exception $e) {
+                                //                 $isValidGoal = false;
+                                //             }
+                                //             break;
+                                //         default:
+                                //             $isValidGoal = false;
+                                //     }
+                                //     if (!$isValidGoal) { break; }
+                                // }
+
                                 foreach ($lines as $line) {
                                     $parts = preg_split('/\s+/', trim($line));
-        
                                     if (count($parts) !== 2) { $isValidGoal = false; break; }
-        
                                     [$min, $max] = $parts;
-        
-                                    switch ($goalType) {
-                                        case 'number':
-                                        case 'currency':
-                                        case 'percent':
-                                            if (!is_numeric($min) || !is_numeric($max)) {
-                                                $isValidGoal = false;
-                                            }
-                                            break;
-        
-                                        case 'date':
-                                            try {
-                                                $d1 = \Carbon\Carbon::createFromFormat('Y-m-d', $min);
-                                                $d2 = \Carbon\Carbon::createFromFormat('Y-m-d', $max);
-        
-                                                if ($d1->format('Y-m-d') !== $min || $d2->format('Y-m-d') !== $max) {
-                                                    $isValidGoal = false;
-                                                }
-                                            } catch (\Exception $e) {
-                                                $isValidGoal = false;
-                                            }
-                                            break;
-        
-                                        default:
+                                    // Parse numeric/date types
+                                    if (str_contains($goalType, 'number') || str_contains($goalType, 'percent') || str_contains($goalType, 'currency')) {
+                                        if (!is_numeric($min) || !is_numeric($max)) {
                                             $isValidGoal = false;
+                                            break;
+                                        }
                                     }
-                                    if (!$isValidGoal) { break; }
+                                    elseif (str_contains($goalType, 'date')) {
+                                        try {
+                                            $min = Carbon::parse($min);
+                                            $max = Carbon::parse($max);
+                                        } catch (\Exception $e) {
+                                            $isValidGoal = false;
+                                            break;
+                                        }
+                                    } else {
+                                        $isValidGoal = false;
+                                        break;
+                                    }
+
+                                    // Determine increment or decrement
+                                    if ($min < $max)       $current = 'inc';
+                                    elseif ($min > $max)   $current = 'dec';
+                                    else                   $current = 'equal';
+                                    // Assign direction based on goal type
+                                    $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
+
+                                    // "equal" is allowed for both increment & decrement
+                                    if ($current !== 'equal' && $current !== $expected) {
+                                        $isValidGoal = false;
+                                        break;
+                                    }
                                 }
         
                                 if (!$isValidGoal) {
@@ -512,40 +543,79 @@ class PerformanceController extends Controller
                                     $goalType    = $kpi['goal_type'];
                                     $lines       = explode("\n", $kpi['goal']);
                 
+                                    // foreach ($lines as $line) {
+                                    //     $parts = preg_split('/\s+/', trim($line));
+                
+                                    //     if (count($parts) !== 2) { $isValidGoal = false; break; }
+                
+                                    //     [$min, $max] = $parts;
+                
+                                    //     switch ($goalType) {
+                                    //         case 'number':
+                                    //         case 'currency':
+                                    //         case 'percent':
+                                    //             if (!is_numeric($min) || !is_numeric($max)) {
+                                    //                 $isValidGoal = false;
+                                    //             }
+                                    //             break;
+                
+                                    //         case 'date':
+                                    //             try {
+                                    //                 $d1 = \Carbon\Carbon::createFromFormat('Y-m-d', $min);
+                                    //                 $d2 = \Carbon\Carbon::createFromFormat('Y-m-d', $max);
+                
+                                    //                 if ($d1->format('Y-m-d') !== $min || $d2->format('Y-m-d') !== $max) {
+                                    //                     $isValidGoal = false;
+                                    //                 }
+                                    //             } catch (\Exception $e) {
+                                    //                 $isValidGoal = false;
+                                    //             }
+                                    //             break;
+                
+                                    //         default:
+                                    //             $isValidGoal = false;
+                                    //     }
+                                    //     if (!$isValidGoal) { break; }
+                                    // }
+
                                     foreach ($lines as $line) {
                                         $parts = preg_split('/\s+/', trim($line));
-                
                                         if (count($parts) !== 2) { $isValidGoal = false; break; }
-                
                                         [$min, $max] = $parts;
-                
-                                        switch ($goalType) {
-                                            case 'number':
-                                            case 'currency':
-                                            case 'percent':
-                                                if (!is_numeric($min) || !is_numeric($max)) {
-                                                    $isValidGoal = false;
-                                                }
-                                                break;
-                
-                                            case 'date':
-                                                try {
-                                                    $d1 = \Carbon\Carbon::createFromFormat('Y-m-d', $min);
-                                                    $d2 = \Carbon\Carbon::createFromFormat('Y-m-d', $max);
-                
-                                                    if ($d1->format('Y-m-d') !== $min || $d2->format('Y-m-d') !== $max) {
-                                                        $isValidGoal = false;
-                                                    }
-                                                } catch (\Exception $e) {
-                                                    $isValidGoal = false;
-                                                }
-                                                break;
-                
-                                            default:
+                                        // Parse numeric/date types
+                                        if (str_contains($goalType, 'number') || str_contains($goalType, 'percent') || str_contains($goalType, 'currency')) {
+                                            if (!is_numeric($min) || !is_numeric($max)) {
                                                 $isValidGoal = false;
+                                                break;
+                                            }
                                         }
-                                        if (!$isValidGoal) { break; }
+                                        elseif (str_contains($goalType, 'date')) {
+                                            try {
+                                                $min = Carbon::parse($min);
+                                                $max = Carbon::parse($max);
+                                            } catch (\Exception $e) {
+                                                $isValidGoal = false;
+                                                break;
+                                            }
+                                        } else {
+                                            $isValidGoal = false;
+                                            break;
+                                        }
+
+                                        // Determine increment or decrement
+                                        if ($min < $max)       $current = 'inc';
+                                        elseif ($min > $max)   $current = 'dec';
+                                        else                   $current = 'equal';
+                                        // Assign direction based on goal type
+                                        $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
+
+                                        // "equal" is allowed for both increment & decrement
+                                        if ($current !== 'equal' && $current !== $expected) {
+                                            $isValidGoal = false;
+                                            break;
+                                        }
                                     }
+
                 
                                     if (!$isValidGoal) {
                                         DB::rollBack();
