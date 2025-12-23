@@ -54,8 +54,7 @@ class CandidateResumeController extends Controller
             if ($RolePermission == 'BM') {
                 $query->where("location_applied", Auth::user()->branch_id);
             }
-        })
-        ->get();
+        })->count();
         $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'BM') {
@@ -121,6 +120,54 @@ class CandidateResumeController extends Controller
             'totalUpcomings',
             'totalUpcomingtotalCancel',
         ]));
+    }
+
+    public function dataShow(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $query = CandidateResume::where("status", "1")
+                ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                    if ($RolePermission == 'BM') {
+                        $query->where("location_applied", Auth::user()->branch_id);
+                    }
+                });
+
+            // 🔍 Search
+            $searchValue = $request->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('candidate_resumes.id', 'like', "%{$searchValue}%")
+                    ->orWhere('candidate_resumes.name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('candidate_resumes.name_kh', 'like', "%{$searchValue}%")
+                    ->orWhere('candidate_resumes.current_position', 'like', "%{$searchValue}%")
+                    ->orWhere('candidate_resumes.companey_name', 'like', "%{$searchValue}%")
+                    ->orWhere('candidate_resumes.current_address', 'like', "%{$searchValue}%");
+                });
+            }
+
+            // Counts
+            $recordsTotal = CandidateResume::where("status", "1")->count();
+            $recordsFiltered = $query->count();
+
+            // Pagination
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+
+            // 🔥 HANDLE "ALL"
+            if ($limit == -1) {
+                $data = $query->get(); // get all rows
+            } else {
+                $data = $query->offset($start)->limit($limit)->get();
+            }
+
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
     }
 
     /**

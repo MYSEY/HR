@@ -102,7 +102,7 @@
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true"
-                                    role="tab">@lang('lang.cvs')<span id="data_cv" class="badge bg-secondary ms-1 rounded-pill">{{count($data)}}</span></a>
+                                    role="tab">@lang('lang.cvs')<span id="data_cv" class="badge bg-secondary ms-1 rounded-pill">{{$data}}</span></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
@@ -203,10 +203,20 @@
         @include('recruitments.candidate_resumes.modal_form_edit')
         @include('recruitments.candidate_resumes.modal_form_create_emp')
         @include('recruitments.candidate_resumes.import')
+
+        <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p>Loading Data...</p>
+            </div>
+        </div>
     </div>
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
+@section('script')
 <script type="text/javascript">
     $(function(){
         $("#import_new_cvs").on("click", function() {
@@ -1151,8 +1161,168 @@
                 });
             }
         }); 
+        datashowTables();
     });
+
+    function datashowTables() {
+        let canUpdate = "{{ Helper::permissionAccess('m3-s1','is_update') }}";
+        let canDelete = "{{ Helper::permissionAccess('m3-s1','is_delete') }}";
+        $('#loading-overlay').show();
+
+        if ($.fn.DataTable.isDataTable('#Candidate_CVs')) {
+            $('#Candidate_CVs').DataTable().clear().destroy();
+        }
+
+        $('#Candidate_CVs').DataTable({
+            destroy: true,
+            pageLength: 10,
+            processing: true,
+            serverSide: true,
+            order: [[0, 'desc']],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
+            ajax: {
+                url: '{{ URL("recruitment/candidate-resume/indexshow") }}',
+                type: 'GET',
+                dataSrc: function (response) { 
+                    console.log('AJAX full response:', response); 
+                    console.log('Table data only:', response.data); 
+                    return response.data; 
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    name: 'num',
+                    className: 'ids stuck-scroll-3',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                { data: 'name_en', className: 'stuck-scroll-3' },
+                { data: 'name_kh', className: 'stuck-scroll-3' },
+                { data: 'CandidateGender' },
+                { data: 'current_position' },
+                { data: 'companey_name' },
+                { data: 'current_address' },
+                { data: 'CandidatePosition' },
+                { data: 'CandidateBranch' },
+                {
+                    data: 'received_date',
+                    render: function (data) {
+                        return data ? moment(data).format('DD-MMM-YYYY') : '';
+                    }
+                },
+                { data: 'recruitment_channel' },
+                { data: 'contact_number' },
+                {
+                    data: 'id',
+                    orderable: false,
+                    searchable: false,
+                    render: function (id) {
+                        return `
+                            <div class="dropdown action-label">
+                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
+                                href="#" data-toggle="dropdown">
+                                    <i class="fa fa-dot-circle-o text-purple"></i>
+                                    <span>@lang('lang.received_cv')</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" id="btn-status">
+                                    <a class="dropdown-item"
+                                    data-emp-id="${id}" data-id="2" href="#">
+                                        <i class="fa fa-dot-circle-o text-warning"></i>
+                                        @lang('lang.shortlisted')
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    }
+                },
+                {
+                    data: 'cv',
+                    orderable: false,
+                    searchable: false,
+                    render: function (cv) {
+                        if (cv) {
+                            return `
+                                <small class="block text-ellipsis">
+                                    <a href="/uploads/images/${cv}" target="_blank">
+                                        <i class="la la-file-pdf"></i>
+                                        <span>@lang('lang.preview_cv')</span>
+                                    </a>
+                                </small>
+                            `;
+                        }
+                        return `<span>@lang('lang.no_cv')</span>`;
+                    }
+                },
+                { data: 'remark' },
+                {
+                    data: 'id',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-end',
+                    render: function (id) {
+
+                        if (canUpdate !== "1" && canDelete !== "1") {
+                            return '';
+                        }
+
+                        let editBtn = '';
+                        let deleteBtn = '';
+
+                        if (canUpdate === "1") {
+                            editBtn = `
+                                <a class="dropdown-item update" data-id="${id}">
+                                    <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')
+                                </a>
+                            `;
+                        }
+
+                        if (canDelete === "1") {
+                            deleteBtn = `
+                                <a class="dropdown-item delete"
+                                href="#"
+                                data-id="${id}"
+                                data-bs-toggle="modal"
+                                data-bs-target="#delete_candidate">
+                                    <i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')
+                                </a>
+                            `;
+                        }
+
+                        return `
+                            <div class="dropdown dropdown-action">
+                                <a href="#" class="action-icon dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="material-icons">more_vert</i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    ${editBtn}
+                                    ${deleteBtn}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            ],
+            order: [[0, 'desc']],
+            initComplete: function () {
+                $('#loading-overlay').hide();
+            }
+        });
+
+        $('#Candidate_CVs').on('processing.dt', function (e, settings, processing) {
+            processing ? $('#loading-overlay').show() : $('#loading-overlay').hide();
+        });
+    }
+
     function showDatas(btn_tab){
+         $('#loading-overlay').show();
         let is_update = "{{ Helper::permissionAccess('m3-s1','is_update') }}";
         let is_delete = "{{ Helper::permissionAccess('m3-s1','is_delete') }}";
         let is_cancel = "{{ Helper::permissionAccess('m3-s1','is_cancel') }}";
@@ -1664,7 +1834,9 @@
                 $(".tbl-signed-contract_cancel tbody").html(tr_ct_cancel);
                 $(".tbl-upcoming tbody").html(tr_upcoming);
                 $(".tbl-upcoming_cancel tbody").html(tr_upcoming_cancel);
+                $('#loading-overlay').hide();
             }
         });
     }
 </script>
+@endsection
