@@ -188,22 +188,33 @@ class CandidateResumeController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         try {
-            Activity::all()->last();
+            // Get last activity (optimized)
+            $latestActivity = Activity::latest()->first();
+
             $data = $request->all();
-            $data['created_by'] = Auth::user()->id;
-            $data['name_kh'] = $request->last_name_kh.' '.$request->first_name_kh;
-            $data['name_en'] = $request->last_name_en.' '.$request->first_name_en;
+            $data['created_by'] = Auth::id(); // simpler
+            $data['name_kh'] = $request->last_name_kh . ' ' . $request->first_name_kh;
+            $data['name_en'] = $request->last_name_en . ' ' . $request->first_name_en;
             $data['status'] = "1";
+
             CandidateResume::create($data);
+
+            Toastr::success('Candidate resume created successfully.', 'Success');
+
             DB::commit();
-            Toastr::success('Candidate resume created successfully.','Success');
+
             return redirect()->back();
-        } catch (\Throwable $exp) {
+
+        } catch (\Throwable $e) {
             DB::rollback();
-            Toastr::error('Candidate resume created fail.','Error');
+            Toastr::error('Candidate resume creation failed: '.$e->getMessage(), 'Error');
+            return redirect()->back()->withInput();
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -421,6 +432,7 @@ class CandidateResumeController extends Controller
      */
     public function update(Request $request)
     {
+        DB::beginTransaction();
         try{
             if ($request->hasFile('cv')) {
                 $file = $request->file('cv');
@@ -454,6 +466,7 @@ class CandidateResumeController extends Controller
             $data['updated_by']            = Auth::user()->id;
             $data->save();
             Toastr::success('Candidate resume updated successfully.','Success');
+            DB::commit();
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
