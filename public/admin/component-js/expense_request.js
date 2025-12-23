@@ -64,6 +64,10 @@ $(document).ready(function() {
             reviewLink.href = "#"; // Reset href
         }
     });
+    // $("#fn_subject").on("change", function(){
+    //     let value_fn_subject = $(this).val();
+    //     $("#fn_reason_subject").text("តបតាមកម្មវត្ថុ និងយោងខាងលើ ខ្ញុំបាទ/នាងខ្ញុំស្នើសុំ "+value_fn_subject);
+    // });
     
     $("#addLocations").on("change", function() {
         $("#view-tbl_location").css("display", "block");
@@ -289,7 +293,23 @@ $(document).ready(function() {
                 });
                 $("#fn_reference").css("border-color","#198754");
                 form_data.append("fn_reference", fn_reference);
-                
+                let attachment = $('#IrregularFile').prop('files')[0];
+                let fileSize = attachment ? (attachment['size'] / 1024) : "";
+                if (fileSize > 10240) {
+                    new Noty({
+                        title: "",
+                        text: 'Please check file size less than or equal to 10MB.',
+                        type: "error",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                    setTimeout(function () {
+                        $("." + buttonSubmit).attr('disabled',false);
+                        $(".loading-icon").css("display", "none");
+                        $(".btn-txt").css("display", "block");
+                    }, 500);
+                    return false;
+                }
                 let fileInput = $('#IrregularFile')[0];
                 if (fileInput.files.length > 0) {
                     let file_data = fileInput.files[0];
@@ -309,6 +329,23 @@ $(document).ready(function() {
             }else{
                 $("#RI_required").css("display","none");
                 $("#IrregularFileName").css("border-color","#198754");
+                let attachment = $('#IrregularFile').prop('files')[0];
+                let fileSize = attachment ? (attachment['size'] / 1024) : "";
+                if (fileSize > 10240) {
+                    new Noty({
+                        title: "",
+                        text: 'Please check file size less than or equal to 10MB.',
+                        type: "error",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                    setTimeout(function () {
+                        $("." + buttonSubmit).attr('disabled',false);
+                        $(".loading-icon").css("display", "none");
+                        $(".btn-txt").css("display", "block");
+                    }, 500);
+                    return false;
+                }
                 let fileInput = $('#IrregularFile')[0];
                 if (fileInput.files.length > 0) {
                     let file_data = fileInput.files[0];

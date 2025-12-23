@@ -1064,7 +1064,7 @@ return[
     "september" => "កញ្ញា",
     "october" => "តុលា",
 	"object" => "កម្មវត្ថុ",
-	"or_tax_on_fring_benefit" => "ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម",
+	"or_tax_on_fring_benefit" => "ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម/ប្រាក់បៀវត្ស",
     "november" => "វិច្ឆិកា",
     "december" => "ធ្នូ",
 ];

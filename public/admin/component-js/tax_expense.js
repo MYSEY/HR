@@ -197,6 +197,23 @@ $(document).ready(function() {
             let fileInput = $('#IrregularFile')[0];
             if (fileInput.files.length > 0) {
                 let file_data = fileInput.files[0];
+                 let attachment = $('#IrregularFile').prop('files')[0];
+                let fileSize = attachment ? (attachment['size'] / 1024) : "";
+                if (fileSize > 10240) {
+                    new Noty({
+                        title: "",
+                        text: 'Please check file size less than or equal to 10MB.',
+                        type: "error",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                    setTimeout(function () {
+                        $("." + buttonSubmit).attr('disabled',false);
+                        $(".loading-icon").css("display", "none");
+                        $(".btn-txt").css("display", "block");
+                    }, 500);
+                    return false;
+                }
                 form_data.append("fn_invoice", file_data);
             }
         }
