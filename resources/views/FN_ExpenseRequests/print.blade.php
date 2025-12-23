@@ -87,7 +87,7 @@
                                 <td class="table_tr_" colspan="2">៤ ពន្ធកាត់ទុក</td>
                             </tr>
                             <tr>
-                                <td class="table_tr_" colspan="2"><span style="margin-left: 4%"> ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម៊/ប្រាក់បៀវត្ស</span></td>
+                                <td class="table_tr_" colspan="2"><span style="margin-left: 4%"> ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម/ប្រាក់បៀវត្ស</span></td>
                             </tr>
                             <tr>
                                 <td class="table_tr_" colspan="2">៥ អាករជំនួស (VAT Reverse Charge) ១០% </td>
