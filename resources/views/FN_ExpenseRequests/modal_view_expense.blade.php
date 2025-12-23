@@ -91,7 +91,7 @@
                     <div id="block_fringe_benefit" style="display: none">
                         <div class="row">
                             <label class="col-form-label col-sm-1"></label>
-                            <label class="col-form-label col-sm-6"><span class="m-3"> ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម</span> <span style="float: right">:</span></label>
+                            <label class="col-form-label col-sm-6"><span class="m-3"> ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម/ប្រាក់បៀវត្ស</span> <span style="float: right">:</span></label>
                             <label class="col-form-label col-sm-2" id="v_tax_fringe_benefit_usd"> </label>
                             <label class="col-form-label col-sm-3" id="v_tax_fringe_benefit_riel"> </label>
                         </div>
