@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use App\Exports\ExportCOPerformance;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
-use PhpParser\Node\Stmt\TryCatch;
 
 class COPerformanceController extends Controller
 {
@@ -30,10 +29,9 @@ class COPerformanceController extends Controller
             ->table('MKT_LOAN_CONTRACT as LC')
             ->select([
                 'LC.ContractOfficerID',
+                'LC.Currency',
                 DB::raw('MAX("OFFICER"."FirstName") AS "FirstName"'),
                 DB::raw('MAX("OFFICER"."LastName") AS "LastName"'),
-                'LC.Currency',
-                'LC.Branch',
 
                 DB::raw('SUM("LC"."Disbursed") AS TotalDisbursed'),
                 DB::raw('SUM("LC"."OutstandingAmountAS") AS TotalOutstanding'),
@@ -47,7 +45,16 @@ class COPerformanceController extends Controller
                 // ===============================
                 DB::raw('SUM("PD"."PDPrincipal") AS "TotalPDPrincipal"'),
                 DB::raw('SUM("PD"."PDInterest") AS "TotalPDInterest"'),
-                DB::raw('SUM("PD"."PDPenalty") AS "TotalPDPenalty"'),
+                // DB::raw('SUM("PD"."PDPenalty") AS "TotalPDPenalty"'),
+                DB::raw('
+                    SUM(
+                        CASE
+                            WHEN NULLIF("LC"."AssetClass", \'\')::INTEGER > 0
+                            THEN "PD"."PDPenalty"
+                            ELSE 0
+                        END
+                    ) AS "TotalPDPenalty"
+                '),
                 DB::raw('
                     COUNT(
                         DISTINCT CASE
@@ -170,11 +177,9 @@ class COPerformanceController extends Controller
                 $join->whereRaw('"PD"."ID" = \'PD\' || "LC"."ID"');
             })
             ->where('LC.OutstandingAmountAS', '>', 0)
-            ->where('LC.AssetClass', '>=', 0)
             ->groupBy(
                 'LC.ContractOfficerID',
-                'LC.Currency',
-                'LC.Branch'
+                'LC.Currency'
             );
             
             $query->when(request('branch_id'), function ($q, $branch_id) {
@@ -200,15 +205,13 @@ class COPerformanceController extends Controller
             $limit = intval(request('length', 10));
 
             $data = $query->offset($start)->limit($limit)->get();
-            // dd($data);
+            
+
             // ---- PROCESS GROUP + SUBTOTALS ----
             $currency = DB::connection('pgsql')->table('MKT_CURRENCY')->where('ID','KHR')->select('ID','ReportingRate')->first();
             $exchangeRate = (float)$currency->ReportingRate;
-            $currentGroup = null;
-            $lastRowCurrency = null;
-            $finalData = [];
 
-            $groupTotals = [
+            $emptyTotals = [
                 'TotalBorrowers' => 0,
                 'TotalLoans' => 0,
                 'TotalDisbursed' => 0,
@@ -226,7 +229,12 @@ class COPerformanceController extends Controller
                 'ParAmtAS' => 0,
             ];
 
-            foreach ($data as $row) {
+            $groupTotals = $emptyTotals;
+            $grandTotals = $emptyTotals;
+            $currentGroup = null;
+            $finalData = [];
+            $allRows = (clone $query)->get();
+            foreach ($allRows as $row) {
                 // -----------------------------
                 // GROUP CHANGE → PUSH SUBTOTAL
                 // -----------------------------
@@ -247,7 +255,7 @@ class COPerformanceController extends Controller
 
                         $finalData[] = [
                             'ContractOfficerID' => '',
-                            'DisplayName' => '<b style="color:#1f1f1f;font-size:14px;">Sub Total</b>',
+                            'DisplayName' => '<b style="color:#1f1f1f;font-size:14px;">SubTotal</b>',
                             'Currency' => 'USD',
                             'TotalBorrowers' => $groupTotals['TotalBorrowers'],
                             'TotalLoans' => $groupTotals['TotalLoans'],
@@ -268,10 +276,15 @@ class COPerformanceController extends Controller
                             'OutPARRate' => round($subOutPARRate * 100, 2),
                             'subtotal_row' => true
                         ];
+                        // ✅ ADD SUBTOTAL → GRAND TOTAL
+                        foreach ($groupTotals as $key => $value) {
+                            $grandTotals[$key] += $value;
+                        }
                     }
 
                     // RESET GROUP
                     $currentGroup = $row->ContractOfficerID;
+                    $groupTotals = $emptyTotals;
                     $groupTotals = [
                         'TotalBorrowers' => 0,
                         'TotalLoans' => 0,
@@ -338,7 +351,6 @@ class COPerformanceController extends Controller
                 // -----------------------------
                 // CONVERT TO USD FOR SUBTOTAL
                 // -----------------------------
-                // dd($row->totaldisbursed);
                 $usdDisbursed = ($row->Currency === 'KHR') ? $row->totaldisbursed * $exchangeRate : $row->totaldisbursed;
                 $usdOutstanding = ($row->Currency === 'KHR') ? $row->totaloutstanding * $exchangeRate : $row->totaloutstanding;
                 $usdLoanBalance = ($row->Currency === 'KHR') ? $row->totalloanbalanceas * $exchangeRate : $row->totalloanbalanceas;
@@ -346,6 +358,7 @@ class COPerformanceController extends Controller
                 $TotalPDPrincipal = ($row->Currency === 'KHR') ? $row->TotalPDPrincipal * $exchangeRate : $row->TotalPDPrincipal;
                 $TotalPDInterest = ($row->Currency === 'KHR') ? $row->TotalPDInterest * $exchangeRate : $row->TotalPDInterest;
                 $TotalPDPenalty = ($row->Currency === 'KHR') ? $row->TotalPDPenalty * $exchangeRate : $row->TotalPDPenalty;
+                
                 // -----------------------------
                 // ACCUMULATE SUBTOTALS (USD)
                 // -----------------------------
@@ -368,23 +381,19 @@ class COPerformanceController extends Controller
             // FINAL SUBTOTAL
             // -----------------------------
             if ($currentGroup !== null) {
-
                 $finalParRate = 0;
                 if ($groupTotals['TotalOutstanding'] > 0) {
                     $finalParRate = $groupTotals['ParAmount'] / $groupTotals['TotalOutstanding'];
                 }
-                
                 $ArrearRate = 0;
                 $ArrearRate = $groupTotals['TotalPDPrincipal'] / $groupTotals['TotalOutstanding'];
-
                 $finalOutPARRate = 0;
                 if ($groupTotals['ParAmtAS'] > 0) {
                     $finalOutPARRate = $groupTotals['ParAmtAS'] / $groupTotals['OutstandingAmt'];
                 }
-
                 $finalData[] = [
                     'ContractOfficerID' => '',
-                    'DisplayName' => '<b style="color:#1f1f1f;font-size:14px;">Sub Total</b>',
+                    'DisplayName' => '<b style="color:#1f1f1f;font-size:14px;">SubTotal</b>',
                     'Currency' => 'USD',
                     'TotalBorrowers' => $groupTotals['TotalBorrowers'],
                     'TotalLoans' => $groupTotals['TotalLoans'],
@@ -405,7 +414,42 @@ class COPerformanceController extends Controller
                     'OutPARRate' => round($finalOutPARRate * 100, 2),
                     'subtotal_row' => true
                 ];
+
+                // ✅ ADD LAST SUBTOTAL → GRAND TOTAL
+                foreach ($groupTotals as $key => $value) {
+                    $grandTotals[$key] += $value;
+                }
             }
+           
+            $totalPages = ceil($recordsFiltered / $limit);
+            $currentPage = floor($start / $limit) + 1;
+
+            if ($currentPage === $totalPages) {
+                $finalData[] = [
+                    'ContractOfficerID' => '',
+                    'DisplayName' => '<b style="color:#1f1f1f;font-size:14px;">GrandTotal</b>',
+                    'Currency' => 'USD',
+                    'TotalBorrowers' => $grandTotals['TotalBorrowers'],
+                    'TotalLoans' => $grandTotals['TotalLoans'],
+                    'TotalDisbursed' => $grandTotals['TotalDisbursed'],
+                    'TotalOutstanding' => $grandTotals['TotalOutstanding'],
+                    'TotalLoanBalanceAs' => $grandTotals['TotalLoanBalanceAs'],
+                    'Pars' => $grandTotals['Pars'],
+                    'ParAmount' => $grandTotals['ParAmount'],
+                    'parRate' => round($finalParRate * 100, 2),
+                    'TotalPDPrincipal' => $grandTotals['TotalPDPrincipal'],
+                    'TotalPDInterest' => $grandTotals['TotalPDInterest'],
+                    'TotalPDPenalty' => $grandTotals['TotalPDPenalty'],
+                    'ArrearRate' => round($ArrearRate * 100, 2),
+                    'Loans' => $grandTotals['Loans'],
+                    'OutstandingAmt' => $grandTotals['OutstandingAmt'],
+                    'OutPARs' => $grandTotals['OutPARs'],
+                    'ParAmtAS' => $grandTotals['ParAmtAS'],
+                    'OutPARRate' => round($finalOutPARRate * 100, 2),
+                    'subtotal_row' => true
+                ];
+            }
+            
             return response()->json([
                 'draw' => intval(request('draw')),
                 'recordsTotal' => $recordsTotal,
@@ -447,7 +491,7 @@ class COPerformanceController extends Controller
             // Convert to Carbon
             $date = Carbon::parse($data->LastSystemDate);
             // Add current time
-            $dateTime = $date->format('Y-m-d') . '-' . now()->format('H-i-s');
+            $dateTime = $date->format('Y-m-d') . '-' . now()->format('H-i');
             // File name
             $fileName = "CO Performance {$dateTime}.xlsx";
             return Excel::download(

@@ -203,7 +203,7 @@ class LoandDetailListingController extends Controller
         // Convert to Carbon
         $date = Carbon::parse($data->LastSystemDate);
         // Add current time
-        $dateTime = $date->format('Y-m-d') . '-' . now()->format('H-i-s');
+        $dateTime = $date->format('Y-m-d') . '-' . now()->format('H-i');
         // File name
         $fileName = "Loan Detail Listing {$dateTime}.xlsx";
         return Excel::download(new ExportLoanDetailListing($request), $fileName);

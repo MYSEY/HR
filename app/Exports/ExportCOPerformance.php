@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Sum;
 
 class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
@@ -37,10 +38,9 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
         ->table('MKT_LOAN_CONTRACT as LC')
         ->select([
             'LC.ContractOfficerID',
+            'LC.Currency',
             DB::raw('MAX("OFFICER"."FirstName") AS "FirstName"'),
             DB::raw('MAX("OFFICER"."LastName") AS "LastName"'),
-            'LC.Currency',
-            'LC.Branch',
 
             DB::raw('SUM("LC"."Disbursed") AS totaldisbursed'),
             DB::raw('SUM("LC"."OutstandingAmountAS") AS OutstandingAmt'),
@@ -54,7 +54,16 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             // ===============================
             DB::raw('SUM("PD"."PDPrincipal") AS "TotalPDPrincipal"'),
             DB::raw('SUM("PD"."PDInterest") AS "TotalPDInterest"'),
-            DB::raw('SUM("PD"."PDPenalty") AS "TotalPDPenalty"'),
+            // DB::raw('SUM("PD"."PDPenalty") AS "TotalPDPenalty"'),
+            DB::raw('
+                SUM(
+                    CASE
+                        WHEN NULLIF("LC"."AssetClass", \'\')::INTEGER > 0
+                        THEN "PD"."PDPenalty"
+                        ELSE 0
+                    END
+                ) AS "TotalPDPenalty"
+            '),
             DB::raw('
                 COUNT(
                     DISTINCT CASE
@@ -177,11 +186,9 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             $join->whereRaw('"PD"."ID" = \'PD\' || "LC"."ID"');
         })
         ->where('LC.OutstandingAmountAS', '>', 0)
-        ->where('LC.AssetClass', '>=', 0)
         ->groupBy(
             'LC.ContractOfficerID',
-            'LC.Currency',
-            'LC.Branch'
+            'LC.Currency'
         );
 
         // GET DATA
@@ -204,9 +211,11 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             'loan_balance' => 0,
             'pars' => 0,
             'par_amt' => 0,
+            'par_rate' => 0,
             'pd_principal' => 0,
             'pd_interest' => 0,
             'pd_penalty' => 0,
+            'ArrearRate' => 0,
             'Loans' => 0,
             'OutstandingAmt' => 0,
             'OutPARs' => 0,
@@ -214,10 +223,8 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             'OutPARRate' => 0,
         ];
         // GRAND TOTAL
-        // $grand = $sub;
         $grand = array_fill_keys(array_keys($sub), 0);
         foreach ($data as $row) {
-
             // -----------------------------
             // BASE VALUES
             // -----------------------------
@@ -252,6 +259,10 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             // -----------------------------
             if ($currentCO !== null && $currentCO !== $row->ContractOfficerID) {
 
+                $ParRate = $sub['outstanding'] > 0 ? round(($sub['par_amt'] / $sub['outstanding']) * 100, 2) : 0;
+                $ArrearRate = round(($sub['pd_principal'] / $sub['outstanding']) * 100, 2);
+                $OutPARRate = $sub['OutstandingAmt'] > 0 ? round(($sub['ParAmtAS'] / $sub['OutstandingAmt']) * 100, 2): 0;
+                
                 // 👉 print SubTotal row
                 $dataExcel[] = [
                     '',
@@ -259,18 +270,21 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
                     'USD',
                     $sub['borrowers'],
                     $sub['total_loans'],
-                    round($sub['disbursed'], 2),
-                    round($sub['outstanding'], 2),
-                    round($sub['loan_balance'], 2),
+                    number_format($sub['disbursed'], 2),
+                    number_format($sub['outstanding'], 2),
+                    number_format($sub['loan_balance'], 2),
                     $sub['pars'],
-                    round($sub['par_amt'], 2),
-                    round($sub['pd_principal'], 2),
-                    round($sub['pd_interest'], 2),
-                    round($sub['pd_penalty'], 2),
+                    number_format($sub['par_amt'], 2),
+                    $ParRate . '%',
+                    number_format($sub['pd_principal'], 2),
+                    number_format($sub['pd_interest'], 2),
+                    number_format($sub['pd_penalty'], 2),
+                    $ArrearRate . '%',
                     $sub['Loans'],
-                    round($sub['OutstandingAmt'], 2),
+                    number_format($sub['OutstandingAmt'], 2),
                     $sub['OutPARs'],
-                    round($sub['ParAmtAS'], 2),
+                    number_format($sub['ParAmtAS'], 2),
+                    $OutPARRate . '%',
                 ];
 
                 // 👉 add ONLY subtotal to grand total
@@ -294,26 +308,27 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
                 $row->Currency,
                 $row->TotalBorrowers,
                 $row->TotalLoans,
-                $row->totaldisbursed,
-                $row->outstandingamt,
-                $row->totalloanbalanceas,
-                $row->Pars,
-                $row->ParAmount,
+                number_format($row->totaldisbursed,2),
+                number_format($row->outstandingamt,2),
+                number_format($row->totalloanbalanceas,2),
+                number_format($row->Pars,2),
+                number_format($row->ParAmount,2),
                 round(($row->outstandingamt > 0 ? $row->ParAmount / $row->outstandingamt : 0) * 100, 2) . '%',
-                $row->TotalPDPrincipal,
-                $row->TotalPDInterest,
-                $row->TotalPDPenalty,
+                number_format($row->TotalPDPrincipal,2),
+                number_format($row->TotalPDInterest,2),
+                number_format($row->TotalPDPenalty,2),
                 round(($row->outstandingamt > 0 ? $row->TotalPDPrincipal / $row->outstandingamt : 0) * 100, 2) . '%',
-                $row->Loans,
-                $row->OutstandingAmt,
-                $row->OutPARs,
-                $row->ParAmtAS,
+                number_format($row->Loans,2),
+                number_format($row->OutstandingAmt,2),
+                number_format($row->OutPARs,2),
+                number_format($row->ParAmtAS,2),
                 round(($row->OutstandingAmt > 0 ? $row->ParAmtAS / $row->OutstandingAmt : 0) * 100, 2) . '%',
             ];
 
             // -----------------------------
             // ✅ ACCUMULATE SUBTOTAL (USD!)
             // -----------------------------
+
             $sub['borrowers']    += $row->TotalBorrowers;
             $sub['total_loans']  += $row->TotalLoans;
             $sub['disbursed']    += $disbursed;
@@ -328,16 +343,16 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             $sub['OutstandingAmt'] += $OutstandingAmt;
             $sub['OutPARs']      += $row->OutPARs;
             $sub['ParAmtAS']     += $ParAmtAS;
-
-            // foreach ($grand as $k => $v) {
-            //     $grand[$k] += $sub[$k] - ($sub[$k] - $sub[$k]);
-            // }
         }
-
+        
         // ==========================
         // GRAND TOTAL ROW
         // ==========================
         if ($currentCO !== null) {
+
+            $subParRate = $sub['outstanding'] > 0 ? round(($sub['par_amt'] / $sub['outstanding']) * 100, 2): 0;
+            $subArrearRate = round(($sub['pd_principal'] / $sub['outstanding']) * 100, 2);
+            $subOutPARRate = $sub['OutstandingAmt'] > 0 ? round(($sub['ParAmtAS'] / $sub['OutstandingAmt']) * 100, 2) : 0;
 
             $dataExcel[] = [
                 '',
@@ -345,44 +360,54 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
                 'USD',
                 $sub['borrowers'],
                 $sub['total_loans'],
-                round($sub['disbursed'], 2),
-                round($sub['outstanding'], 2),
-                round($sub['loan_balance'], 2),
+                number_format($sub['disbursed'], 2),
+                number_format($sub['outstanding'], 2),
+                number_format($sub['loan_balance'], 2),
                 $sub['pars'],
-                round($sub['par_amt'], 2),
-                round($sub['pd_principal'], 2),
-                round($sub['pd_interest'], 2),
-                round($sub['pd_penalty'], 2),
-                $sub['Loans'],
-                round($sub['OutstandingAmt'], 2),
-                $sub['OutPARs'],
-                round($sub['ParAmtAS'], 2),
+                number_format($sub['par_amt'], 2),
+                $subParRate . '%',
+                number_format($sub['pd_principal'], 2),
+                number_format($sub['pd_interest'], 2),
+                number_format($sub['pd_penalty'], 2),
+                $subArrearRate . '%',
+                number_format($sub['Loans'],2),
+                number_format($sub['OutstandingAmt'], 2),
+                number_format($sub['OutPARs'],2),
+                number_format($sub['ParAmtAS'], 2),
+                $subOutPARRate . '%',
             ];
 
             foreach ($sub as $k => $v) {
                 $grand[$k] += $v;
             }
         }
+
+        $grandParRate = $grand['outstanding'] > 0 ? round(($grand['par_amt'] / $grand['outstanding']) * 100, 2) : 0;
+        $grandArrearRate = round(($grand['pd_principal'] / $grand['outstanding']) * 100, 2);
+        $grandOutPARRate = $grand['OutstandingAmt'] > 0 ? round(($grand['ParAmtAS'] / $grand['OutstandingAmt']) * 100, 2): 0;
+
         $dataExcel[] = [
             '',
             'GrandTotal',
             'USD',
             $grand['borrowers'],
             $grand['total_loans'],
-            round($grand['disbursed'], 2),
-            round($grand['outstanding'], 2),
-            round($grand['loan_balance'], 2),
-            $grand['pars'],
-            round($grand['par_amt'], 2),
-            round($grand['pd_principal'], 2),
-            round($grand['pd_interest'], 2),
-            round($grand['pd_penalty'], 2),
-            $grand['Loans'],
-            round($grand['OutstandingAmt'], 2),
-            $grand['OutPARs'],
-            round($grand['ParAmtAS'], 2),
+            number_format($grand['disbursed'], 2),
+            number_format($grand['outstanding'], 2),
+            number_format($grand['loan_balance'], 2),
+            number_format($grand['pars'],2),
+            number_format($grand['par_amt'], 2),
+            $grandParRate . '%',
+            number_format($grand['pd_principal'], 2),
+            number_format($grand['pd_interest'], 2),
+            number_format($grand['pd_penalty'], 2),
+            $grandArrearRate . '%',
+            number_format($grand['Loans'],2),
+            number_format($grand['OutstandingAmt'], 2),
+            number_format($grand['OutPARs'],2),
+            number_format($grand['ParAmtAS'], 2),
+            $grandOutPARRate . '%',
         ];
-
         $this->export_datas = $dataExcel;
     }
 
