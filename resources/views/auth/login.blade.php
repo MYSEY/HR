@@ -10,6 +10,7 @@
         <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">
         <meta name="author" content="Dreamguys - Bootstrap Admin Template">
         <meta name="robots" content="noindex, nofollow">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>HRMS Admin</title>
 
         <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/favicon.ico') }}">
@@ -176,6 +177,7 @@
                                                     </span>
                                                 @enderror
                                             </div>
+                                            <p id="passwordError" style="color: red;"></p>
                                         </div>
                                         <div class="form-group Password-icon">
                                             <div style="display: flex;" class="position-relative" id="old_password">
@@ -199,91 +201,10 @@
             <div id="errorMessage"></div>
         </div>
         <script>
-            document.getElementById("password").addEventListener("keyup", function(event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    submitForm();
-                }
-            });
-            document.getElementById("number_employee").addEventListener("keyup", function(event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    submitForm();
-                }
-            });
-            $(function(){
-                $(document).ready(function() {
-                    $('#btn-change-pass').submit(function(event) {
-                        event.preventDefault();
-                        var formData = $(this).serialize();
-                        $.ajax({
-                            type: "post",
-                            url: $(this).attr('action'),
-                            data: formData,
-                            dataType: "JSON",
-                            success: function(response) {
-                                let data =  response;
-                                if (data.status == "error") {
-                                    toastr.error(data.message);
-                                    return false;
-                                }
-                                var errors = response.errors;
-                                if (errors) {
-                                    $.each(errors, function(field, messages) {
-                                        if (field === 'new_password') {
-                                            toastr.error(messages[0]);
-                                        } else {
-                                            $.each(messages, function(index, message) {
-                                                toastr.error(messages);
-                                            });
-                                        }
-                                    });
-                                    return false;
-                                }
-                                if (data.role == "Employee") {
-                                    toastr.success('Login successfully.');
-                                    window.location.replace("{{ URL('dashboad/employee') }}"); 
-                                }else{
-                                    toastr.success('Login successfully.');
-                                    window.location.replace("{{ URL('dashboad/admin') }}"); 
-                                }
-                            },
-                        });
-                    });
-                });
-            });
-            function submitForm() {
-                $("#cha_number_employee").val($("#number_employee").val());
-                $.ajax({
-                    type: "post",
-                    url: "{{ url('/login') }}",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        number_employee: $("#number_employee").val(),
-                        password: $("#password").val(),
-                    },
-                    dataType: "JSON",
-                    success: function(response) {
-                        let data =  response;
-                        if (data.status == "success" && data.role == null) {
-                            $("#form-login").css("display", "none");
-                            $("#id01").css("display", "block");
-                            return false;
-                        }
-                        if (data.status == "error") {
-                            toastr.error(data.message);
-                            return false;
-                        }
-                        if (data.status == "success" && data.role == "Employee") {
-                            toastr.success(data.message);
-                            window.location.replace("{{ URL('dashboad/employee') }}"); 
-                        }else{
-                            toastr.success(data.message);
-                            window.location.replace("{{ URL('dashboad/admin') }}"); 
-                        }
-                    }
-                });
-            }
+            const loginUrl = "{{ url('/login') }}";
+            const dashboadEmployee = "{{ URL('dashboad/employee') }}";
+            const dashboadAdmin = "{{ URL('dashboad/admin') }}";
         </script>
+        <script src="{{asset('/admin/component-js/login.js')}}"></script>
     </body>
 </html>

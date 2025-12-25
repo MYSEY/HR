@@ -795,122 +795,124 @@ class UserController extends Controller
                     } else {
                         $totalSalaryStaffResign = ($users->basic_salary * $totalDayStaffResign) / 22;
                     }
-
-                    // *** Caculate leave day**/
-                    if(in_array($request->emp_status, ['3','4','5','6','7','9'])){
-                        $leaveRequest = LeaveAllocation::where('employee_id',$users->id)->first();
-                        $data_request = [
-                            "total_annual_leave" => 0,
-                            "total_sick_leave" => 0,
-                            "total_special_leave" => 0,
-                        ];
-                        if($leaveRequest){
+                    if($users->emp_status == "Probation"){
+                        // *** Caculate leave day**/
+                        if(in_array($request->emp_status, ['3','4','5','6','7','9'])){
+                            $leaveRequest = LeaveAllocation::where('employee_id',$users->id)->first();
                             $data_request = [
-                                "total_annual_leave" => $leaveRequest->total_annual_leave,
-                                "total_sick_leave" => $leaveRequest->total_sick_leave,
-                                "total_special_leave" => $leaveRequest->total_special_leave,
+                                "total_annual_leave" => 0,
+                                "total_sick_leave" => 0,
+                                "total_special_leave" => 0,
                             ];
-                        }
-
-                        $start_date = Carbon::createFromDate($users->date_of_commencement)->format('d-m-Y');
-                        $resign_date = Carbon::createFromDate($request->resign_date)->format('d-m-Y');
-                        $start_day = Carbon::createFromDate($users->date_of_commencement)->format('d');
-
-                        $end_day = Carbon::createFromDate($request->resign_date)->format('d');
-                        $end_month = Carbon::createFromDate($request->resign_date)->format('m-Y');
-
-                        if($start_date >= $resign_date){
-                            $end_date = $start_day.'-'.$end_month;
-                        }else{
-                            $end_date = $end_day.'-'.$end_month;
-                        }
-                        $join_date = Carbon::createFromDate($users->date_of_commencement);
-                        $total_month = $join_date->diffInMonths($end_date);
-                        if($total_month == 0){
-                            $totalWorkingDay = $join_date->diffInWeekdays($startDate);
-                            //*** special case */
-                            $total_sick_leave = 0;
-                            if ($totalWorkingDay < 15) {
-                                $totalDay = 0;
-                            }else if($totalWorkingDay >= 15 && $totalWorkingDay <= 20) {
-                                $totalDay = 1;
-                            }else{
-                                $totalDay = 1.5;
+                            if($leaveRequest){
+                                $data_request = [
+                                    "total_annual_leave" => $leaveRequest->total_annual_leave,
+                                    "total_sick_leave" => $leaveRequest->total_sick_leave,
+                                    "total_special_leave" => $leaveRequest->total_special_leave,
+                                ];
                             }
 
-                            if($totalWorkingDay > 20 ){
-                                $total_sick_leave = 1;
-                            }else {
+                            $start_date = Carbon::createFromDate($users->date_of_commencement)->format('d-m-Y');
+                            $resign_date = Carbon::createFromDate($request->resign_date)->format('d-m-Y');
+                            $start_day = Carbon::createFromDate($users->date_of_commencement)->format('d');
+
+                            $end_day = Carbon::createFromDate($request->resign_date)->format('d');
+                            $end_month = Carbon::createFromDate($request->resign_date)->format('m-Y');
+
+                            if($start_date >= $resign_date){
+                                $end_date = $start_day.'-'.$end_month;
+                            }else{
+                                $end_date = $end_day.'-'.$end_month;
+                            }
+                            $join_date = Carbon::createFromDate($users->date_of_commencement);
+                            $total_month = $join_date->diffInMonths($end_date);
+                            if($total_month == 0){
+                                $totalWorkingDay = $join_date->diffInWeekdays($startDate);
+                                //*** special case */
                                 $total_sick_leave = 0;
-                            }
-                            $dataLeaveAllocation['default_annual_leave'] = $totalDay;
-                            $dataLeaveAllocation['total_annual_leave'] = $totalDay - abs($data_request["total_annual_leave"]);
-                            $dataLeaveAllocation['default_sick_leave'] = $total_sick_leave;
-                            $dataLeaveAllocation['total_sick_leave'] = $total_sick_leave - abs($data_request["total_sick_leave"]);
-                            $dataLeaveAllocation['default_special_leave'] = 22;
-                            $dataLeaveAllocation['total_special_leave'] = 22 - abs($data_request["total_special_leave"]);
-                            //*** end */
-                        }else{
-                            $end_date = $start_day.'-'.$end_month;
-                            $joinResign = Carbon::createFromDate($end_date);
-                            $totalWorkingDay = $joinResign->diffInWeekdays($startDate);
+                                if ($totalWorkingDay < 15) {
+                                    $totalDay = 0;
+                                }else if($totalWorkingDay >= 15 && $totalWorkingDay <= 20) {
+                                    $totalDay = 1;
+                                }else{
+                                    $totalDay = 1.5;
+                                }
 
-                            //*** special case */
-                            $total_sick_leave = 0;
-                            if ($totalWorkingDay < 15) {
-                                $totalDay = 0;
-                            }else if($totalWorkingDay >= 15 && $totalWorkingDay <= 20) {
-                                $totalDay = 1;
-                            }else{
-                                $totalDay = 1.5;
-                            }
-                            //*** end */
-                            $leaveType = LeaveType::get();
-                            foreach ($leaveType as $key => $lt) {
-                                $detault_total_day = ($lt->default_day / 12);
                                 if($totalWorkingDay > 20 ){
-                                    $total_sick_leave = $detault_total_day;
+                                    $total_sick_leave = 1;
                                 }else {
                                     $total_sick_leave = 0;
                                 }
-                                $total_day_inprobation = $detault_total_day * $total_month;
-                                $default_annual_leave = $total_day_inprobation + $totalDay;
+                                $dataLeaveAllocation['default_annual_leave'] = $totalDay;
+                                $dataLeaveAllocation['total_annual_leave'] = $totalDay - abs($data_request["total_annual_leave"]);
+                                $dataLeaveAllocation['default_sick_leave'] = $total_sick_leave;
+                                $dataLeaveAllocation['total_sick_leave'] = $total_sick_leave - abs($data_request["total_sick_leave"]);
+                                $dataLeaveAllocation['default_special_leave'] = 22;
+                                $dataLeaveAllocation['total_special_leave'] = 22 - abs($data_request["total_special_leave"]);
+                                //*** end */
+                            }else{
+                                $end_date = $start_day.'-'.$end_month;
+                                $joinResign = Carbon::createFromDate($end_date);
+                                $totalWorkingDay = $joinResign->diffInWeekdays($startDate);
 
-                                if ($lt->type == "annual_leave") {
-                                    $dataLeaveAllocation['default_annual_leave'] = convertNumber($default_annual_leave);
-                                    $dataLeaveAllocation['total_annual_leave'] = convertNumber($default_annual_leave) - abs($data_request["total_annual_leave"]);
-                                }else if($lt->type == "sick_leave") {
-                                    $totalDayAnnualLeave = $total_day_inprobation + $total_sick_leave;
-                                    $dataLeaveAllocation['default_sick_leave'] = convertNumber($totalDayAnnualLeave);
-                                    $dataLeaveAllocation['total_sick_leave'] = convertNumber($totalDayAnnualLeave) - abs($data_request["total_sick_leave"]);
-                                }else if($lt->type == "special_leave"){
-                                    $dataLeaveAllocation['default_special_leave'] = $lt->default_day;
-                                    $dataLeaveAllocation['total_special_leave'] = $lt->default_day - abs($data_request["total_special_leave"]);
+                                //*** special case */
+                                $total_sick_leave = 0;
+                                if ($totalWorkingDay < 15) {
+                                    $totalDay = 0;
+                                }else if($totalWorkingDay >= 15 && $totalWorkingDay <= 20) {
+                                    $totalDay = 1;
                                 }else{
-                                    $dataLeaveAllocation['default_unpaid_leave'] = 0;
-                                    $dataLeaveAllocation['total_unpaid_leave'] = 0;
+                                    $totalDay = 1.5;
+                                }
+                                //*** end */
+                                $leaveType = LeaveType::get();
+                                foreach ($leaveType as $key => $lt) {
+                                    $detault_total_day = ($lt->default_day / 12);
+                                    if($totalWorkingDay > 20 ){
+                                        $total_sick_leave = $detault_total_day;
+                                    }else {
+                                        $total_sick_leave = 0;
+                                    }
+                                    $total_day_inprobation = $detault_total_day * $total_month;
+                                    $default_annual_leave = $total_day_inprobation + $totalDay;
+
+                                    if ($lt->type == "annual_leave") {
+                                        $dataLeaveAllocation['default_annual_leave'] = convertNumber($default_annual_leave);
+                                        $dataLeaveAllocation['total_annual_leave'] = convertNumber($default_annual_leave) - abs($data_request["total_annual_leave"]);
+                                    }else if($lt->type == "sick_leave") {
+                                        $totalDayAnnualLeave = $total_day_inprobation + $total_sick_leave;
+                                        $dataLeaveAllocation['default_sick_leave'] = convertNumber($totalDayAnnualLeave);
+                                        $dataLeaveAllocation['total_sick_leave'] = convertNumber($totalDayAnnualLeave) - abs($data_request["total_sick_leave"]);
+                                    }else if($lt->type == "special_leave"){
+                                        $dataLeaveAllocation['default_special_leave'] = $lt->default_day;
+                                        $dataLeaveAllocation['total_special_leave'] = $lt->default_day - abs($data_request["total_special_leave"]);
+                                    }else{
+                                        $dataLeaveAllocation['default_unpaid_leave'] = 0;
+                                        $dataLeaveAllocation['total_unpaid_leave'] = 0;
+                                    }
                                 }
                             }
+                            LeaveAllocation::updateOrCreate(
+                                [
+                                    'employee_id' => $users->id,
+                                ],
+                                [
+                                    'default_annual_leave' => $dataLeaveAllocation['default_annual_leave'],
+                                    'total_annual_leave' => $dataLeaveAllocation['total_annual_leave'],
+                                    'default_sick_leave' => $dataLeaveAllocation['default_sick_leave'],
+                                    'total_sick_leave' => $dataLeaveAllocation['total_sick_leave'],
+                                    'default_special_leave' => $dataLeaveAllocation['default_special_leave'],
+                                    'total_special_leave' => $dataLeaveAllocation['total_special_leave'],
+                                    'default_unpaid_leave' => 0,
+                                    'total_unpaid_leave' => 0,
+                                    // 'year_1' => $year_1,
+                                    'created_by'    =>  Auth::user()->id,
+                                ]
+                            );
+                        
                         }
-                        LeaveAllocation::updateOrCreate(
-                            [
-                                'employee_id' => $users->id,
-                            ],
-                            [
-                                'default_annual_leave' => $dataLeaveAllocation['default_annual_leave'],
-                                'total_annual_leave' => $dataLeaveAllocation['total_annual_leave'],
-                                'default_sick_leave' => $dataLeaveAllocation['default_sick_leave'],
-                                'total_sick_leave' => $dataLeaveAllocation['total_sick_leave'],
-                                'default_special_leave' => $dataLeaveAllocation['default_special_leave'],
-                                'total_special_leave' => $dataLeaveAllocation['total_special_leave'],
-                                'default_unpaid_leave' => 0,
-                                'total_unpaid_leave' => 0,
-                                // 'year_1' => $year_1,
-                                'created_by'    =>  Auth::user()->id,
-                            ]
-                        );
-                    
                     }
+                    
                     // *** end **/
                     User::where('id',$request->id)->update([
                         'emp_status' => $request->emp_status,
