@@ -47,7 +47,7 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             DB::raw('SUM("LC"."LoanBalanceAS") AS totalloanbalanceas'),
 
             DB::raw('COUNT(DISTINCT "LC"."LoanApplicationID") AS "TotalLoans"'),
-            DB::raw('COUNT(DISTINCT "LC"."ContractCustomerID") AS "TotalBorrowers"'),
+            DB::raw('COUNT(DISTINCT "LC"."ContractCustomerID") AS "borrowers"'),
 
             // ===============================
             // ✅ TOTAL PRINCIPAL DUE
@@ -64,6 +64,7 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
                     END
                 ) AS "TotalPDPenalty"
             '),
+           
             DB::raw('
                 COUNT(
                     DISTINCT CASE
@@ -193,6 +194,7 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
 
         // GET DATA
         $data = $query->get();
+
         // -------------------------
         // EXPORT FORMAT
         // -------------------------
@@ -204,7 +206,7 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
 
         // subtotal holders
         $sub = [
-            'borrowers' => 0,
+            'total_borrowers' => 0,
             'total_loans' => 0,
             'disbursed' => 0,
             'outstanding' => 0,
@@ -268,7 +270,7 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
                     '',
                     'SubTotal',
                     'USD',
-                    $sub['borrowers'],
+                    $sub['total_borrowers'],
                     $sub['total_loans'],
                     number_format($sub['disbursed'], 2),
                     number_format($sub['outstanding'], 2),
@@ -306,7 +308,7 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
                 $row->ContractOfficerID,
                 trim(($row->FirstName ?? '') . ' ' . ($row->LastName ?? '')),
                 $row->Currency,
-                $row->TotalBorrowers,
+                $row->borrowers,
                 $row->TotalLoans,
                 number_format($row->totaldisbursed,2),
                 number_format($row->outstandingamt,2),
@@ -329,7 +331,7 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             // ✅ ACCUMULATE SUBTOTAL (USD!)
             // -----------------------------
 
-            $sub['borrowers']    += $row->TotalBorrowers;
+            $sub['total_borrowers']    += $row->borrowers;
             $sub['total_loans']  += $row->TotalLoans;
             $sub['disbursed']    += $disbursed;
             $sub['outstanding']  += $outstanding;
@@ -358,7 +360,7 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
                 '',
                 'SubTotal',
                 'USD',
-                $sub['borrowers'],
+                $sub['total_borrowers'],
                 $sub['total_loans'],
                 number_format($sub['disbursed'], 2),
                 number_format($sub['outstanding'], 2),
@@ -385,12 +387,12 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
         $grandParRate = $grand['outstanding'] > 0 ? round(($grand['par_amt'] / $grand['outstanding']) * 100, 2) : 0;
         $grandArrearRate = round(($grand['pd_principal'] / $grand['outstanding']) * 100, 2);
         $grandOutPARRate = $grand['OutstandingAmt'] > 0 ? round(($grand['ParAmtAS'] / $grand['OutstandingAmt']) * 100, 2): 0;
-
+        $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
         $dataExcel[] = [
             '',
             'GrandTotal',
             'USD',
-            $grand['borrowers'],
+            $grandBorrowers,
             $grand['total_loans'],
             number_format($grand['disbursed'], 2),
             number_format($grand['outstanding'], 2),
