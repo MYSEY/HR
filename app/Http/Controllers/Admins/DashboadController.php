@@ -149,7 +149,7 @@ class DashboadController extends Controller
         })->count();
         $leaveApproval = LeaveRequest::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
-                $query->whereJsonContains("approved_by", Auth::user()->id);
+                $query->where("approved_by", Auth::user()->id);
             }else{
                 $query->where("status", ["approved"]);
             }
@@ -165,7 +165,7 @@ class DashboadController extends Controller
         $leaveCancel = LeaveRequest::where("status","cancel")
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
-                $query->whereJsonContains("approved_by", Auth::user()->id);
+                $query->where("approved_by", Auth::user()->id);
                 $query->where("status", "cancel");
             }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
                 $query->where("status", "cancel");

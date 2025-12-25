@@ -16,6 +16,7 @@ class LeaveRequest extends Model
 
     protected $table = 'leave_requests';
     protected $guarded = ['id'];
+    protected $appends = ['Approve','Delegated'];
     protected $fillable = [
         'employee_id',
         'leave_type_id',

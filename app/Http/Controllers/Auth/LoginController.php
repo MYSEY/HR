@@ -15,6 +15,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -69,100 +70,85 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         try {
-            Activity::all()->last();
-            $user = User::where("number_employee",$request->number_employee)->first();
-            $currenDate = Carbon::now()->format('Y-m-d');
-            if ($user->resign_date){
-                if ($user->resign_date > $currenDate) {
-                    if ($user->role_id == "" || $user->role_id == null) {
-                        return response()->json([
-                            'message' => "You don't have permission to view this page",
-                            'status'=>"error"
-                        ]);
-                    }
-                    Activity::all()->last();
-                    $number_employee    = $request->number_employee;
-                    $password           = $request->password;
-                    if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-                        return response()->json([
-                            'message' => "Login successfully",
-                            'status'=>"success",
-                            'role' => Auth::user()->RolePermission
-                        ]);
-                    }
-                }else{
-                    Auth::logout();
+            $request->validate([
+                'number_employee' => 'required',
+                'password' => 'required',
+            ]);
+
+            $user = User::where('number_employee', $request->number_employee)->first();
+
+            if (!$user) {
+                return response()->json([
+                    'message' => 'Wrong employee ID or password',
+                    'status' => 'error'
+                ]);
+            }
+
+            // Resigned user check
+            if(in_array($user->emp_status, ['3','4','5','6','7','8','9'])){
+                if ($user->resign_date && $user->resign_date <= now()->toDateString()) {
                     return response()->json([
-                        'message' => "Your account is not active. Please contact support",
-                        'status'=>"error"
-                    ]);
-                }
-            }else{
-                if ($user) {
-                    if ($user->role_id == "" || $user->role_id == null) {
-                        return response()->json([
-                            'message' => "You don't have permission to view this page",
-                            'status'=>"error"
-                        ]);
-                    }
-                    if($user->status == "Active"){
-                        if ($user->p_status == 0) {
-                            if (!Hash::check($request->password, $user->password)) {
-                                return response()->json([
-                                    'message' => "Wrong employee ID or password",
-                                    'status'=>"error"
-                                ]);
-                            }else{
-                                return response()->json([
-                                    'message' => "Login successfully",
-                                    'status'=>"success",
-                                    'role' => null
-                                ]);
-                            }
-                        }else{
-                            Activity::all()->last();
-                            $number_employee    = $request->number_employee;
-                            $password           = $request->password;
-                            if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-                                if (Auth::user()->status == 'Active') {
-                                    return response()->json([
-                                        'message' => "Login successfully",
-                                        'status'=>"success",
-                                        'role' => Auth::user()->RolePermission
-                                    ]);
-                                } else {
-                                    Auth::logout();
-                                    return response()->json([
-                                        'message' => "Your account is not active. Please contact support",
-                                        'status'=>"error"
-                                    ]);
-                                }
-                            }else {
-                                return response()->json([
-                                    'message' => "Wrong Employee ID Or Password",
-                                    'status'=>"error"
-                                ]);
-                            }
-                        }
-                    }else{
-                        return response()->json([
-                            'message' => "Your account is not active. Please contact support",
-                            'status'=>"error"
-                        ]);
-                    }
-                }else {
-                    return response()->json([
-                        'message' => "Wrong employee ID or password. Please contact support",
-                        'status'=>"error"
+                        'message' => 'Your account is not active. Please contact support',
+                        'status' => 'error'
                     ]);
                 }
             }
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Login fail','Error');
-            return redirect()->back();
-        } 
+
+            // Role check
+            if (empty($user->role_id)) {
+                return response()->json([
+                    'message' => "You don't have permission to view this page",
+                    'status' => 'error'
+                ]);
+            }
+
+            // Status check
+            if ($user->status !== 'Active') {
+                return response()->json([
+                    'message' => 'Your account is not active. Please contact support',
+                    'status' => 'error'
+                ]);
+            }
+
+            // First-time password logic
+            if ($user->p_status == 0) {
+                if (!Hash::check($request->password, $user->password)) {
+                    return response()->json([
+                        'message' => 'Wrong employee ID or password',
+                        'status' => 'error'
+                    ]);
+                }
+
+                return response()->json([
+                    'message' => 'Login successfully',
+                    'status' => 'success',
+                    'role' => null
+                ]);
+            }
+
+            // Normal login
+            if (!Auth::attempt($request->only('number_employee', 'password'))) {
+                return response()->json([
+                    'message' => 'Wrong employee ID or password',
+                    'status' => 'error'
+                ]);
+            }
+
+            return response()->json([
+                'message' => 'Login successfully',
+                'status' => 'success',
+                'role' => Auth::user()->RolePermission
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Login error', ['error' => $e->getMessage()]);
+            return response()->json([
+                'message' => 'Login failed. Please try again',
+                'status' => 'error'
+            ], 500);
+        }
     }
+
 
     public function changePassword(Request $request)
     {
@@ -183,17 +169,25 @@ class LoginController extends Controller
                     'message' => "New password is invalid with password confirmation!",
                     'status'=>"error"
                 ]);
-            }else{
-                $user = User::where("number_employee",$request->number_employee)->first();
-                $user->password = Hash::make($request->new_password);
-                $user->p_status = 1;
-                $user->save();
-                if (Auth::attempt(['number_employee' => $request->number_employee, 'password' => $request->new_password])) {
-                    return response()->json([
-                        'role' => Auth::user()->RolePermission
-                    ]);
-                    // Toastr::success('Login successfully.', 'Success');
-                }
+            }
+
+            $user = User::where("number_employee",$request->number_employee)->first();
+
+            if (Hash::check($request->new_password, $user->password)) {
+                return response()->json([
+                    'message' => 'New password must be different from current password!',
+                    'status' => 'error'
+                ]);
+            }
+
+            $user->password = Hash::make($request->new_password);
+            $user->p_status = 1;
+            $user->save();
+            if (Auth::attempt(['number_employee' => $request->number_employee, 'password' => $request->new_password])) {
+                return response()->json([
+                    'role' => Auth::user()->RolePermission
+                ]);
+                // Toastr::success('Login successfully.', 'Success');
             }
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->validator->errors()]);
