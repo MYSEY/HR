@@ -202,7 +202,7 @@ class ExportExpenseHistories implements FromCollection, WithColumnWidths, WithHe
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('Q5:R5');
-                $sheet->setCellValue('Q5', "ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម");
+                $sheet->setCellValue('Q5', "ឬពន្ធលើអត្ថប្រយោជន៍បន្ថែម/ប្រាក់បៀវត្ស");
                 $event->sheet->getDelegate()->getStyle('Q5:R5')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);

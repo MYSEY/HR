@@ -54,8 +54,7 @@ class CandidateResumeController extends Controller
             if ($RolePermission == 'BM') {
                 $query->where("location_applied", Auth::user()->branch_id);
             }
-        })
-        ->get();
+        })->count();
         $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'BM') {
@@ -123,6 +122,54 @@ class CandidateResumeController extends Controller
         ]));
     }
 
+    public function dataShow(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $query = CandidateResume::where("status", "1")
+                ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                    if ($RolePermission == 'BM') {
+                        $query->where("location_applied", Auth::user()->branch_id);
+                    }
+                });
+
+            // 🔍 Search
+            $searchValue = $request->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('candidate_resumes.id', 'like', "%{$searchValue}%")
+                    ->orWhere('candidate_resumes.name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('candidate_resumes.name_kh', 'like', "%{$searchValue}%")
+                    ->orWhere('candidate_resumes.current_position', 'like', "%{$searchValue}%")
+                    ->orWhere('candidate_resumes.companey_name', 'like', "%{$searchValue}%")
+                    ->orWhere('candidate_resumes.current_address', 'like', "%{$searchValue}%");
+                });
+            }
+
+            // Counts
+            $recordsTotal = CandidateResume::where("status", "1")->count();
+            $recordsFiltered = $query->count();
+
+            // Pagination
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+
+            // 🔥 HANDLE "ALL"
+            if ($limit == -1) {
+                $data = $query->get(); // get all rows
+            } else {
+                $data = $query->offset($start)->limit($limit)->get();
+            }
+
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -141,22 +188,33 @@ class CandidateResumeController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         try {
-            Activity::all()->last();
+            // Get last activity (optimized)
+            $latestActivity = Activity::latest()->first();
+
             $data = $request->all();
-            $data['created_by'] = Auth::user()->id;
-            $data['name_kh'] = $request->last_name_kh.' '.$request->first_name_kh;
-            $data['name_en'] = $request->last_name_en.' '.$request->first_name_en;
+            $data['created_by'] = Auth::id(); // simpler
+            $data['name_kh'] = $request->last_name_kh . ' ' . $request->first_name_kh;
+            $data['name_en'] = $request->last_name_en . ' ' . $request->first_name_en;
             $data['status'] = "1";
+
             CandidateResume::create($data);
+
+            Toastr::success('Candidate resume created successfully.', 'Success');
+
             DB::commit();
-            Toastr::success('Candidate resume created successfully.','Success');
+
             return redirect()->back();
-        } catch (\Throwable $exp) {
+
+        } catch (\Throwable $e) {
             DB::rollback();
-            Toastr::error('Candidate resume created fail.','Error');
+            Toastr::error('Candidate resume creation failed: '.$e->getMessage(), 'Error');
+            return redirect()->back()->withInput();
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -374,6 +432,7 @@ class CandidateResumeController extends Controller
      */
     public function update(Request $request)
     {
+        DB::beginTransaction();
         try{
             if ($request->hasFile('cv')) {
                 $file = $request->file('cv');
@@ -407,6 +466,7 @@ class CandidateResumeController extends Controller
             $data['updated_by']            = Auth::user()->id;
             $data->save();
             Toastr::success('Candidate resume updated successfully.','Success');
+            DB::commit();
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
