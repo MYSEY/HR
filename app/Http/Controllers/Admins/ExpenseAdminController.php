@@ -54,7 +54,7 @@ class ExpenseAdminController extends Controller
                     }
                 }
             }else{
-                if (in_array($user->RolePermission, ['HOD','HRAdmin'])) {
+                if (in_array($user->RolePermission, ['HOD','HRAdmin'])  && $user->department->abbreviations !="A&FDpt") {
                     $query->where("users.department_id", Auth::user()->department_id);
                         // ->where("users.branch_id", Auth::user()->branch_id);
                 }

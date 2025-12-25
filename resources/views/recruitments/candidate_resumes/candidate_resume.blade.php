@@ -1250,7 +1250,7 @@
                         if (cv) {
                             return `
                                 <small class="block text-ellipsis">
-                                    <a href="/uploads/images/${cv}" target="_blank">
+                                    <a href="{{asset("/uploads/images")}}/${cv}" target="_blank">
                                         <i class="la la-file-pdf"></i>
                                         <span>@lang('lang.preview_cv')</span>
                                     </a>

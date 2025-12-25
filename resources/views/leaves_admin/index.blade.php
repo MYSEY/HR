@@ -144,14 +144,14 @@
                                         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                                    <table class="table table-striped custom-table mb-0 no-footer datatable dataTable tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                         <thead>
                                                             <tr>
-                                                                @if (Auth::user()->RolePermission == 'HRAdmin')
+                                                                @if (in_array(Auth::user()->RolePermission, ['HRAdmin','admin']))
                                                                     <th class="stuck-scroll-3"><input type="checkbox" id="checkAll"></th>
                                                                 @endif
-                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
-                                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
+                                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
+                                                                <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="handover staff: activate to sort column ascending">@lang('lang.handover_staff')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="delegated: activate to sort column ascending">@lang('lang.delegated')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
@@ -172,7 +172,7 @@
                                                             @if (count($dataLeaveRequest) > 0)
                                                                 @foreach ($dataLeaveRequest as $key=>$request)
                                                                     <tr class="odd">
-                                                                        @if (Auth::user()->RolePermission == 'HRAdmin')
+                                                                        @if (in_array(Auth::user()->RolePermission, ['HRAdmin','admin']))
                                                                             <td class="stuck-scroll-3">
                                                                                 <input type="checkbox" class="sub_chk" data-id="{{$request->id}}" data-status="{{$request->status}}"
                                                                                 @if($request->status == 'pending' && $request->next_approver != Auth::user()->id) disabled @endif>
@@ -191,9 +191,7 @@
                                                                         <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td> {{$request->createdBy->employee_name_en}} </td>
                                                                         <td>{{$request->remark}}</td>
-                                                                        {{-- @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin') --}}
                                                                         <td>{{ $request->Approve ? $request->Approve : ""}}</td>
-                                                                        {{-- @endif --}}
                                                                         <td>
                                                                             @if ($request->status == "rejected")
                                                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by HR</span>
@@ -203,13 +201,10 @@
                                                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by Line Manager</span>
                                                                             @elseif ($request->status == "rejected_hod")
                                                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by ACEO/Head/BM</span>
-                                                                            {{-- @elseif ($request->status == "pending")
-                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by Line Manager</span> --}}
                                                                             @elseif ($request->status == "approved_lm" || $request->status == "pending")
                                                                                 <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by CEO/Head/BM</span>
                                                                             @elseif ($request->status == "approved_hod")
                                                                                 <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
-                                                                                {{-- <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span> --}}
                                                                             @elseif($request->status == "approved")
                                                                                 <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                                             @endif
@@ -499,10 +494,21 @@
     </div>
     @include('leaves_admin.import_leaves')
     <input type="hidden" id="leaveAuth" value="{{Auth::user()}}">
+
+    <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p>Loading Data...</p>
+        </div>
+    </div>
 @endsection
 @include('includs.script')
+@section('script')
 <script>
     $(function() {
+        // datashowTables();
         $("#importPayroll").on("click", function() {
             $(".thanLess").hide();
             $("#thanLess").text("");
@@ -1151,4 +1157,225 @@
             });
         });
     });
+
+    function datashowTables() {
+        let is_reject = "{{ Helper::permissionAccess('m10-s1','is_reject') }}";
+        let is_approve = "{{ Helper::permissionAccess('m10-s1','is_approve') }}";
+        $('#loading-overlay').show();
+
+        if ($.fn.DataTable.isDataTable('.tbl-leave-request')) {
+            $('.tbl-leave-request').DataTable().clear().destroy();
+        }
+
+        $('.tbl-leave-request').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            pageLength: 10,
+            order: [[0, 'desc']],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
+            ajax: {
+                url: '{{ url("/leaves/admin/show") }}',
+                type: 'GET',
+                 dataSrc: function (response) { 
+                    console.log('Table data only:', response.data); 
+                    return response.data; 
+                }
+            },
+            columns: [
+                // ✅ Checkbox (HRAdmin only)
+                @if (Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'admin')
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        className: 'stuck-scroll-3',
+                        render: function (row) {
+
+                            const isDisabled =
+                                row.status === 'pending' &&
+                                row.next_approver != {{ Auth::id() }};
+
+                            return `
+                                <input type="checkbox"
+                                    class="sub_chk"
+                                    data-id="${row.id}"
+                                    data-status="${row.status}"
+                                    ${isDisabled ? 'disabled' : ''}>
+                            `;
+                        }
+                    },
+                @endif
+
+                {
+                    data: null,
+                    name: 'num',
+                    className: 'ids stuck-scroll-3',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+
+                // Employee
+                {
+                    data: 'employee.employee_name_en',
+                    className: 'stuck-scroll-3',
+                    defaultContent: ''
+                },
+
+                // Handover
+                {
+                    data: 'handover.employee_name_en',
+                    defaultContent: ''
+                },
+
+                // Delegated
+                {
+                    data: 'Delegated',
+                    defaultContent: ''
+                },
+
+                // Leave type
+                {
+                    data: 'leave_type.name',
+                    defaultContent: ''
+                },
+
+                // Reason
+                { data: 'reason' },
+
+                // Days
+                {
+                    data: 'number_of_day',
+                    render: d => `${d} Day`
+                },
+
+                // Start date
+                { data: 'start_date' },
+
+                // End date
+                { data: 'end_date' },
+
+                // Created by
+                {
+                    data: 'created_by.employee_name_en',
+                    defaultContent: ''
+                },
+
+                // Remark
+                { data: 'remark', defaultContent: '' },
+
+                // Approve
+                { data: 'Approve', defaultContent: '' },
+
+                // Status badge
+                {
+                    data: 'status',
+                    render: function (status) {
+                        switch (status) {
+
+                            case 'rejected':
+                                return `<span class="badge bg-inverse-danger" style="font-size:13px;">
+                                            Rejected by HR
+                                        </span>`;
+
+                            case 'cancel':
+                                return `<span class="badge bg-inverse-danger" style="font-size:13px;">
+                                            Cancel
+                                        </span>`;
+
+                            case 'rejected_lm':
+                                return `<span class="badge bg-inverse-danger" style="font-size:13px;">
+                                            Rejected by Line Manager
+                                        </span>`;
+
+                            case 'rejected_hod':
+                                return `<span class="badge bg-inverse-danger" style="font-size:13px;">
+                                            Rejected by ACEO/Head/BM
+                                        </span>`;
+
+                            case 'approved_lm':
+                            case 'pending':
+                                return `<span class="badge bg-inverse-info" style="font-size:13px;">
+                                            Waiting Approve by CEO/Head/BM
+                                        </span>`;
+
+                            case 'approved':
+                            case 'approved_hod':
+                                return `<span class="badge bg-inverse-success" style="font-size:13px;">
+                                            Approved
+                                        </span>`;
+
+                            default:
+                                return '';
+                        }
+                    }
+                },
+
+
+                // Action button
+               {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function (row) {
+
+                        // Permission check
+                        if (is_approve !== "1" && is_reject !== "1") {
+                            return '';
+                        }
+
+                        // Status check
+                        if (!['pending', 'approved_lm', 'approved_hod'].includes(row.status)) {
+                            return '';
+                        }
+
+                        let buttonText = '';
+
+                        if (is_approve === "1") {
+                            buttonText += `@lang('lang.approve')`;
+                        }
+
+                        if (is_reject === "1") {
+                            buttonText += (buttonText ? ' / ' : '') + `@lang('lang.reject')`;
+                        }
+
+                        return `
+                            <button class="btn btn-outline-secondary btn-sm btn-approved"
+                                data-id="${row.id}"
+                                data-linemanager="${row.employee?.line_manager ?? ''}"
+                                data-approveby="${row.next_approver}"
+                                data-status="${row.status}"
+                                data-employeename="${row.employee?.employee_name_en ?? ''}"
+                                data-startdate="${row.start_date}"
+                                data-enddate="${row.end_date}"
+                                data-starthalfday="${row.start_half_day}"
+                                data-endhalfday="${row.end_half_day}"
+                                data-handover="${row.handover?.employee_name_en ?? ''}"
+                                data-reason="${row.reason}"
+                                data-leavetype="${row.leave_type?.type ?? ''}"
+                                data-leaveallocation='${JSON.stringify(row.leave_allocation ?? {})}'
+                            >
+                                ${buttonText}
+                            </button>
+                        `;
+                    }
+                }
+            ],
+            order: [[0, 'desc']],
+            initComplete: function () {
+                $('#loading-overlay').hide();
+            }
+        });
+
+        $('.tbl-leave-request').on('processing.dt', function (e, settings, processing) {
+            processing ? $('#loading-overlay').show() : $('#loading-overlay').hide();
+        });
+    }
 </script>
+@endsection

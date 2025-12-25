@@ -87,7 +87,7 @@ class ExpenseRepository extends BaseRepository
                 }
                 
             }else{
-                if (in_array($user->RolePermission, ['HOD', 'HRAdmin'])) {
+                if (in_array($user->RolePermission, ['HOD', 'HRAdmin'])  && $user->department->abbreviations !="A&FDpt") {
                     $query->where("users.department_id", Auth::user()->department_id);
                 }
                 if (in_array($user->RolePermission, ['BM'])) {

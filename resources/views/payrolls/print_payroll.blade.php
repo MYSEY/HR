@@ -146,7 +146,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>@lang('lang.parking_allowance')</td>
+                            <td>@lang('lang.parking_allowance')/Motor rental/ Tablet/iPad</td>
                             <td>
                                 <span class="float-end">${{$payslip->total_amount_car == 0 ? '0.00' : $payslip->total_amount_car}}</span>
                             </td>
