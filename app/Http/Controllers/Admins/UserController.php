@@ -631,8 +631,7 @@ class UserController extends Controller
             } elseif ($decimal >= 0.50) {
                 return $int + 0.5;                // convert to .5
             }
-
-            return $int;                          // keep as integer
+            return $int;
         }
         try {
             $totalUpcomings = 0;
