@@ -621,6 +621,18 @@ class UserController extends Controller
 
     public function processing(Request $request)
     {
+        function convertNumber($value)
+        {
+            $int = floor($value);                  // whole number part
+            $decimal = $value - $int;             // decimal part only
+
+            if ($decimal >= 0.60) {
+                return $int + 1;                  // round up to next integer
+            } elseif ($decimal >= 0.50) {
+                return $int + 0.5;                // convert to .5
+            }
+            return $int;
+        }
         try {
             $totalUpcomings = 0;
             if ($request->emp_status == '1') {
