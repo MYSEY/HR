@@ -166,7 +166,7 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
             $dataExcel[] = [
                 $row->ID,
                 $row->ContractCustomerID,
-                $row->FirstNameEn . ' ' . $row->LastNameEn,
+                $row->LastNameEn . ' ' . $row->FirstNameEn,
                 $row->Branch,
                 $row->Gender,
                 $row->Street,

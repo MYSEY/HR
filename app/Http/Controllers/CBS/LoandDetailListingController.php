@@ -180,7 +180,12 @@ class LoandDetailListingController extends Controller
 
 
             // Total rows (no search)
-            $recordsTotal = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->count();
+            $recordsTotal = DB::connection('pgsql')
+            ->table('MKT_LOAN_CONTRACT as LC')
+            ->when($request->filled('branch_id'), function ($q) use ($request) {
+                $q->where('LC.Branch', $request->branch_id);
+            })
+            ->count();
 
             // Total rows (with search)
             $recordsFiltered = $query->count();
