@@ -775,49 +775,6 @@ class UserController extends Controller
                     } else {
                         $totalSalaryStaffResign = ($users->basic_salary * $totalDayStaffResign) / 22;
                     }
-<<<<<<< HEAD
-
-                    // if ($users->emp_status=='Probation') {
-                    //     $months = 4.5;
-                    //     if ($totalDayStaffResign < 15) {
-                    //         $totalDay = 0;
-                    //         $EndMonths = $months - 1;
-                    //     } elseif($totalDayStaffResign >= 15 && $totalDayStaffResign <= 20) {
-                    //         $totalDay = 1;
-                    //         $EndMonths = $months - 1;
-                    //     }else{
-                    //         $totalDay = 1.5;
-                    //         $EndMonths = $months;
-                    //     }
-                        
-                    //     $numberOfDay = LeaveRequest::where('employee_id',$request->id)->sum('number_of_day');
-                    //     $totalDayResignProbation = $EndMonths - $numberOfDay;
-                    //     if ($numberOfDay) {
-                    //         $totalSallaryStaffResign = ($users->basic_salary * $totalDayResignProbation) / 22;
-                    //         $totalSalaryAL = $totalSalaryStaffResign - $totalSallaryStaffResign;
-                    //     }else{
-                    //         $totalSallaryStaffResign = ($users->basic_salary * $totalDayResignProbation) / 22;
-                    //         $totalSalaryAL = $totalSalaryStaffResign + $totalSallaryStaffResign;
-                    //     }
-                    // } else {
-                    //     //function calu Carried forward AL
-                    //     $dataLeave = LeaveAllocation::where('employee_id',$users->id)->first();
-                    //     if ($dataLeave) {
-                    //         $year1 = $dataLeave->year_1;
-                    //         $year2 = $dataLeave->year_2;
-                    //         $year3 = $dataLeave->year_3;
-                    //         if ($dataLeave->total_annual_leave < 0) {
-                    //             $Carriedforward = $year1 + $year2 + $year3 - abs($dataLeave->total_annual_leave);
-                    //             $totalSallaryAL = ($users->basic_salary * $Carriedforward) / 22;
-                    //             $totalSalaryAL = $totalSalaryStaffResign + $totalSallaryAL;
-                    //         } else {
-                    //             $Carriedforward = $year1 + $year2 + $year3 + $dataLeave->total_annual_leave;
-                    //             $totalSallaryAL = ($users->basic_salary * $Carriedforward) / 22;
-                    //             $totalSalaryAL = $totalSallaryAL + $totalSalaryStaffResign;
-                    //         }
-                    //     }
-                    // }
-=======
                     if($users->emp_status == "Probation"){
                         // *** Caculate leave day**/
                         if(in_array($request->emp_status, ['3','4','5','6','7','9'])){
@@ -937,7 +894,6 @@ class UserController extends Controller
                     }
                     
                     // *** end **/
->>>>>>> aa2a4a9e3121e200ffb4855d480edf1cde461531
                     User::where('id',$request->id)->update([
                         'emp_status' => $request->emp_status,
                         'resign_date' => $request->resign_date,

@@ -205,7 +205,6 @@ class COPerformanceController extends Controller
             $limit = intval(request('length', 10));
 
             $data = $query->offset($start)->limit($limit)->get();
-            
 
             // ---- PROCESS GROUP + SUBTOTALS ----
             $currency = DB::connection('pgsql')->table('MKT_CURRENCY')->where('ID','KHR')->select('ID','ReportingRate')->first();
@@ -245,8 +244,8 @@ class COPerformanceController extends Controller
                         if ($groupTotals['TotalOutstanding'] > 0) {
                             $subParRate = $groupTotals['ParAmount'] / $groupTotals['TotalOutstanding'];
                         }
-                        $ArrearRate = 0;
-                        $ArrearRate = $groupTotals['TotalPDPrincipal'] / $groupTotals['TotalOutstanding'];
+                        $subArrearRate = 0;
+                        $subArrearRate = $groupTotals['TotalPDPrincipal'] / $groupTotals['TotalOutstanding'];
 
                         $subOutPARRate = 0;
                         if ($groupTotals['ParAmtAS'] > 0) {
@@ -268,7 +267,7 @@ class COPerformanceController extends Controller
                             'TotalPDPrincipal' => $groupTotals['TotalPDPrincipal'],
                             'TotalPDInterest' => $groupTotals['TotalPDInterest'],
                             'TotalPDPenalty' => $groupTotals['TotalPDPenalty'],
-                            'ArrearRate' => round($ArrearRate * 100, 2),
+                            'ArrearRate' => round($subArrearRate * 100, 2),
                             'Loans' => $groupTotals['Loans'],
                             'OutstandingAmt' => $groupTotals['OutstandingAmt'],
                             'OutPARs' => $groupTotals['OutPARs'],
@@ -276,32 +275,17 @@ class COPerformanceController extends Controller
                             'OutPARRate' => round($subOutPARRate * 100, 2),
                             'subtotal_row' => true
                         ];
+
                         // ✅ ADD SUBTOTAL → GRAND TOTAL
                         foreach ($groupTotals as $key => $value) {
                             $grandTotals[$key] += $value;
                         }
-                    }
 
+                        // ✅ RESET AFTER ADDING
+                        $groupTotals = $emptyTotals;
+                    }
                     // RESET GROUP
                     $currentGroup = $row->ContractOfficerID;
-                    $groupTotals = $emptyTotals;
-                    $groupTotals = [
-                        'TotalBorrowers' => 0,
-                        'TotalLoans' => 0,
-                        'TotalDisbursed' => 0,
-                        'TotalOutstanding' => 0,
-                        'TotalLoanBalanceAs' => 0,
-                        'Pars' => 0,
-                        'ParAmount' => 0,
-                        'TotalPDPrincipal' => 0,
-                        'TotalPDInterest' => 0,
-                        'TotalPDPenalty' => 0,
-                        'ArrearRate' => 0,
-                        'Loans' => 0,
-                        'OutstandingAmt' => 0,
-                        'OutPARs' => 0,
-                        'ParAmtAS' => 0
-                    ];
                 }
 
                 // -----------------------------
@@ -312,8 +296,8 @@ class COPerformanceController extends Controller
                     $rowParRate = $row->ParAmount / $row->totaloutstanding;
                 }
 
-                $ArrearRate = 0;
-                $ArrearRate = $row->TotalPDPrincipal / $row->totaloutstanding;
+                $rowArrearRate = 0;
+                $rowArrearRate = $row->TotalPDPrincipal / $row->totaloutstanding;
 
                 $rowOutPARRate = 0;
                 if ($row->ParAmtAS > 0) {
@@ -339,7 +323,7 @@ class COPerformanceController extends Controller
                     'TotalPDPrincipal' => $row->TotalPDPrincipal,
                     'TotalPDInterest' => $row->TotalPDInterest,
                     'TotalPDPenalty' => $row->TotalPDPenalty,
-                    'ArrearRate' => round($ArrearRate * 100, 2),
+                    'ArrearRate' => round($rowArrearRate * 100, 2),
                     'Loans' => $row->Loans,
                     'OutstandingAmt' => $row->OutstandingAmt,
                     'OutPARs' => $row->OutPARs,
@@ -385,8 +369,8 @@ class COPerformanceController extends Controller
                 if ($groupTotals['TotalOutstanding'] > 0) {
                     $finalParRate = $groupTotals['ParAmount'] / $groupTotals['TotalOutstanding'];
                 }
-                $ArrearRate = 0;
-                $ArrearRate = $groupTotals['TotalPDPrincipal'] / $groupTotals['TotalOutstanding'];
+                $grandArrearRate = 0;
+                $grandArrearRate = $groupTotals['TotalPDPrincipal'] / $groupTotals['TotalOutstanding'];
                 $finalOutPARRate = 0;
                 if ($groupTotals['ParAmtAS'] > 0) {
                     $finalOutPARRate = $groupTotals['ParAmtAS'] / $groupTotals['OutstandingAmt'];
@@ -406,7 +390,7 @@ class COPerformanceController extends Controller
                     'TotalPDPrincipal' => $groupTotals['TotalPDPrincipal'],
                     'TotalPDInterest' => $groupTotals['TotalPDInterest'],
                     'TotalPDPenalty' => $groupTotals['TotalPDPenalty'],
-                    'ArrearRate' => round($ArrearRate * 100, 2),
+                    'ArrearRate' => round($grandArrearRate * 100, 2),
                     'Loans' => $groupTotals['Loans'],
                     'OutstandingAmt' => $groupTotals['OutstandingAmt'],
                     'OutPARs' => $groupTotals['OutPARs'],
@@ -414,22 +398,22 @@ class COPerformanceController extends Controller
                     'OutPARRate' => round($finalOutPARRate * 100, 2),
                     'subtotal_row' => true
                 ];
-
                 // ✅ ADD LAST SUBTOTAL → GRAND TOTAL
                 foreach ($groupTotals as $key => $value) {
                     $grandTotals[$key] += $value;
                 }
             }
-           
+
             $totalPages = ceil($recordsFiltered / $limit);
             $currentPage = floor($start / $limit) + 1;
-
+            $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
+            
             if ($currentPage === $totalPages) {
                 $finalData[] = [
                     'ContractOfficerID' => '',
                     'DisplayName' => '<b style="color:#1f1f1f;font-size:14px;">GrandTotal</b>',
                     'Currency' => 'USD',
-                    'TotalBorrowers' => $grandTotals['TotalBorrowers'],
+                    'TotalBorrowers' => $grandBorrowers,
                     'TotalLoans' => $grandTotals['TotalLoans'],
                     'TotalDisbursed' => $grandTotals['TotalDisbursed'],
                     'TotalOutstanding' => $grandTotals['TotalOutstanding'],
@@ -440,16 +424,15 @@ class COPerformanceController extends Controller
                     'TotalPDPrincipal' => $grandTotals['TotalPDPrincipal'],
                     'TotalPDInterest' => $grandTotals['TotalPDInterest'],
                     'TotalPDPenalty' => $grandTotals['TotalPDPenalty'],
-                    'ArrearRate' => round($ArrearRate * 100, 2),
+                    'ArrearRate' => round($grandArrearRate * 100, 2),
                     'Loans' => $grandTotals['Loans'],
                     'OutstandingAmt' => $grandTotals['OutstandingAmt'],
                     'OutPARs' => $grandTotals['OutPARs'],
                     'ParAmtAS' => $grandTotals['ParAmtAS'],
                     'OutPARRate' => round($finalOutPARRate * 100, 2),
-                    'subtotal_row' => true
+                    'grandtotal_row' => true
                 ];
             }
-            
             return response()->json([
                 'draw' => intval(request('draw')),
                 'recordsTotal' => $recordsTotal,
@@ -457,7 +440,6 @@ class COPerformanceController extends Controller
                 'data' => $finalData
             ]);
         }
-
         
         // $data = DB::connection('pgsql')
         //     ->table('MKT_LOAN_CONTRACT as LC')
@@ -500,6 +482,6 @@ class COPerformanceController extends Controller
             );
         } catch (\Throwable $th) {
             throw $th;
-        }           
+        }
     }
 }

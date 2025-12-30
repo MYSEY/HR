@@ -537,7 +537,7 @@
                 rowCallback: function (row, data) {
                     if (data.subtotal_row) {
                         $('td', row).css({
-                            "font-weight": "bold",
+                            // "font-weight": "bold",
                             "color": "#080808",
                             "font-size": "14px",
                             "font-family": '"Khmer Battambang", sans-serif',
