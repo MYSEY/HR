@@ -197,14 +197,7 @@ class COPerformanceController extends Controller
                     ->orWhere('LC.Branch', 'like', "%{$search}%");
                 });
             }
-            $countQuery = clone $query;
-            $recordsTotal = DB::connection('pgsql')->table(DB::raw("({$countQuery->toSql()}) as sub"))->mergeBindings($countQuery)->count();
-            $recordsFiltered = DB::connection('pgsql')->table(DB::raw("({$countQuery->toSql()}) as sub"))->mergeBindings($countQuery)->count();
-
-            $start = intval(request('start', 0));
-            $limit = intval(request('length', 10));
-
-            $data = $query->offset($start)->limit($limit)->get();
+            $data = $query->get();
 
             // ---- PROCESS GROUP + SUBTOTALS ----
             $currency = DB::connection('pgsql')->table('MKT_CURRENCY')->where('ID','KHR')->select('ID','ReportingRate')->first();
@@ -404,6 +397,15 @@ class COPerformanceController extends Controller
                 }
             }
 
+
+            $countQuery = clone $query;
+            $recordsTotal = DB::connection('pgsql')->table(DB::raw("({$countQuery->toSql()}) as sub"))->mergeBindings($countQuery)->count();
+            $recordsFiltered = DB::connection('pgsql')->table(DB::raw("({$countQuery->toSql()}) as sub"))->mergeBindings($countQuery)->count();
+
+            $start = intval(request('start', 0));
+            $limit = intval(request('length', 10));
+            $finalData = array_slice($finalData, $start, $limit);
+
             $totalPages = ceil($recordsFiltered / $limit);
             $currentPage = floor($start / $limit) + 1;
             $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
@@ -432,6 +434,7 @@ class COPerformanceController extends Controller
                     'grandtotal_row' => true
                 ];
             }
+            
             return response()->json([
                 'draw' => intval(request('draw')),
                 'recordsTotal' => $recordsTotal,
