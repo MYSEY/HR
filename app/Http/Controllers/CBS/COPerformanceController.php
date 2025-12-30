@@ -362,8 +362,8 @@ class COPerformanceController extends Controller
                 if ($groupTotals['TotalOutstanding'] > 0) {
                     $finalParRate = $groupTotals['ParAmount'] / $groupTotals['TotalOutstanding'];
                 }
-                $grandArrearRate = 0;
-                $grandArrearRate = $groupTotals['TotalPDPrincipal'] / $groupTotals['TotalOutstanding'];
+                $finalArrearRate = 0;
+                $finalArrearRate = $groupTotals['TotalPDPrincipal'] / $groupTotals['TotalOutstanding'];
                 $finalOutPARRate = 0;
                 if ($groupTotals['ParAmtAS'] > 0) {
                     $finalOutPARRate = $groupTotals['ParAmtAS'] / $groupTotals['OutstandingAmt'];
@@ -383,7 +383,7 @@ class COPerformanceController extends Controller
                     'TotalPDPrincipal' => $groupTotals['TotalPDPrincipal'],
                     'TotalPDInterest' => $groupTotals['TotalPDInterest'],
                     'TotalPDPenalty' => $groupTotals['TotalPDPenalty'],
-                    'ArrearRate' => round($grandArrearRate * 100, 2),
+                    'ArrearRate' => round($finalArrearRate * 100, 2),
                     'Loans' => $groupTotals['Loans'],
                     'OutstandingAmt' => $groupTotals['OutstandingAmt'],
                     'OutPARs' => $groupTotals['OutPARs'],
@@ -397,7 +397,7 @@ class COPerformanceController extends Controller
                 }
             }
 
-
+            //grand total par rate
             $countQuery = clone $query;
             $recordsTotal = DB::connection('pgsql')->table(DB::raw("({$countQuery->toSql()}) as sub"))->mergeBindings($countQuery)->count();
             $recordsFiltered = DB::connection('pgsql')->table(DB::raw("({$countQuery->toSql()}) as sub"))->mergeBindings($countQuery)->count();
@@ -409,6 +409,16 @@ class COPerformanceController extends Controller
             $totalPages = ceil($recordsFiltered / $limit);
             $currentPage = floor($start / $limit) + 1;
             $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
+            $grandParRate = 0;
+            if ($grandTotals['TotalOutstanding'] > 0) {
+                $grandParRate = $grandTotals['ParAmount'] / $grandTotals['TotalOutstanding'];
+            }
+            $grandArrearRate = 0;
+            $grandArrearRate = $grandTotals['TotalPDPrincipal'] / $grandTotals['TotalOutstanding'];
+            $grandOutPARRate = 0;
+            if ($grandTotals['ParAmtAS'] > 0) {
+                $grandOutPARRate = $grandTotals['ParAmtAS'] / $grandTotals['OutstandingAmt'];
+            }
             if ($currentPage === $totalPages) {
                 $finalData[] = [
                     'ContractOfficerID' => '',
@@ -421,7 +431,7 @@ class COPerformanceController extends Controller
                     'TotalLoanBalanceAs' => $grandTotals['TotalLoanBalanceAs'],
                     'Pars' => $grandTotals['Pars'],
                     'ParAmount' => $grandTotals['ParAmount'],
-                    'parRate' => round($finalParRate * 100, 2),
+                    'parRate' => round($grandParRate * 100, 2),
                     'TotalPDPrincipal' => $grandTotals['TotalPDPrincipal'],
                     'TotalPDInterest' => $grandTotals['TotalPDInterest'],
                     'TotalPDPenalty' => $grandTotals['TotalPDPenalty'],
@@ -430,7 +440,7 @@ class COPerformanceController extends Controller
                     'OutstandingAmt' => $grandTotals['OutstandingAmt'],
                     'OutPARs' => $grandTotals['OutPARs'],
                     'ParAmtAS' => $grandTotals['ParAmtAS'],
-                    'OutPARRate' => round($finalOutPARRate * 100, 2),
+                    'OutPARRate' => round($grandOutPARRate * 100, 2),
                     'grandtotal_row' => true
                 ];
             }

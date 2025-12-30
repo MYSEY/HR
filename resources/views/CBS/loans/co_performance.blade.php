@@ -75,7 +75,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
                 <div class="form-group">
                     <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                        <option value="" data-select2-id="select2-data-2-c0n2">Branch</option>
+                        <option value="" data-select2-id="select2-data-2-c0n2">All Branch</option>
                         @foreach ($branch as $item)
                             <option value="{{ $item->ID }}">
                                 {{ Helper::getLang() == 'en' ? $item->Description : $item->LocalDescription }}
@@ -112,88 +112,6 @@
                 </div>
             </div>
         </div>
-        
-
-        {{-- <div class="col-sm-12">
-            <div role="grid" id="mktlist_wrapper" class="dataTables_wrapper form-inline no-footer">
-                <table id="mktlist" class="table table-hover table-striped dataTable no-footer" cellspacing="0" width="100%" aria-describedby="mktlist_info" style="width: 100%;">
-                    <thead>
-                        <tr role="row">
-                            <th rowspan="1" colspan="1" style="width: 45px;">CO ID</th>
-                            <th rowspan="1" colspan="1" style="width: 87px;">CO Name</th>
-                            <th rowspan="1" colspan="1" style="width: 57px;">Currency</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 74px;">#Borrowers</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 46px;">#Loans</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 93px;">Disbursed Amt.</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 101px;">Oustanding Amt.</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 82px;">Loan Balance</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 39px;">#PARs</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 66px;">PAR Amt.</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 52px;">PAR Rate</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 74px;">PD Principal</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 68px;">PD Interest</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 68px;">PD Penalty</th>
-                            <th class="text-right" rowspan="1" colspan="1" style="width: 66px;">Arrear Rate</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="even">
-                            <td class="text-left">230-503</td>
-                            <td class="text-left">Kai Mot</td>
-                            <td class="text-left">KHR</td>
-                            <td class="text-right">18</td>
-                            <td class="text-right">19</td>
-                            <td class="text-right">266,000,000</td>
-                            <td class="text-right">220,169,000</td>
-                            <td class="text-right">219,213,900</td>
-                            <td class="text-right">1</td>
-                            <td class="text-right">3,404,200</td>
-                            <td class="text-right">1.55 %</td>
-                            <td class="text-right">955,100</td>
-                            <td class="text-right">143,400</td>
-                            <td class="text-right">51,900</td>
-                            <td class="text-right">0.43 %</td>
-                        </tr>
-                        <tr class="odd">
-                            <td class="text-left">230-503</td>
-                            <td class="text-left">Kai Mot</td>
-                            <td class="text-left">USD</td>
-                            <td class="text-right">14</td>
-                            <td class="text-right">14</td>
-                            <td class="text-right">112,500.00</td>
-                            <td class="text-right">94,688.02</td>
-                            <td class="text-right">94,500.79</td>
-                            <td class="text-right">2</td>
-                            <td class="text-right">26,800.08</td>
-                            <td class="text-right">28.30 %</td>
-                            <td class="text-right">187.23</td>
-                            <td class="text-right">384.45</td>
-                            <td class="text-right">73.22</td>
-                            <td class="text-right">0.20 %</td>
-                        </tr>
-                    </tbody>
-                    <tfoot style="border-top: 2px solid #CCC;">
-                        <tr class="text-bold cls-border odd">
-							<td class="text-left"></td>
-							<td class="text-left">SubTotal</td>
-							<td class="text-left">USD</td>
-							<td class="text-right">31</td>
-							<td class="text-right">31</td>
-							<td class="text-right">348,336.76</td>
-							<td class="text-right">208,223.85</td>
-							<td class="text-right">207,712.42</td>
-							<td class="text-right">3</td>
-							<td class="text-right">20,330.87</td>
-							<td class="text-right">9.76 %</td>
-							<td class="text-right">511.43</td>
-							<td class="text-right">1,800.87</td>
-							<td class="text-right">241.43</td>
-							<td class="text-right">0.25 %</td>
-						</tr>
-                    </tfoot>
-                </table>
-            </div>
-	    </div> --}}
 
         <div class="content">
             <div class="page-menu">
@@ -537,7 +455,7 @@
                 rowCallback: function (row, data) {
                     if (data.subtotal_row) {
                         $('td', row).css({
-                            // "font-weight": "bold",
+                            "font-weight": "bold",
                             "color": "#080808",
                             "font-size": "14px",
                             "font-family": '"Khmer Battambang", sans-serif',
