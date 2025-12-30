@@ -407,7 +407,6 @@ class COPerformanceController extends Controller
             $totalPages = ceil($recordsFiltered / $limit);
             $currentPage = floor($start / $limit) + 1;
             $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
-            
             if ($currentPage === $totalPages) {
                 $finalData[] = [
                     'ContractOfficerID' => '',
