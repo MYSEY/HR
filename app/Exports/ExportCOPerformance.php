@@ -391,7 +391,20 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
         $grandParRate = $grand['outstanding'] > 0 ? round(($grand['par_amt'] / $grand['outstanding']) * 100, 2) : 0;
         $grandArrearRate = round(($grand['pd_principal'] / $grand['outstanding']) * 100, 2);
         $grandOutPARRate = $grand['OutstandingAmt'] > 0 ? round(($grand['ParAmtAS'] / $grand['OutstandingAmt']) * 100, 2): 0;
-        $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
+        // $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
+
+        $applyBranchFilter = function ($q) {
+            $q->when(request('branch_id'), function ($q, $branch_id) {
+                $q->where('Branch', $branch_id);
+            });
+        };
+        $grandBorrowers = DB::connection('pgsql')
+        ->table('MKT_LOAN_CONTRACT')
+        ->tap($applyBranchFilter)
+        ->where('OutstandingAmountAS', '>', 0)
+        ->distinct()
+        ->count('ContractCustomerID');
+        
         $dataExcel[] = [
             '',
             'GrandTotal',

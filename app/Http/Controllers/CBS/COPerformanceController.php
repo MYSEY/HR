@@ -408,7 +408,20 @@ class COPerformanceController extends Controller
 
             $totalPages = ceil($recordsFiltered / $limit);
             $currentPage = floor($start / $limit) + 1;
-            $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
+
+            $applyBranchFilter = function ($q) {
+                $q->when(request('branch_id'), function ($q, $branch_id) {
+                    $q->where('Branch', $branch_id);
+                });
+            };
+            $grandBorrowers = DB::connection('pgsql')
+            ->table('MKT_LOAN_CONTRACT')
+            ->tap($applyBranchFilter)
+            ->where('OutstandingAmountAS', '>', 0)
+            ->distinct()
+            ->count('ContractCustomerID');
+            
+            // $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('Branch', request('branch_id'))->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
             $grandParRate = 0;
             if ($grandTotals['TotalOutstanding'] > 0) {
                 $grandParRate = $grandTotals['ParAmount'] / $grandTotals['TotalOutstanding'];
