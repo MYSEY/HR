@@ -408,26 +408,25 @@ class COPerformanceController extends Controller
 
             $totalPages = ceil($recordsFiltered / $limit);
             $currentPage = floor($start / $limit) + 1;
-
-            $applyBranchFilter = function ($q) {
-                $q->when(request('branch_id'), function ($q, $branch_id) {
-                    $q->where('Branch', $branch_id);
-                });
-            };
             $grandBorrowers = DB::connection('pgsql')
             ->table('MKT_LOAN_CONTRACT')
-            ->tap($applyBranchFilter)
+            ->when(request('branch_id'), function ($q, $branch_id) {
+                $q->where('Branch', $branch_id);
+            })
             ->where('OutstandingAmountAS', '>', 0)
             ->distinct()
             ->count('ContractCustomerID');
             
-            // $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('Branch', request('branch_id'))->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
+            // $grandBorrowers = DB::connection('pgsql')->table('MKT_LOAN_CONTRACT')->where('OutstandingAmountAS', '>', 0)->distinct()->count('ContractCustomerID');
             $grandParRate = 0;
             if ($grandTotals['TotalOutstanding'] > 0) {
                 $grandParRate = $grandTotals['ParAmount'] / $grandTotals['TotalOutstanding'];
             }
             $grandArrearRate = 0;
-            $grandArrearRate = $grandTotals['TotalPDPrincipal'] / $grandTotals['TotalOutstanding'];
+            if ($grandTotals['TotalOutstanding'] > 0) {
+                $grandArrearRate = $grandTotals['TotalPDPrincipal'] / $grandTotals['TotalOutstanding'];
+            }
+            
             $grandOutPARRate = 0;
             if ($grandTotals['ParAmtAS'] > 0) {
                 $grandOutPARRate = $grandTotals['ParAmtAS'] / $grandTotals['OutstandingAmt'];
@@ -438,6 +437,7 @@ class COPerformanceController extends Controller
                     'DisplayName' => '<b style="color:#1f1f1f;font-size:14px;">GrandTotal</b>',
                     'Currency' => 'USD',
                     'TotalBorrowers' => $grandBorrowers,
+                    // 'TotalBorrowers' => $grandTotals['TotalBorrowers'],
                     'TotalLoans' => $grandTotals['TotalLoans'],
                     'TotalDisbursed' => $grandTotals['TotalDisbursed'],
                     'TotalOutstanding' => $grandTotals['TotalOutstanding'],
