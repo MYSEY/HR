@@ -192,6 +192,10 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             'LC.Currency'
         );
 
+        $query->when(request('branch_id'), function ($q, $branch_id) {
+            return $q->where('LC.Branch', $branch_id);
+        });
+
         // GET DATA
         $data = $query->get();
 
