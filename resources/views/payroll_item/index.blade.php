@@ -49,7 +49,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
+                                <table class="table table-striped custom-table datatable dataTable no-footer" id="tbl_adjustment" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -188,15 +188,6 @@
                 </div>
             </div>
         </div>
-
-        <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-                <p>Loading Data...</p>
-            </div>
-        </div>
     </div>
     @include('payroll_item.import')
 @endsection
@@ -214,7 +205,7 @@
                 employee_name = $('#employee_name').val();
                 filter_month = $('#filter_month').val();
                 // Reload DataTable with the filter values
-                $('#DataTables_Table_0').DataTable().ajax.reload(null, false);
+                $('#tbl_adjustment').DataTable().ajax.reload(null, false);
             });
             
             dataTables();
@@ -283,13 +274,7 @@
         }
 
         function dataTables() {
-            $('#loading-overlay').show();
-            // Check if DataTable instance exists, then destroy it
-            if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
-                $('#DataTables_Table_0').DataTable().clear().destroy();
-            }
-            
-            $('#DataTables_Table_0').DataTable({
+            $('#tbl_adjustment').DataTable({
                 destroy: true,
                 pageLength: 10,
                 processing: true,
@@ -348,7 +333,7 @@
                     $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
                 }
             });
-            $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
+            $('#tbl_adjustment').on('processing.dt', function (e, settings, processing) {
                 if (processing) {
                     $('#loading-overlay').show();
                 } else {
@@ -358,4 +343,3 @@
         }
     </script>
 @endsection
-

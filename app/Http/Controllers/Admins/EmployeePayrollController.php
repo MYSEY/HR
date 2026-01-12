@@ -95,7 +95,7 @@ class EmployeePayrollController extends Controller
                 'branchs.branch_name_kh',
                 'branchs.branch_name_en',
             );
-            $query ->when($request->employee_name, function ($query, $employee_name) {
+            $query->when($request->employee_name, function ($query, $employee_name) {
                 return $query->where('users.employee_name_en', 'LIKE', "%$employee_name%");
             })
             ->when($request->number_employee, function ($query, $number_employee) {
@@ -123,7 +123,7 @@ class EmployeePayrollController extends Controller
             }
 
             // Fetch paginated data
-            $recordsTotal = payrollPreview::where('id', $request->id)->count();
+            $recordsTotal = $query->count();
             $recordsFiltered = $query->count();
             // Apply pagination for the actual data retrieval
             $start = intval($request->input('start', 0));

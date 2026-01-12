@@ -61,13 +61,12 @@ class PayrollItemController extends Controller
             }
 
             // Fetch paginated data
-            $recordsTotal = PayrollAdjustment::where('id', $request->id)->count();
+            $recordsTotal = $query->count();
             $recordsFiltered = $query->count();
             // Apply pagination for the actual data retrieval
             $start = intval($request->input('start', 0));
             $limit = intval($request->input('length', 10));
             $data = $query->orderBy('id', 'DESC')->offset($start)->limit($limit)->get();
-            // dd($data);
             // Return JSON response
             return response()->json([
                 'draw' => intval($request->input('draw')),  // Optional: for client-side tracking

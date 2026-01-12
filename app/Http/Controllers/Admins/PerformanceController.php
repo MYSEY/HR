@@ -106,7 +106,7 @@ class PerformanceController extends Controller
                 $query->whereIn('performances.status', ['preparing','accepted']);
             }
 
-            $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
+            $recordsTotal = Performance::whereIn('performances.status', ['preparing','accepted'])->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));

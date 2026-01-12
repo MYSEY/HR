@@ -89,125 +89,40 @@
                                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table class="table table-striped custom-table no-footer" id="btl_payroll_resign" aria-describedby="DataTables_Table_0_info">
+                                            <table class="table table-striped custom-table no-footer" id="tbl_payroll_resign" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
-                                                        <th class=" stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending">@lang('lang.employee_name')</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                            aria-label="Email: activate to sort column ascending">@lang('lang.position')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Email: activate to sort column ascending">@lang('lang.department')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.basic_salary')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.base_salary_received')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.child_allowance')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.phone_allowance')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.incentive')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.KNY_/_pchum_ben')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.annual_bonus')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.other_benefits')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.seniority_pay') (@lang('lang.included_tax'))
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.adjustment_include_taxe')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.gross_salary')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.pension_fund')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.gross_salary')(@lang('lang.usd'))
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.gross_salary')(@lang('lang.rile'))
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.salary_charges_reduced')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.tax_base')(@lang('lang.rile'))
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.tax_rate')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.personal_tax')(@lang('lang.usd'))
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.personal_tax')(@lang('lang.rile'))
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.seniority_pay') (@lang('lang.excluded_tax'))
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.adjustment_excluded_tax')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.severance_pay')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.loan_amount')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.net_salary')
-                                                        </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.payment_date')
-                                                        </th>
+                                                        <th class="sorting stuck-scroll-3" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                                        <th class="stuck-scroll-3" rowspan="1" colspan="1" aria-sort="ascending">@lang('lang.employee_name')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.department')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.basic_salary')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.base_salary_received')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.child_allowance')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.phone_allowance')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.incentive')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.KNY_/_pchum_ben')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.annual_bonus')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.other_benefits')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.seniority_pay') (@lang('lang.included_tax'))</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.adjustment_include_taxe')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.gross_salary')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.pension_fund')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.gross_salary')(@lang('lang.usd'))</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.gross_salary')(@lang('lang.rile'))</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.salary_charges_reduced')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.tax_base')(@lang('lang.rile'))</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.tax_rate')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.personal_tax')(@lang('lang.usd'))</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.personal_tax')(@lang('lang.rile'))</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.seniority_pay') (@lang('lang.excluded_tax'))</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.adjustment_excluded_tax')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.severance_pay')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.loan_amount')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.net_salary')</th>
+                                                        <th class="sorting" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.payment_date')</th>
                                                         <th style="text-align: center;">@lang('lang.action')</th>
                                                     </tr>
                                                 </thead>
@@ -356,515 +271,502 @@
                 </div>
             </div>
         </div>
-        <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-                <p>Loading Data...</p>
-            </div>
-        </div>
     </div>
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
-<script>
-    var lang = @json(Helper::getLang());
-    var number_employee = null;
-    var employee_name = null;
-    var branch_id = null;
-    var filter_month = null;
-    let isDelete = "{{ permissionAccess('m4-s7', 'is_delete')->value }}";
-    let isApprove = "{{ permissionAccess('m4-s7', 'is_approve')->value }}";
-    $(function(){
-        dataTables();
-        $(".btn-search").on("click", function(){
-            number_employee = $('#employee_id').val();
-            employee_name = $('#employee_name').val();
-            branch_id = $('#branch_id').val();
-            filter_month = $('#filter_month').val();
-            // Reload DataTable with the filter values
-            $('#btl_payroll_resign').DataTable().ajax.reload(); 
-        });
-        
-        $(".btn_excel").on("click", function() {
-            let query = {
-                branch_id: $("#branch_id").val(),
-                employee_id: $("#employee_id").val(),
-                employee_name: $("#employee_name").val(),
-                filter_month: $("#filter_month").val(),
-            };
-            var url = "{{URL::to('payroll/review/export')}}?" + $.param(query)
-            window.location = url;
-        });
-        $(".reset-btn").on("click", function() {
-            $(this).prop('disabled', true);
-            $(".btn-text-reset").hide();
-            $("#btn-text-loading").css('display', 'block');
-            window.location.replace("{{ URL('payroll/review') }}");
-        });
-        $("#btnPayrollStaffResign").on("click",function() {
-            let num_miss = 0;
-            $(".pay_required").each(function(){
-                if($(this).val()=="0.00" || $(this).val()==""){
-                    num_miss++;
-                    $(this).css("border-color","#dc3545")
-                }else{
-                    $(this).css("border-color","#198754")
-                }
+@section('script')
+    <script>
+        var lang = @json(Helper::getLang());
+        var number_employee = null;
+        var employee_name = null;
+        var branch_id = null;
+        var filter_month = null;
+        let isDelete = "{{ permissionAccess('m4-s7', 'is_delete')->value }}";
+        let isApprove = "{{ permissionAccess('m4-s7', 'is_approve')->value }}";
+        $(function(){
+            $(".btn-search").on("click", function(){
+                number_employee = $('#employee_id').val();
+                employee_name = $('#employee_name').val();
+                branch_id = $('#branch_id').val();
+                filter_month = $('#filter_month').val();
+                // Reload DataTable with the filter values
+                $('#tbl_payroll_resign').DataTable().ajax.reload(); 
             });
-            if (num_miss>0) {
-                return false;
-            }else{
-                let number_employee = $("#number_employee").val();
-                let exchange_rate_salary = $("#exchange_rate_preview").val();
-                let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
-                let monthly_quarterly_incentive = $("#monthly_quarterly_incentive").val();
-                let staff_loan = $("#staff_loan").val();
-                let other_benefits = $("#other_benefits").val();
-                let annual_incentive_bonus = $("#annual_incentive_bonus").val();
-                let staff_book = $("#staff_book").val();
-                let parking_allowance = $("#parking_allowance").val();
-                // var file_loan = $('#loan').prop('files')[0];
-
-                var form_data = new FormData();
-                form_data.append('number_employee', number_employee);
-                form_data.append('exchange_rate', exchange_rate_salary);
-                form_data.append('monthly_quarterly_incentive', monthly_quarterly_incentive);
-                form_data.append('payment_date', $("#payment_date").val());
-                form_data.append('staff_loan', staff_loan);
-                form_data.append('other_benefits', other_benefits);
-                form_data.append('annual_incentive_bonus', annual_incentive_bonus);
-                form_data.append('staff_book', staff_book);
-                form_data.append('parking_allowance', parking_allowance);
-                form_data.append('_token', "{{ csrf_token() }}");
-                
-                let button_ok = {
-                    text: '@lang("lang.pay")',
-                    btnClass: 'add-btn-status',
-                    action: function () {
-                        $(".btn-search").prop('disabled', false);
-                        $(".loading-icon").css('display', 'block');
-                        $.ajax({
-                            type: 'POST',
-                            url: "{{ url('payroll/staff/risign/create') }}",
-                            data: form_data,
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            success: function(data) {
-                                toastr.success('Data has been save success');
-                                window.location.replace("{{ URL('payroll/staff/resign') }}");
-                            }
-                        });
-                    }
+            
+            $(".btn_excel").on("click", function() {
+                let query = {
+                    branch_id: $("#branch_id").val(),
+                    employee_id: $("#employee_id").val(),
+                    employee_name: $("#employee_name").val(),
+                    filter_month: $("#filter_month").val(),
                 };
-               
-                $.confirm({
-                    // icon: 'fa fa-warning',
-                    title: '@lang("lang.are_you_sure_you_want_to_pay")',
-                    titleClass: 'text-center',
-                    type: 'blue',
-                    content: '' +
-                    '<form action="" class="formName">' +
-                        '<div class="form-group">' +
-                            '<div class="content-title">@lang("lang.exchange_rate") @lang("lang.nssf")</div>'+
-                            '<span style="margin-left: 15px;"> 1 @lang("lang.us_dollar")  =  '+(exchange_rate_nssf)+' @lang("lang.rile")</span>'+
-                            '<div class="content-title">@lang("lang.exchange_rate") @lang("lang.salary")</div>'+
-                            '<span style="margin-left: 15px;">1 @lang("lang.us_dollar") = '+(exchange_rate_salary)+' @lang("lang.rile")</span>'+
-                            '<input type="hidden" class="form-control id" id="" name="">'+
-                        '</div>' +
-                    '</form>',
-                    onOpenBefore: function () {
-                        $(".jconfirm-buttons").addClass("jconfirm-buttons-center");
-                    },
-                    buttons: {
-                        cancel: {
-                            text: '@lang("lang.cancel")',
-                            btnClass: 'btn-secondary btn-sm',
-                        },
-                        button_ok,
-                    },
+                var url = "{{URL::to('payroll/review/export')}}?" + $.param(query)
+                window.location = url;
+            });
+            dataTables();
 
-                    onContentReady: function () {
-                        var jc = this;
-                        this.$content.find('form').on('submit', function (e) {
-                            e.preventDefault();
-                            jc.$$formSubmit.trigger('click');
-                        });
+            $(".reset-btn").on("click", function() {
+                $(this).prop('disabled', true);
+                $(".btn-text-reset").hide();
+                $("#btn-text-loading").css('display', 'block');
+                window.location.replace("{{ URL('payroll/review') }}");
+            });
+            $("#btnPayrollStaffResign").on("click",function() {
+                let num_miss = 0;
+                $(".pay_required").each(function(){
+                    if($(this).val()=="0.00" || $(this).val()==""){
+                        num_miss++;
+                        $(this).css("border-color","#dc3545")
+                    }else{
+                        $(this).css("border-color","#198754")
                     }
                 });
-            }
-        });
-        $('.btnDelete').on('click',function(){
-            var number_employee = $(this).attr('data-id');
-            $.confirm({
-                title: '@lang("lang.delete")!',
-                content: "@lang('lang.are_you_sure_want_to_delete')?",
-                type: 'red',
-                typeAnimated: true,
-                buttons: {
-                    tryAgain: {
-                        text: 'ok',
-                        btnClass: 'btn-red',
-                        action: function(){
-                            axios.post('{{ URL("payroll/staff/resign/delete") }}', {
-                                number_employee : number_employee,
-                            }).then(function(response) {
-                                new Noty({
-                                    title: "",
-                                    text: "@lang('lang.the_process_has_been_successfully').",
-                                    type: "success",
-                                    timeout: 3000,
-                                    icon: true
-                                }).show();
-                                window.location.replace("{{ URL('payroll/staff/resign') }}");
-                            }).catch(function(error) {
-                                new Noty({
-                                    title: "",
-                                    text: "@lang('lang.something_went_wrong_please_try_again_later').",
-                                    type: "error",
-                                    icon: true
-                                }).show();
+                if (num_miss>0) {
+                    return false;
+                }else{
+                    let number_employee = $("#number_employee").val();
+                    let exchange_rate_salary = $("#exchange_rate_preview").val();
+                    let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
+                    let monthly_quarterly_incentive = $("#monthly_quarterly_incentive").val();
+                    let staff_loan = $("#staff_loan").val();
+                    let other_benefits = $("#other_benefits").val();
+                    let annual_incentive_bonus = $("#annual_incentive_bonus").val();
+                    let staff_book = $("#staff_book").val();
+                    let parking_allowance = $("#parking_allowance").val();
+                    // var file_loan = $('#loan').prop('files')[0];
+
+                    var form_data = new FormData();
+                    form_data.append('number_employee', number_employee);
+                    form_data.append('exchange_rate', exchange_rate_salary);
+                    form_data.append('monthly_quarterly_incentive', monthly_quarterly_incentive);
+                    form_data.append('payment_date', $("#payment_date").val());
+                    form_data.append('staff_loan', staff_loan);
+                    form_data.append('other_benefits', other_benefits);
+                    form_data.append('annual_incentive_bonus', annual_incentive_bonus);
+                    form_data.append('staff_book', staff_book);
+                    form_data.append('parking_allowance', parking_allowance);
+                    form_data.append('_token', "{{ csrf_token() }}");
+                    
+                    let button_ok = {
+                        text: '@lang("lang.pay")',
+                        btnClass: 'add-btn-status',
+                        action: function () {
+                            $(".btn-search").prop('disabled', false);
+                            $(".loading-icon").css('display', 'block');
+                            $.ajax({
+                                type: 'POST',
+                                url: "{{ url('payroll/staff/risign/create') }}",
+                                data: form_data,
+                                contentType: false,
+                                cache: false,
+                                processData: false,
+                                success: function(data) {
+                                    toastr.success('Data has been save success');
+                                    window.location.replace("{{ URL('payroll/staff/resign') }}");
+                                }
                             });
                         }
-                    },
-                        close: function () {
-                    }
+                    };
+                
+                    $.confirm({
+                        // icon: 'fa fa-warning',
+                        title: '@lang("lang.are_you_sure_you_want_to_pay")',
+                        titleClass: 'text-center',
+                        type: 'blue',
+                        content: '' +
+                        '<form action="" class="formName">' +
+                            '<div class="form-group">' +
+                                '<div class="content-title">@lang("lang.exchange_rate") @lang("lang.nssf")</div>'+
+                                '<span style="margin-left: 15px;"> 1 @lang("lang.us_dollar")  =  '+(exchange_rate_nssf)+' @lang("lang.rile")</span>'+
+                                '<div class="content-title">@lang("lang.exchange_rate") @lang("lang.salary")</div>'+
+                                '<span style="margin-left: 15px;">1 @lang("lang.us_dollar") = '+(exchange_rate_salary)+' @lang("lang.rile")</span>'+
+                                '<input type="hidden" class="form-control id" id="" name="">'+
+                            '</div>' +
+                        '</form>',
+                        onOpenBefore: function () {
+                            $(".jconfirm-buttons").addClass("jconfirm-buttons-center");
+                        },
+                        buttons: {
+                            cancel: {
+                                text: '@lang("lang.cancel")',
+                                btnClass: 'btn-secondary btn-sm',
+                            },
+                            button_ok,
+                        },
+
+                        onContentReady: function () {
+                            var jc = this;
+                            this.$content.find('form').on('submit', function (e) {
+                                e.preventDefault();
+                                jc.$$formSubmit.trigger('click');
+                            });
+                        }
+                    });
                 }
             });
-        });
-        $('body').on('click','.btn_approved',function(){
-            var number_employee = $(this).attr('data-id');
-            $.confirm({
-                title: '@lang("lang.approve")',
-                content: "@lang('lang.are_you_sure_want_to_approve')?",
-                type: 'blue',
-                typeAnimated: true,
-                buttons: {
-                    tryAgain: {
-                        text: 'ok',
-                        btnClass: 'btn-blue',
-                        action: function(){
-                            axios.post('{{ URL('payroll/staff/resign/approved') }}',{
-                                number_employee: number_employee,
-                            }).then(function(response) {
-                                new Noty({
-                                    title: "",
-                                    text: '@lang("lang.the_process_has_been_successfully")',
-                                    type: "success",
-                                    icon: true
-                                }).show();
-                                    $('.card-footer').remove();
+            $('.btnDelete').on('click',function(){
+                var number_employee = $(this).attr('data-id');
+                $.confirm({
+                    title: '@lang("lang.delete")!',
+                    content: "@lang('lang.are_you_sure_want_to_delete')?",
+                    type: 'red',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: 'ok',
+                            btnClass: 'btn-red',
+                            action: function(){
+                                axios.post('{{ URL("payroll/staff/resign/delete") }}', {
+                                    number_employee : number_employee,
+                                }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: "@lang('lang.the_process_has_been_successfully').",
+                                        type: "success",
+                                        timeout: 3000,
+                                        icon: true
+                                    }).show();
                                     window.location.replace("{{ URL('payroll/staff/resign') }}");
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                         type: "error",
                                         icon: true
                                     }).show();
                                 });
                             }
                         },
-                        close: function () {
+                            close: function () {
+                        }
                     }
-                }
+                });
+            });
+            $('body').on('click','.btn_approved',function(){
+                var number_employee = $(this).attr('data-id');
+                $.confirm({
+                    title: '@lang("lang.approve")',
+                    content: "@lang('lang.are_you_sure_want_to_approve')?",
+                    type: 'blue',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: 'ok',
+                            btnClass: 'btn-blue',
+                            action: function(){
+                                axios.post('{{ URL('payroll/staff/resign/approved') }}',{
+                                    number_employee: number_employee,
+                                }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
+                                        type: "success",
+                                        icon: true
+                                    }).show();
+                                        $('.card-footer').remove();
+                                        window.location.replace("{{ URL('payroll/staff/resign') }}");
+                                    }).catch(function(error) {
+                                        new Noty({
+                                            title: "",
+                                            text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                            type: "error",
+                                            icon: true
+                                        }).show();
+                                    });
+                                }
+                            },
+                            close: function () {
+                        }
+                    }
+                });
             });
         });
-    });
-    
-   
-    function dataTables() {
-        $('#loading-overlay').show();
-        let table = $('#btl_payroll_resign');
         
-        // ✅ Properly destroy existing instance before reinitializing
-        if ($.fn.DataTable.isDataTable(table)) {
-            table.DataTable().clear().destroy();
-            table.html(''); // clear headers as well
-        }
-
-        table.DataTable({
-            pageLength: 10,
-            processing: true,
-            serverSide: true,
-            destroy: true, // <-- IMPORTANT SAFEGUARD
-            order: [[0, 'desc']],
-            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-            ajax: {
-                url: '{{ URL("payroll/staff/resign") }}',
-                type: 'GET',
-                data: function(d) {
-                    d.number_employee = $('input[name="employee_id"]').val();
-                    d.branch_id = $('select[name="branch_id"]').val();
-                    d.employee_name = $('input[name="employee_name"]').val();
-                    d.filter_month = $('select[name="filter_month"]').val();
-                }
-            },
-            columns: [
-                {
-                    data: 'number_employee',
-                    name: 'number_employee',
-                    className: 'stuck-scroll-3',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'employee_name_en',
-                    name: 'employee_name_en',
-                    className: 'stuck-scroll-3',
-                    render: function(data, type, row) {
-                        return lang == 'en' ? row.employee_name_en : row.employee_name_kh
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'post_name_en',
-                    name: 'post_name_en',
-                    render: function(data, type, row) {
-                        return lang == 'en' ? row.post_name_en : row.post_name_kh
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'depart_name_en',
-                    name: 'depart_name_en',
-                    render: function(data, type, row) {
-                        return lang == 'en' ? row.depart_name_en : row.depart_name_kh
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'branch_name_en',
-                    name: 'branch_name_en',
-                    render: function(data, type, row) {
-                        return lang == 'en' ? row.branch_name_en : row.branch_name_kh
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'date_of_commencement',
-                    name: 'date_of_commencement',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'basic_salary',
-                    name: 'basic_salary',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_gross_salary',
-                    name: 'total_gross_salary',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_child_allowance',
-                    name: 'total_child_allowance',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'phone_allowance',
-                    name: 'phone_allowance',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'monthly_quarterly_bonuses',
-                    name: 'monthly_quarterly_bonuses',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_kny_phcumben',
-                    name: 'total_kny_phcumben',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'annual_incentive_bonus',
-                    name: 'annual_incentive_bonus',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'other_benefits',
-                    name: 'other_benefits',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'seniority_pay_included_tax',
-                    name: 'seniority_pay_included_tax',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'adjustment_include_taxe',
-                    name: 'adjustment_include_taxe',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_gross',
-                    name: 'total_gross',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_pension_fund',
-                    name: 'total_pension_fund',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'base_salary_received_usd',
-                    name: 'base_salary_received_usd',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'base_salary_received_riel',
-                    name: 'base_salary_received_riel',
-                    render: function(data, type, row) {
-                        return formatCurrencyKH(row.base_salary_received_riel)
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_charges_reduced',
-                    name: 'total_charges_reduced',
-                    render: function(data, type, row) {
-                        return formatCurrencyKH(row.total_charges_reduced)
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_tax_base_riel',
-                    name: 'total_tax_base_riel',
-                    render: function(data, type, row) {
-                        return formatCurrencyKH(row.total_tax_base_riel)
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_rate',
-                    name: 'total_rate',
-                    render: function(data, type, row) {
-                        return data == null ? "0.00" : data
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_salary_tax_usd',
-                    name: 'total_salary_tax_usd',
-                    render: function(data, type, row) {
-                        return data == null ? "0.00" : data
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_salary_tax_riel',
-                    name: 'total_salary_tax_riel',
-                    render: function(data, type, row) {
-                        return formatCurrencyKH(row.total_salary_tax_riel)
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'seniority_pay_excluded_tax',
-                    name: 'seniority_pay_excluded_tax',
-                    render: function(data, type, row) {
-                        return data == null ? "0.00" : data
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'adjustment',
-                    name: 'adjustment',
-                    render: function(data, type, row) {
-                        return data == null ? "0.00" : data
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_severance_pay',
-                    name: 'total_severance_pay',
-                    render: function(data, type, row) {
-                        return data == null ? "0.00" : data
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'loan_amount',
-                    name: 'loan_amount',
-                    render: function(data, type, row) {
-                        return data == null ? "0.00" : data
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'total_salary',
-                    name: 'total_salary',
-                    render: function(data, type, row) {
-                        return data == null ? "0.00" : data
-                    },
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'payment_date',
-                    name: 'payment_date',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    render: function(data, type, row) {
-                        let buttons = '';
-                        if (row.id) {
-                            if (isDelete ==1) {
-                                buttons += `<button class="btn btn-danger btn-sm btnDelete" type="button" data-id="'+row.users?.number_employee+'">Delete</button>`;
-                            }
-                            if (isApprove == 1) {
-                                buttons += '<button type="button" class="btn btn-success btn-sm btn_approved" href="#" data-id="'+row.users?.number_employee+'">@lang("lang.approve")</button>';
-                            }
-                        }
-                        return buttons || '';
-                    },
-                    orderable: false,
-                    searchable: false
-                }
-            ],
-            initComplete: function() {
-                $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
+    
+        function dataTables() {
+            $('#loading-overlay').show();
+            // FIX: destroy existing DataTable first
+            if ($.fn.DataTable.isDataTable('#tbl_payroll_resign')) {
+                $('#tbl_payroll_resign').DataTable().clear().destroy();
             }
-        });
-        // ✅ Show/hide loading spinner on DataTable processing
-        table.on('processing.dt', function (e, settings, processing) {
-            $('#loading-overlay').toggle(processing);
-        });
-    }
-    function formatCurrencyKH(currency) {
-        return parseInt(currency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-</script>
+            $('#tbl_payroll_resign').DataTable({
+                destroy: true,
+                pageLength: 10,
+                processing: true,
+                serverSide: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                ajax: {
+                    url: '{{ URL("payroll/staff/resign") }}',
+                    type: 'GET',
+                    data: function(d) {
+                        d.number_employee = $('input[name="employee_id"]').val();
+                        d.branch_id = $('select[name="branch_id"]').val();
+                        d.employee_name = $('input[name="employee_name"]').val();
+                        d.filter_month = $('select[name="filter_month"]').val();
+                    }
+                },
+                columns: [
+                    {
+                        data: 'number_employee',
+                        name: 'number_employee',
+                        className: 'stuck-scroll-3',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'employee_name_en',
+                        name: 'employee_name_en',
+                        className: 'stuck-scroll-3',
+                        render: function(data, type, row) {
+                            return lang == 'en' ? row.employee_name_en : row.employee_name_kh
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'post_name_en',
+                        name: 'post_name_en',
+                        render: function(data, type, row) {
+                            return lang == 'en' ? row.post_name_en : row.post_name_kh
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'depart_name_en',
+                        name: 'depart_name_en',
+                        render: function(data, type, row) {
+                            return lang == 'en' ? row.depart_name_en : row.depart_name_kh
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'branch_name_en',
+                        name: 'branch_name_en',
+                        render: function(data, type, row) {
+                            return lang == 'en' ? row.branch_name_en : row.branch_name_kh
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'date_of_commencement',
+                        name: 'date_of_commencement',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'basic_salary',
+                        name: 'basic_salary',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_gross_salary',
+                        name: 'total_gross_salary',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_child_allowance',
+                        name: 'total_child_allowance',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'phone_allowance',
+                        name: 'phone_allowance',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'monthly_quarterly_bonuses',
+                        name: 'monthly_quarterly_bonuses',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_kny_phcumben',
+                        name: 'total_kny_phcumben',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'annual_incentive_bonus',
+                        name: 'annual_incentive_bonus',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'other_benefits',
+                        name: 'other_benefits',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'seniority_pay_included_tax',
+                        name: 'seniority_pay_included_tax',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'adjustment_include_taxe',
+                        name: 'adjustment_include_taxe',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_gross',
+                        name: 'total_gross',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_pension_fund',
+                        name: 'total_pension_fund',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'base_salary_received_usd',
+                        name: 'base_salary_received_usd',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'base_salary_received_riel',
+                        name: 'base_salary_received_riel',
+                        render: function(data, type, row) {
+                            return formatCurrencyKH(row.base_salary_received_riel)
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_charges_reduced',
+                        name: 'total_charges_reduced',
+                        render: function(data, type, row) {
+                            return formatCurrencyKH(row.total_charges_reduced)
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_tax_base_riel',
+                        name: 'total_tax_base_riel',
+                        render: function(data, type, row) {
+                            return formatCurrencyKH(row.total_tax_base_riel)
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_rate',
+                        name: 'total_rate',
+                        render: function(data, type, row) {
+                            return data == null ? "0.00" : data
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_salary_tax_usd',
+                        name: 'total_salary_tax_usd',
+                        render: function(data, type, row) {
+                            return data == null ? "0.00" : data
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_salary_tax_riel',
+                        name: 'total_salary_tax_riel',
+                        render: function(data, type, row) {
+                            return formatCurrencyKH(row.total_salary_tax_riel)
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'seniority_pay_excluded_tax',
+                        name: 'seniority_pay_excluded_tax',
+                        render: function(data, type, row) {
+                            return data == null ? "0.00" : data
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'adjustment',
+                        name: 'adjustment',
+                        render: function(data, type, row) {
+                            return data == null ? "0.00" : data
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_severance_pay',
+                        name: 'total_severance_pay',
+                        render: function(data, type, row) {
+                            return data == null ? "0.00" : data
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'loan_amount',
+                        name: 'loan_amount',
+                        render: function(data, type, row) {
+                            return data == null ? "0.00" : data
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'total_salary',
+                        name: 'total_salary',
+                        render: function(data, type, row) {
+                            return data == null ? "0.00" : data
+                        },
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'payment_date',
+                        name: 'payment_date',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        render: function(data, type, row) {
+                            let buttons = '';
+                            if (row.id) {
+                                if (isDelete ==1) {
+                                    buttons += `<button class="btn btn-danger btn-sm btnDelete" type="button" data-id="'+row.users?.number_employee+'">Delete</button>`;
+                                }
+                                if (isApprove == 1) {
+                                    buttons += '<button type="button" class="btn btn-success btn-sm btn_approved" href="#" data-id="'+row.users?.number_employee+'">@lang("lang.approve")</button>';
+                                }
+                            }
+                            return buttons || '';
+                        },
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                initComplete: function() {
+                    $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
+                }
+            });
+        }
+        function formatCurrencyKH(currency) {
+            return parseInt(currency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    </script>
+@endsection

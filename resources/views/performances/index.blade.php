@@ -165,7 +165,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="tbl_performance" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
                                             <th>
@@ -224,14 +224,6 @@
         </div>
         <!-- /Delete Performane Modal -->
     </div>
-    <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            <div class="spinner-border text-primary" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-            <p>Loading Data...</p>
-        </div>
-    </div>
     @include('performances.import')
 @endsection
 @include('includs.script')
@@ -255,7 +247,7 @@
                 employee_name = $('#employee_name').val();
                 branch_id = $('#branch_id').val();
                 department_id = $('#department_id').val();
-                $('#DataTables_Table_0').DataTable().ajax.reload(null, false);
+                $('#tbl_performance').DataTable().ajax.reload(null, false);
             });
             $('.checkAll').on('click', function(e) {
                 if($(this).is(':checked',true)){
@@ -592,12 +584,7 @@
             }
         }
         function dataTables() {
-            $('#loading-overlay').show();
-            // Check if DataTable instance exists, then destroy it
-            if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
-                $('#DataTables_Table_0').DataTable().clear().destroy();
-            }
-            $('#DataTables_Table_0').DataTable({
+            $('#tbl_performance').DataTable({
                 destroy: true,
                 pageLength: 10,
                 processing: true,
@@ -773,14 +760,6 @@
                 ],
                 initComplete: function() {
                     $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
-                }
-            });
-
-            $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
-                if (processing) {
-                    $('#loading-overlay').show();
-                } else {
-                    $('#loading-overlay').hide();
                 }
             });
         }
