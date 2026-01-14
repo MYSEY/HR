@@ -20,13 +20,13 @@
                                 <i class="fa fa-print fa-lg"></i> @lang('lang.print')
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" style="">
-                            <a class="dropdown-item" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
-                            <a class="dropdown-item" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
-                            {{-- <a class="dropdown-item" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
-                            <a class="dropdown-item" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
-                            <a class="dropdown-item" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
-                            <a class="dropdown-item" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
-                            <a class="dropdown-item" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a> --}}
+                                <a class="dropdown-item" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
+                                <a class="dropdown-item" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
+                                <a class="dropdown-item" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
+                                <a class="dropdown-item" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
+                                <a class="dropdown-item" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
+                                <a class="dropdown-item" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
+                                <a class="dropdown-item" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
                             </div>
                         </div>
                     @endif
@@ -363,7 +363,7 @@
                 let join_year = formatDate(date_of_commencement, 'km', format_date={year: true});
                 let end_day = formatDate(fdc_date, 'km', format_date={day: true});
                 let end_month = formatDate(fdc_date, 'km', format_date={month: true});
-                let end_year = formatDate(fdc_date, 'km', format_date={year: true});
+                let end_year = formatDate(fdc_date, 'km', format_date={year: true});                
                 if (data) {
                     if (data.gender.name_english == "Female") {
                         $("#pr_mr_or_mrs").text("អ្នកស្រី ");
@@ -377,8 +377,8 @@
 
                     $(".pr_name").text(data.employee_name_kh +" ");
                     $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
-                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                    $("#pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
+                    $("#pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
                     $("#pr_id_card_number").text(data.id_card_number+ "");
                     let number_home = "";
                     let number_street = "";
