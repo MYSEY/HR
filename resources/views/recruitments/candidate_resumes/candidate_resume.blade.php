@@ -203,15 +203,6 @@
         @include('recruitments.candidate_resumes.modal_form_edit')
         @include('recruitments.candidate_resumes.modal_form_create_emp')
         @include('recruitments.candidate_resumes.import')
-
-        <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-                <p>Loading Data...</p>
-            </div>
-        </div>
     </div>
 @endsection
 @include('includs.script')
@@ -1322,7 +1313,8 @@
     }
 
     function showDatas(btn_tab){
-         $('#loading-overlay').show();
+        var localeLanguage = '{{ config('app.locale') }}';
+        $('#loading-overlay').show();
         let is_update = "{{ Helper::permissionAccess('m3-s1','is_update') }}";
         let is_delete = "{{ Helper::permissionAccess('m3-s1','is_delete') }}";
         let is_cancel = "{{ Helper::permissionAccess('m3-s1','is_cancel') }}";
