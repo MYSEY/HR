@@ -398,7 +398,7 @@
                     $(".pr_end_month").text(end_month);
                     $(".pr_end_year").text(end_year);
                     $("#pr_position").text(data.position.name_khmer);
-                    $("#pr_branch").text(data.branch.branch_name_kh);
+                    $(".pr_branch").text(data.branch.branch_name_kh);
                     $("#pr_employee_id").text(data.number_employee);
                     $("#pr_basic_salary").text(data.basic_salary);
                     $("#pr_salary_increase").text(data.salary_increas);

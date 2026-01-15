@@ -96,7 +96,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                កន្លែងបម្រើការងារនៅ ប្រចាំ <strong id="pr_branch"></strong> ។
+                                កន្លែងបម្រើការងារនៅ ប្រចាំ <strong class="pr_branch"></strong> ។
                             </td></tr>
                         </table>
                     </div>
