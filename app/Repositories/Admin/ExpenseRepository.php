@@ -112,11 +112,17 @@ class ExpenseRepository extends BaseRepository
         ->when($request->tracking_id, function ($query, $tracking_id) {
             $query->where('expense_requests.tracking_id', $tracking_id);
         })
-        ->when($request->date_request, function ($query, $date_request) {
-            $query->whereDate('expense_requests.date_request', $date_request);
+        ->when($request->request_from_date, function ($query, $request_from_date) {
+            $query->where('expense_requests.date_request', '>=', $request_from_date);
         })
-        ->when($request->date_approve, function ($query, $date_approve) {
-            $query->where('expense_requests.date_approve', $date_approve);
+        ->when($request->request_to_date, function ($query, $request_to_date) {
+            $query->where('expense_requests.date_request', '<=', $request_to_date);
+        })
+        ->when($request->approved_from_date, function ($query, $approved_from_date) {
+            $query->where('expense_requests.date_approve', '>=', $approved_from_date);
+        })
+        ->when($request->approved_to_date, function ($query, $approved_to_date) {
+            $query->where('expense_requests.date_approve', '<=', $approved_to_date);
         })
         ->when($request->type, function ($query, $type) {
             if ($type == 3) {

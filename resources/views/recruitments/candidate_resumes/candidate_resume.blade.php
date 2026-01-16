@@ -1186,11 +1186,11 @@
             ajax: {
                 url: '{{ URL("recruitment/candidate-resume/indexshow") }}',
                 type: 'GET',
-                dataSrc: function (response) { 
-                    console.log('AJAX full response:', response); 
-                    console.log('Table data only:', response.data); 
-                    return response.data; 
-                }
+                // dataSrc: function (response) { 
+                //     console.log('AJAX full response:', response); 
+                //     console.log('Table data only:', response.data); 
+                //     return response.data; 
+                // }
             },
             columns: [
                 {

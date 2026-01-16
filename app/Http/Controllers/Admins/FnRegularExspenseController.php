@@ -27,8 +27,51 @@ class FnRegularExspenseController extends Controller
         if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-        $datas = FnRegularExspense::get();
-        return view('FN_RegularExspenses.index',compact(['datas', 'permission']));
+        return view('FN_RegularExspenses.index',compact(['permission']));
+    }
+
+    public function dataShow(Request $request)
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/regular-expense")->first();
+        if ($request->ajax()) {
+
+           $query = FnRegularExspense::query();
+
+            // 🔍 Search
+            $searchValue = $request->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('fn_regular_exspenses.serialref', 'like', "%{$searchValue}%")
+                    ->orWhere('fn_regular_exspenses.description', 'like', "%{$searchValue}%")
+                    ->orWhere('fn_regular_exspenses.file_upload', 'like', "%{$searchValue}%")
+                    // ->orWhere('fn_regular_exspenses.is_contactual', 'like', "%{$searchValue}%")
+                    ->orWhere('fn_regular_exspenses.status', 'like', "%{$searchValue}%");
+                });
+            }
+
+            // Counts
+            $recordsTotal = FnRegularExspense::count();
+            $recordsFiltered = $query->count();
+
+            // Pagination
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+
+            // 🔥 HANDLE "ALL"
+            if ($limit == -1) {
+                $data = $query->get(); // get all rows
+            } else {
+                $data = $query->offset($start)->limit($limit)->get();
+            }
+
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data,
+                'permission' => $permission,
+            ]);
+        }
     }
 
     /**

@@ -30,7 +30,8 @@
                     </div>
                     <div class="form-group">
                         <div class="cal-icon">
-                            <input class="form-control floating datetimepicker" type="text" id="request_date" placeholder="@lang('lang.request_date')">
+                            <input type="text" id="request_date" class="form-control date_range" placeholder="@lang('lang.request_date')">
+                            {{-- <input class="form-control floating datetimepicker" type="text" id="request_date" placeholder="@lang('lang.request_date')"> --}}
                         </div>
                     </div>
                 </div>
@@ -46,7 +47,7 @@
                     
                     <div class="form-group">
                         <div class="cal-icon">
-                            <input class="form-control floating datetimepicker" type="text" id="approved_date" placeholder="@lang('lang.approved_date')">
+                            <input class="form-control floating date_range" type="text" id="approved_date" placeholder="@lang('lang.approved_date')">
                         </div>
                     </div>
                 </div>
@@ -68,8 +69,6 @@
                             </select>
                     </div>
                     @endif
-                    
-
                 </div>
             </div>
         </div>
@@ -265,22 +264,59 @@
         });
     });
     $(function() {
-         $(".reset-btn").on("click", function() {
+        $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('/fn/expense/report') }}"); 
+        });
+        $('.date_range').daterangepicker({
+            autoUpdateInput: false,
+            showDropdowns: true,
+            linkedCalendars: false,
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+        });
+
+        $('.date_range').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(
+                picker.startDate.format('YYYY-MM-DD') + ' - ' +
+                picker.endDate.format('YYYY-MM-DD')
+            );
+            // table.draw();
+        });
+
+        $('.date_range').on('cancel.daterangepicker', function () {
+            $(this).val('');
+            table.draw();
         });
         $(".btn-research").on("click", function () {
             $(this).prop('disabled', true);
             $(".btn-txt").hide();
             $(".loading-icon").css('display', 'block');
             let currentPage = $(".per_page").val();
+            let request_from_date = null;
+            let request_to_date = null;
+            if ($('#request_date').val()) {
+                let dates = $('#request_date').val().split(' - ');
+                request_from_date = dates[0];
+                request_to_date   = dates[1] ? dates[1] : null;
+            }
+            let approved_from_date = null;
+            let approved_to_date = null;
+            if ($('#approved_date').val()) {
+                let dates = $('#approved_date').val().split(' - ');
+                approved_from_date = dates[0];
+                approved_to_date   = dates[1] ? dates[1] : null;
+            }
             let param = {
                 "_token": "{{ csrf_token() }}",
                 tracking_id:     $("#tracking_id").val(),
-                date_request:    $("#request_date").val(),
-                date_approve:    $("#approved_date").val(),
+                request_from_date: request_from_date,
+                request_to_date: request_to_date,
+                approved_from_date: approved_from_date,
+                approved_to_date: approved_to_date,
                 type:            $("#type").val(),
                 expense_type:    $("#type_of_expense").val(),
                 location_id:     $("#branch_id").val(),
@@ -290,11 +326,27 @@
         });
         $(".btn_excel").on("click", function () {
             let currentPage = $(".per_page").val();
+            let request_from_date = "";
+            let request_to_date = "";
+            if ($('#request_date').val()) {
+                let dates = $('#request_date').val().split(' - ');
+                request_from_date = dates[0];
+                request_to_date   = dates[1] ? dates[1] : null;
+            }
+            let approved_from_date = "";
+            let approved_to_date = "";
+            if ($('#approved_date').val()) {
+                let dates = $('#approved_date').val().split(' - ');
+                approved_from_date = dates[0];
+                approved_to_date   = dates[1] ? dates[1] : null;
+            }
             let query = {
                 "_token": "{{ csrf_token() }}",
                 tracking_id:     $("#tracking_id").val(),
-                date_request:    $("#request_date").val(),
-                date_approve:    $("#approved_date").val(),
+                request_from_date: request_from_date,
+                request_to_date: request_to_date,
+                approved_from_date: approved_from_date,
+                approved_to_date: approved_to_date,
                 type:            $("#type").val(),
                 expense_type:    $("#type_of_expense").val(),
                 location_id:     $("#branch_id").val(),
@@ -373,7 +425,7 @@
             if (datas.expense_request.location_details.length === 1) {
                 tr_a = '<tr>' +
                         '<td class="table_tr_">' + datas.expense_request.location_details[0].location.branch_name_kh +
-                        'ចំនួនទឹកប្រាក់​ $ ' + datas.expense_request.location_details[0].amount_usd + '</td>' +
+                        'ចំនួនទឹកប្រាក់​ $ ' + formatNumber(datas.expense_request.location_details[0].amount_usd) + ', ៛ '+ formatNumber(datas.expense_request.location_details[0].amount_riel)+'</td>' +
                     '</tr>';
             } else {
                 let mid = Math.ceil(datas.expense_request.location_details.length / 2);
@@ -382,7 +434,7 @@
                     let detail = datas.expense_request.location_details[index];
                     let row = '<tr>' +
                                 '<td class="table_tr_">' + detail.location.branch_name_kh +
-                                'ចំនួនទឹកប្រាក់​ $ ' + detail.amount_usd + '</td>' +
+                                'ចំនួនទឹកប្រាក់​ $ ' + formatNumber(detail.amount_usd) + ', ៛ '+ formatNumber(detail.amount_riel)+'</td>' +
                             '</tr>';
 
                     if (index < mid) {
