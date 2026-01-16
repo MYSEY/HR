@@ -432,6 +432,7 @@ class UserController extends Controller
     public function print(Request $request)
     {
         $data = User::where("id", $request->id)
+        ->with("lineManager")
         ->with("branch")
         ->with("position")
         ->with("gender")

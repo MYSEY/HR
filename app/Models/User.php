@@ -159,6 +159,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(self::class, 'created_by');
     }
+    public function lineManager(){
+        return $this->belongsTo(User::class,'line_manager');
+    }
     public function position(){
         return $this->belongsTo(Position::class,'position_id');
     }

@@ -282,7 +282,7 @@
     @include('components.loading-modal')
     @include('recruitments.candidate_resumes.prints.signed_contract')
     @include('recruitments.candidate_resumes.prints.contract')
-    @include('recruitments.candidate_resumes.prints.oppointed_letter')
+    @include('recruitments.candidate_resumes.prints.appointed_letter')
     @include('recruitments.candidate_resumes.prints.complete_probation')
     @include('recruitments.candidate_resumes.prints.contract_volunteer')
     @include('recruitments.candidate_resumes.prints.confidential_letter')
@@ -348,7 +348,7 @@
             },
             dataType: "JSON",
             success: function (response) {
-                var data = response.success;
+                var data = response.success;                
                 var branch = response.branch;
                 var date_of_birth = new Date(data.date_of_birth);
                 var date_of_commencement = new Date(data.date_of_commencement);
@@ -366,20 +366,21 @@
                 let end_year = formatDate(fdc_date, 'km', format_date={year: true});                
                 if (data) {
                     if (data.gender.name_english == "Female") {
-                        $("#pr_mr_or_mrs").text("អ្នកស្រី ");
-                        $("#pr_gender").text("ស្រី ");
+                        $(".pr_mr_or_mrs").text("អ្នកស្រី ");
+                        $(".pr_gender").text("ស្រី ");
                     }else{
-                        $("#pr_mr_or_mrs").text("លោក ");
-                        $("#pr_gender").text("ប្រុស ");
+                        $(".pr_mr_or_mrs").text("លោក ");
+                        $(".pr_gender").text("ប្រុស ");
                     }
                     $(".pr_ceo").text(branch.employee_name_kh);
-                    $(".pr_position").text(branch.name_khmer);
-
+                    $(".pr_position").text(data.position.name_khmer);
+                    $(".level").text(data.level);
+                    $(".line_manager").text(data.line_manager != null ? data.line_manager.employee_name_kh : "");
                     $(".pr_name").text(data.employee_name_kh +" ");
-                    $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
-                    $("#pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
-                    $("#pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
-                    $("#pr_id_card_number").text(data.id_card_number+ "");
+                    $(".pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
+                    $(".pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
+                    $(".pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
+                    $(".pr_id_card_number").text(data.id_card_number+ "");
                     let number_home = "";
                     let number_street = "";
                     if (data.current_house_no) {
@@ -389,15 +390,14 @@
                         number_street = " ផ្លូវលេខ "+data.current_street_no;
                     }
                     let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
-                    $("#pr_current_location").text(location);
-                    $("#pr_personal_phone_number").text(data.personal_phone_number);
+                    $(".pr_current_location").text(location);
+                    $(".pr_personal_phone_number").text(data.personal_phone_number);
                     $(".pr_join_day").text(join_day);
                     $(".pr_join_month").text(join_month);
                     $(".pr_join_year").text(join_year);
                     $(".pr_end_day").text(end_day);
                     $(".pr_end_month").text(end_month);
                     $(".pr_end_year").text(end_year);
-                    $("#pr_position").text(data.position.name_khmer);
                     $(".pr_branch").text(data.branch.branch_name_kh);
                     $("#pr_employee_id").text(data.number_employee);
                     $("#pr_basic_salary").text(data.basic_salary);
