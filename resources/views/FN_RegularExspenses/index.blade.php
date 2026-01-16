@@ -11,7 +11,7 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if ($permission->is_create == "1")
+                    @if ($permission->is_update == "1")
                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#addRegularExspense"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
-                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer btn_trainer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                    <table class="table table-striped custom-table mb-0 no-footer btn_trainer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                         <thead>
                             <tr>
                                 <th>@lang('lang.serialref')</th>
@@ -29,59 +29,10 @@
                                 <th>@lang('lang.file_upload')</th>
                                 <th>@lang('lang.contactual')</th>
                                 <th>@lang('lang.status')</th>
+                                <th>@lang('lang.renew')</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (count($datas)>0)
-                                @foreach ($datas as $key=>$item)
-                                    <tr class="odd">
-                                        <td>{{$item->serialref}}</td>
-                                        <td>{{$item->description}}</td>
-                                        <td>
-                                            @if ($item->file_upload !=null)
-                                                <small class="block text-ellipsis">
-                                                    <span class="text-xs">@lang('lang.preview_file_click_here') <a href="{{ url('uploads/FnRegularExspenses/', $item->file_upload) }}" target="_blank">link</a></span>
-                                                </small>
-                                                {{-- <embed src="{{url('uploads/FnRegularExspenses/', $item->file_upload)}}"> --}}
-                                            @else
-                                                <span class="text-xs">@lang('lang.preview_file_not_found')</span>
-                                            @endif
-                                        </td>
-                                        <td>{{$item->is_contactual ==1 ? "Yes":"No"}}</td>
-                                        <td>
-                                            @if ($permission->is_update == "1")
-                                                <div class="dropdown action-label">
-                                                    @if ($item->status==1)
-                                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                            <i class="fa fa-dot-circle-o text-success"></i>
-                                                            <span>@lang('lang.active')</span>
-                                                        </a>
-                                                    @elseif ($item->status==0)
-                                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                            <i class="fa fa-dot-circle-o text-danger"></i>
-                                                            <span>@lang('lang.inactive')</span>
-                                                        </a>
-                                                    @endif
-                                                        <div class="dropdown-menu dropdown-menu-right" id="btn-status">
-                                                            <a class="dropdown-item" data-id="{{$item->id}}" data-name="1" data-status-old="{{$item->status}}" href="#">
-                                                                <i class="fa fa-dot-circle-o text-success"></i> @lang('lang.active')
-                                                            </a>
-                                                            <a class="dropdown-item" data-id="{{$item->id}}" data-name="0" data-status-old="{{$item->status}}" href="#">
-                                                                <i class="fa fa-dot-circle-o text-danger"></i> @lang('lang.inactive')
-                                                            </a>
-                                                        </div>
-                                                </div>
-                                            @else
-                                                @if ($item->status==1)
-                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.active')</span>
-                                                @elseif ($item->status==0)
-                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.inactive')</span>
-                                                @endif
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -92,7 +43,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">@lang('lang.add_new_regular_expense')</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" id="btn-modal-close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -130,11 +81,20 @@
                 </div>
             </div>
         </div>
+        <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p>Loading Data...</p>
+            </div>
+        </div>
     </div>
 @endsection
 
 @include('includs.script')
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
+@section('script')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('addRegularExspense').addEventListener('submit', function (event) {
@@ -172,7 +132,17 @@
         });
     });
     $(function() {
-        $('body').on('click', '#btn-status a', function() {
+        dataTables();
+        $(document).on('click', '#btn-renew-contract', function() {
+            let description = $(this).data("description");
+            $("#description").val(description);
+            $("#addRegularExspense").modal("show");
+        });
+        $(document).on('click', '#btn-modal-close', function() {
+            $("#description").val("");
+            $("#file_upload").val("");
+        });
+        $(document).on('click', '#btn-status a', function() {
             let id = $(this).attr('data-id');
             let status = $(this).attr('data-name');
             let old_status = $(this).attr('data-status-old');
@@ -234,4 +204,146 @@
             });
         });
     });
+
+    function dataTables() {
+        $('#loading-overlay').show();
+        if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
+            $('#DataTables_Table_0').DataTable().clear().destroy();
+        }
+       $('#DataTables_Table_0').DataTable({
+            destroy: true,
+            pageLength: 10,
+            processing: true,
+            serverSide: true,
+            order: [[0, 'desc']],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
+            ajax: {
+                url: '{{ URL("/fn/regular-expense/indexshow") }}',
+                type: 'GET',
+            },
+            columns: [
+
+                // SERIAL REF
+                {
+                    data: 'serialref',
+                    name: 'serialref'
+                },
+
+                // DESCRIPTION
+                {
+                    data: 'description',
+                    name: 'description'
+                },
+
+                // FILE UPLOAD
+                {
+                    data: 'file_upload',
+                    orderable: false,
+                    searchable: false,
+                    render: function (file_upload) {
+                        if (file_upload !=null) {
+                            return `
+                                <small class="block text-ellipsis">
+                                    <span class="text-xs">
+                                        @lang('lang.preview_file_click_here')
+                                        <a href="{{asset("/uploads/FnRegularExspenses")}}/${file_upload}" target="_blank">link</a>
+                                    </span>
+                                </small>
+                            `;
+                        }
+                        return `<span class="text-xs">@lang('lang.preview_file_not_found')</span>`;
+                    }
+                },
+
+                // IS CONTACTUAL
+                {
+                    data: 'is_contactual',
+                    render: function (is_contactual) {
+                        if (is_contactual ==1) {
+                            return `
+                                Yes
+                            `;
+                        }
+                        return `No`;
+                    }
+                },
+
+                // STATUS
+                {
+                    data: 'status',
+                    orderable: false,
+                    searchable: false,
+                    render: function (status, type, row) {
+
+                        @if ($permission->is_update == "1")
+                            if (status == 1) {
+                                return `
+                                <div class="dropdown action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown">
+                                        <i class="fa fa-dot-circle-o text-success"></i>
+                                        <span>{{ __('lang.active') }}</span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" id="btn-status">
+                                        <a class="dropdown-item" data-id="${row.id}" data-name="1" data-status-old="${status}">
+                                            <i class="fa fa-dot-circle-o text-success"></i> {{ __('lang.active') }}
+                                        </a>
+                                        <a class="dropdown-item" data-id="${row.id}" data-name="0" data-status-old="${status}">
+                                            <i class="fa fa-dot-circle-o text-danger"></i> {{ __('lang.inactive') }}
+                                        </a>
+                                    </div>
+                                </div>`;
+                            } else {
+                                return `
+                                <div class="dropdown action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown">
+                                        <i class="fa fa-dot-circle-o text-danger"></i>
+                                        <span>{{ __('lang.inactive') }}</span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" id="btn-status">
+                                        <a class="dropdown-item" data-id="${row.id}" data-name="1" data-status-old="${status}">
+                                            <i class="fa fa-dot-circle-o text-success"></i> {{ __('lang.active') }}
+                                        </a>
+                                        <a class="dropdown-item" data-id="${row.id}" data-name="0" data-status-old="${status}">
+                                            <i class="fa fa-dot-circle-o text-danger"></i> {{ __('lang.inactive') }}
+                                        </a>
+                                    </div>
+                                </div>`;
+                            }
+                        @else
+                            return status == 1
+                                ? `<span class="badge bg-inverse-success">{{ __('lang.active') }}</span>`
+                                : `<span class="badge bg-inverse-danger">{{ __('lang.inactive') }}</span>`;
+                        @endif
+                    }
+                },
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function (row) {
+                        @if ($permission->is_create == "1")
+                            return `
+                                    <button class="btn btn-outline-secondary btn-sm" id="btn-renew-contract"
+                                    data-description="${row.description}">
+                                    Renew Contract
+                                    </button>
+                                `;
+                        @endif
+                        return ``;
+                    }
+                },
+            ],
+            initComplete: function () {
+                $('#loading-overlay').hide();
+            }
+        });
+
+        $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
+            processing ? $('#loading-overlay').show() : $('#loading-overlay').hide();
+        });
+    }
 </script>
+@endsection

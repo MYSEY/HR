@@ -33,8 +33,8 @@ class ExpenseReportController extends Controller
         return view('reports.expense_report',compact(['permission','datas', 'locations']));
     }
     public function filter(Request $request){
-        $datas = $this->dataRequests->getDataByLocation($request);
         $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/expense/report")->first();
+        $datas = $this->dataRequests->getDataByLocation($request);
         // Check if it's a paginated response
         if ($datas instanceof \Illuminate\Pagination\LengthAwarePaginator) {
             // If it's paginated, return the necessary pagination metadata
