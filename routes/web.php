@@ -628,6 +628,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/fn/level-reviewer/export/details', [FnLevelReviewerController::class,'exportDetails']);
     // Block FN RegularExspense
     Route::get('/fn/regular-expense', [FnRegularExspenseController::class,'index']);
+    Route::get('/fn/regular-expense/indexshow', [FnRegularExspenseController::class,'dataShow']);
     Route::post('/fn/regular-expense', [FnRegularExspenseController::class,'store']);
     Route::post('/fn/regular-expense/update', [FnRegularExspenseController::class,'update']);
     Route::post('/fn/regular-expense/delete', [FnRegularExspenseController::class,'destroy']);
