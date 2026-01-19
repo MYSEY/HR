@@ -124,13 +124,15 @@ class FnLevelReviewerController extends Controller
     public function formCreate() {
         $departments = Department::get();
         $positions = Position::get();
-        return view('FN_LevelReviewers.form_create', compact(['positions','departments']));
+        $branchs = Branchs::whereNot("abbreviations","HQ")->get();
+        return view('FN_LevelReviewers.form_create', compact(['branchs','positions','departments']));
     }
     public function formEdit(Request $request) {
         $departments = Department::get();
         $positions = Position::get();
+        $branchs = Branchs::whereNot("abbreviations","HQ")->get();
         $datas = FnLevelReviewer::where('group_id', $request->id)->get();
-        return view('FN_LevelReviewers.form_edit', compact(['datas','positions','departments']));
+        return view('FN_LevelReviewers.form_edit', compact(['datas','positions','branchs','departments']));
     }
 
     /**
@@ -158,6 +160,7 @@ class FnLevelReviewerController extends Controller
                     $data['special_fixed_asset']= $request->special_fixed_asset;
                     $data['type']               = $value["type"];
                     $data['from_location']      = $request->from_location;
+                    $data['branch_id']          = $request->branch_id;
                     $data['model_review']       = $request->model_review;
                     $data['department_review']  = $value["department_review"];
                     $data['id_positions']       = $value["id_positions"];
@@ -210,6 +213,7 @@ class FnLevelReviewerController extends Controller
                         $data->from_location      = $request->from_location;
                         $data->model_review       = $request->model_review;
                         $data->department_review  = $value["department_review"];
+                        $data->branch_id          = $request->branch_id;
                         $data->id_positions       = $value["id_positions"];
                         $data->verify_print       = (isset($value["verify_print"]) ? $value["verify_print"] : "");
                         $data->description        = $request->description;
@@ -231,6 +235,7 @@ class FnLevelReviewerController extends Controller
                     'from_location'      => $request->from_location,
                     'model_review'       => $request->model_review,
                     'department_review'  => $value["department_review"],
+                    'branch_id'          => $request->branch_id,
                     'id_positions'       => $value["id_positions"],
                     'verify_print'       => (isset($value["verify_print"]) ? $value["verify_print"] : ""),
                     'description'        => $request->description,

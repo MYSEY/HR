@@ -100,7 +100,16 @@
                                     <option value="2"> Department </option>
                                 </select>
                             </div>
-                             <div class="form-group" id="view_model_review">
+                            <div class="form-group branch_view" style="display: none">
+                                <label>@lang('lang.special_branch')</label>
+                                <select class="form-control branch_id" id="branch_id" name="branch_id">
+                                    <option value="" selected> </option>
+                                    @foreach ($branchs as $item)
+                                        <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group" id="view_model_review">
                                 <label>@lang('lang.model_review')</label>
                                 <select class="form-control model_review" id="model_review" name="model_review">
                                     <option value="" selected> </option>

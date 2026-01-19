@@ -44,8 +44,10 @@ $(function(){
         $("#model_review").val("");
         if (value == "2") {
             $("#view_model_review").css("display","block");
+            $(".branch_view").css("display","none");
         } else {
             $("#view_model_review").css("display","none");
+            $(".branch_view").css("display","block");
         }
     });
 
@@ -142,6 +144,7 @@ $(function(){
                     "to_amount":                $("#to_amount").val(),
                     "from_location":            $("#from_location").val(),
                     "model_review":             $("#model_review").val(),
+                    "branch_id":                $("#branch_id").val(),
                     "request_type":             $("#request_type").val(),
                     "special_fixed_asset":      $(".special_fixed_asset:checked").val(),
                     "reference_type":           $("#reference_type").val(),
