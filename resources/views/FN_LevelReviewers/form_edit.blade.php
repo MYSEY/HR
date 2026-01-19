@@ -99,6 +99,15 @@
                                     <option value="2" <?= ($datas[0]->from_location == '2') ? 'selected' : '' ?>>Department</option>
                                 </select>
                             </div>
+                            <div class="form-group branch_view" style="<?= ($datas[0]->from_location != '2') ? '' : 'display: none;' ?>">
+                                <label>@lang('lang.special_branch')</label>
+                                <select class="form-control branch_id" id="branch_id" name="branch_id">
+                                    <option value="" selected> </option>
+                                    @foreach ($branchs as $item)
+                                        <option value="{{$item->id}}" <?= ($datas[0]->branch_id == $item->id) ? 'selected' : '' ?>>{{$item->branch_name_en}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                              <div class="form-group" id="view_model_review" style="<?= ($datas[0]->from_location == '2') ? '' : 'display: none;' ?>">
                                 <label>@lang('lang.model_review')</label>
                                 <select class="form-control model_review" id="model_review" name="model_review">
