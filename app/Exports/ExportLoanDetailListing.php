@@ -183,8 +183,10 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
                 $row->AIRAS,
                 $row->AIRCurrentAS,
                 $row->TotalInterest,
-                $row->ValueDate,
-                $row->MaturityDate,
+                // $row->ValueDate,
+                // $row->MaturityDate,
+                $this->formatDate($row->ValueDate),
+                $this->formatDate($row->MaturityDate),
                 $row->LoanProduct . ' ' .$row->LoanProductDes,
                 $row->Term,
                 $row->DisbursedStat,
@@ -198,9 +200,11 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
                 $row->ContractOfficerID,
                 $row->IDType,
                 $row->IDNumber,
-                $row->LastPaymentDate,
+                // $row->LastPaymentDate,
+                $this->formatDate($row->LastPaymentDate),
                 $row->DueDay,
-                $row->OverdueDate,
+                // $row->OverdueDate,
+                $this->formatDate($row->OverdueDate),
                 $row->LoanType,
                 $row->LoanCharge,
                 $row->ChargeEarned,
@@ -228,6 +232,12 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
         $this->export_datas = $dataExcel;
     }
 
+
+    private function formatDate($date)
+    {
+        if (!$date) return '';
+        return date('m/d/Y', strtotime($date));
+    }
     public function collection()
     {
         return new Collection([

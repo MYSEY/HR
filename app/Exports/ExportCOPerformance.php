@@ -310,7 +310,7 @@ class ExportCOPerformance implements FromCollection, WithColumnWidths, WithHeadi
             // -----------------------------
             $dataExcel[] = [
                 $row->ContractOfficerID,
-                trim(($row->FirstName ?? '') . ' ' . ($row->LastName ?? '')),
+                trim(($row->LastName ?? '') . ' ' . ($row->FirstName ?? '')),
                 $row->Currency,
                 $row->borrowers,
                 $row->TotalLoans,
