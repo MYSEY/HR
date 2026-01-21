@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -15,9 +16,11 @@ use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
     protected $export_datas;
+    protected $totalRecord;
 
     public function __construct($request)
     {
+
         // -------------------------
         // 1) SUBQUERY FIXED
         // -------------------------
@@ -157,6 +160,7 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
 
         // GET DATA
         $data = $query->get();
+        $this->totalRecord = count($data);
 
         // -------------------------
         // EXPORT FORMAT
@@ -235,9 +239,31 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
 
     private function formatDate($date)
     {
-        if (!$date) return '';
-        return date('m/d/Y', strtotime($date));
+        if (!$date || trim($date) === '') {
+            return '';
+        }
+
+        $formats = [
+            'd-m-y H:i',   // 14-07-20 0:00
+            'd-m-y',       // 14-07-20
+            'd/m/y H:i',
+            'd/m/y',
+            'Y-m-d H:i:s',
+            'Y-m-d',
+        ];
+
+        foreach ($formats as $format) {
+            try {
+                $dt = Carbon::createFromFormat($format, $date);
+                // 🔥 Remove time
+                return $dt->format('d-m-Y');
+
+            } catch (\Exception $e) { }
+        }
+
+        return '';
     }
+  
     public function collection()
     {
         return new Collection([
@@ -336,23 +362,13 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
     public function registerEvents(): array
     {
         return [
-            // AfterSheet::class => function(AfterSheet $event) {
-
-            //     $sheet = $event->sheet->getDelegate();
-
-            //     // Get the last row automatically
-            //     $lastRow = $sheet->getHighestRow();
-
-            //     // Apply border
-            //     $sheet->getStyle("A1:O{$lastRow}")
-            //         ->applyFromArray([
-            //             'borders' => [
-            //                 'allBorders' => [
-            //                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-            //                 ],
-            //             ],
-            //         ]);
-            // },
+            AfterSheet::class => function(AfterSheet $event) {
+                $lastRow = $this->totalRecord + 1;
+                $event->sheet->getDelegate()->getStyle('T2:T'.$lastRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                $event->sheet->getDelegate()->getStyle('U2:U'.$lastRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                $event->sheet->getDelegate()->getStyle('AI2:AI'.$lastRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                $event->sheet->getDelegate()->getStyle('AK2:AK'.$lastRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+            },
         ];
     }
 }
