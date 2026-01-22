@@ -250,7 +250,7 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
         //     Carbon::parse($date)->startOfDay()
         // );
 
-        if (!$date || $date === '0000-00-00') {
+        if (!$date) {
             return null;
         }
 
@@ -364,7 +364,6 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
                 // Column T = date column
                 $sheet->getStyle("T2:T{$lastRow}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_XLSX14);
                 $sheet->getStyle("U2:U{$lastRow}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_XLSX14);
-
                 $sheet->getStyle("AI2:AI{$lastRow}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_XLSX14);
                 $sheet->getStyle("AK2:AK{$lastRow}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_XLSX14);
             },
