@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -12,6 +13,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
@@ -239,29 +241,28 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
 
     private function formatDate($date)
     {
-        if (!$date || trim($date) === '') {
-            return '';
+        // if (!$date || trim($date) === '' || $date === '0000-00-00') {
+        //     return null;
+        // }
+
+        // return ExcelDate::PHPToExcel(
+        //     Carbon::parse($date)->startOfDay() // no time
+        // );
+
+        // if (!$date || trim($date) === '') {
+        //     return null;
+        // }
+        // // Handles varchar date like: 2025-02-28, 28-02-2025, with or without time
+        // $carbon = Carbon::parse($date)->startOfDay();
+        // return ExcelDate::PHPToExcel($carbon);
+
+        if (!$date) {
+            return null;
         }
 
-        $formats = [
-            'd-m-y H:i',   // 14-07-20 0:00
-            'd-m-y',       // 14-07-20
-            'd/m/y H:i',
-            'd/m/y',
-            'Y-m-d H:i:s',
-            'Y-m-d',
-        ];
-
-        foreach ($formats as $format) {
-            try {
-                $dt = Carbon::createFromFormat($format, $date);
-                // 🔥 Remove time
-                return $dt->format('d-m-Y');
-
-            } catch (\Exception $e) { }
-        }
-
-        return '';
+        return ExcelDate::PHPToExcel(
+            Carbon::parse($date)->startOfDay()
+        );
     }
   
     public function collection()
@@ -364,10 +365,16 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
         return [
             AfterSheet::class => function(AfterSheet $event) {
                 $lastRow = $this->totalRecord + 1;
-                $event->sheet->getDelegate()->getStyle('T2:T'.$lastRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                $event->sheet->getDelegate()->getStyle('U2:U'.$lastRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                $event->sheet->getDelegate()->getStyle('AI2:AI'.$lastRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                $event->sheet->getDelegate()->getStyle('AK2:AK'.$lastRow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+
+                $sheet = $event->sheet->getDelegate();
+                $lastRow = $sheet->getHighestRow();
+                // Column T = date column
+                $sheet->getStyle("T2:T{$lastRow}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_XLSX14);
+                $sheet->getStyle("U2:U{$lastRow}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_XLSX14);
+
+                $sheet->getStyle("AI2:AI{$lastRow}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_XLSX14);
+                $sheet->getStyle("AK2:AK{$lastRow}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_DATE_XLSX14);
             },
         ];
     }
