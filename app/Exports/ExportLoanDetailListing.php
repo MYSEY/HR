@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
@@ -241,27 +242,20 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
 
     private function formatDate($date)
     {
-        // if (!$date || trim($date) === '' || $date === '0000-00-00') {
+        // if (!$date) {
         //     return null;
         // }
 
         // return ExcelDate::PHPToExcel(
-        //     Carbon::parse($date)->startOfDay() // no time
+        //     Carbon::parse($date)->startOfDay()
         // );
 
-        // if (!$date || trim($date) === '') {
-        //     return null;
-        // }
-        // // Handles varchar date like: 2025-02-28, 28-02-2025, with or without time
-        // $carbon = Carbon::parse($date)->startOfDay();
-        // return ExcelDate::PHPToExcel($carbon);
-
-        if (!$date) {
+        if (!$date || $date === '0000-00-00') {
             return null;
         }
 
-        return ExcelDate::PHPToExcel(
-            Carbon::parse($date)->startOfDay()
+        return Date::dateTimeToExcel(
+            Carbon::parse($date)
         );
     }
   
@@ -365,8 +359,6 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
         return [
             AfterSheet::class => function(AfterSheet $event) {
                 $lastRow = $this->totalRecord + 1;
-
-
                 $sheet = $event->sheet->getDelegate();
                 $lastRow = $sheet->getHighestRow();
                 // Column T = date column
