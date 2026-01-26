@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('from_location');
             $table->integer('model_review')->nullable();
             $table->integer('department_review')->nullable();
+            $table->integer('branch_id')->nullable();
             $table->json('id_positions');
             $table->integer('verify_print')->nullable();
             $table->string('description')->nullable();

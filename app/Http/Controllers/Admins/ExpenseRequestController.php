@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use App\Mail\SendEmail;
+use App\Models\FnAmountApproval;
 use App\Models\LeaveRequest;
 use App\Models\mail as ModelsMail;
 use Illuminate\Support\Facades\Mail;
@@ -90,6 +91,8 @@ class ExpenseRequestController extends Controller
             if($branch->abbreviations != 'HQ'){
                 $query->where("branchs.abbreviations", $branch->abbreviations);
                 $query->orWhere("branchs.abbreviations", "HQ");
+            }else{
+                $query->where("branchs.abbreviations", "HQ");
             }
         })
         ->get();
@@ -145,6 +148,8 @@ class ExpenseRequestController extends Controller
             if($branch->abbreviations != 'HQ'){
                 $query->where("branchs.abbreviations", $branch->abbreviations);
                 $query->orWhere("branchs.abbreviations", "HQ");
+            }else{
+                $query->where("branchs.abbreviations", "HQ");
             }
         })
         ->get();
@@ -275,19 +280,13 @@ class ExpenseRequestController extends Controller
 
     //**  old condition review flow */
     // function levelReview($dataLevelView){
-    //     $condistion_branch = FnLevelReviewer::where('branch_id', $dataLevelView["branch_id"])->first();
     //     $query = FnLevelReviewer::with(["departmentView", "modelReview"])
-    //         ->when($dataLevelView["by_location"], function ($query, $by_location) use ($dataLevelView, $condistion_branch) {
+    //         ->when($dataLevelView["by_location"], function ($query, $by_location) use ($dataLevelView) {
     //             $query->where('from_location', $by_location);
     //             if ((string) $by_location === "2") {
     //                 $query->where('model_review', $dataLevelView["model_review"]);
     //             } else {
-    //                 if($condistion_branch){
-    //                     $query->where('branch_id', Auth::user()->branch_id);
-    //                 }else{
-    //                     $query->whereNull("model_review");
-    //                     $query->where('branch_id', null);
-    //                 }
+    //                 $query->whereNull("model_review");
     //             }
     //         })
     //         ->when(isset($dataLevelView["request_type"]), function ($query) use ($dataLevelView) {
@@ -311,6 +310,7 @@ class ExpenseRequestController extends Controller
     //             ->whereJsonContains('id_positions', (string) $dataLevelView["position_request"])
     //             ->orderBy("id", "DESC")
     //             ->first();
+
     //              // 🔹 If not found, fallback to type
     //             if (!$positionReview) {
     //                 $positionReview = (clone $query)
@@ -320,6 +320,7 @@ class ExpenseRequestController extends Controller
     //                     ->orderBy("id", "DESC")
     //                     ->first();
     //             }
+
     //             return $positionReview;
     //     }else{
     //         $positionReview = (clone $query)
@@ -402,6 +403,37 @@ class ExpenseRequestController extends Controller
             ->first();
     }
 
+    function amountApprove($request){
+        $query = FnAmountApproval::
+            where("fn_amount_approvals.fn_approval_id", $request["approved_id"])
+            ->where("fn_amount_approvals.location", $request["location"])
+            ->leftJoin('fn_level_reviewers', 'fn_amount_approvals.level_reviewer_id', '=', 'fn_level_reviewers.id')
+            ->select(
+                'fn_amount_approvals.*', 
+                'fn_level_reviewers.*',
+            )
+            ->when(isset($request["request_type"]), function ($query) use ($request) {
+                $request_type = $request["request_type"];
+                $query->where('fn_level_reviewers.request_type', $request_type);
+                if($request["reference_type"] == "on" || (string) $request_type === "1"){
+                    $query->where('fn_level_reviewers.special_fixed_asset', $request["special_fixed_asset"]);
+                }
+                if ((string) $request_type === "0") {
+                    $query->where('fn_level_reviewers.reference_type', $request["reference_type"]);
+                }
+            })
+            ->first();
+        if($query){
+            if($query->from_amount < $request["amount"] && $query->to_amount >= $request["amount"]){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            return true;
+        }
+        return false;
+    }
 
     function sendEmail($dataSend, $emailUserRequest){
         // $datasSendEmail = [
@@ -478,6 +510,15 @@ class ExpenseRequestController extends Controller
                 "amount"=> $amount,
                 "branch_id"=> Auth::user()->branch_id,
             ];
+            $dataAmountApprove = [
+               "approved_id"=> $request->approved_id,
+               "request_type"=> $request->type,
+                "reference_type"=> $request->expense_type,
+                "special_fixed_asset"=> ($request->type != 2 ? $request->special_asset : null),
+                "amount"=> $amount,
+                "location"=> 2,
+            ];
+            
             $dataSendEmail = [
                 "condiction" => [
                     "department_id"=> "",
@@ -535,6 +576,7 @@ class ExpenseRequestController extends Controller
                 }
                 
             }else{
+                $dataAmountApprove["location"] = 1;
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::levelReview($dataCheckLevelView);
                 if($positionReview){
@@ -568,6 +610,13 @@ class ExpenseRequestController extends Controller
                         }
                     }
                 }
+            }
+            $amountApprove = self::amountApprove($dataAmountApprove);
+            if($amountApprove){
+                return response()->json([
+                    'error'=>'The expense request you selected does not match the approver’s amount limit.',
+                    'status'=>405,
+                ]);
             }
             if ($request->hasFile('fn_invoice')) {
                 $autoSerial = $this->generateSerialCode(Carbon::today(),"REF")['serialref'];
@@ -689,6 +738,8 @@ class ExpenseRequestController extends Controller
             if($branch->abbreviations != 'HQ'){
                 $query->where("branchs.abbreviations", $branch->abbreviations);
                 $query->orWhere("branchs.abbreviations", "HQ");
+            }else{
+               $query->where("branchs.abbreviations", "HQ"); 
             }
         })
         ->get();
@@ -749,6 +800,8 @@ class ExpenseRequestController extends Controller
             if($branch->abbreviations != 'HQ'){
                 $query->where("branchs.abbreviations", $branch->abbreviations);
                 $query->orWhere("branchs.abbreviations", "HQ");
+            }else{
+                $query->where("branchs.abbreviations", "HQ");
             }
         })
         ->get();
@@ -800,6 +853,14 @@ class ExpenseRequestController extends Controller
                 "type"=> 1,
                 "amount"=> $amount,
                 "branch_id"=> Auth::user()->branch_id,
+            ];
+            $dataAmountApprove = [
+               "approved_id"=> $request->approved_id,
+               "request_type"=> $request->type,
+                "reference_type"=> $request->expense_type,
+                "special_fixed_asset"=> ($request->type != 2 ? $request->special_asset : null),
+                "amount"=> $amount,
+                "location"=> 2,
             ];
             $dataSendEmail = [
                 "condiction" => [
@@ -856,6 +917,7 @@ class ExpenseRequestController extends Controller
                     }
                 }
             }else{
+                $dataAmountApprove["location"] = 1;
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::levelReview($dataCheckLevelView);
                 if($positionReview){
@@ -892,6 +954,13 @@ class ExpenseRequestController extends Controller
                         }
                     }
                 }
+            }
+            $amountApprove = self::amountApprove($dataAmountApprove);
+            if($amountApprove){
+                return response()->json([
+                    'error'=>'The expense request you selected does not match the approver’s amount limit.',
+                    'status'=>405,
+                ]);
             }
             $oldId = ExpenseRequestHistory::where("expense_id", $request->id)->count();
             $dataHistory = $data->toArray();
@@ -1115,6 +1184,14 @@ class ExpenseRequestController extends Controller
                 "amount"=> $amount,
                 "branch_id"=> Auth::user()->branch_id,
             ];
+            $dataAmountApprove = [
+               "approved_id"=> $request->approved_id,
+               "request_type"=> "2",
+                "reference_type"=> "1",
+                "special_fixed_asset"=> null,
+                "amount"=> $amount,
+                "location"=> 2,
+            ];
             $dataSendEmail = [
                 "condiction" => [
                     "department_id"=> "",
@@ -1168,6 +1245,7 @@ class ExpenseRequestController extends Controller
                     }
                 }
             }else{
+                $dataAmountApprove["location"] = 1;
                 $dataCheckLevelView["by_location"] = 1;
                 $positionReview = self::levelReview($dataCheckLevelView);
                 if($positionReview){
@@ -1201,6 +1279,13 @@ class ExpenseRequestController extends Controller
                         }
                     }
                 }
+            }
+            $amountApprove = self::amountApprove($dataAmountApprove);
+            if($amountApprove){
+                return response()->json([
+                    'error'=>'The expense request you selected does not match the approver’s amount limit.',
+                    'status'=>405,
+                ]);
             }
 
             // ***  block create history *** //

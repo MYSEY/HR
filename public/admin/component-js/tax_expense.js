@@ -312,11 +312,13 @@ $(document).ready(function() {
             return false;
         }else{
             let approved = $("#fn_approve").find("option:selected").data("approved");
+            let approved_id = $("#fn_approve").find("option:selected").data("id");
             // Function to get field values (fallback to 0)
             let getVal = (id) => $("#" + id).val() || 0;
             // Append other form fields
             form_data.append("type", 2);
             form_data.append("approve_by", approved);
+            form_data.append("approved_id", approved_id);
             form_data.append("expense_type", 2);
             form_data.append("kind_regard", getVal("fn_approve"));
             form_data.append("subject", getVal("fn_subject"));
@@ -356,6 +358,20 @@ $(document).ready(function() {
                             icon: true
                         }).show();
                         window.location.replace(expenseRequestListUrl);
+                    }
+                    if(response.status == 405){
+                        new Noty({
+                            title: "",
+                            text: response.error,
+                            type: "error",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                        setTimeout(function () {
+                            $("." + buttonSubmit).attr('disabled',false);
+                            $(".loading-icon").css("display", "none");
+                            $(".btn-txt").css("display", "block");
+                        }, 500);
                     }
                     if(response.status == 404){
                         new Noty({

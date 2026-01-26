@@ -331,8 +331,7 @@
     <script type="text/javascript" src="{{ asset('/admin/js/noty.min.js') }}"></script>
     <script src="{{asset('/admin/js/bootstrap3-typeahead.min.js')}}"></script>
 
-
-    <script>
+    {{-- <script>
         var rolePermission = $("#rolePermission").val();
         if (rolePermission != "HRAdmin") {
             let idleTime = 0;
@@ -376,7 +375,7 @@
         
             warnUserBeforeLogout();   
         }
-    </script>
+    </script> --}}
     
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
@@ -390,21 +389,60 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        var element = document.querySelector('body');
-            element.addEventListener('keydown', function(e) {
-            if (e.keyCode == 91 && e.ctrlKey && e.shiftKey) {
-                e.preventDefault();
-                alert('You cannot inspect this page.');
-            }
-        });
-        document.addEventListener('keydown', function(e) {
-            if (e.keyCode === 123) {
-                e.preventDefault();
-            }
-        });
-        document.addEventListener('contextmenu', function(e) {
-          e.preventDefault();
-        });
+        // (function () {
+        //     // Disable right click
+        //     document.addEventListener('contextmenu', function (e) {
+        //         e.preventDefault();
+        //     });
+
+        //     // Disable key shortcuts
+        //     document.addEventListener('keydown', function (e) {
+        //         // F12
+        //         if (e.keyCode === 123) {
+        //             e.preventDefault();
+        //             return false;
+        //         }
+
+        //         // Ctrl + Shift + I / J / C
+        //         if (e.ctrlKey && e.shiftKey && (
+        //             e.keyCode === 73 || // I
+        //             e.keyCode === 74 || // J
+        //             e.keyCode === 67    // C
+        //         )) {
+        //             e.preventDefault();
+        //             return false;
+        //         }
+
+        //         // Ctrl + U (view source)
+        //         if (e.ctrlKey && e.keyCode === 85) {
+        //             e.preventDefault();
+        //             return false;
+        //         }
+        //     });
+        // })();
+        // var element = document.querySelector('body');
+        //     element.addEventListener('keydown', function(e) {
+        //     if (e.keyCode == 91 && e.ctrlKey && e.shiftKey) {
+        //         e.preventDefault();
+        //         alert('You cannot inspect this page.');
+        //     }
+        // });
+        // document.addEventListener('keydown', function(e) {
+        //     if (e.keyCode === 123) {
+        //         e.preventDefault();
+        //     }
+        // });
+        // document.addEventListener('contextmenu', function(e) {
+        //   e.preventDefault();
+        // });
+        // setInterval(function () {
+        //     if (
+        //         window.outerWidth - window.innerWidth > 160 ||
+        //         window.outerHeight - window.innerHeight > 160
+        //     ) {
+        //         document.body.innerHTML = '<h1>DevTools is not allowed</h1>';
+        //     }
+        // }, 100);
     </script>
 </body>
 
