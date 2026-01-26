@@ -97,7 +97,7 @@
                                         <select class="form-control requered fn_require hr-select2-option" id="fn_approve" name="fn_approve" required>
                                             <option selected disabled value="">@lang('lang.please_select') </option>
                                             @foreach ($FnApproval as $item)
-                                                <option value="{{$item->title}}" data-description="{{$item->description}}" data-approved="{{json_encode($item->employee_id)}}">{{$item->title}}</option>
+                                                <option value="{{$item->title}}" data-id="{{$item->id}}" data-description="{{$item->description}}" data-approved="{{json_encode($item->employee_id)}}">{{$item->title}}</option>
                                             @endforeach
                                         </select>
                                     </div>

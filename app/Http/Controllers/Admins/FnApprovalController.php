@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
+use App\Models\FnAmountApproval;
 use App\Models\FnApproval;
+use App\Models\FnLevelReviewer;
 use App\Models\permissions;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
@@ -32,14 +34,47 @@ class FnApprovalController extends Controller
         return view('FN_Approvals.index',compact(['datas','permission', 'employees', 'locations']));
     }
 
+    public function view(Request $request)
+    {
+        $datas = FnAmountApproval::where('fn_approval_id', $request->id)->get();
+        $FnApproval = FnApproval::with('location')->findOrFail($request->id);
+        $locationAbbr = optional($FnApproval->location)->abbreviations;
+        $location_id = $locationAbbr !== 'HQ' ? 1 : 2;
+        $amounts = FnLevelReviewer::where('from_location', $location_id)
+            ->when($FnApproval->employee[0], function ($query, $employee) {
+                $query->where("model_review", $employee->department_id)
+                    ->orWhere("branch_id", null);
+            })
+            ->groupBy('group_id')
+            ->get();
+        if ($amounts->isEmpty()) {
+            $amounts = FnLevelReviewer::where('from_location', $location_id)
+                ->whereNull('branch_id')
+                ->groupBy('group_id')
+                ->get();
+        }
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/approval")->first();
+        return view('FN_Approvals.amount_setup',compact(['permission','FnApproval','datas','amounts']));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try {
+            $data = $request->all();
+            $data['created_by']         = Auth::user()->id;
+            FnAmountApproval::create($data);
+            Toastr::success('Created successfully.','Success');
+            return redirect()->back();
+            DB::commit();
+        } catch (\Throwable $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage(), 'status' => 500], 500);
+        }
     }
 
     /**
@@ -139,4 +174,18 @@ class FnApprovalController extends Controller
             return redirect()->back();
         }
     }
+
+      public function deleteAmount(Request $request)
+    {
+        try{
+            FnAmountApproval::destroy($request->id);
+            Toastr::success('Deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Delete fail.','Error');
+            return redirect()->back();
+        }
+    }
+    
 }

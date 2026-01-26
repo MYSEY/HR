@@ -109,7 +109,7 @@
                                         <select class="form-control requered fn_require hr-select2-option" id="fn_approve" name="fn_approve" required>
                                             {{-- <option selected value="{{$data->kind_regard}}" data-approved="{{$data->approve_by}}"> {{$data->kind_regard}} </option> --}}
                                             @foreach ($FnApproval as $item)
-                                                <option value="{{$item->title}}" @if ($item->title == $data->kind_regard) selected @endif data-description="{{$item->description}}" 
+                                                <option value="{{$item->title}}" data-id="{{$item->id}}" @if ($item->title == $data->kind_regard) selected @endif data-description="{{$item->description}}" 
                                                     data-approved="{{json_encode($item->employee_id)}}">{{$item->title}}</option>
                                             @endforeach
                                         </select>

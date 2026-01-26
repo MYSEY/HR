@@ -604,10 +604,16 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/fn/taxe/edit', [FNTaxController::class,'edit']);
     // Block FN Approvals
     Route::get('/fn/approval', [FnApprovalController::class,'index']);
+    Route::get('/fn/approval/view/{id}', [FnApprovalController::class,'view']);
+
     Route::post('/fn/approval', [FNApprovalController::class,'store']);
     Route::post('/fn/approval/update', [FNApprovalController::class,'update']);
     Route::post('/fn/approval/delete', [FNApprovalController::class,'destroy']);
     Route::get('/fn/approval/edit', [FNApprovalController::class,'edit']);
+
+    Route::post('/fn/approval/create/amount', [FNApprovalController::class,'create']);
+    Route::post('/fn/approval/delete/amount', [FNApprovalController::class,'deleteAmount']);
+
     // Block FN Payment Terms
     Route::get('/fn/payment-term', [FnPaymentTermController::class,'index']);
     Route::post('/fn/payment-term', [FNPaymentTermController::class,'store']);

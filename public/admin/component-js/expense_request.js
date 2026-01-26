@@ -430,6 +430,7 @@ $(document).ready(function() {
             $("#paymentterm_required").css("display", "none");
         }
         let approved = $("#fn_approve").find("option:selected").data("approved");
+        let approved_id = $("#fn_approve").find("option:selected").data("id");
         // Validate
         if (num_miss>0) {
             setTimeout(function () {
@@ -451,6 +452,7 @@ $(document).ready(function() {
             // Append other form fields
             form_data.append("type", type);
             form_data.append("approve_by", approved);
+            form_data.append("approved_id", approved_id);
             form_data.append("expense_type", expense_type);
             form_data.append("special_asset", special_fixed_asset);
             form_data.append("kind_regard", getVal("fn_approve"));
@@ -499,6 +501,20 @@ $(document).ready(function() {
                             icon: true
                         }).show();
                         window.location.replace(expenseRequestListUrl);
+                    }
+                    if(response.status == 405){
+                        new Noty({
+                            title: "",
+                            text: response.error,
+                            type: "error",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                        setTimeout(function () {
+                            $("." + buttonSubmit).attr('disabled',false);
+                            $(".loading-icon").css("display", "none");
+                            $(".btn-txt").css("display", "block");
+                        }, 500);
                     }
                     if(response.status == 404){
                         new Noty({

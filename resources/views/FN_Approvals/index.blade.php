@@ -36,6 +36,7 @@
                                 <th>@lang('lang.employee')</th>
                                 <th>@lang('lang.location')</th>
                                 <th>@lang('lang.description')</th>
+                                <th style="text-align: center;">Amount Approve</th>
                                 <th style="text-align: center;">@lang('lang.option')</th>
                             </tr>
                         </thead>
@@ -60,6 +61,11 @@
                                         <td>{{$item->location ? $item->location->branch_name_en : ""}}</td>
                                         <td data-toggle="tooltip" data-html="true" title="{!! $item->description !!}">
                                             {{ Str::limit($item->description, 30, '...') }}
+                                        </td>
+                                        <td style="text-align: center;">
+                                            @if ($permission->is_update == "1")
+                                            <a class="btn btn-outline-secondary btn-sm btn-approved" href="{{url("fn/approval/view",$item->id)}}"><i class="fa fa-eye m-r-5"></i> View Amount</a>
+                                            @endif
                                         </td>
                                         <td style="text-align: center;">
                                             @if ($permission->is_update == "1")
