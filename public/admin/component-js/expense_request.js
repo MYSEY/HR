@@ -503,6 +503,10 @@ $(document).ready(function() {
                         window.location.replace(expenseRequestListUrl);
                     }
                     if(response.status == 405){
+                        $("#fn_approve")
+                        .next(".select2-container")
+                        .find(".select2-selection--single")
+                        .css("border", "1px solid #dc3545");
                         new Noty({
                             title: "",
                             text: response.error,
