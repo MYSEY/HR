@@ -35,7 +35,8 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
             })
             ->select(
                 DB::raw('"ID"'),
-                DB::raw('MAX(CAST("NumDayDue" AS INTEGER)) AS "DueDay"'),
+                // DB::raw('MAX(CAST("NumDayDue" AS INTEGER)) AS "DueDay"'),
+                DB::raw('COALESCE(MAX(CAST(NULLIF("NumDayDue", \'\') AS INTEGER)), 0) AS "DueDay"'),
                 DB::raw('MAX("DueDate") AS "DueDate"'),
                 DB::raw('MAX("OutIntAmountAS") AS "OutIntAmountAS"'),
                 DB::raw('MAX("OutPriAmountAS") AS "OutPriAmountAS"')
@@ -190,8 +191,6 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
                 $row->AIRAS,
                 $row->AIRCurrentAS,
                 $row->TotalInterest,
-                // $row->ValueDate,
-                // $row->MaturityDate,
                 $this->formatDate($row->ValueDate),
                 $this->formatDate($row->MaturityDate),
                 $row->LoanProduct . ' ' .$row->LoanProductDes,
@@ -207,10 +206,8 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
                 $row->ContractOfficerID,
                 $row->IDType,
                 $row->IDNumber,
-                // $row->LastPaymentDate,
                 $this->formatDate($row->LastPaymentDate),
-                $row->DueDay,
-                // $row->OverdueDate,
+                $row->DueDay == null ? '0' : $row->DueDay,
                 $this->formatDate($row->OverdueDate),
                 $row->LoanType,
                 $row->LoanCharge,
@@ -220,7 +217,7 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
                 $row->CustomerOccupation,
                 $row->RestructuredCycle,
                 $row->AddressCode,
-                $row->CollateralID,
+                $row->CollateralID == null ? 'None' : $row->CollateralID,
                 $row->Mobile1. ' '. $row->Mobile2,
                 $row->Cycle,
                 $row->Amount,
@@ -242,14 +239,6 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
 
     private function formatDate($date)
     {
-        // if (!$date) {
-        //     return null;
-        // }
-
-        // return ExcelDate::PHPToExcel(
-        //     Carbon::parse($date)->startOfDay()
-        // );
-
         if (!$date) {
             return null;
         }
