@@ -614,7 +614,7 @@ class ExpenseRequestController extends Controller
             $amountApprove = self::amountApprove($dataAmountApprove);
             if($amountApprove){
                 return response()->json([
-                    'error'=>'The expense request you selected does not match the approver’s amount limit.',
+                    'error'=> __('lang.the_expense_request_you_selected'),
                     'status'=>405,
                 ]);
             }
@@ -958,7 +958,7 @@ class ExpenseRequestController extends Controller
             $amountApprove = self::amountApprove($dataAmountApprove);
             if($amountApprove){
                 return response()->json([
-                    'error'=>'The expense request you selected does not match the approver’s amount limit.',
+                    'error'=>__('lang.the_expense_request_you_selected'),
                     'status'=>405,
                 ]);
             }
@@ -1283,7 +1283,7 @@ class ExpenseRequestController extends Controller
             $amountApprove = self::amountApprove($dataAmountApprove);
             if($amountApprove){
                 return response()->json([
-                    'error'=>'The expense request you selected does not match the approver’s amount limit.',
+                    'error'=>__('lang.the_expense_request_you_selected'),
                     'status'=>405,
                 ]);
             }

@@ -51,6 +51,7 @@
                             <th>@lang('lang.reference')</th>
                             <th>@lang('lang.description')</th>
                             <th>@lang('lang.location')</th>
+                            <th>@lang('lang.review_by')</th>
                             <th>@lang('lang.reason')</th>
                         </tr>
                     </thead>
@@ -150,7 +151,13 @@
                                     <td data-toggle="tooltip" data-html="true" title="{!! $locations !!}" >
                                         {{ Str::limit($locations, 30, '...') }}
                                     </td>
-                                    {{-- <td>{{$item->createdBy ? $item->createdBy->employee_name_en: ""}}</td> --}}
+
+                                    <td>
+                                        @if ($item->updated_by && $item->updated_by != $item->created_by)
+                                            {{$item->upldatedBy ? $item->upldatedBy->employee_name_en: ""}}
+                                        @endif
+                                    </td>
+
                                     <td data-toggle="tooltip" data-html="true" title="{!! $item->reason !!}">
                                         {{ Str::limit($item->reason, 25, '...') }}
                                     </td>

@@ -1012,6 +1012,7 @@ return[
     "total_contract_severance_pay"=>"Total Contract Severance Pay",
     "total_inactive_staff"=>"Total Inactive Staff",
     "the_process_has_been_successfully"=>"The process has been successfully",
+    "the_expense_request_you_selected"=>"The expense request you selected does not match the approver’s amount limit.",
     "trainsferend_date"=>'Transferred Date',
     "transferred_from"=>'Transferred From',
     "transferred_to"=>'Transferred To',

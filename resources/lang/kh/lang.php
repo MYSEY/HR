@@ -996,6 +996,7 @@ return[
     "type_fdc2"=>'Type FDC-2',
     "type_udc"=>'Type UDC',
     "total_weight"=>'Total Weight',
+	"the_expense_request_you_selected"=>"សំណើសុំចំណាយដែលអ្នកបានជ្រើសរើសមិនត្រូវគ្នានឹងដែនកំណត់ចំនួនទឹកប្រាក់របស់អ្នកអនុម័តទេ។",
 
     // "apply_leave"=>'អនុវត្តការចាកចេញ',
 	"unactive"=>"មិនដំណើរការ",
