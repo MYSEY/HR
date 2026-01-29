@@ -29,10 +29,7 @@
                         <input type="text" class="form-control" name="tracking_id" id="tracking_id" placeholder="@lang('lang.tracking_id')" value="{{old('tracking_id')}}">
                     </div>
                     <div class="form-group">
-                        <div class="cal-icon">
-                            <input type="text" id="request_date" class="form-control date_range" placeholder="@lang('lang.request_date')">
-                            {{-- <input class="form-control floating datetimepicker" type="text" id="request_date" placeholder="@lang('lang.request_date')"> --}}
-                        </div>
+                        <input type="text" id="request_date" class="form-control daterange" placeholder="@lang('lang.request_date')">
                     </div>
                 </div>
                 <div class="col-4">
@@ -46,9 +43,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <div class="cal-icon">
-                            <input class="form-control floating date_range" type="text" id="approved_date" placeholder="@lang('lang.approved_date')">
-                        </div>
+                        <input type="text" id="approved_date" class="form-control daterange" placeholder="@lang('lang.approved_date')">
                     </div>
                 </div>
                 <div class="col-4">
@@ -252,6 +247,7 @@
 </div>
 @endsection
 @include('includs.script')
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/ui-lightness/jquery-ui.css">
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{asset('/admin/js/convertNumberToWordsExp.js')}}"></script>
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
@@ -264,52 +260,68 @@
         });
     });
     $(function() {
+        $(".daterange").each(function () {
+
+            const $input = $(this);
+
+            $input.data("start", null);
+            $input.data("end", null);
+
+            $input.datepicker({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                numberOfMonths: 1,
+
+                onSelect: function (dateText) {
+
+                    let start = $input.data("start");
+                    let end   = $input.data("end");
+
+                    // First select OR reset
+                    if (!start || end) {
+                        start = dateText;
+                        end = null;
+                        $input.val(start);
+                    }
+                    // Second select
+                    else {
+                        end = dateText;
+
+                        if (start > end) {
+                            [start, end] = [end, start];
+                        }
+
+                        $input.val(start + " " + end);
+                    }
+
+                    // save back to element
+                    $input.data("start", start);
+                    $input.data("end", end);
+                }
+            });
+        });
+
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('/fn/expense/report') }}"); 
         });
-        $('.date_range').daterangepicker({
-            autoUpdateInput: false,
-            showDropdowns: true,
-            linkedCalendars: false,
-            locale: {
-                format: 'YYYY-MM-DD'
-            }
-        });
 
-        $('.date_range').on('apply.daterangepicker', function (ev, picker) {
-            $(this).val(
-                picker.startDate.format('YYYY-MM-DD') + ' - ' +
-                picker.endDate.format('YYYY-MM-DD')
-            );
-            // table.draw();
-        });
-
-        $('.date_range').on('cancel.daterangepicker', function () {
-            $(this).val('');
-            table.draw();
-        });
         $(".btn-research").on("click", function () {
             $(this).prop('disabled', true);
             $(".btn-txt").hide();
             $(".loading-icon").css('display', 'block');
             let currentPage = $(".per_page").val();
-            let request_from_date = null;
-            let request_to_date = null;
-            if ($('#request_date').val()) {
-                let dates = $('#request_date').val().split(' - ');
-                request_from_date = dates[0];
-                request_to_date   = dates[1] ? dates[1] : null;
-            }
-            let approved_from_date = null;
-            let approved_to_date = null;
-            if ($('#approved_date').val()) {
-                let dates = $('#approved_date').val().split(' - ');
-                approved_from_date = dates[0];
-                approved_to_date   = dates[1] ? dates[1] : null;
-            }
+            let request_date_value = $('#request_date').val()
+            let parts = request_date_value.split(" ");
+            let request_from_date = parts[0] ? parts[0] : null;
+            let request_to_date   = parts[1] ? parts[1] : null;
+
+            let approved_date_value = $('#approved_date').val()
+            let approved_parts = approved_date_value.split(" ");
+            let approved_from_date = approved_parts[0] ? approved_parts[0] : null;
+            let approved_to_date   = approved_parts[1] ? approved_parts[1] : null;
             let param = {
                 "_token": "{{ csrf_token() }}",
                 tracking_id:     $("#tracking_id").val(),
@@ -326,20 +338,15 @@
         });
         $(".btn_excel").on("click", function () {
             let currentPage = $(".per_page").val();
-            let request_from_date = "";
-            let request_to_date = "";
-            if ($('#request_date').val()) {
-                let dates = $('#request_date').val().split(' - ');
-                request_from_date = dates[0];
-                request_to_date   = dates[1] ? dates[1] : null;
-            }
-            let approved_from_date = "";
-            let approved_to_date = "";
-            if ($('#approved_date').val()) {
-                let dates = $('#approved_date').val().split(' - ');
-                approved_from_date = dates[0];
-                approved_to_date   = dates[1] ? dates[1] : null;
-            }
+            let request_date_value = $('#request_date').val()
+            let parts = request_date_value.split(" ");
+            let request_from_date = parts[0] ? parts[0] : null;
+            let request_to_date   = parts[1] ? parts[1] : null;
+
+            let approved_date_value = $('#approved_date').val()
+            let approved_parts = approved_date_value.split(" ");
+            let approved_from_date = approved_parts[0] ? approved_parts[0] : null;
+            let approved_to_date   = approved_parts[1] ? approved_parts[1] : null;
             let query = {
                 "_token": "{{ csrf_token() }}",
                 tracking_id:     $("#tracking_id").val(),
