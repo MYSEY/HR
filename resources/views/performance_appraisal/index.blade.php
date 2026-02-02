@@ -255,7 +255,7 @@
                 var titleText = "";
                 var formContent = "";
                 var columnClassText = 'col-md-4';
-                if (status == "new" || status == 1 || status == 2 || status == 3) {
+                if (status == "new" || status == 1 || status == 2 || status == 3 || status == 4) {
                     titleText = '@lang("lang.asign_to_employee")';
                     columnClassText = 'col-md-6'
                     formContent = ''+
