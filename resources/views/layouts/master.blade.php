@@ -279,7 +279,7 @@
         </div>
     </div>
 
-    <input type="text" name="" id="rolePermission" value="{{Auth::user()->RolePermission}}">
+    <input hidden type="text" name="" id="rolePermission" value="{{Auth::user()->RolePermission}}">
 
     <script src="{{ asset('/admin/js/jquery.min.js') }}"></script>
 

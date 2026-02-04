@@ -162,7 +162,7 @@
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
+                                        <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -203,6 +203,14 @@
         @include('recruitments.candidate_resumes.modal_form_edit')
         @include('recruitments.candidate_resumes.modal_form_create_emp')
         @include('recruitments.candidate_resumes.import')
+        <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p>Loading Data...</p>
+            </div>
+        </div>
     </div>
 @endsection
 @include('includs.script')
@@ -417,8 +425,7 @@
                 }
             });
         });
-        $('.delete').on('click', function() {
-            var _this = $(this).parents('tr');
+        $(document).on('click','.delete', function() {
             let id = $(this).data('id');
             $('.e_id').val(id);
         });
