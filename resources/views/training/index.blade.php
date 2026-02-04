@@ -11,6 +11,12 @@
         min-height: 38px !important;
         padding: 9px !important;
     }
+    .tooltip-inner {
+        white-space: pre-line !important;
+        text-align: left !important;
+        max-width: 300px !important; 
+        /* word-wrap: break-word !important; */
+    }
 </style>
 @section('content')
     <div class="">
@@ -174,7 +180,10 @@
                                                         <tr class="odd">
                                                             <td class="sorting_1 ids">{{ $item->id }}</td>
                                                             <td class="training_type_name">{{ $item->training_type == 1 ? "Internal" : "External" }}</td>
-                                                            <td class="course_name">{{ $item->course_name }}</td>
+                                                            <td class="course_name" data-toggle="tooltip" data-html="true" title="{!! $item->course_name !!}">
+                                                                {{ Str::limit($item->course_name, 30, '...') }}
+                                                                {{-- {{ $item->course_name }} --}}
+                                                            </td>
                                                             <td>
                                                                 <ul class="team-members">
                                                                     <li class="dropdown avatar-dropdown">
@@ -203,7 +212,9 @@
                                                         
                                                             <td>${{ $item->cost_price ? $item->cost_price : 0 }}</td>
                                                             <td>{{ $item->status == 1 ? "Yes" : "No" }} </td>
-                                                            <td>{{ $item->remark }}</td>
+                                                            <td data-toggle="tooltip" data-html="true" title="{!! $item->remark !!}">
+                                                                {{ Str::limit($item->remark, 30, '...') }}
+                                                            </td>
                                                             <td class="text-end">
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle"
@@ -274,6 +285,12 @@
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip({ 
+            html: true,
+            container: 'tr' 
+        });
+    });
     $(function() {
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
@@ -522,6 +539,9 @@
             $('.e_id').val(id);
         });
     });
+    function strLimit(str, limit = 30, end = '...') {
+        return str.length > limit ? str.substring(0, limit) + end : str;
+    }
     function showdatas(params) {
         $.ajax({
             type: "post",
@@ -547,7 +567,10 @@
                         tr += '<tr class="odd">'+
                                 '<td class="sorting_1 ids">'+(row.id)+'</td>'+
                                 '<td class="training_type_name">'+(row.training_type == 1 ? "@lang('lang.internal')" : "@lang('lang.external')")+'</td>'+
-                                '<td class="course_name">'+(row.course_name)+'</td>'+
+                                '<td class="course_name" data-toggle="tooltip" data-html="true" title="'+ row.course_name +'">'+
+                                    // (row.course_name)+
+                                    strLimit(row.course_name, 30, '...')+
+                                '</td>'+
                                 '<td>'+
                                     '<ul class="team-members">'+
                                         '<li class="dropdown avatar-dropdown">'+
@@ -568,7 +591,9 @@
                                 
                                 '<td>$'+(row.cost_price ? row.cost_price : 0)+'</td>'+
                                 '<td>'+(row.status == 1 ? "Yes" : "No")+' </td>'+
-                                '<td>'+(row.remark ? row.remark: "")+'</td>'+
+                                '<td data-toggle="tooltip" data-html="true" title="'+ row.remark +'">'+
+                                    (row.remark ? strLimit(row.remark, 30, '...'): "")+
+                                '</td>'+
                                 '<td class="text-end">'+
                                     '<div class="dropdown dropdown-action">'+
                                         '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+

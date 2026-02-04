@@ -19,6 +19,7 @@ use App\Models\CandidateResume;
 use App\Models\GenerateIdEmployee;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\permissions;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -120,6 +121,124 @@ class CandidateResumeController extends Controller
             'totalUpcomings',
             'totalUpcomingtotalCancel',
         ]));
+    }
+    public function indexCVs()
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "recruitment/candidate-resume/cvs")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        $department = Department::all();
+        $position = Position::all();
+        $branch = Branchs::all();
+        $gender = Option::where('type','gender')->get();
+        $optionPositionType = Option::where('type','position_type')->get();
+        $optionLoan = Option::where('type','loan')->get();
+        $province = Province::all();
+        return view('recruitments.candidate_resumes.candidate_cv',
+        compact([
+            'permission',
+            "position", 
+            "branch", 
+            "gender",
+            "department", 
+            "optionPositionType", 
+            "optionLoan", 
+            "province",
+        ]));
+    }
+    public function indexShortlisted()
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "recruitment/candidate-resume/shortlisted")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        return view('recruitments.candidate_resumes.shortlisted',
+        compact(['permission']));
+    }
+    public function indexNonShortlisted()
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "recruitment/candidate-resume/non/shortlisted")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        return view('recruitments.candidate_resumes.non-shortlisted',compact(['permission']));
+    }
+    public function indexInterfailed()
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "recruitment/candidate-resume/interfailed")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        return view('recruitments.candidate_resumes.inter-failed',compact(['permission']));
+    }
+    public function indexInterresult()
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "recruitment/candidate-resume/interresult")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        return view('recruitments.candidate_resumes.inter-result',compact(['permission']));
+    }
+    public function indexProcessingContract()
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "recruitment/candidate-resume/processing/contract")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        $role = Role::all();
+        $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
+        $department = Department::all();
+        $position = Position::all();
+        $branch = Branchs::all();
+        $gender = Option::where('type','gender')->get();
+        $optionPositionType = Option::where('type','position_type')->get();
+        $optionLoan = Option::where('type','loan')->get();
+        $province = Province::all();
+        $lineManager = User::join('roles', 'users.role_id', '=', 'roles.id')
+        ->select(
+            'users.*',
+            'roles.role_type',
+        )->whereNotIn('roles.role_type',['employee','admin','developer'])->get();
+        return view('recruitments.candidate_resumes.processing_contract',
+            compact([
+                'permission',
+                "position", 
+                "branch", 
+                "gender",
+                "autoEmpId", 
+                "role", 
+                "department", 
+                "optionPositionType", 
+                "optionLoan", 
+                "province",
+                'lineManager'
+            ])
+        );
+    }
+    public function indexProcessingCancel()
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "recruitment/candidate-resume/processing/cancel")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        return view('recruitments.candidate_resumes.cancel_processing_contract',compact(['permission']));
+    }
+    public function indexUpcomingStaff()
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "recruitment/candidate-resume/upcoming/staff")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        return view('recruitments.candidate_resumes.upcoming_staff',compact(['permission']));
+    }
+    public function indexCanceledContract()
+    {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "recruitment/candidate-resume/upcoming/cancel")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        return view('recruitments.candidate_resumes.canceled_contract',compact(['permission']));
     }
 
     public function dataShow(Request $request)
@@ -258,9 +377,99 @@ class CandidateResumeController extends Controller
             })
             ->get();
         }
+        
         return response()->json(['datas'=>$datas,"dataUpcomings"=>$dataUpcomings, "dataUpcomingCancels"=>$dataUpcomingCancels]);
     }
 
+    public function ajaxShow(Request $request){
+         if ($request->ajax()) {
+
+            /* =======================
+            | BASE QUERY
+            ======================= */
+            if (in_array($request->status, [7, 8])) {
+                // UPCOMING / CANCEL (User table)
+                $query = User::with(['branch','department','position','gender'])
+                    ->when($request->status == 7, fn ($q) =>
+                        $q->where('emp_status', 'Upcoming')
+                    )
+                    ->when($request->status == 8, fn ($q) =>
+                        $q->where('emp_status', 'Cancel')
+                    );
+
+            } else {
+
+                // CANDIDATE RESUME
+                $query = CandidateResume::with(['branch','position','option'])
+
+                ->when($request->status, function ($q, $status) {
+
+                    if ($status == 6) {
+                        $q->where('status', 3)
+                        ->where(function ($qq) {
+                            $qq->whereNotIn('interviewed_result', [1,3,4])
+                                ->orWhereNull('interviewed_result');
+                        });
+
+                    } elseif ($status == 3) {
+                        $q->where('status', 3)
+                        ->whereIn('interviewed_result', [1,3,4]);
+
+                    } else {
+                        $q->where('status', $status);
+                    }
+                })
+                ->when($request->short_list, function ($q, $short_list) {
+                    $q->whereIn('short_list', $short_list);
+                })
+                ->when(Auth::user()->RolePermission == 'BM', function ($q) {
+                    $q->where('location_applied', Auth::user()->branch_id);
+                });
+            }
+
+            /* =======================
+            | SEARCH
+            ======================= */
+            $searchValue = $request->input('search.value');
+            if (!empty($searchValue) && !in_array($request->status, [7,8])) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('name_kh', 'like', "%{$searchValue}%")
+                    ->orWhere('current_position', 'like', "%{$searchValue}%")
+                    ->orWhere('companey_name', 'like', "%{$searchValue}%")
+                    ->orWhere('current_address', 'like', "%{$searchValue}%");
+                });
+            }
+
+            /* =======================
+            | COUNTS
+            ======================= */
+            $recordsTotal    = $query->count();
+            $recordsFiltered = $recordsTotal;
+
+            /* =======================
+            | PAGINATION
+            ======================= */
+            $start  = intval($request->input('start', 0));
+            $length = intval($request->input('length', 10));
+
+            if ($length != -1) {
+                $query->offset($start)->limit($length);
+            }
+
+            $data = $query->get();
+
+            /* =======================
+            | RESPONSE
+            ======================= */
+            return response()->json([
+                'draw'            => intval($request->input('draw')),
+                'recordsTotal'    => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data'            => $data
+            ]);
+        }
+    }
     public function showemp(){
         $dataEmp =  User::whereIn('emp_status',['Probation', '1','2','10'])->get();
         return response()->json(['employees'=>$dataEmp]);

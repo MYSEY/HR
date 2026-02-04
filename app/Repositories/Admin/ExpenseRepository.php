@@ -36,6 +36,22 @@ class ExpenseRepository extends BaseRepository
     }
 
     public function getDataByLocation($request){
+        $request_from_date = null;
+        $request_to_date = null;
+        $approved_from_date = null;
+        $approved_to_date = null;
+        if ($request->request_from_date) {
+            $request_from_date = Carbon::createFromDate($request->request_from_date)->format('Y-m-d H:i:s');
+        }
+        if ($request->request_to_date) {
+            $request_to_date = Carbon::createFromDate($request->request_to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
+        }
+        if ($request->approved_from_date) {
+            $approved_from_date = Carbon::createFromDate($request->approved_from_date)->format('Y-m-d H:i:s');
+        }
+        if ($request->approved_to_date) {
+            $approved_to_date = Carbon::createFromDate($request->approved_to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
+        }
         $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/expense/report")->first();
         $datasDetails = FnDetailLocation::with(["expenseRequest", "location", "department"])
         
@@ -112,16 +128,16 @@ class ExpenseRepository extends BaseRepository
         ->when($request->tracking_id, function ($query, $tracking_id) {
             $query->where('expense_requests.tracking_id', $tracking_id);
         })
-        ->when($request->request_from_date, function ($query, $request_from_date) {
+        ->when($request_from_date, function ($query, $request_from_date) {
             $query->where('expense_requests.date_request', '>=', $request_from_date);
         })
-        ->when($request->request_to_date, function ($query, $request_to_date) {
+        ->when($request_to_date, function ($query, $request_to_date) {
             $query->where('expense_requests.date_request', '<=', $request_to_date);
         })
-        ->when($request->approved_from_date, function ($query, $approved_from_date) {
+        ->when($approved_from_date, function ($query, $approved_from_date) {
             $query->where('expense_requests.date_approve', '>=', $approved_from_date);
         })
-        ->when($request->approved_to_date, function ($query, $approved_to_date) {
+        ->when($approved_to_date, function ($query, $approved_to_date) {
             $query->where('expense_requests.date_approve', '<=', $approved_to_date);
         })
         ->when($request->type, function ($query, $type) {

@@ -8,6 +8,12 @@
     .ui-datepicker-calendar {
         display: none;
     }
+    .tooltip-inner {
+        white-space: pre-line !important;
+        text-align: left !important;
+        max-width: 300px !important; 
+        /* word-wrap: break-word !important; */
+    }
 </style>
 @section('content')
     <div class="">
@@ -241,7 +247,10 @@
                                                                 <td>{{$item->employee->EmployeePosition}}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($item->employee->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
                                                                 <td>{{$item->employee->SeniorityYearsOfEmployee}}</td>
-                                                                <td>{{$item->training->course_name}}</td>
+                                                                <td data-toggle="tooltip" data-html="true" title="{!! $item->training->course_name !!}">
+                                                                    {{ Str::limit($item->training->course_name, 30, '...') }}
+                                                                    {{-- {{$item->training->course_name}} --}}
+                                                                </td>
                                                                 <td>{{$item->employee->EmployeeBranch}}</td>
                                                                 <td>{{ $item->training ? \Carbon\Carbon::parse($item->training->start_date)->format('d-M-Y') : ''}}</td>
                                                                 <td>{{ $item->training ? \Carbon\Carbon::parse($item->training->end_date)->format('d-M-Y') : '' }}</td>
@@ -251,9 +260,13 @@
                                                                 <td>$ {{round($price, 2)}}</td>
                                                                 <td>$ {{round($discount, 2)}}</td>
                                                                 <td>$ {{round($total, 2)}}</td>
-                                                                <td> {{$trainer}}</td>
+                                                                <td data-toggle="tooltip" data-html="true" title="{!! $trainer !!}">
+                                                                    {{Str::limit($trainer, 30, '...')}}
+                                                                </td>
                                                                 <td>{{ $item->training ? ($item->training->training_type == 1 ? "Internal" : "External") : ""}}</td>
-                                                                <td>{{$item->training ? ($item->training->remark ? $item->training->remark : ""): ""}}</td>
+                                                                <td data-toggle="tooltip" data-html="true" title="{!! $item->training->remark !!}">
+                                                                    {{$item->training ? ($item->training->remark ? Str::limit($item->training->remark, 30, '...') : ""): ""}}
+                                                                </td>
                                                             </tr>
                                                     @endforeach
                                                 @endif
@@ -276,6 +289,12 @@
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip({ 
+            html: true,
+            container: 'tr' 
+        });
+    });
     $(function() {
         $(".btn-research").on("click", function () {
             $(this).prop('disabled', true);
@@ -334,6 +353,9 @@
             window.location = url;
         });
     });
+    function strLimit(str, limit = 30, end = '...') {
+        return str.length > limit ? str.substring(0, limit) + end : str;
+    }
     function showdatas(param) {  
         $.ajax({
             url: "{{ url('reports/training-report-filter') }}",
@@ -383,7 +405,9 @@
                             '<td>'+ item.employee.position.name_english +'</td>'+
                             '<td>'+(date_ofcommencement)+'</td>'+
                             '<td>'+(empl_period)+'</td>'+
-                            '<td>'+ item.training.course_name +'</td>'+
+                            '<td data-toggle="tooltip" data-html="true" title="'+ item.training.course_name +'">'+ 
+                                strLimit(item.training.course_name, 30, '...')+
+                            '</td>'+
                             '<td>'+ item.employee.branch.branch_name_en +'</td>'+
                             '<td>'+(start_date)+'</td>'+
                             '<td>'+(end_date)+'</td>'+
@@ -391,9 +415,9 @@
                             '<td>$ '+(parseFloat(price).toFixed(2))+'</td>'+
                             '<td>$ '+(parseFloat(discount).toFixed(2))+'</td>'+
                             '<td>$ '+(parseFloat(total).toFixed(2))+'</td>'+
-                            '<td>'+ trainer +'</td>'+
+                            '<td data-toggle="tooltip" data-html="true" title="'+ trainer +'">'+ strLimit(trainer, 30, '...') +'</td>'+
                             '<td>'+ (item.training.training_type == 1 ? "Internal" : "External") +'</td>'+
-                            '<td>'+ (item.training.remark ? item.training.remark : "")+'</td>'+
+                            '<td data-toggle="tooltip" data-html="true" title="'+ item.training.remark +'">'+ (item.training.remark ? strLimit(item.training.remark, 30, '...') : "")+'</td>'+
                         '</tr>';
                     });
                 }
