@@ -41,6 +41,8 @@ class ExportExpense implements FromCollection, WithColumnWidths, WithHeadings, W
             };
            $request_date = Carbon::createFromDate($value->date_request)->format('d-M-Y H:i');
            $date_approve = $value->date_approve ? Carbon::createFromDate($value->date_approve)->format('d-M-Y') : "";
+            $department_name_english = $value->department ? $value->department->name_english : "";
+           $branch_name_english = $value->location ? $value->location->branch_name_en : "";
             $dataExport[] = [
                 "number" => $i,
                 "Tracking ID"           =>  $value->tracking_id,
@@ -52,7 +54,7 @@ class ExportExpense implements FromCollection, WithColumnWidths, WithHeadings, W
                 "Type of payment"       =>  $value->payment_term,
                 "Request Date"          =>  $request_date,
                 "Request By"            =>  ($value->expenseRequest->createdBy ? $value->expenseRequest->createdBy->employee_name_en: ""),
-                "Location"              =>  ($value->type == "2" ?  $value->department->name_english : $value->location->branch_name_en ) ,
+                "Location"              =>  ($value->type == "2" ?  $department_name_english : $branch_name_english) ,
                 "Reference"             =>  $value->reference,
                 "Submitted Date"        =>  $date_approve,
                 "Approve By"            =>  ($value->expenseRequest->approveBy ? $value->expenseRequest->approveBy->employee_name_en: ""),

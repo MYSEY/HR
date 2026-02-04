@@ -544,9 +544,19 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // route block recruitment candidate resume
     Route::get('/recruitment/candidate-resume/list', [CandidateResumeController::class,'index']);
+    Route::get('/recruitment/candidate-resume/cvs', [CandidateResumeController::class,'indexCVs']);
+    Route::get('/recruitment/candidate-resume/shortlisted', [CandidateResumeController::class,'indexShortlisted']);
+    Route::get('/recruitment/candidate-resume/non/shortlisted', [CandidateResumeController::class,'indexNonShortlisted']);
+    Route::get('/recruitment/candidate-resume/interfailed', [CandidateResumeController::class,'indexInterfailed']);
+    Route::get('/recruitment/candidate-resume/interresult', [CandidateResumeController::class,'indexInterresult']);
+    Route::get('/recruitment/candidate-resume/processing/contract', [CandidateResumeController::class,'indexProcessingContract']);
+    Route::get('/recruitment/candidate-resume/processing/cancel', [CandidateResumeController::class,'indexProcessingCancel']);
+    Route::get('/recruitment/candidate-resume/upcoming/staff', [CandidateResumeController::class,'indexUpcomingStaff']);
+    Route::get('/recruitment/candidate-resume/upcoming/cancel', [CandidateResumeController::class,'indexCanceledContract']);
     Route::get('/recruitment/candidate-resume/indexshow', [CandidateResumeController::class,'dataShow']);
     Route::get('/recruitment/candidate-resume/preview/{id}', [CandidateResumeController::class,'preview']);
     Route::get('/recruitment/candidate-resume/show', [CandidateResumeController::class,'show']);
+    Route::get('/recruitment/candidate-resume/ajaxShow', [CandidateResumeController::class,'ajaxShow']);
     Route::post('/recruitment/candidate-resume/store', [CandidateResumeController::class,'store']);
     Route::get('/recruitment/candidate-resume/edit', [CandidateResumeController::class,'edit']);
     Route::post('/recruitment/candidate-resume/update', [CandidateResumeController::class,'update']);

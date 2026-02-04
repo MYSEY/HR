@@ -50,6 +50,7 @@ class ExpenseRequestController extends Controller
         $user = Auth::user();
         $dataAsign = ExpenseRequest::with(['requestBy', 'locationDetails', 'departments', 'createdBy', 'reviewBy','approveBy'])
             ->where('status', '!=', "rejected")
+            ->whereNot('status', "approved")
             ->whereNot('request_by', $user->id)
             ->where(function ($query) use ($user) {
                 if ($user->RolePermission != "admin" && $user->RolePermission != "developer") {
