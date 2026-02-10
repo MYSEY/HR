@@ -92,7 +92,7 @@
                                             @elseif($item->status == "pending_approve")
                                                 <span class="badge bg-inverse-warning" style="font-size: 13px;">@lang('lang.pending_approved')</span>
                                             @elseif ($item->status == "rejected")
-                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by {{$item->review_type ? "review ".$item->reject_review_type : "Approved"}}</span>
+                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Return by {{$item->review_type ? "review ".$item->reject_review_type : "Approved"}}</span>
                                             @elseif ($item->status == "cancel")
                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">@lang('lang.cancel')</span>
                                             @elseif($item->status == "approved")

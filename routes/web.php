@@ -687,6 +687,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/fn/expense/report', [ExpenseReportController::class,'index']);
     Route::post('/fn/expense/search', [ExpenseReportController::class,'filter']);
     Route::get('/fn/expense/report/export', [ExpenseReportController::class,'reportExport']);
+    Route::get('/fn/expense/report/export-histories', [ExpenseReportController::class,'historiesExport']);
     
     // Block backup database and file upload
     Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
