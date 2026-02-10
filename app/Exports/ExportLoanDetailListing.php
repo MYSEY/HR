@@ -219,7 +219,7 @@ class ExportLoanDetailListing implements FromCollection, WithColumnWidths, WithH
                 $row->AddressCode,
                 $row->CollateralID == null ? 'None' : $row->CollateralID,
                 $row->Mobile1. ' '. $row->Mobile2,
-                $row->cycle = $row->Cycle === null ? '03' : ltrim($row->Cycle, '0'),
+                $row->Cycle === null ? '03' : ltrim($row->Cycle, '0'),
                 $row->Amount,
                 $row->OutstandingAmount,
                 $row->EIRRate,
