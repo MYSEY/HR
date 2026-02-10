@@ -84,16 +84,18 @@
                     <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                     <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                 </button>
-                <div class="btn-group btn" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        @lang('lang.history')
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <li><a class="dropdown-item btn_excel_history" data-id="2" href="#">Tax Download</a></li>
-                        <li><a class="dropdown-item btn_excel_history" data-id="0" href="#">General Download</a></li>
-                        <li><a class="dropdown-item btn_excel_history" data-id="1" href="#">Special Download</a></li>
-                    </ul>
-                </div>
+                @if ($permission->is_export == "1")
+                    <div class="btn-group btn" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            @lang('lang.history')
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            <li><a class="dropdown-item btn_excel_history" data-id="2" href="#">Tax Download</a></li>
+                            <li><a class="dropdown-item btn_excel_history" data-id="0" href="#">General Download</a></li>
+                            <li><a class="dropdown-item btn_excel_history" data-id="1" href="#">Special Download</a></li>
+                        </ul>
+                    </div>
+                @endif
                 
             </div>
         </div>
