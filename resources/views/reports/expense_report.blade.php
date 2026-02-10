@@ -80,10 +80,21 @@
                         <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
                 @endif
-                <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                <button type="button" class="btn btn-sm btn-outline-secondary reset-btn me-2" id="icon-search-download-reload">
                     <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                     <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                 </button>
+                <div class="btn-group btn" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        @lang('lang.history')
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <li><a class="dropdown-item btn_excel_history" data-id="2" href="#">Tax Download</a></li>
+                        <li><a class="dropdown-item btn_excel_history" data-id="0" href="#">General Download</a></li>
+                        <li><a class="dropdown-item btn_excel_history" data-id="1" href="#">Special Download</a></li>
+                    </ul>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -137,7 +148,6 @@
                                 </thead>
                                 <tbody>
                                     @if (count($datas)>0)
-                                    {{-- @dd($datas) --}}
                                         @foreach ($datas as $key=>$item)
                                         
                                             <tr class="odd">
@@ -362,6 +372,32 @@
             var url = "{{URL::to('fn/expense/report/export')}}?" + $.param(query)
             window.location = url;
         });
+         $(".btn_excel_history").on("click", function () {
+            let type = $(this).data("id");
+            let request_date_value = $('#request_date').val()
+            let parts = request_date_value.split(" ");
+            let request_from_date = parts[0] ? parts[0] : null;
+            let request_to_date   = parts[1] ? parts[1] : null;
+
+            let approved_date_value = $('#approved_date').val()
+            let approved_parts = approved_date_value.split(" ");
+            let approved_from_date = approved_parts[0] ? approved_parts[0] : null;
+            let approved_to_date   = approved_parts[1] ? approved_parts[1] : null;
+            let query = {
+                "_token":           "{{ csrf_token() }}",
+                tracking_id:        $("#tracking_id").val(),
+                type:               type,
+                request_from_date:  request_from_date,
+                request_to_date:    request_to_date,
+                approved_from_date: approved_from_date,
+                approved_to_date:   approved_to_date,
+                expense_type:       $("#type_of_expense").val(),
+                location_id:        $("#branch_id").val(),
+            };
+            var url = "{{URL::to('fn/expense/report/export-histories')}}?" + $.param(query)
+            window.location = url;
+        });
+
         $(document).on('click','.btn-GEXP-print', function() {
             $('.number_supplier').text('៦ បើកជូនអ្នកផ្គត់ផ្គង់ (៣) ឫ (៣-(៤+៥))');
             $('#modal-loading').modal('show');
