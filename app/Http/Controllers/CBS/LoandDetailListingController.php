@@ -201,7 +201,8 @@ class LoandDetailListingController extends Controller
             ]);
         }
         $branch = DB::connection('pgsql')->table('MKT_BRANCH')->select('ID', 'Description', 'LocalDescription')->get();
-        return view('CBS.loans.loan_listing',compact('branch'));
+        $data = DB::connection('pgsql')->table('MKT_DATES')->select('ID', 'LastSystemDate')->first();
+        return view('CBS.loans.loan_listing',compact('branch', 'data'));
     }
     public function download(Request $request){
         $data = DB::connection('pgsql')->table('MKT_DATES')->select('ID', 'LastSystemDate')->first();

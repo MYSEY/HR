@@ -7,7 +7,7 @@
                     <h3 class="page-title">Loan Detail Listing</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">Loan Detail Listing</li>
+                        <li class="breadcrumb-item active">Loan Detail Listing {{ $data->LastSystemDate ?? 'N/A' }}</li>
                     </ul>
                 </div>
             </div>
@@ -17,7 +17,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
                 <div class="form-group">
                     <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                        <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                        <option value="" data-select2-id="select2-data-2-c0n2">All Branch</option>
                         @foreach ($branch as $item)
                             <option value="{{ $item->ID }}">
                                 {{ Helper::getLang() == 'en' ? $item->Description : $item->LocalDescription }}
