@@ -189,12 +189,19 @@
                                         <input type="file" name="IrregularFile" class="d-none" id="IrregularFile" onchange="updateFileName(this)">
                                     
                                         {{-- Review existing file --}}
-                                        @if ($viewFile)
+                                        {{-- @if ($viewFile)
                                             <button class="btn btn-sm btn-outline-secondary" type="button" id="reviewFileBtn">
                                                 <a href="{{ url('uploads/FnRegularExspenses/' . $viewFile) }}" target="_blank" style="text-decoration: none; color: inherit;">@lang('lang.review_file')</a>
                                             </button>
                                         @endif
-                                        <button class="btn btn-outline-danger btn-clear-file" type="button"> @lang('lang.clear') </button>
+                                        <button class="btn btn-outline-danger btn-clear-file" type="button"> @lang('lang.clear') </button> --}}
+                                        <button class="btn btn-sm btn-outline-secondary" type="button" id="reviewFileBtn" {{ !$viewFile ? 'style=display:none' : '' }}>
+                                            <a id="filePreviewLink" href="{{ $viewFile ? url('uploads/FnRegularExspenses/' . $viewFile) : '#' }}" 
+                                            target="_blank" style="text-decoration: none; color: inherit;">
+                                            @lang('lang.review_file')
+                                            </a>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-clear-file" type="button" onclick="clearAll()"> @lang('lang.clear') </button>
                                     </div>
                                 </div>
                             </div>

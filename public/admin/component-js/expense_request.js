@@ -599,8 +599,54 @@ function openFileInNewTab() {
         }).show();
     }
 }
+// function updateFileName(input) {
+//     if (input.files.length > 0) {
+//         document.getElementById('IrregularFileName').value = input.files[0].name;
+//     }
+// }
 function updateFileName(input) {
-    if (input.files.length > 0) {
-        document.getElementById('IrregularFileName').value = input.files[0].name;
+    const fileNameDisplay = document.getElementById('IrregularFileName');
+    const reviewBtn = document.getElementById('reviewFileBtn');
+    const previewLink = document.getElementById('filePreviewLink');
+
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        
+        // 1. Update the text input to show the new file name
+        fileNameDisplay.value = file.name;
+
+        // 2. Create a temporary URL for the new file
+        const blobUrl = URL.createObjectURL(file);
+        
+        // 3. Update the link and show the button
+        previewLink.href = blobUrl;
+        reviewBtn.style.display = "inline-block";
+    }
+}
+
+function clearAll() {
+    // 1. Reset the File Input (the actual upload)
+    const fileInput = document.getElementById('IrregularFile');
+    fileInput.value = ""; 
+
+    // 2. Clear the Display Name (the text box)
+    const fileNameDisplay = document.getElementById('IrregularFileName');
+    fileNameDisplay.value = "";
+
+    // 3. Clear the Hidden Input (the old file from DB)
+    // Note: This ensures the system knows you want to remove the existing file
+    const hiddenInput = document.getElementById('e_fn_invoice');
+    hiddenInput.value = "";
+
+    // 4. Hide the Review Button
+    const reviewBtn = document.getElementById('reviewFileBtn');
+    if (reviewBtn) {
+        reviewBtn.style.display = "none";
+    }
+
+    // 5. Reset the link inside the button
+    const previewLink = document.getElementById('filePreviewLink');
+    if (previewLink) {
+        previewLink.href = "#";
     }
 }
