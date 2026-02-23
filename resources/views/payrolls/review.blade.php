@@ -387,7 +387,7 @@
             branch_id = $('#branch_id').val();
             filter_month = $('#filter_month').val();
             // Reload DataTable with the filter values
-            $('#DataTables_Table_0').DataTable().ajax.reload(null, false); 
+            $('#tbl_payroll_review').DataTable().ajax.reload(null, false); 
         });
         dataTables();
 
@@ -713,9 +713,6 @@
     function dataTables() {
         $('#loading-overlay').show();
         // Check if DataTable instance exists, then destroy it
-        if ($.fn.DataTable.isDataTable('#tbl_payroll_review')) {
-            $('#tbl_payroll_review').DataTable().clear().destroy();
-        }
         $('#tbl_payroll_review').DataTable({
             responsive: false,
             pageLength: 10,

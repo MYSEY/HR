@@ -479,10 +479,16 @@ class EmployeePayrollController extends Controller
                     foreach ($dataPayrollAdjustment as $valueAdjust) {
                         $adjustmentDate = Carbon::createFromDate($valueAdjust->adjustment_date)->format('m-y');
                         if($adjustmentDate == $paymentDate){
-                            if ($valueAdjust->adjustment_type == 'include_taxe') {
-                                $adjustmentIncludeTaxe = $valueAdjust->amount;
-                            }else{
-                                $adjustmentExcludeTaxe = $valueAdjust->amount;
+                            // if ($valueAdjust->adjustment_type == 'include_taxe') {
+                            //     $adjustmentIncludeTaxe = $valueAdjust->amount;
+                            // }else{
+                            //     $adjustmentExcludeTaxe = $valueAdjust->amount;
+                            // }
+
+                            if ($valueAdjust->adjustment_type === 'include_taxe') {
+                                $adjustmentIncludeTaxe += $valueAdjust->amount;
+                            } else {
+                                $adjustmentExcludeTaxe += $valueAdjust->amount;
                             }
                         }
                     }
