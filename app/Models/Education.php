@@ -39,6 +39,13 @@ class Education extends Model
         ->dontSubmitEmptyLogs();
     }
 
+    public function optionDegree(){
+        return $this->belongsTo(Option::class,'degree');
+    }
+    public function optionFieldofstudy(){
+        return $this->belongsTo(Option::class,'field_of_study');
+    }
+
     public function getEdcutionFieldOfStudyAttribute(){
         $data = Option::where('type','field_of_study')->get();
         foreach($data as $item){

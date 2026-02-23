@@ -91,6 +91,18 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
+        'pgsql_bi' => [
+            'driver'   => 'pgsql',
+            'host'     => env('DB_HOST_PG_BI'),
+            'port'     => env('DB_PORT_PG_BI', 5432),
+            'database' => env('DB_DATABASE_PG_BI'),
+            'username' => env('DB_USERNAME_PG_BI'),
+            'password' => env('DB_PASSWORD_PG_BI'),
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'public',
+            'sslmode'  => 'prefer',
+        ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
