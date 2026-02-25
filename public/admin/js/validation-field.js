@@ -33,19 +33,24 @@ $(function(){
                 if(!value && requered){
                     formGroup.find(".select2-selection--single").css("border-color","#dc3545");
                     formGroup.find(".select2-selection--multiple").css("border-color","#dc3545");
+                    setTimeout(function () {
+                        $(".submit-btn").attr('disabled',false);
+                        $(".loading-icon").css('display', 'none');
+                        $(".btn-txt").css("display", 'block');
+                    }, 1000);
                 }else if (!requeredField && requered) {
                     formGroup.find(".select2-selection--single").css("border-color","#dc3545");
                     formGroup.find(".select2-selection--multiple").css("border-color","#dc3545");
+                    setTimeout(function () {
+                        $(".submit-btn").attr('disabled',false);
+                        $(".loading-icon").css('display', 'none');
+                        $(".btn-txt").css("display", 'block');
+                    }, 1000);
                 }
             });
             $(".loading-icon").css('display', 'block');
             $(".submit-btn").attr("disabled", true);
             $(".btn-txt").css("display", "none");
-            setTimeout(function () {
-                $(".submit-btn").attr('disabled',false);
-                $(".loading-icon").css('display', 'none');
-                $(".btn-txt").css("display", 'block');
-            }, 500);
             if (!form.checkValidity()) {
                 event.preventDefault()
                 event.stopPropagation()

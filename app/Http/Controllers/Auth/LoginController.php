@@ -103,9 +103,9 @@ class LoginController extends Controller
             }
 
             // Status check
-            if ($user->status !== 'Active') {
+            if (!in_array($user->status, ['Active', 'Unactive'])) {
                 return response()->json([
-                    'message' => 'Your account is not active. Please contact support',
+                    'message' => 'Invalid account status.',
                     'status' => 'error'
                 ]);
             }
