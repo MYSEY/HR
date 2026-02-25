@@ -26,6 +26,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Repositories\Admin\LeaveRepository;
 use App\Repositories\Admin\EmployeeRepository;
+use Carbon\CarbonPeriod;
 
 class LeavesAdminController extends Controller
 {
@@ -263,6 +264,38 @@ class LeavesAdminController extends Controller
             Toastr::error('Leave created fail.','Error');
         }
     }
+    public static function totalRequestLeaveDay($request)
+    {
+        $current_year = Carbon::now()->format('Y');
+        //** caculate leave for end date new year */
+        $total_number_of_day = $request->number_of_day;
+        $current_end_date = Carbon::createFromDate($request->end_date)->format('Y');
+        if($current_end_date > $current_year){
+            $new_year_start = Carbon::createFromFormat('Y-m-d', $current_end_date . '-01-02');
+            $new_year_end   = Carbon::createFromFormat('Y-m-d', $request->end_date);
+            $newYearWorkingDays = CarbonPeriod::create($new_year_start, $new_year_end)
+            ->filter(fn ($date) => $date->isWeekday())
+            ->count();
+            $totalCurrent_numberOfDay = $request->number_of_day - $newYearWorkingDays;
+            if($request->end_half_day){
+                $totalCurrent_numberOfDay = $totalCurrent_numberOfDay + 0.5;
+            }
+            $total_number_of_day = $totalCurrent_numberOfDay;
+        }else if($current_end_date = $current_year){
+            $new_year_start = Carbon::createFromFormat('Y-m-d', $current_end_date . '-01-02');
+            $new_year_end   = Carbon::createFromFormat('Y-m-d', $request->end_date);
+            $newYearWorkingDays = CarbonPeriod::create($new_year_start, $new_year_end)
+            ->filter(fn ($date) => $date->isWeekday())
+            ->count();
+            $totalCurrent_numberOfDay = $newYearWorkingDays;
+            if($request->end_half_day){
+                $totalCurrent_numberOfDay = $totalCurrent_numberOfDay - 0.5;
+            }
+            $total_number_of_day = $totalCurrent_numberOfDay;
+        }
+        return $total_number_of_day;
+    }
+
     public function approve(Request $request) {
         try {
             $data = LeaveRequest::with("employee")->find($request->id);
@@ -363,7 +396,6 @@ class LeavesAdminController extends Controller
                             $data['next_approver'] = $branch->direct_manager_id;
                         }
 
-
                         // $data['next_approver'] = $branch->direct_manager_id;
 
                         $email_send = User::where("id", $data['next_approver'])->first();
@@ -441,32 +473,33 @@ class LeavesAdminController extends Controller
         try {
             $data = LeaveRequest::with("leaveType")->find($request->id);
             $LeaveAllocation = LeaveAllocation::where("employee_id", $data->employee_id)->first();
+            //** caculate leave for end date new year */
+            $total_number_of_day = self::totalRequestLeaveDay($data);
+            //** end */
             if ($data->leaveType->type == "annual_leave") {
-                $current_annual_leave = $LeaveAllocation->total_annual_leave + $data->number_of_day;
+                // $current_annual_leave = $LeaveAllocation->total_annual_leave + $data->number_of_day;
+                $current_annual_leave = $LeaveAllocation->total_annual_leave +$total_number_of_day;
                 $LeaveAllocation->total_annual_leave =  $current_annual_leave > $LeaveAllocation->default_annual_leave ? $LeaveAllocation->default_annual_leave : $current_annual_leave;
             }else if($data->leaveType->type == "sick_leave"){
-                $current_sick_leave = $LeaveAllocation->total_sick_leave + $data->number_of_day;
+                $current_sick_leave = $LeaveAllocation->total_sick_leave +$total_number_of_day;
                 $LeaveAllocation->total_sick_leave = $current_sick_leave > $LeaveAllocation->default_sick_leave ? $LeaveAllocation->default_sick_leave : $current_sick_leave;
             }else if($data->leaveType->type == "special_leave") {
-                $current_special_leave = $LeaveAllocation->total_special_leave + $data->number_of_day;
+                $current_special_leave = $LeaveAllocation->total_special_leave +$total_number_of_day;
                 $LeaveAllocation->total_special_leave = $current_special_leave > $LeaveAllocation->default_special_leave ? $LeaveAllocation->default_special_leave : $current_special_leave;
             }else if($data->leaveType->type == "unpaid_leave"){
-                $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave + $data->number_of_day;
+                $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave +$total_number_of_day;
                 if ($current_unpaid_leave == 0) {
                    $LeaveAllocation->total_unpaid_leave = 0;
                 }else{
                     $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave;
                 }
-
-                // $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
             }else if($data->leaveType->type == "long_sick_leave"){
-                $current_long_sick_leave = $LeaveAllocation->total_long_sick_leave + $data->number_of_day;
+                $current_long_sick_leave = $LeaveAllocation->total_long_sick_leave +$total_number_of_day;
                 if ($current_long_sick_leave == 0) {
                     $LeaveAllocation->total_long_sick_leave = 0;
                 }else{
                     $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave;
                 }
-                // $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave > $LeaveAllocation->default_long_sick_leave ? $LeaveAllocation->default_long_sick_leave : $current_long_sick_leave;
             }
             $role = Auth::user()->RolePermission;
             $department = Auth::user()->department;
@@ -712,6 +745,58 @@ class LeavesAdminController extends Controller
             "remain_year_3" => $data->year_2        // previous year_2 → year_3
         ];
     }
+    
+    public static function totalRequestLeave ($employee_id){
+        $year = Carbon::now()->format('Y');
+        $yearStart = Carbon::create($year, 1, 2);
+        $yearEnd   = Carbon::create($year, 12, 31);
+        $leaveRequest = LeaveRequest::with("leaveType")->where("employee_id",$employee_id)
+            ->whereDate('start_date', '<=', $yearEnd)
+            ->whereDate('end_date', '>=', $yearStart)
+            ->get();
+            $total_annual_leave     =0;
+            $total_sick_leave       =0;
+            $total_special_leave    =0;
+            $total = 0;
+            $yearStartCompare = Carbon::createFromFormat('Y-m-d', $year . '-01-01');
+            if(count($leaveRequest) > 0){
+                foreach ($leaveRequest as $item) {
+                    if($item->start_date < $yearStartCompare){
+                        $from = Carbon::parse($item->start_date)->max($yearStart);
+                        $to   = Carbon::parse($item->end_date)->min($yearEnd);
+                        $workingDays = CarbonPeriod::create($from, $to)
+                            ->filter(fn ($date) => $date->isWeekday())
+                            ->count();
+                        if($item->end_half_day){
+                            $total = $workingDays - 0.5;
+                        }
+                    }else{
+                        $total = $item->number_of_day;
+                    }
+    
+                    switch ($item->leaveType->type) {
+                        case 'annual_leave':
+                            $total_annual_leave += $total;
+                            break;
+
+                        case 'sick_leave':
+                            $total_sick_leave += $total;
+                            break;
+
+                        case 'special_leave':
+                            $total_special_leave += $total;
+                            break;
+                    }
+                }
+            }
+            
+        return [
+            "total_annual_leave" => $total_annual_leave,
+            "total_sick_leave" => $total_sick_leave,
+            "total_special_leave" => $total_special_leave,
+            "total_unpaid_leave" => 0
+        ];
+    }
     public function CreateGenerateLeave(Request $request){
         try {
             $employee = User::whereIn('emp_status',['1','10','2'])->get();
@@ -742,121 +827,15 @@ class LeavesAdminController extends Controller
                             $remain_year_3 = $rotated["remain_year_3"];
                             $defaultDays = $totalAnnualLeave;
                         }
-
-                        // *** old code for condition **/
-                        // $defaultDays = $request->annual_leave;
-                        // $remain_year_1 = $data->year_1;
-                        // $remain_year_2 = $data->year_2;
-                        // $remain_year_3 = $data->year_3;
-                        // $totalDays = $defaultDays;
-                        // $remianDay = $remainingDay;
-                        // if ($diffYears == 1) {
-                        //     $defaultDays = $remainingDay;
-                        //     $sick_leave = $sick_leave;
-                        //     $special_leave = $special_leave;
-                        //     $remain_year_1 = 0;
-                        //     $remain_year_2 = 0;
-                        //     $remain_year_3 = 0;
-                        // }elseif($diffYears == 2){
-                        //     if ($remainingDay >= 6) {
-                        //         $remianDay = 6;
-                        //     } else {
-                        //         $remianDay = $remainingDay;
-                        //     }
-                        //     $remain_year_1 = $data->year_1;
-                        //     $remain_year_2 = $remianDay;
-                        //     $remain_year_3 = 0;
-                        //     $totalDays = $defaultDays;
-                        // }elseif($diffYears == 3){
-                        //     if ($remainingDay >= 6) {
-                        //         $remianDay = 6;
-                        //     } else {
-                        //         $remianDay = $remainingDay;
-                        //     }
-                        //     $remain_year_1 = $data->year_1;
-                        //     $remain_year_2 = $remianDay;
-                        //     $remain_year_3 = 0;
-                        //     $totalDays = $defaultDays;
-                        // }elseif($diffYears == 4){
-                        //     if ($remainingDay >= 6) {
-                        //         $remianDay = 6;
-                        //     } else {
-                        //         $remianDay = $remainingDay;
-                        //     }
-                        //     $remain_year_1 = $data->year_1;
-                        //     $remain_year_2 = $remianDay;
-                        //     $remain_year_3 = 0;
-                        //     $totalDays = $defaultDays + 1;
-                        // } elseif($diffYears == 5) {
-                        //     if ($remainingDay >= 7) {
-                        //         $remianDay = 7;
-                        //     } else {
-                        //         $remianDay = $remainingDay;
-                        //     }
-                        //     $remain_year_1 = $data->year_1;
-                        //     $remain_year_2 = $remianDay;
-                        //     $remain_year_3 = 0;
-                        //     $totalDays = $defaultDays + 1;
-                        // }elseif($diffYears == 6){
-                        //     if ($remainingDay >= 7) {
-                        //         $remianDay = 7;
-                        //     } else {
-                        //         $remianDay = $remainingDay;
-                        //     }
-                        //     $remain_year_1 = $data->year_1;
-                        //     $remain_year_2 = $remianDay;
-                        //     $remain_year_3 = 0;
-                        //     $totalDays = $defaultDays + 1;
-                        // }elseif($diffYears == 7){
-                        //     if ($remainingDay >= 8) {
-                        //         $remianDay = 8;
-                        //     } else {
-                        //         $remianDay = $remainingDay;
-                        //     }
-                        //     $remain_year_1 = $data->year_1;
-                        //     $remain_year_2 = $remianDay;
-                        //     $remain_year_3 = 0;
-                        //     $totalDays = $defaultDays + 2;
-                        // }elseif($diffYears == 8){
-                        //     if ($remainingDay >= 8) {
-                        //         $remianDay = 8;
-                        //     } else {
-                        //         $remianDay = $remainingDay;
-                        //     }
-                        //     $remain_year_1 = $data->year_1;
-                        //     $remain_year_2 = $remianDay;
-                        //     $remain_year_3 = 0;
-                        //     $totalDays = $defaultDays + 2;
-                        // }elseif($diffYears == 9){
-                        //     if ($remainingDay >= 8) {
-                        //         $remianDay = 8;
-                        //     } else {
-                        //         $remianDay = $remainingDay;
-                        //     }
-                        //     $remain_year_1 = $data->year_1;
-                        //     $remain_year_2 = $remianDay;
-                        //     $remain_year_3 = 0;
-                        //     $totalDays = $defaultDays + 2;
-                        // }else if($diffYears > 10){
-                        //     if ($remainingDay >= 10) {
-                        //         $remianDay = 9;
-                        //     } else {
-                        //         $remianDay = $remainingDay;
-                        //     }
-                        //     $remain_year_1 = $data->year_1;
-                        //     $remain_year_2 = $remianDay;
-                        //     $remain_year_3 = 0;
-                        //     $totalDays = $defaultDays + 3;
-                        // }
-                        
+                        $totalRequestLeaves = self:: totalRequestLeave($item->id);
                         LeaveAllocation::where('employee_id',$item->id)->update([
                             'default_annual_leave'  => $defaultDays,
                             'default_sick_leave'  => $sick_leave,
                             'default_special_leave'  => $special_leave,
                             'default_unpaid_leave'  => 0,
-                            'total_annual_leave'  => $defaultDays,
-                            'total_sick_leave'  => $sick_leave,
-                            'total_special_leave'  => $special_leave,
+                            'total_annual_leave'  => ($defaultDays - $totalRequestLeaves["total_annual_leave"]),
+                            'total_sick_leave'  => ($sick_leave - $totalRequestLeaves["total_sick_leave"]),
+                            'total_special_leave'  => ($special_leave - $totalRequestLeaves["total_special_leave"]),
                             'total_unpaid_leave'  => 0,
                             'year_1'  => $remain_year_1,
                             'year_2'  => $remain_year_2,
