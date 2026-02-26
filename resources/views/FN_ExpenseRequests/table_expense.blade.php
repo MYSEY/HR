@@ -258,7 +258,7 @@
                                     </td>
                                     <td>$ {{ number_format($item->ge_total_amount_usd, 2) }}</td>
                                     <td>
-                                        {{ $item->type == "2" ? '$ ' . number_format($item->te_total_tax, 2) : '៛ ' . number_format($item->ge_total_amount_riel, 2) }}
+                                        {{ $item->type == "2" ? '៛ ' . number_format($item->te_total_tax, 2) : '៛ ' . number_format($item->ge_total_amount_riel, 2) }}
                                     </td>
 
                                     @if(count($item->References) <= 1 && isset($item->References[0]->file_upload))
