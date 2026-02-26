@@ -160,8 +160,11 @@
             if (datas.expense_type == "1") {
                 text_expense_type = "Regular Expense";
             }
-            if (datas.expense_type == "2") {  
+            if (datas.expense_type == "2" && datas.type !="2") {  
                 text_expense_type = "Irregular Expense";
+            }
+            if (datas.type =="2") {  
+                text_expense_type = "Tax Expense";
             }
             if (datas.expense_type == "0") { 
                 let asset = "";

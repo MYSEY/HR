@@ -90,7 +90,7 @@ class SyncHrDataToPgsql extends Command
     {
         $this->info('Syncing employees...');
 
-      User::whereIn('emp_status', ['Probation','2','3','4','5','6','7','8','9','10'])
+      User::whereIn('emp_status', ['Probation','1','2','3','4','5','6','7','8','9','10'])
         ->with(['branch', 'employeeGender'])
         ->chunk(300, function ($users) {
 
