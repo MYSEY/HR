@@ -340,10 +340,17 @@
             </td>
            <td class="text-center">
                 <select class="form-control goal-type-select" name="goal_type[]">
-                    <option value="number">Number</option>
-                    <option value="date">Date</option>
-                    <option value="currency">Currency</option>
-                    <option value="percent">Percent</option>
+                    <option value="number_increment">Number Increment</option>
+                    <option value="number_decrement">Number Decrement</option>
+
+                    <option value="percent_increment">Percent Increment</option>
+                    <option value="percent_decrement">Percent Decrement</option>
+
+                    <option value="currency_increment">Currency Increment</option>
+                    <option value="currency_decrement">Currency Decrement</option>
+
+                    <option value="date_increment">Date Increment</option>
+                    <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
                     <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
@@ -372,10 +379,17 @@
             </td>
             <td class="text-center">
                 <select class="form-control goal-type-select" name="goal_type[]">
-                    <option value="number">Number</option>
-                    <option value="date">Date</option>
-                    <option value="currency">Currency</option>
-                    <option value="percent">Percent</option>
+                    <option value="number_increment">Number Increment</option>
+                    <option value="number_decrement">Number Decrement</option>
+
+                    <option value="percent_increment">Percent Increment</option>
+                    <option value="percent_decrement">Percent Decrement</option>
+
+                    <option value="currency_increment">Currency Increment</option>
+                    <option value="currency_decrement">Currency Decrement</option>
+
+                    <option value="date_increment">Date Increment</option>
+                    <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
                     <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
@@ -425,10 +439,17 @@
             </td>
             <td class="text-center">
                 <select class="form-control goal-type-select" name="goal_type[]">
-                    <option value="number">Number</option>
-                    <option value="date">Date</option>
-                    <option value="currency">Currency</option>
-                    <option value="percent">Percent</option>
+                    <option value="number_increment">Number Increment</option>
+                    <option value="number_decrement">Number Decrement</option>
+
+                    <option value="percent_increment">Percent Increment</option>
+                    <option value="percent_decrement">Percent Decrement</option>
+
+                    <option value="currency_increment">Currency Increment</option>
+                    <option value="currency_decrement">Currency Decrement</option>
+
+                    <option value="date_increment">Date Increment</option>
+                    <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
                     <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>

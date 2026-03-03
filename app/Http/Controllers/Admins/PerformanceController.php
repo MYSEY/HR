@@ -82,9 +82,9 @@ class PerformanceController extends Controller
             }
             
             if (in_array(Auth::user()->RolePermission, ['HR','HRAdmin','HOD'])) {
-                $query->where("users.department_id", Auth::user()->department_id);
-                $query->where("performances.review_employee_id", Auth::user()->id);
-                $query->where("users.branch_id", Auth::user()->branch_id);
+                // $query->where("users.department_id", Auth::user()->department_id);
+                // $query->where("performances.review_employee_id", Auth::user()->id);
+                // $query->where("users.branch_id", Auth::user()->branch_id);
                 $query->whereIn('performances.status', ['preparing','accepted']);
             }
             if (in_array(Auth::user()->RolePermission, ['BM'])){
@@ -203,14 +203,6 @@ class PerformanceController extends Controller
                 foreach ($request->employee_id as $empId) {
 
                     $user = User::with("branch")->where('id', $empId)->select('id','department_id','branch_id','line_manager', 'number_employee', 'employee_name_kh', 'employee_name_en', 'emp_status')->first();
-                    $type = $user->emp_status === 'Probation' ? 'KPI Probation ' . Carbon::parse($request->from_date)->format('Y') : 'KPI Form ' . Carbon::parse($request->from_date)->format('Y');
-                    $data = $request->all();
-                    $data['created_by'] = Auth::id();
-                    $data['employee_id'] = $empId;
-                    $data['total_weight'] = $totalWeight;
-                    $data['status'] = 'prepare';
-                    $data['type'] = $type;
-                
                     $type = $user->emp_status === 'Probation' ? 'KPI Probation ' . Carbon::parse($request->from_date)->format('Y') : 'KPI Form ' . Carbon::parse($request->from_date)->format('Y');
                     $data = $request->all();
                     $data['created_by'] = Auth::id();
