@@ -266,18 +266,80 @@ class PerformanceController extends Controller
                                 //     if (!$isValidGoal) { break; }
                                 // }
 
+                                // foreach ($lines as $line) {
+                                //     $parts = preg_split('/\s+/', trim($line));
+                                //     if (count($parts) !== 2) { $isValidGoal = false; break; }
+                                //     [$min, $max] = $parts;
+                                //     if (str_contains($goalType, 'number') || str_contains($goalType, 'percent') || str_contains($goalType, 'currency')) {
+                                //         if (!is_numeric($min) || !is_numeric($max)) {
+                                //             $isValidGoal = false;
+                                //             break;
+                                //         }
+                                //     }
+                                //     elseif (str_contains($goalType, 'date')) {
+                                //         try {
+                                //             $min = Carbon::parse($min);
+                                //             $max = Carbon::parse($max);
+                                //         } catch (\Exception $e) {
+                                //             $isValidGoal = false;
+                                //             break;
+                                //         }
+                                //     } else {
+                                //         $isValidGoal = false;
+                                //         break;
+                                //     }
+
+                                //     if ($min < $max)       $current = 'inc';
+                                //     elseif ($min > $max)   $current = 'dec';
+                                //     else                   $current = 'equal';
+                                //     $expected = str_contains($goalType, 'number_increment') ? 'inc' : 'dec';
+
+                                //     if ($current !== 'equal' && $current !== $expected) {
+                                //         $isValidGoal = false;
+                                //         break;
+                                //     }
+                                // }
+        
+                                
+
                                 foreach ($lines as $line) {
-                                    $parts = preg_split('/\s+/', trim($line));
-                                    if (count($parts) !== 2) { $isValidGoal = false; break; }
+
+                                    $line = trim($line);
+                                    if ($line === '') continue; // skip empty lines
+
+                                    $parts = preg_split('/\s+/', $line);
+
+                                    if (count($parts) !== 2) {
+                                        $isValidGoal = false;
+                                        break;
+                                    }
+
                                     [$min, $max] = $parts;
-                                    // Parse numeric/date types
-                                    if (str_contains($goalType, 'number') || str_contains($goalType, 'percent') || str_contains($goalType, 'currency')) {
+
+                                    if (
+                                        str_contains($goalType, 'number') ||
+                                        str_contains($goalType, 'percent') ||
+                                        str_contains($goalType, 'currency')
+                                    ) {
+
                                         if (!is_numeric($min) || !is_numeric($max)) {
                                             $isValidGoal = false;
                                             break;
                                         }
-                                    }
-                                    elseif (str_contains($goalType, 'date')) {
+
+                                        $min = (float)$min;
+                                        $max = (float)$max;
+
+                                        // Optional percent validation
+                                        if (str_contains($goalType, 'percent')) {
+                                            if ($min < 0 || $max > 100) {
+                                                $isValidGoal = false;
+                                                break;
+                                            }
+                                        }
+
+                                    } elseif (str_contains($goalType, 'date')) {
+
                                         try {
                                             $min = Carbon::parse($min);
                                             $max = Carbon::parse($max);
@@ -285,25 +347,25 @@ class PerformanceController extends Controller
                                             $isValidGoal = false;
                                             break;
                                         }
+
                                     } else {
                                         $isValidGoal = false;
                                         break;
                                     }
 
-                                    // Determine increment or decrement
                                     if ($min < $max)       $current = 'inc';
                                     elseif ($min > $max)   $current = 'dec';
                                     else                   $current = 'equal';
-                                    // Assign direction based on goal type
+
+                                    // ✅ FIXED HERE
                                     $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
 
-                                    // "equal" is allowed for both increment & decrement
                                     if ($current !== 'equal' && $current !== $expected) {
                                         $isValidGoal = false;
                                         break;
                                     }
                                 }
-        
+
                                 if (!$isValidGoal) {
                                     DB::rollBack();
                                     return response()->json([
