@@ -56,7 +56,7 @@
                                         <th style="min-width: 450px;">(KPI)</th>
                                         <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 350px;">គោលដៅ (Goal)</th>
-                                        <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
+                                        <th style="min-width: 150px;">ទម្ងន់ (Weight%)</th>
                                         <th style="min-width: 150px;">Is Lock</th>
                                         <th>@lang('lang.action')</th>
                                     </tr>
@@ -68,7 +68,7 @@
                                                 <input type="text" class="form-control required" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}">
                                             </td>
                                             <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"><p id="total_weight">0</p></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
@@ -113,12 +113,12 @@
                                                             <option value="date_decrement">Date Decrement</option>
                                                         </select>
                                                         <div class="goal-input-wrapper mt-1">
-                                                            <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 to 70&#10;70 to 80&#10;90 to 100"></textarea>
+                                                            <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 to 70&#10;70 to 80&#10;90 to 100"></textarea>
                                                         </div>
                                                     </td>
 
                                                     <td class="text-center">
-                                                        <input type="number" step="any" class="form-control required" name="weight[]" id="weight" placeholder="%" value="{{old('weight')}}">
+                                                        <input type="number" step="any" class="form-control required weight" name="weight[]" id="weight" placeholder="%" value="{{old('weight')}}">
                                                     </td>
                                                     <td class="text-center">
                                                         <select class="form-control" name="is_lock[]" id="is_lock" required>
@@ -218,6 +218,23 @@
             $(this).closest('tr').nextAll().remove();
             $(this).closest('tr').remove(); // Remove the current tr as well
         });
+        $(document).on('input', '.weight', function () {
+            let total = 0;
+            $('.weight').each(function () {
+                let value = parseFloat($(this).val()) || 0;
+                // Validate 0–100 per field
+                if (value < 0 || value > 100) {
+                    $(this).css("border-color", "red");
+                    value = 0;
+                } else {
+                    $(this).css("border-color", "");
+                }
+                total += value;
+            });
+
+            // Update <p> text (NOT .val())
+            $('#total_weight').text(total);
+        });
         $(document).ready(function() {
             // Attach event listeners to inputs with class .weight and .score_achieved
             $('#tbl_performance').on('input', '.weight', function () {
@@ -308,6 +325,14 @@
                             }, 2000);
                             $('#performanceForm').trigger("reset");
                         } else if (response.message === 'not_goal') {
+                            console.log(response.message);
+                            
+                            // $(".goal").css("border-color","red");
+                            $(".goal").each(function(){
+                                if($(this).val()==""){
+                                    $(this).css("border-color","red");
+                                }
+                            });
                             toastr.error(response.error || 'Invalid goal format for type'+' '+response.goal_type || 'Error');
                         } else {
                             toastr.error(response.message || 'សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%', 'Error');
@@ -395,7 +420,7 @@
                     <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required weight" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>
                     <option value="0">No</option>
@@ -455,7 +480,7 @@
                     <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required weight" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>
                     <option value="0">No</option>

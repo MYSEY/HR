@@ -92,8 +92,9 @@ class PerformanceController extends Controller
                 $query->whereNot("users.id", Auth::user()->id);
             }
             if (in_array(Auth::user()->RolePermission, ['DHOD','DBM'])){
-                $query->where("users.line_manager", Auth::user()->id);
-                $query->OrWhere("performances.employee_id", Auth::user()->id);
+                // $query->where("users.line_manager", Auth::user()->id);
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->orWhere("performances.employee_id", Auth::user()->id);
                 $query->whereIn('performances.status', ['preparing','accepted']);
             }
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
