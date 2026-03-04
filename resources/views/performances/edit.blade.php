@@ -60,7 +60,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($data->titles as $item)
-                                    <tr class="title-group">
+                                    <tr class="title-group" style="background-color: #e5e1e1">
                                         <td colspan="2" class="text-center">
                                             <input type="text" class="form-control required" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{ $item->title ?? '' }}">
                                         </td>
@@ -70,7 +70,7 @@
                                         <td colspan="1" class="text-center"></td>
                                     </tr>
                                     @foreach ($item->purposes as $purposeItem)
-                                        <tr class='section-purpose purpose-group' style='text-align: center'>
+                                        <tr class='section-purpose purpose-group' style='text-align: center; background-color: #e5e1e1'>
                                             <td colspan="2" class="text-center">
                                                 <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{ $purposeItem->name ?? '' }}">
                                             </td>
@@ -382,7 +382,7 @@
 
     // Function to create a new purpose row
     function addPurposeRow() {
-        return `<tr class='section-purpose purpose-group' style='text-align: center'>
+        return `<tr class='section-purpose purpose-group' style='text-align: center; background-color: #e5e1e1'>
             <td colspan="2" class="text-center">
                 <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
@@ -425,7 +425,7 @@
     }
     // Function to create a new record row
     function addNewRecord() {
-        return `<tr class='section-purpose kpi-group' style='text-align: center'>
+        return `<tr class='section-purpose kpi-group' style='text-align: center; background-color: #e5e1e1'>
             <td class="text-center">
                 <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
             </td>
@@ -448,7 +448,7 @@
         </tr>`;
     }
     function addMoreRow() {
-        return `<tr class='title-group'>
+        return `<tr class='title-group' style='background-color: #e5e1e1'>
             <td colspan="2" class="text-center">
                 <input type="text" class="form-control required" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}">
             </td>
@@ -459,10 +459,11 @@
                 <a class="btn btn-danger btn-sm btnRemoveMore"><i class="fa fa-plus-circle"></i>Remove More</a>
             </td>
         </tr>
-        <tr class='purpose-group' style='text-align: center'>
+        <tr class='purpose-group' style='text-align: center; background-color: #e5e1e1'>
             <td colspan="2" class="text-center">
                 <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
+            <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center">
