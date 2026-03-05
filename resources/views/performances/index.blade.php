@@ -176,8 +176,9 @@
                                                     <label class="custom-control-label" for="checkAll"></label>
                                                 </div>
                                             </th>
+                                            <th class="text-nowrap sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
                                             <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
-                                            <th class="sorting sorting_asc stuck-scroll-4">@lang('lang.employee_name')</th>
+                                            <th class="sorting sorting_asc">@lang('lang.employee_name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.department')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
@@ -185,7 +186,6 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.to_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.kpi_year')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.total_weight')</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.reason')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
                                         </tr>
@@ -620,54 +620,16 @@
                             if (row.status == "preparing") {
                                 disabledAttr = "disabled";
                             }
-                            // let permission = window.rolePermission;
-                            // alert(permission);
-                            // if (['HOD','BM'].includes(window.rolePermission )) {
-                            // if (permission != 'HOD' || permission != 'BM' ) {
-                            //     disabledAttr = "disabled";
-                            // }
-
                             return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
                                 <input type="checkbox" class="custom-control-input sub_chk" ${disabledAttr} name="checkbox" data-status="${row.status}" data-id="${data}" id="${data}" value="${data}">
                                 <label class="custom-control-label" for="${data}"></label>
                             </div>`;
                         }
                     },
-                    { 
-                        data: 'number_employee', 
-                        name: 'number_employee',
-                        className: 'stuck-scroll-3',
-                        orderable: true,
-                        searchable: true,
-                    },
-                    { 
-                        data: 'employee_name_kh', 
-                        name: 'employee_name_kh',
-                        className: 'stuck-scroll-3',
-                        orderable: true,
-                        searchable: true,
-                    },
-                    { 
-                        data: 'branch_name_en', 
-                        name: 'branch_name_en',
-                        orderable: true,
-                        searchable: true,
-                    },
-                    { data: 'dep_name', name: 'dep_name' },
-                    { data: 'positions_name', name: 'positions_name' },
-                    { data: 'from_date', name: 'from_date' },
-                    { data: 'to_date', name: 'to_date' },
-                    { data: 'type', name: 'type' },
-                    {
-                        data: 'total_weight',
-                        name: 'total_weight',
-                        render: function (data, type, row) {
-                            return data !== null ? data + '%' : '';
-                        }
-                    },
                     {
                         data: 'status',
                         name: 'status',
+                        className: 'stuck-scroll-3',
                         orderable: true,
                         searchable: true,
                         render: function (data, type, row) {
@@ -693,25 +655,68 @@
                             }
                             if(row.employee_id != userIdLog && row.status === 'preparing'){
                                 return `
-                                    <span class="badge badge-warning">Preparing</span>
+                                    <span class="badge bg-inverse-info" style="font-size: 13px;">Preparing</span>
                                 `;
                             }
-                            let status_text ="";
+                            let statusText = "";
+                            if (row.status == "preparing") {
+                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Preparing</span>';
+                            }
                             if (row.status == "accepted") {
-                                status_text ="Accepted";
+                                statusText = '<span class="badge bg-inverse-success" style="font-size: 13px;">Accepted</span>';
                             }
                             if (row.status == "1") {
-                                status_text ="Review";
+                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending Review</span>';
+                            }
+                            if (row.status == "2") {
+                                statusText = '<span class="badge bg-inverse-warning" style="font-size: 13px;">Pending Accepted</span>';
                             }
                             if (row.status == "3") {
-                                status_text ="Verify";
+                                statusText = '<span class="badge bg-inverse-warning" style="font-size: 13px;">Pending Verify</span>';
+                            }
+                            if (row.status == "4") {
+                                statusText = '<span class="badge bg-inverse-warning" style="font-size: 13px;">Pending Approve</span>';
                             }
                             if (row.status == "5") {
-                                return `<span class="badge bg-inverse-danger" style="font-size: 13px;">@lang('lang.return')</span>`;
+                                statusText = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Return</span>';
+                            }
+                            if (row.status == "approved") {
+                                statusText = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
                             }
                             return `
-                                <span class="badge badge-info">${status_text}</span>
+                                ${statusText}
                             `;
+                        }
+                    },
+                    { 
+                        data: 'number_employee', 
+                        name: 'number_employee',
+                        className: 'stuck-scroll-3',
+                        orderable: true,
+                        searchable: true,
+                    },
+                    { 
+                        data: 'employee_name_kh', 
+                        name: 'employee_name_kh',
+                        orderable: true,
+                        searchable: true,
+                    },
+                    { 
+                        data: 'branch_name_en', 
+                        name: 'branch_name_en',
+                        orderable: true,
+                        searchable: true,
+                    },
+                    { data: 'dep_name', name: 'dep_name' },
+                    { data: 'positions_name', name: 'positions_name' },
+                    { data: 'from_date', name: 'from_date' },
+                    { data: 'to_date', name: 'to_date' },
+                    { data: 'type', name: 'type' },
+                    {
+                        data: 'total_weight',
+                        name: 'total_weight',
+                        render: function (data, type, row) {
+                            return data !== null ? data + '%' : '';
                         }
                     },
                     { data: 'reason', name: 'reason' },

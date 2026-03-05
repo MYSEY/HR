@@ -70,6 +70,7 @@ class PerformanceAdminController extends Controller
                 'reviewEmployee.employee_name_kh as review_employee_name_kh',
                 'reviewEmployee.employee_name_en as review_employee_name_en',
             )
+            ->whereNot('performances.status', 'approved')
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -95,21 +96,13 @@ class PerformanceAdminController extends Controller
                 });
             }
             
-            if (in_array(Auth::user()->RolePermission, ['HR']) && $permission->is_access != "1") {
+            if (in_array(Auth::user()->RolePermission, ['HRAdmin','developer','admin']) || (in_array(Auth::user()->RolePermission, ['HR']) && $permission->is_access == "1")) {
+               
+            }else{
                 $query->where("performances.review_employee_id", Auth::user()->id);
-                $query->whereNot('performances.status', 'preparing');
-                $query->whereNot('performances.status', 'approved');
             }
-
-            if (in_array(Auth::user()->RolePermission, ['BOD','CEO','HOD','DHOD','BM','DBM','Employee'])) {
-                $query->where('performances.review_employee_id', Auth::user()->id);
-                $query->whereNot('performances.status', 'preparing');
-                $query->whereNot('performances.status', 'approved');
-            }
-            if (in_array(Auth::user()->RolePermission, ['Employee'])) {
-                $query->where('performances.employee_id', Auth::user()->id);
-            }
-            $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
+            
+            $recordsTotal = Performance::where('status', 'approved')->where("performances.review_employee_id", Auth::user()->id)->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
