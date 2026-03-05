@@ -98,63 +98,65 @@
                 </div>
             </div>
         </div>
-        <div class="row filter-btn"> 
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
-                <div class="form-group">
-                    <div class="search">
-                        <i class="uil uil-search"></i>
-                        <input spellcheck="false" id="employee_id" name="employee_id" class="form-control" type="text" placeholder="Employee ID">
+        @if (Auth::user()->RolePermission !="Employee")
+            <div class="row filter-btn"> 
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
+                    <div class="form-group">
+                        <div class="search">
+                            <i class="uil uil-search"></i>
+                            <input spellcheck="false" id="employee_id" name="employee_id" class="form-control" type="text" placeholder="Employee ID">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                <div class="form-group ">
-                    <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <div class="form-group ">
+                        <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                    <div class="form-group">
-                        <select class="select form-control hr-select2-option" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
-                            @foreach ($branch as $item)
-                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                @endif
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                    <div class="form-group">
-                        <select class="select form-control hr-select2-option" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
-                            @foreach ($department as $item)
-                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                @endif
-            </div>
-            <div class="col-sm-2 col-md-2">
-                <div style="display: flex">
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
-                        <span class="btn-txt"><i class="fa fa-search"></i></span>
-                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                    </button>
-                    {{-- @if (permissionAccess("m4-s2","is_export")->value == "1")
-                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
-                            <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
-                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+                        <div class="form-group">
+                            <select class="select form-control hr-select2-option" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                                @foreach ($branch as $item)
+                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+                        <div class="form-group">
+                            <select class="select form-control hr-select2-option" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
+                                @foreach ($department as $item)
+                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
+                </div>
+                <div class="col-sm-2 col-md-2">
+                    <div style="display: flex" class="float-end">
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
+                            <span class="btn-txt"><i class="fa fa-search"></i></span>
+                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                         </button>
-                    @endif --}}
-                    <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
-                        <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
-                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                    </button>
+                        {{-- @if (permissionAccess("m4-s2","is_export")->value == "1")
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                                <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
+                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            </button>
+                        @endif --}}
+                        <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                            <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
@@ -184,6 +186,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.kpi_year')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.total_weight')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.reason')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
@@ -457,7 +460,7 @@
                                         type: "success",
                                         icon: true
                                     }).show();
-                                    window.location.replace("{{ URL('performance-admin') }}");
+                                    window.location.replace("{{ URL('performance') }}");
                                 } else if(response.data.message == 'weight_must_be_exactly'){
                                     new Noty({
                                         title: "",
@@ -617,6 +620,13 @@
                             if (row.status == "preparing") {
                                 disabledAttr = "disabled";
                             }
+                            // let permission = window.rolePermission;
+                            // alert(permission);
+                            // if (['HOD','BM'].includes(window.rolePermission )) {
+                            // if (permission != 'HOD' || permission != 'BM' ) {
+                            //     disabledAttr = "disabled";
+                            // }
+
                             return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
                                 <input type="checkbox" class="custom-control-input sub_chk" ${disabledAttr} name="checkbox" data-status="${row.status}" data-id="${data}" id="${data}" value="${data}">
                                 <label class="custom-control-label" for="${data}"></label>
@@ -661,97 +671,84 @@
                         orderable: true,
                         searchable: true,
                         render: function (data, type, row) {
-                            // 1️⃣ ROLE: DHOD / DBM (Manager-level)
-                            if (['DHOD', 'DBM','HOD','BM','BOD'].includes(window.rolePermission)) {
-                                // Manager only controls their employee or themselves
-                                const isOwner = row.line_manager == window.userId || row.employee_id == window.userId;
-                                if (isOwner) {
-                                    // 📌 If status = accepted → show "Assign to"
-                                    if (row.status === 'accepted') {
-                                        return `
-                                            <div class="dropdown action-label">
-                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" 
-                                                href="#" data-toggle="dropdown">
-                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                    <span>Accepted</span>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" 
-                                                    id="btnAsignTo" 
-                                                    data-id="${row.id}" 
-                                                    data-status="${row.status}">
-                                                        <i class="fa fa-dot-circle-o text-primary"></i>
-                                                        <span>@lang("lang.asign_to")</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        `;
-                                    }
-                                    // 📌 If status = preparing → manager cannot change → just show
-                                    if (row.status === 'preparing') {
-                                        return `
-                                            <span class="badge badge-warning">Preparing</span>
-                                        `;
-                                    }
-                                }
-                                // Not owner → show only view
+                            if (row.employee_id == userIdLog && row.status === 'preparing') {
                                 return `
-                                    <span class="badge badge-info">${row.status}</span>
+                                    <div class="dropdown action-label">
+                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" 
+                                        href="#" data-toggle="dropdown">
+                                            <i class="fa fa-dot-circle-o text-warning"></i>
+                                            <span>Preparing</span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" 
+                                            id="btnAccepted" 
+                                            data-id="${row.id}" 
+                                            data-status="${row.status}">
+                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                <span>@lang('lang.accepted')</span>
+                                            </a>
+                                        </div>
+                                    </div>
                                 `;
                             }
-                            // 2️⃣ ROLE: Normal users
-                            else {
-                                // PREPARING → User can accept
-                                if (row.status === 'preparing') {
-                                    return `
-                                        <div class="dropdown action-label">
-                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" 
-                                            href="#" data-toggle="dropdown">
-                                                <i class="fa fa-dot-circle-o text-warning"></i>
-                                                <span>Preparing</span>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" 
-                                                id="btnAccepted" 
-                                                data-id="${row.id}" 
-                                                data-status="${row.status}">
-                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                    <span>@lang('lang.accepted')</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    `;
-                                }
-                                // ACCEPTED → Normal user cannot change
-                                if (row.status === 'accepted') {
-                                    return `
-                                        <span class="badge badge-info">Accepted</span>
-                                    `;
-                                }
+                            if(row.employee_id != userIdLog && row.status === 'preparing'){
+                                return `
+                                    <span class="badge badge-warning">Preparing</span>
+                                `;
                             }
-                            // 3️⃣ DEFAULT fallback
+                            let status_text ="";
+                            if (row.status == "accepted") {
+                                status_text ="Accepted";
+                            }
+                            if (row.status == "1") {
+                                status_text ="Review";
+                            }
+                            if (row.status == "3") {
+                                status_text ="Verify";
+                            }
+                            if (row.status == "5") {
+                                return `<span class="badge bg-inverse-danger" style="font-size: 13px;">@lang('lang.return')</span>`;
+                            }
                             return `
-                                <span class="badge badge-secondary">Unknown</span>
+                                <span class="badge badge-info">${status_text}</span>
                             `;
                         }
                     },
+                    { data: 'reason', name: 'reason' },
                     {
                         data: null,
                         name: 'action',
                         orderable: true,
                         searchable: true,
                         render: function (data, type, row) {
+                            let actionHtml = `<a class="dropdown-item" href="{{url('performance')}}/${row.id}">
+                                                <i class="fa fa-regular fa-eye"></i> Preview
+                                            </a>`;
+                            if (row.status == "preparing" || row.status == "5") {
+                                actionHtml += `
+                                    <a href="{{url('/performance')}}/${row.id}/edit" 
+                                    class="dropdown-item" data-id="${row.id}">
+                                        <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')
+                                    </a>
+                                `;
+                            }
+
+                            if (row.status == "preparing" && userPermission.is_delete == 1 || row.status == "5") {
+                                actionHtml += `
+                                    <a class="dropdown-item performanceDelete" 
+                                    href="#" data-toggle="modal" data-id="${row.id}">
+                                        <i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')
+                                    </a>
+                                `;
+                            }
                             return `
                                 <div class="dropdown dropdown-action">
-                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                    <a href="#" class="action-icon dropdown-toggle" 
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="material-icons">more_vert</i>
+                                    </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="{{url('performance')}}/${row.id}">
-                                            <i class="fa fa-regular fa-eye"></i> Preview
-                                        </a>
-                                        <a href="{{url('/performance')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
-                                            <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')
-                                        </a>
-                                        <a class="dropdown-item performanceDelete" href="#" data-toggle="modal" data-id="${row.id}"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                        ${actionHtml}
                                     </div>
                                 </div>
                             `;

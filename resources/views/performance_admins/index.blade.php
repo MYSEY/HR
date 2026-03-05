@@ -127,7 +127,7 @@
                 @endif
             </div>
             <div class="col-sm-2 col-md-2">
-                <div style="display: flex">
+                <div style="display: flex" class="float-end">
                     <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
                         <span class="btn-txt"><i class="fa fa-search"></i></span>
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -274,7 +274,7 @@
                     var titleText = "";
                     var formContent = "";
                     var columnClassText = 'col-md-4';
-                    if (condistionStatus == 1 ||  condistionStatus == 2 || condistionStatus == 3 || condistionStatus == "approved") {
+                    if (condistionStatus == 1 ||  condistionStatus == "accepted" || condistionStatus == 3 || condistionStatus == "approved") {
                         titleText = '@lang("lang.asign_to_employee")';
                         columnClassText = 'col-md-6'
                         formContent = ''+
@@ -285,7 +285,7 @@
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
                                     '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
                                      '<label class="container-checkbox">Accepted'+
-                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
+                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="accepted"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
                                     '<label class="container-checkbox">Verify'+
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+

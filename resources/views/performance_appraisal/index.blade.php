@@ -86,11 +86,9 @@
                         <li class="breadcrumb-item active">@lang('lang.performance_appraisal')</li>
                     </ul>
                 </div>
-                @if (Auth::user()->RolePermission == 'Employee' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'DBM' || Auth::user()->RolePermission == 'developer')
+                @if ($permission->is_import == 1 || Auth::user()->RolePermission == 'developer')
                     <div class="col-auto float-end ms-auto">
-                        {{-- @if (permissionAccess("m4-s2","is_import")->value == "1") --}}
-                            <a href="#" class="btn add-btn" data-toggle="modal" id="importKPI"><i class="fa fa-plus"></i>@lang('lang.import')</a>
-                        {{-- @endif --}}
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="importKPI"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     </div>
                 @endif
             </div>
@@ -135,12 +133,12 @@
                 @endif
             </div>
             <div class="col-sm-2 col-md-2">
-                <div style="display: flex">
+                <div style="display: flex" class="float-end">
                     <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
                         <span class="btn-txt"><i class="fa fa-search"></i></span>
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
-                    @if (Auth::user()->RolePermission == 'Employee' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'DBM' || Auth::user()->RolePermission == 'developer')
+                    @if ($permission->is_export == 1 || Auth::user()->RolePermission == 'developer')
                         {{-- @if (permissionAccess("m4-s2","is_export")->value == "1") --}}
                             <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
                                 <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
@@ -645,6 +643,9 @@
                         className: 'stuck-scroll-3',
                         render: function (data, type, row) {
                             let statusText = "";
+                            if (row.status == "new") {
+                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">New</span>';
+                            }
                             if (row.status == "preparing") {
                                 statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Preparing</span>';
                             }
@@ -685,7 +686,7 @@
                             if (row.status == 4) {
                                 textBtn = "@lang('lang.approved')";
                             }
-                            if (userIdLog == data.review_employee_id || userPermission.is_access == 1 && (row.status !="preparing" && row.status != "approved")) {
+                            if ((userIdLog == data.employee_id && row.status =="new") || ((userIdLog == data.review_employee_id && row.status !="new") && row.status != "approved")) {
                                 return `
                                     <a class="btn btn-white btn-sm btn-rounded btn-asign" 
                                     data-id="${row.id}" 
@@ -722,24 +723,23 @@
                                             <i class="fa fa-regular fa-eye"></i> Preview
                                         </a>
                             `;
-
-                            // ✅ Add conditionally based on userRole
-                            if (userRole =='Employee') {
+                            if ((userIdLog == data.employee_id && row.status =="new") || (userPermission.is_update == 1  && (userIdLog == data.review_employee_id && row.status =="new"))){
                                 actionHtml += `
                                     <a class="dropdown-item" href="{{ url('performance-appraisal') }}/${row.id}">
                                         <i class="fa fa-regular fa-pencil"></i> Update Progress
                                     </a>
                                 `;
                             }
-
-                            // ✅ Always add Export link
-                            actionHtml += `
-                                        <a class="dropdown-item" href="{{ url('performance/appraisal/export') }}/${row.id}">
-                                            <i class="fa fa-regular fa-download"></i> Export Template
-                                        </a>
+                            if (userPermission.is_export == 1) {
+                                actionHtml += `
+                                            <a class="dropdown-item" href="{{ url('performance/appraisal/export') }}/${row.id}">
+                                                <i class="fa fa-regular fa-download"></i> Export Template
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                            `;
+                                `;
+                            }
+                            
                             return actionHtml;
                         }
                     }
