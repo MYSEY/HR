@@ -274,7 +274,7 @@
                     var titleText = "";
                     var formContent = "";
                     var columnClassText = 'col-md-4';
-                    if (condistionStatus == 1 ||  condistionStatus == "accepted" || condistionStatus == 3 || condistionStatus == "approved") {
+                    if (condistionStatus == 1 ||  condistionStatus == 2 || condistionStatus == 3 || condistionStatus == "approved") {
                         titleText = '@lang("lang.asign_to_employee")';
                         columnClassText = 'col-md-6'
                         formContent = ''+
@@ -285,7 +285,7 @@
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
                                     '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
                                      '<label class="container-checkbox">Accepted'+
-                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="accepted"> <span class="checkmark"></span>'+
+                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
                                     '<label class="container-checkbox">Verify'+
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
@@ -831,7 +831,7 @@
                         searchable: false,
                         render: function(data, type, row) {
                             let disabledAttr = "";
-                            if (row.status == "preparing") {
+                            if (row.review_employee_id != userIdLog) {
                                 disabledAttr = "disabled";
                             }
                             return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
@@ -850,6 +850,9 @@
                             let statusText = "";
                             if (row.status == "preparing") {
                                 statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Preparing</span>';
+                            }
+                            if (row.status == "accepted") {
+                                statusText = '<span class="badge bg-inverse-success" style="font-size: 13px;">Accepted</span>';
                             }
                             if (row.status == "1") {
                                 statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending Review</span>';

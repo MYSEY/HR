@@ -72,6 +72,9 @@
                                                         @if ($item->status == "1") 
                                                             <span class="badge bg-inverse-info" style="font-size: 13px;">Pending Review</span>
                                                         @endif
+                                                        @if ($item->status == "accepted") 
+                                                            <span class="badge bg-inverse-warning" style="font-size: 13px;">Accepted</span>
+                                                        @endif
                                                         @if ($item->status == "2") 
                                                             <span class="badge bg-inverse-warning" style="font-size: 13px;">Pending Accepted</span>
                                                         @endif

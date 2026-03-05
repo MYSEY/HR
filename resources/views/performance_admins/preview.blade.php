@@ -142,10 +142,13 @@
                                         <th style="min-width: 450px;">(KPI)</th>
                                         <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 250px;">គោលដៅ (Goal)</th>
-                                        <th>ទម្ងន់ (Weight %)</th>
+                                        <th>ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbl_performance">
+                                    @php
+                                        $total_weight = 0;
+                                    @endphp
                                     @foreach ($data->titles as $item)
                                         <tr>
                                             <td colspan="2" class="text-center">
@@ -165,6 +168,9 @@
                                             </tr>
                                             
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
+                                                @php
+                                                    $total_weight += $Detailitem->weight;
+                                                @endphp
                                                 <tr>
                                                     <td class="text-center">
                                                         <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
@@ -190,6 +196,7 @@
                                             @endforeach
                                         @endforeach
                                     @endforeach
+                                    <input type="number" class="preview_total_weight" hidden value="{{$total_weight}}">
                                 </tbody>
                             </table>
                         </div>
@@ -231,6 +238,7 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(document).ready(function () {
+        $("#total_weight").text($(".preview_total_weight").val());
         document.querySelectorAll('.score_achieved').forEach(input => {
             input.addEventListener('input', function () {
                 let val = parseFloat(this.value);
