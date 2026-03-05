@@ -205,8 +205,10 @@
 
                 <div class="submit-section mb-2">
                     <input type="text" name="performance_id" id="performance_id" value="{{ $data->id }}" hidden>
+                    @if ($data->employee_id == Auth::user()->id && $data->status === 'preparing' || $data->status == "5")
+                        <a href="javascript:" class="btn btn-success" id="btnAccepted">@lang('lang.accepted')</a>
+                    @endif
                     <a href="{{ url('performance') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
-                    <a href="javascript:" class="btn btn-success" id="btnAccepted">@lang('lang.accepted')</a>
                 </div>
             </form>
         </div>

@@ -28,13 +28,13 @@ class PerformanceAppraisalController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function permission(){
-        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "performance-admin")->first();
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "performance-appraisal")->first();
         return $permission;
     }
     public function index(Request $request)
     {
         $permission = self::permission();
-        if (!$permission) {
+        if (!$permission || $permission['is_view'] != 1) {
             return view('upgrade.access_page');
         }
         if (request()->ajax()) {
@@ -84,24 +84,39 @@ class PerformanceAppraisalController extends Controller
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
                 });
             }
-            
-            if (in_array(Auth::user()->RolePermission, ['HR'])) {
-                $query->where("performance_appraisals.review_employee_id", Auth::user()->id);
-                $query->whereNot('performance_appraisals.status', 'new');
-                $query->whereNot('performance_appraisals.status', 'approved');
+            if (in_array(Auth::user()->RolePermission, ['HR']) && $permission["is_access"] != 1){
+                $query->where(function ($q) {
+                    $q->whereNot('performance_appraisals.status', 'approved');
+                    $q->where("users.line_manager", Auth::user()->id);   // team under me
+                    $q->orWhere('performance_appraisals.employee_id', Auth::user()->id)
+                    ->orWhere("performance_appraisals.review_employee_id", Auth::user()->id); // my own
+                });
             }
 
-            if (in_array(Auth::user()->RolePermission, ['BOD','CEO','HOD','DHOD','BM','DBM'])) {
-                $query->where('performance_appraisals.review_employee_id', Auth::user()->id);
-                $query->whereNot('performance_appraisals.status', 'new');
+            if (in_array(Auth::user()->RolePermission, ['HOD'])) {
                 $query->whereNot('performance_appraisals.status', 'approved');
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            
+            if (in_array(Auth::user()->RolePermission, ['BM'])) {
+                $query->whereNot('performance_appraisals.status', 'approved');
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+            
+            if (in_array(Auth::user()->RolePermission, ['BOD','CEO','DHOD', 'DBM'])) {
+                $query->where(function ($q) {
+                    $q->whereNot('performance_appraisals.status', 'approved');
+                    $q->orWhere("users.line_manager", Auth::user()->id)   // team under me
+                    ->orWhere("performance_appraisals.review_employee_id", Auth::user()->id); // my own
+                });
             }
 
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
-                $query->where('performance_appraisals.employee_id', Auth::user()->id);
-                $query->where("users.department_id", Auth::user()->department_id);
-                $query->where("users.branch_id", Auth::user()->branch_id);
-                // $query->whereIn('performance_appraisals.status', ['approved','new']);
+                $query->whereNot('performance_appraisals.status', 'approved');
+                $query->where(function ($q) {
+                    $q->where('performance_appraisals.employee_id', Auth::user()->id)
+                    ->orWhere("performance_appraisals.review_employee_id", Auth::user()->id);
+                });
             }
         
             $recordsTotal = PerformanceAppraisal::where('status', 'new')->count();  // total records without filter
@@ -138,7 +153,7 @@ class PerformanceAppraisalController extends Controller
         }
         $branch = Branchs::all();
         $department = Department::all();
-        return view('performance_appraisal.index',compact('branch','department'));
+        return view('performance_appraisal.index',compact('branch','department','permission'));
     }
     public function menualScore(Request $request)
     {

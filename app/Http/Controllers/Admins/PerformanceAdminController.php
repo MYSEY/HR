@@ -44,7 +44,7 @@ class PerformanceAdminController extends Controller
     public function index(Request $request)
     {
         $permission = self::permission();
-        if (!$permission || $permission->is_view != "1") {
+        if (!$permission || $permission["is_view"] != "1") {
             return view('upgrade.access_page');
         }
         if (request()->ajax()) {

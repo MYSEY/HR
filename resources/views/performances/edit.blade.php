@@ -53,12 +53,15 @@
                                     <th style="min-width: 450px;">(KPI)</th>
                                     <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                     <th style="min-width: 350px;">គោលដៅ (Goal)</th>
-                                    <th style="min-width: 150px;">ទម្ងន់ (Weight %)</th>
+                                    <th style="min-width: 150px;">ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
                                     <th style="min-width: 150px;">Is Lock</th>
                                     <th>@lang('lang.action')</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $total_weight = 0;
+                                @endphp
                                 @foreach ($data->titles as $item)
                                     <tr class="title-group" style="background-color: #e5e1e1">
                                         <td colspan="2" class="text-center">
@@ -86,6 +89,10 @@
                                             </td>
                                         </tr>
                                         @foreach ($purposeItem->performanceDetail as $Detailitem)
+                                            @php
+                                                $total_weight += $Detailitem->weight;
+                                            @endphp
+                                            
                                             <tr class="section-purpose kpi-group">
                                                 <td class="text-center">
                                                     <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false"
@@ -131,7 +138,7 @@
                                                 </td>
                                                 
                                                 <td class="text-center">
-                                                    <input type="number" step="any" class="form-control required weight" name="weight[]" id="weight" placeholder="%" value="{{ $Detailitem->weight }}" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                    <input type="number" step="any" class="form-control required sum_total_weight weight" name="weight[]" id="weight" placeholder="%" value="{{ $Detailitem->weight }}" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                 </td>
                                                 @php
                                                     if (in_array(Auth::user()->RolePermission, ['admin', 'HRAdmin', 'developer', 'DHOD', 'DBM'])) {
@@ -165,6 +172,7 @@
                                         @endforeach
                                     @endforeach
                                 @endforeach
+                                <input type="number" class="preview_total_weight" hidden value="{{$total_weight}}">
                             </tbody>
                             <tbody>
                                 <tr>
@@ -200,6 +208,27 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(function() {
+        $("#total_weight").text($(".preview_total_weight").val());
+        $(document).on('input', '.sum_total_weight', function () {
+            let total_weight = 0;
+            $(".sum_total_weight").each(function () {
+                let value = parseFloat($(this).val());
+                if (!isNaN(value)) {
+                    total_weight += value;
+                }
+            });
+            if (total_weight > 100) {
+                new Noty({
+                    title: "Please to check weight",
+                    text: "សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%",
+                    type: "error",
+                    timeout: 5000,
+                    icon: true
+                }).show();
+            }
+            $("#total_weight").text(total_weight);
+        });
+        
         let dataKeyKpi = [];
         $(document).on('change', '.goal-type-select', function () {
             const selectedType = $(this).val();

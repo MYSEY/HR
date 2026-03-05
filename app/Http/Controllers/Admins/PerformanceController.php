@@ -32,11 +32,15 @@ class PerformanceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function permission(){
-        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "performance-admin")->first();
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "performance")->first();
         return $permission;
     }
     public function index(Request $request)
     {
+        $permission = self::permission();
+        if (!$permission || $permission["is_view"] != 1) {
+            return view('upgrade.access_page');
+        }
         if (request()->ajax()) {
             // Define the base query
             $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
@@ -55,7 +59,8 @@ class PerformanceController extends Controller
                 'positions.name_english as positions_name',
                 'branchs.branch_name_en',
                 'branchs.branch_name_kh',
-            )->whereIn('performances.status', ['preparing','accepted'])
+            )
+            // ->whereIn('performances.status', ['preparing','accepted'])
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -80,34 +85,41 @@ class PerformanceController extends Controller
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
                 });
             }
-            
-            if (in_array(Auth::user()->RolePermission, ['HR','HRAdmin','HOD'])) {
-                // $query->where("users.department_id", Auth::user()->department_id);
-                // $query->where("performances.review_employee_id", Auth::user()->id);
-                // $query->where("users.branch_id", Auth::user()->branch_id);
-                $query->whereIn('performances.status', ['preparing','accepted']);
+            if (in_array(Auth::user()->RolePermission, ['BOD','CEO'])){
+                $query->whereNot('performances.status', 'approved');
+                // $query->whereIn('performances.status', ['preparing','accepted']);
+                $query->where(function ($q) {
+                    $q->where("users.line_manager", Auth::user()->id)
+                    ->orWhere("performances.employee_id", Auth::user()->id);
+                });
             }
+            if (in_array(Auth::user()->RolePermission, ['HR']) && $permission["is_access"] != 1){
+                $query->whereNot('performances.status', 'approved');
+                $query->where(function ($q) {
+                    $q->where("users.line_manager", Auth::user()->id)
+                    ->orWhere('performances.employee_id', Auth::user()->id);
+                });
+            }
+            if (in_array(Auth::user()->RolePermission, ['HOD'])) {
+                $query->whereNot('performances.status', 'approved');
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            
             if (in_array(Auth::user()->RolePermission, ['BM'])){
+                $query->whereNot('performances.status', 'approved');
                 $query->where("users.branch_id", Auth::user()->branch_id);
-                $query->whereNot("users.id", Auth::user()->id);
             }
             if (in_array(Auth::user()->RolePermission, ['DHOD','DBM'])){
-                // $query->where("users.line_manager", Auth::user()->id);
-                $query->where("users.department_id", Auth::user()->department_id);
-                $query->orWhere("performances.employee_id", Auth::user()->id);
-                $query->whereIn('performances.status', ['preparing','accepted']);
+                $query->whereNot('performances.status', 'approved');
+                $query->where(function ($q) {
+                    $q->where("users.line_manager", Auth::user()->id)
+                    ->orWhere('performances.employee_id', Auth::user()->id);
+                });
             }
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
                 $query->where('performances.employee_id', Auth::user()->id);
-                $query->whereIn('performances.status', ['preparing','accepted']);
+                $query->whereNot('performances.status', 'approved');
             }
-            if (in_array(Auth::user()->RolePermission, ['BOD','CEO'])){
-                $query->whereNot("users.id", Auth::user()->id);
-                $query->whereNot("roles.role_type", "Employee");
-                $query->whereIn('performances.status', ['preparing','accepted']);
-            }
-
-            $recordsTotal = Performance::whereIn('performances.status', ['preparing','accepted'])->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
@@ -131,8 +143,10 @@ class PerformanceController extends Controller
             $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw' => intval(request()->input('draw')),
-                'recordsTotal' => $recordsTotal,
+                'recordsTotal' => $recordsFiltered,
                 'recordsFiltered' => $recordsFiltered,
+                'userIdLog'=>Auth::user()->id,
+                'permission'=>$permission,
                 'data' => $data
             ]);
         }
@@ -559,12 +573,14 @@ class PerformanceController extends Controller
                 $type = $employee->emp_status === 'KPI Probation' ? "Probation $year" : "KPI Form $year";
 
                 $performance->update([
-                    'employee_id' => $request->employee_id,
-                    'from_date'   => $request->from_date,
-                    'to_date'     => $request->to_date,
-                    'type'        => $type,
-                    'total_weight' => $totalWeight,
-                    'updated_by'  => Auth::id(),
+                    'status'        => 'preparing',
+                    'reason'        => '',
+                    'employee_id'   => $request->employee_id,
+                    'from_date'     => $request->from_date,
+                    'to_date'       => $request->to_date,
+                    'type'          => $type,
+                    'total_weight'  => $totalWeight,
+                    'updated_by'    => Auth::id(),
                 ]);
 
                 /* -------------------------------------------------

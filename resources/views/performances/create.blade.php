@@ -56,7 +56,7 @@
                                         <th style="min-width: 450px;">(KPI)</th>
                                         <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 350px;">គោលដៅ (Goal)</th>
-                                        <th style="min-width: 150px;">ទម្ងន់ (Weight%)</th>
+                                        <th style="min-width: 150px;">ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
                                         <th style="min-width: 150px;">Is Lock</th>
                                         <th>@lang('lang.action')</th>
                                     </tr>
@@ -118,7 +118,7 @@
                                                     </td>
 
                                                     <td class="text-center">
-                                                        <input type="number" step="any" class="form-control required weight" name="weight[]" id="weight" placeholder="%" value="{{old('weight')}}">
+                                                        <input type="number" step="any" class="form-control sum_total_weight required" name="weight[]" id="weight" placeholder="%" value="{{old('weight')}}">
                                                     </td>
                                                     <td class="text-center">
                                                         <select class="form-control" name="is_lock[]" id="is_lock" required>
@@ -168,6 +168,7 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(function() {
+        $(document).on('input', '.sum_total_weight', calculateTotal);
         let dataKeyKpi = [];
         $(document).on('change', '.goal-type-select', function () {
             const selectedType = $(this).val();
@@ -381,7 +382,7 @@
                     <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight required" id="weight" placeholder="%"></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight weight required" id="weight" placeholder="%"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>
                     <option value="0">No</option>
@@ -420,7 +421,7 @@
                     <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required weight" placeholder="%" min="0" value="{{old('weight')}}"></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>
                     <option value="0">No</option>
@@ -480,7 +481,7 @@
                     <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required weight" placeholder="%" min="0" value="{{old('weight')}}"></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>
                     <option value="0">No</option>
@@ -491,5 +492,26 @@
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
         </tr>`;
+    }
+    function calculateTotal() {
+
+        let total_weight = 0;
+
+        $(".sum_total_weight").each(function () {
+            let value = parseFloat($(this).val()) || 0;
+            total_weight += value;
+        });
+
+        if (total_weight > 100) {
+            new Noty({
+                title: "Please to check weight",
+                text: "សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%",
+                type: "error",
+                timeout: 5000,
+                icon: true
+            }).show();
+        }
+
+        $("#total_weight").text(total_weight);
     }
 </script>
