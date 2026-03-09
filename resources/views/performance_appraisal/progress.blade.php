@@ -80,6 +80,7 @@
                                     <th>ប្រធានផ្ទាល់</th>
                                     <th style="min-width: 350px;">កត្តាដែលងាយស្រួល និងលំបាក</th>
                                     <th style="min-width: 350px;">យោបល់/កំណត់សម្គាល់</th>
+                                    <th>ឯកសារយោង</th>
                                 </tr>
                             </thead>
                             @php
@@ -101,6 +102,7 @@
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
                                     </tr>
                                     
                                     @foreach ($item->purposes as $purposeItem)
@@ -108,6 +110,7 @@
                                             <td colspan="2" class="text-center">
                                                 <input type="text" class="form-control" value="{{ $purposeItem->name ?? '' }}" required>
                                             </td>
+                                            <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
@@ -139,6 +142,9 @@
                                                     'total_personnel_score' => 0,
                                                     'total_direct_chairman' => 0,
                                                 ];
+                                                $hasFile = $Detailitem->reference->isNotEmpty();
+                                                $file = $hasFile ? $Detailitem->reference->first() : null;
+                                                $file_name = $file ? $file->reference : '';
                                             @endphp
                                             <tr class="performance-row">
                                                 <td class="text-center" hidden>
@@ -198,6 +204,31 @@
                                                 <td class="text-center">
                                                     <textarea rows="5" class="form-control comment" name="comment[]" placeholder="Enter text here">{{$Detailitem->comment}}</textarea>
                                                 </td>
+                                                <td>
+                                                    <div class="d-flex float-end">
+                                                            <span class="ml-2 text-name-reference" style="display: {{ $hasFile ? 'block' : 'none' }}; margin-right: 10px;">{{ $file_name }}</span>
+                                                            <input type="file" class="pa_reference" 
+                                                                data-performenceid="{{$data->id}}" 
+                                                                data-titleid="{{$item->id}}" 
+                                                                data-purposeid="{{$purposeItem->id}}" 
+                                                                data-id="{{$Detailitem->id}}" 
+                                                                name="reference" 
+                                                                accept=".pdf, .rar, .zip, .xlsx, .xls" style="display: {{ $hasFile ? 'none' : 'block' }}">
+
+                                                        <a href="{{ $hasFile ? url('/performance/view-reference/'.$file->id) : 'javascript:void(0)' }}" 
+                                                            class="btn btn-info btn-sm viewReference" 
+                                                            target="_blank"
+                                                            style="display: {{ $hasFile ? 'block' : 'none' }}; margin-right: 2px;">
+                                                                <i class="fa fa-eye"></i>
+                                                        </a>
+
+                                                        <button type="button" class="btn btn-danger btn-sm removeReference" 
+                                                                data-id="{{ $hasFile ? $file->id : '' }}"
+                                                                style="display: {{ $hasFile ? 'block' : 'none' }}">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     @endforeach
@@ -214,7 +245,7 @@
                                         <td colspan="1" class="text-center">
                                             <input type="text" class="form-control tr_direct_chairman" id="tr_direct_chairman" value="{{ number_format($currentTitleTotal['total_direct_chairman'], 2) }}" readonly>
                                         </td>
-                                        <td colspan="2"></td>
+                                        <td colspan="3"></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -236,6 +267,7 @@
                                     <td colspan="1" class="text-center">
                                         <input type="text" class="form-control" placeholder="" id="total_direct_chairman" value="{{$data->total_score_direct_chairman}}" readonly>
                                     </td>
+                                    <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
                                 </tr>
@@ -273,6 +305,7 @@
                                     </td>
                                     <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -300,6 +333,103 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(document).ready(function () {
+        $(document).on('change', '.pa_reference', function (e) {
+            let fileInput = $(this);
+            let container = fileInput.closest('.d-flex');
+            let removeBtn = container.find('.removeReference');
+            let nameReference = container.find('.text-name-reference');
+            let file = e.target.files[0];
+
+            if (!file) return;
+
+            // ឆែកទំហំ File (5MB)
+            let fileSize = file.size / 1024; // KB
+            if (fileSize > 5120) {
+                new Noty({
+                    text: 'Please check file size less than or equal to 5MB.',
+                    type: "error",
+                    timeout: 5000
+                }).show();
+                fileInput.val("");
+                return false;
+            }
+
+            let formData = new FormData();
+            formData.append('performance_id', fileInput.data("performenceid"));
+            formData.append('title_id', fileInput.data("titleid"));
+            formData.append('purpose_id', fileInput.data("purposeid"));
+            formData.append('detail_id', fileInput.data("id"));
+            formData.append('reference', file);
+            formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+            $.ajax({
+                url: '/performance/upload-reference',
+                type: 'POST',
+                data: formData,
+                processData: false, 
+                contentType: false,
+                success: function (response) {
+                    if(response.status == 200) {
+                        // រក្សាទុក ID ក្នុងប៊ូតុងលុប
+                        let viewBtn = container.find('.viewReference');
+                        viewBtn.attr('href', '/performance/view-reference/' + response.id).show();
+                        removeBtn.attr('data-id', response.id).show();
+                        nameReference.text(response.file_name).show();
+                        fileInput.css('display', "none");
+                        fileInput.prop('disabled', false);
+                        new Noty({
+                            text: 'File uploaded to Drive D successfully',
+                            type: "success",
+                            timeout: 3000
+                        }).show();
+                    }
+                },
+                error: function (xhr) {
+                    fileInput.prop('disabled', false);
+                    let errorMsg = xhr.responseJSON ? xhr.responseJSON.message : 'Something went wrong';
+                    new Noty({ text: errorMsg, type: "error" }).show();
+                }
+            });
+        });
+        $(document).on('click', '.viewReference', function(e) {
+            let url = $(this).attr('href');
+            if(url !== "javascript:void(0)") {
+                window.open(url, '_blank'); // បើកក្នុង Tab ថ្មី
+            }
+        });
+        $(document).on('click', '.removeReference', function () {
+            let btn = $(this); 
+            let dFlexContainer = btn.closest('.d-flex');
+            let fileInput = dFlexContainer.find('.pa_reference');
+            let nameReference = dFlexContainer.find('.text-name-reference');
+            let viewReference = dFlexContainer.find('.viewReference');
+            let id = btn.attr('data-id'); // ទាញយក ID ពីប៊ូតុងផ្ទាល់
+            if (!id) {
+                fileInput.prop('disabled', false).val('');
+                btn.hide();
+                return;
+            }
+            $.ajax({
+                url: '/performance/delete-reference/' + id,
+                type: 'DELETE',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    if(response.status == 200) {
+                        nameReference.css('display', "none");
+                        viewReference.css('display', "none");
+                        fileInput.css('display', "block");
+                        fileInput.val('');
+                        btn.hide().removeAttr('data-id');
+                        new Noty({ text: 'File deleted from Drive D!', type: "success", timeout: 3000 }).show();
+                    }
+                },
+                error: function (xhr) {
+                    alert('Error deleting file.');
+                }
+            });
+        });
+
         $(document).on('change', '#progress', function (e) {
             let $row = $(this).closest('tr');
             let goal = $row.find('.goal').val();

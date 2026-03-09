@@ -79,6 +79,7 @@
                                         <th>ពិន្ទុ (Score)</th>
                                         <th>បុគ្គលិកផ្ទាល់</th>
                                         <th>ប្រធានផ្ទាល់</th>
+                                        <th>ឯកសារយោង</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbl_performance">
@@ -87,6 +88,7 @@
                                             <td colspan="2" class="text-center">
                                                 <input type="text" class="form-control" value="{{ $item->title ?? '' }}" required>
                                             </td>
+                                            <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
@@ -108,9 +110,15 @@
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
+                                                <td colspan="1" class="text-center"></td>
                                             </tr>
                                             
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
+                                                @php
+                                                    $hasFile = $Detailitem->reference->isNotEmpty();
+                                                    $file = $hasFile ? $Detailitem->reference->first() : null;
+                                                    $file_name = $file ? $file->reference : '';
+                                                @endphp
                                                 <tr>
                                                     <td class="text-center">
                                                         <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
@@ -146,6 +154,17 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control direct_chairman" name="direct_chairman[]" placeholder="0" value="{{$Detailitem->score_direct_chairman}}" min="0" id="direct_chairman" readonly>
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex float-end">
+                                                            <span class="ml-2 text-name-reference" style="display: {{ $hasFile ? 'block' : 'none' }}; margin-right: 10px;">{{ $file_name }}</span>
+                                                            <a href="{{ $hasFile ? url('/performance/view-reference/'.$file->id) : 'javascript:void(0)' }}" 
+                                                                class="btn btn-info btn-sm viewReference" 
+                                                                target="_blank"
+                                                                style="display: {{ $hasFile ? 'block' : 'none' }}; margin-right: 2px;">
+                                                                    <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             @endforeach

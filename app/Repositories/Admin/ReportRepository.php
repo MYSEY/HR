@@ -385,9 +385,12 @@ class ReportRepository extends BaseRepository
             }
 
             // HOD or BM: can see same department and branch
-            if (in_array($RolePermission, ['HOD', 'BM'])) {
-                $query->where("users.department_id", Auth::user()->department_id)
-                    ->where("users.branch_id", Auth::user()->branch_id);
+            if (in_array($RolePermission, ['HOD'])) {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            // HOD or BM: can see same department and branch
+            if (in_array($RolePermission, ['BM'])) {
+                $query->where("users.branch_id", Auth::user()->branch_id);
             }
 
             // DHOD or DBM: can see their own and those they manage

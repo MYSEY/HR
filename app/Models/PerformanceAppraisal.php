@@ -54,6 +54,6 @@ class PerformanceAppraisal extends Model
     }
     public function performanceDetail()
     {
-        return $this->hasMany(PaDetail::class,'performance_id');
+        return $this->hasMany(PaDetail::class,'performance_id')->with("reference");
     }
 }

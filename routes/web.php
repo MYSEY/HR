@@ -333,6 +333,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('menual/score', [PerformanceAppraisalController::class,'menualScore']);
     Route::get('performance/appraisal/download', [PerformanceAppraisalController::class,'performanceAppraisalDownload']);
 
+    Route::post('performance/upload-reference', [PerformanceAppraisalController::class, 'uploadReference']);
+    Route::delete('performance/delete-reference/{id}', [PerformanceAppraisalController::class, 'deleteReference']);
+    Route::get('/performance/view-reference/{id}', [PerformanceAppraisalController::class, 'viewReference']);
+
     Route::get('performance/appraisal/pa-report', [ReportsController::class,'PaReport']);
     Route::get('performance/appraisal/pa-export', [ReportsController::class,'PaReportExport']);
     Route::get('performance/appraisal/pa-export/{id}', [ReportsController::class,'PaReportExportDetail']);

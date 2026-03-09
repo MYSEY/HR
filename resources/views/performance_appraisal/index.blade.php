@@ -164,9 +164,10 @@
                                         <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th class="sorting sorting_asc stuck-scroll-4">#</th>
-                                                    <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
-                                                    <th class="sorting sorting_asc stuck-scroll-4">@lang('lang.employee_name')</th>
+                                                    <th class="sorting sorting_asc stuck-scroll-3">#</th>
+                                                    <th class="stuck-scroll-3">@lang('lang.status')</th>
+                                                    <th class="sorting stuck-scroll-3">@lang('lang.employee_id')</th>
+                                                    <th class="sorting sorting_asc">@lang('lang.employee_name')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.department')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
@@ -177,7 +178,6 @@
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">បុគ្គលិកផ្ទាល់</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ប្រធានផ្ទាល់</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Overall Results</th>
-                                                    <th>@lang('lang.status')</th>
                                                     <th>@lang('lang.review_by')</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.asign_to')</th>
                                                     <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
@@ -428,7 +428,7 @@
                                             type: "success",
                                             icon: true
                                         }).show();
-                                        window.location.replace("{{ URL('performance-admin') }}");
+                                        window.location.replace("{{ URL('performance-appraisal') }}");
                                     } else if(response.data.message == 'weight_must_be_exactly'){
                                         new Noty({
                                             title: "",
@@ -527,6 +527,40 @@
                 ],
                 columns: [
                     { data: 'id', name: 'id' },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        orderable: false,
+                        searchable: false,
+                        className: 'stuck-scroll-3',
+                        render: function (data, type, row) {
+                            let statusText = "";
+                            if (row.status == "new") {
+                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">New</span>';
+                            }
+                            if (row.status == "preparing") {
+                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Preparing</span>';
+                            }
+                            if (row.status == "1") {
+                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending Review</span>';
+                            }
+                            if (row.status == "2") {
+                                statusText = '<span class="badge bg-inverse-warning" style="font-size: 13px;">Pending Verify</span>';
+                            }
+                            if (row.status == "3") {
+                                statusText = '<span class="badge bg-inverse-warning" style="font-size: 13px;">Pending Approve</span>';
+                            }
+                            if (row.status == "4") {
+                                statusText = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Return</span>';
+                            }
+                            if (row.status == "approved") {
+                                statusText = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
+                            }
+                            return `
+                                ${statusText}
+                            `;
+                        }
+                    },
                     { 
                         data: 'number_employee', 
                         name: 'number_employee',
@@ -537,7 +571,6 @@
                     { 
                         data: 'employee_name_kh', 
                         name: 'employee_name_kh',
-                        className: 'stuck-scroll-3',
                         orderable: true,
                         searchable: true,
                     },
@@ -627,46 +660,12 @@
                                 color = 'info';
                             } else if (score <= 4.99) {
                                 overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
-                                color = 'lightgreen';
+                                color = 'green';
                             } else {
                                 overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
                                 color = 'green';
                             }
                             return `<span style="color:${color}">${overallResults}</span>`;
-                        }
-                    },
-                    {
-                        data: 'status',
-                        name: 'status',
-                        orderable: false,
-                        searchable: false,
-                        className: 'stuck-scroll-3',
-                        render: function (data, type, row) {
-                            let statusText = "";
-                            if (row.status == "new") {
-                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">New</span>';
-                            }
-                            if (row.status == "preparing") {
-                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Preparing</span>';
-                            }
-                            if (row.status == "1") {
-                                statusText = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending Review</span>';
-                            }
-                            if (row.status == "2") {
-                                statusText = '<span class="badge bg-inverse-warning" style="font-size: 13px;">Pending Verify</span>';
-                            }
-                            if (row.status == "3") {
-                                statusText = '<span class="badge bg-inverse-warning" style="font-size: 13px;">Pending Approve</span>';
-                            }
-                            if (row.status == "4") {
-                                statusText = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Return</span>';
-                            }
-                            if (row.status == "approved") {
-                                statusText = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
-                            }
-                            return `
-                                ${statusText}
-                            `;
                         }
                     },
                     {
@@ -683,10 +682,10 @@
                         searchable: false,
                         render: function (data, type, row) {
                             let textBtn = "@lang('lang.asign_to')";
-                            if (row.status == 4) {
+                            if (row.status == 3) {
                                 textBtn = "@lang('lang.approved')";
                             }
-                            if ((userIdLog == data.employee_id && row.status =="new") || ((userIdLog == data.review_employee_id && row.status !="new") && row.status != "approved")) {
+                            if ((userIdLog == data.employee_id && (row.status =="new" || row.status =="4")) || userIdLog == data.review_employee_id) {
                                 return `
                                     <a class="btn btn-white btn-sm btn-rounded btn-asign" 
                                     data-id="${row.id}" 
@@ -723,7 +722,7 @@
                                             <i class="fa fa-regular fa-eye"></i> Preview
                                         </a>
                             `;
-                            if ((userIdLog == data.employee_id && row.status =="new") || (userPermission.is_update == 1  && (userIdLog == data.review_employee_id && row.status =="new"))){
+                            if ((userIdLog == data.employee_id && (row.status =="new" || row.status =="4")) || (userPermission.is_update == 1  && (userIdLog == data.review_employee_id && row.status =="new"))){
                                 actionHtml += `
                                     <a class="dropdown-item" href="{{ url('performance-appraisal') }}/${row.id}">
                                         <i class="fa fa-regular fa-pencil"></i> Update Progress

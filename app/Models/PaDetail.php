@@ -31,4 +31,8 @@ class PaDetail extends Model
         'created_by',
         'updated_by',
     ];
+    public function reference()
+    {
+        return $this->hasMany(PaReference::class, 'detail_id', 'id');
+    }
 }

@@ -55,7 +55,11 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
-
+       'd_drive' => [
+            'driver' => 'local',
+            'root'   => env('Storage_D'), // ត្រូវប្រាកដថាអក្សរធំតូចដូចក្នុង .env
+            'throw'  => false,
+        ],
     ],
 
     /*
