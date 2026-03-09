@@ -274,7 +274,7 @@
                     var titleText = "";
                     var formContent = "";
                     var columnClassText = 'col-md-4';
-                    if (condistionStatus == 1 ||  condistionStatus == 2 || condistionStatus == 3 || condistionStatus == "approved") {
+                    if (condistionStatus == 1 ||  condistionStatus == 2 || condistionStatus == "accepted"|| condistionStatus == 3 || condistionStatus == "approved") {
                         titleText = '@lang("lang.asign_to_employee")';
                         columnClassText = 'col-md-6'
                         formContent = ''+
@@ -544,7 +544,7 @@
                 var titleText = "";
                 var formContent = "";
                 var columnClassText = 'col-md-4';
-                if (status == 1 || status == 2 || status == 3 || status == "preparing" || status == 5) {
+                if (status == 1 || status == 2 || status == "accepted" || status == 3 || status == "preparing" || status == 5) {
                     titleText = '@lang("lang.asign_to_employee")';
                     columnClassText = 'col-md-6'
                     formContent = ''+

@@ -88,8 +88,8 @@
                 </div>
             </div>
         </div>
-        @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO', 'HOD','DHOD','BM','DBM']))
-            <div class="row filter-btn"> 
+        <div class="row filter-btn"> 
+            @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO', 'HOD','DHOD','BM','DBM']))
                 <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
                     <div class="form-group">
                         <div class="search">
@@ -127,26 +127,29 @@
                 @else
                     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
                 @endif
-                <div class="col-sm-2 col-md-2">
-                    <div style="display: flex">
-                        <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
-                            <span class="btn-txt"><i class="fa fa-search"></i></span>
-                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+            @else
+                    <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10"></div>
+            @endif
+            <div class="col-sm-2 col-md-2">
+                <div style="display: flex" class="float-end">
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
+                        <span class="btn-txt"><i class="fa fa-search"></i></span>
+                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                    </button>
+                    @if ($permission->is_export == "1")
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                            <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
+                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                         </button>
-                        @if ($permission->is_export == "1")
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
-                                <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
-                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                            </button>
-                        @endif
-                        <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
-                            <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
-                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                        </button>
-                    </div>
+                    @endif
+                    <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                        <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                    </button>
                 </div>
             </div>
-        @endif
+        </div><br>
+        
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">

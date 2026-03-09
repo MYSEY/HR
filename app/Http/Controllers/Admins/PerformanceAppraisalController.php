@@ -14,11 +14,13 @@ use App\Exports\DownloadKpis;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\PaReference;
 use App\Models\PerformanceAppraisal;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Storage;
 
 class PerformanceAppraisalController extends Controller
 {
@@ -60,6 +62,7 @@ class PerformanceAppraisalController extends Controller
                     'reviewEmployee.employee_name_kh as review_employee_name_kh',
                     'reviewEmployee.employee_name_en as review_employee_name_en',
                 )
+            ->whereNot('performance_appraisals.status', 'approved')
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -86,33 +89,30 @@ class PerformanceAppraisalController extends Controller
             }
             if (in_array(Auth::user()->RolePermission, ['HR']) && $permission["is_access"] != 1){
                 $query->where(function ($q) {
-                    $q->whereNot('performance_appraisals.status', 'approved');
-                    $q->where("users.line_manager", Auth::user()->id);   // team under me
-                    $q->orWhere('performance_appraisals.employee_id', Auth::user()->id)
+                    $q->where("users.line_manager", Auth::user()->id)   // team under me
+                    ->orWhere('performance_appraisals.employee_id', Auth::user()->id)
                     ->orWhere("performance_appraisals.review_employee_id", Auth::user()->id); // my own
                 });
             }
 
             if (in_array(Auth::user()->RolePermission, ['HOD'])) {
-                $query->whereNot('performance_appraisals.status', 'approved');
                 $query->where("users.department_id", Auth::user()->department_id);
+                $query->orWhere("performance_appraisals.review_employee_id", Auth::user()->id);
             }
             
             if (in_array(Auth::user()->RolePermission, ['BM'])) {
-                $query->whereNot('performance_appraisals.status', 'approved');
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
             
             if (in_array(Auth::user()->RolePermission, ['BOD','CEO','DHOD', 'DBM'])) {
                 $query->where(function ($q) {
-                    $q->whereNot('performance_appraisals.status', 'approved');
-                    $q->orWhere("users.line_manager", Auth::user()->id)   // team under me
+                    $q->where("users.line_manager", Auth::user()->id)   // team under me
+                    ->orWhere('performance_appraisals.employee_id', Auth::user()->id)
                     ->orWhere("performance_appraisals.review_employee_id", Auth::user()->id); // my own
                 });
             }
 
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
-                $query->whereNot('performance_appraisals.status', 'approved');
                 $query->where(function ($q) {
                     $q->where('performance_appraisals.employee_id', Auth::user()->id)
                     ->orWhere("performance_appraisals.review_employee_id", Auth::user()->id);
@@ -237,6 +237,64 @@ class PerformanceAppraisalController extends Controller
     {
         //
     }
+    public function uploadReference(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            if ($request->hasFile('reference')) {
+                $file = $request->file('reference');
+                $filename = $request->performance_id . $request->title_id . $request->purpose_id . $request->detail_id . '_' . $file->getClientOriginalName();
+                
+                $file->storeAs('', $filename, 'd_drive');
+
+                // ចាប់យក object ដែលបង្កើតថ្មីដាក់ក្នុង variable $data
+                $data = PaReference::create([
+                    'performance_id' => $request->performance_id,
+                    'title_id'       => $request->title_id,
+                    'purpose_id'     => $request->purpose_id,
+                    'detail_id'      => $request->detail_id,
+                    'reference'      => $filename,
+                    'created_by'     => Auth::user()->id,
+                ]);
+
+                DB::commit();
+                // បញ្ជូន id ទៅឱ្យ JavaScript វិញ
+                return response()->json([
+                    'message' => 'Uploaded successfully.', 
+                    'status'  => 200, 
+                    'id'      => $data->id,
+                    'file_name'      => $data->reference
+                ]);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Error', 'error' => $e->getMessage()], 500);
+        }
+    }
+    public function viewReference($id) {
+        $data = PaReference::findOrFail($id);
+        $fileName = $data->reference;
+        $rootPath = config('filesystems.disks.d_drive.root');
+        $fullPath = $rootPath . DIRECTORY_SEPARATOR . $fileName;
+
+        if (!file_exists($fullPath)) {
+            return abort(404, "រកមិនឃើញ File ក្នុង Drive D ទេ");
+        }
+
+        // ទាញយក Extension ដើម្បីឆែកប្រភេទ File
+        $extension = strtolower(pathinfo($fullPath, PATHINFO_EXTENSION));
+
+        if ($extension === 'pdf') {
+            // បើជា PDF ឱ្យបង្ហាញក្នុង Browser ផ្ទាល់ (Inline)
+            return response()->file($fullPath, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="'.$fileName.'"'
+            ]);
+        } else {
+            // បើជា Excel, RAR, ZIP ឱ្យវា Download
+            return response()->download($fullPath);
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -246,7 +304,7 @@ class PerformanceAppraisalController extends Controller
      */
     public function show($id)
     {
-        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail'])
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail.reference'])
         ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
@@ -265,7 +323,7 @@ class PerformanceAppraisalController extends Controller
     }
     public function performanceAppraisalPreview($id)
     {
-        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail'])
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail.reference'])
         ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
@@ -455,8 +513,27 @@ class PerformanceAppraisalController extends Controller
         //
     }
 
+    public function deleteReference($id)
+    {
+        try {
+            $reference = PaReference::findOrFail($id);
+
+            // ១. លុប File ចេញពី Drive D (ប្រើ disk d_drive)
+            if (Storage::disk('d_drive')->exists($reference->reference)) {
+                Storage::disk('d_drive')->delete($reference->reference);
+            }
+
+            // ២. លុប Record ចេញពី Database
+            $reference->delete();
+
+            return response()->json(['message' => 'Deleted successfully.', 'status' => 200]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error', 'error' => $e->getMessage()], 500);
+        }
+    }
+
     public function performanceAppraisalExport($id){
-        return Excel::download(new ExportKpis($id), 'kpis.xlsx');
+        return Excel::download(new ExportKpis($id), 'PA.xlsx');
     }
 
     public function performanceAppraisalImport(Request $request){
@@ -589,6 +666,6 @@ class PerformanceAppraisalController extends Controller
     }
 
     public function performanceAppraisalDownload(Request $request){
-        return Excel::download(new DownloadKpis($request), 'kpis.xlsx');
+        return Excel::download(new DownloadKpis($request), 'PA.xlsx');
     }
 }
