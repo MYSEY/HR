@@ -299,7 +299,7 @@
                                 color = 'info';
                             } else if (score <= 4.99) {
                                 overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
-                                color = 'lightgreen';
+                                color = 'green';
                             } else {
                                 overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
                                 color = 'green';

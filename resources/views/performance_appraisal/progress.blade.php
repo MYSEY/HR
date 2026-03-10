@@ -362,7 +362,7 @@
             formData.append('reference', file);
             formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
             $.ajax({
-                url: '/performance/upload-reference',
+                url: "{{ url('/performance/upload-reference') }}",
                 type: 'POST',
                 data: formData,
                 processData: false, 
@@ -409,7 +409,7 @@
                 return;
             }
             $.ajax({
-                url: '/performance/delete-reference/' + id,
+                url: "{{ url('/performance/delete-reference') }}/" + id,
                 type: 'DELETE',
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content')

@@ -579,7 +579,7 @@ class ReportsController extends Controller
                 // Default order
                 $query->orderBy('performances.id', 'desc');
             }
-            $data = $query->where('performance_appraisals.status', 'new')->orderBy('performance_appraisals.id', 'desc')->offset($start)->limit($limit)->get();
+            $data = $query->where('performance_appraisals.status', 'approved')->orderBy('performance_appraisals.id', 'desc')->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw' => intval(request()->input('draw')),
                 'recordsTotal' => $recordsTotal,

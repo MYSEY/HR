@@ -82,6 +82,7 @@ class PerformanceAppraisalController extends Controller
                 $query->where(function ($q) use ($searchValue) {
                     $q->where('performance_appraisals.id', 'like', "%{$searchValue}%")
                     ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
                     ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
                     ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
@@ -119,7 +120,7 @@ class PerformanceAppraisalController extends Controller
                 });
             }
         
-            $recordsTotal = PerformanceAppraisal::where('status', 'new')->count();  // total records without filter
+            $recordsTotal = $query->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
@@ -157,6 +158,10 @@ class PerformanceAppraisalController extends Controller
     }
     public function menualScore(Request $request)
     {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "menual/score")->first();
+        if (!$permission || $permission['is_view'] != 1) {
+            return view('upgrade.access_page');
+        }
         if (request()->ajax()) {
             // Define the base query
             $query = PerformanceAppraisal::leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
@@ -194,13 +199,40 @@ class PerformanceAppraisalController extends Controller
                 $query->where(function ($q) use ($searchValue) {
                     $q->where('performance_appraisals.id', 'like', "%{$searchValue}%")
                     ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
                     ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
                     ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
                 });
             }
+            if (in_array(Auth::user()->RolePermission, ['HR']) && $permission["is_access"] != 1){
+                $query->where(function ($q) {
+                    $q->where("users.line_manager", Auth::user()->id)   // team under me
+                    ->orWhere('performance_appraisals.employee_id', Auth::user()->id);
+                });
+            }
+
+            if (in_array(Auth::user()->RolePermission, ['HOD'])) {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            
+            if (in_array(Auth::user()->RolePermission, ['BM'])) {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+            
+            if (in_array(Auth::user()->RolePermission, ['BOD','CEO','DHOD', 'DBM'])) {
+                $query->where(function ($q) {
+                    $q->where("users.line_manager", Auth::user()->id)   // team under me
+                    ->orWhere('performance_appraisals.employee_id', Auth::user()->id);
+                });
+            }
+            if (in_array(Auth::user()->RolePermission, ['Employee'])) {
+                $query->where(function ($q) {
+                    $q->where('performance_appraisals.employee_id', Auth::user()->id);
+                });
+            }
         
-            $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
+            $recordsTotal = PerformanceAppraisal::where('status', 'approved')->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));

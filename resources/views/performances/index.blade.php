@@ -584,6 +584,9 @@
                 checkboxes[i].checked = source.checked;
             }
         }
+        function strLimit(str, limit = 30, end = '...') {
+            return str.length > limit ? str.substring(0, limit) + end : str;
+        }
         function dataTables() {
             $('#tbl_performance').DataTable({
                 destroy: true,
@@ -761,7 +764,21 @@
                             return data !== null ? data + '%' : '';
                         }
                     },
-                    { data: 'reason', name: 'reason' },
+                    { 
+                        data: 'reason', 
+                        defaultContent: '',
+                        render: function (data, type, row) {
+
+                            if (!data) return '';
+                            return `
+                                <span data-toggle="tooltip"
+                                    data-html="true"
+                                    title="${data}">
+                                    ${strLimit(data, 30, '...')}
+                                </span>
+                            `;
+                        }
+                    },
                     {
                         data: null,
                         name: 'action',

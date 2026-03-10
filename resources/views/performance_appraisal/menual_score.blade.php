@@ -52,7 +52,7 @@
                 @endif
             </div>
             <div class="col-sm-2 col-md-2">
-                <div style="display: flex">
+                <div style="display: flex" class="float-end">
                     <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
                         <span class="btn-txt"><i class="fa fa-search"></i></span>
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -153,7 +153,7 @@
                 order: [[0, 'desc']],
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
                 ajax: {
-                    url: '{{ URL("performance-appraisal") }}',
+                    url: '{{ URL("menual/score") }}',
                     type: 'GET',
                     data: function (d) {
                         d.employee_id = $('input[name="employee_id"]').val();
@@ -221,7 +221,7 @@
                                 color = 'info';
                             } else if (score <= 4.99) {
                                 overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
-                                color = 'lightgreen';
+                                color = 'green';
                             } else {
                                 overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
                                 color = 'green';

@@ -179,7 +179,8 @@
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">ប្រធានផ្ទាល់</th>
                                                     <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Overall Results</th>
                                                     <th>@lang('lang.review_by')</th>
-                                                    <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.asign_to')</th>
+                                                    <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.asign_to')</th>
+                                                    <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.reason')</th>
                                                     <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                                 </tr>
                                             </thead>
@@ -235,6 +236,9 @@
                 branch_id = $('#branch_id').val();
                 department_id = $('#department_id').val();
                 $('#DataTables_Table_0').DataTable().ajax.reload(null, false);
+            });
+            $(document).on('click','.checkbox-group', function(){
+                $(".checkbox-group").not(this).prop("checked", false);
             });
             // Initialize only once
             dataTables();
@@ -493,7 +497,9 @@
                 });
             });
         });
-
+        function strLimit(str, limit = 30, end = '...') {
+            return str.length > limit ? str.substring(0, limit) + end : str;
+        }
         function dataTables() {
             $('#loading-overlay').show();
             // Check if DataTable instance exists, then destroy it
@@ -704,6 +710,21 @@
                                     </a>
                                 `;
                             }
+                        }
+                    },
+                    { 
+                        data: 'reason', 
+                        defaultContent: '',
+                        render: function (data, type, row) {
+
+                            if (!data) return '';
+                            return `
+                                <span data-toggle="tooltip"
+                                    data-html="true"
+                                    title="${data}">
+                                    ${strLimit(data, 30, '...')}
+                                </span>
+                            `;
                         }
                     },
                     {
