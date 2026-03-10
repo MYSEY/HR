@@ -374,6 +374,7 @@ class ReportRepository extends BaseRepository
             'userApprove.employee_name_kh as approve_employee_name_kh',
             'userApprove.employee_name_en as approve_employee_name_en',
         )
+        ->where('performances.status', 'approved')
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
 
             // HR Role: can only see their own data or subordinates if access denied
@@ -427,6 +428,7 @@ class ReportRepository extends BaseRepository
             $query->where(function ($q) use ($searchValue) {
                 $q->where('performances.id', 'like', "%{$searchValue}%")
                 ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
                 ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
                 ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
                 ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
@@ -464,22 +466,24 @@ class ReportRepository extends BaseRepository
             // HR Role: can only see their own data or subordinates if access denied
             if ($RolePermission == 'HR' && $permission->is_access != "1") {
                 $query->where(function ($q) {
-                    $q->where("performance_appraisals.employee_id", Auth::user()->id)
-                    ->orWhere("users.line_manager", Auth::user()->id);
+                    $q->where("users.line_manager", Auth::user()->id)
+                    ->orWhere("performance_appraisals.employee_id", Auth::user()->id);
                 });
             }
 
-            // HOD or BM: can see same department and branch
-            if (in_array($RolePermission, ['HOD', 'BM'])) {
-                $query->where("users.department_id", Auth::user()->department_id)
-                    ->where("users.branch_id", Auth::user()->branch_id);
+            // HOD or BM: can see same department
+            if (in_array($RolePermission, ['HOD'])) {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if (in_array($RolePermission, ['BM'])) {
+                $query->where("users.branch_id", Auth::user()->branch_id);
             }
 
             // DHOD or DBM: can see their own and those they manage
             if (in_array($RolePermission, ['DHOD', 'DBM'])) {
                 $query->where(function ($q) {
-                    $q->where("performance_appraisals.employee_id", Auth::user()->id)
-                    ->orWhere("users.line_manager", Auth::user()->id);
+                    $q->where("users.line_manager", Auth::user()->id)
+                    ->orWhere("performance_appraisals.employee_id", Auth::user()->id);
                 });
             }
 
@@ -514,6 +518,7 @@ class ReportRepository extends BaseRepository
             $query->where(function ($q) use ($searchValue) {
                 $q->where('performance_appraisals.id', 'like', "%{$searchValue}%")
                 ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
                 ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
                 ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
                 ->orWhere('departments.name_english', 'like', "%{$searchValue}%");

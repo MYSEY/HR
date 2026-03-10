@@ -80,6 +80,7 @@ class PerformanceController extends Controller
                 $query->where(function ($q) use ($searchValue) {
                     $q->where('performances.id', 'like', "%{$searchValue}%")
                     ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
                     ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
                     ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");

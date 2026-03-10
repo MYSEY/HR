@@ -90,6 +90,7 @@ class PerformanceAdminController extends Controller
                 $query->where(function ($q) use ($searchValue) {
                     $q->where('performances.id', 'like', "%{$searchValue}%")
                     ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
                     ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
                     ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
@@ -97,12 +98,13 @@ class PerformanceAdminController extends Controller
             }
             
             if (in_array(Auth::user()->RolePermission, ['HRAdmin','developer','admin']) || (in_array(Auth::user()->RolePermission, ['HR']) && $permission->is_access == "1")) {
-               
+               $recordsTotal = Performance::whereNot('performances.status', 'approved')->count();  // total records without filter
             }else{
                 $query->where("performances.review_employee_id", Auth::user()->id);
+                $recordsTotal = Performance::where("performances.review_employee_id", Auth::user()->id)->count();  // total records without filter
             }
             
-            $recordsTotal = Performance::where('status', 'approved')->where("performances.review_employee_id", Auth::user()->id)->count();  // total records without filter
+            
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
@@ -626,7 +628,7 @@ class PerformanceAdminController extends Controller
         }
         if (request()->ajax()) {
             $query = $this->reportRepo->getKpiReport($request, $permission);
-            $recordsTotal = Performance::where('status', 'approved')->count();  // total records without filter
+            $recordsTotal = $query->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
