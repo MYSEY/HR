@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PerformanceDetailHistory;
 use App\Repositories\Admin\ReportRepository;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class PerformanceAdminController extends Controller
@@ -294,7 +295,9 @@ class PerformanceAdminController extends Controller
             'user'      => $user,
             'type'      => "kpi",
         ];
-        // Mail::to($user->email)->queue(new SendEmail($datasSendEmail, false));
+        if ($user->email) {
+            // Mail::to($user->email)->queue(new SendEmail($datasSendEmail, false));
+        }
     }
     public function asign(Request $request)
     {
@@ -315,9 +318,15 @@ class PerformanceAdminController extends Controller
                     'message' => 'weight_must_be_exactly'
                 ]);
             }
-            // ✅ Start service email
-            self::sendEmail($request->asign_employee_id);
             DB::commit();
+            // ✅ Start service email
+            DB::afterCommit(function () use ($request) {
+                try {
+                    self::sendEmail($request->asign_employee_id);
+                } catch (\Exception $e) {
+                    Log::error("Email failed after commit: " . $e->getMessage());
+                }
+            });
             return response()->json([
                 'success' => true,
                 'message' => 'Asing successfully successfully!',
@@ -354,9 +363,15 @@ class PerformanceAdminController extends Controller
                     ]);
                 }
             }
-            // ✅ Start service email
-            self::sendEmail($request->asign_employee_id);
             DB::commit();
+            // ✅ Start service email
+            DB::afterCommit(function () use ($request) {
+                try {
+                    self::sendEmail($request->asign_employee_id);
+                } catch (\Exception $e) {
+                    Log::error("Email failed after commit: " . $e->getMessage());
+                }
+            });
             return response()->json([
                 'success' => true,
                 'message' => 'Asign successfully!',

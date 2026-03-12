@@ -14,10 +14,19 @@ use App\Exports\DownloadKpis;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Mail\SendEmail;
+use App\Models\PaDetailHistory;
+use App\Models\PaPurpose;
+use App\Models\PaPurposeHistory;
 use App\Models\PaReference;
+use App\Models\PaTitle;
+use App\Models\PaTitleHistory;
 use App\Models\PerformanceAppraisal;
+use App\Models\PerformanceAppraisalHistory;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Storage;
@@ -443,6 +452,7 @@ class PerformanceAppraisalController extends Controller
         DB::beginTransaction();
         try{
             $performance = PerformanceAppraisal::findOrFail($request->id);
+            self::createHistories($performance);
             $performance->update([
                 'status'                => $request->actionAsign,
                 'reason'                => $request->reason,
@@ -450,9 +460,15 @@ class PerformanceAppraisalController extends Controller
                 'review_date'           => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_by'            => Auth::id(),
             ]);
-            // ✅ Start service email
-            self::sendEmail($request->asign_employee_id);
             DB::commit();
+            // ✅ Start service email
+            DB::afterCommit(function () use ($request) {
+                try {
+                    self::sendEmail($request->asign_employee_id);
+                } catch (\Exception $e) {
+                    Log::error("Email failed after commit: " . $e->getMessage());
+                }
+            });
             return response()->json([
                 'success' => true,
                 'message' => 'Asing successfully successfully!',
@@ -468,6 +484,7 @@ class PerformanceAppraisalController extends Controller
         DB::beginTransaction();
         try{
             $performance = PerformanceAppraisal::findOrFail($request->id);
+            self::createHistories($performance);
             $performance->update([
                 'reason'        => $request->reason,
                 'approved_by'   => Auth::id(),
@@ -475,9 +492,15 @@ class PerformanceAppraisalController extends Controller
                 'approved_date' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_by'    => Auth::id(),
             ]);
-            // ✅ Start service email
-            self::sendEmail($request->asign_employee_id);
             DB::commit();
+            // ✅ Start service email
+            DB::afterCommit(function () use ($request) {
+                try {
+                    self::sendEmail($request->asign_employee_id);
+                } catch (\Exception $e) {
+                    Log::error("Email failed after commit: " . $e->getMessage());
+                }
+            });
             return response()->json([
                 'success' => true,
                 'message' => 'Asing successfully successfully!',
@@ -494,13 +517,16 @@ class PerformanceAppraisalController extends Controller
             'user'      => $user,
             'type'      => "kpi",
         ];
-        // Mail::to($user->email)->queue(new SendEmail($datasSendEmail, false));
+        if ($user->email) {
+           // Mail::to($user->email)->queue(new SendEmail($datasSendEmail, false));
+        }
     }
     public function paReturn(Request $request)
     {
         DB::beginTransaction();
         try{
             $paPerformance = PerformanceAppraisal::findOrFail($request->id);
+            self::createHistories($paPerformance);
             $paPerformance->update([
                 'status'                => $request->actionAsign,
                 'review_employee_id'    => $request->asign_employee_id,
@@ -519,11 +545,71 @@ class PerformanceAppraisalController extends Controller
             return response()->json(['message' => 'Something went wrong', 'error' => $e->getMessage()], 500);
         }
     }
+
+    function createHistories($data)
+    {
+        DB::transaction(function () use ($data) {
+
+            // 🔹 Convert Performance to array
+            $dataHistory = $data->toArray();
+            unset($dataHistory['id']);
+            $dataHistory['pa_id'] = $data->id;
+
+            // 🔹 Create PerformanceHistory
+            $paHistory = PerformanceAppraisalHistory::create($dataHistory);
+
+            // 🔹 Get related Titles
+            $titles = PaTitle::where("performance_id", $data->id)->get();
+
+            foreach ($titles as $titleItem) {
+                $titleArray = $titleItem->toArray();
+                unset($titleArray['id']);
+                $titleArray['pa_histories_id'] = $paHistory->id;
+
+                $tHistory = PaTitleHistory::create($titleArray);
+
+                // 🔹 Get related Purposes for this title
+                $purposes = PaPurpose::where("performance_id", $data->id)
+                    ->where("title_id", $titleItem->id)
+                    ->get();
+
+                foreach ($purposes as $pp) {
+                    $ppArray = $pp->toArray();
+                    unset($ppArray['id']);
+                    $ppArray['pa_histories_id'] = $paHistory->id;
+                    $ppArray['title_histories_id'] = $tHistory->id;
+
+                    $ppHistory = PaPurposeHistory::create($ppArray);
+
+                    // 🔹 Get related PerformanceDetails
+                    $details = PaDetail::where("performance_id", $data->id)
+                        ->where("title_id", $titleItem->id)
+                        ->where("purpose_id", $pp->id)
+                        ->get();
+
+                    foreach ($details as $pd) {
+                        $pdArray = $pd->toArray();
+                        unset($pdArray['id']);
+                        $pdArray['pa_histories_id'] = $paHistory->id;
+                        $pdArray['title_histories_id'] = $tHistory->id;
+                        $pdArray['purpose_histories_id'] = $ppHistory->id;
+
+                        PaDetailHistory::create($pdArray);
+                    }
+                }
+            }
+        });
+    }
+
     public function updateKpiScore(Request $request){
         try {
-            PerformanceAppraisal::where('employee_id',$request->employee_id)->where('id',$request->id)->update([
+            
+            $paPerformance = PerformanceAppraisal::where('employee_id',$request->employee_id)->where('id',$request->id)->first();
+            self::createHistories($paPerformance);
+             $paPerformance->update([
                 'total_score_direct_chairman'  => $request->total_score_direct_chairman,
                 'remark'  => $request->remark,
+                'updated_by'            => Auth::id(),
             ]);
             DB::commit();
             return response()->json([
