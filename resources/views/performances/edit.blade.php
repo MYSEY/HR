@@ -396,6 +396,23 @@
                             }, 2000);
                             $('#performanceForm').trigger("reset");
                         } else if(response.message == 'not_goal') {
+                            if (response.goal_type=='number_increment' || response.goal_type=='number_decrement') {
+                                $(".goal").each(function () {
+                                    $(this).css("border-color", "red");
+                                });
+                            }else if(response.goal_type=='percent_increment' || response.goal_type=='percent_decrement'){
+                                $(".goal").each(function () {
+                                    $(this).css("border-color", "red");
+                                });
+                            }else if(response.goal_type=='currency_increment' || response.goal_type=='currency_decrement'){
+                                $(".goal").each(function () {
+                                    $(this).css("border-color", "red");
+                                });
+                            }else{
+                                $(".goal").each(function () {
+                                    $(this).css("border-color", "red");
+                                });
+                            }
                             toastr.error(response.error || 'Invalid goal format for type'+' '+response.goal_type || 'Error');
                         }else {
                             toastr.error(response.message || 'សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%', 'Error');
@@ -431,16 +448,23 @@
             </td>
             <td class="text-center">
                 <select class="form-control goal-type-select" name="goal_type[]">
-                    <option value="number">Number</option>
-                    <option value="date">Date</option>
-                    <option value="currency">Currency</option>
-                    <option value="percent">Percent</option>
+                    <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
+                    <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
+
+                    <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
+                    <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
+
+                    <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
+                    <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
+
+                    <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
+                    <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight required" id="weight" placeholder="%"></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight sum_total_weight required" id="weight" placeholder="%"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>
                     <option value="0">No</option>
@@ -462,9 +486,9 @@
                 <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="5" class="form-control required" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
+                <textarea rows="5" class="form-control required goal" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required sum_total_weight" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>
                     <option value="0">No</option>
@@ -508,16 +532,23 @@
             </td>
             <td class="text-center">
                 <select class="form-control goal-type-select" name="goal_type[]">
-                    <option value="number">Number</option>
-                    <option value="date">Date</option>
-                    <option value="currency">Currency</option>
-                    <option value="percent">Percent</option>
+                    <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
+                    <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
+
+                    <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
+                    <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
+
+                    <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
+                    <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
+
+                    <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
+                    <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required" placeholder="%" min="0" value="{{old('weight')}}"></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required sum_total_weight" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>
                     <option value="0">No</option>

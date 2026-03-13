@@ -246,10 +246,10 @@
             });
         });
         
-        $(".weight").on('focus',function(){
+        $(".required").on('focus',function(){
             $(this).css("border-color","#1e9ff2");
         });
-        $(".weight").on('focusout',function(){
+        $(".required").on('focusout',function(){
             $(this).css("border-color","#d8d2d2");
         });
         $(document).on('click', '#btnCreatePerformance', function(e) {
@@ -320,7 +320,6 @@
                             }, 2000);
                             $('#performanceForm').trigger("reset");
                         } else if (response.message === 'not_goal') {
-                            console.log(response.goal_type);
                             if (response.goal_type=='number_increment' || response.goal_type=='number_decrement') {
                                 $(".goal").each(function () {
                                     $(this).css("border-color", "red");
