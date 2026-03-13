@@ -93,12 +93,6 @@
                                                         <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        {{-- <select class="form-control goal-type-select" name="goal_type[]">
-                                                            <option value="number">Number</option>
-                                                            <option value="date">Date</option>
-                                                            <option value="currency">Currency</option>
-                                                            <option value="percent">Percent</option>
-                                                        </select> --}}
                                                         <select class="form-control goal-type-select mt-1" name="goal_type[]">
                                                             <option value="number_increment">Number Increment</option>
                                                             <option value="number_decrement">Number Decrement</option>
@@ -326,14 +320,24 @@
                             }, 2000);
                             $('#performanceForm').trigger("reset");
                         } else if (response.message === 'not_goal') {
-                            console.log(response.message);
-                            
-                            // $(".goal").css("border-color","red");
-                            $(".goal").each(function(){
-                                if($(this).val()==""){
-                                    $(this).css("border-color","red");
-                                }
-                            });
+                            console.log(response.goal_type);
+                            if (response.goal_type=='number_increment' || response.goal_type=='number_decrement') {
+                                $(".goal").each(function () {
+                                    $(this).css("border-color", "red");
+                                });
+                            }else if(response.goal_type=='percent_increment' || response.goal_type=='percent_decrement'){
+                                $(".goal").each(function () {
+                                    $(this).css("border-color", "red");
+                                });
+                            }else if(response.goal_type=='currency_increment' || response.goal_type=='currency_decrement'){
+                                $(".goal").each(function () {
+                                    $(this).css("border-color", "red");
+                                });
+                            }else{
+                                $(".goal").each(function () {
+                                    $(this).css("border-color", "red");
+                                });
+                            }
                             toastr.error(response.error || 'Invalid goal format for type'+' '+response.goal_type || 'Error');
                         } else {
                             toastr.error(response.message || 'សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%', 'Error');
@@ -379,7 +383,7 @@
                     <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight weight required" id="weight" placeholder="%"></td>
@@ -418,7 +422,7 @@
                     <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight required" placeholder="%" min="0" value="{{old('weight')}}"></td>
@@ -478,7 +482,7 @@
                     <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight required" placeholder="%" min="0" value="{{old('weight')}}"></td>

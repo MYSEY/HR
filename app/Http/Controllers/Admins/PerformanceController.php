@@ -885,72 +885,78 @@ class PerformanceController extends Controller
                     $employee = User::where("number_employee", $row[0])->first();
                     if (!$employee) continue;
 
-                    $performance = Performance::create([
-                        'employee_id'  => $employee->id,
-                        'from_date'    => Carbon::parse($row[1]),
-                        'to_date'      => Carbon::parse($row[2]),
-                        'type'         => $row[3],
-                        'total_weight' => $row[4],
-                        'status'       => 'preparing',
-                        'created_by'   => Auth::id(),
-                    ]);
+                    if($row[4] <= 100){
+                        $performance = Performance::create([
+                            'employee_id'  => $employee->id,
+                            'from_date'    => Carbon::parse($row[1]),
+                            'to_date'      => Carbon::parse($row[2]),
+                            'type'         => $row[3],
+                            'total_weight' => $row[4],
+                            'status'       => 'preparing',
+                            'created_by'   => Auth::id(),
+                        ]);
 
-                    // --- Title Sheet ---
-                    $titleSheet = $spreadsheet->getSheetByName('Title');
-                    if ($titleSheet) {
-                        $rowsTitle = $titleSheet->toArray();
-                        foreach ($rowsTitle as $j => $rowT) {
-                            if ($j == 0) continue;
+                        // --- Title Sheet ---
+                        $titleSheet = $spreadsheet->getSheetByName('Title');
+                        if ($titleSheet) {
+                            $rowsTitle = $titleSheet->toArray();
+                            foreach ($rowsTitle as $j => $rowT) {
+                                if ($j == 0) continue;
 
-                            $title = $performance->titles()->create([
-                                'title'      => $rowT[0],
-                                'created_by' => Auth::id(),
-                            ]);
-                            // --- Purpose Sheet ---
-                            $purposeSheet = $spreadsheet->getSheetByName('Purposes');
-                            if ($purposeSheet) {
-                                $rowsPurpose = $purposeSheet->toArray();
-                                foreach ($rowsPurpose as $k => $rowP) {
-                                    if ($k == 0) continue;
+                                $title = $performance->titles()->create([
+                                    'title'      => $rowT[0],
+                                    'created_by' => Auth::id(),
+                                ]);
+                                // --- Purpose Sheet ---
+                                $purposeSheet = $spreadsheet->getSheetByName('Purposes');
+                                if ($purposeSheet) {
+                                    $rowsPurpose = $purposeSheet->toArray();
+                                    foreach ($rowsPurpose as $k => $rowP) {
+                                        if ($k == 0) continue;
 
-                                    // ✅ Match Title Ref in col[0] with current Title in rowT[0]
-                                    if (trim($rowP[0]) == trim($rowT[0])) {
-                                        $purpose = $title->purposes()->create([
-                                            'performance_id' => $performance->id,
-                                            'title_id'       => $title->id,
-                                            'name'           => $rowP[1], // Purpose Name in Col B
-                                            'created_by'     => Auth::id(),
-                                        ]);
+                                        // ✅ Match Title Ref in col[0] with current Title in rowT[0]
+                                        if (trim($rowP[0]) == trim($rowT[0])) {
+                                            $purpose = $title->purposes()->create([
+                                                'performance_id' => $performance->id,
+                                                'title_id'       => $title->id,
+                                                'name'           => $rowP[1], // Purpose Name in Col B
+                                                'created_by'     => Auth::id(),
+                                            ]);
 
-                                        // --- Performance Detail Sheet ---
-                                        $detailSheet = $spreadsheet->getSheetByName('Performance Detail');
-                                        if ($detailSheet) {
-                                            $rowsDetail = $detailSheet->toArray();
-                                            foreach ($rowsDetail as $m => $rowD) {
-                                                if ($m == 0) continue;
+                                            // --- Performance Detail Sheet ---
+                                            $detailSheet = $spreadsheet->getSheetByName('Performance Detail');
+                                            if ($detailSheet) {
+                                                $rowsDetail = $detailSheet->toArray();
+                                                foreach ($rowsDetail as $m => $rowD) {
+                                                    if ($m == 0) continue;
 
-                                                // ✅ Match Purpose Ref in detail with current Purpose
-                                                if (trim($rowD[0]) == trim($rowP[1])) {
-                                                    $purpose->performanceDetail()->create([
-                                                        'performance_id' => $performance->id,
-                                                        'title_id'       => $title->id,
-                                                        'purpose_id'     => $purpose->id,
-                                                        'key_kpi'        => $rowD[1],
-                                                        'action_plan'    => $rowD[2],
-                                                        'goal'           => $rowD[3],
-                                                        'goal_type'      => $rowD[4],
-                                                        'weight'         => $rowD[5],
-                                                        'is_lock'        => $rowD[6],
-                                                        'created_by'     => Auth::id(),
-                                                    ]);
+                                                    // ✅ Match Purpose Ref in detail with current Purpose
+                                                    if (trim($rowD[0]) == trim($rowP[1])) {
+                                                        $purpose->performanceDetail()->create([
+                                                            'performance_id' => $performance->id,
+                                                            'title_id'       => $title->id,
+                                                            'purpose_id'     => $purpose->id,
+                                                            'key_kpi'        => $rowD[1],
+                                                            'action_plan'    => $rowD[2],
+                                                            'goal'           => $rowD[3],
+                                                            'goal_type'      => $rowD[4],
+                                                            'weight'         => $rowD[5],
+                                                            'is_lock'        => $rowD[6],
+                                                            'created_by'     => Auth::id(),
+                                                        ]);
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                            }
 
+                            }
                         }
+                    }else{
+                        return response()->json([
+                            'message' => 'weight_must_be_exactly'
+                        ]);
                     }
                 }
             }

@@ -737,36 +737,6 @@ class PerformanceAppraisalController extends Controller
                         if (!$updated) {
                             $dataArray[] = ["Row $i: No detail found for KPI {$item[5]}"];
                         }
-
-
-
-                        // $score  = (float)($item[12] ?? 0);
-                        // $live   = (float)($item[13] ?? 0);
-                        // $chair  = (float)($item[14] ?? 0);
-
-                        // // group sums per employee
-                        // $eid = $employee->id;
-                        // if (!isset($employeeTotals[$eid])) {
-                        //     $employeeTotals[$eid] = ['s' => 0, 'ls' => 0, 'dc' => 0];
-                        // }
-                        // $employeeTotals[$eid]['s']  += $score;
-                        // $employeeTotals[$eid]['ls'] += $live;
-                        // $employeeTotals[$eid]['dc'] += $chair;
-
-                        // $updated = PaDetail::where('performance_id', $item[2])
-                        //     ->where('title_id', $item[3])
-                        //     ->where('purpose_id', $item[4])
-                        //     ->where('key_kpi', $item[5]) // extra condition
-                        //     ->update([
-                        //         'progress' => !empty($item[9]) ? $item[9] : null,
-                        //         'score_achieved' => !empty($item[10]) ? $item[10] : null,
-                        //         'score' => !empty($item[12]) ? $item[12] : null,
-                        //         'score_live_staff' => !empty($item[13]) ? $item[13] : null,
-                        //         'score_direct_chairman' => !empty($item[14]) ? $item[14] : null,
-                        //     ]);
-                        // if (!$updated) {
-                        //     $dataArray[] = ["Row $i: No detail found for KPI {$item[5]}"];
-                        // }
                     } else {
                         $dataUserLeaveArray[] = [$item[0]]; // employee not found
                     }

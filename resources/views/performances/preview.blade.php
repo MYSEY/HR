@@ -186,11 +186,15 @@
                                                         <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <select class="form-control goal-type-selec goal_type" name="goal_type">
-                                                            <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
-                                                            <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
-                                                            <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
-                                                            <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
+                                                        <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>
+                                                            <option value="number_increment"  @selected($Detailitem->goal_type == 'number_increment')>Number Increment</option>
+                                                            <option value="number_decrement"  @selected($Detailitem->goal_type == 'number_decrement')>Number Decrement</option>
+                                                            <option value="date_increment"    @selected($Detailitem->goal_type == 'date_increment')>Date Increment</option>
+                                                            <option value="date_decrement"    @selected($Detailitem->goal_type == 'date_decrement')>Date Decrement</option>
+                                                            <option value="currency_increment" @selected($Detailitem->goal_type == 'currency_increment')>Currency Increment</option>
+                                                            <option value="currency_decrement" @selected($Detailitem->goal_type == 'currency_decrement')>Currency Decrement</option>
+                                                            <option value="percent_increment"  @selected($Detailitem->goal_type == 'percent_increment')>Percent Increment</option>
+                                                            <option value="percent_decrement"  @selected($Detailitem->goal_type == 'percent_decrement')>Percent Decrement</option>
                                                         </select>
                                                         <div class="goal-input-wrapper mt-1">
                                                             <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal">{{ $Detailitem->goal }}</textarea>

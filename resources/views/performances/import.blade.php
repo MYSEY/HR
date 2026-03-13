@@ -71,6 +71,15 @@
                             $("#importLeaves").modal("hide");
                             toastr.success('Data has been save success');
                             window.location.reload();
+                        }else if(data.message == 'weight_must_be_exactly'){
+                            new Noty({
+                                title: "",
+                                text: 'Total weight must be exactly 100%',
+                                type: "error",
+                                icon: true,
+                                timeout: 3000,
+                            }).show();
+                            $("#importLeaves").modal("hide");
                         }
                     }
                 });

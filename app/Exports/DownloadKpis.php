@@ -39,10 +39,6 @@ class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, Wi
                     $detail->goal_type,
                     $detail->progress,
                     $detail->weight,
-                    $detail->score_achieved,
-                    $detail->score,
-                    $detail->score_live_staff,
-                    $detail->score_direct_chairman,
                 ];
             }
         }
@@ -85,10 +81,6 @@ class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, Wi
             'I' => 10,
             'J' => 10,
             'K' => 10,
-            'M' => 10,
-            'N' => 10,
-            'O' => 10,
-            'P' => 10,
         ];
     }
     public function headings(): array
@@ -105,10 +97,6 @@ class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, Wi
             "Goal Type",
             "Progress",
             "Weight",
-            "Score Achieved",
-            "Score",
-            "Score Live Staff",
-            "Score Direct Chairman",
         ];
     }
 }
