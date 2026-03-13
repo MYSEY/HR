@@ -430,24 +430,141 @@
             });
         });
 
-        $(document).on('change', '#progress', function (e) {
+        // $(document).on('change', '#progress', function (e) {
+        //     let $row = $(this).closest('tr');
+        //     let goal = $row.find('.goal').val();
+        //     let progress = $(this).val();
+        //     let goalType = $row.find('.goal_type').val();
+            
+        //     let scoreAchieved = 0;
+        //     if (!goal || !progress) return;
+
+        //     const lines = goal.trim().split('\n');
+        //     let exceeded = false; // flag to track if progress exceeds max
+        //     let lastMax = null;   // store last max to compare
+
+        //     const getParsedValue = (val, type) => {
+        //         if (!val) return null;
+        //         val = val.toString().trim();
+
+        //         switch (type) {
+        //             case 'date_increment':
+        //             case 'date_decrement':
+        //                 return Date.parse(val);
+
+        //             case 'percent_increment':
+        //             case 'percent_decrement':
+        //                 return parseFloat(val.replace('%', ''));
+
+        //             case 'currency_increment':
+        //             case 'currency_decrement':
+        //                 return parseFloat(val.replace(/[^\d.]/g, ''));
+
+        //             case 'number_increment':
+        //             case 'number_decrement':
+        //                 return parseFloat(val); // NO replace needed
+
+        //             default:
+        //                 return parseFloat(val);
+        //         }
+        //     };
+        //     const input = getParsedValue(progress, goalType);
+        //     lines.forEach((element, index) => {
+        //         let [minRaw, maxRaw] = element.trim().split(/\s+/);
+        //         let min = getParsedValue(minRaw, goalType);
+        //         let max = getParsedValue(maxRaw, goalType);
+        //         lastMax = max;
+        //         if (isNaN(input) || isNaN(min) || isNaN(max)) return;
+        //         let matched = false;
+        //         // Increment types → value increases
+        //         if (goalType.includes("increment")) {
+        //             if (input >= min && input <= max) matched = true;
+        //         }
+        //         // Decrement types → value decreases
+        //         if (goalType.includes("decrement")) {
+        //             if (input <= min && input <= max) matched = true;
+        //         }
+        //         if (matched) {
+        //             scoreAchieved = index + 1;
+        //             return false; // stop loop
+        //         }
+        //     });
+
+
+        //     // const getParsedValue = (val, type) => {
+        //     //     switch (type) {
+        //     //         case 'date':
+        //     //             return Date.parse(val);
+        //     //         case 'percent':
+        //     //             return parseFloat(val.replace('%', ''));
+        //     //         case 'currency':
+        //     //             return parseFloat(val.replace(/[^\d.]/g, ''));
+        //     //         default:
+        //     //             return parseFloat(val);
+        //     //     }
+        //     // };
+
+        //     // const input = getParsedValue(progress, goalType);
+        //     // lines.forEach((element, index) => {
+        //     //     let [minRaw, maxRaw] = element.trim().split(/\s+/);
+        //     //     let min = getParsedValue(minRaw, goalType);
+        //     //     let max = getParsedValue(maxRaw, goalType);
+        //     //     lastMax = max;
+        //     //     if (!isNaN(input) && input >= min && input <= max) {
+        //     //         scoreAchieved = index + 1;
+        //     //         return false; // stop looping
+        //     //     }
+        //     // });
+
+        //     // Check for exceeding max range
+        //     // if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
+        //     //     scoreAchieved = (goalType === 'date') ? 0 : 5;
+        //     // }
+
+        //     if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
+        //         // If goal type is date, don't force 5 here
+        //         scoreAchieved = (goalType === 'date') ? 0 : 5;
+        //     } else if (goalType === 'date' && lastMax !== null) {
+        //         // Handle date type specifically
+        //         let inputDate = new Date(input);
+        //         let lastMaxDate = new Date(lastMax);
+
+        //         if (!isNaN(inputDate) && !isNaN(lastMaxDate) && inputDate < lastMaxDate) {
+        //             scoreAchieved = 5;
+        //         }
+        //     }
+        //     $row.find('.score_achieved').val(scoreAchieved);
+        //     // Calculate and update scores
+        //     let weight = parseFloat($row.find('.weight').val()) || 0;
+        //     let score = (weight * scoreAchieved) / 100;
+
+        //     $row.find('.score').val(score.toFixed(2));
+        //     $row.find('.personnel_score').val(score.toFixed(2));
+        //     $row.find('.direct_chairman').val(score.toFixed(2));
+
+        //     calculateSubtotals();
+        //     calculateGrandTotals();
+        // });
+
+        $(document).on('change', '#progress', function () {
             let $row = $(this).closest('tr');
             let goal = $row.find('.goal').val();
             let progress = $(this).val();
             let goalType = $row.find('.goal_type').val();
-            
-            let scoreAchieved = 0;
+
+            let scoreAchieved = 1;
+
             if (!goal || !progress) return;
 
             const lines = goal.trim().split('\n');
-            let exceeded = false; // flag to track if progress exceeds max
-            let lastMax = null;   // store last max to compare
+            let lastMax = null;
 
+            // Convert value based on goal type
             const getParsedValue = (val, type) => {
                 if (!val) return null;
                 val = val.toString().trim();
-
                 switch (type) {
+
                     case 'date_increment':
                     case 'date_decrement':
                         return Date.parse(val);
@@ -462,82 +579,61 @@
 
                     case 'number_increment':
                     case 'number_decrement':
-                        return parseFloat(val); // NO replace needed
+                        return parseFloat(val);
 
                     default:
                         return parseFloat(val);
                 }
             };
+
             const input = getParsedValue(progress, goalType);
-            lines.forEach((element, index) => {
-                let [minRaw, maxRaw] = element.trim().split(/\s+/);
+
+            if (isNaN(input)) return;
+
+            lines.forEach((line, index) => {
+                let [minRaw, maxRaw] = line.trim().split(/\s+/);
                 let min = getParsedValue(minRaw, goalType);
                 let max = getParsedValue(maxRaw, goalType);
                 lastMax = max;
-                if (isNaN(input) || isNaN(min) || isNaN(max)) return;
+                if (isNaN(min) || isNaN(max)) return;
                 let matched = false;
-                // Increment types → value increases
-                if (goalType.includes("increment")) {
-                    if (input >= min && input <= max) matched = true;
+                // Increment logic
+                if (goalType.includes('increment')) {
+                    if (input >= min && input <= max) {
+                        matched = true;
+                    }
                 }
-                // Decrement types → value decreases
-                if (goalType.includes("decrement")) {
-                    if (input <= min && input <= max) matched = true;
+
+                // Decrement logic
+                if (goalType.includes('decrement')) {
+
+                    if (input <= min && input >= max) {
+                        matched = true;
+                    }
                 }
+
                 if (matched) {
                     scoreAchieved = index + 1;
-                    return false; // stop loop
+                    return false;
                 }
             });
 
+            // Handle exceed range
+            if (scoreAchieved === 0 && lastMax !== null) {
+                if (goalType.includes('increment') && input > lastMax) {
+                    scoreAchieved = 5;
+                }
 
-            // const getParsedValue = (val, type) => {
-            //     switch (type) {
-            //         case 'date':
-            //             return Date.parse(val);
-            //         case 'percent':
-            //             return parseFloat(val.replace('%', ''));
-            //         case 'currency':
-            //             return parseFloat(val.replace(/[^\d.]/g, ''));
-            //         default:
-            //             return parseFloat(val);
-            //     }
-            // };
-
-            // const input = getParsedValue(progress, goalType);
-            // lines.forEach((element, index) => {
-            //     let [minRaw, maxRaw] = element.trim().split(/\s+/);
-            //     let min = getParsedValue(minRaw, goalType);
-            //     let max = getParsedValue(maxRaw, goalType);
-            //     lastMax = max;
-            //     if (!isNaN(input) && input >= min && input <= max) {
-            //         scoreAchieved = index + 1;
-            //         return false; // stop looping
-            //     }
-            // });
-
-            // Check for exceeding max range
-            // if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
-            //     scoreAchieved = (goalType === 'date') ? 0 : 5;
-            // }
-
-            if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
-                // If goal type is date, don't force 5 here
-                scoreAchieved = (goalType === 'date') ? 0 : 5;
-            } else if (goalType === 'date' && lastMax !== null) {
-                // Handle date type specifically
-                let inputDate = new Date(input);
-                let lastMaxDate = new Date(lastMax);
-
-                if (!isNaN(inputDate) && !isNaN(lastMaxDate) && inputDate < lastMaxDate) {
+                if (goalType.includes('decrement') && input < lastMax) {
                     scoreAchieved = 5;
                 }
             }
+
+            // Update score achieved
             $row.find('.score_achieved').val(scoreAchieved);
-            // Calculate and update scores
+            // Calculate weighted score
             let weight = parseFloat($row.find('.weight').val()) || 0;
             let score = (weight * scoreAchieved) / 100;
-
             $row.find('.score').val(score.toFixed(2));
             $row.find('.personnel_score').val(score.toFixed(2));
             $row.find('.direct_chairman').val(score.toFixed(2));
@@ -545,6 +641,7 @@
             calculateSubtotals();
             calculateGrandTotals();
         });
+
 
         $(document).on('click', '#btnSubmit', function (e) {
             e.preventDefault();
