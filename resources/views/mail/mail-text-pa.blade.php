@@ -14,14 +14,15 @@
     </h2>
     <div style="font-size: 16px; line-height: 1.6; color: #333;">
         <p style="line-height:1.6;">
-            Dear Respective Management,
+            Dear LK/NK,
         </p>
         <P>
-            I would like to summit you for the KPI/PA and please kindly review and consider to approve accordingly.
-Should you need any further information, please do not hesitate to let me know.
+            I would like to submit the KPI/PA to you.
+Please kindly to review and comment.
+If you have any concern,please let me know.
         </P>
     </div>
-    <p style="margin-top: 20px; font-weight: bold;">Best Regards,</p>
+    <p style="margin-top: 20px; font-weight: bold;">Best regards.</p>
     <div style="text-align: center; margin-top: 20px;">
         @php
             $segments = request()->segments();

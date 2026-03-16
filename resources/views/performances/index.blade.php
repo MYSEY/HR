@@ -174,17 +174,18 @@
                                                     <label class="custom-control-label" for="checkAll"></label>
                                                 </div>
                                             </th>
-                                            <th class="text-nowrap sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
-                                            <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
-                                            <th class="sorting sorting_asc">@lang('lang.employee_name')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.department')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.from_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.to_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.kpi_year')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.total_weight')</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.reason')</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
+                                            <th class="sorting stuck-scroll-3">@lang('lang.employee_id')</th>
+                                            <th class="sorting sorting_asc stuck-scroll-3">@lang('lang.employee_name')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.location')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.department')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.position')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.from_date')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.to_date')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.kpi_year')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.total_weight')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" >@lang('lang.incharge_by')</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.reason')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
@@ -214,7 +215,7 @@
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
+                                        <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -617,9 +618,12 @@
                         orderable: false,
                         searchable: false,
                         render: function(data, type, row) {
-                            let disabledAttr = "";
-                            if (row.status == "preparing") {
-                                disabledAttr = "disabled";
+                            let disabledAttr = "disabled";
+                            if (row.employee_id == window.userId && row.status == 'preparing') {
+                                disabledAttr = "";
+                            }
+                            if ((row.line_manager == window.userId && row.status == "accepted") || row.review_employee_id == window.userId) {
+                                disabledAttr = "";
                             }
                             return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
                                 <input type="checkbox" class="custom-control-input sub_chk" ${disabledAttr} name="checkbox" data-status="${row.status}" data-id="${data}" id="${data}" value="${data}">
@@ -630,76 +634,49 @@
                     {
                         data: 'status',
                         name: 'status',
-                        className: 'stuck-scroll-3',
                         orderable: true,
                         searchable: true,
                         render: function (data, type, row) {
-                            // 1️⃣ ROLE: DHOD / DBM (Manager-level)
-                            if (['DHOD', 'DBM','HOD','BM','BOD'].includes(window.rolePermission)) {
-                                // Manager only controls their employee or themselves
-                                const isOwner = row.line_manager == window.userId || row.employee_id == window.userId;
-                                if (isOwner) {
-                                    // 📌 If status = accepted → show "Assign to"
-                                    if (row.status === 'accepted') {
-                                        return `
-                                            <div class="dropdown action-label">
-                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" 
-                                                href="#" data-toggle="dropdown">
-                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                    <span>Accepted</span>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" 
-                                                    id="btnAsignTo" 
-                                                    data-id="${row.id}" 
-                                                    data-status="${row.status}">
-                                                        <i class="fa fa-dot-circle-o text-primary"></i>
-                                                        <span>@lang("lang.asign_to")</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        `;
-                                    }
-                                    // 📌 If status = preparing → manager cannot change → just show
-                                    if (row.status === 'preparing') {
-                                        return `
-                                            <span class="badge badge-warning">Preparing</span>
-                                        `;
-                                    }
-                                }
-                                // Not owner → show only view
+                            // const isOwner = row.line_manager == window.userId || row.employee_id == window.userId;
+                            if (row.line_manager == window.userId && row.status == "accepted") {
                                 return `
-                                    <span class="badge badge-info">${row.status}</span>
+                                    <div class="dropdown action-label">
+                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" 
+                                        href="#" data-toggle="dropdown">
+                                            <i class="fa fa-dot-circle-o text-success"></i>
+                                            <span>Accepted</span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" 
+                                            id="btnAsignTo" 
+                                            data-id="${row.id}" 
+                                            data-status="${row.status}">
+                                                <i class="fa fa-dot-circle-o text-primary"></i>
+                                                <span>@lang("lang.asign_to")</span>
+                                            </a>
+                                        </div>
+                                    </div>
                                 `;
                             }
-                            // 2️⃣ ROLE: Normal users
-                            else {
-                                // PREPARING → User can accept
-                                if (row.status === 'preparing') {
-                                    return `
-                                            <div class="dropdown action-label">
-                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" 
-                                                href="#" data-toggle="dropdown">
-                                                    <i class="fa fa-dot-circle-o text-warning"></i>
-                                                    <span>Preparing</span>
+                            if (row.employee_id == window.userId && row.status === 'preparing') {
+                                return `
+                                        <div class="dropdown action-label">
+                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" 
+                                            href="#" data-toggle="dropdown">
+                                                <i class="fa fa-dot-circle-o text-warning"></i>
+                                                <span>Preparing</span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" 
+                                                id="btnAccepted" 
+                                                data-id="${row.id}" 
+                                                data-status="${row.status}">
+                                                    <i class="fa fa-dot-circle-o text-success"></i>
+                                                    <span>@lang('lang.accepted')</span>
                                                 </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" 
-                                                    id="btnAccepted" 
-                                                    data-id="${row.id}" 
-                                                    data-status="${row.status}">
-                                                        <i class="fa fa-dot-circle-o text-success"></i>
-                                                        <span>@lang('lang.accepted')</span>
-                                                    </a>
-                                                </div>
                                             </div>
                                         </div>
-                                    `;
-                                }
-                            }
-                            if(row.employee_id != userIdLog && row.status === 'preparing'){
-                                return `
-                                    <span class="badge bg-inverse-info" style="font-size: 13px;">Preparing</span>
+                                    </div>
                                 `;
                             }
                             let statusText = "";
@@ -743,6 +720,7 @@
                     { 
                         data: 'employee_name_kh', 
                         name: 'employee_name_kh',
+                        className: 'stuck-scroll-3',
                         orderable: true,
                         searchable: true,
                     },
@@ -764,6 +742,7 @@
                             return data !== null ? data + '%' : '';
                         }
                     },
+                    { data: 'review_employee_name_en', name: 'review_employee_name_en' },
                     { 
                         data: 'reason', 
                         defaultContent: '',
@@ -785,6 +764,19 @@
                         orderable: true,
                         searchable: true,
                         render: function (data, type, row) {
+                            let btn_edit = "";
+                            let btn_delete = "";
+                            if ((row.employee_id == window.userId && row.status == 'preparing') || (row.line_manager == window.userId && row.status == 'preparing')) {
+                                btn_edit = ` <a href="{{url('/performance')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
+                                            <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')
+                                        </a>`;
+                                btn_delete = `<a class="dropdown-item performanceDelete" href="#" data-toggle="modal" data-id="${row.id}"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>`;
+                            }
+                            if (row.line_manager == window.userId && row.status == "accepted") {
+                                btn_edit = ` <a href="{{url('/performance')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
+                                            <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')
+                                        </a>`;
+                            }
                             return `
                                 <div class="dropdown dropdown-action">
                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
@@ -792,10 +784,8 @@
                                         <a class="dropdown-item" href="{{url('performance')}}/${row.id}">
                                             <i class="fa fa-regular fa-eye"></i> Preview
                                         </a>
-                                        <a href="{{url('/performance')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
-                                            <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')
-                                        </a>
-                                        <a class="dropdown-item performanceDelete" href="#" data-toggle="modal" data-id="${row.id}"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                        ${btn_edit}
+                                        ${btn_delete}
                                     </div>
                                 </div>
                             `;

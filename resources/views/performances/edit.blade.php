@@ -64,22 +64,22 @@
                                 @endphp
                                 @foreach ($data->titles as $item)
                                     <tr class="title-group" style="background-color: #e5e1e1">
-                                        <td colspan="2" class="text-center">
-                                            <input type="text" class="form-control required" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{ $item->title ?? '' }}">
+                                        <td colspan="5" class="text-center">
+                                            <input type="text" class="form-control required" style="background: #efa781" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{ $item->title ?? '' }}">
                                         </td>
+                                        {{-- <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td> --}}
                                         <td colspan="1" class="text-center"></td>
                                     </tr>
                                     @foreach ($item->purposes as $purposeItem)
                                         <tr class='section-purpose purpose-group' style='text-align: center; background-color: #e5e1e1'>
-                                            <td colspan="2" class="text-center">
-                                                <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{ $purposeItem->name ?? '' }}">
+                                            <td colspan="5" class="text-center">
+                                                <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{ $purposeItem->name ?? '' }}">
                                             </td>
+                                            {{-- <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td> --}}
                                             <td class="text-center">
                                                 @if ($loop->index == 0)
                                                     <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
@@ -429,12 +429,9 @@
     // Function to create a new purpose row
     function addPurposeRow() {
         return `<tr class='section-purpose purpose-group' style='text-align: center; background-color: #e5e1e1'>
-            <td colspan="2" class="text-center">
-                <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
+            <td colspan="5" class="text-center">
+                <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
-            <td colspan="1" class="text-center"></td>
-            <td colspan="1" class="text-center"></td>
-            <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center">
                 <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
             </td>
@@ -502,23 +499,17 @@
     }
     function addMoreRow() {
         return `<tr class='title-group' style='background-color: #e5e1e1'>
-            <td colspan="2" class="text-center">
-                <input type="text" class="form-control required" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}">
+            <td colspan="5" class="text-center">
+                <input type="text" class="form-control required" style="background: #efa781" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}">
             </td>
-            <td colspan="1" class="text-center"></td>
-            <td colspan="1" class="text-center"></td>
-            <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center">
                 <a class="btn btn-danger btn-sm btnRemoveMore"><i class="fa fa-plus-circle"></i>Remove More</a>
             </td>
         </tr>
         <tr class='purpose-group' style='text-align: center; background-color: #e5e1e1'>
-            <td colspan="2" class="text-center">
-                <input type="text" class="form-control required" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
+            <td colspan="5" class="text-center">
+                <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
-            <td colspan="1" class="text-center"></td>
-            <td colspan="1" class="text-center"></td>
-            <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center">
                 <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
             </td>
