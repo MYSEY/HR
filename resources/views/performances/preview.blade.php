@@ -158,19 +158,19 @@
                                     @endphp
                                     @foreach ($data->titles as $item)
                                         <tr>
-                                            <td colspan="2" class="text-center">
-                                                <input type="text" class="form-control" value="{{ $item->title ?? '' }}" required>
+                                            <td colspan="3" class="text-center">
+                                                <input type="text" style="background: #efa781" class="form-control" value="{{ $item->title ?? '' }}" required>
                                             </td>
-                                            <td colspan="1" class="text-center"></td>
+                                            {{-- <td colspan="1" class="text-center"></td> --}}
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
                                         
                                         @foreach ($item->purposes as $purposeItem)
                                             <tr>
-                                                <td colspan="2" class="text-center">
-                                                    <input type="text" class="form-control" value="{{ $purposeItem->name ?? '' }}" required>
+                                                <td colspan="3" class="text-center">
+                                                    <input type="text" class="form-control" style="background: #f0cc9b" value="{{ $purposeItem->name ?? '' }}" required>
                                                 </td>
-                                                <td colspan="1" class="text-center"></td>
+                                                {{-- <td colspan="1" class="text-center"></td> --}}
                                                 <td colspan="1" class="text-center"></td>
                                             </tr>
                                             

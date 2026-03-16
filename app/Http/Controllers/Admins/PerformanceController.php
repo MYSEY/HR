@@ -47,6 +47,7 @@ class PerformanceController extends Controller
             ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
             ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
             ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->leftJoin('users as reviewEmployee', 'performances.review_employee_id', '=', 'reviewEmployee.id')
             ->select(
                 'performances.*',
                 'users.number_employee',
@@ -59,8 +60,11 @@ class PerformanceController extends Controller
                 'positions.name_english as positions_name',
                 'branchs.branch_name_en',
                 'branchs.branch_name_kh',
+                'reviewEmployee.number_employee as review_employee_number_employee',
+                'reviewEmployee.employee_name_kh as review_employee_name_kh',
+                'reviewEmployee.employee_name_en as review_employee_name_en',
             )
-            // ->whereIn('performances.status', ['preparing','accepted'])
+            ->whereNot('performances.status', 'approved')
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -87,7 +91,6 @@ class PerformanceController extends Controller
                 });
             }
             if (in_array(Auth::user()->RolePermission, ['BOD','CEO'])){
-                $query->whereNot('performances.status', 'approved');
                 // $query->whereIn('performances.status', ['preparing','accepted']);
                 $query->where(function ($q) {
                     $q->where("users.line_manager", Auth::user()->id)
@@ -95,23 +98,19 @@ class PerformanceController extends Controller
                 });
             }
             if (in_array(Auth::user()->RolePermission, ['HR']) && $permission["is_access"] != 1){
-                $query->whereNot('performances.status', 'approved');
                 $query->where(function ($q) {
                     $q->where("users.line_manager", Auth::user()->id)
                     ->orWhere('performances.employee_id', Auth::user()->id);
                 });
             }
             if (in_array(Auth::user()->RolePermission, ['HOD'])) {
-                $query->whereNot('performances.status', 'approved');
                 $query->where("users.department_id", Auth::user()->department_id);
             }
             
             if (in_array(Auth::user()->RolePermission, ['BM'])){
-                $query->whereNot('performances.status', 'approved');
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
             if (in_array(Auth::user()->RolePermission, ['DHOD','DBM'])){
-                $query->whereNot('performances.status', 'approved');
                 $query->where(function ($q) {
                     $q->where("users.line_manager", Auth::user()->id)
                     ->orWhere('performances.employee_id', Auth::user()->id);
@@ -119,7 +118,6 @@ class PerformanceController extends Controller
             }
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
                 $query->where('performances.employee_id', Auth::user()->id);
-                $query->whereNot('performances.status', 'approved');
             }
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
@@ -773,6 +771,7 @@ class PerformanceController extends Controller
             $performance = Performance::findOrFail($request->id);
             if ($performance->total_weight == 100) {
                 $performance->update([
+                    'review_employee_id'    => Auth::user()->line_manager,
                     'status'                => 'accepted',
                     'updated_by'            => Auth::id(),
                 ]);
