@@ -411,12 +411,11 @@ class PerformanceController extends Controller
                     'message' => 'successfully'
                 ]);
             } else {
-                DB::rollBack();
                 return response()->json([
                     'success' => false,
                     'error' => 'The total weight of all KPIs must equal 100%.',
                     'status' => 422
-                ], 422);
+                ]);
             }
         } catch (\Throwable $exp) {
             DB::rollback();

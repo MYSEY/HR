@@ -766,7 +766,7 @@
                         render: function (data, type, row) {
                             let btn_edit = "";
                             let btn_delete = "";
-                            if ((row.employee_id == window.userId && row.status == 'preparing') || (row.line_manager == window.userId && row.status == 'preparing')) {
+                            if ((row.employee_id == window.userId && (row.status == 'preparing' || row.status == "5")) || (row.line_manager == window.userId && row.status == 'preparing')) {
                                 btn_edit = ` <a href="{{url('/performance')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
                                             <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')
                                         </a>`;

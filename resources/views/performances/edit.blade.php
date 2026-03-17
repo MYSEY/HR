@@ -327,6 +327,10 @@
         
         $(document).on('click', '#btnCreatePerformance', function(e) {
             e.preventDefault(); // Prevent the form from submitting the traditional way
+            $(this).attr('disabled',true);
+            $('.btn-cancel').addClass('disabled');
+            $(".loading-icon").css("display", "block");
+            $(".btn-txt").css("display", "none");
             let numRequired = 0;
             $(".required").each(function(e){
                 if($(this).val()==""){ numRequired++;}
@@ -376,6 +380,10 @@
                         $(this).css("border-color","red");
                     }
                 });
+                $("#btnCreatePerformance").attr('disabled',false);
+                $('.btn-cancel').removeClass('disabled');;
+                $(".loading-icon").css("display", "none");
+                $(".btn-txt").css("display", "block");
             }else{
                 $.ajax({
                     type: "POST",
@@ -389,6 +397,10 @@
                     },
                     dataType: "JSON",
                     success: function (response) {
+                        $("#btnCreatePerformance").attr('disabled',false);
+                        $('.btn-cancel').removeClass('disabled');;
+                        $(".loading-icon").css("display", "none");
+                        $(".btn-txt").css("display", "block");
                         if (response.message == 'successfully') {
                             toastr.success(response.message, 'Success');
                             setTimeout(function() {
