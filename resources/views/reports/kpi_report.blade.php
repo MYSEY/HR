@@ -88,68 +88,57 @@
                 </div>
             </div>
         </div>
-        <div class="row filter-btn"> 
+        <div class="row filter-btn">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-2">
+                <div class="form-group">
+                    <div class="cal-icon">
+                        <input class="form-control floating datetimepicker" type="text" id="from_date" name="from_date" placeholder="@lang('lang.from_date')">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-2">
+                <div class="form-group">
+                    <div class="cal-icon">
+                        <input class="form-control floating datetimepicker" type="text" id="to_date" name="to_date" placeholder="@lang('lang.to_date')">
+                    </div>
+                </div>
+            </div>
             @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO', 'HOD','DHOD','BM','DBM']))
-                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
-                        <div class="search">
-                            <i class="uil uil-search"></i>
-                            <input spellcheck="false" id="employee_id" name="employee_id" class="form-control" type="text" placeholder="Employee ID">
-                        </div>
+                        <select class="select form-control hr-select2-option filter" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                            @foreach ($branch as $item)
+                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
-                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                    <div class="form-group ">
-                        <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <div class="form-group">
+                        <select class="select form-control hr-select2-option filter" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
+                            @foreach ($department as $item)
+                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <div class="form-group">
-                            <select class="select form-control hr-select2-option" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
-                                @foreach ($branch as $item)
-                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <div class="form-group">
-                            <select class="select form-control hr-select2-option" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
-                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
-                                @foreach ($department as $item)
-                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                @else
-                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
-                @endif
             @else
                     <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10"></div>
             @endif
             <div class="col-sm-2 col-md-2">
                 <div style="display: flex" class="float-end">
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
-                        <span class="btn-txt"><i class="fa fa-search"></i></span>
-                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                    </button>
                     @if ($permission->is_export == "1")
                         <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
                             <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
                             <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                         </button>
                     @endif
-                    <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
-                        <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
-                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                    </button>
                 </div>
             </div>
         </div><br>
-        
+
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
@@ -209,12 +198,12 @@
 @section('script')
     <script>
         $(function(){
-            $('.btn-search').on('click', function() {
-                number_employee = $('#employee_id').val();
-                employee_name = $('#employee_name').val();
-                branch_id = $('#branch_id').val();
-                department_id = $('#department_id').val();
-                $('#DataTables_Table_0').DataTable().ajax.reload(null, false);
+            dataTables();
+            $('.filter').on('change', function() {
+                dataTables();
+            });
+            $('.datetimepicker').on('dp.change changeDate change', function (e) {
+                dataTables();
             });
             $('.checkAll').on('click', function(e) {
                 if($(this).is(':checked',true)){
@@ -279,7 +268,7 @@
                                 '<div class="form-group">'+
                                     '<label>@lang("lang.employee")</label>'+
                                     '<select class="form-control hr-select2-option-emp-role form-select asign_employee_id" id="asign_employee_id">'+
-                                    
+
                                     '</select>'+
                                 '</div>'+
                                 '<div class="form-group">' +
@@ -510,18 +499,12 @@
                     employee_name:      $("#employee_name").val(),
                     branch_id:          $("#branch_id").val(),
                     department_id:      $("#department_id").val(),
+                    from_date:          $("#from_date").val(),
+                    to_date:            $("#to_date").val(),
                     per_page: currentPage,
                 };
                 var url = "{{URL::to('performance-admin/kpi-export')}}?" + $.param(query)
                 window.location = url;
-            });
-            // Initialize only once
-            dataTables();
-            $(".reset-btn").on("click", function() {
-                $(this).prop('disabled', true);
-                $(".btn-text-reset").hide();
-                $("#btn-text-loading").css('display', 'block');
-                window.location.replace("{{ URL('performance-admin/kpi-report') }}");
             });
             $('body').on('click', '.btn-asign', function() {
                 var pa_id = $(this).data("id");
@@ -554,7 +537,7 @@
                             '<div class="form-group">'+
                                 '<label>@lang("lang.employee")</label>'+
                                 '<select class="form-control hr-select2-option-emp-role form-select asign_employee_id" id="asign_employee_id">'+
-                                
+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group">' +
@@ -782,11 +765,11 @@
             }
         }
         function dataTables() {
-            $('#loading-overlay').show();
-            // Check if DataTable instance exists, then destroy it
-            if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
-                $('#DataTables_Table_0').DataTable().clear().destroy();
-            }
+            // $('#loading-overlay').show();
+            // // Check if DataTable instance exists, then destroy it
+            // if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
+            //     $('#DataTables_Table_0').DataTable().clear().destroy();
+            // }
             $('#DataTables_Table_0').DataTable({
                 destroy: true,
                 pageLength: 10,
@@ -802,6 +785,8 @@
                         d.employee_name = $('input[name="employee_name"]').val();
                         d.branch_id = $('select[name="branch_id"]').val();
                         d.department_id = $('select[name="department_id"]').val();
+                        d.from_date = $('#from_date').val();
+                        d.to_date = $('#to_date').val();
                     },
                     dataSrc: function (json) {
                         userPermission = json.permission || {}; // 👈 Save permission
@@ -861,13 +846,13 @@
                             `;
                         }
                     },
-                    { 
-                        data: 'number_employee', 
+                    {
+                        data: 'number_employee',
                         name: 'number_employee',
                         className: 'stuck-scroll-3',
                     },
-                    { 
-                        data: 'employee_name_kh', 
+                    {
+                        data: 'employee_name_kh',
                         name: 'employee_name_kh',
                     },
                     { data: 'branch_name_en', name: 'branch_name_en' },
@@ -906,11 +891,11 @@
                     //         }
                     //         if (userIdLog == data.review_employee_id || userPermission.is_access == 1 && (row.status !="preparing" && row.status != "approved")) {
                     //             return `
-                    //                 <a class="btn btn-white btn-sm btn-rounded btn-asign" 
-                    //                 data-id="${row.id}" 
-                    //                 data-name="${row.review_employee_name_en}" 
+                    //                 <a class="btn btn-white btn-sm btn-rounded btn-asign"
+                    //                 data-id="${row.id}"
+                    //                 data-name="${row.review_employee_name_en}"
                     //                 data-employeeid="${row.employee_id}"
-                    //                 data-status="${row.status}" 
+                    //                 data-status="${row.status}"
                     //                 href="#" aria-expanded="false">
                     //                     <i class="fa fa-dot-circle-o text-success"></i>
                     //                     <span>${textBtn}</span>
@@ -954,13 +939,13 @@
                 }
             });
 
-            $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
-                if (processing) {
-                    $('#loading-overlay').show();
-                } else {
-                    $('#loading-overlay').hide();
-                }
-            });
+            // $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
+            //     if (processing) {
+            //         $('#loading-overlay').show();
+            //     } else {
+            //         $('#loading-overlay').hide();
+            //     }
+            // });
         }
     </script>
 @endsection

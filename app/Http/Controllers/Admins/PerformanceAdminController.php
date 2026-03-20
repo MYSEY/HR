@@ -83,8 +83,10 @@ class PerformanceAdminController extends Controller
             })
             ->when($request->department_id, function ($query, $department_id) {
                 return $query->where('users.department_id', $department_id);
+            })
+            ->when($request->status, function ($query, $status) {
+                return $query->where('performances.status', $status);
             });
-        
             // Search filter
             $searchValue = request()->input('search.value');
             if (!empty($searchValue)) {
@@ -97,15 +99,15 @@ class PerformanceAdminController extends Controller
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
                 });
             }
-            
+
             if (in_array(Auth::user()->RolePermission, ['HRAdmin','developer','admin']) || (in_array(Auth::user()->RolePermission, ['HR']) && $permission->is_access == "1")) {
                $recordsTotal = Performance::whereNot('performances.status', 'approved')->count();  // total records without filter
             }else{
                 $query->where("performances.review_employee_id", Auth::user()->id);
                 $recordsTotal = Performance::where("performances.review_employee_id", Auth::user()->id)->count();  // total records without filter
             }
-            
-            
+
+
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
@@ -192,7 +194,7 @@ class PerformanceAdminController extends Controller
         $data = $query->where("performance_histories.id", $id)->first();
         return view('performance_admins.preview', compact('data','permission', 'url','urlpage'));
     }
-   
+
     public function employees(Request $request)
     {
         $kpiUser = User::where("id", $request->get_employee_id)->select(
@@ -228,7 +230,7 @@ class PerformanceAdminController extends Controller
             $query->whereIn('users.emp_status', ['1','2','10','Probation']);
             $query->orWhere('branchs.abbreviations', "HQ");
         }
-        
+
         $datas = $query->whereIn('users.emp_status', ['1','2','10','Probation'])->get();
         return response()->json([
             'datas' => $datas
@@ -509,7 +511,7 @@ class PerformanceAdminController extends Controller
                     }
                 }
             }
-            
+
             if ($performance->total_weight == 100) {
                 $performance->update([
                     'reason'        => $request->reason,
@@ -602,7 +604,7 @@ class PerformanceAdminController extends Controller
                         }
                     }
                 }
-                
+
                 if ($performance->total_weight == 100) {
                     self::createHistories($performance);
                     $performance->update([
@@ -701,6 +703,6 @@ class PerformanceAdminController extends Controller
             'branchs.branch_name_kh',
         )->where('performances.id',$id)->first();
         return Excel::download(new ExporPerformanceDetail($data), 'performance_appraisal_'.$id.'.xlsx');
-        
+
     }
 }

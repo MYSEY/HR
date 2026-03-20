@@ -76,8 +76,11 @@ class PerformanceController extends Controller
             })
             ->when($request->department_id, function ($query, $department_id) {
                 return $query->where('users.department_id', $department_id);
+            })
+            ->when($request->status, function ($query, $status) {
+                return $query->where('performances.status', $status);
             });
-        
+
             // Search filter
             $searchValue = request()->input('search.value');
             if (!empty($searchValue)) {
@@ -105,8 +108,11 @@ class PerformanceController extends Controller
             }
             if (in_array(Auth::user()->RolePermission, ['HOD'])) {
                 $query->where("users.department_id", Auth::user()->department_id);
+                if(Auth::user()->department->abbreviations == "CRD"){
+                    $branch = Branchs::whereNot("id", Auth::user()->branch_id)->get();
+                }
             }
-            
+
             if (in_array(Auth::user()->RolePermission, ['BM'])){
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
@@ -115,6 +121,7 @@ class PerformanceController extends Controller
                     $q->where("users.line_manager", Auth::user()->id)
                     ->orWhere('performances.employee_id', Auth::user()->id);
                 });
+
             }
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
                 $query->where('performances.employee_id', Auth::user()->id);
@@ -149,8 +156,15 @@ class PerformanceController extends Controller
                 'data' => $data
             ]);
         }
-        $branch = Branchs::all();
-        $department = Department::all();
+        $branch = [];
+        $department = [];
+        if(Auth::user()->RolePermission == "DHOD" && Auth::user()->department->abbreviations == "CRD"){
+            $branch = Branchs::whereNot("id", Auth::user()->branch_id)->get();
+        }
+        if(in_array(Auth::user()->RolePermission,['admin','HRAdmin','developer','BOD','CEO']) || (in_array(Auth::user()->RolePermission, ['HR']) && $permission["is_access"] == 1)){
+            $branch = Branchs::all();
+            $department = Department::all();
+        }
         $employee = User::where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
         return view('performances.index',compact('branch','department','employee'));
     }
@@ -199,7 +213,7 @@ class PerformanceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {  
+    {
         try {
             DB::beginTransaction();
             $totalWeight = 0;
@@ -235,7 +249,7 @@ class PerformanceController extends Controller
                             'title'          => $titleItem['title'],
                             'created_by'     => Auth::id(),
                         ]);
-        
+
                         foreach ($titleItem['dataPurpose'] as $purposeItem) {
                             $purpose = Purpose::create([
                                 'performance_id' => $performance->id,
@@ -243,13 +257,13 @@ class PerformanceController extends Controller
                                 'name'           => $purposeItem['purpose'],
                                 'created_by'     => Auth::id(),
                             ]);
-        
+
                             foreach ($purposeItem['dataKPi'] as $kpi) {
                                 /* ---- Validate goal lines -------------------------------- */
                                 $isValidGoal = true;
                                 $goalType    = $kpi['goal_type'];           // number|currency|percent|date
                                 $lines       = explode("\n", $kpi['goal']);
-        
+
                                 // foreach ($lines as $line) {
                                 //     $parts = preg_split('/\s+/', trim($line));
                                 //     if (count($parts) !== 2) { $isValidGoal = false; break; }
@@ -266,7 +280,7 @@ class PerformanceController extends Controller
                                 //             try {
                                 //                 $d1 = \Carbon\Carbon::createFromFormat('Y-m-d', $min);
                                 //                 $d2 = \Carbon\Carbon::createFromFormat('Y-m-d', $max);
-        
+
                                 //                 if ($d1->format('Y-m-d') !== $min || $d2->format('Y-m-d') !== $max) {
                                 //                     $isValidGoal = false;
                                 //                 }
@@ -313,8 +327,8 @@ class PerformanceController extends Controller
                                 //         break;
                                 //     }
                                 // }
-        
-                                
+
+
 
                                 foreach ($lines as $line) {
 
@@ -387,7 +401,7 @@ class PerformanceController extends Controller
                                         'goal_type' => $goalType,
                                     ]);
                                 }
-        
+
                                 /* ---- Passed validation → create row -------------------- */
                                 PerformanceDetail::create([
                                     'performance_id' => $performance->id,
@@ -594,7 +608,7 @@ class PerformanceController extends Controller
                         'title'          => $titleItem['title'],
                         'created_by'     => Auth::id(),
                     ]);
-                
+
                     // Only loop if dataPurpose exists and is an array
                     if (!empty($titleItem['dataPurpose']) && is_array($titleItem['dataPurpose'])) {
                         foreach ($titleItem['dataPurpose'] as $purposeItem) {
@@ -604,21 +618,21 @@ class PerformanceController extends Controller
                                 'name'           => $purposeItem['purpose'],
                                 'created_by'     => Auth::id(),
                             ]);
-                
+
                             if (!empty($purposeItem['dataKPi']) && is_array($purposeItem['dataKPi'])) {
                                 foreach ($purposeItem['dataKPi'] as $kpi) {
                                     // ✅ Your goal validation logic here (unchanged)
                                     $isValidGoal = true;
                                     $goalType    = $kpi['goal_type'];
                                     $lines       = explode("\n", $kpi['goal']);
-                
+
                                     // foreach ($lines as $line) {
                                     //     $parts = preg_split('/\s+/', trim($line));
-                
+
                                     //     if (count($parts) !== 2) { $isValidGoal = false; break; }
-                
+
                                     //     [$min, $max] = $parts;
-                
+
                                     //     switch ($goalType) {
                                     //         case 'number':
                                     //         case 'currency':
@@ -627,12 +641,12 @@ class PerformanceController extends Controller
                                     //                 $isValidGoal = false;
                                     //             }
                                     //             break;
-                
+
                                     //         case 'date':
                                     //             try {
                                     //                 $d1 = \Carbon\Carbon::createFromFormat('Y-m-d', $min);
                                     //                 $d2 = \Carbon\Carbon::createFromFormat('Y-m-d', $max);
-                
+
                                     //                 if ($d1->format('Y-m-d') !== $min || $d2->format('Y-m-d') !== $max) {
                                     //                     $isValidGoal = false;
                                     //                 }
@@ -640,7 +654,7 @@ class PerformanceController extends Controller
                                     //                 $isValidGoal = false;
                                     //             }
                                     //             break;
-                
+
                                     //         default:
                                     //             $isValidGoal = false;
                                     //     }
@@ -685,7 +699,7 @@ class PerformanceController extends Controller
                                         }
                                     }
 
-                
+
                                     if (!$isValidGoal) {
                                         DB::rollBack();
                                         return response()->json([
@@ -693,7 +707,7 @@ class PerformanceController extends Controller
                                             'goal_type' => $goalType,
                                         ]);
                                     }
-                
+
                                     // ✅ Passed validation → create row
                                     PerformanceDetail::create([
                                         'performance_id' => $performance->id,
@@ -712,7 +726,7 @@ class PerformanceController extends Controller
                         }
                     }
                 }
-                
+
                 DB::commit();
                 return response()->json([
                     'message' => 'successfully'
@@ -816,7 +830,7 @@ class PerformanceController extends Controller
                     $skipped[] = $id;
                 }
             }
-        
+
             DB::commit(); // ✅ Commit after all pass
             return response()->json([
                 'success'  => true,
@@ -824,7 +838,7 @@ class PerformanceController extends Controller
                 'approved' => $approved,
                 'status'   => 200
             ]);
-        
+
         } catch (\Throwable $exp) {
             DB::rollBack(); // ✅ Roll back on exception
             return response()->json([
@@ -868,11 +882,11 @@ class PerformanceController extends Controller
             // --- Performance Sheet ---
             $file = $request->file('file');
             $extension = $file->getClientOriginalExtension();
-    
+
             if (!in_array($extension, ["xlsx", "xls", "csv"])) {
                 return back()->withErrors(["file" => "Invalid file format"]);
             }
-    
+
             $spreadsheet = IOFactory::load($file->getPathname());
             $performanceSheet = $spreadsheet->getSheetByName('Performance');
             if ($performanceSheet) {
