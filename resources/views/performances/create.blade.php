@@ -106,8 +106,66 @@
                                                             <option value="date_increment">Date Increment</option>
                                                             <option value="date_decrement">Date Decrement</option>
                                                         </select>
-                                                        <div class="goal-input-wrapper mt-1">
+                                                        {{-- <div class="goal-input-wrapper mt-1">
                                                             <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 to 70&#10;70 to 80&#10;90 to 100"></textarea>
+                                                        </div> --}}
+                                                        <div class="goal-input-wrapper mt-1">
+                                                            <div class="row mb-1">
+                                                                <div class="group d-flex align-items-center">
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                                                    </div>
+                                                                    <div class="col-md-2 text-center">To</div>
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-1">
+                                                                <div class="group d-flex align-items-center">
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any"  class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                                                    </div>
+                                                                    <div class="col-md-2 text-center">To</div>
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="row mb-1">
+                                                                <div class="group d-flex align-items-center">
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                                                    </div>
+                                                                    <div class="col-md-2 text-center">To</div>
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mb-1">
+                                                                <div class="group d-flex align-items-center">
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                                                    </div>
+                                                                    <div class="col-md-2 text-center">To</div>
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="group d-flex align-items-center">
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                                                    </div>
+                                                                    <div class="col-md-2 text-center">To</div>
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </td>
 
@@ -164,21 +222,96 @@
     $(function() {
         $(document).on('input', '.sum_total_weight', calculateTotal);
         let dataKeyKpi = [];
-        $(document).on('change', '.goal-type-select', function () {
-            const selectedType = $(this).val();
-            const wrapper = $(this).closest('td').find('.goal-input-wrapper');
+        // $(document).on('change', '.goal-type-select', function () {
+        //     const selectedType = $(this).val();
+        //     const wrapper = $(this).closest('td').find('.goal-input-wrapper');
 
-            let placeholder = "e.g.\n60 70\n70 80\n90 100";
-            if (selectedType === 'date') {
-                placeholder = "e.g.\n2025-01-01 2025-06-01\n2025-06-02 2025-12-31";
-            } else if (selectedType === 'currency') {
-                placeholder = "e.g.\n1000 2000\n2000 3000";
-            } else if (selectedType === 'percent') {
-                placeholder = "e.g.\n10 20\n20 30";
+        //     let placeholder = "e.g.\n60 70\n70 80\n90 100";
+        //     if (selectedType === 'date') {
+        //         placeholder = "e.g.\n2025-01-01 2025-06-01\n2025-06-02 2025-12-31";
+        //     } else if (selectedType === 'currency') {
+        //         placeholder = "e.g.\n1000 2000\n2000 3000";
+        //     } else if (selectedType === 'percent') {
+        //         placeholder = "e.g.\n10 20\n20 30";
+        //     }
+
+        //     const textarea = `<textarea class="form-control required" name="goal[]" rows="5" placeholder="${placeholder}"></textarea>`;
+        //     wrapper.html(textarea);
+        // });
+        $(document).on('change', '.goal-type-select', function () {
+            let selectedType = $(this).val();
+            let wrapper = $(this).closest('td').find('.goal-input-wrapper');
+            let [dataType, direction] = selectedType.split('_');
+            let inputType = 'number';
+            let step = 'any';
+            let min = '';
+            let max = '';
+            let placeholderFrom = 'From';
+            let placeholderTo = 'To';
+
+            // ===== TYPE CONTROL + PLACEHOLDER =====
+            if (dataType === 'date') {
+                inputType = 'date';
+                placeholderFrom = 'Start Date';
+                placeholderTo = 'End Date';
+            } 
+            else if (dataType === 'percent') {
+                inputType = 'number';
+                step = '0.01';
+                min = 0;
+                max = 100;
+                placeholderFrom = 'From (%)';
+                placeholderTo = 'To (%)';
+            } 
+            else if (dataType === 'currency') {
+                inputType = 'number';
+                step = '0.01';
+                placeholderFrom = 'From ($)';
+                placeholderTo = 'To ($)';
+            } 
+            else {
+                placeholderFrom = 'From Number';
+                placeholderTo = 'To Number';
             }
 
-            const textarea = `<textarea class="form-control required" name="goal[]" rows="5" placeholder="${placeholder}"></textarea>`;
-            wrapper.html(textarea);
+            // ===== GENERATE ROW =====
+            function generateRow() {
+                if (inputType=='date') {
+                    return `
+                        <div class="row mb-1">
+                            <div class="group d-flex align-items-center">
+                                <div class="col-md-5">
+                                    <input type="${inputType}" step="${step}" class="form-control weight-from required" name="goal_from[]" placeholder="${placeholderFrom}" style="height: 35px;">
+                                </div>
+                                <div class="col-md-2 text-center">To</div>
+                                <div class="col-md-5">
+                                    <input type="${inputType}" step="${step}" class="form-control weight-to required" name="goal_to[]" placeholder="${placeholderTo}" style="height: 35px;">
+                                </div>
+                            </div>
+                        </div>`;
+                } else {
+                    return `
+                        <div class="row mb-1">
+                            <div class="group d-flex align-items-center">
+                                <div class="col-md-5">
+                                    <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="${placeholderFrom}" style="height: 35px;">
+                                </div>
+                                <div class="col-md-2 text-center">To</div>
+                                <div class="col-md-5">
+                                    <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="${placeholderTo}" style="height: 35px;">
+                                </div>
+                            </div>
+                        </div>`;
+                }
+            }
+
+            // ===== BUILD ROWS =====
+            let html = '';
+            for (let i = 0; i < 5; i++) {
+                html += generateRow();
+            }
+
+            wrapper.html(html);
         });
         
         // Event to add a new purpose
@@ -282,11 +415,19 @@
                             let $kpiRow = $($rows[i]);
                             let key_kpi = $kpiRow.find('textarea[name="key_kpi[]"]').val();
                             let action_plan = $kpiRow.find('textarea[name="action_plan[]"]').val();
-                            let goal = $kpiRow.find('textarea[name="goal[]"]').val();
+                            // let goal = $kpiRow.find('textarea[name="goal[]"]').val();
                             let weight = $kpiRow.find('input[name="weight[]"]').val();
                             let goal_type = $kpiRow.find('select[name="goal_type[]"]').val();
                             let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
 
+                            let goal = [];
+                            $kpiRow.find('.weight-from').each(function(index) {
+                                let fromVal = $(this).val();
+                                let toVal = $kpiRow.find('.weight-to').eq(index).val();
+                                if (fromVal || toVal) {
+                                    goal.push({ from: fromVal, to: toVal });
+                                }
+                            });
                             dataKPi.push({ key_kpi, action_plan, goal, weight,goal_type,is_lock });
                             i++;
                         }
@@ -391,7 +532,62 @@
                     <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any"  class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight weight required" id="weight" placeholder="%"></td>
@@ -430,7 +626,62 @@
                     <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any"  class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight required" placeholder="%" min="0" value="{{old('weight')}}"></td>
@@ -484,7 +735,62 @@
                     <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any"  class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight required" placeholder="%" min="0" value="{{old('weight')}}"></td>
