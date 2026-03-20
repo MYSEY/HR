@@ -95,8 +95,8 @@
         </div>
         {!! Toastr::message() !!}
         <div class="row filter-btn">
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+            @if (count($branch)>1)
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                         <select class="select form-control hr-select2-option filter" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
                             <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
@@ -105,10 +105,10 @@
                             @endforeach
                         </select>
                     </div>
-                @endif
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+                </div>
+            @endif
+            @if (count($department)>1)
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                         <select class="select form-control hr-select2-option filter" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
                             <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
@@ -117,22 +117,20 @@
                             @endforeach
                         </select>
                     </div>
-                @endif
-            </div>
+                </div>
+            @endif
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                    <div class="form-group">
-                        <select class="select form-control hr-select2-option filter" id="status" data-select2-id="select2-data-2-c09n2" name="status">
-                            <option value="">@lang('lang.all') @lang('lang.status')</option>
-                            <option value="new">New</option>
-                            <option value="preparing">Preparing</option>
-                            <option value="1">Pending Review</option>
-                            <option value="2">Pending Verify</option>
-                            <option value="3">Pending Approve</option>
-                            <option value="4">Return</option>
-                        </select>
-                    </div>
-                @endif
+                <div class="form-group">
+                    <select class="select form-control hr-select2-option filter" id="status" data-select2-id="select2-data-2-c09n2" name="status">
+                        <option value="">@lang('lang.all') @lang('lang.status')</option>
+                        <option value="new">New</option>
+                        <option value="preparing">Preparing</option>
+                        <option value="1">Pending Review</option>
+                        <option value="2">Pending Verify</option>
+                        <option value="3">Pending Approve</option>
+                        <option value="4">Return</option>
+                    </select>
+                </div>
             </div>
             <div class="col-sm-3 col-md-3">
                 <div style="display: flex" class="float-end">

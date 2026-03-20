@@ -404,7 +404,7 @@ class ReportsController extends Controller
         }else{
             return view('reports.bank_transfer',compact(['data','banks','departments','branchs']));
         }
-        
+
     }
 
     public function bankTransferExport(Request $request){
@@ -541,7 +541,7 @@ class ReportsController extends Controller
                 'recordsFiltered' => $recordsFiltered,
                 'data' => $data
             ]);
-        } 
+        }
         $branch = Branchs::all();
         return view('reports.annualSalary_increasement_report',compact('branch'));
     }
@@ -586,9 +586,16 @@ class ReportsController extends Controller
                 'recordsFiltered' => $recordsFiltered,
                 'data' => $data
             ]);
-        } 
-        $branch = Branchs::all();
-        $department = Department::all();
+        }
+        $branch = [];
+        $department = [];
+        if(Auth::user()->RolePermission == "DHOD" && Auth::user()->department->abbreviations == "CRD"){
+            $branch = Branchs::whereNot("id", Auth::user()->branch_id)->get();
+        }
+        if(in_array(Auth::user()->RolePermission,['admin','HRAdmin','developer','BOD','CEO']) || (in_array(Auth::user()->RolePermission, ['HR']) && $permission["is_access"] == 1)){
+            $branch = Branchs::all();
+            $department = Department::all();
+        }
         return view('reports.pa_report',compact('branch','department','permission'));
     }
     public function PaReportExport(Request $request){
@@ -620,7 +627,7 @@ class ReportsController extends Controller
             'branchs.branch_name_kh',
         )->where('performance_appraisals.id',$id)->first();
         return Excel::download(new ExporPerformanceDetail($data), 'performance_appraisal_'.$id.'.xlsx');
-        
+
     }
-    
+
 }
