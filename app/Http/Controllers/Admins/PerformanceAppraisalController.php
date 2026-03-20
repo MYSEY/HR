@@ -30,9 +30,15 @@ use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Storage;
+use App\Repositories\Admin\ReportRepository;
 
 class PerformanceAppraisalController extends Controller
 {
+    private $reportRepo;
+    public function __construct(ReportRepository $reportRepo)
+    {
+        $this->reportRepo = $reportRepo;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -83,8 +89,11 @@ class PerformanceAppraisalController extends Controller
             })
             ->when($request->department_id, function ($query, $department_id) {
                 return $query->where('users.department_id', $department_id);
+            })
+            ->when($request->status, function ($query, $status) {
+                return $query->where('performance_appraisals.status', $status);
             });
-        
+
             // Search filter
             $searchValue = request()->input('search.value');
             if (!empty($searchValue)) {
@@ -109,11 +118,11 @@ class PerformanceAppraisalController extends Controller
                 $query->where("users.department_id", Auth::user()->department_id);
                 $query->orWhere("performance_appraisals.review_employee_id", Auth::user()->id);
             }
-            
+
             if (in_array(Auth::user()->RolePermission, ['BM'])) {
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
-            
+
             if (in_array(Auth::user()->RolePermission, ['BOD','CEO','DHOD', 'DBM'])) {
                 $query->where(function ($q) {
                     $q->where("users.line_manager", Auth::user()->id)   // team under me
@@ -128,7 +137,7 @@ class PerformanceAppraisalController extends Controller
                     ->orWhere("performance_appraisals.review_employee_id", Auth::user()->id);
                 });
             }
-        
+
             $recordsTotal = $query->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
@@ -201,7 +210,7 @@ class PerformanceAppraisalController extends Controller
             ->when($request->branch_id, function ($query, $branch_id) {
                 return $query->where('users.branch_id', $branch_id);
             });
-        
+
             // Search filter
             $searchValue = request()->input('search.value');
             if (!empty($searchValue)) {
@@ -224,11 +233,11 @@ class PerformanceAppraisalController extends Controller
             if (in_array(Auth::user()->RolePermission, ['HOD'])) {
                 $query->where("users.department_id", Auth::user()->department_id);
             }
-            
+
             if (in_array(Auth::user()->RolePermission, ['BM'])) {
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
-            
+
             if (in_array(Auth::user()->RolePermission, ['BOD','CEO','DHOD', 'DBM'])) {
                 $query->where(function ($q) {
                     $q->where("users.line_manager", Auth::user()->id)   // team under me
@@ -240,7 +249,7 @@ class PerformanceAppraisalController extends Controller
                     $q->where('performance_appraisals.employee_id', Auth::user()->id);
                 });
             }
-        
+
             $recordsTotal = PerformanceAppraisal::where('status', 'approved')->count();  // total records without filter
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
@@ -285,7 +294,7 @@ class PerformanceAppraisalController extends Controller
             if ($request->hasFile('reference')) {
                 $file = $request->file('reference');
                 $filename = $request->performance_id . $request->title_id . $request->purpose_id . $request->detail_id . '_' . $file->getClientOriginalName();
-                
+
                 $file->storeAs('', $filename, 'd_drive');
 
                 // ចាប់យក object ដែលបង្កើតថ្មីដាក់ក្នុង variable $data
@@ -301,8 +310,8 @@ class PerformanceAppraisalController extends Controller
                 DB::commit();
                 // បញ្ជូន id ទៅឱ្យ JavaScript វិញ
                 return response()->json([
-                    'message' => 'Uploaded successfully.', 
-                    'status'  => 200, 
+                    'message' => 'Uploaded successfully.',
+                    'status'  => 200,
                     'id'      => $data->id,
                     'file_name'      => $data->reference
                 ]);
@@ -603,7 +612,7 @@ class PerformanceAppraisalController extends Controller
 
     public function updateKpiScore(Request $request){
         try {
-            
+
             $paPerformance = PerformanceAppraisal::where('employee_id',$request->employee_id)->where('id',$request->id)->first();
             self::createHistories($paPerformance);
              $paPerformance->update([
@@ -691,7 +700,7 @@ class PerformanceAppraisalController extends Controller
                             $min = (float) $minRaw;
                             $max = (float) $maxRaw;
                             $progress = $item[9]; // the value to compare
-                            
+
                             if ($progress >= $min && $progress < $max) {
                                 $scoreAchieved = $index + 1; // mimic JS: index + 1
                                 break; // stop looping once found
@@ -699,7 +708,7 @@ class PerformanceAppraisalController extends Controller
                                 $scoreAchieved = 5;
                             }
                         }
-                        
+
                         $totalScore = ($item[10] * $scoreAchieved) / 100;
                         $score  = $totalScore;
                         $live   = $totalScore;
@@ -722,7 +731,7 @@ class PerformanceAppraisalController extends Controller
                                 'total_score_direct_chairman' => $sum['dc'],
                             ]);
                         }
-                        
+
                         $updated = PaDetail::where('performance_id', $item[2])
                             ->where('title_id', $item[3])
                             ->where('purpose_id', $item[4])
@@ -743,7 +752,7 @@ class PerformanceAppraisalController extends Controller
                 }
             }
 
-            
+
             if($dataArray){
                 return response()->json(['error'=>$dataArray]);
             }
@@ -754,6 +763,9 @@ class PerformanceAppraisalController extends Controller
     }
 
     public function performanceAppraisalDownload(Request $request){
-        return Excel::download(new DownloadKpis($request), 'PA.xlsx');
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "performance-appraisal")->first();
+        $query = $this->reportRepo->getPAReport($request, $permission);
+        $data = $query->with(['users', 'performanceDetail'])->orderBy('performance_appraisals.id', 'desc')->get();
+        return Excel::download(new DownloadKpis($data), 'PA.xlsx');
     }
 }

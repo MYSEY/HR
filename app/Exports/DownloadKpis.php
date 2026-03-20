@@ -18,9 +18,9 @@ class DownloadKpis implements FromCollection, WithColumnWidths, WithHeadings, Wi
     protected $export_datas;
     protected $num;
 
-    public function __construct($id)
+    public function __construct($data)
     {
-        $data = PerformanceAppraisal::with(['users', 'performanceDetail'])->get();
+        // $data = PerformanceAppraisal::with(['users', 'performanceDetail'])->get();
         $i = 0;
         $dataPer = [];
         foreach ($data as $performance) {

@@ -13,79 +13,53 @@
             </div>
         </div>
         {!! Toastr::message() !!}
-        <div class="row filter-btn"> 
-            <div class="col-md-10">
-                <div class="row">
-                    @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO', 'HOD','DHOD','BM','DBM']))
-                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4"> 
-                            <div class="form-group">
-                                <div class="search">
-                                    <i class="uil uil-search"></i>
-                                    <input spellcheck="false" id="employee_id" name="employee_id" class="form-control" type="text" placeholder="Employee ID">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group ">
-                                <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
-                            </div>
-                        </div>
-                        @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                <div class="form-group">
-                                    <select class="select form-control hr-select2-option" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                                        <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
-                                        @foreach ($branch as $item)
-                                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                <div class="form-group">
-                                    <select class="select form-control hr-select2-option" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
-                                        <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
-                                        @foreach ($department as $item)
-                                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @endif
-                    @endif
-                    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 col-4">
-                        <div class="form-group">
-                            <div class="cal-icon">
-                                <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="@lang('lang.from_date')">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 col-4">
-                        <div class="form-group">
-                            <div class="cal-icon">
-                                <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="@lang('lang.to_date')">
-                            </div>
-                        </div>
+        <div class="row filter-btn">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-2">
+                <div class="form-group">
+                    <div class="cal-icon">
+                        <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="@lang('lang.from_date')">
                     </div>
                 </div>
             </div>
-
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-2">
+                <div class="form-group">
+                    <div class="cal-icon">
+                        <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="@lang('lang.to_date')">
+                    </div>
+                </div>
+            </div>
+            @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO', 'HOD','DHOD','BM','DBM']))
+                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <div class="form-group">
+                            <select class="select form-control hr-select2-option filter" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                                @foreach ($branch as $item)
+                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <div class="form-group">
+                            <select class="select form-control hr-select2-option filter" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
+                                @foreach ($department as $item)
+                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @endif
+            @endif
             <div class="col-sm-2 col-md-2">
-                <div style="display: flex">
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
-                        <span class="btn-txt"><i class="fa fa-search"></i></span>
-                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                    </button>
+                <div style="display: flex" class="float-end">
                     @if ($permission->is_export== "1")
                         <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
                             <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
                             <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                         </button>
                     @endif
-                    <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
-                        <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
-                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -117,7 +91,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -145,36 +119,33 @@
     <script>
         var number_employee = null;
         $(function(){
+            dataTables();
             $(".btn_excel").on("click", function() {
                 let query = {
-                    branch_id: $("#branch_id").val(),
-                    department_id: $("#department_id").val(),
-                    employee_id: $("#employee_id").val(),
-                    employee_name: $("#employee_name").val(),
+                    branch_id:              $("#branch_id").val(),
+                    department_id:          $("#department_id").val(),
+                    employee_id:            $("#employee_id").val(),
+                    employee_name:          $("#employee_name").val(),
+                    from_date:              $("#from_date").val(),
+                    to_date:                $("#to_date").val(),
                 };
                 var url = "{{URL::to('performance/appraisal/pa-export')}}?" + $.param(query)
                 window.location = url;
             });
-            // Reload only (DON'T destroy/reinit)
-            $('.btn-search').on('click', function() {
-                $('#DataTables_Table_0').DataTable().ajax.reload(null, false);
+            $('.filter').on('change', function() {
+                dataTables();
             });
-            // Initialize only once
-            dataTables();
-            $(".reset-btn").on("click", function() {
-                $(this).prop('disabled', true);
-                $(".btn-text-reset").hide();
-                $("#btn-text-loading").css('display', 'block');
-                window.location.replace("{{ URL('performance/appraisal/pa-report') }}");
+            $('.datetimepicker').on('dp.change changeDate change', function (e) {
+                dataTables();
             });
         });
 
         function dataTables() {
-            $('#loading-overlay').show();
-            // Check if DataTable instance exists, then destroy it
-            if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
-                $('#DataTables_Table_0').DataTable().clear().destroy();
-            }
+            // $('#loading-overlay').show();
+            // // Check if DataTable instance exists, then destroy it
+            // if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
+            //     $('#DataTables_Table_0').DataTable().clear().destroy();
+            // }
             $('#DataTables_Table_0').DataTable({
                 destroy: true,
                 pageLength: 10,
@@ -199,52 +170,52 @@
                 ],
                 columns: [
                     { data: 'id', name: 'id' },
-                    { 
-                        data: 'number_employee', 
+                    {
+                        data: 'number_employee',
                         name: 'number_employee',
                         className: 'stuck-scroll-3',
                         orderable: true,
                         searchable: true,
                     },
-                    { 
-                        data: 'employee_name_kh', 
+                    {
+                        data: 'employee_name_kh',
                         name: 'employee_name_kh',
                         className: 'stuck-scroll-3',
                         orderable: true,
                         searchable: true,
                     },
-                    { 
-                        data: 'branch_name_en', 
+                    {
+                        data: 'branch_name_en',
                         name: 'branch_name_en',
                         orderable: true,
                         searchable: true,
                     },
-                    { 
-                        data: 'dep_name', 
+                    {
+                        data: 'dep_name',
                         name: 'dep_name',
                         orderable: true,
                         searchable: true,
                     },
-                    { 
-                        data: 'positions_name', 
+                    {
+                        data: 'positions_name',
                         name: 'positions_name',
                         orderable: true,
                         searchable: true,
                     },
-                    { 
-                        data: 'from_date', 
+                    {
+                        data: 'from_date',
                         name: 'from_date',
                         orderable: true,
                         searchable: true,
                     },
-                    { 
-                        data: 'to_date', 
+                    {
+                        data: 'to_date',
                         name: 'to_date',
                         orderable: true,
                         searchable: true,
                     },
-                    { 
-                        data: 'type', 
+                    {
+                        data: 'type',
                         name: 'type',
                         orderable: true,
                         searchable: true,
@@ -337,13 +308,13 @@
                 }
             });
 
-            $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
-                if (processing) {
-                    $('#loading-overlay').show();
-                } else {
-                    $('#loading-overlay').hide();
-                }
-            });
+            // $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
+            //     if (processing) {
+            //         $('#loading-overlay').show();
+            //     } else {
+            //         $('#loading-overlay').hide();
+            //     }
+            // });
         }
     </script>
 @endsection
