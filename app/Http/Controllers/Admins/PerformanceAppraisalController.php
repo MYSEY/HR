@@ -89,9 +89,6 @@ class PerformanceAppraisalController extends Controller
             })
             ->when($request->department_id, function ($query, $department_id) {
                 return $query->where('users.department_id', $department_id);
-            })
-            ->when($request->status, function ($query, $status) {
-                return $query->where('performance_appraisals.status', $status);
             });
 
             // Search filter
@@ -137,6 +134,14 @@ class PerformanceAppraisalController extends Controller
                     ->orWhere("performance_appraisals.review_employee_id", Auth::user()->id);
                 });
             }
+            $countPendingReview   = (clone $query)->where('performance_appraisals.status', '1')->count();
+            // $countPendingAccepted = (clone $query)->where('performance_appraisals.status', '2')->count();
+            $countPendingVerify   = (clone $query)->where('performance_appraisals.status', '2')->count();
+            $countPendingApprove  = (clone $query)->where('performance_appraisals.status', '3')->count();
+            $countPendingReturn  = (clone $query)->where('performance_appraisals.status', '4')->count();
+            $query->when($request->status, function ($query, $status) {
+                return $query->where('performance_appraisals.status', $status);
+            });
 
             $recordsTotal = $query->count();  // total records without filter
             $recordsFiltered = $query->count();
@@ -167,7 +172,12 @@ class PerformanceAppraisalController extends Controller
                 'permission'=>$permission,
                 'userIdLog'=>Auth::user()->id,
                 'recordsFiltered' => $recordsFiltered,
-                'data' => $data
+                'data' => $data,
+                'pendingReview'   => $countPendingReview,
+                // 'pendingAccepted' => $countPendingAccepted,
+                'pendingVerify'   => $countPendingVerify,
+                'pendingApprove'  => $countPendingApprove,
+                'pendingReturn'   => $countPendingReturn,
             ]);
         }
         $branch = [];

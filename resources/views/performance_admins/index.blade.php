@@ -88,9 +88,36 @@
                 </div>
             </div>
         </div>
+        <div class="p-6 rounded-lg">
+            <div class="flex items-center space-x-8 ">
+                <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
+                    <span>Pending Review</span>
+                    <span id="PendingReview" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
+                </label>
+
+                <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
+                    <span>Pending Accepted</span>
+                    <span id="PendingAccepted" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
+                </label>
+
+                <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
+                    <span>Pending Verify</span>
+                    <span id="PendingVerify" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
+                </label>
+
+                <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
+                    <span>Pending Approve</span>
+                    <span id="PendingApprove" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
+                </label>
+                <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
+                    <span>Return</span>
+                    <span id="PendingReturn" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
+                </label>
+            </div>
+        </div>
         <div class="row filter-btn">
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+            @if (count($branch)>1)
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                         <select class="select form-control hr-select2-option filter" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
                             <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
@@ -99,10 +126,10 @@
                             @endforeach
                         </select>
                     </div>
-                @endif
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+                </div>
+            @endif
+            @if (count($department)>1)
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                         <select class="select form-control hr-select2-option filter" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
                             <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
@@ -111,25 +138,23 @@
                             @endforeach
                         </select>
                     </div>
-                @endif
-            </div>
+                </div>
+            @endif
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                    <div class="form-group">
-                        <select class="select form-control hr-select2-option filter" id="status" data-select2-id="select2-data-2-c09n2" name="status">
-                            <option value="">@lang('lang.all') @lang('lang.status')</option>
-                            {{-- <option value="preparing">Preparing</option>
-                            <option value="accepted">Accepted</option>
-                            <option value="approved">Approved</option> --}}
+                <div class="form-group">
+                    <select class="select form-control hr-select2-option filter" id="status" data-select2-id="select2-data-2-c09n2" name="status">
+                        <option value="">@lang('lang.all') @lang('lang.status')</option>
+                        {{-- <option value="preparing">Preparing</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="approved">Approved</option> --}}
 
-                            <option value="1">Pending Review</option>
-                            <option value="2">Pending Accepted</option>
-                            <option value="3">Pending Verify</option>
-                            <option value="4">Pending Approve</option>
-                            {{-- <option value="5">Return</option> --}}
-                        </select>
-                    </div>
-                @endif
+                        <option value="1">Pending Review</option>
+                        <option value="2">Pending Accepted</option>
+                        <option value="3">Pending Verify</option>
+                        <option value="4">Pending Approve</option>
+                        <option value="5">Return</option>
+                    </select>
+                </div>
             </div>
         </div>
         {!! Toastr::message() !!}
@@ -264,7 +289,8 @@
                     var titleText = "";
                     var formContent = "";
                     var columnClassText = 'col-md-4';
-                    if (condistionStatus == 1 ||  condistionStatus == 2 || condistionStatus == "accepted"|| condistionStatus == 3 || condistionStatus == "approved") {
+                    const allowedStatuses = [1, 2, 3, 5, 'accepted', 'approved'];
+                    if (allowedStatuses.includes(condistionStatus)) {
                         titleText = '@lang("lang.asign_to_employee")';
                         columnClassText = 'col-md-6'
                         formContent = ''+
@@ -526,7 +552,8 @@
                 var titleText = "";
                 var formContent = "";
                 var columnClassText = 'col-md-4';
-                if (status == 1 || status == 2 || status == "accepted" || status == 3 || status == "preparing" || status == 5) {
+                const allowedStatuses = [1, 2, 3, 5, 'accepted', 'preparing'];
+                if (allowedStatuses.includes(status)) {
                     titleText = '@lang("lang.asign_to_employee")';
                     columnClassText = 'col-md-6'
                     formContent = ''+
@@ -800,9 +827,13 @@
                         d.status = $('select[name="status"]').val();
                     },
                     dataSrc: function (json) {
-                        userPermission = json.permission || {}; // 👈 Save permission
+                        $('#PendingReview').text(json.pendingReview || 0);
+                        $('#PendingAccepted').text(json.pendingAccepted || 0);
+                        $('#PendingVerify').text(json.pendingVerify || 0);
+                        $('#PendingApprove').text(json.pendingApprove || 0);
+                        $('#PendingReturn').text(json.pendingReturn || 0);
+                        userPermission = json.permission || {};
                         userIdLog = json.userIdLog;
-                        // console.log("Permission Data:", userPermission);
                         return json.data;
                     }
                 },
