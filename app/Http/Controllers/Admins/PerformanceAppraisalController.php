@@ -170,8 +170,15 @@ class PerformanceAppraisalController extends Controller
                 'data' => $data
             ]);
         }
-        $branch = Branchs::all();
-        $department = Department::all();
+        $branch = [];
+        $department = [];
+        if(Auth::user()->RolePermission == "DHOD" && Auth::user()->department->abbreviations == "CRD"){
+            $branch = Branchs::whereNot("id", Auth::user()->branch_id)->get();
+        }
+        if(in_array(Auth::user()->RolePermission,['admin','HRAdmin','developer','BOD','CEO']) || (in_array(Auth::user()->RolePermission, ['HR']) && $permission["is_access"] == 1)){
+            $branch = Branchs::all();
+            $department = Department::all();
+        }
         return view('performance_appraisal.index',compact('branch','department','permission'));
     }
     public function menualScore(Request $request)

@@ -121,8 +121,15 @@ class PerformanceAdminController extends Controller
                 'data' => $data
             ]);
         }
-        $branch = Branchs::all();
-        $department = Department::all();
+        $branch = [];
+        $department = [];
+        if(Auth::user()->RolePermission == "DHOD" && Auth::user()->department->abbreviations == "CRD"){
+            $branch = Branchs::whereNot("id", Auth::user()->branch_id)->get();
+        }
+        if(in_array(Auth::user()->RolePermission,['admin','HRAdmin','developer','BOD','CEO']) || (in_array(Auth::user()->RolePermission, ['HR']) && $permission["is_access"] == 1)){
+            $branch = Branchs::all();
+            $department = Department::all();
+        }
         return view('performance_admins.index',compact('branch','department'));
     }
     public function show($id,$url)
@@ -659,8 +666,15 @@ class PerformanceAdminController extends Controller
                 'data' => $data
             ]);
         }
-        $branch = Branchs::all();
-        $department = Department::all();
+        $branch = [];
+        $department = [];
+        if(Auth::user()->RolePermission == "DHOD" && Auth::user()->department->abbreviations == "CRD"){
+            $branch = Branchs::whereNot("id", Auth::user()->branch_id)->get();
+        }
+        if(in_array(Auth::user()->RolePermission,['admin','HRAdmin','developer','BOD','CEO']) || (in_array(Auth::user()->RolePermission, ['HR']) && $permission["is_access"] == 1)){
+            $branch = Branchs::all();
+            $department = Department::all();
+        }
         return view('reports.kpi_report',compact('branch','department','permission'));
         if (in_array(Auth::user()->RolePermission, ['Employee'])) {
             $query->where('performances.employee_id', Auth::user()->id);

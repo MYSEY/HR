@@ -103,7 +103,7 @@
                     </div>
                 </div>
             </div>
-            @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO', 'HOD','DHOD','BM','DBM']))
+            @if (count($branch)>1)
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                         <select class="select form-control hr-select2-option filter" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
@@ -114,6 +114,10 @@
                         </select>
                     </div>
                 </div>
+            @else
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+            @endif
+            @if (count($department)>1)
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
                         <select class="select form-control hr-select2-option filter" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
@@ -125,7 +129,7 @@
                     </div>
                 </div>
             @else
-                    <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10"></div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
             @endif
             <div class="col-sm-2 col-md-2">
                 <div style="display: flex" class="float-end">

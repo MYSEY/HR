@@ -28,29 +28,33 @@
                     </div>
                 </div>
             </div>
-            @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO', 'HOD','DHOD','BM','DBM']))
-                @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
-                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <div class="form-group">
-                            <select class="select form-control hr-select2-option filter" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
-                                @foreach ($branch as $item)
-                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+            @if (count($branch)>1)
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <div class="form-group">
+                        <select class="select form-control hr-select2-option filter" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                            @foreach ($branch as $item)
+                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <div class="form-group">
-                            <select class="select form-control hr-select2-option filter" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
-                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
-                                @foreach ($department as $item)
-                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                </div>
+            @else
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+            @endif
+            @if (count($department)>1)
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <div class="form-group">
+                        <select class="select form-control hr-select2-option filter" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
+                            @foreach ($department as $item)
+                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                @endif
+                </div>
+            @else
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
             @endif
             <div class="col-sm-2 col-md-2">
                 <div style="display: flex" class="float-end">
