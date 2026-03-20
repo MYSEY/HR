@@ -83,9 +83,6 @@ class PerformanceAdminController extends Controller
             })
             ->when($request->department_id, function ($query, $department_id) {
                 return $query->where('users.department_id', $department_id);
-            })
-            ->when($request->status, function ($query, $status) {
-                return $query->where('performances.status', $status);
             });
             // Search filter
             $searchValue = request()->input('search.value');
@@ -106,7 +103,14 @@ class PerformanceAdminController extends Controller
                 $query->where("performances.review_employee_id", Auth::user()->id);
                 $recordsTotal = Performance::where("performances.review_employee_id", Auth::user()->id)->count();  // total records without filter
             }
-
+            $countPendingReview   = (clone $query)->where('performances.status', '1')->count();
+            $countPendingAccepted = (clone $query)->where('performances.status', '2')->count();
+            $countPendingVerify   = (clone $query)->where('performances.status', '3')->count();
+            $countPendingApprove  = (clone $query)->where('performances.status', '4')->count();
+            $countPendingReturn  = (clone $query)->where('performances.status', '5')->count();
+            $query->when($request->status, function ($query, $status) {
+                return $query->where('performances.status', $status);
+            });
 
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
@@ -118,7 +122,12 @@ class PerformanceAdminController extends Controller
                 'userIdLog'=>Auth::user()->id,
                 'recordsTotal' => $recordsTotal,
                 'recordsFiltered' => $recordsFiltered,
-                'data' => $data
+                'data' => $data,
+                'pendingReview'   => $countPendingReview,
+                'pendingAccepted' => $countPendingAccepted,
+                'pendingVerify'   => $countPendingVerify,
+                'pendingApprove'  => $countPendingApprove,
+                'pendingReturn'   => $countPendingReturn,
             ]);
         }
         $branch = [];

@@ -76,9 +76,6 @@ class PerformanceController extends Controller
             })
             ->when($request->department_id, function ($query, $department_id) {
                 return $query->where('users.department_id', $department_id);
-            })
-            ->when($request->status, function ($query, $status) {
-                return $query->where('performances.status', $status);
             });
 
             // Search filter
@@ -126,6 +123,15 @@ class PerformanceController extends Controller
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
                 $query->where('performances.employee_id', Auth::user()->id);
             }
+            $countPendingReview   = (clone $query)->where('performances.status', '1')->count();
+            $countPendingAccepted = (clone $query)->where('performances.status', '2')->count();
+            $countPendingVerify   = (clone $query)->where('performances.status', '3')->count();
+            $countPendingApprove  = (clone $query)->where('performances.status', '4')->count();
+            $countPendingReturn  = (clone $query)->where('performances.status', '5')->count();
+
+            $query->when($request->status, function ($query, $status) {
+                return $query->where('performances.status', $status);
+            });
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
@@ -146,6 +152,7 @@ class PerformanceController extends Controller
                 // Default order
                 $query->orderBy('performances.id', 'desc');
             }
+
             $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw' => intval(request()->input('draw')),
@@ -153,7 +160,13 @@ class PerformanceController extends Controller
                 'recordsFiltered' => $recordsFiltered,
                 'userIdLog'=>Auth::user()->id,
                 'permission'=>$permission,
-                'data' => $data
+                'data' => $data,
+
+                'pendingReview'   => $countPendingReview,
+                'pendingAccepted' => $countPendingAccepted,
+                'pendingVerify'   => $countPendingVerify,
+                'pendingApprove'  => $countPendingApprove,
+                'pendingReturn'   => $countPendingReturn,
             ]);
         }
         $branch = [];

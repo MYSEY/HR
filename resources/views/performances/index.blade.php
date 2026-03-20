@@ -98,6 +98,33 @@
                 </div>
             </div>
         </div>
+        <div class="p-6 rounded-lg">
+            <div class="flex items-center space-x-8 ">
+                <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
+                    <span>Pending Review</span>
+                    <span id="PendingReview" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
+                </label>
+
+                <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
+                    <span>Pending Accepted</span>
+                    <span id="PendingAccepted" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
+                </label>
+
+                <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
+                    <span>Pending Verify</span>
+                    <span id="PendingVerify" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
+                </label>
+
+                <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
+                    <span>Pending Approve</span>
+                    <span id="PendingApprove" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
+                </label>
+                <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
+                    <span>Return</span>
+                    <span id="PendingReturn" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
+                </label>
+            </div>
+        </div>
         <div class="row filter-btn">
             @if (count($branch)>1)
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -579,6 +606,11 @@
                         d.status = $('select[name="status"]').val();
                     },
                     dataSrc: function (json) {
+                        $('#PendingReview').text(json.pendingReview || 0);
+                        $('#PendingAccepted').text(json.pendingAccepted || 0);
+                        $('#PendingVerify').text(json.pendingVerify || 0);
+                        $('#PendingApprove').text(json.pendingApprove || 0);
+                        $('#PendingReturn').text(json.pendingReturn || 0);
                         userPermission = json.permission || {}; // 👈 Save permission
                         userIdLog = json.userIdLog;
                         return json.data;
