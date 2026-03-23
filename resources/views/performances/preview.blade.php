@@ -185,7 +185,7 @@
                                                     <td class="text-center">
                                                         <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
-                                                    <td class="text-center">
+                                                    {{-- <td class="text-center">
                                                         <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>
                                                             <option value="number_increment"  @selected($Detailitem->goal_type == 'number_increment')>Number Increment</option>
                                                             <option value="number_decrement"  @selected($Detailitem->goal_type == 'number_decrement')>Number Decrement</option>
@@ -199,6 +199,37 @@
                                                         <div class="goal-input-wrapper mt-1">
                                                             <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal">{{ $Detailitem->goal }}</textarea>
                                                         </div>
+                                                    </td> --}}
+                                                    <td class="text-center">
+                                                        <select class="form-control goal-type-select mt-1" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                            <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
+                                                            <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
+
+                                                            <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
+                                                            <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
+
+                                                            <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
+                                                            <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
+
+                                                            <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
+                                                            <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
+                                                        </select>
+
+                                                        @foreach ($Detailitem->performanceGoals as $item)
+                                                            <div class="goal-input-wrapper mt-1">
+                                                                <div class="row mb-1">
+                                                                    <div class="group d-flex align-items-center">
+                                                                        <div class="col-md-5">
+                                                                            <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" value="{{ $item->from }}" style="height: 35px;width: 100px;">
+                                                                        </div>
+                                                                        <div class="col-md-2 text-center">To</div>
+                                                                        <div class="col-md-5">
+                                                                            <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" value="{{ $item->to }}" style="height: 35px;width: 100px;">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>

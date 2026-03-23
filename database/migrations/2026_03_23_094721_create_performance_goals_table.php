@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('title_id');
             $table->integer('purpose_id');
             $table->integer('performance_detail_id');
-            $table->integer('from');
-            $table->integer('to');
+            $table->string('from');
+            $table->string('to');
             $table->integer('user_id');
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
