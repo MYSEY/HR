@@ -81,7 +81,8 @@
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td> --}}
                                                 <td colspan="1" class="text-center">
-                                                    <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
+                                                    <button type="button" class="btn btn-danger btn-sm btnRemovePurpose"><i class="fa fa-minus"></i></button>
+                                                    <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i></button>
                                                 </td>
                                             </tr>
                                             <div>
@@ -179,6 +180,7 @@
                                                         </select>
                                                     </td>
                                                     <td class="text-center">
+                                                        <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
                                                         <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
                                                     </td>
                                                 </tr>
@@ -387,10 +389,10 @@
         });
         $(document).on('click', '#btnCreatePerformance', function(e) {
             e.preventDefault(); // Prevent the form from submitting the traditional way
-            $(this).attr('disabled',true);
-            $('.btn-cancel').addClass('disabled');
-            $(".loading-icon").css("display", "block");
-            $(".btn-txt").css("display", "none");
+            // $(this).attr('disabled',true);
+            // $('.btn-cancel').addClass('disabled');
+            // $(".loading-icon").css("display", "block");
+            // $(".btn-txt").css("display", "none");
             let numRequired = 0;
             $(".required").each(function(e){
                 if($(this).val()==""){ numRequired++;}
@@ -507,7 +509,8 @@
                 <input type="text" class="form-control required" style='background-color: #efa781' name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
             <td colspan="1" class="text-center">
-                <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
+                <button type="button" class="btn btn-danger btn-sm btnRemovePurpose"><i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i></button>
             </td>
         </tr>
         <tr class='section-purpose kpi-group' style='text-align: center'>
@@ -598,6 +601,7 @@
                 </select>
             </td>
             <td class="text-center">
+                <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
         </tr>`;
@@ -693,6 +697,7 @@
             </td>
             <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
+                <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
         </tr>`;
     }
@@ -710,7 +715,8 @@
                 <input type="text" class="form-control required" style='background-color: #f0cc9b' name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
             <td colspan="1" class="text-center">
-                <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i>Add Purpose</button>
+                <button type="button" class="btn btn-danger btn-sm btnRemovePurpose"><i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i></button>
             </td>
         </tr>
         <tr class='kpi-group' style='text-align: center'>
@@ -801,6 +807,7 @@
                 </select>
             </td>
             <td class="text-center">
+                <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
         </tr>`;

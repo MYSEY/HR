@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
-use App\Models\Title;
+use App\Models\PerformanceGoal;
 use App\Models\Purpose;
-use App\Models\Performance;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Title;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class PerformanceDetail extends Model
 {
     use HasFactory;
     protected $table = 'performance_details';
     protected $guarded = ['id'];
-
+    protected $casts = [
+        'goal' => 'array',
+    ];
     protected $fillable = [
         'performance_id',
         'title_id',
@@ -41,5 +43,9 @@ class PerformanceDetail extends Model
     
     public function purpose() {
         return $this->belongsTo(Purpose::class, 'purpose_id');
+    }
+    public function performanceGoals()
+    {
+        return $this->hasMany(PerformanceGoal::class, 'performance_detail_id');
     }
 }

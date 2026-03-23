@@ -81,11 +81,13 @@
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td> --}}
                                             <td class="text-center">
-                                                @if ($loop->index == 0)
+                                                {{-- @if ($loop->index == 0)
                                                     <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
                                                 @else
                                                     <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
-                                                @endif
+                                                @endif --}}
+                                                <button type="button" class="btn btn-danger btn-sm btnRemovePurpose"><i class="fa fa-minus"></i></button>
+                                                <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i></button>
                                             </td>
                                         </tr>
                                         @foreach ($purposeItem->performanceDetail as $Detailitem)
@@ -104,13 +106,7 @@
                                                         {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->action_plan }}
                                                     </textarea>
                                                 </td>
-                                                <td class="text-center">
-                                                    {{-- <select class="form-control goal-type-select" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
-                                                        <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
-                                                        <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
-                                                        <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
-                                                        <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
-                                                    </select> --}}
+                                                {{-- <td class="text-center">
                                                     <select class="form-control goal-type-select mt-1" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                         <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
                                                         <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
@@ -124,17 +120,38 @@
                                                         <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
                                                         <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
                                                     </select>
-                                                
-                                                    <div class="goal-input-wrapper mt-1">
-                                                        <textarea
-                                                            class="form-control required"
-                                                            name="goal[]"
-                                                            rows="5"
-                                                            placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"
-                                                            spellcheck="false"
-                                                            {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}
-                                                        >{{ $Detailitem->goal }}</textarea>
-                                                    </div>
+                                                </td> --}}
+
+                                                <td class="text-center">
+                                                    <select class="form-control goal-type-select mt-1" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                        <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
+                                                        <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
+
+                                                        <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
+                                                        <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
+
+                                                        <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
+                                                        <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
+
+                                                        <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
+                                                        <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
+                                                    </select>
+
+                                                    @foreach ($Detailitem->performanceGoals as $item)
+                                                        <div class="goal-input-wrapper mt-1">
+                                                            <div class="row mb-1">
+                                                                <div class="group d-flex align-items-center">
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" value="{{ $item->from }}" style="height: 35px;">
+                                                                    </div>
+                                                                    <div class="col-md-2 text-center">To</div>
+                                                                    <div class="col-md-5">
+                                                                        <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" value="{{ $item->to }}" style="height: 35px;">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
                                                 </td>
                                                 
                                                 <td class="text-center">
@@ -155,16 +172,14 @@
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($loop->index == 0)
-                                                        <button type="button" class="btn btn-success btn-sm addRecord">
-                                                            <i class="fa fa-plus"></i>
-                                                        </button>
+                                                        <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
+                                                        <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
                                                     @else
                                                         @if ($Detailitem->is_lock == 1)
                                                             <button type="button" class="btn btn-secondary btn-sm" disabled><i class="fa fa-lock"></i></button>
                                                         @else
-                                                            <button type="button" class="btn btn-danger me-1 btn-sm removeRecord">
-                                                                <i class="fa fa-trash-o"></i>
-                                                            </button>
+                                                            <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
+                                                            <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
                                                         @endif
                                                     @endif
                                                 </td>
@@ -231,20 +246,49 @@
         
         let dataKeyKpi = [];
         $(document).on('change', '.goal-type-select', function () {
-            const selectedType = $(this).val();
-            const wrapper = $(this).closest('td').find('.goal-input-wrapper');
+            let selectedType = $(this).val();
+            let wrapper = $(this).closest('td').find('.goal-input-wrapper');
 
-            let placeholder = "e.g.\n60 70\n70 80\n90 100";
-            if (selectedType === 'date') {
-                placeholder = "e.g.\n2025-01-01 2025-06-01\n2025-06-02 2025-12-31";
-            } else if (selectedType === 'currency') {
-                placeholder = "e.g.\n1000 2000\n2000 3000";
-            } else if (selectedType === 'percent') {
-                placeholder = "e.g.\n10 20\n20 30";
+            // Determine input type and placeholder
+            let [dataType, direction] = selectedType.split('_');
+            let inputType = 'text';
+            let step = 'any';
+            let placeholderFrom = 'From';
+            let placeholderTo = 'To';
+
+            if (dataType === 'date') {
+                inputType = 'date';
+                placeholderFrom = 'Start Date';
+                placeholderTo = 'End Date';
+            } else if (dataType === 'percent') {
+                inputType = 'number';
+                step = '0.01';
+                placeholderFrom = 'From (%)';
+                placeholderTo = 'To (%)';
+            } else if (dataType === 'currency') {
+                inputType = 'number';
+                step = '0.01';
+                placeholderFrom = 'From ($)';
+                placeholderTo = 'To ($)';
+            } else {
+                inputType = 'number';
+                step = 'any';
+                placeholderFrom = 'From Number';
+                placeholderTo = 'To Number';
             }
 
-            const textarea = `<textarea class="form-control required" name="goal[]" rows="5" placeholder="${placeholder}"></textarea>`;
-            wrapper.html(textarea);
+            // Update all existing inputs in wrapper
+            wrapper.find('input.weight-from').attr({
+                type: inputType,
+                step: step,
+                placeholder: placeholderFrom
+            });
+
+            wrapper.find('input.weight-to').attr({
+                type: inputType,
+                step: step,
+                placeholder: placeholderTo
+            });
         });
         $(document).on('click', ".addNewPurpose", function () {
             let currentPurposeRow = $(this).closest('tr');
@@ -262,27 +306,31 @@
         $(document).on('click',".addMore", function() {
             $("#tbl_performance").append(addMoreRow());
         });
-
-        // Event to add a new record
-        $(document).on('click', '.addRecord', function () {
-            let currentTr = $(this).closest('tr');
-            let purposeHeader = currentTr.prevAll('.purpose-group').first(); // Locate the related purpose row
-            let rowsUnderPurpose = purposeHeader.nextUntil('.purpose-group, .title-group'); // All rows under this purpose
-            let lastKpiRow = rowsUnderPurpose.filter('.kpi-group').last(); // Get last KPI row
-            let newRow = currentTr.clone();
-            // Reset fields
-            newRow.find('textarea').val('');
-            newRow.find('input[type=number]').val('').prop('disabled', false);
-            newRow.find('select[name="is_lock[]"]').val('0').prop('disabled', false);
-            // Replace buttons
-            newRow.find('.addRecord').replaceWith(
-                `<button type="button" class="btn btn-danger me-1 btn-sm removeRecord">
-                    <i class="fa fa-trash-o"></i>
-                </button>`
-            );
-            // Insert new row after last KPI row
-            lastKpiRow.after(newRow);
+        $(document).on('click', '.addRecord', function() {
+            // Append a new record row to the last purpose section
+            // $(this).closest('tr').before(addNewRecord());
+            $("#tbl_performance").append(addNewRecord());
         });
+        // Event to add a new record
+        // $(document).on('click', '.addRecord', function () {
+        //     let currentTr = $(this).closest('tr');
+        //     let purposeHeader = currentTr.prevAll('.purpose-group').first(); // Locate the related purpose row
+        //     let rowsUnderPurpose = purposeHeader.nextUntil('.purpose-group, .title-group'); // All rows under this purpose
+        //     let lastKpiRow = rowsUnderPurpose.filter('.kpi-group').last(); // Get last KPI row
+        //     let newRow = currentTr.clone();
+        //     // Reset fields
+        //     newRow.find('textarea').val('');
+        //     newRow.find('input[type=number]').val('').prop('disabled', false);
+        //     newRow.find('select[name="is_lock[]"]').val('0').prop('disabled', false);
+        //     // Replace buttons
+        //     // newRow.find('.addRecord').replaceWith(
+        //     //     `<button type="button" class="btn btn-danger me-1 btn-sm removeRecord">
+        //     //         <i class="fa fa-trash-o"></i>
+        //     //     </button>`
+        //     // );
+        //     // Insert new row after last KPI row
+        //     lastKpiRow.after(newRow);
+        // });
 
         // Event delegation for dynamically added Remove buttons in records
         $(document).on('click', '.removeRecord', function() {
@@ -355,11 +403,18 @@
                             let $kpiRow = $($rows[i]);
                             let key_kpi = $kpiRow.find('textarea[name="key_kpi[]"]').val();
                             let action_plan = $kpiRow.find('textarea[name="action_plan[]"]').val();
-                            let goal = $kpiRow.find('textarea[name="goal[]"]').val();
+                            // let goal = $kpiRow.find('textarea[name="goal[]"]').val();
                             let weight = $kpiRow.find('input[name="weight[]"]').val();
                             let goal_type = $kpiRow.find('select[name="goal_type[]"]').val();
                             let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
-
+                            let goal = [];
+                            $kpiRow.find('.weight-from').each(function(index) {
+                                let fromVal = $(this).val();
+                                let toVal = $kpiRow.find('.weight-to').eq(index).val();
+                                if (fromVal || toVal) {
+                                    goal.push({ from: fromVal, to: toVal });
+                                }
+                            });
                             dataKPi.push({ key_kpi, action_plan, goal, weight,goal_type,is_lock });
                             i++;
                         }
@@ -445,7 +500,8 @@
                 <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
             <td colspan="1" class="text-center">
-                <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
+                <button type="button" class="btn btn-danger btn-sm btnRemovePurpose"><i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i></button>
             </td>
         </tr>
         <tr class='section-purpose kpi-group' style='text-align: center'>
@@ -457,20 +513,75 @@
             </td>
             <td class="text-center">
                 <select class="form-control goal-type-select" name="goal_type[]">
-                    <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
-                    <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
+                    <option value="number_increment">Number Increment</option>
+                    <option value="number_decrement">Number Decrement</option>
 
-                    <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
-                    <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
+                    <option value="percent_increment">Percent Increment</option>
+                    <option value="percent_decrement">Percent Decrement</option>
 
-                    <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
-                    <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
+                    <option value="currency_increment">Currency Increment</option>
+                    <option value="currency_decrement">Currency Decrement</option>
 
-                    <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
-                    <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
+                    <option value="date_increment">Date Increment</option>
+                    <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any"  class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight sum_total_weight required" id="weight" placeholder="%"></td>
@@ -481,13 +592,14 @@
                 </select>
             </td>
             <td class="text-center">
+                <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
         </tr>`;
     }
     // Function to create a new record row
     function addNewRecord() {
-        return `<tr class='section-purpose kpi-group' style='text-align: center; background-color: #e5e1e1'>
+        return `<tr class='section-purpose kpi-group' style='text-align: center'>
             <td class="text-center">
                 <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
             </td>
@@ -495,9 +607,79 @@
                 <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="5" class="form-control required goal" name="goal[]" placeholder="Enter text here" spellcheck="false"></textarea>
+                <select class="form-control goal-type-select" name="goal_type[]">
+                    <option value="number_increment">Number Increment</option>
+                    <option value="number_decrement">Number Decrement</option>
+
+                    <option value="percent_increment">Percent Increment</option>
+                    <option value="percent_decrement">Percent Decrement</option>
+
+                    <option value="currency_increment">Currency Increment</option>
+                    <option value="currency_decrement">Currency Decrement</option>
+
+                    <option value="date_increment">Date Increment</option>
+                    <option value="date_decrement">Date Decrement</option>
+                </select>
+                <div class="goal-input-wrapper mt-1">
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any"  class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required sum_total_weight" placeholder="%" min="0" value="{{old('weight')}}"></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
                 <select class="form-control" name="is_lock[]" id="is_lock" required>
                     <option value="0">No</option>
@@ -506,6 +688,7 @@
             </td>
             <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
+                <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
         </tr>`;
     }
@@ -523,7 +706,8 @@
                 <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
             <td colspan="1" class="text-center">
-                <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
+                <button type="button" class="btn btn-danger btn-sm btnRemovePurpose"><i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i></button>
             </td>
         </tr>
         <tr class='kpi-group' style='text-align: center'>
@@ -535,20 +719,75 @@
             </td>
             <td class="text-center">
                 <select class="form-control goal-type-select" name="goal_type[]">
-                    <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
-                    <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
+                    <option value="number_increment">Number Increment</option>
+                    <option value="number_decrement">Number Decrement</option>
 
-                    <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
-                    <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
+                    <option value="percent_increment">Percent Increment</option>
+                    <option value="percent_decrement">Percent Decrement</option>
 
-                    <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
-                    <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
+                    <option value="currency_increment">Currency Increment</option>
+                    <option value="currency_decrement">Currency Decrement</option>
 
-                    <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
-                    <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
+                    <option value="date_increment">Date Increment</option>
+                    <option value="date_decrement">Date Decrement</option>
                 </select>
                 <div class="goal-input-wrapper mt-1">
-                    <textarea class="form-control required goal" name="goal[]" rows="5" placeholder="e.g.&#10;60 70&#10;70 80&#10;90 100"></textarea>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any"  class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="group d-flex align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                            </div>
+                            <div class="col-md-2 text-center">To</div>
+                            <div class="col-md-5">
+                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" style="height: 35px;">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required sum_total_weight" placeholder="%" min="0" value="{{old('weight')}}"></td>
@@ -559,6 +798,7 @@
                 </select>
             </td>
             <td class="text-center">
+                <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
         </tr>`;
