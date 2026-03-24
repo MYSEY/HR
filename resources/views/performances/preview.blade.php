@@ -180,10 +180,10 @@
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">
-                                                        <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
+                                                        <textarea rows="9" class="form-control" placeholder="Enter text here" required>{{$Detailitem->key_kpi}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
+                                                        <textarea rows="9" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
                                                     {{-- <td class="text-center">
                                                         <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>

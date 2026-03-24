@@ -88,10 +88,10 @@
                                             <div>
                                                 <tr class="kpi-group">
                                                     <td class="text-center">
-                                                        <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
+                                                        <textarea rows="9" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false">{{ old('key_kpi') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
+                                                        <textarea rows="9" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
                                                         <select class="form-control goal-type-select mt-1" name="goal_type[]">

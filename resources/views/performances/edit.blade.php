@@ -97,12 +97,12 @@
                                             
                                             <tr class="section-purpose kpi-group">
                                                 <td class="text-center">
-                                                    <textarea rows="7" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false"
+                                                    <textarea rows="9" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false"
                                                         {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->key_kpi }}
                                                     </textarea>
                                                 </td>
                                                 <td class="text-center">
-                                                    <textarea rows="7" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"
+                                                    <textarea rows="9" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"
                                                         {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->action_plan }}
                                                     </textarea>
                                                 </td>
