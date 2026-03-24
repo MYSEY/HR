@@ -116,14 +116,14 @@
                                                                     <div class="col-md-5">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                                                            <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-2 text-center">To</div>
                                                                     <div class="col-md-5">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="any" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                                                            <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -133,14 +133,14 @@
                                                                     <div class="col-md-5">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                                                            <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-2 text-center">To</div>
                                                                     <div class="col-md-5">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="any" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                                                            <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -151,14 +151,14 @@
                                                                     <div class="col-md-5">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                                                            <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-2 text-center">To</div>
                                                                     <div class="col-md-5">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="any" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                                                            <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -168,14 +168,14 @@
                                                                     <div class="col-md-5">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                                                            <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-2 text-center">To</div>
                                                                     <div class="col-md-5">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="any" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                                                            <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -185,14 +185,14 @@
                                                                     <div class="col-md-5">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                                                            <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-2 text-center">To</div>
                                                                     <div class="col-md-5">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="any" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                                                            <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                                                         </div>
                                                                     </div>
                                                                 </div>
