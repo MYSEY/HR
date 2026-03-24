@@ -610,7 +610,7 @@ class EmployeePayrollController extends Controller
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
-                        $dataHolidayBunuse = Holiday::where('type','bonus')->whereYear('created_at', now()->year)->get();
+                        $dataHolidayBunuse = Holiday::where('type','bonus')->whereYear('from', now()->year)->get();
                         foreach ($dataHolidayBunuse as $value) {
                             $userJoinDate = $item->date_of_commencement;
                             $dayOfYear = 365;

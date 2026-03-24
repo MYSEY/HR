@@ -17,7 +17,7 @@ class HolidayController extends Controller
         if (permissionAccess("m8-s3","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $data = Holiday::whereYear('created_at', now()->year)->orderBy('from', 'asc')->get();
+        $data = Holiday::whereYear('from', now()->year)->orderBy('from', 'asc')->get();
         return view('holidays.index',compact('data'));
     }
 
@@ -47,7 +47,6 @@ class HolidayController extends Controller
             Activity::all()->last();
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
-            $data['type']       = 'bonus';
             Holiday::create($data);
             DB::commit();
             Toastr::success('created holiday successfully','Success');
@@ -75,7 +74,7 @@ class HolidayController extends Controller
             $data['period_month']      = $request->period_month;
             $data['from']              = $request->from;
             $data['to']                = $request->to;
-            $data['type']              = 'bonus';
+            $data['type']              = $request->type;
             $data['updated_by']        = Auth::user()->id;
             $data->save();
             DB::commit();

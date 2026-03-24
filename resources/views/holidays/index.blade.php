@@ -135,6 +135,15 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.type')</label>
+                                        <select class="form-control hr-select2-option" name="type" id="type">
+                                            <option value=""> --@lang('lang.select')--</option>
+                                            <option value="bonus">Bonus</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                            
                             <div class="submit-section">
@@ -204,6 +213,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.type')</label>
+                                        <select class="form-control hr-select2-option" name="type" id="e_type">
+                                            {{-- <option value=""> --@lang('lang.select')--</option> --}}
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="submit-section">
                                 <input type="hidden" name="id" id="e_id" class="e_id" value="">
@@ -240,6 +257,13 @@
                     $('#e_period_month').val(response.success.period_month);
                     $('#e_from').val(response.success.from);
                     $('#e_to').val(response.success.to);
+                    let type = response.success.type;
+                    $("#e_type").empty();
+                    $("#e_type").append(`
+                        <option value="">--Select--</option>
+                        <option value="bonus">Bonus</option>
+                    `);
+                    $("#e_type").val(type).trigger('change');
                 }
             });
         });
