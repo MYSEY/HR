@@ -1,4 +1,4 @@
-<div id="importLeaves" class="modal custom-modal fade" role="dialog">
+<div id="importKpi" class="modal custom-modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -16,7 +16,7 @@
                                 <span id="thanLess"></span>
                             </div>
                             <div class="col-md-12" style="padding-left: 2%;">
-                                <input type="file" id="result_file">
+                                <input type="file" id="result_file" accept=".xlsx, .xls, .csv">
                             </div>
                         </div>
                     </div>
