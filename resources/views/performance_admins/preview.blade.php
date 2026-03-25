@@ -132,7 +132,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <div class="table-responsive">
@@ -157,7 +157,7 @@
                                             {{-- <td colspan="1" class="text-center"></td> --}}
                                             {{-- <td colspan="1" class="text-center"></td> --}}
                                         </tr>
-                                        
+
                                         @foreach ($item->purposes as $purposeItem)
                                             <tr>
                                                 <td colspan="4" class="text-center">
@@ -166,7 +166,7 @@
                                                 {{-- <td colspan="1" class="text-center"></td> --}}
                                                 {{-- <td colspan="1" class="text-center"></td> --}}
                                             </tr>
-                                            
+
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
                                                 @php
                                                     $total_weight += $Detailitem->weight;
@@ -179,15 +179,35 @@
                                                         <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <select class="form-control goal-type-selec goal_type" name="goal_type">
-                                                            <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
-                                                            <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
-                                                            <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
-                                                            <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
+                                                        <select class="form-control goal-type-select mt-1" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                            <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
+                                                            <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
+
+                                                            <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
+                                                            <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
+
+                                                            <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
+                                                            <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
+
+                                                            <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
+                                                            <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
                                                         </select>
-                                                        <div class="goal-input-wrapper mt-1">
-                                                            <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal">{{ $Detailitem->goal }}</textarea>
-                                                        </div>
+
+                                                        @foreach ($Detailitem->performanceGoals as $item)
+                                                            <div class="goal-input-wrapper mt-1">
+                                                                <div class="row mb-1">
+                                                                    <div class="group d-flex align-items-center">
+                                                                        <div class="col-md-5">
+                                                                            <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" value="{{ $item->from }}" style="height: 35px;width: 100px;">
+                                                                        </div>
+                                                                        <div class="col-md-2 text-center">To</div>
+                                                                        <div class="col-md-5">
+                                                                            <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" value="{{ $item->to }}" style="height: 35px;width: 100px;">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
@@ -202,15 +222,15 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="submit-section mb-2">
                     @if ($permission)
                         @if (Auth::user()->id == $data->review_employee_id || $permission->is_access == 1 && ($data->status !="preparing" && $data->status != "approved"))
-                            <a class="btn @if ($data->status == 4) btn-success @else btn-danger @endif btn-asign" 
-                                data-id="{{$data->id}}" 
-                                data-status="{{$data->status}}" 
-                                data-name="{{$data->review_employee_name_en}}" 
-                                data-employeeid="{{$data->employee_id}}" 
+                            <a class="btn @if ($data->status == 4) btn-success @else btn-danger @endif btn-asign"
+                                data-id="{{$data->id}}"
+                                data-status="{{$data->status}}"
+                                data-name="{{$data->review_employee_name_en}}"
+                                data-employeeid="{{$data->employee_id}}"
                                 href="#" aria-expanded="false">
                                     @if ($data->status == 4)
                                         <span>@lang('lang.approved')</span>
@@ -265,7 +285,7 @@
         $(function(){
             $(document).on('click','.checkbox-group', function(){
                 $(".checkbox-group").not(this).prop("checked", false);
-            }); 
+            });
             $('.btn-asign').on('click', function() {
                 var pa_id = $(this).data("id");
                 var employee_old = $(this).data("name");
@@ -298,7 +318,7 @@
                             '<div class="form-group">'+
                                 '<label>@lang("lang.employee")</label>'+
                                 '<select class="form-control hr-select2-option-emp-role form-select asign_employee_id" id="asign_employee_id">'+
-                                
+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group">' +

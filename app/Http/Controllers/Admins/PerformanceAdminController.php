@@ -28,6 +28,8 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PerformanceDetailHistory;
 use App\Repositories\Admin\ReportRepository;
+use App\Models\PerformanceGoal;
+use App\Models\PerformanceGoalHistory;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -170,7 +172,7 @@ class PerformanceAdminController extends Controller
         return view('performance_admins.preview',compact('data','permission','url'));
     }
     public function dataHistory(){
-        $query = PerformanceHistory::with(['titles.purposes.performanceDetail'])
+        $query = PerformanceHistory::with(['titles.purposes.performanceDetail.performanceGoals'])
             ->leftJoin('users', 'performance_histories.employee_id', '=', 'users.id')
             ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
             ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
@@ -299,8 +301,22 @@ class PerformanceAdminController extends Controller
                         $pdArray['performance_histories_id'] = $paHistory->id;
                         $pdArray['title_histories_id'] = $tHistory->id;
                         $pdArray['purpose_histories_id'] = $ppHistory->id;
+                        $detailHistory = PerformanceDetailHistory::create($pdArray);
 
-                        PerformanceDetailHistory::create($pdArray);
+                        $pGoals = PerformanceGoal::where("performance_id", $data->id)
+                        ->where("title_id", $titleItem->id)
+                        ->where("purpose_id", $pp->id)
+                        ->where("performance_detail_id", $pd->id)
+                        ->get();
+                        foreach ($pGoals as $goal) {
+                            $pgArray = $goal->toArray();
+                            unset($pgArray['id']);
+                            $pgArray['performance_histories_id'] = $paHistory->id;
+                            $pgArray['title_histories_id'] = $tHistory->id;
+                            $pgArray['purpose_histories_id'] = $ppHistory->id;
+                            $pgArray['performance_detail_histories_id'] = $detailHistory->id;
+                            PerformanceGoalHistory::create($pgArray);
+                        }
                     }
                 }
             }
@@ -705,7 +721,7 @@ class PerformanceAdminController extends Controller
     }
     public function kpiReportExportDetail(Request $request){
         $id = $request->id;
-        $data = Performance::with(['titles.purposes.performanceDetail'])
+        $data = Performance::with(['titles.purposes.performanceDetail.performanceGoals'])
         ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
         ->leftJoin('users as line_manager', 'users.line_manager', '=', 'line_manager.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')

@@ -16,6 +16,7 @@ use App\Models\Purpose;
 use App\Models\PurposeHistory;
 use App\Models\Title;
 use App\Models\TitleHistory;
+use App\Models\PerformanceGoalHistory;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -496,8 +497,22 @@ class PerformanceController extends Controller
                         $pdArray['performance_histories_id'] = $paHistory->id;
                         $pdArray['title_histories_id'] = $tHistory->id;
                         $pdArray['purpose_histories_id'] = $ppHistory->id;
+                        $detailHistory = PerformanceDetailHistory::create($pdArray);
 
-                        PerformanceDetailHistory::create($pdArray);
+                        $pGoals = PerformanceGoal::where("performance_id", $data->id)
+                        ->where("title_id", $titleItem->id)
+                        ->where("purpose_id", $pp->id)
+                        ->where("performance_detail_id", $pd->id)
+                        ->get();
+                        foreach ($pGoals as $goal) {
+                            $pgArray = $goal->toArray();
+                            unset($pgArray['id']);
+                            $pgArray['performance_histories_id'] = $paHistory->id;
+                            $pgArray['title_histories_id'] = $tHistory->id;
+                            $pgArray['purpose_histories_id'] = $ppHistory->id;
+                            $pgArray['performance_detail_histories_id'] = $detailHistory->id;
+                            PerformanceGoalHistory::create($pgArray);
+                        }
                     }
                 }
             }
@@ -513,8 +528,8 @@ class PerformanceController extends Controller
      */
     public function update(Request $request)
     {
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $totalWeight = 0;
             foreach ($request->data as $title) {
                 if (!empty($title['dataPurpose'])) {
@@ -531,9 +546,13 @@ class PerformanceController extends Controller
             if ($totalWeight <= 100) {
                 $performance = Performance::findOrFail($request->performance_id);
                 self::createHistories($performance);
+
                 $employee = User::findOrFail($request->employee_id);
+
                 $year = Carbon::parse($request->from_date)->format('Y');
-                $type = $employee->emp_status === 'Probation'? "KPI Probation $year" : "KPI Form $year";
+                $type = $employee->emp_status === 'Probation'
+                    ? "KPI Probation $year"
+                    : "KPI Form $year";
 
                 $performance->update([
                     'status'       => 'preparing',
@@ -546,12 +565,14 @@ class PerformanceController extends Controller
                     'updated_by'   => Auth::id(),
                 ]);
 
+                // ✅ DELETE ALL OLD DATA
                 PerformanceGoal::where('performance_id', $performance->id)->delete();
                 PerformanceDetail::where('performance_id', $performance->id)->delete();
                 Purpose::where('performance_id', $performance->id)->delete();
                 Title::where('performance_id', $performance->id)->delete();
 
                 foreach ($request->data as $titleItem) {
+
                     $title = Title::create([
                         'performance_id' => $performance->id,
                         'title'          => $titleItem['title'],
@@ -560,21 +581,28 @@ class PerformanceController extends Controller
 
                     if (!empty($titleItem['dataPurpose'])) {
                         foreach ($titleItem['dataPurpose'] as $purposeItem) {
+
                             $purpose = Purpose::create([
                                 'performance_id' => $performance->id,
                                 'title_id'       => $title->id,
                                 'name'           => $purposeItem['purpose'],
                                 'created_by'     => Auth::id(),
                             ]);
+
                             if (!empty($purposeItem['dataKPi'])) {
                                 foreach ($purposeItem['dataKPi'] as $kpi) {
+
+                                    // ✅ VALIDATION (your same logic)
                                     $isValidGoal = true;
                                     $goalType = $kpi['goal_type'];
+
                                     foreach ($kpi['goal'] as $g) {
+
                                         if (!isset($g['from'], $g['to'])) {
                                             $isValidGoal = false;
                                             break;
                                         }
+
                                         $min = $g['from'];
                                         $max = $g['to'];
 
@@ -594,7 +622,9 @@ class PerformanceController extends Controller
                                                 $isValidGoal = false;
                                                 break;
                                             }
+
                                         } elseif (str_contains($goalType, 'date')) {
+
                                             try {
                                                 $min = Carbon::parse($min);
                                                 $max = Carbon::parse($max);
@@ -602,6 +632,7 @@ class PerformanceController extends Controller
                                                 $isValidGoal = false;
                                                 break;
                                             }
+
                                         } else {
                                             $isValidGoal = false;
                                             break;
@@ -609,6 +640,7 @@ class PerformanceController extends Controller
 
                                         $current = $min < $max ? 'inc' : ($min > $max ? 'dec' : 'equal');
                                         $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
+
                                         if ($current !== 'equal' && $current !== $expected) {
                                             $isValidGoal = false;
                                             break;
@@ -619,9 +651,11 @@ class PerformanceController extends Controller
                                         DB::rollBack();
                                         return response()->json([
                                             'message' => 'not_goal',
-                                            'goal_type' => $goalType
+                                            'goal_type' => $goalType,
                                         ]);
                                     }
+
+                                    // ✅ CREATE DETAIL
                                     $detail = PerformanceDetail::create([
                                         'performance_id' => $performance->id,
                                         'title_id'       => $title->id,
@@ -634,13 +668,18 @@ class PerformanceController extends Controller
                                         'updated_by'     => Auth::id(),
                                     ]);
 
+                                    // ✅ CREATE GOALS
                                     foreach ($kpi['goal'] as $g) {
                                         $from = $g['from'];
                                         $to   = $g['to'];
+
                                         $isIncrement = str_contains($goalType, 'increment');
+
+                                        // ✅ ONLY swap for increment
                                         if ($isIncrement && $from > $to) {
                                             [$from, $to] = [$to, $from];
                                         }
+
                                         PerformanceGoal::create([
                                             'performance_id'        => $performance->id,
                                             'title_id'              => $title->id,
@@ -657,7 +696,6 @@ class PerformanceController extends Controller
                         }
                     }
                 }
-
                 DB::commit();
                 return response()->json(['message' => 'successfully']);
             } else {
@@ -665,14 +703,14 @@ class PerformanceController extends Controller
                     'error' => 'The total weight of all KPIs must equal 100%'
                 ]);
             }
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            return response()->json([
-                'success'   => false,
-                'error'     => 'Performance update failed.',
-                'exception' => $e->getMessage()
-            ], 500);
-        }
+        // } catch (\Throwable $e) {
+        //     DB::rollBack();
+        //     return response()->json([
+        //         'success'   => false,
+        //         'error'     => 'Performance update failed.',
+        //         'exception' => $e->getMessage()
+        //     ], 500);
+        // }
     }
     public function performanceAssign(Request $request)
     {
