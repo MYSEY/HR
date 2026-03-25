@@ -35,8 +35,12 @@ class PerformanceDetailHistory extends Model
     public function title() {
         return $this->belongsTo(TitleHistory::class, 'title_histories_id');
     }
-    
+
     public function purpose() {
         return $this->belongsTo(PurposeHistory::class, 'purpose_histories_id');
+    }
+    public function performanceGoals()
+    {
+        return $this->hasMany(PerformanceGoalHistory::class, 'performance_detail_histories_id');
     }
 }
