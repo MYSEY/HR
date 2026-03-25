@@ -92,7 +92,26 @@
                     <tr>
                         <td>{!! nl2br(e($detail->key_kpi)) !!}</td>
                         <td>{!! nl2br(e($detail->action_plan)) !!}</td>
-                        <td>{!! nl2br(e($detail->goal)) !!}</td>
+                        <td>
+                            @php
+                                $typeArray = explode('_', $detail->goal_type);
+                                $type = $typeArray[0] ?? 'number';
+                                $symbol = '';
+                                if ($type == 'percent') {
+                                    $symbol = '%';
+                                } elseif ($type == 'currency') {
+                                    $symbol = '$';
+                                } elseif ($type == 'number') {
+                                    $symbol = '';
+                                }
+                            @endphp
+
+                            @foreach ($detail->performanceGoals as $key => $pGoal)
+                                <span>
+                                    {{ "ពិន្ទុ " . ($key + 1) . " = " . $pGoal->from . $symbol . " ដល់ " . $pGoal->to . $symbol }}
+                                </span><br>
+                            @endforeach
+                        </td>
                         <td>{{ $detail->progress }}</td>
                         <td>{{ $detail->weight }}</td>
                         <td>{{ $detail->score_achieved }}</td>
@@ -166,7 +185,7 @@
             } else if ($score <= 4.99) {
                 $overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
                 $color = 'lightgreen';
-            } else {                
+            } else {
                 $overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
                 $color = 'green';
             }
