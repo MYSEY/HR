@@ -94,7 +94,7 @@
                                                         <textarea rows="9" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <select class="form-control goal-type-select mt-1" name="goal_type[]">
+                                                        <select class="form-control goal-type-select mt-1 goal_type" name="goal_type[]">
                                                             <option value="number_increment">Number Increment</option>
                                                             <option value="number_decrement">Number Decrement</option>
 
@@ -252,6 +252,8 @@
         $(document).on('input', '.sum_total_weight', calculateTotal);
         let dataKeyKpi = [];
         $(document).on('change', '.goal-type-select', function () {
+            $(".weight-from").val('');
+            $(".weight-to").val('');
             let selectedType = $(this).val();
             let wrapper = $(this).closest('td').find('.goal-input-wrapper');
 
@@ -380,7 +382,6 @@
                 }
             });
         });
-        
         $(document).on('focus', '.required', function () {
             $(this).css("border-color", "#1e9ff2");
         });
@@ -480,19 +481,19 @@
                             $('#performanceForm').trigger("reset");
                         } else if (response.message === 'not_goal') {
                             if (response.goal_type=='number_increment' || response.goal_type=='number_decrement') {
-                                $(".goal").each(function () {
+                                $(".goal_type").each(function () {
                                     $(this).css("border-color", "red");
                                 });
                             }else if(response.goal_type=='percent_increment' || response.goal_type=='percent_decrement'){
-                                $(".goal").each(function () {
+                                $(".goal_type").each(function () {
                                     $(this).css("border-color", "red");
                                 });
                             }else if(response.goal_type=='currency_increment' || response.goal_type=='currency_decrement'){
-                                $(".goal").each(function () {
+                                $(".goal_type").each(function () {
                                     $(this).css("border-color", "red");
                                 });
                             }else{
-                                $(".goal").each(function () {
+                                $(".goal_type").each(function () {
                                     $(this).css("border-color", "red");
                                 });
                             }
@@ -525,7 +526,7 @@
                 <textarea rows="9" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
             <td class="text-center">
-                <select class="form-control goal-type-select mt-1" name="goal_type[]">
+                <select class="form-control goal-type-select mt-1 goal_type" name="goal_type[]">
                     <option value="number_increment">Number Increment</option>
                     <option value="number_decrement">Number Decrement</option>
 
@@ -650,7 +651,7 @@
                 <textarea rows="9" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <select class="form-control goal-type-select mt-1" name="goal_type[]">
+                <select class="form-control goal-type-select mt-1 goal_type" name="goal_type[]">
                     <option value="number_increment">Number Increment</option>
                     <option value="number_decrement">Number Decrement</option>
 
@@ -791,7 +792,7 @@
                 <textarea rows="9" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <select class="form-control goal-type-select mt-1" name="goal_type[]">
+                <select class="form-control goal-type-select mt-1 goal_type" name="goal_type[]">
                     <option value="number_increment">Number Increment</option>
                     <option value="number_decrement">Number Decrement</option>
 

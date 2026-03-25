@@ -272,200 +272,107 @@ class PerformanceController extends Controller
                                 'created_by'     => Auth::id(),
                             ]);
 
-                            // foreach ($purposeItem['dataKPi'] as $kpi) {
-                            //     /* ---- Validate goal lines -------------------------------- */
-                            //     $isValidGoal = true;
-                            //     $goalType    = $kpi['goal_type'];           // number|currency|percent|date
-                            //     $lines       = explode("\n", $kpi['goal']);
+                            foreach ($purposeItem['dataKPi'] as $kpi) {
+                                /* ---- Validate goal lines -------------------------------- */
+                                $isValidGoal = true;
+                                $goalType    = $kpi['goal_type']; // number|currency|percent|date
 
-                            //     foreach ($lines as $line) {
-
-                            //         $line = trim($line);
-                            //         if ($line === '') continue; // skip empty lines
-
-                            //         $parts = preg_split('/\s+/', $line);
-
-                            //         if (count($parts) !== 2) {
-                            //             $isValidGoal = false;
-                            //             break;
-                            //         }
-
-                            //         [$min, $max] = $parts;
-
-                            //         if (
-                            //             str_contains($goalType, 'number') ||
-                            //             str_contains($goalType, 'percent') ||
-                            //             str_contains($goalType, 'currency')
-                            //         ) {
-
-                            //             if (!is_numeric($min) || !is_numeric($max)) {
-                            //                 $isValidGoal = false;
-                            //                 break;
-                            //             }
-
-                            //             $min = (float)$min;
-                            //             $max = (float)$max;
-
-                            //             // Optional percent validation
-                            //             if (str_contains($goalType, 'percent')) {
-                            //                 if ($min < 0 || $max > 100) {
-                            //                     $isValidGoal = false;
-                            //                     break;
-                            //                 }
-                            //             }
-
-                            //         } elseif (str_contains($goalType, 'date')) {
-
-                            //             try {
-                            //                 $min = Carbon::parse($min);
-                            //                 $max = Carbon::parse($max);
-                            //             } catch (\Exception $e) {
-                            //                 $isValidGoal = false;
-                            //                 break;
-                            //             }
-
-                            //         } else {
-                            //             $isValidGoal = false;
-                            //             break;
-                            //         }
-
-                            //         if ($min < $max)       $current = 'inc';
-                            //         elseif ($min > $max)   $current = 'dec';
-                            //         else                   $current = 'equal';
-
-                            //         // ✅ FIXED HERE
-                            //         $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
-
-                            //         if ($current !== 'equal' && $current !== $expected) {
-                            //             $isValidGoal = false;
-                            //             break;
-                            //         }
-                            //     }
-
-                            //     if (!$isValidGoal) {
-                            //         DB::rollBack();
-                            //         return response()->json([
-                            //             'message' => 'not_goal',
-                            //             'goal_type' => $goalType,
-                            //         ]);
-                            //     }
-
-                            //     /* ---- Passed validation → create row -------------------- */
-                            //     $performanceDetail = PerformanceDetail::create([
-                            //         'performance_id' => $performance->id,
-                            //         'title_id'       => $title->id,
-                            //         'purpose_id'     => $purpose->id,
-                            //         'key_kpi'        => $kpi['key_kpi'],
-                            //         'action_plan'    => $kpi['action_plan'],
-                            //         'goal'           => $kpi['goal'],
-                            //         'weight'         => $kpi['weight'],
-                            //         'goal_type'      => $goalType,
-                            //         'is_lock'        => $kpi['is_lock'],
-                            //         'updated_by'     => Auth::id(),
-                            //     ]);
-                            // }
-                        }
-
-                        foreach ($purposeItem['dataKPi'] as $kpi) {
-                            /* ---- Validate goal lines -------------------------------- */
-                            $isValidGoal = true;
-                            $goalType    = $kpi['goal_type']; // number|currency|percent|date
-
-                            foreach ($kpi['goal'] as $g) {
-                                if (!isset($g['from'], $g['to'])) {
-                                    $isValidGoal = false;
-                                    break;
-                                }
-
-                                $min = $g['from'];
-                                $max = $g['to'];
-
-                                // ---------- VALIDATE TYPE ----------
-                                if (str_contains($goalType, 'number') ||
-                                    str_contains($goalType, 'percent') ||
-                                    str_contains($goalType, 'currency')) {
-
-                                    if (!is_numeric($min) || !is_numeric($max)) {
+                                foreach ($kpi['goal'] as $g) {
+                                    if (!isset($g['from'], $g['to'])) {
                                         $isValidGoal = false;
                                         break;
                                     }
 
-                                    $min = (float)$min;
-                                    $max = (float)$max;
+                                    $min = $g['from'];
+                                    $max = $g['to'];
 
-                                    if (str_contains($goalType, 'percent') && ($min < 0 || $max > 100)) {
+                                    // ---------- VALIDATE TYPE ----------
+                                    if (str_contains($goalType, 'number') ||
+                                        str_contains($goalType, 'percent') ||
+                                        str_contains($goalType, 'currency')) {
+
+                                        if (!is_numeric($min) || !is_numeric($max)) {
+                                            $isValidGoal = false;
+                                            break;
+                                        }
+
+                                        $min = (float)$min;
+                                        $max = (float)$max;
+
+                                        if (str_contains($goalType, 'percent') && ($min < 0 || $max > 100)) {
+                                            $isValidGoal = false;
+                                            break;
+                                        }
+
+                                    } elseif (str_contains($goalType, 'date')) {
+
+                                        try {
+                                            $min = Carbon::parse($min);
+                                            $max = Carbon::parse($max);
+                                        } catch (\Exception $e) {
+                                            $isValidGoal = false;
+                                            break;
+                                        }
+
+                                    } else {
                                         $isValidGoal = false;
                                         break;
                                     }
 
-                                } elseif (str_contains($goalType, 'date')) {
+                                    // ---------- CHECK DIRECTION ----------
+                                    if ($min < $max)       $current = 'inc';
+                                    elseif ($min > $max)   $current = 'dec';
+                                    else                   $current = 'equal';
 
-                                    try {
-                                        $min = Carbon::parse($min);
-                                        $max = Carbon::parse($max);
-                                    } catch (\Exception $e) {
+                                    $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
+                                    if ($current !== 'equal' && $current !== $expected) {
                                         $isValidGoal = false;
                                         break;
                                     }
-
-                                } else {
-                                    $isValidGoal = false;
-                                    break;
                                 }
 
-                                // ---------- CHECK DIRECTION ----------
-                                if ($min < $max)       $current = 'inc';
-                                elseif ($min > $max)   $current = 'dec';
-                                else                   $current = 'equal';
-
-                                $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
-                                if ($current !== 'equal' && $current !== $expected) {
-                                    $isValidGoal = false;
-                                    break;
+                                if (!$isValidGoal) {
+                                    DB::rollBack();
+                                    return response()->json([
+                                        'message' => 'not_goal',
+                                        'goal_type' => $goalType,
+                                    ]);
                                 }
-                            }
 
-                            if (!$isValidGoal) {
-                                DB::rollBack();
-                                return response()->json([
-                                    'message' => 'not_goal',
-                                    'goal_type' => $goalType,
+                                /* ---- Passed validation → create PerformanceDetail row ---- */
+                                $performanceDetail = PerformanceDetail::create([
+                                    'performance_id' => $performance->id,
+                                    'title_id'       => $title->id,
+                                    'purpose_id'     => $purpose->id,
+                                    'key_kpi'        => $kpi['key_kpi'],
+                                    'action_plan'    => $kpi['action_plan'],
+                                    'weight'         => $kpi['weight'],
+                                    'goal_type'      => $goalType,
+                                    'is_lock'        => $kpi['is_lock'],
+                                    'created_by'     => Auth::id(),
                                 ]);
-                            }
 
-                            /* ---- Passed validation → create PerformanceDetail row ---- */
-                            $performanceDetail = PerformanceDetail::create([
-                                'performance_id' => $performance->id,
-                                'title_id'       => $title->id,
-                                'purpose_id'     => $purpose->id,
-                                'key_kpi'        => $kpi['key_kpi'],
-                                'action_plan'    => $kpi['action_plan'],
-                                'weight'         => $kpi['weight'],
-                                'goal_type'      => $goalType,
-                                'is_lock'        => $kpi['is_lock'],
-                                'created_by'     => Auth::id(),
-                            ]);
+                                /* ---- Create PerformanceGoal rows ---- */
+                                foreach ($kpi['goal'] as $g) {
+                                    $from = $g['from'];
+                                    $to   = $g['to'];
 
-                            /* ---- Create PerformanceGoal rows ---- */
-                            foreach ($kpi['goal'] as $g) {
-                                $from = $g['from'];
-                                $to   = $g['to'];
+                                    // Swap if from > to
+                                    if ($from > $to) {
+                                        [$from, $to] = [$to, $from];
+                                    }
 
-                                // Swap if from > to
-                                if ($from > $to) {
-                                    [$from, $to] = [$to, $from];
+                                    PerformanceGoal::create([
+                                        'performance_id'         => $performance->id,
+                                        'title_id'               => $title->id,
+                                        'purpose_id'             => $purpose->id,
+                                        'performance_detail_id'  => $performanceDetail->id,
+                                        'from'                   => $from,
+                                        'to'                     => $to,
+                                        'user_id'                => Auth::id(),
+                                        'created_by'             => Auth::id(),
+                                    ]);
                                 }
-
-                                PerformanceGoal::create([
-                                    'performance_id'         => $performance->id,
-                                    'title_id'               => $title->id,
-                                    'purpose_id'             => $purpose->id,
-                                    'performance_detail_id'  => $performanceDetail->id,
-                                    'from'                   => $from,
-                                    'to'                     => $to,
-                                    'user_id'                => Auth::id(),
-                                    'created_by'             => Auth::id(),
-                                ]);
                             }
                         }
                     }
@@ -602,15 +509,12 @@ class PerformanceController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request)
     {
         DB::beginTransaction();
         try {
-            /* -------------------------------------------------
-            | 1. Check total KPI weight
-            * ------------------------------------------------*/
             $totalWeight = 0;
             foreach ($request->data as $title) {
                 if (!empty($title['dataPurpose'])) {
@@ -625,33 +529,27 @@ class PerformanceController extends Controller
             }
 
             if ($totalWeight <= 100) {
-                /* -------------------------------------------------
-                | 2. Update Performance header
-                * ------------------------------------------------*/
                 $performance = Performance::findOrFail($request->performance_id);
                 self::createHistories($performance);
-                $employee    = User::findOrFail($request->employee_id);
-
-                $year = \Carbon\Carbon::parse($request->from_date)->format('Y');
-                $type = $employee->emp_status === 'KPI Probation' ? "Probation $year" : "KPI Form $year";
+                $employee = User::findOrFail($request->employee_id);
+                $year = Carbon::parse($request->from_date)->format('Y');
+                $type = $employee->emp_status === 'Probation'? "KPI Probation $year" : "KPI Form $year";
 
                 $performance->update([
-                    'status'        => 'preparing',
-                    'reason'        => '',
-                    'employee_id'   => $request->employee_id,
-                    'from_date'     => $request->from_date,
-                    'to_date'       => $request->to_date,
-                    'type'          => $type,
-                    'total_weight'  => $totalWeight,
-                    'updated_by'    => Auth::id(),
+                    'status'       => 'preparing',
+                    'reason'       => '',
+                    'employee_id'  => $request->employee_id,
+                    'from_date'    => $request->from_date,
+                    'to_date'      => $request->to_date,
+                    'type'         => $type,
+                    'total_weight' => $totalWeight,
+                    'updated_by'   => Auth::id(),
                 ]);
 
-                /* -------------------------------------------------
-                | 3. Remove old detail rows
-                * ------------------------------------------------*/
-                Title::where('performance_id', $performance->id)->delete();
-                Purpose::where('performance_id', $performance->id)->delete();
+                PerformanceGoal::where('performance_id', $performance->id)->delete();
                 PerformanceDetail::where('performance_id', $performance->id)->delete();
+                Purpose::where('performance_id', $performance->id)->delete();
+                Title::where('performance_id', $performance->id)->delete();
 
                 foreach ($request->data as $titleItem) {
                     $title = Title::create([
@@ -660,8 +558,7 @@ class PerformanceController extends Controller
                         'created_by'     => Auth::id(),
                     ]);
 
-                    // Only loop if dataPurpose exists and is an array
-                    if (!empty($titleItem['dataPurpose']) && is_array($titleItem['dataPurpose'])) {
+                    if (!empty($titleItem['dataPurpose'])) {
                         foreach ($titleItem['dataPurpose'] as $purposeItem) {
                             $purpose = Purpose::create([
                                 'performance_id' => $performance->id,
@@ -669,212 +566,92 @@ class PerformanceController extends Controller
                                 'name'           => $purposeItem['purpose'],
                                 'created_by'     => Auth::id(),
                             ]);
+                            if (!empty($purposeItem['dataKPi'])) {
+                                foreach ($purposeItem['dataKPi'] as $kpi) {
+                                    $isValidGoal = true;
+                                    $goalType = $kpi['goal_type'];
+                                    foreach ($kpi['goal'] as $g) {
+                                        if (!isset($g['from'], $g['to'])) {
+                                            $isValidGoal = false;
+                                            break;
+                                        }
+                                        $min = $g['from'];
+                                        $max = $g['to'];
 
-                            // if (!empty($purposeItem['dataKPi']) && is_array($purposeItem['dataKPi'])) {
-                            //     foreach ($purposeItem['dataKPi'] as $kpi) {
-                            //         // ✅ Your goal validation logic here (unchanged)
-                            //         $isValidGoal = true;
-                            //         $goalType    = $kpi['goal_type'];
-                            //         $lines       = explode("\n", $kpi['goal']);
+                                        if (str_contains($goalType, 'number') ||
+                                            str_contains($goalType, 'percent') ||
+                                            str_contains($goalType, 'currency')) {
 
-                            //         // foreach ($lines as $line) {
-                            //         //     $parts = preg_split('/\s+/', trim($line));
+                                            if (!is_numeric($min) || !is_numeric($max)) {
+                                                $isValidGoal = false;
+                                                break;
+                                            }
 
-                            //         //     if (count($parts) !== 2) { $isValidGoal = false; break; }
+                                            $min = (float)$min;
+                                            $max = (float)$max;
 
-                            //         //     [$min, $max] = $parts;
-
-                            //         //     switch ($goalType) {
-                            //         //         case 'number':
-                            //         //         case 'currency':
-                            //         //         case 'percent':
-                            //         //             if (!is_numeric($min) || !is_numeric($max)) {
-                            //         //                 $isValidGoal = false;
-                            //         //             }
-                            //         //             break;
-
-                            //         //         case 'date':
-                            //         //             try {
-                            //         //                 $d1 = \Carbon\Carbon::createFromFormat('Y-m-d', $min);
-                            //         //                 $d2 = \Carbon\Carbon::createFromFormat('Y-m-d', $max);
-
-                            //         //                 if ($d1->format('Y-m-d') !== $min || $d2->format('Y-m-d') !== $max) {
-                            //         //                     $isValidGoal = false;
-                            //         //                 }
-                            //         //             } catch (\Exception $e) {
-                            //         //                 $isValidGoal = false;
-                            //         //             }
-                            //         //             break;
-
-                            //         //         default:
-                            //         //             $isValidGoal = false;
-                            //         //     }
-                            //         //     if (!$isValidGoal) { break; }
-                            //         // }
-
-                            //         foreach ($lines as $line) {
-                            //             $parts = preg_split('/\s+/', trim($line));
-                            //             if (count($parts) !== 2) { $isValidGoal = false; break; }
-                            //             [$min, $max] = $parts;
-                            //             // Parse numeric/date types
-                            //             if (str_contains($goalType, 'number') || str_contains($goalType, 'percent') || str_contains($goalType, 'currency')) {
-                            //                 if (!is_numeric($min) || !is_numeric($max)) {
-                            //                     $isValidGoal = false;
-                            //                     break;
-                            //                 }
-                            //             }
-                            //             elseif (str_contains($goalType, 'date')) {
-                            //                 try {
-                            //                     $min = Carbon::parse($min);
-                            //                     $max = Carbon::parse($max);
-                            //                 } catch (\Exception $e) {
-                            //                     $isValidGoal = false;
-                            //                     break;
-                            //                 }
-                            //             } else {
-                            //                 $isValidGoal = false;
-                            //                 break;
-                            //             }
-
-                            //             // Determine increment or decrement
-                            //             if ($min < $max)       $current = 'inc';
-                            //             elseif ($min > $max)   $current = 'dec';
-                            //             else                   $current = 'equal';
-                            //             // Assign direction based on goal type
-                            //             $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
-
-                            //             // "equal" is allowed for both increment & decrement
-                            //             if ($current !== 'equal' && $current !== $expected) {
-                            //                 $isValidGoal = false;
-                            //                 break;
-                            //             }
-                            //         }
-
-
-                            //         if (!$isValidGoal) {
-                            //             DB::rollBack();
-                            //             return response()->json([
-                            //                 'message'   => 'not_goal',
-                            //                 'goal_type' => $goalType,
-                            //             ]);
-                            //         }
-
-                            //         // ✅ Passed validation → create row
-                            //         PerformanceDetail::create([
-                            //             'performance_id' => $performance->id,
-                            //             'title_id'       => $title->id,
-                            //             'purpose_id'     => $purpose->id,
-                            //             'key_kpi'        => $kpi['key_kpi'],
-                            //             'action_plan'    => $kpi['action_plan'],
-                            //             'goal'           => $kpi['goal'],
-                            //             'weight'         => $kpi['weight'],
-                            //             'goal_type'      => $goalType,
-                            //             'is_lock'        => $kpi['is_lock'],
-                            //             'updated_by'     => Auth::id(),
-                            //         ]);
-                            //     }
-                            // }
-
-                            foreach ($purposeItem['dataKPi'] as $kpi) {
-                                /* ---- Validate goal lines -------------------------------- */
-                                $isValidGoal = true;
-                                $goalType    = $kpi['goal_type']; // number|currency|percent|date
-
-                                foreach ($kpi['goal'] as $g) {
-                                    if (!isset($g['from'], $g['to'])) {
-                                        $isValidGoal = false;
-                                        break;
-                                    }
-
-                                    $min = $g['from'];
-                                    $max = $g['to'];
-
-                                    // ---------- VALIDATE TYPE ----------
-                                    if (str_contains($goalType, 'number') ||
-                                        str_contains($goalType, 'percent') ||
-                                        str_contains($goalType, 'currency')) {
-
-                                        if (!is_numeric($min) || !is_numeric($max)) {
+                                            if (str_contains($goalType, 'percent') && ($min < 0 || $max > 100)) {
+                                                $isValidGoal = false;
+                                                break;
+                                            }
+                                        } elseif (str_contains($goalType, 'date')) {
+                                            try {
+                                                $min = Carbon::parse($min);
+                                                $max = Carbon::parse($max);
+                                            } catch (\Exception $e) {
+                                                $isValidGoal = false;
+                                                break;
+                                            }
+                                        } else {
                                             $isValidGoal = false;
                                             break;
                                         }
 
-                                        $min = (float)$min;
-                                        $max = (float)$max;
-
-                                        if (str_contains($goalType, 'percent') && ($min < 0 || $max > 100)) {
+                                        $current = $min < $max ? 'inc' : ($min > $max ? 'dec' : 'equal');
+                                        $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
+                                        if ($current !== 'equal' && $current !== $expected) {
                                             $isValidGoal = false;
                                             break;
                                         }
-
-                                    } elseif (str_contains($goalType, 'date')) {
-
-                                        try {
-                                            $min = Carbon::parse($min);
-                                            $max = Carbon::parse($max);
-                                        } catch (\Exception $e) {
-                                            $isValidGoal = false;
-                                            break;
-                                        }
-
-                                    } else {
-                                        $isValidGoal = false;
-                                        break;
                                     }
 
-                                    // ---------- CHECK DIRECTION ----------
-                                    if ($min < $max)       $current = 'inc';
-                                    elseif ($min > $max)   $current = 'dec';
-                                    else                   $current = 'equal';
-
-                                    $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
-                                    if ($current !== 'equal' && $current !== $expected) {
-                                        $isValidGoal = false;
-                                        break;
+                                    if (!$isValidGoal) {
+                                        DB::rollBack();
+                                        return response()->json([
+                                            'message' => 'not_goal',
+                                            'goal_type' => $goalType
+                                        ]);
                                     }
-                                }
-
-                                if (!$isValidGoal) {
-                                    DB::rollBack();
-                                    return response()->json([
-                                        'message' => 'not_goal',
-                                        'goal_type' => $goalType,
+                                    $detail = PerformanceDetail::create([
+                                        'performance_id' => $performance->id,
+                                        'title_id'       => $title->id,
+                                        'purpose_id'     => $purpose->id,
+                                        'key_kpi'        => $kpi['key_kpi'],
+                                        'action_plan'    => $kpi['action_plan'],
+                                        'weight'         => $kpi['weight'],
+                                        'goal_type'      => $goalType,
+                                        'is_lock'        => $kpi['is_lock'],
+                                        'updated_by'     => Auth::id(),
                                     ]);
-                                }
 
-                                /* ---- Passed validation → create PerformanceDetail row ---- */
-                                $performanceDetail = PerformanceDetail::create([
-                                    'performance_id' => $performance->id,
-                                    'title_id'       => $title->id,
-                                    'purpose_id'     => $purpose->id,
-                                    'key_kpi'        => $kpi['key_kpi'],
-                                    'action_plan'    => $kpi['action_plan'],
-                                    'weight'         => $kpi['weight'],
-                                    'goal_type'      => $goalType,
-                                    'is_lock'        => $kpi['is_lock'],
-                                    'updated_by'     => Auth::id(),
-                                ]);
-
-                                /* ---- Create PerformanceGoal rows ---- */
-                                foreach ($kpi['goal'] as $g) {
-                                    $from = $g['from'];
-                                    $to   = $g['to'];
-
-                                    // Swap if from > to
-                                    if ($from > $to) {
-                                        [$from, $to] = [$to, $from];
+                                    foreach ($kpi['goal'] as $g) {
+                                        $from = $g['from'];
+                                        $to   = $g['to'];
+                                        $isIncrement = str_contains($goalType, 'increment');
+                                        if ($isIncrement && $from > $to) {
+                                            [$from, $to] = [$to, $from];
+                                        }
+                                        PerformanceGoal::create([
+                                            'performance_id'        => $performance->id,
+                                            'title_id'              => $title->id,
+                                            'purpose_id'            => $purpose->id,
+                                            'performance_detail_id' => $detail->id,
+                                            'from'                  => $from,
+                                            'to'                    => $to,
+                                            'user_id'               => Auth::id(),
+                                            'updated_by'            => Auth::id(),
+                                        ]);
                                     }
-
-                                    PerformanceGoal::create([
-                                        'performance_id'         => $performance->id,
-                                        'title_id'               => $title->id,
-                                        'purpose_id'             => $purpose->id,
-                                        'performance_detail_id'  => $performanceDetail->id,
-                                        'from'                   => $from,
-                                        'to'                     => $to,
-                                        'user_id'                => Auth::id(),
-                                        'updated_by'             => Auth::id(),
-                                    ]);
                                 }
                             }
                         }
@@ -882,11 +659,11 @@ class PerformanceController extends Controller
                 }
 
                 DB::commit();
-                return response()->json([
-                    'message' => 'successfully'
-                ]);
+                return response()->json(['message' => 'successfully']);
             } else {
-                return response()->json(['error' => 'The total weight of all KPIs must equal 100%.']);
+                return response()->json([
+                    'error' => 'The total weight of all KPIs must equal 100%'
+                ]);
             }
         } catch (\Throwable $e) {
             DB::rollBack();

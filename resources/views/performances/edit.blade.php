@@ -106,62 +106,8 @@
                                                         {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->action_plan }}
                                                     </textarea>
                                                 </td>
-                                                {{-- <td class="text-center">
-                                                    <select class="form-control goal-type-select mt-1" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
-                                                        <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
-                                                        <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
-
-                                                        <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
-                                                        <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
-
-                                                        <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
-                                                        <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
-
-                                                        <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
-                                                        <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
-                                                    </select>
-                                                </td> --}}
-
-                                                {{-- <td class="text-center">
-                                                    <select class="form-control goal-type-select mt-1" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
-                                                        <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
-                                                        <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
-
-                                                        <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
-                                                        <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
-
-                                                        <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
-                                                        <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
-
-                                                        <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
-                                                        <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
-                                                    </select>
-
-                                                    @foreach ($Detailitem->performanceGoals as $item)
-                                                        <div class="goal-input-wrapper mt-1">
-                                                            <div class="row mb-1">
-                                                                <div class="group d-flex align-items-center">
-                                                                    <div class="col-md-5">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" value="{{ $item->from }}" style="height: 35px;">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-2 text-center">To</div>
-                                                                    <div class="col-md-5">
-                                                                        <div class="input-group">
-                                                                            <span class="input-group-text" style="height: 35px;">#</span>
-                                                                            <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" value="{{ $item->to }}" style="height: 35px;">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </td> --}}
-
                                                 <td class="text-center">
-                                                    <select class="form-control goal-type-select mt-1" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                    <select class="form-control goal-type-select mt-1 goal_type" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                         <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
                                                         <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
 
@@ -299,46 +245,65 @@
             let selectedType = $(this).val();
             let wrapper = $(this).closest('td').find('.goal-input-wrapper');
 
-            // Determine input type and placeholder
             let [dataType, direction] = selectedType.split('_');
-            let inputType = 'text';
+
+            let inputType = 'number';
             let step = 'any';
+            let symbol = '';
             let placeholderFrom = 'From';
             let placeholderTo = 'To';
 
             if (dataType === 'date') {
                 inputType = 'date';
-                placeholderFrom = 'Start Date';
-                placeholderTo = 'End Date';
-            } else if (dataType === 'percent') {
+            } 
+            else if (dataType === 'percent') {
                 inputType = 'number';
                 step = '0.01';
-                placeholderFrom = 'From (%)';
-                placeholderTo = 'To (%)';
-            } else if (dataType === 'currency') {
+                symbol = '%';
+                placeholderFrom = 'From';
+                placeholderTo = 'To';
+            } 
+            else if (dataType === 'currency') {
                 inputType = 'number';
                 step = '0.01';
-                placeholderFrom = 'From ($)';
-                placeholderTo = 'To ($)';
-            } else {
+                symbol = '$';
+                placeholderFrom = 'From';
+                placeholderTo = 'To';
+            } 
+            else if (dataType === 'number') {
                 inputType = 'number';
                 step = 'any';
-                placeholderFrom = 'From Number';
-                placeholderTo = 'To Number';
+                symbol = '#'; // 🔥 ADD THIS
+                placeholderFrom = 'From';
+                placeholderTo = 'To';
             }
 
-            // Update all existing inputs in wrapper
-            wrapper.find('input.weight-from').attr({
-                type: inputType,
-                step: step,
-                placeholder: placeholderFrom
-            });
+            function generateRow() {
+                return `
+                <div class="row mb-1">
+                    <div class="group d-flex align-items-center">
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                ${symbol ? `<span class="input-group-text" style="height: 35px;">${symbol}</span>` : ''}
+                                <input type="${inputType}" step="${step}" class="form-control weight-from required" name="goal_from[]" placeholder="${placeholderFrom}" style="height:35px;">
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center">To</div>
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                ${symbol ? `<span class="input-group-text" style="height: 35px;">${symbol}</span>` : ''}
+                                <input type="${inputType}" step="${step}" class="form-control weight-to required" name="goal_to[]" placeholder="${placeholderTo}" style="height:35px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }
 
-            wrapper.find('input.weight-to').attr({
-                type: inputType,
-                step: step,
-                placeholder: placeholderTo
-            });
+            let html = '';
+            for (let i = 0; i < 5; i++) {
+                html += generateRow();
+            }
+            wrapper.html(html);
         });
         $(document).on('click', ".addNewPurpose", function () {
             let currentPurposeRow = $(this).closest('tr');
@@ -513,23 +478,24 @@
                             $('#performanceForm').trigger("reset");
                         } else if(response.message == 'not_goal') {
                             if (response.goal_type=='number_increment' || response.goal_type=='number_decrement') {
-                                $(".goal").each(function () {
+                                $(".goal_type").each(function () {
                                     $(this).css("border-color", "red");
                                 });
                             }else if(response.goal_type=='percent_increment' || response.goal_type=='percent_decrement'){
-                                $(".goal").each(function () {
+                                $(".goal_type").each(function () {
                                     $(this).css("border-color", "red");
                                 });
                             }else if(response.goal_type=='currency_increment' || response.goal_type=='currency_decrement'){
-                                $(".goal").each(function () {
+                                $(".goal_type").each(function () {
                                     $(this).css("border-color", "red");
                                 });
                             }else{
-                                $(".goal").each(function () {
+                                $(".goal_type").each(function () {
                                     $(this).css("border-color", "red");
                                 });
                             }
                             toastr.error(response.error || 'Invalid goal format for type'+' '+response.goal_type || 'Error');
+                           
                         }else {
                             toastr.error(response.message || 'សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%', 'Error');
                         }
@@ -561,7 +527,7 @@
                 <textarea rows="9" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"></textarea>
             </td>
             <td class="text-center">
-                <select class="form-control goal-type-select mt-1" name="goal_type[]">
+                <select class="form-control goal-type-select mt-1 goal_type" name="goal_type[]">
                     <option value="number_increment">Number Increment</option>
                     <option value="number_decrement">Number Decrement</option>
 
@@ -686,7 +652,7 @@
                 <textarea rows="9" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <select class="form-control goal-type-select mt-1" name="goal_type[]">
+                <select class="form-control goal-type-select mt-1 goal_type" name="goal_type[]">
                     <option value="number_increment">Number Increment</option>
                     <option value="number_decrement">Number Decrement</option>
 
@@ -827,7 +793,7 @@
                 <textarea rows="9" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false">{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <select class="form-control goal-type-select mt-1" name="goal_type[]">
+                <select class="form-control goal-type-select mt-1 goal_type" name="goal_type[]">
                     <option value="number_increment">Number Increment</option>
                     <option value="number_decrement">Number Decrement</option>
 
