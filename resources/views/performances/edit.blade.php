@@ -190,7 +190,7 @@
                                                                             @if($symbol)
                                                                                 <span class="input-group-text" style="height: 35px;">{{ $symbol }}</span>
                                                                             @endif
-                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control weight-from required" name="goal_from[]" value="{{ $item->from }}" placeholder="From" style="height: 35px;">
+                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control weight-from required" name="goal_from[]" value="{{ $item->from }}" placeholder="From" style="height: 35px;" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                                         </div>
                                                                     </div>
 
@@ -200,7 +200,7 @@
                                                                             @if($symbol)
                                                                                 <span class="input-group-text" style="height: 35px;">{{ $symbol }}</span>
                                                                             @endif
-                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control weight-to required" name="goal_to[]" value="{{ $item->to }}" placeholder="To" style="height: 35px;">
+                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control weight-to required" name="goal_to[]" value="{{ $item->to }}" placeholder="To" style="height: 35px;" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -226,16 +226,11 @@
                                                     </select>
                                                 </td>
                                                 <td class="text-center">
-                                                    @if ($loop->index == 0)
+                                                    @if ($Detailitem->is_lock == 1)
+                                                        <button type="button" class="btn btn-secondary btn-sm" disabled><i class="fa fa-lock"></i></button>
+                                                    @else
                                                         <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
                                                         <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
-                                                    @else
-                                                        @if ($Detailitem->is_lock == 1)
-                                                            <button type="button" class="btn btn-secondary btn-sm" disabled><i class="fa fa-lock"></i></button>
-                                                        @else
-                                                            <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
-                                                            <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
-                                                        @endif
                                                     @endif
                                                 </td>
                                             </tr>
@@ -361,31 +356,30 @@
         $(document).on('click',".addMore", function() {
             $("#tbl_performance").append(addMoreRow());
         });
-        $(document).on('click', '.addRecord', function() {
-            // Append a new record row to the last purpose section
-            // $(this).closest('tr').before(addNewRecord());
-            $("#tbl_performance").append(addNewRecord());
-        });
-        // Event to add a new record
-        // $(document).on('click', '.addRecord', function () {
-        //     let currentTr = $(this).closest('tr');
-        //     let purposeHeader = currentTr.prevAll('.purpose-group').first(); // Locate the related purpose row
-        //     let rowsUnderPurpose = purposeHeader.nextUntil('.purpose-group, .title-group'); // All rows under this purpose
-        //     let lastKpiRow = rowsUnderPurpose.filter('.kpi-group').last(); // Get last KPI row
-        //     let newRow = currentTr.clone();
-        //     // Reset fields
-        //     newRow.find('textarea').val('');
-        //     newRow.find('input[type=number]').val('').prop('disabled', false);
-        //     newRow.find('select[name="is_lock[]"]').val('0').prop('disabled', false);
-        //     // Replace buttons
-        //     // newRow.find('.addRecord').replaceWith(
-        //     //     `<button type="button" class="btn btn-danger me-1 btn-sm removeRecord">
-        //     //         <i class="fa fa-trash-o"></i>
-        //     //     </button>`
-        //     // );
-        //     // Insert new row after last KPI row
-        //     lastKpiRow.after(newRow);
+        // $(document).on('click', '.addRecord', function() {
+        //     $("#tbl_performance").append(addNewRecord());
         // });
+
+        // Event to add a new record
+        $(document).on('click', '.addRecord', function () {
+            let currentTr = $(this).closest('tr');
+            let purposeHeader = currentTr.prevAll('.purpose-group').first(); // Locate the related purpose row
+            let rowsUnderPurpose = purposeHeader.nextUntil('.purpose-group, .title-group'); // All rows under this purpose
+            let lastKpiRow = rowsUnderPurpose.filter('.kpi-group').last(); // Get last KPI row
+            let newRow = currentTr.clone();
+            // Reset fields
+            newRow.find('textarea').val('');
+            newRow.find('input[type=number]').val('');
+            // newRow.find('select[name="is_lock[]"]').val('0').prop('disabled', false);
+            // Replace buttons
+            // newRow.find('.addRecord').replaceWith(
+            //     `<button type="button" class="btn btn-danger me-1 btn-sm removeRecord">
+            //         <i class="fa fa-trash-o"></i>
+            //     </button>`
+            // );
+            // Insert new row after last KPI row
+            lastKpiRow.after(newRow);
+        });
 
         // Event delegation for dynamically added Remove buttons in records
         $(document).on('click', '.removeRecord', function() {
