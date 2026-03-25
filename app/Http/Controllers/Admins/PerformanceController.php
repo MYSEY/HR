@@ -528,8 +528,8 @@ class PerformanceController extends Controller
      */
     public function update(Request $request)
     {
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             $totalWeight = 0;
             foreach ($request->data as $title) {
                 if (!empty($title['dataPurpose'])) {
@@ -703,14 +703,14 @@ class PerformanceController extends Controller
                     'error' => 'The total weight of all KPIs must equal 100%'
                 ]);
             }
-        // } catch (\Throwable $e) {
-        //     DB::rollBack();
-        //     return response()->json([
-        //         'success'   => false,
-        //         'error'     => 'Performance update failed.',
-        //         'exception' => $e->getMessage()
-        //     ], 500);
-        // }
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'success'   => false,
+                'error'     => 'Performance update failed.',
+                'exception' => $e->getMessage()
+            ], 500);
+        }
     }
     public function performanceAssign(Request $request)
     {
