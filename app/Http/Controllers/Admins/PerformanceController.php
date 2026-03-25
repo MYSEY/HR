@@ -1081,36 +1081,72 @@ class PerformanceController extends Controller
                                         if ($k == 0) continue;
 
                                         // ✅ Match Title Ref in col[0] with current Title in rowT[0]
-                                        if (trim($rowP[0]) == trim($rowT[0])) {
+                                        // --- Purpose Sheet Loop ---
+                                        if (trim($rowP[0]) == trim($rowT[0])) { // Match Purpose ទៅ Title
                                             $purpose = $title->purposes()->create([
                                                 'performance_id' => $performance->id,
                                                 'title_id'       => $title->id,
-                                                'name'           => $rowP[1], // Purpose Name in Col B
+                                                'name'           => $rowP[1],
                                                 'created_by'     => Auth::id(),
                                             ]);
 
                                             // --- Performance Detail Sheet ---
-                                            $detailSheet = $spreadsheet->getSheetByName('Performance Detail');
-                                            if ($detailSheet) {
-                                                $rowsDetail = $detailSheet->toArray();
-                                                foreach ($rowsDetail as $m => $rowD) {
-                                                    if ($m == 0) continue;
+                                            $detailSheet = $spreadsheet->getSheetByName("Performance Detail");
+                                            $highestRow  = $detailSheet->getHighestRow();
 
-                                                    // ✅ Match Purpose Ref in detail with current Purpose
-                                                    if (trim($rowD[0]) == trim($rowP[1])) {
-                                                        $purpose->performanceDetail()->create([
-                                                            'performance_id' => $performance->id,
-                                                            'title_id'       => $title->id,
-                                                            'purpose_id'     => $purpose->id,
-                                                            'key_kpi'        => $rowD[1],
-                                                            'action_plan'    => $rowD[2],
-                                                            'goal'           => $rowD[3],
-                                                            'goal_type'      => $rowD[4],
-                                                            'weight'         => $rowD[5],
-                                                            'is_lock'        => $rowD[6],
-                                                            'created_by'     => Auth::id(),
-                                                        ]);
-                                                    }
+                                            // Variable សម្រាប់រក្សាទុកឈ្មោះ Purpose ចុងក្រោយដែលរកឃើញ (ដើម្បីដោះស្រាយ Merged Cells)
+                                            $currentPurposesRef = null;
+                                            $last_detail_id     = null;
+
+                                            for ($row = 2; $row <= $highestRow; $row++) {
+                                                $purposesRefValue = trim($detailSheet->getCell('A' . $row)->getValue() ?? '');
+
+                                                // 🚀 Logic សំខាន់៖ បើជួរនេះមានឈ្មោះ Purpose ថ្មី ត្រូវប្តូរ currentPurposesRef
+                                                // បើជួរនេះទទេ (Merged cell) វានឹងប្រើឈ្មោះ Purpose ចាស់ដដែល
+                                                if (!empty($purposesRefValue)) {
+                                                    $currentPurposesRef = $purposesRefValue;
+                                                }
+
+                                                // 🛑 ឆែកថា តើជួរនេះជារបស់ Purpose ដែលយើងកំពុង Loop ដែរឬទេ?
+                                                // បើមិនមែនទេ គឺត្រូវ Skip ទៅជួរបន្ទាប់
+                                                if ($currentPurposesRef !== $purpose->name) {
+                                                    continue;
+                                                }
+
+                                                $keyKpiValue = trim($detailSheet->getCell('B' . $row)->getValue() ?? '');
+
+                                                // ១. បង្កើត Performance Detail តែនៅជួរដែលមាន KPI Key ប៉ុណ្ណោះ
+                                                if (!empty($keyKpiValue)) {
+                                                    $newDetail = $purpose->performanceDetail()->create([
+                                                        'performance_id' => $performance->id,
+                                                        'title_id'       => $title->id,
+                                                        'purpose_id'     => $purpose->id,
+                                                        'key_kpi'        => $keyKpiValue,
+                                                        'action_plan'    => trim($detailSheet->getCell('C' . $row)->getValue() ?? ''),
+                                                        'goal_type'      => trim($detailSheet->getCell('F' . $row)->getValue() ?? ''),
+                                                        'weight'         => trim($detailSheet->getCell('G' . $row)->getValue() ?? ''),
+                                                        'is_lock'        => (trim($detailSheet->getCell('H' . $row)->getValue()) == 'Yes') ? 1 : 0,
+                                                        'created_by'     => Auth::id(),
+                                                    ]);
+                                                    $last_detail_id = $newDetail->id;
+                                                }
+
+                                                // ២. បញ្ចូល From/To ទៅក្នុង performance_goals
+                                                $fromValue = $detailSheet->getCell('D' . $row)->getValue();
+                                                $toValue   = $detailSheet->getCell('E' . $row)->getValue();
+
+                                                if ($fromValue !== null && $toValue !== null && $last_detail_id !== null) {
+                                                    DB::table('performance_goals')->insert([
+                                                        'performance_id'        => $performance->id,
+                                                        'title_id'              => $title->id,
+                                                        'purpose_id'            => $purpose->id,
+                                                        'performance_detail_id' => $last_detail_id,
+                                                        'from'                  => $fromValue,
+                                                        'to'                    => $toValue,
+                                                        'user_id'               => $employee->id,
+                                                        'created_at'            => now(),
+                                                        'updated_at'            => now(),
+                                                    ]);
                                                 }
                                             }
                                         }
@@ -1133,5 +1169,140 @@ class PerformanceController extends Controller
             DB::rollback();
             Toastr::error("Import failed: " . $e->getMessage(), "Error");
         }
+    }
+
+    public function kpiImportGoal(Request $request) {
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
+
+        if (!in_array($extension, ["xlsx", "xls", "csv"])) {
+            return back()->withErrors(["file" => "Invalid file format"]);
+        }
+
+        $spreadsheet = IOFactory::load($file);
+        $sheetNames = $spreadsheet->getSheetNames();
+
+        $notFoundIds = [];
+        $errors = [];
+
+        foreach ($sheetNames as $id) {
+            $employee = User::where("number_employee", $id)->first();
+            if (!$employee) {
+                $notFoundIds[] = $id;
+                continue;
+            }
+
+            $sheet = $spreadsheet->getSheetByName($id);
+            $highestRow = $sheet->getHighestRow();
+
+            $currentForYear = null;
+            $currentPurpose = null;
+            $currentKPI = null;
+            $goalIndex      = 0;
+
+            for ($row = 2; $row <= $highestRow; $row++) {
+                $forYearValue  = trim($sheet->getCell('A' . $row)->getValue());
+                $purposeValue  = trim($sheet->getCell('B' . $row)->getValue());
+                $kpiValue      = trim($sheet->getCell('C' . $row)->getValue());
+                $fromValue     = $sheet->getCell('D' . $row)->getValue();
+                $toValue       = $sheet->getCell('E' . $row)->getValue();
+                $goalType      = trim($sheet->getCell('F' . $row)->getValue());
+                $goalWeight    = trim($sheet->getCell('G' . $row)->getValue());
+                $goalIslook    = trim($sheet->getCell('H' . $row)->getValue());
+
+
+                if (!empty($forYearValue))  $currentForYear = $forYearValue;
+                if (!empty($purposeValue))  $currentPurpose = $purposeValue;
+                if (!empty($kpiValue)) {
+                    $currentKPI = $kpiValue;
+                    $goalIndex = 0; // Reset មក ០ វិញភ្លាម ពេលចាប់ផ្ដើម KPI ថ្មី
+                }
+
+                // បើជួរនោះទទេទាំងស្រុង មិនបាច់ឆែកទេ
+                if (empty($currentForYear) && empty($currentPurpose) && empty($currentKPI)) continue;
+
+                if ($fromValue === null || $toValue === null) {
+                    // ប្រសិនបើអ្នកចង់ឱ្យបង្ហាញ Error តែម្តងសម្រាប់ករណីខ្វះទិន្នន័យក្នុង Sheet មួយ
+                    $errors[] = "Sheet $id: (From ឬ To) ខ្លះខ្វះទិន្នន័យ";
+                    continue;
+                }
+
+                // ១. ស្វែងរក Performance
+                $performance = Performance::where("employee_id", $employee->id)
+                                ->where('type', $currentForYear)->first();
+                if (!$performance) {
+                    $errors[] = "Sheet $id: For Year ($currentForYear) រកមិនឃើញក្នុងប្រព័ន្ធ";
+                    continue;
+                }
+
+                // ២. ស្វែងរក Purpose
+                $purpose = Purpose::where("performance_id", $performance->id)
+                            ->where('name', $currentPurpose)->first();
+                if (!$purpose) {
+                    $errors[] = "Sheet $id: Purpose ($currentPurpose) រកមិនឃើញក្នុងប្រព័ន្ធ";
+                    continue;
+                }
+
+                // ៣. ស្វែងរក PerformanceDetail
+                $detail = PerformanceDetail::where("performance_id", $performance->id)
+                            ->where("purpose_id", $purpose->id)
+                            ->where('key_kpi', $currentKPI)->first();
+                if (!$detail) {
+                    $errors[] = "Sheet $id: KPI Key ($currentKPI) រកមិនឃើញក្នុងប្រព័ន្ធ";
+                    continue;
+                }
+                if ($performance && $purpose && $detail) {
+                    // កែសម្រួល PerformanceDetail បើមានការផ្លាស់ប្តូរ
+                    if($goalType && $goalWeight && $goalIslook){
+                        $newData = [
+                            'goal_type' => $goalType,
+                            'weight'    => is_numeric($goalWeight) ? (float)$goalWeight : 0,
+                            'is_lock'   => ($goalIslook == 'Yes' || $goalIslook == '1') ? 1 : 0,
+                        ];
+
+                        // Update តែពេលណាទិន្នន័យខុសគ្នា (ដើម្បីល្បឿន)
+                        if ($detail->goal_type != $newData['goal_type'] ||
+                            $detail->weight != $newData['weight'] ||
+                            $detail->is_lock != $newData['is_lock']) {
+                            $detail->update($newData);
+                        }
+                    }
+
+                    $existingGoals = DB::table('performance_goals')
+                    ->where('performance_detail_id', $detail->id)
+                    ->orderBy('id', 'asc')
+                    ->get();
+                    if ($fromValue !== null && $toValue !== null) {
+                        // ២. ឆែកមើលតាមរយៈ Index
+                        if (isset($existingGoals[$goalIndex])) {
+                            // Update ជួរដែលមានស្រាប់ (រក្សា ID ដដែល)
+                            DB::table('performance_goals')
+                                ->where('id', $existingGoals[$goalIndex]->id)
+                                ->update([
+                                    'from'       => (string)$fromValue,
+                                    'to'         => (string)$toValue,
+                                    'updated_by' => Auth::id(),
+                                    'updated_at' => now(),
+                                ]);
+                        }
+                        // ៣. បូក Index បន្ថែមសម្រាប់ជួរបន្ទាប់ (Merged rows)
+                        $goalIndex++;
+                    }
+                }
+            }
+        }
+        // ចម្រាញ់យកតែ Error ដែលប្លែកៗគ្នា (Unique)
+        $uniqueErrors = array_unique($errors);
+        $uniqueStaffErrors = array_unique($notFoundIds);
+        if (count($errors) > 0 || count($notFoundIds) > 0) {
+            return response()->json([
+                'status'  => 422,
+                'message' => 'ការ Upload មានបញ្ហាមួយចំនួន៖',
+                'invalid_staff' => array_values($uniqueStaffErrors),
+                'row_errors'    => array_values($uniqueErrors)
+            ]);
+        }
+
+        return response()->json(['status' => 200, 'message' => 'បញ្ចូលទិន្នន័យជោគជ័យ']);
     }
 }

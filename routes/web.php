@@ -95,7 +95,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
         Route::get('co-performance',[COPerformanceController::class,'coPerformance']);
         Route::get('co-performance/download',[COPerformanceController::class,'coPerformanceDownload']);
     });
-    
+
     Route::get('admin/activity-log', [ActivityLogController::class,'index']);
     Route::get('/dashboad/employee', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboad.employee');
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);
@@ -109,7 +109,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('employee/contact/edit', [EmployeeProfileController::class, 'editContact']);
     Route::post('employee/contact/update', [EmployeeProfileController::class, 'updateContact']);
     Route::post('employee/contact/delete', [EmployeeProfileController::class, 'deleteContact']);
-    
+
     Route::post('employee/experience', [EmployeeProfileController::class, 'createExperience'])->name('employee.experience');
     Route::get('employee/experience/edite', [EmployeeProfileController::class, 'editeExperience'])->name('employee.experience.edite');
     Route::post('employee/experience/update', [EmployeeProfileController::class, 'updateExperience'])->name('employee.experience.update');
@@ -194,7 +194,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/leaves/replcement', [LeavesEmployeeController::class,'indexReplcement']);
     Route::post('/leaves/replacement/store', [LeavesEmployeeController::class,'replcementCreate']);
     Route::post('/leaves/replacement/update', [LeavesEmployeeController::class,'replcementUpdate']);
-    
+
     Route::get('/leaves/type', [LeaveTypeController::class,'index']);
     Route::post('/leave/type/create', [LeaveTypeController::class,'store']);
     Route::get('/leave/type/edit', [LeaveTypeController::class,'edit']);
@@ -268,7 +268,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     //user log
     Route::get('user/not/logged', [UserController::class, 'userNotLogged']);
     Route::get('user/logged', [UserController::class, 'userLogged']);
-    
+
     //Employee Payroll
     Route::get('payroll',[EmployeePayrollController::class,'index']);
     Route::post('payroll-search',[EmployeePayrollController::class,'search']);
@@ -277,7 +277,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('payroll/delete',[EmployeePayrollController::class,'destroy']);
     Route::get('payslip/{id}',[EmployeePayrollController::class,'paySlip']);
     Route::post('import/payroll',[EmployeePayrollController::class,'importPayroll']);
-    
+
     Route::get('payroll/review',[EmployeePayrollController::class,'payrollReview']);
     Route::post('payroll/review/search',[EmployeePayrollController::class,'payrollReviewSearch']);
     Route::post('payroll/approved',[EmployeePayrollController::class,'payrollApproved']);
@@ -297,7 +297,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('performance-admin/kpi-report', [PerformanceAdminController::class,'kpiReport']);
     Route::get('performance-admin/kpi-export', [PerformanceAdminController::class,'reportExport']);
     Route::get('performance-admin/kpi-export/{id}', [PerformanceAdminController::class,'kpiReportExportDetail']);
-    
+
     Route::get('performance-admin/{id}/{url}', [PerformanceAdminController::class,'show']);
     Route::get('performance-admin/histories/{id}/{url}', [PerformanceAdminController::class,'histories']);
     Route::get('performance-admin/histories-detail/{id}/{url}/{urlpage}', [PerformanceAdminController::class,'historiesDetail']);
@@ -320,6 +320,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('performance/accepted', [PerformanceController::class,'performanceAccepted']);
     Route::post('performance/assign/all', [PerformanceController::class,'performanceAssignAll']);
     Route::post('performance/import', [PerformanceController::class,'performanceImport']);
+    Route::post('performance/import/goal', [PerformanceController::class,'kpiImportGoal']);
 
     //performance Appraisal
     Route::resource('performance-appraisal', PerformanceAppraisalController::class);
@@ -332,6 +333,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('performance-appraisal-preview/{id}', [PerformanceAppraisalController::class,'performanceAppraisalPreview']);
     Route::get('menual/score', [PerformanceAppraisalController::class,'menualScore']);
     Route::get('performance/appraisal/download', [PerformanceAppraisalController::class,'performanceAppraisalDownload']);
+    Route::post('performance/appraisal/import/result', [PerformanceAppraisalController::class,'paResult']);
 
     Route::post('performance/upload-reference', [PerformanceAppraisalController::class, 'uploadReference']);
     Route::delete('performance/delete-reference/{id}', [PerformanceAppraisalController::class, 'deleteReference']);
@@ -389,7 +391,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('district', [ProvinceController::class,'showDistrict']);
     Route::post('commune', [ProvinceController::class,'showCommune']);
     Route::post('village', [ProvinceController::class,'showVillage']);
-    
+
     // route banks
     Route::get('/bank', [BankController::class,'index']);
     Route::post('/bank/store', [BankController::class,'store']);
@@ -458,7 +460,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     //NSSF
     Route::resource('/import-nssf', NationalSocialSecurityFundController::class);
     Route::get('/nssf-export-review', [NationalSocialSecurityFundController::class,'NssfExportReview']);
-    
+
     //Report nssf
     Route::get('/reports/nssf-report', [PayrollReportController::class,'reportNssf']);
     Route::post('/reports/nssf-report', [PayrollReportController::class,'nssfFilter']);
@@ -490,7 +492,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::get('/reports/export-motor-rentel-report', [PayrollReportController::class,'export']);
-    
+
     Route::get('/reports/new_staff-report', [ReportsController::class,'newStaff']);
     Route::post('/reports/new_staff-report', [ReportsController::class,'newStaff']);
 
@@ -527,7 +529,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/report/annual/salary/increasement', [ReportsController::class,'AnnualSalaryIncreasement']);
     Route::get('/report/annual/salary/export', [ReportsController::class,'AnnualSalaryIncreasementExport']);
-    
+
     // export excel
     Route::get('motor-rentel/export',[PayrollReportController::class,'export']);
     Route::post('motor-rentel/import',[MotorRentelController::class,'import']);
@@ -610,7 +612,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/special/approve/delete', [SpecialController::class,'destroy']);
     Route::post('/special/approve/delete/employee', [SpecialController::class,'destroyEmploee']);
     Route::get('/special/approve/edit', [SpecialController::class,'edit']);
-    
+
     // Block FN Taxes
     Route::get('/fn/taxe', [FNTaxController::class,'index']);
     Route::post('/fn/taxe', [FNTaxController::class,'store']);
@@ -655,7 +657,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/fn/regular-expense/delete', [FnRegularExspenseController::class,'destroy']);
     Route::get('/fn/regular-expense/edit', [FnRegularExspenseController::class,'edit']);
     Route::post('/fn/regular-expense/processing', [FnRegularExspenseController::class,'processing']);
-    
+
     // route exchange rate
     Route::get('/fn/exchange-rate/list', [FNExchangeRateController::class,'index']);
     Route::post('/fn/exchange-rate/store', [FNExchangeRateController::class,'store']);
@@ -686,13 +688,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/admin-expense/asign', [ExpenseAdminController::class,'asign']);
     Route::get('/admin-expense/histories/{id}', [ExpenseAdminController::class,'histories']);
     Route::get('/admin-expense/histories-export', [ExpenseAdminController::class,'historiesExport']);
-    
+
     // Block Exspense report
     Route::get('/fn/expense/report', [ExpenseReportController::class,'index']);
     Route::post('/fn/expense/search', [ExpenseReportController::class,'filter']);
     Route::get('/fn/expense/report/export', [ExpenseReportController::class,'reportExport']);
     Route::get('/fn/expense/report/export-histories', [ExpenseReportController::class,'historiesExport']);
-    
+
     // Block backup database and file upload
     Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
     Route::get('/backup/database', [BackupController::class, 'databaseBackup'])->name('backup.database');
@@ -708,8 +710,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/salary-requests/update', [SalaryRequestController::class,'update']);
     Route::post('salary-requests/approved/all', [SalaryRequestController::class,'requestApproveAll']);
     Route::post('/salary-requests/delete', [SalaryRequestController::class,'destroy']);
-    
 
-    
+
+
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);
