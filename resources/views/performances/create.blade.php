@@ -252,8 +252,6 @@
         $(document).on('input', '.sum_total_weight', calculateTotal);
         let dataKeyKpi = [];
         $(document).on('change', '.goal-type-select', function () {
-            $(".weight-from").val('');
-            $(".weight-to").val('');
             let selectedType = $(this).val();
             let wrapper = $(this).closest('td').find('.goal-input-wrapper');
 
@@ -329,32 +327,25 @@
 
         // Event to add a new record
         $(document).on('click', '.addRecord', function() {
-            // Append a new record row to the last purpose section
             // $(this).closest('tr').before(addNewRecord());
             $("#tbl_performance").append(addNewRecord());
         });
-        // Event delegation for dynamically added Remove buttons in records
         $(document).on('click', '.removeRecord', function() {
-            $(this).closest('tr').remove(); // Remove the clicked row
+            $(this).closest('tr').remove();
         });
 
-        // Event delegation for dynamically added Remove buttons in purposes
         $(document).on('click', '.btnRemovePurpose', function() {
-            // Find all rows with the class 'section-purpose' starting from the clicked button's row
             let currentRow = $(this).closest('tr');
-            // Remove the current row and the next row(s) associated with the purpose section
             currentRow.nextUntil('tr:not(.section-purpose)').addBack().remove();
         });
         $(document).on('click', '.btnRemoveMore', function() {
-           // Remove the current tr and all subsequent tr elements
             $(this).closest('tr').nextAll().remove();
-            $(this).closest('tr').remove(); // Remove the current tr as well
+            $(this).closest('tr').remove();
         });
         $(document).on('input', '.weight', function () {
             let total = 0;
             $('.weight').each(function () {
                 let value = parseFloat($(this).val()) || 0;
-                // Validate 0–100 per field
                 if (value < 0 || value > 100) {
                     $(this).css("border-color", "red");
                     value = 0;
@@ -363,20 +354,15 @@
                 }
                 total += value;
             });
-
-            // Update <p> text (NOT .val())
             $('#total_weight').text(total);
         });
         $(document).ready(function() {
-            // Attach event listeners to inputs with class .weight and .score_achieved
             $('#tbl_performance').on('input', '.weight', function () {
                 var row = $(this).closest('tr');
                 var weightInput = row.find('.weight');
-                // Validate weight input
                 var weightValue = parseFloat(weightInput.val());
-                // Check if weightValue is NaN or out of range
                 if (isNaN(weightValue) || weightValue < 0 || weightValue > 100) {
-                    weightInput.val(0); // Reset to a default value or keep it empty
+                    weightInput.val(0);
                     $('.weight').css("border-color","red");
                     // toastr.error('Please enter a weight between 0 and 100.', 'Error');
                 }
@@ -393,11 +379,11 @@
         });
 
         $(document).on('click', '#btnCreatePerformance', function(e) {
-            e.preventDefault(); // Prevent the form from submitting the traditional way
-            // $(this).attr('disabled',true);
-            // $('.btn-cancel').addClass('disabled');
-            // $(".loading-icon").css("display", "block");
-            // $(".btn-txt").css("display", "none");
+            e.preventDefault();
+            $(this).attr('disabled',true);
+            $('.btn-cancel').addClass('disabled');
+            $(".loading-icon").css("display", "block");
+            $(".btn-txt").css("display", "none");
             let numRequired = 0;
             $(".required").each(function(e){
                 if($(this).val()==""){ numRequired++;}
@@ -411,18 +397,15 @@
                 let title = $titleRow.find('input[name="title[]"]').val();
                 i++;
                 let dataPurpose = [];
-                // Process all purpose rows until the next title or end
                 while (i < $rows.length && !$($rows[i]).hasClass('title-group')) {
                     if ($($rows[i]).hasClass('purpose-group')) {
                         let purpose = $($rows[i]).find('input[name="purpose[]"]').val();
                         i++;
                         let dataKPi = [];
-                        // Process all KPI rows until next purpose or title or end
                         while (i < $rows.length && !$($rows[i]).hasClass('title-group') && !$($rows[i]).hasClass('purpose-group')) {
                             let $kpiRow = $($rows[i]);
                             let key_kpi = $kpiRow.find('textarea[name="key_kpi[]"]').val();
                             let action_plan = $kpiRow.find('textarea[name="action_plan[]"]').val();
-                            // let goal = $kpiRow.find('textarea[name="goal[]"]').val();
                             let weight = $kpiRow.find('input[name="weight[]"]').val();
                             let goal_type = $kpiRow.find('select[name="goal_type[]"]').val();
                             let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
@@ -438,10 +421,9 @@
                             dataKPi.push({ key_kpi, action_plan, goal, weight,goal_type,is_lock });
                             i++;
                         }
-
                         dataPurpose.push({ purpose, dataKPi });
                     } else {
-                        i++; // just in case of stray rows
+                        i++;
                     }
                 }
                 dataKeyKpi.push({ title, dataPurpose });
@@ -480,24 +462,21 @@
                             }, 2000);
                             $('#performanceForm').trigger("reset");
                         } else if (response.message === 'not_goal') {
-                            if (response.goal_type=='number_increment' || response.goal_type=='number_decrement') {
-                                $(".goal_type").each(function () {
-                                    $(this).css("border-color", "red");
-                                });
-                            }else if(response.goal_type=='percent_increment' || response.goal_type=='percent_decrement'){
-                                $(".goal_type").each(function () {
-                                    $(this).css("border-color", "red");
-                                });
-                            }else if(response.goal_type=='currency_increment' || response.goal_type=='currency_decrement'){
-                                $(".goal_type").each(function () {
-                                    $(this).css("border-color", "red");
-                                });
-                            }else{
-                                $(".goal_type").each(function () {
-                                    $(this).css("border-color", "red");
-                                });
+                            let index = response.kpi_index;
+                            $(".goal_type").css("border-color", "");
+                            let color = 'red';
+                            if (response.goal_type.includes('percent')) {
+                                color = 'orange';
+                            } else if (response.goal_type.includes('currency')) {
+                                color = 'green';
+                            } else if (response.goal_type.includes('date')) {
+                                color = 'blue';
                             }
-                            toastr.error(response.error || 'Invalid goal format for type'+' '+response.goal_type || 'Error');
+                            $(".goal_type").eq(index).css("border-color", color);
+                            toastr.error(
+                                response.error || 'Invalid goal format for type ' + response.goal_type,
+                                'Error'
+                            );
                         } else {
                             toastr.error(response.message || 'សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%', 'Error');
                         }
@@ -506,8 +485,6 @@
             }
         });
     });
-
-    // Function to create a new purpose row
     function addPurposeRow() {
         return `<tr class='section-purpose purpose-group' style='text-align: center; background-color: #e5e1e1'>
             <td colspan="5" class="text-center">
@@ -641,7 +618,6 @@
             </td>
         </tr>`;
     }
-    // Function to create a new record row
     function addNewRecord() {
         return `<tr class='section-purpose kpi-group' style='text-align: center'>
             <td class="text-center">
@@ -908,14 +884,11 @@
         </tr>`;
     }
     function calculateTotal() {
-
         let total_weight = 0;
-
         $(".sum_total_weight").each(function () {
             let value = parseFloat($(this).val()) || 0;
             total_weight += value;
         });
-
         if (total_weight > 100) {
             new Noty({
                 title: "Please to check weight",
@@ -925,7 +898,6 @@
                 icon: true
             }).show();
         }
-
         $("#total_weight").text(total_weight);
     }
 </script>

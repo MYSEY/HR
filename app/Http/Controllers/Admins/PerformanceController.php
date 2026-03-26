@@ -44,7 +44,6 @@ class PerformanceController extends Controller
             return view('upgrade.access_page');
         }
         if (request()->ajax()) {
-            // Define the base query
             $query = Performance::leftJoin('users', 'performances.employee_id', '=', 'users.id')
             ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
             ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
@@ -79,8 +78,6 @@ class PerformanceController extends Controller
             ->when($request->department_id, function ($query, $department_id) {
                 return $query->where('users.department_id', $department_id);
             });
-
-            // Search filter
             $searchValue = request()->input('search.value');
             if (!empty($searchValue)) {
                 $query->where(function ($q) use ($searchValue) {
@@ -93,7 +90,6 @@ class PerformanceController extends Controller
                 });
             }
             if (in_array(Auth::user()->RolePermission, ['BOD','CEO'])){
-                // $query->whereIn('performances.status', ['preparing','accepted']);
                 $query->where(function ($q) {
                     $q->where("users.line_manager", Auth::user()->id)
                     ->orWhere("performances.employee_id", Auth::user()->id);
@@ -111,7 +107,6 @@ class PerformanceController extends Controller
                     $branch = Branchs::whereNot("id", Auth::user()->branch_id)->get();
                 }
             }
-
             if (in_array(Auth::user()->RolePermission, ['BM'])){
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
@@ -120,7 +115,6 @@ class PerformanceController extends Controller
                     $q->where("users.line_manager", Auth::user()->id)
                     ->orWhere('performances.employee_id', Auth::user()->id);
                 });
-
             }
             if (in_array(Auth::user()->RolePermission, ['Employee'])) {
                 $query->where('performances.employee_id', Auth::user()->id);
@@ -130,14 +124,12 @@ class PerformanceController extends Controller
             $countPendingVerify   = (clone $query)->where('performances.status', '3')->count();
             $countPendingApprove  = (clone $query)->where('performances.status', '4')->count();
             $countPendingReturn  = (clone $query)->where('performances.status', '5')->count();
-
             $query->when($request->status, function ($query, $status) {
                 return $query->where('performances.status', $status);
             });
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
-
             $order = request()->input('order', []);
             $columns = request()->input('columns', []);
             if (!empty($order)) {
@@ -145,16 +137,13 @@ class PerformanceController extends Controller
                     $colIndex = $ord['column'];
                     $colDir   = $ord['dir'];
                     $colName  = $columns[$colIndex]['name'] ?? null;
-
                     if ($colName && $columns[$colIndex]['orderable'] === 'true') {
                         $query->orderBy($colName, $colDir);
                     }
                 }
             } else {
-                // Default order
                 $query->orderBy('performances.id', 'desc');
             }
-
             $data = $query->orderBy('performances.id', 'desc')->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw' => intval(request()->input('draw')),
@@ -163,7 +152,6 @@ class PerformanceController extends Controller
                 'userIdLog'=>Auth::user()->id,
                 'permission'=>$permission,
                 'data' => $data,
-
                 'pendingReview'   => $countPendingReview,
                 'pendingAccepted' => $countPendingAccepted,
                 'pendingVerify'   => $countPendingVerify,
@@ -233,7 +221,6 @@ class PerformanceController extends Controller
             DB::beginTransaction();
             $totalWeight = 0;
             $data = $request->all();
-            // Calculate total weight
             foreach ($request->data as $titleItem) {
                 foreach ($titleItem['dataPurpose'] as $purposeItem) {
                     foreach ($purposeItem['dataKPi'] as $kpi) {
@@ -241,10 +228,8 @@ class PerformanceController extends Controller
                     }
                 }
             }
-
             if ($totalWeight <= 100) {
                 foreach ($request->employee_id as $empId) {
-
                     $user = User::with("branch")->where('id', $empId)->select('id','department_id','branch_id','line_manager', 'number_employee', 'employee_name_kh', 'employee_name_en', 'emp_status')->first();
                     $type = $user->emp_status === 'Probation' ? 'KPI Probation ' . Carbon::parse($request->from_date)->format('Y') : 'KPI Form ' . Carbon::parse($request->from_date)->format('Y');
                     $data = $request->all();
@@ -253,18 +238,13 @@ class PerformanceController extends Controller
                     $data['total_weight'] = $totalWeight;
                     $data['status'] = 'preparing';
                     $data['type'] = $type;
-
-                    // Create Performance
                     $performance = Performance::create($data);
-                    // Loop through each title
                     foreach ($request->data as $titleItem) {
-
                         $title = Title::create([
                             'performance_id' => $performance->id,
                             'title'          => $titleItem['title'],
                             'created_by'     => Auth::id(),
                         ]);
-
                         foreach ($titleItem['dataPurpose'] as $purposeItem) {
                             $purpose = Purpose::create([
                                 'performance_id' => $performance->id,
@@ -272,41 +252,30 @@ class PerformanceController extends Controller
                                 'name'           => $purposeItem['purpose'],
                                 'created_by'     => Auth::id(),
                             ]);
-
-                            foreach ($purposeItem['dataKPi'] as $kpi) {
-                                /* ---- Validate goal lines -------------------------------- */
+                            foreach ($purposeItem['dataKPi'] as $kpiIndex => $kpi) {
                                 $isValidGoal = true;
-                                $goalType    = $kpi['goal_type']; // number|currency|percent|date
-
+                                $goalType    = $kpi['goal_type'];
                                 foreach ($kpi['goal'] as $g) {
                                     if (!isset($g['from'], $g['to'])) {
                                         $isValidGoal = false;
                                         break;
                                     }
-
                                     $min = $g['from'];
                                     $max = $g['to'];
-
-                                    // ---------- VALIDATE TYPE ----------
                                     if (str_contains($goalType, 'number') ||
                                         str_contains($goalType, 'percent') ||
                                         str_contains($goalType, 'currency')) {
-
                                         if (!is_numeric($min) || !is_numeric($max)) {
                                             $isValidGoal = false;
                                             break;
                                         }
-
                                         $min = (float)$min;
                                         $max = (float)$max;
-
                                         if (str_contains($goalType, 'percent') && ($min < 0 || $max > 100)) {
                                             $isValidGoal = false;
                                             break;
                                         }
-
                                     } elseif (str_contains($goalType, 'date')) {
-
                                         try {
                                             $min = Carbon::parse($min);
                                             $max = Carbon::parse($max);
@@ -314,33 +283,28 @@ class PerformanceController extends Controller
                                             $isValidGoal = false;
                                             break;
                                         }
-
                                     } else {
                                         $isValidGoal = false;
                                         break;
                                     }
-
-                                    // ---------- CHECK DIRECTION ----------
                                     if ($min < $max)       $current = 'inc';
                                     elseif ($min > $max)   $current = 'dec';
                                     else                   $current = 'equal';
-
                                     $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
                                     if ($current !== 'equal' && $current !== $expected) {
                                         $isValidGoal = false;
                                         break;
                                     }
                                 }
-
                                 if (!$isValidGoal) {
                                     DB::rollBack();
                                     return response()->json([
-                                        'message' => 'not_goal',
-                                        'goal_type' => $goalType,
+                                        'message'     => 'not_goal',
+                                        'goal_type'   => $goalType,
+                                        'kpi_index'   => $kpiIndex,
+                                        'error'       => 'Invalid goal format for type '.$goalType
                                     ]);
                                 }
-
-                                /* ---- Passed validation → create PerformanceDetail row ---- */
                                 $performanceDetail = PerformanceDetail::create([
                                     'performance_id' => $performance->id,
                                     'title_id'       => $title->id,
@@ -352,17 +316,12 @@ class PerformanceController extends Controller
                                     'is_lock'        => $kpi['is_lock'],
                                     'created_by'     => Auth::id(),
                                 ]);
-
-                                /* ---- Create PerformanceGoal rows ---- */
                                 foreach ($kpi['goal'] as $g) {
                                     $from = $g['from'];
                                     $to   = $g['to'];
-
-                                    // Swap if from > to
                                     if ($from > $to) {
                                         [$from, $to] = [$to, $from];
                                     }
-
                                     PerformanceGoal::create([
                                         'performance_id'         => $performance->id,
                                         'title_id'               => $title->id,
@@ -378,7 +337,6 @@ class PerformanceController extends Controller
                         }
                     }
                 }
-
                 DB::commit();
                 return response()->json([
                     'message' => 'successfully'
@@ -392,7 +350,11 @@ class PerformanceController extends Controller
             }
         } catch (\Throwable $exp) {
             DB::rollback();
-            Toastr::error('Performance created fail.','Error');
+            Log::error('Performance creation failed: ' . $exp->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Performance created fail.'
+            ], 500);
         }
     }
 
@@ -546,14 +508,9 @@ class PerformanceController extends Controller
             if ($totalWeight <= 100) {
                 $performance = Performance::findOrFail($request->performance_id);
                 self::createHistories($performance);
-
                 $employee = User::findOrFail($request->employee_id);
-
                 $year = Carbon::parse($request->from_date)->format('Y');
-                $type = $employee->emp_status === 'Probation'
-                    ? "KPI Probation $year"
-                    : "KPI Form $year";
-
+                $type = $employee->emp_status === 'Probation' ? "KPI Probation $year" : "KPI Form $year";
                 $performance->update([
                     'status'       => 'preparing',
                     'reason'       => '',
@@ -565,23 +522,19 @@ class PerformanceController extends Controller
                     'updated_by'   => Auth::id(),
                 ]);
 
-                // ✅ DELETE ALL OLD DATA
                 PerformanceGoal::where('performance_id', $performance->id)->delete();
                 PerformanceDetail::where('performance_id', $performance->id)->delete();
                 Purpose::where('performance_id', $performance->id)->delete();
                 Title::where('performance_id', $performance->id)->delete();
 
                 foreach ($request->data as $titleItem) {
-
                     $title = Title::create([
                         'performance_id' => $performance->id,
                         'title'          => $titleItem['title'],
                         'created_by'     => Auth::id(),
                     ]);
-
                     if (!empty($titleItem['dataPurpose'])) {
                         foreach ($titleItem['dataPurpose'] as $purposeItem) {
-
                             $purpose = Purpose::create([
                                 'performance_id' => $performance->id,
                                 'title_id'       => $title->id,
@@ -590,41 +543,30 @@ class PerformanceController extends Controller
                             ]);
 
                             if (!empty($purposeItem['dataKPi'])) {
-                                foreach ($purposeItem['dataKPi'] as $kpi) {
-
-                                    // ✅ VALIDATION (your same logic)
+                                foreach ($purposeItem['dataKPi'] as $kpiIndex=>$kpi) {
                                     $isValidGoal = true;
                                     $goalType = $kpi['goal_type'];
-
                                     foreach ($kpi['goal'] as $g) {
-
                                         if (!isset($g['from'], $g['to'])) {
                                             $isValidGoal = false;
                                             break;
                                         }
-
                                         $min = $g['from'];
                                         $max = $g['to'];
-
                                         if (str_contains($goalType, 'number') ||
                                             str_contains($goalType, 'percent') ||
                                             str_contains($goalType, 'currency')) {
-
                                             if (!is_numeric($min) || !is_numeric($max)) {
                                                 $isValidGoal = false;
                                                 break;
                                             }
-
                                             $min = (float)$min;
                                             $max = (float)$max;
-
                                             if (str_contains($goalType, 'percent') && ($min < 0 || $max > 100)) {
                                                 $isValidGoal = false;
                                                 break;
                                             }
-
                                         } elseif (str_contains($goalType, 'date')) {
-
                                             try {
                                                 $min = Carbon::parse($min);
                                                 $max = Carbon::parse($max);
@@ -632,30 +574,26 @@ class PerformanceController extends Controller
                                                 $isValidGoal = false;
                                                 break;
                                             }
-
                                         } else {
                                             $isValidGoal = false;
                                             break;
                                         }
-
                                         $current = $min < $max ? 'inc' : ($min > $max ? 'dec' : 'equal');
                                         $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
-
                                         if ($current !== 'equal' && $current !== $expected) {
                                             $isValidGoal = false;
                                             break;
                                         }
                                     }
-
                                     if (!$isValidGoal) {
                                         DB::rollBack();
                                         return response()->json([
-                                            'message' => 'not_goal',
-                                            'goal_type' => $goalType,
+                                            'message'     => 'not_goal',
+                                            'goal_type'   => $goalType,
+                                            'kpi_index'   => $kpiIndex,
+                                            'error'       => 'Invalid goal format for type '.$goalType
                                         ]);
                                     }
-
-                                    // ✅ CREATE DETAIL
                                     $detail = PerformanceDetail::create([
                                         'performance_id' => $performance->id,
                                         'title_id'       => $title->id,
@@ -668,18 +606,13 @@ class PerformanceController extends Controller
                                         'updated_by'     => Auth::id(),
                                     ]);
 
-                                    // ✅ CREATE GOALS
                                     foreach ($kpi['goal'] as $g) {
                                         $from = $g['from'];
                                         $to   = $g['to'];
-
                                         $isIncrement = str_contains($goalType, 'increment');
-
-                                        // ✅ ONLY swap for increment
                                         if ($isIncrement && $from > $to) {
                                             [$from, $to] = [$to, $from];
                                         }
-
                                         PerformanceGoal::create([
                                             'performance_id'        => $performance->id,
                                             'title_id'              => $title->id,
@@ -828,20 +761,18 @@ class PerformanceController extends Controller
         DB::beginTransaction();
         try {
             $performance = Performance::findOrFail($request->id);
-            // Delete performance details
-            PerformanceDetail::where('performance_id', $performance->id)->delete();
-            // Delete purposes
-            Purpose::where('performance_id', $performance->id)->delete();
-            // Delete titles
             Title::where('performance_id', $performance->id)->delete();
-            // Finally delete performance
+            Purpose::where('performance_id', $performance->id)->delete();
+            PerformanceDetail::where('performance_id', $performance->id)->delete();
+            PerformanceGoal::where('performance_id', $performance->id)->delete();
             $performance->delete();
             DB::commit();
-            Toastr::success('Performance deleted successfully.','Success');
+            Toastr::success('Performance deleted successfully.');
             return redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();
-            Toastr::error('Failed to delete performance.','Error');
+            Toastr::error('Failed to delete performance');
+            return redirect()->back();
         }
     }
 

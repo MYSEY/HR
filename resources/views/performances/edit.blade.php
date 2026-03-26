@@ -239,45 +239,37 @@
             }
             $("#total_weight").text(total_weight);
         });
-        
         let dataKeyKpi = [];
         $(document).on('change', '.goal-type-select', function () {
             let selectedType = $(this).val();
             let wrapper = $(this).closest('td').find('.goal-input-wrapper');
-
             let [dataType, direction] = selectedType.split('_');
-
             let inputType = 'number';
             let step = 'any';
             let symbol = '';
             let placeholderFrom = 'From';
             let placeholderTo = 'To';
-
             if (dataType === 'date') {
                 inputType = 'date';
-            } 
-            else if (dataType === 'percent') {
+            }else if (dataType === 'percent') {
                 inputType = 'number';
                 step = '0.01';
                 symbol = '%';
                 placeholderFrom = 'From';
                 placeholderTo = 'To';
-            } 
-            else if (dataType === 'currency') {
+            }else if (dataType === 'currency') {
                 inputType = 'number';
                 step = '0.01';
                 symbol = '$';
                 placeholderFrom = 'From';
                 placeholderTo = 'To';
-            } 
-            else if (dataType === 'number') {
+            } else if (dataType === 'number') {
                 inputType = 'number';
                 step = 'any';
-                symbol = '#'; // 🔥 ADD THIS
+                symbol = '#';
                 placeholderFrom = 'From';
                 placeholderTo = 'To';
             }
-
             function generateRow() {
                 return `
                 <div class="row mb-1">
@@ -298,7 +290,6 @@
                     </div>
                 </div>`;
             }
-
             let html = '';
             for (let i = 0; i < 5; i++) {
                 html += generateRow();
@@ -307,75 +298,46 @@
         });
         $(document).on('click', ".addNewPurpose", function () {
             let currentPurposeRow = $(this).closest('tr');
-            // Find the nearest .title-group above this purpose
             let titleRow = currentPurposeRow.prevAll('.title-group').first();
-            // Find all rows under this title group until the next title
             let rowsUnderTitle = titleRow.nextUntil('.title-group');
-            // Find the last row of the current title group
             let lastRowInGroup = rowsUnderTitle.last();
-            // Build new rows
             let newPurposeRow = $(addPurposeRow());
-            // Insert them after the last row of the title group
             lastRowInGroup.after(newPurposeRow);
         });
         $(document).on('click',".addMore", function() {
             $("#tbl_performance").append(addMoreRow());
         });
-        // $(document).on('click', '.addRecord', function() {
-        //     $("#tbl_performance").append(addNewRecord());
-        // });
-
-        // Event to add a new record
         $(document).on('click', '.addRecord', function () {
             let currentTr = $(this).closest('tr');
-            let purposeHeader = currentTr.prevAll('.purpose-group').first(); // Locate the related purpose row
-            let rowsUnderPurpose = purposeHeader.nextUntil('.purpose-group, .title-group'); // All rows under this purpose
-            let lastKpiRow = rowsUnderPurpose.filter('.kpi-group').last(); // Get last KPI row
+            let purposeHeader = currentTr.prevAll('.purpose-group').first(); 
+            let rowsUnderPurpose = purposeHeader.nextUntil('.purpose-group, .title-group');
+            let lastKpiRow = rowsUnderPurpose.filter('.kpi-group').last();
             let newRow = currentTr.clone();
-            // Reset fields
             newRow.find('textarea').val('');
             newRow.find('input[type=number]').val('');
             // newRow.find('select[name="is_lock[]"]').val('0').prop('disabled', false);
-            // Replace buttons
-            // newRow.find('.addRecord').replaceWith(
-            //     `<button type="button" class="btn btn-danger me-1 btn-sm removeRecord">
-            //         <i class="fa fa-trash-o"></i>
-            //     </button>`
-            // );
-            // Insert new row after last KPI row
             lastKpiRow.after(newRow);
         });
-
-        // Event delegation for dynamically added Remove buttons in records
         $(document).on('click', '.removeRecord', function() {
-            $(this).closest('tr').remove(); // Remove the clicked row
+            $(this).closest('tr').remove();
         });
-
         $(document).on('click', '.btnRemovePurpose', function () {
             let currentRow = $(this).closest('tr');
-            // Select all rows until the next .purpose-group or .title-group
             let rowsToRemove = currentRow.nextUntil('.purpose-group, .title-group');
-            // Include current purpose row too
             currentRow.add(rowsToRemove).remove();
         });
-
         $(document).on('click', '.btnRemoveMore', function() {
-           // Remove the current tr and all subsequent tr elements
             $(this).closest('tr').nextAll().remove();
-            $(this).closest('tr').remove(); // Remove the current tr as well
+            $(this).closest('tr').remove();
         });
         $(document).ready(function() {
-            // Attach event listeners to inputs with class .weight and .score_achieved
             $('#tbl_performance').on('input', '.weight', function () {
                 var row = $(this).closest('tr');
                 var weightInput = row.find('.weight');
-                // Validate weight input
                 var weightValue = parseFloat(weightInput.val());
-                // Check if weightValue is NaN or out of range
                 if (isNaN(weightValue) || weightValue < 0 || weightValue > 100) {
-                    weightInput.val(0); // Reset to a default value or keep it empty
+                    weightInput.val(0);
                     $('.weight').css("border-color","red");
-                    // toastr.error('Please enter a weight between 0 and 100.', 'Error');
                 }
             });
         });
@@ -386,9 +348,8 @@
         $(".weight").on('focusout',function(){
             $(this).css("border-color","#d8d2d2");
         });
-        
         $(document).on('click', '#btnCreatePerformance', function(e) {
-            e.preventDefault(); // Prevent the form from submitting the traditional way
+            e.preventDefault();
             $(this).attr('disabled',true);
             $('.btn-cancel').addClass('disabled');
             $(".loading-icon").css("display", "block");
@@ -397,7 +358,6 @@
             $(".required").each(function(e){
                 if($(this).val()==""){ numRequired++;}
             });
-
             let dataKeyKpi = [];
             let $rows = $('#tbl_performance tbody tr');
             let i = 0;
@@ -406,18 +366,15 @@
                 let title = $titleRow.find('input[name="title[]"]').val();
                 i++;
                 let dataPurpose = [];
-                // Process all purpose rows until the next title or end
                 while (i < $rows.length && !$($rows[i]).hasClass('title-group')) {
                     if ($($rows[i]).hasClass('purpose-group')) {
                         let purpose = $($rows[i]).find('input[name="purpose[]"]').val();
                         i++;
                         let dataKPi = [];
-                        // Process all KPI rows until next purpose or title or end
                         while (i < $rows.length && !$($rows[i]).hasClass('title-group') && !$($rows[i]).hasClass('purpose-group')) {
                             let $kpiRow = $($rows[i]);
                             let key_kpi = $kpiRow.find('textarea[name="key_kpi[]"]').val();
                             let action_plan = $kpiRow.find('textarea[name="action_plan[]"]').val();
-                            // let goal = $kpiRow.find('textarea[name="goal[]"]').val();
                             let weight = $kpiRow.find('input[name="weight[]"]').val();
                             let goal_type = $kpiRow.find('select[name="goal_type[]"]').val();
                             let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
@@ -432,15 +389,13 @@
                             dataKPi.push({ key_kpi, action_plan, goal, weight,goal_type,is_lock });
                             i++;
                         }
-
                         dataPurpose.push({ purpose, dataKPi });
                     } else {
-                        i++; // just in case of stray rows
+                        i++;
                     }
                 }
                 dataKeyKpi.push({ title, dataPurpose });
             }
-
             var performance_id = $("#performance_id").val();
             if (numRequired>0) {
                 toastr.error("@lang('lang.input_required')", "@lang('lang.message_title')");
@@ -477,25 +432,21 @@
                             }, 2000);
                             $('#performanceForm').trigger("reset");
                         } else if(response.message == 'not_goal') {
-                            if (response.goal_type=='number_increment' || response.goal_type=='number_decrement') {
-                                $(".goal_type").each(function () {
-                                    $(this).css("border-color", "red");
-                                });
-                            }else if(response.goal_type=='percent_increment' || response.goal_type=='percent_decrement'){
-                                $(".goal_type").each(function () {
-                                    $(this).css("border-color", "red");
-                                });
-                            }else if(response.goal_type=='currency_increment' || response.goal_type=='currency_decrement'){
-                                $(".goal_type").each(function () {
-                                    $(this).css("border-color", "red");
-                                });
-                            }else{
-                                $(".goal_type").each(function () {
-                                    $(this).css("border-color", "red");
-                                });
+                            let index = response.kpi_index;
+                            $(".goal_type").css("border-color", "");
+                            let color = 'red';
+                            if (response.goal_type.includes('percent')) {
+                                color = 'orange';
+                            } else if (response.goal_type.includes('currency')) {
+                                color = 'green';
+                            } else if (response.goal_type.includes('date')) {
+                                color = 'blue';
                             }
-                            toastr.error(response.error || 'Invalid goal format for type'+' '+response.goal_type || 'Error');
-                           
+                            $(".goal_type").eq(index).css("border-color", color);
+                            toastr.error(
+                                response.error || 'Invalid goal format for type ' + response.goal_type,
+                                'Error'
+                            );
                         }else {
                             toastr.error(response.message || 'សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%', 'Error');
                         }
@@ -507,8 +458,6 @@
             }
         });
     });
-
-    // Function to create a new purpose row
     function addPurposeRow() {
         return `<tr class='section-purpose purpose-group' style='text-align: center; background-color: #e5e1e1'>
             <td colspan="5" class="text-center">
@@ -642,7 +591,6 @@
             </td>
         </tr>`;
     }
-    // Function to create a new record row
     function addNewRecord() {
         return `<tr class='section-purpose kpi-group' style='text-align: center'>
             <td class="text-center">
