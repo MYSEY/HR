@@ -88,9 +88,17 @@
                 </div>
                 @if ($permission->is_import == 1 || Auth::user()->RolePermission == 'developer')
                     <div class="col-auto float-end ms-auto">
-                        <a href="#" class="btn add-btn" data-toggle="modal" id="importKPI"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="importKPI">
+                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i> @lang('lang.import')</a>
                     </div>
                 @endif
+                <div class="col-auto float-end ms-auto">
+                    @if ($permission->is_import == 1)
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="btnImportResult">
+                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i> Import Resulf
+                        </a>
+                    @endif
+                </div>
             </div>
         </div>
         <div class="p-6 rounded-lg">
@@ -225,6 +233,7 @@
         </div>
     </div>
     @include('performance_appraisal.import')
+    @include('performance_appraisal.import_result')
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
@@ -234,6 +243,11 @@
         const userRole = "{{ Auth::user()->RolePermission }}";
         $(function(){
             dataTables();
+            $("#btnImportResult").on("click", function() {
+                $(".pa_thanLess").hide();
+                $("#pa_thanLess").text("");
+                $('#importResult').modal('show');
+            });
             $("#importKPI").on("click", function() {
                 $(".thanLess").hide();
                 $("#thanLess").text("");

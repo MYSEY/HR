@@ -29,6 +29,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PerformanceDetailHistory;
 use App\Repositories\Admin\ReportRepository;
 use App\Models\PerformanceGoal;
+use App\Models\PaDetailGoal;
 use App\Models\PerformanceGoalHistory;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -528,7 +529,7 @@ class PerformanceAdminController extends Controller
                     ]);
 
                     foreach ($purposeItem->performanceDetail as $kpi) {
-                        PaDetail::create([
+                        $paDetail = PaDetail::create([
                             'performance_id' => $pa->id,
                             'title_id'       => $paTitle->id,
                             'purpose_id'     => $paPurpose->id,
@@ -540,6 +541,16 @@ class PerformanceAdminController extends Controller
                             'is_lock'        => $kpi->is_lock,
                             'created_by'     => $kpi->created_by,
                         ]);
+                        foreach($kpi->performanceGoals as $paGoal){
+                            PaDetailGoal::create([
+                                'performance_id'    => $pa->id,
+                                'title_id'          => $paTitle->id,
+                                'purpose_id'        => $paPurpose->id,
+                                'pa_detail_id'      => $paDetail->id,
+                                'from'              => $paGoal->from,
+                                'to'                => $paGoal->to,
+                            ]);
+                        }
                     }
                 }
             }
@@ -621,7 +632,7 @@ class PerformanceAdminController extends Controller
                         ]);
 
                         foreach ($purposeItem->performanceDetail as $kpi) {
-                            PaDetail::create([
+                            $paDetail  = PaDetail::create([
                                 'performance_id' => $pa->id,
                                 'title_id'       => $paTitle->id,
                                 'purpose_id'     => $paPurpose->id,
@@ -633,6 +644,16 @@ class PerformanceAdminController extends Controller
                                 'is_lock'        => $kpi->is_lock,
                                 'created_by'     => $kpi->created_by,
                             ]);
+                            foreach($kpi->performanceGoals as $paGoal){
+                                PaDetailGoal::create([
+                                    'performance_id'    => $pa->id,
+                                    'title_id'          => $paTitle->id,
+                                    'purpose_id'        => $paPurpose->id,
+                                    'pa_detail_id'      => $paDetail->id,
+                                    'from'              => $paGoal->from,
+                                    'to'                => $paGoal->to,
+                                ]);
+                            }
                         }
                     }
                 }

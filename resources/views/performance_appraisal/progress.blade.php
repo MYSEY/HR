@@ -17,7 +17,7 @@
                 <div class="col-sm-4">
                     <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" class="inv-logo" alt="">
                 </div>
-                
+
                 <div class="col-md-4">
                     <h4 class="payslip-title">ទម្រង់វាយតម្លៃការងាររបស់បុគ្គលិកសាកល្បង</h4>
                     <h5 class="payslip-title">ប្រចាំឆ្នាំ៖ {{ \App\Helpers\Helper::toKhmerNumber(\Carbon\Carbon::parse($data->to_date)->format('Y')) }}</h5>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row mb-2">
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -104,7 +104,7 @@
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                     </tr>
-                                    
+
                                     @foreach ($item->purposes as $purposeItem)
                                         <tr>
                                             <td colspan="2" class="text-center">
@@ -121,7 +121,7 @@
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
-                                        
+
                                         @foreach ($purposeItem->performanceDetail as $Detailitem)
                                             @php
                                                 $totalWeight += (float) $Detailitem->weight;
@@ -156,32 +156,31 @@
                                                 <td class="text-center">
                                                     <textarea rows="7" class="form-control" placeholder="Enter text here" readonly>{{$Detailitem->action_plan}}</textarea>
                                                 </td>
-                                                <td class="text-center">
-                                                    {{-- <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>
-                                                        <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
-                                                        <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
-                                                        <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
-                                                        <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
-                                                    </select> --}}
-                                                    <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>
-                                                        <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
-                                                        <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
+                                                <td>
+                                                    <input type="hidden" class="goal"
+                                                        data-goals="{{ json_encode($Detailitem->performanceGoals) }}"
+                                                        data-type="{{ $Detailitem->goal_type }}">
+                                                    @php
+                                                        $typeArray = explode('_', $Detailitem->goal_type);
+                                                        $type = $typeArray[0] ?? 'number';
+                                                        $symbol = '';
+                                                        if ($type == 'percent') {
+                                                            $symbol = '%';
+                                                        } elseif ($type == 'currency') {
+                                                            $symbol = '$';
+                                                        } elseif ($type == 'number') {
+                                                            $symbol = '';
+                                                        }
+                                                    @endphp
 
-                                                        <option value="percent_increment" {{ $Detailitem->goal_type == 'percent_increment' ? 'selected' : '' }}>Percent Increment</option>
-                                                        <option value="percent_decrement" {{ $Detailitem->goal_type == 'percent_decrement' ? 'selected' : '' }}>Percent Decrement</option>
-
-                                                        <option value="currency_increment" {{ $Detailitem->goal_type == 'currency_increment' ? 'selected' : '' }}>Currency Increment</option>
-                                                        <option value="currency_decrement" {{ $Detailitem->goal_type == 'currency_decrement' ? 'selected' : '' }}>Currency Decrement</option>
-
-                                                        <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
-                                                        <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
-                                                    </select>
-                                                    <div class="goal-input-wrapper mt-1">
-                                                        <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal" readonly>{{ $Detailitem->goal }}</textarea>
-                                                    </div>
+                                                    @foreach ($Detailitem->performanceGoals as $key => $pGoal)
+                                                        <span>
+                                                            {{ "ពិន្ទុ " . ($key + 1) . " = " . $pGoal->from . $symbol . " ដល់ " . $pGoal->to . $symbol }}
+                                                        </span><br>
+                                                    @endforeach
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="text" step="any" class="form-control" id="progress" name="progress[]" value="{{$Detailitem->progress}}">
+                                                    <input type="{{$type == 'date' ? 'date' : 'number' }}" step="any" class="form-control" id="progress" name="progress[]" value="{{$Detailitem->progress}}">
                                                 </td>
                                                 <td class="text-center">
                                                     <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
@@ -207,22 +206,22 @@
                                                 <td>
                                                     <div class="d-flex float-end">
                                                             <span class="ml-2 text-name-reference" style="display: {{ $hasFile ? 'block' : 'none' }}; margin-right: 10px;">{{ $file_name }}</span>
-                                                            <input type="file" class="pa_reference" 
-                                                                data-performenceid="{{$data->id}}" 
-                                                                data-titleid="{{$item->id}}" 
-                                                                data-purposeid="{{$purposeItem->id}}" 
-                                                                data-id="{{$Detailitem->id}}" 
-                                                                name="reference" 
+                                                            <input type="file" class="pa_reference"
+                                                                data-performenceid="{{$data->id}}"
+                                                                data-titleid="{{$item->id}}"
+                                                                data-purposeid="{{$purposeItem->id}}"
+                                                                data-id="{{$Detailitem->id}}"
+                                                                name="reference"
                                                                 accept=".pdf, .rar, .zip, .xlsx, .xls" style="display: {{ $hasFile ? 'none' : 'block' }}">
 
-                                                        <a href="{{ $hasFile ? url('/performance/view-reference/'.$file->id) : 'javascript:void(0)' }}" 
-                                                            class="btn btn-info btn-sm viewReference" 
+                                                        <a href="{{ $hasFile ? url('/performance/view-reference/'.$file->id) : 'javascript:void(0)' }}"
+                                                            class="btn btn-info btn-sm viewReference"
                                                             target="_blank"
                                                             style="display: {{ $hasFile ? 'block' : 'none' }}; margin-right: 2px;">
                                                                 <i class="fa fa-eye"></i>
                                                         </a>
 
-                                                        <button type="button" class="btn btn-danger btn-sm removeReference" 
+                                                        <button type="button" class="btn btn-danger btn-sm removeReference"
                                                                 data-id="{{ $hasFile ? $file->id : '' }}"
                                                                 style="display: {{ $hasFile ? 'block' : 'none' }}">
                                                             <i class="fa fa-trash-o"></i>
@@ -290,7 +289,7 @@
                                 } else if ($score <= 4.99) {
                                     $overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
                                     $color = 'lightgreen';
-                                } else {                
+                                } else {
                                     $overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
                                     $color = 'green';
                                 }
@@ -321,7 +320,7 @@
                         <span class="btn-txt">@lang('lang.submit')</span>
                     </button>
                 @endif
-                
+
                 <input type="text" name="id" id="id" value="{{ $data->id }}" hidden>
                 <input type="text" name="employee_id" id="employee_id" value="{{ $data->employee_id }}" hidden>
                 <a href=" @if ($data->status =='approved') {{ url('performance/appraisal/pa-report') }} @else {{ url('performance-appraisal') }} @endif" class="btn btn-secondary btn-cancel">@if ($data->status =='approved') @lang('lang.back') @else @lang('lang.cancel')@endif</a>
@@ -365,7 +364,7 @@
                 url: "{{ url('/performance/upload-reference') }}",
                 type: 'POST',
                 data: formData,
-                processData: false, 
+                processData: false,
                 contentType: false,
                 success: function (response) {
                     if(response.status == 200) {
@@ -397,7 +396,7 @@
             }
         });
         $(document).on('click', '.removeReference', function () {
-            let btn = $(this); 
+            let btn = $(this);
             let dFlexContainer = btn.closest('.d-flex');
             let fileInput = dFlexContainer.find('.pa_reference');
             let nameReference = dFlexContainer.find('.text-name-reference');
@@ -430,204 +429,111 @@
             });
         });
 
-        // $(document).on('change', '#progress', function (e) {
-        //     let $row = $(this).closest('tr');
-        //     let goal = $row.find('.goal').val();
-        //     let progress = $(this).val();
-        //     let goalType = $row.find('.goal_type').val();
-            
-        //     let scoreAchieved = 0;
-        //     if (!goal || !progress) return;
-
-        //     const lines = goal.trim().split('\n');
-        //     let exceeded = false; // flag to track if progress exceeds max
-        //     let lastMax = null;   // store last max to compare
-
-        //     const getParsedValue = (val, type) => {
-        //         if (!val) return null;
-        //         val = val.toString().trim();
-
-        //         switch (type) {
-        //             case 'date_increment':
-        //             case 'date_decrement':
-        //                 return Date.parse(val);
-
-        //             case 'percent_increment':
-        //             case 'percent_decrement':
-        //                 return parseFloat(val.replace('%', ''));
-
-        //             case 'currency_increment':
-        //             case 'currency_decrement':
-        //                 return parseFloat(val.replace(/[^\d.]/g, ''));
-
-        //             case 'number_increment':
-        //             case 'number_decrement':
-        //                 return parseFloat(val); // NO replace needed
-
-        //             default:
-        //                 return parseFloat(val);
-        //         }
-        //     };
-        //     const input = getParsedValue(progress, goalType);
-        //     lines.forEach((element, index) => {
-        //         let [minRaw, maxRaw] = element.trim().split(/\s+/);
-        //         let min = getParsedValue(minRaw, goalType);
-        //         let max = getParsedValue(maxRaw, goalType);
-        //         lastMax = max;
-        //         if (isNaN(input) || isNaN(min) || isNaN(max)) return;
-        //         let matched = false;
-        //         // Increment types → value increases
-        //         if (goalType.includes("increment")) {
-        //             if (input >= min && input <= max) matched = true;
-        //         }
-        //         // Decrement types → value decreases
-        //         if (goalType.includes("decrement")) {
-        //             if (input <= min && input <= max) matched = true;
-        //         }
-        //         if (matched) {
-        //             scoreAchieved = index + 1;
-        //             return false; // stop loop
-        //         }
-        //     });
-
-
-        //     // const getParsedValue = (val, type) => {
-        //     //     switch (type) {
-        //     //         case 'date':
-        //     //             return Date.parse(val);
-        //     //         case 'percent':
-        //     //             return parseFloat(val.replace('%', ''));
-        //     //         case 'currency':
-        //     //             return parseFloat(val.replace(/[^\d.]/g, ''));
-        //     //         default:
-        //     //             return parseFloat(val);
-        //     //     }
-        //     // };
-
-        //     // const input = getParsedValue(progress, goalType);
-        //     // lines.forEach((element, index) => {
-        //     //     let [minRaw, maxRaw] = element.trim().split(/\s+/);
-        //     //     let min = getParsedValue(minRaw, goalType);
-        //     //     let max = getParsedValue(maxRaw, goalType);
-        //     //     lastMax = max;
-        //     //     if (!isNaN(input) && input >= min && input <= max) {
-        //     //         scoreAchieved = index + 1;
-        //     //         return false; // stop looping
-        //     //     }
-        //     // });
-
-        //     // Check for exceeding max range
-        //     // if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
-        //     //     scoreAchieved = (goalType === 'date') ? 0 : 5;
-        //     // }
-
-        //     if (scoreAchieved === 0 && !isNaN(input) && lastMax !== null && input > lastMax) {
-        //         // If goal type is date, don't force 5 here
-        //         scoreAchieved = (goalType === 'date') ? 0 : 5;
-        //     } else if (goalType === 'date' && lastMax !== null) {
-        //         // Handle date type specifically
-        //         let inputDate = new Date(input);
-        //         let lastMaxDate = new Date(lastMax);
-
-        //         if (!isNaN(inputDate) && !isNaN(lastMaxDate) && inputDate < lastMaxDate) {
-        //             scoreAchieved = 5;
-        //         }
-        //     }
-        //     $row.find('.score_achieved').val(scoreAchieved);
-        //     // Calculate and update scores
-        //     let weight = parseFloat($row.find('.weight').val()) || 0;
-        //     let score = (weight * scoreAchieved) / 100;
-
-        //     $row.find('.score').val(score.toFixed(2));
-        //     $row.find('.personnel_score').val(score.toFixed(2));
-        //     $row.find('.direct_chairman').val(score.toFixed(2));
-
-        //     calculateSubtotals();
-        //     calculateGrandTotals();
-        // });
-
         $(document).on('change', '#progress', function () {
             let $row = $(this).closest('tr');
-            let goal = $row.find('.goal').val();
+            let goals = $row.find('.goal').data("goals");
+            let goalType = $row.find('.goal').data("type") || "";
+
             let progress = $(this).val();
-            let goalType = $row.find('.goal_type').val();
 
-            let scoreAchieved = 1;
 
-            if (!goal || !progress) return;
+            let scoreAchieved = 0;
 
-            const lines = goal.trim().split('\n');
-            let lastMax = null;
+            if (progress) {;
 
-            // Convert value based on goal type
-            const getParsedValue = (val, type) => {
-                if (!val) return null;
-                val = val.toString().trim();
-                switch (type) {
+                let lastMax = null;
+                let lastMin = null;
 
-                    case 'date_increment':
-                    case 'date_decrement':
-                        return Date.parse(val);
+                // Convert value based on goal type
+                const getParsedValue = (val, type) => {
+                    if (!val) return null;
+                    val = val.toString().trim();
+                    switch (type) {
 
-                    case 'percent_increment':
-                    case 'percent_decrement':
-                        return parseFloat(val.replace('%', ''));
+                        case 'date_increment':
+                        case 'date_decrement':
+                            return Date.parse(val);
 
-                    case 'currency_increment':
-                    case 'currency_decrement':
-                        return parseFloat(val.replace(/[^\d.]/g, ''));
+                        case 'percent_increment':
+                        case 'percent_decrement':
+                            return parseFloat(val.replace('%', ''));
 
-                    case 'number_increment':
-                    case 'number_decrement':
-                        return parseFloat(val);
+                        case 'currency_increment':
+                        case 'currency_decrement':
+                            return parseFloat(val.replace(/[^\d.]/g, ''));
 
-                    default:
-                        return parseFloat(val);
+                        case 'number_increment':
+                        case 'number_decrement':
+                            return parseFloat(val);
+
+                        default:
+                            return parseFloat(val);
+                    }
+                };
+
+                const input = getParsedValue(progress, goalType);
+
+                if (isNaN(input)) return;
+
+                if (Array.isArray(goals) && goalType !== "") {
+                    for (let i = 0; i < goals.length; i++) {
+                        let pGoal = goals[i];
+                        let matched = false;
+                        let rangeMin = null;
+                        let rangeMax  = null;
+                        if (goalType == "date_increment" || goalType =="date_decrement") {
+                            rangeMin = pGoal.from;
+                            rangeMax = pGoal.to;
+                            if (goalType.includes('decrement') && i == 0){
+                                lastMin = rangeMin;
+                                continue
+                            }
+                            if (goalType.includes('increment')){
+                                lastMax = rangeMax;
+                            }
+                        }else{
+                            // បំប្លែង from/to ទៅជាលេខ
+                            let min = parseFloat(pGoal.from);
+                            let max = parseFloat(pGoal.to);
+                            if (goalType.includes('decrement') && i == 0){
+                                lastMin = min;
+                                continue
+                            }
+                            if (goalType.includes('increment')){
+                                lastMax = max;
+                            }
+                            if (isNaN(min) || isNaN(max)) continue;
+                            rangeMin = Math.min(min, max);
+                            rangeMax = Math.max(min, max);
+                        }
+
+                        if (progress >= rangeMin && progress <= rangeMax) {
+                            matched = true;
+                        }
+                        if (matched) {
+                            scoreAchieved = i + 1; // ជួរទី១ = ១ពិន្ទុ, ជួរទី២ = ២ពិន្ទុ...
+                            break; // ឈប់រកពេលឃើញហើយ
+                        }else{
+                            scoreAchieved = 0;
+                        }
+                    }
                 }
-            };
-
-            const input = getParsedValue(progress, goalType);
-
-            if (isNaN(input)) return;
-
-            lines.forEach((line, index) => {
-                let [minRaw, maxRaw] = line.trim().split(/\s+/);
-                let min = getParsedValue(minRaw, goalType);
-                let max = getParsedValue(maxRaw, goalType);
-                lastMax = max;
-                if (isNaN(min) || isNaN(max)) return;
-                let matched = false;
-                // Increment logic
-                if (goalType.includes('increment')) {
-                    if (input >= min && input <= max) {
-                        matched = true;
+                // Handle exceed range
+                if (scoreAchieved === 0 && lastMax !== null) {
+                    if (goalType.includes('increment') && progress > lastMax) {
+                        scoreAchieved = 5;
                     }
                 }
 
-                // Decrement logic
-                if (goalType.includes('decrement')) {
-
-                    if (input <= min && input >= max) {
-                        matched = true;
+                if(scoreAchieved === 0 && lastMin !== null){
+                    if (goalType.includes('decrement') && progress > lastMin) {
+                        scoreAchieved = 1;
+                    }else{
+                        scoreAchieved = 5;
                     }
-                }
-
-                if (matched) {
-                    scoreAchieved = index + 1;
-                    return false;
-                }
-            });
-
-            // Handle exceed range
-            if (scoreAchieved === 0 && lastMax !== null) {
-                if (goalType.includes('increment') && input > lastMax) {
-                    scoreAchieved = 5;
-                }
-
-                if (goalType.includes('decrement') && input < lastMax) {
-                    scoreAchieved = 5;
                 }
             }
+
 
             // Update score achieved
             $row.find('.score_achieved').val(scoreAchieved);
@@ -641,7 +547,6 @@
             calculateSubtotals();
             calculateGrandTotals();
         });
-
 
         $(document).on('click', '#btnSubmit', function (e) {
             e.preventDefault();
@@ -704,7 +609,18 @@
                 }
             });
         });
+        function getDate(value) {
+            if (!value) return NaN;
 
+            // ១. ឆែកមើលថាតើវាជា Date Format (YYYY-MM-DD) ឬអត់
+            const dateReg = /^\d{4}-\d{2}-\d{2}$/;
+            if (typeof value === 'string' && dateReg.test(value)) {
+                return value // បំប្លែងទៅជាលេខ (Milliseconds)
+            }
+
+            // ២. បើមិនមែន Date ទេ គឺបំប្លែងជាលេខធម្មតា (Number/Float)
+            return parseFloat(value);
+        }
         function calculateSubtotals() {
             $('#tbl_performance_appraisal').find('tr.total').each(function () {
                 let $totalRow = $(this);
@@ -739,8 +655,8 @@
 
             $('#total_score').val(totalScore.toFixed(2));
             $('#total_personnel_score').val(totalPersonnel.toFixed(2));
-            $('#total_direct_chairman').val(totalChairman.toFixed(2));            
-            
+            $('#total_direct_chairman').val(totalChairman.toFixed(2));
+
             var overallResults = '';
             var color = '';
             if (totalScore.toFixed(2) === 0) {
@@ -757,7 +673,7 @@
             } else if (totalScore.toFixed(2) <= 4.99) {
                 overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
                 color = 'lightgreen';
-            } else {                
+            } else {
                 overallResults = 'ឆ្នើម_(អនុវត្តន៍ការងារលើសផែនការ២០%)';
                 color = 'green';
             }

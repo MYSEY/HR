@@ -371,7 +371,9 @@ class PerformanceAppraisalController extends Controller
      */
     public function show($id)
     {
-        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail.reference'])
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail'=> function($query) {
+                $query->with(['performanceGoals', 'reference']);
+            }])
         ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
@@ -390,7 +392,11 @@ class PerformanceAppraisalController extends Controller
     }
     public function performanceAppraisalPreview($id)
     {
-        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail.reference'])
+        $data = PerformanceAppraisal::with([
+            'titles.purposes.performanceDetail'=> function($query) {
+                $query->with(['performanceGoals', 'reference']);
+            }
+        ])
         ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
@@ -416,7 +422,7 @@ class PerformanceAppraisalController extends Controller
      */
     public function edit($id)
     {
-        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail'])
+        $data = PerformanceAppraisal::with(['titles.purposes.performanceDetail.performanceGoals'])
         ->leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
         ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
@@ -784,5 +790,115 @@ class PerformanceAppraisalController extends Controller
         $query = $this->reportRepo->getPAReport($request, $permission);
         $data = $query->with(['users', 'performanceDetail'])->orderBy('performance_appraisals.id', 'desc')->get();
         return Excel::download(new DownloadKpis($data), 'PA.xlsx');
+    }
+
+    public function paResult(Request $request) {
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
+
+        if (!in_array($extension, ["xlsx", "xls", "csv"])) {
+            return back()->withErrors(["file" => "Invalid file format"]);
+        }
+
+        $spreadsheet = IOFactory::load($file);
+        $sheetNames = $spreadsheet->getSheetNames();
+
+        $notFoundIds = [];
+        $errors = [];
+
+        foreach ($sheetNames as $id) {
+            $employee = User::where("number_employee", $id)->first();
+            if (!$employee) {
+                $notFoundIds[] = $id;
+                continue;
+            }
+
+            $sheet = $spreadsheet->getSheetByName($id);
+            $highestRow = $sheet->getHighestRow();
+
+            $currentForYear = null;
+            $currentPurpose = null;
+            $currentPA = null;
+
+            for ($row = 2; $row <= $highestRow; $row++) {
+                $index = $row - 2;
+                $forYearValue   = trim($sheet->getCell('A' . $row)->getValue());
+                $purposeValue   = trim($sheet->getCell('B' . $row)->getValue());
+                $paValue        = trim($sheet->getCell('C' . $row)->getValue());
+                $paResult       = trim($sheet->getCell('I' . $row)->getValue());
+
+                if (!empty($forYearValue))  $currentForYear = $forYearValue;
+                if (!empty($purposeValue))  $currentPurpose = $purposeValue;
+                if (!empty($paValue))      $currentPA     = $paValue;
+
+                // បើជួរនោះទទេទាំងស្រុង មិនបាច់ឆែកទេ
+                if (empty($currentForYear) && empty($currentPurpose) && empty($currentPA)) continue;
+
+                // ១. ស្វែងរក PerformanceAppraisal
+                $performance = PerformanceAppraisal::where("employee_id", $employee->id)
+                                ->where('type', $currentForYear)->first();
+                if (!$performance) {
+                    $errors[] = "Sheet $id: For Year ($currentForYear) រកមិនឃើញក្នុងប្រព័ន្ធ";
+                    continue;
+                }
+
+                // ២. ស្វែងរក Purpose
+                $purpose = PaPurpose::where("performance_id", $performance->id)
+                            ->where('name', $currentPurpose)->first();
+                if (!$purpose) {
+                    $errors[] = "Sheet $id: Purpose ($currentPurpose) រកមិនឃើញក្នុងប្រព័ន្ធ";
+                    continue;
+                }
+
+                // ៣. ស្វែងរក PerformanceDetail
+                $detail = PaDetail::where("performance_id", $performance->id)
+                            ->where("purpose_id", $purpose->id)
+                            ->where('key_kpi', $currentPA)->first();
+                if (!$detail) {
+                    $errors[] = "Sheet $id: KPI Key ($currentPA) រកមិនឃើញក្នុងប្រព័ន្ធ";
+                    continue;
+                }
+                if($detail){
+                    $detail->progress = $paResult;
+                    $fromValue     = $sheet->getCell('D' . $row)->getValue();
+                    $toValue       = $sheet->getCell('E' . $row)->getValue();
+
+                    // if ($paResult <= $fromValue && $paResult >= $toValue) {
+                    //     $scoreAchieved = $index + 1; // mimic JS: index + 1
+                    //     // break; // stop looping once found
+                    // }else{
+                    //     $scoreAchieved = 5;
+                    // }
+                    $scoreAchieved = 1;
+
+                    $totalScore = ($detail->weight * $scoreAchieved) / 100;
+                    $score  = $totalScore;
+                    $live   = $totalScore;
+                    $chair  = $totalScore;
+
+                    $detail->score_achieved         = $scoreAchieved;
+                    $detail->score                  = $score;
+                    $detail->score_live_staff       = $live;
+                    $detail->score_direct_chairman  = $chair;
+
+
+                    dd($detail);
+                }
+            }
+        }
+
+        // ចម្រាញ់យកតែ Error ដែលប្លែកៗគ្នា (Unique)
+        $uniqueErrors = array_unique($errors);
+        $uniqueStaffErrors = array_unique($notFoundIds);
+        if (count($errors) > 0 || count($notFoundIds) > 0) {
+            return response()->json([
+                'status'  => 422,
+                'message' => 'ការ Upload មានបញ្ហាមួយចំនួន៖',
+                'invalid_staff' => array_values($uniqueStaffErrors),
+                'row_errors'    => array_values($uniqueErrors)
+            ]);
+        }
+
+        return response()->json(['status' => 200, 'message' => 'បញ្ចូលទិន្នន័យជោគជ័យ']);
     }
 }

@@ -20,11 +20,12 @@ use App\Models\PerformanceGoalHistory;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Carbon\Carbon;
 
 class PerformanceController extends Controller
 {
@@ -1107,6 +1108,7 @@ class PerformanceController extends Controller
             $currentForYear = null;
             $currentPurpose = null;
             $currentKPI = null;
+            $currentGoalType = null; // បន្ថែមថ្មី
             $goalIndex      = 0;
 
             for ($row = 2; $row <= $highestRow; $row++) {
@@ -1119,12 +1121,14 @@ class PerformanceController extends Controller
                 $goalWeight    = trim($sheet->getCell('G' . $row)->getValue());
                 $goalIslook    = trim($sheet->getCell('H' . $row)->getValue());
 
-
                 if (!empty($forYearValue))  $currentForYear = $forYearValue;
                 if (!empty($purposeValue))  $currentPurpose = $purposeValue;
                 if (!empty($kpiValue)) {
                     $currentKPI = $kpiValue;
                     $goalIndex = 0; // Reset មក ០ វិញភ្លាម ពេលចាប់ផ្ដើម KPI ថ្មី
+                }
+                if (!empty($goalType)) {
+                    $currentGoalType = $goalType;
                 }
 
                 // បើជួរនោះទទេទាំងស្រុង មិនបាច់ឆែកទេ
@@ -1182,19 +1186,60 @@ class PerformanceController extends Controller
                     ->orderBy('id', 'asc')
                     ->get();
                     if ($fromValue !== null && $toValue !== null) {
-                        // ២. ឆែកមើលតាមរយៈ Index
+                        $goal_from = $fromValue;
+                        $goal_to = $toValue;
+
+                        if ($currentGoalType == "date_increment" || $currentGoalType == "date_decrement") {
+                            try {
+                                if (is_numeric($fromValue)) {
+                                    // ១. បើជាលេខ Excel Serial (ឧទាហរណ៍: 46025)
+                                    $dateFrom = Carbon::instance(Date::excelToDateTimeObject($fromValue));
+                                } else {
+                                    // ២. បើជាអក្សរ (String) - ព្យាយាម Parse តាម formats ដែលអាចមាន
+                                    $trimmedFrom = trim($fromValue);
+
+                                    // ឆែកមើលថាឆ្នាំមាន ២ ខ្ទង់ (26) ឬ ៤ ខ្ទង់ (2026)
+                                    if (preg_match('/^\d{1,2}\/\d{1,2}\/\d{2}$/', $trimmedFrom)) {
+                                        $dateFrom = Carbon::createFromFormat('d/m/y', $trimmedFrom); // ឆ្នាំ ២ ខ្ទង់ (y តូច)
+                                    } else {
+                                        $dateFrom = Carbon::createFromFormat('d/m/Y', $trimmedFrom); // ឆ្នាំ ៤ ខ្ទង់ (Y ធំ)
+                                    }
+                                }
+
+                                // ធ្វើដូចគ្នាសម្រាប់ To Value
+                                if (is_numeric($toValue)) {
+                                    $dateTo = Carbon::instance(Date::excelToDateTimeObject($toValue));
+                                } else {
+                                    $trimmedTo = trim($toValue);
+                                    if (preg_match('/^\d{1,2}\/\d{1,2}\/\d{2}$/', $trimmedTo)) {
+                                        $dateTo = Carbon::createFromFormat('d/m/y', $trimmedTo);
+                                    } else {
+                                        $dateTo = Carbon::createFromFormat('d/m/Y', $trimmedTo);
+                                    }
+                                }
+
+                                // ៣. បំប្លែងទៅជា Format Database ជានិច្ច (YYYY-MM-DD)
+                                $goal_from = $dateFrom->format('Y-m-d');
+                                $goal_to   = $dateTo->format('Y-m-d');
+
+                            } catch (\Exception $e) {
+                                $errors[] = "សន្លឹកកិច្ចការ $id (ជួរទី $row): ថ្ងៃខែមិនត្រឹមត្រូវ ($fromValue / $toValue)។";
+                                $goalIndex++;
+                                continue;
+                            }
+                        }
+
+                        // --- ផ្នែក Update ចូល Database ---
                         if (isset($existingGoals[$goalIndex])) {
-                            // Update ជួរដែលមានស្រាប់ (រក្សា ID ដដែល)
                             DB::table('performance_goals')
                                 ->where('id', $existingGoals[$goalIndex]->id)
                                 ->update([
-                                    'from'       => (string)$fromValue,
-                                    'to'         => (string)$toValue,
+                                    'from'       => (string)$goal_from,
+                                    'to'         => (string)$goal_to,
                                     'updated_by' => Auth::id(),
                                     'updated_at' => now(),
                                 ]);
                         }
-                        // ៣. បូក Index បន្ថែមសម្រាប់ជួរបន្ទាប់ (Merged rows)
                         $goalIndex++;
                     }
                 }
