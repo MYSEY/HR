@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('purpose_id');
             $table->longText('key_kpi');
             $table->longText('action_plan');
-            $table->string('goal');
+            $table->string('goal')->nullable();
             $table->string('goal_type')->nullable();
             $table->string('progress')->nullable();
             $table->string('weight');

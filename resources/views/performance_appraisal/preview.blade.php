@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="row mb-2">
                     <div class="col-md-12">
                         <div class="table-responsive">
@@ -97,7 +97,7 @@
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
-                                        
+
                                         @foreach ($item->purposes as $purposeItem)
                                             <tr>
                                                 <td colspan="2" class="text-center">
@@ -112,7 +112,7 @@
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
                                             </tr>
-                                            
+
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
                                                 @php
                                                     $hasFile = $Detailitem->reference->isNotEmpty();
@@ -126,16 +126,25 @@
                                                     <td class="text-center">
                                                         <textarea rows="7" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
-                                                    <td class="text-center">
-                                                        <select class="form-control goal-type-selec goal_type" name="goal_type">
-                                                            <option value="number" {{ $Detailitem->goal_type == 'number' ? 'selected' : '' }}>Number</option>
-                                                            <option value="date" {{ $Detailitem->goal_type == 'date' ? 'selected' : '' }}>Date</option>
-                                                            <option value="currency" {{ $Detailitem->goal_type == 'currency' ? 'selected' : '' }}>Currency</option>
-                                                            <option value="percent" {{ $Detailitem->goal_type == 'percent' ? 'selected' : '' }}>Percent</option>
-                                                        </select>
-                                                        <div class="goal-input-wrapper mt-1">
-                                                            <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal">{{ $Detailitem->goal }}</textarea>
-                                                        </div>
+                                                    <td>
+                                                        @php
+                                                            $typeArray = explode('_', $Detailitem->goal_type);
+                                                            $type = $typeArray[0] ?? 'number';
+                                                            $symbol = '';
+                                                            if ($type == 'percent') {
+                                                                $symbol = '%';
+                                                            } elseif ($type == 'currency') {
+                                                                $symbol = '$';
+                                                            } elseif ($type == 'number') {
+                                                                $symbol = '';
+                                                            }
+                                                        @endphp
+
+                                                        @foreach ($Detailitem->performanceGoals as $key => $pGoal)
+                                                            <span>
+                                                                {{ "ពិន្ទុ " . ($key + 1) . " = " . $pGoal->from . $symbol . " ដល់ " . $pGoal->to . $symbol }}
+                                                            </span><br>
+                                                        @endforeach
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="text" step="any" class="form-control" id="progress" name="progress[]" value="{{$Detailitem->progress}}">
@@ -158,8 +167,8 @@
                                                     <td>
                                                         <div class="d-flex float-end">
                                                             <span class="ml-2 text-name-reference" style="display: {{ $hasFile ? 'block' : 'none' }}; margin-right: 10px;">{{ $file_name }}</span>
-                                                            <a href="{{ $hasFile ? url('/performance/view-reference/'.$file->id) : 'javascript:void(0)' }}" 
-                                                                class="btn btn-info btn-sm viewReference" 
+                                                            <a href="{{ $hasFile ? url('/performance/view-reference/'.$file->id) : 'javascript:void(0)' }}"
+                                                                class="btn btn-info btn-sm viewReference"
                                                                 target="_blank"
                                                                 style="display: {{ $hasFile ? 'block' : 'none' }}; margin-right: 2px;">
                                                                     <i class="fa fa-eye"></i>
@@ -187,7 +196,7 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(document).ready(function () {
-        
-      
+
+
     });
 </script>

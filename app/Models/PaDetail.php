@@ -35,4 +35,8 @@ class PaDetail extends Model
     {
         return $this->hasMany(PaReference::class, 'detail_id', 'id');
     }
+    public function performanceGoals()
+    {
+        return $this->hasMany(PaDetailGoal::class, 'pa_detail_id', 'id');
+    }
 }

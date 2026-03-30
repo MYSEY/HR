@@ -40,7 +40,7 @@ class PerformanceDetail extends Model
     public function title() {
         return $this->belongsTo(Title::class, 'title_id');
     }
-    
+
     public function purpose() {
         return $this->belongsTo(Purpose::class, 'purpose_id');
     }
