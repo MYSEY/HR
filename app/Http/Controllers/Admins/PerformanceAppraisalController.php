@@ -15,6 +15,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Mail\SendEmail;
+use App\Models\PaDetailGoal;
+use App\Models\PaDetailGoalHistory;
 use App\Models\PaDetailHistory;
 use App\Models\PaPurpose;
 use App\Models\PaPurposeHistory;
@@ -450,12 +452,19 @@ class PerformanceAppraisalController extends Controller
     {
         try {
             DB::beginTransaction();
-            PerformanceAppraisal::where('employee_id',$request->employee_id)->where('id',$request->id)->update([
-                'total_score'  => $request->total_score,
-                'total_score_live_staff'  => $request->total_personnel_score,
-                'total_score_direct_chairman'  => $request->total_direct_chairman,
-                'updated_by'  => Auth::id(),
+            $paPerformance = PerformanceAppraisal::where('employee_id', $request->employee_id)
+                ->where('id', $request->id)
+                ->firstOrFail(); // Using firstOrFail() helps catch missing records early
+
+            // 2. Use update() instead of save()
+            $paPerformance->update([
+                'total_score'                 => $request->total_score,
+                'total_score_live_staff'      => $request->total_personnel_score,
+                'total_score_direct_chairman' => $request->total_direct_chairman,
+                'updated_by'                  => Auth::id(),
             ]);
+
+            self::createHistories($paPerformance);
 
             foreach ($request->performanceDetail as $value) {
                 PaDetail::where('id',$value['performance_id'])->update([
@@ -626,7 +635,22 @@ class PerformanceAppraisalController extends Controller
                         $pdArray['title_histories_id'] = $tHistory->id;
                         $pdArray['purpose_histories_id'] = $ppHistory->id;
 
-                        PaDetailHistory::create($pdArray);
+                        $detailHistory = PaDetailHistory::create($pdArray);
+
+                        $paGoals = PaDetailGoal::where("performance_id", $data->id)
+                        ->where("title_id", $titleItem->id)
+                        ->where("purpose_id", $pp->id)
+                        ->where("pa_detail_id", $pd->id)
+                        ->get();
+                        foreach ($paGoals as $goal) {
+                            $pgArray = $goal->toArray();
+                            unset($pgArray['id']);
+                            $pgArray['pa_histories_id'] = $paHistory->id;
+                            $pgArray['title_histories_id'] = $tHistory->id;
+                            $pgArray['purpose_histories_id'] = $ppHistory->id;
+                            $pgArray['pa_detail_histories_id'] = $detailHistory->id;
+                            PaDetailGoalHistory::create($pgArray);
+                        }
                     }
                 }
             }

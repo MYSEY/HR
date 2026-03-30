@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PaDetailGoal extends Model
+class PaDetailGoalHistory extends Model
 {
     use HasFactory;
-    protected $table = 'pa_detail_goals';
+    protected $table = 'pa_detail_goal_histories';
     protected $guarded = ['id'];
     protected $fillable = [
-        'performance_id',
-        'title_id',
-        'purpose_id',
-        'pa_detail_id',
+        'pa_histories_id',
+        'title_histories_id',
+        'purpose_histories_id',
+        'pa_detail_histories_id',
         'from',
         'to',
         'user_id',

@@ -95,7 +95,7 @@
                 <div class="col-auto float-end ms-auto">
                     @if ($permission->is_import == 1)
                         <a href="#" class="btn add-btn" data-toggle="modal" id="btnImportResult">
-                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i> Import Resulf
+                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i> Import Result
                         </a>
                     @endif
                 </div>
