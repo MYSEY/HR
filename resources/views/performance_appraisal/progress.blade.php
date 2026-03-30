@@ -148,7 +148,7 @@
                                             @endphp
                                             <tr class="performance-row">
                                                 <td class="text-center" hidden>
-                                                    <input type="number" step="any" class="form-control performance_id" name="performance_id[]" value="{{$Detailitem->id}}" id="performance_id">
+                                                    <input type="number" step="any" class="form-control performance_id" name="performance_id[]" value="{{$Detailitem->id}}">
                                                 </td>
                                                 <td class="text-center">
                                                     <textarea rows="5" class="form-control" placeholder="Enter text here" readonly>{{$Detailitem->key_kpi}}</textarea>
@@ -180,22 +180,22 @@
                                                     @endforeach
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="{{$type == 'date' ? 'date' : 'number' }}" step="any" class="form-control" id="progress" name="progress[]" value="{{$Detailitem->progress}}">
+                                                    <input type="{{$type == 'date' ? 'date' : 'number' }}" step="any" class="form-control progress" name="progress[]" value="{{$Detailitem->progress}}">
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
+                                                    <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" name="weight" readonly>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="number" step="any" class="form-control score_achieved" name="score_achieved[]" placeholder="0" value="{{$Detailitem->score_achieved}}" id="score_achieved" min="0" max="5" readonly>
+                                                    <input type="number" step="any" class="form-control score_achieved" name="score_achieved[]" placeholder="0" value="{{$Detailitem->score_achieved}}" min="0" max="5" readonly>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="number" step="any" class="form-control score" name="score[]" placeholder="0" min="0" id="score" value="{{$Detailitem->score}}" readonly>
+                                                    <input type="number" step="any" class="form-control score" name="score[]" placeholder="0" min="0" value="{{$Detailitem->score}}" readonly>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="number" step="any" class="form-control personnel_score" name="personnel_score[]" placeholder="0" value="{{$Detailitem->score_live_staff}}" min="0" id="personnel_score" readonly>
+                                                    <input type="number" step="any" class="form-control personnel_score" name="personnel_score[]" placeholder="0" value="{{$Detailitem->score_live_staff}}" min="0" readonly>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="number" step="any" class="form-control direct_chairman" name="direct_chairman[]" placeholder="0" value="{{$Detailitem->score_direct_chairman}}" min="0" id="direct_chairman" readonly>
+                                                    <input type="number" step="any" class="form-control direct_chairman" name="direct_chairman[]" placeholder="0" value="{{$Detailitem->score_direct_chairman}}" min="0" readonly>
                                                 </td>
                                                 <td class="text-center">
                                                     <textarea rows="5" class="form-control easy_difficult_factors" name="easy_difficult_factors[]" placeholder="Enter text here">{{$Detailitem->easy_difficult_factors}}</textarea>
@@ -236,13 +236,13 @@
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control tr_score" id="tr_score" value="{{ number_format($currentTitleTotal['total_score'], 2) }}" readonly>
+                                            <input type="text" class="form-control tr_score" value="{{ number_format($currentTitleTotal['total_score'], 2) }}" readonly>
                                         </td>
                                         <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control tr_personnel_score" id="tr_personnel_score" value="{{ number_format($currentTitleTotal['total_personnel_score'], 2) }}" readonly>
+                                            <input type="text" class="form-control tr_personnel_score" value="{{ number_format($currentTitleTotal['total_personnel_score'], 2) }}" readonly>
                                         </td>
                                         <td colspan="1" class="text-center">
-                                            <input type="text" class="form-control tr_direct_chairman" id="tr_direct_chairman" value="{{ number_format($currentTitleTotal['total_direct_chairman'], 2) }}" readonly>
+                                            <input type="text" class="form-control tr_direct_chairman" value="{{ number_format($currentTitleTotal['total_direct_chairman'], 2) }}" readonly>
                                         </td>
                                         <td colspan="3"></td>
                                     </tr>
@@ -429,16 +429,12 @@
             });
         });
 
-        $(document).on('change', '#progress', function () {
+        $(document).on('change', '.progress', function () {
             let $row = $(this).closest('tr');
             let goals = $row.find('.goal').data("goals");
             let goalType = $row.find('.goal').data("type") || "";
-
             let progress = $(this).val();
-
-
             let scoreAchieved = 0;
-
             if (progress) {;
 
                 let lastMax = null;
