@@ -8,17 +8,17 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *php artisan migrate:refresh --path=database/migrations/2026_03_26_083309_create_pa_detail_goals_table.php
+     *php artisan migrate:refresh --path=database/migrations/2026_03_30_083522_create_pa_detail_goal_histories_table.php
      * @return void
      */
     public function up()
     {
-        Schema::create('pa_detail_goals', function (Blueprint $table) {
+        Schema::create('pa_detail_goal_histories', function (Blueprint $table) {
             $table->id();
-            $table->integer('performance_id');
-            $table->string('title_id');
-            $table->string('purpose_id');
-            $table->integer('pa_detail_id');
+            $table->integer('pa_histories_id');
+            $table->string('title_histories_id');
+            $table->string('purpose_histories_id');
+            $table->integer('pa_detail_histories_id');
             $table->string('from');
             $table->string('to');
             $table->integer('user_id')->nullable();
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pa_detail_goals');
+        Schema::dropIfExists('pa_detail_goal_histories');
     }
 };

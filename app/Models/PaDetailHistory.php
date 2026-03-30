@@ -31,4 +31,8 @@ class PaDetailHistory extends Model
         'created_by',
         'updated_by',
     ];
+    public function performanceGoals()
+    {
+        return $this->hasMany(PaDetailGoalHistory::class, 'pa_detail_histories_id', 'id');
+    }
 }
