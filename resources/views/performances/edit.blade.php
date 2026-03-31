@@ -136,7 +136,7 @@
                                                                             @if($symbol)
                                                                                 <span class="input-group-text" style="height: 35px;">{{ $symbol }}</span>
                                                                             @endif
-                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control weight-from required" name="goal_from[]" value="{{ $item->from }}" placeholder="From" style="height: 35px;" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control goal-from required" name="goal_from[]" value="{{ $item->from }}" placeholder="From" style="height: 35px;" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                                         </div>
                                                                     </div>
 
@@ -146,7 +146,7 @@
                                                                             @if($symbol)
                                                                                 <span class="input-group-text" style="height: 35px;">{{ $symbol }}</span>
                                                                             @endif
-                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control weight-to required" name="goal_to[]" value="{{ $item->to }}" placeholder="To" style="height: 35px;" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control goal-to required" name="goal_to[]" value="{{ $item->to }}" placeholder="To" style="height: 35px;" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -156,7 +156,7 @@
                                                 </td>
                                                 
                                                 <td class="text-center">
-                                                    <input type="number" step="any" class="form-control required sum_total_weight weight" name="weight[]" id="weight" placeholder="%" value="{{ $Detailitem->weight }}" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                    <input type="number" step="any" class="form-control required sum_total_weight weight" name="weight[]" placeholder="%" value="{{ $Detailitem->weight }}" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                 </td>
                                                 @php
                                                     if (in_array(Auth::user()->RolePermission, ['admin', 'HRAdmin', 'developer', 'DHOD', 'DBM'])) {
@@ -277,14 +277,14 @@
                         <div class="col-md-5">
                             <div class="input-group">
                                 ${symbol ? `<span class="input-group-text" style="height: 35px;">${symbol}</span>` : ''}
-                                <input type="${inputType}" step="${step}" class="form-control weight-from required" name="goal_from[]" placeholder="${placeholderFrom}" style="height:35px;">
+                                <input type="${inputType}" step="${step}" class="form-control goal-from required" name="goal_from[]" placeholder="${placeholderFrom}" style="height:35px;">
                             </div>
                         </div>
                         <div class="col-md-2 text-center">To</div>
                         <div class="col-md-5">
                             <div class="input-group">
                                 ${symbol ? `<span class="input-group-text" style="height: 35px;">${symbol}</span>` : ''}
-                                <input type="${inputType}" step="${step}" class="form-control weight-to required" name="goal_to[]" placeholder="${placeholderTo}" style="height:35px;">
+                                <input type="${inputType}" step="${step}" class="form-control goal-to required" name="goal_to[]" placeholder="${placeholderTo}" style="height:35px;">
                             </div>
                         </div>
                     </div>
@@ -379,9 +379,9 @@
                             let goal_type = $kpiRow.find('select[name="goal_type[]"]').val();
                             let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
                             let goal = [];
-                            $kpiRow.find('.weight-from').each(function(index) {
+                            $kpiRow.find('.goal-from').each(function(index) {
                                 let fromVal = $(this).val();
-                                let toVal = $kpiRow.find('.weight-to').eq(index).val();
+                                let toVal = $kpiRow.find('.goal-to').eq(index).val();
                                 if (fromVal || toVal) {
                                     goal.push({ from: fromVal, to: toVal });
                                 }
@@ -495,14 +495,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -512,14 +512,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -530,14 +530,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -547,14 +547,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -564,23 +564,23 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </td>
-            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight sum_total_weight required" id="weight" placeholder="%"></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight sum_total_weight required" placeholder="%"></td>
             <td class="text-center">
-                <select class="form-control" name="is_lock[]" id="is_lock" required>
+                <select class="form-control" name="is_lock[]" required>
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>
@@ -619,14 +619,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -636,14 +636,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -654,14 +654,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -671,14 +671,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -688,14 +688,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -704,7 +704,7 @@
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control sum_total_weight required" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
-                <select class="form-control" name="is_lock[]" id="is_lock" required>
+                <select class="form-control" name="is_lock[]" required>
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>
@@ -760,14 +760,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -777,14 +777,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -795,14 +795,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -812,14 +812,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -829,14 +829,14 @@
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
+                                    <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
                             <div class="col-md-2 text-center">To</div>
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
-                                    <input type="number" step="any" class="form-control weight-to required" name="goal_from[]" placeholder="To" style="height:35px;">
+                                    <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
                                 </div>
                             </div>
                         </div>
@@ -845,7 +845,7 @@
             </td>
             <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control required sum_total_weight" placeholder="%" min="0" value="{{old('weight')}}"></td>
             <td class="text-center">
-                <select class="form-control" name="is_lock[]" id="is_lock" required>
+                <select class="form-control" name="is_lock[]" required>
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>
