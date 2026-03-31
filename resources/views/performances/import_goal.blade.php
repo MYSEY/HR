@@ -1,9 +1,9 @@
-<div id="importGoal" class="modal custom-modal fade" role="dialog">
+<div id="importGoal" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">@lang('lang.import_goals')</h5>
-                <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="close btn-close btn-close-goals" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -24,19 +24,19 @@
                 <div class="text-end">
                     <a href="javascript:" class="btn btn-primary submit-btn upload_file_data">
                         <span class="btn-text-submit">@lang('lang.submit')</span>
-                        <span id="btn-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                        <span class="btn-loading" id="btn-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div id="error-container" class="modal custom-modal fade" role="dialog">
+<div id="error-container" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 id="error-message" class="modal-title">@lang('lang.import_goals')</h5>
-                <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="close btn-close btn-close-error" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -53,8 +53,16 @@
             $(".kpi_thanLess").hide();
             $("#kpi_thanLess").text("");
         });
+        $(".btn-close-error").on("click", function (){
+            window.location.reload();
+        });
 
         $(".upload_file_data").on("click", function() {
+            let btn = $(this);
+            if (btn.hasClass('disabled')) {
+                e.preventDefault();
+                return false;
+            }
             if ($('#result_file_kpi').val() == "") {
                 $("#kpi_thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css("color", "red");
                 $(".kpi_thanLess").show();
@@ -68,9 +76,10 @@
             form_data.append('file', file_data);
             form_data.append('_token', "{{ csrf_token() }}");
             if (fileExtension == "xls" || fileExtension == "xlsx" || fileExtension == "csv" && fileSize < 1048576) {
-                $(".upload_file_data").prop('disabled', true);
+                btn.addClass('disabled');
+                $(".btn-close-goals").addClass('disabled');
                 $(".btn-text-submit").hide();
-                $("#btn-loading").css('display', 'block');
+                $(".btn-loading").css('display', 'block');
 
                 $("#importGoal").modal("show");
                 $.ajax({

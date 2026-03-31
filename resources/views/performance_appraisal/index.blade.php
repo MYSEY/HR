@@ -89,13 +89,13 @@
                 @if ($permission->is_import == 1 || Auth::user()->RolePermission == 'developer')
                     <div class="col-auto float-end ms-auto">
                         <a href="#" class="btn add-btn" data-toggle="modal" id="importKPI">
-                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i> @lang('lang.import')</a>
+                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i> @lang('lang.import_file_download')</a>
                     </div>
                 @endif
                 <div class="col-auto float-end ms-auto">
                     @if ($permission->is_import == 1)
                         <a href="#" class="btn add-btn" data-toggle="modal" id="btnImportResult">
-                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i> Import Result
+                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import_result')
                         </a>
                     @endif
                 </div>
@@ -130,30 +130,6 @@
         </div>
         {!! Toastr::message() !!}
         <div class="row filter-btn">
-            @if (count($branch)>1)
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                        <select class="select form-control hr-select2-option filter" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
-                            @foreach ($branch as $item)
-                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            @endif
-            @if (count($department)>1)
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                        <select class="select form-control hr-select2-option filter" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
-                            @foreach ($department as $item)
-                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            @endif
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                 <div class="form-group">
                     <select class="select form-control hr-select2-option filter" id="status" data-select2-id="select2-data-2-c09n2" name="status">
@@ -167,15 +143,41 @@
                     </select>
                 </div>
             </div>
+            @if (count($branch)>1)
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <div class="form-group">
+                        <select class="select form-control hr-select2-option filter" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                            @foreach ($branch as $item)
+                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            @else
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+            @endif
+            @if (count($department)>1)
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                    <div class="form-group">
+                        <select class="select form-control hr-select2-option filter" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_department')</option>
+                            @foreach ($department as $item)
+                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            @else
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+            @endif
             <div class="col-sm-3 col-md-3">
                 <div style="display: flex" class="float-end">
                     @if ($permission->is_export == 1 || Auth::user()->RolePermission == 'developer')
-                        {{-- @if (permissionAccess("m4-s2","is_export")->value == "1") --}}
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
-                                <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
-                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                            </button>
-                        {{-- @endif --}}
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                            <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
+                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
                     @endif
                 </div>
             </div>

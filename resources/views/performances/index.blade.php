@@ -99,7 +99,7 @@
                 <div class="col-auto float-end ms-auto">
                     @if (permissionAccess("m4-s2","is_import")->value == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="btnImportGoal">
-                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i> Import Goals
+                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import_goals')
                         </a>
                     @endif
                 </div>
@@ -136,6 +136,20 @@
             </div>
         </div>
         <div class="row filter-btn">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                <div class="form-group">
+                    <select class="select form-control hr-select2-option filter" id="status" data-select2-id="select2-data-2-c09n2" name="status">
+                        <option value="">@lang('lang.all') @lang('lang.status')</option>
+                        <option value="preparing">Preparing</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="1">Pending Review</option>
+                        <option value="2">Pending Accepted</option>
+                        <option value="3">Pending Verify</option>
+                        <option value="4">Pending Approve</option>
+                        <option value="5">Return</option>
+                    </select>
+                </div>
+            </div>
             @if (count($branch)>1)
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group">
@@ -160,20 +174,6 @@
                     </div>
                 </div>
             @endif
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                <div class="form-group">
-                    <select class="select form-control hr-select2-option filter" id="status" data-select2-id="select2-data-2-c09n2" name="status">
-                        <option value="">@lang('lang.all') @lang('lang.status')</option>
-                        <option value="preparing">Preparing</option>
-                        <option value="accepted">Accepted</option>
-                        <option value="1">Pending Review</option>
-                        <option value="2">Pending Accepted</option>
-                        <option value="3">Pending Verify</option>
-                        <option value="4">Pending Approve</option>
-                        <option value="5">Return</option>
-                    </select>
-                </div>
-            </div>
         </div>
         {!! Toastr::message() !!}
         <div class="row">
