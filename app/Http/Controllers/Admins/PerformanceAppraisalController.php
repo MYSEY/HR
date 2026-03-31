@@ -33,6 +33,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\Admin\ReportRepository;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class PerformanceAppraisalController extends Controller
 {
@@ -829,88 +830,177 @@ class PerformanceAppraisalController extends Controller
 
         $notFoundIds = [];
         $errors = [];
+        
+        // ប្រើ Transaction ដើម្បីសុវត្ថិភាពទិន្នន័យ
+        DB::beginTransaction();
+        try {
+            foreach ($sheetNames as $id) {
+                $employee = User::where("number_employee", $id)->first();
+                if (!$employee) {
+                    $notFoundIds[] = $id;
+                    continue;
+                }
 
-        foreach ($sheetNames as $id) {
-            $employee = User::where("number_employee", $id)->first();
-            if (!$employee) {
-                $notFoundIds[] = $id;
-                continue;
+                $sheet = $spreadsheet->getSheetByName($id);
+                if (!$sheet) continue;
+
+                $highestRow = $sheet->getHighestRow();
+                
+                // Reset ពិន្ទុសម្រាប់បុគ្គលិកម្នាក់ៗ (Sheet នីមួយៗ)
+                $total_score = 0;
+                $performanceID = null;
+
+                $currentForYear = null;
+                $currentPurpose = null;
+                $currentPA = null;
+                $updatedKPIs = [];
+
+                for ($row = 2; $row <= $highestRow; $row++) {
+                    $forYearValue   = trim($sheet->getCell('A' . $row)->getValue());
+                    $purposeValue   = trim($sheet->getCell('B' . $row)->getValue());
+                    $paValue        = trim($sheet->getCell('C' . $row)->getValue());
+                    $paResult       = trim($sheet->getCell('I' . $row)->getValue());
+
+                    if (!empty($forYearValue))  $currentForYear = $forYearValue;
+                    if (!empty($purposeValue))  $currentPurpose = $purposeValue;
+                    if (!empty($paValue))       $currentPA      = $paValue;
+
+                    if (empty($currentForYear) || empty($currentPurpose) || empty($currentPA)) continue;
+
+                    // រក Performance (គួរប្រើ Cache ឬ Collection បើអាច)
+                    $performance = PerformanceAppraisal::where("employee_id", $employee->id)
+                                    ->where('type', $currentForYear)->first();
+                    if (!$performance) {
+                        $errors[] = "Sheet $id: For Year ($currentForYear) រកមិនឃើញក្នុងប្រព័ន្ធ";
+                        continue;
+                    }
+                    // បន្ថែមការឆែក Status "new"
+                    if ($performance->status !== "new") {
+                        // បង្កើតសារ Error ឱ្យចំបញ្ហា
+                        $errors[] = "Sheet $id: មិនអាច Upload បានទេ ព្រោះ Status គឺ '{$performance->status}' (អនុញ្ញាតបានតែ Status 'new' ប៉ុណ្ណោះ)";
+                        continue;
+                    }
+                    $performanceID = $performance->id;
+
+                    $purpose = PaPurpose::where("performance_id", $performance->id)
+                                ->where('name', $currentPurpose)->first();
+                    if (!$purpose) {
+                        $errors[] = "Sheet $id: Purpose ($currentPurpose) រកមិនឃើញក្នុងប្រព័ន្ធ";
+                        continue;
+                    }
+
+                    $detail = PaDetail::with("performanceGoals")
+                                ->where("performance_id", $performance->id)
+                                ->where("purpose_id", $purpose->id)
+                                ->where('key_kpi', $currentPA)->first();
+                    if (!$detail) {
+                        $errors[] = "Sheet $id: KPI ($currentPA) រកមិនឃើញក្នុងប្រព័ន្ធ";
+                        continue;
+                    }
+                    $kpiUniqueKey = $currentPurpose . '_' . $currentPA;
+                    // --- Logic គណនាពិន្ទុ ---
+                    $scoreAchieved = 0;
+                    $goals = $detail->performanceGoals;
+                    $goalType = $detail->goal_type;
+                    $progress = $paResult;
+                    if ($paResult !== "" && $paResult !== null) {
+                        if(str_contains($goalType, 'date')){
+                            try {
+                                // ធ្វើដូចគ្នាសម្រាប់ Value date
+                                if (is_numeric($progress)) {
+                                    $dateValue = Carbon::instance(Date::excelToDateTimeObject($progress));
+                                } else {
+                                    $trimmed = trim($progress);
+                                    if (preg_match('/^\d{1,2}\/\d{1,2}\/\d{2}$/', $trimmed)) {
+                                        $dateValue = Carbon::createFromFormat('d/m/y', $trimmed);
+                                    } else {
+                                        $dateValue = Carbon::createFromFormat('d/m/Y', $trimmed);
+                                    }
+                                }
+
+                                $progress   = $dateValue->format('Y-m-d');
+                            } catch (\Exception $e) {
+                                $errors[] = "Sheet $id (ជួរទី $row): ថ្ងៃខែមិនត្រឹមត្រូវ ($progress)។";
+                                continue;
+                            }
+                        }
+                        $lastGoal = $goals->last();
+                        $firstGoal = $goals->first();
+
+                        foreach ($goals as $index => $pGoal) {
+                            $min = $pGoal->from;
+                            $max = $pGoal->to;
+
+                            if (!str_contains($goalType, 'date')) {
+                                $min = (float)$min;
+                                $max = (float)$max;
+                                $actualMin = min($min, $max);
+                                $actualMax = max($min, $max);
+                            } else {
+                                $actualMin = $min;
+                                $actualMax = $max;
+                            }
+
+                            if ($progress >= $actualMin && $progress <= $actualMax) {
+                                $scoreAchieved = $index + 1;
+                                break;
+                            }
+                        }
+
+                        // បើមិនទាន់រកឃើញពិន្ទុ (Exceed Range Logic)
+                        if ($scoreAchieved === 0 && $goals->isNotEmpty()) {
+                            if (str_contains($goalType, 'increment')) {
+                                $maxVal = !str_contains($goalType, 'date') ? (float)$lastGoal->to : $lastGoal->to;
+                                if ($progress > $maxVal) $scoreAchieved = 5;
+                            } elseif (str_contains($goalType, 'decrement')) {
+                                $minVal = !str_contains($goalType, 'date') ? (float)$firstGoal->from : $firstGoal->from;
+                                // បើលើសកាលបរិច្ឆេទកំណត់ដំបូង (សម្រាប់ Decrement គឺពិន្ទុទាប)
+                                $scoreAchieved = ($progress > $minVal) ? 1 : 5;
+                            }
+                        }
+
+                        // គណនាពិន្ទុតាមទម្ងន់ (Weight)
+                        $weightedScore = ($detail->weight * $scoreAchieved) / 100;
+                        
+                        $detail->update([
+                            'progress'              => $progress,
+                            'score_achieved'        => $scoreAchieved,
+                            'score'                 => $weightedScore,
+                            'score_live_staff'      => $weightedScore,
+                            'score_direct_chairman' => $weightedScore,
+                        ]);
+
+                        $updatedKPIs[$kpiUniqueKey] = true;
+                        $total_score += $weightedScore;
+                    }else{
+                        if (!isset($updatedKPIs[$kpiUniqueKey])) {
+                            $detail->update([
+                                'progress'              => null,
+                                'score_achieved'        => null,
+                                'score'                 => null,
+                                'score_live_staff'      => null,
+                                'score_direct_chairman' => null,
+                            ]);
+                        }
+                    }
+                }
+
+                // Update Performance Main Table
+                if ($performanceID) {
+                    PerformanceAppraisal::where('id', $performanceID)->update([
+                        'total_score'                  => $total_score,
+                        'total_score_live_staff'       => $total_score,
+                        'total_score_direct_chairman'  => $total_score,
+                        'updated_by'                   => Auth::id(),
+                    ]);
+                }
             }
 
-            $sheet = $spreadsheet->getSheetByName($id);
-            $highestRow = $sheet->getHighestRow();
-
-            $currentForYear = null;
-            $currentPurpose = null;
-            $currentPA = null;
-
-            for ($row = 2; $row <= $highestRow; $row++) {
-                $index = $row - 2;
-                $forYearValue   = trim($sheet->getCell('A' . $row)->getValue());
-                $purposeValue   = trim($sheet->getCell('B' . $row)->getValue());
-                $paValue        = trim($sheet->getCell('C' . $row)->getValue());
-                $paResult       = trim($sheet->getCell('I' . $row)->getValue());
-
-                if (!empty($forYearValue))  $currentForYear = $forYearValue;
-                if (!empty($purposeValue))  $currentPurpose = $purposeValue;
-                if (!empty($paValue))      $currentPA     = $paValue;
-
-                // បើជួរនោះទទេទាំងស្រុង មិនបាច់ឆែកទេ
-                if (empty($currentForYear) && empty($currentPurpose) && empty($currentPA)) continue;
-
-                // ១. ស្វែងរក PerformanceAppraisal
-                $performance = PerformanceAppraisal::where("employee_id", $employee->id)
-                                ->where('type', $currentForYear)->first();
-                if (!$performance) {
-                    $errors[] = "Sheet $id: For Year ($currentForYear) រកមិនឃើញក្នុងប្រព័ន្ធ";
-                    continue;
-                }
-
-                // ២. ស្វែងរក Purpose
-                $purpose = PaPurpose::where("performance_id", $performance->id)
-                            ->where('name', $currentPurpose)->first();
-                if (!$purpose) {
-                    $errors[] = "Sheet $id: Purpose ($currentPurpose) រកមិនឃើញក្នុងប្រព័ន្ធ";
-                    continue;
-                }
-
-                // ៣. ស្វែងរក PerformanceDetail
-                $detail = PaDetail::where("performance_id", $performance->id)
-                            ->where("purpose_id", $purpose->id)
-                            ->where('key_kpi', $currentPA)->first();
-                if (!$detail) {
-                    $errors[] = "Sheet $id: KPI Key ($currentPA) រកមិនឃើញក្នុងប្រព័ន្ធ";
-                    continue;
-                }
-                if($detail){
-                    $detail->progress = $paResult;
-                    $fromValue     = $sheet->getCell('D' . $row)->getValue();
-                    $toValue       = $sheet->getCell('E' . $row)->getValue();
-
-                    // if ($paResult <= $fromValue && $paResult >= $toValue) {
-                    //     $scoreAchieved = $index + 1; // mimic JS: index + 1
-                    //     // break; // stop looping once found
-                    // }else{
-                    //     $scoreAchieved = 5;
-                    // }
-                    $scoreAchieved = 1;
-
-                    $totalScore = ($detail->weight * $scoreAchieved) / 100;
-                    $score  = $totalScore;
-                    $live   = $totalScore;
-                    $chair  = $totalScore;
-
-                    $detail->score_achieved         = $scoreAchieved;
-                    $detail->score                  = $score;
-                    $detail->score_live_staff       = $live;
-                    $detail->score_direct_chairman  = $chair;
-
-
-                    dd($detail);
-                }
-            }
+            DB::commit(); // រក្សាទុកទិន្នន័យទាំងអស់បើគ្មាន Error
+        } catch (\Exception $e) {
+            DB::rollBack(); // បោះបង់ការ Update បើមាន Error កូដ
+            return response()->json(['status' => 500, 'message' => $e->getMessage()]);
         }
-
         // ចម្រាញ់យកតែ Error ដែលប្លែកៗគ្នា (Unique)
         $uniqueErrors = array_unique($errors);
         $uniqueStaffErrors = array_unique($notFoundIds);

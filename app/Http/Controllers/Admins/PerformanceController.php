@@ -984,6 +984,12 @@ class PerformanceController extends Controller
                     $errors[] = "Sheet $id: For Year ($currentForYear) រកមិនឃើញក្នុងប្រព័ន្ធ";
                     continue;
                 }
+                // បន្ថែមការឆែក Status "new"
+                if ($performance->status !== "preparing") {
+                    // បង្កើតសារ Error ឱ្យចំបញ្ហា
+                    $errors[] = "Sheet $id: មិនអាច Upload បានទេ ព្រោះ Status គឺ '{$performance->status}' (អនុញ្ញាតបានតែ Status 'preparing' ប៉ុណ្ណោះ)";
+                    continue;
+                }
 
                 // ២. ស្វែងរក Purpose
                 $purpose = Purpose::where("performance_id", $performance->id)
