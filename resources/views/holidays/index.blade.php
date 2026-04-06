@@ -36,7 +36,10 @@
                                                         <th>@lang('lang.amount_percent')(%)</th>
                                                         <th>@lang('lang.period_month')</th>
                                                     @endif
+                                                    <th>@lang('lang.from')</th>
+                                                    <th>@lang('lang.to')</th>
                                                     <th>@lang('lang.created_at')</th>
+                                                    <th>@lang('lang.created_by')</th>
                                                     <th class="text-end">@lang('lang.action')</th>
                                                 </tr>
                                             </thead>
@@ -51,7 +54,10 @@
                                                                 <td style="text-align: center;" class="amount_percent"><a href="#">{{$item->amount_percent}}</a></td>
                                                                 <td class="period_month">{{$item->PeriodPayment}}</td>
                                                             @endif
+                                                            <td>{{Carbon\Carbon::parse($item->from)->format('d-M-Y') }}</td>
+                                                            <td>{{Carbon\Carbon::parse($item->to)->format('d-M-Y') }}</td>
                                                             <td>{{Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
+                                                            <td>{{Helper::getLang() == 'en' ? $item->createdBy->employee_name_en : $item->createdBy->employee_name_kh}}</td>
                                                             <td class="text-end">
                                                                 @if (permissionAccess("m8-s3","is_update")->value == "1")
                                                                     <div class="dropdown dropdown-action">

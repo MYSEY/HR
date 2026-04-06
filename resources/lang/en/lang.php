@@ -186,7 +186,7 @@ return[
     "created_at"=>"Creation Date",
     "create_account"=>"Create Account",
     "create_new"=>"Create New ",
-    "created_by"=>"Createdn By",
+    "created_by"=>"Created By",
     "criteria"=>"Criteria",
     "csv"=>"CSV",
     "custom"=>"Custom",
