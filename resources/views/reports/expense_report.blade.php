@@ -234,6 +234,7 @@
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <a class="dropdown-item {{ $item->type == '2' ? 'btn-TEXP-print' : 'btn-GEXP-print'}}" href="#" data-datas="{{$item}}"><i class="fa fa-print fa-lg m-r-5"></i> @lang('lang.print')</a>
+                                                                <a class="dropdown-item" href="{{url("admin-expense/histories",$item->expense_request_id)}}" ><i class="fa fa-eye m-r-5"></i> @lang('lang.view_history')</a>
                                                             </div>
                                                         </div>
                                                     @endif

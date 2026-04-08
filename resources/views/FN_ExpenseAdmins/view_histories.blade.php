@@ -24,9 +24,9 @@
     <div class="row filter-btn"> 
         <div class="col-sm-12 col-md-12">
             <div style="display: flex" class="float-end">
-                <a href="{{ url('/admin-expense/list') }}" type="button" class="btn btn-icon btn-soft-success me-1">
+                {{-- <a href="{{ url('/admin-expense/list') }}" type="button" class="btn btn-icon btn-soft-success me-1">
                     <i class="fa fa-angle-double-left"></i> @lang('lang.back')
-                </a>
+                </a> --}}
                 <button type="button" class="btn btn-icon btn-soft-success btn_excel">
                     <span class="btn-text-reset"><i class="fa fa-arrow-circle-down"></i> @lang('lang.export')</span>
                     <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>

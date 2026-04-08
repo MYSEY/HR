@@ -58,19 +58,20 @@
                         <span class="p_reason_subject" style="word-wrap: break-word; white-space: normal"></span>
                     </td></tr>
                 </table>
-                
-                <label class="label-sub_lll"></label>
-                <div class="style-table">
-                    <table style="width:100%" class="p_locations_a">
-                        <tr >
-                        </tr>
-                    </table>
-                    <table style="width:100%" class="p_locations_b">
-                        <tr>
-                           
-                        </tr>
-                    </table>
-                </div>
+                @if (Auth::user()->branch->abbreviations == "HQ")
+                    <label class="label-sub_lll"></label>
+                    <div class="style-table">
+                        <table style="width:100%" class="p_locations_a">
+                            <tr >
+                            </tr>
+                        </table>
+                        <table style="width:100%" class="p_locations_b">
+                            <tr>
+                            
+                            </tr>
+                        </table>
+                    </div>
+                @endif
                 <label class="label-sub_lll">ចំណាយរួមមាន៖</label>
                 <div class="style-table">
                         <table style="width:100%">

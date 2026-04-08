@@ -480,7 +480,6 @@ class ExpenseRequestController extends Controller
         //             }
         //         }
         //     }
-            
         // }
     }
     /**
@@ -658,7 +657,7 @@ class ExpenseRequestController extends Controller
             $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
             $dataSendEmail["data"]["subject"] = $request->subject;
             $dataSendEmail["data"]["amount_usd"] = $request->ge_total_amount_usd;
-            $dataSendEmail["data"]["amount_kh"] = $request->ge_total_amount_riel;
+            $dataSendEmail["data"]["amount_kh"] = ($request->type == 2 ? $request->te_total_tax : $request->ge_total_amount_riel);
             $dataSendEmail["data"]["request_by"] = Auth::user()->employee_name_kh;
             // self::sendEmail($dataSendEmail, Auth::user()->email);
             //*** end **/
@@ -1479,7 +1478,7 @@ class ExpenseRequestController extends Controller
             $dataSendEmail["data"]["date"] = Carbon::createFromDate()->format('Y-m-d H:i');
             $dataSendEmail["data"]["subject"] = $request->subject;
             $dataSendEmail["data"]["amount_usd"] = $request->ge_total_amount_usd;
-            $dataSendEmail["data"]["amount_kh"] = $request->ge_total_amount_riel;
+            $dataSendEmail["data"]["amount_kh"] = $request->te_total_tax;
             $dataSendEmail["data"]["request_by"] = Auth::user()->employee_name_kh;
             // self::sendEmail($dataSendEmail, Auth::user()->email);
             /// *** end **/
@@ -1638,7 +1637,7 @@ class ExpenseRequestController extends Controller
                 $email = Auth::user()->email;
                 $dataSendEmail["data"]["subject"] = $data->subject;
                 $dataSendEmail["data"]["amount_usd"] = $data->ge_total_amount_usd;
-                $dataSendEmail["data"]["amount_kh"] = $data->ge_total_amount_riel;
+                $dataSendEmail["data"]["amount_kh"] =  ($data->type == 2 ? $data->te_total_tax : $data->ge_total_amount_riel);
                 $dataSendEmail["data"]["request_by"] = $data->requestBy->employee_name_kh;
                 // self::sendEmail($dataSendEmail, Auth::user()->email);
             }

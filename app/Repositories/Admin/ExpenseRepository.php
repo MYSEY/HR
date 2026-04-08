@@ -156,7 +156,7 @@ class ExpenseRepository extends BaseRepository
         ->whereIn('expense_requests.status', ["approved","cancel"])
         ->orderBy('expense_requests.id', 'DESC');
 
-         $perPage = $request->get('per_page', 10);
+        $perPage = ($request->export == "export" ? "all": $request->get('per_page', 10));
 
         if ($perPage === 'all') {
             $datasDetails = $datasDetails->get();

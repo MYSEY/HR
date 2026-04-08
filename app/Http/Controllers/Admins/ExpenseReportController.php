@@ -25,7 +25,6 @@ class ExpenseReportController extends Controller
         $this->dataRequests = $request;
     }
 
-
     public function index(Request $request)
     {
         $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "fn/expense/report")->first();
@@ -62,6 +61,7 @@ class ExpenseReportController extends Controller
 
     public function reportExport(Request $request)
     {
+        $request["export"] = "export";
         $datas = $this->dataRequests->getDataByLocation($request);
         $name_file = "CAMMA-FND-002-Report.xlsx";
         $export = new ExportExpense($datas, $request);

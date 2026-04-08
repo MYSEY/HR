@@ -147,7 +147,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.basic_salary')</label>
                     </div>
@@ -324,7 +324,7 @@
                     if ($(this).attr('data-id') == "Supporting Staff") {
                         $("#position_type").val($(this).val());
                     }
-                }); 
+                });
             }else{
                 $('#position_type').find('option').each(function(){
                     if ($(this).attr('data-id') == "Field Staff") {
@@ -583,7 +583,7 @@
                 let value = formGroup.attr("data-select2-id");
                 let requeredField = formGroup.find(".hr-select2-option").val();
                 let requered = formGroup.find(".emp_required").val();
-                if(!value && requered == ""){ 
+                if(!value && requered == ""){
                     formGroup.find(".select2-selection--single").css("border-color","#dc3545");
                 }else if (!requeredField && requered == "") {
                     formGroup.find(".select2-selection--single").css("border-color","#dc3545");
@@ -598,7 +598,7 @@
                 $("#btn_save").prop('disabled', true);
                 $(".btn-text-save").css("display", "none");
             }
-           
+
             $(".emp_required").each(function(){
                 if($(this).val()==""){ num_miss++;}
             });
@@ -714,19 +714,19 @@
                                         if (data.marital_status.name_english == "Single") {
                                             $("#pr_mr_or_mrs").text("កញ្ញា ");
                                         }
-                                        $("#pr_gender").text("ស្រី ");
+                                        $(".pr_gender").text("ស្រី ");
                                     }else{
-                                        $("#pr_mr_or_mrs").text("លោក ");
-                                        $("#pr_gender").text("ប្រុស ");
+                                        $(".pr_mr_or_mrs").text("លោក ");
+                                        $(".pr_gender").text("ប្រុស ");
                                     }
                                     $(".pr_ceo").text(branch.employee_name_kh);
                                     $(".pr_position").text(branch.name_khmer);
 
                                     $(".pr_name").text(data.name_kh +" ");
-                                    $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
-                                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                                    $("#pr_id_card_number").text($("#id_card_number").val()+ "");
+                                    $(".pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
+                                    $(".pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                                    $(".pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                                    $(".pr_id_card_number").text($("#id_card_number").val()+ "");
 
                                     let number_home = "";
                                     let number_street = "";
@@ -738,17 +738,17 @@
                                     }
                                     let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
 
-                                    $("#pr_current_location").text(location);
+                                    $(".pr_current_location").text(location);
 
-                                    $("#pr_personal_phone_number").text(data.contact_number);
+                                    $(".pr_personal_phone_number").text(data.contact_number);
                                     $(".pr_join_day").text(join_day);
                                     $(".pr_join_month").text(join_month);
                                     $(".pr_join_year").text(join_year);
                                     $(".pr_end_day").text(end_day);
                                     $(".pr_end_month").text(end_month);
                                     $(".pr_end_year").text(end_year);
-                                    $("#pr_position").text(data.position.name_khmer);
-                                    $("#pr_branch").text(data.branch.branch_name_kh);
+                                    $(".pr_position").text(data.position.name_khmer);
+                                    $(".pr_branch").text(data.branch.branch_name_kh);
                                     $("#pr_employee_id").text(data.number_employee);
                                     $("#pr_basic_salary").text(data.basic_salary);
                                     $("#pr_salary_increase").text($("#salary_to_increase").val());
@@ -792,7 +792,7 @@
                     }
                 });
             }
-            
+
         });
     });
     function showProvince(id, optionSelect){
@@ -852,7 +852,7 @@
                         }else if (optionSelect == "permanentCommune") {
                             $('#permanent_village').append($('<option>', option));
                         }
-                    
+
                     });
                 }
             }
