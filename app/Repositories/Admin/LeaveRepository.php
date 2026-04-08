@@ -151,6 +151,7 @@ class LeaveRepository extends BaseRepository
     }
      public function getLeaveReports($request){
         $sumByEmployee = LeaveRequest::with(["employee", "handover", "createdBy", "leaveType","LeaveAllocation"])
+                ->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending","approved"])
                 ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
                 ->select(
                     'leave_requests.*',
@@ -166,36 +167,42 @@ class LeaveRepository extends BaseRepository
                     DB::raw("SUM(CASE WHEN leave_type_id = 4 THEN number_of_day ELSE 0 END) AS total_number_ul")
                 )
                 ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
-                    $query->where("users.id", Auth::user()->id);
-                    $query->orWhere("users.line_manager", Auth::user()->id);
-                }else if ($RolePermission == 'BM') {
-                    $query->where("users.id", Auth::user()->line_manager);
-                    $query->orWhere("users.branch_id", Auth::user()->branch_id);
-                }else if($RolePermission == 'HOD'){
-                    if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
-                        $query->where("users.id", Auth::user()->id);
-                        $query->orWhere("users.department_id", Auth::user()->department_id);
-                        
-                    }else{
+                    if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
                         $query->where("users.id", Auth::user()->id);
                         $query->orWhere("users.line_manager", Auth::user()->id);
-                    }
-                }else if ($RolePermission == 'HR' && permissionAccess("m10-s1","is_access")->value != "1") {
-                    $query->where("users.id", Auth::user()->id);
-                    $query->orWhere("users.line_manager", Auth::user()->id);
-                }else if($RolePermission == 'DHOD' || $RolePermission == 'DBM'){
-                    $query->where("users.id", Auth::user()->id);
-                    $query->orWhere("users.line_manager", Auth::user()->id);
-                }else if($RolePermission == 'Employee'){
-                    if(permissionAccess("m10-s1","is_access")->value == "1"){
-                        $query->where("users.department_id", Auth::user()->department_id);
-                        $query->where("users.branch_id", Auth::user()->branch_id);
-                    }else{
+                    }else if ($RolePermission == 'BM') {
                         $query->where("users.id", Auth::user()->line_manager);
+                        $query->orWhere("users.branch_id", Auth::user()->branch_id);
+                    }else if($RolePermission == 'HOD'){
+                        if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
+                            $query->where("users.id", Auth::user()->id);
+                            $query->orWhere("users.department_id", Auth::user()->department_id);
+                            
+                        }else{
+                            $query->where("users.id", Auth::user()->id);
+                            $query->orWhere("users.line_manager", Auth::user()->id);
+                        }
+                    }else if ($RolePermission == 'HR' && permissionAccess("m10-s1","is_access")->value != "1") {
+                        $query->where("users.id", Auth::user()->id);
+                        $query->orWhere("users.line_manager", Auth::user()->id);
+                    }else if($RolePermission == 'DHOD' || $RolePermission == 'DBM'){
+                        $query->where("users.id", Auth::user()->id);
+                        $query->orWhere("users.line_manager", Auth::user()->id);
+                    }else if($RolePermission == 'Employee'){
+                        if(permissionAccess("m10-s1","is_access")->value == "1"){
+                            $query->where("users.department_id", Auth::user()->department_id);
+                            $query->where("users.branch_id", Auth::user()->branch_id);
+                        }else{
+                            $query->where("users.id", Auth::user()->line_manager);
+                        }
                     }
+                }) 
+            ->when(
+                !$request->start_date && !$request->end_date,
+                function ($query) {
+                    $query->whereYear('leave_requests.start_date', now()->year);
                 }
-            }) 
+            )
             ->when($request->start_date, function ($query, $start_date) {
                 $query->where('leave_requests.start_date', '>=', $start_date);
             })

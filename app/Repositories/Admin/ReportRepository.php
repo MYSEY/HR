@@ -181,7 +181,7 @@ class ReportRepository extends BaseRepository
                         $tax_deduction_riel = ($fri->amount_riel ? $fri->amount_riel/2: 0) + (round($amount_usd,2) * $item->exchange_rate);
                         $withholding_tax_rate_usd = $tax_deduction_usd ? ($tax_deduction_usd * 20) / 100 : 0;
                         $withholding_tax_rate_riel = $tax_deduction_riel ? ($tax_deduction_riel * 20 / 100): 0;
-                       
+
                         // $withholding_tax_rate_riel = $withholding_tax_rate_usd ? (round($withholding_tax_rate_usd,2) * $item->exchange_rate) : ($tax_deduction_riel ? ($tax_deduction_riel * 20 / 100): 0);
                         $earnings_after_tax_usd = round($tax_deduction_usd,2) - round($withholding_tax_rate_usd,2);
                         $earnings_after_tax_riel = $tax_deduction_riel - $withholding_tax_rate_riel;
@@ -284,7 +284,7 @@ class ReportRepository extends BaseRepository
     }
 
     public function getAnnualSalaryIncreasementReport($request){
-      
+
         // Base query with joins
         $query = GenerateAnnualSalaryIncreasement::leftJoin('users', 'generate_annual_salary_increasements.employee_id', '=', 'users.id')
             ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
@@ -322,7 +322,7 @@ class ReportRepository extends BaseRepository
             ->when($request->department_id, function ($query, $department_id) {
                 return $query->where('users.department_id', $department_id);
             });
-    
+
         // Search filter
         $searchValue = request()->input('search.value');
         if (!empty($searchValue)) {
@@ -359,7 +359,7 @@ class ReportRepository extends BaseRepository
 
             'departments.name_english as dep_name',
             'departments.name_khmer as dep_name_khmer',
-            
+
             'positions.name_english as positions_name',
             'positions.name_khmer as positions_name_khmer',
 
@@ -420,6 +420,15 @@ class ReportRepository extends BaseRepository
         })
         ->when($request->department_id, function ($query, $department_id) {
             $query->where('users.department_id', $department_id);
+        })
+        ->when($request->status, function ($query, $status) {
+            return $query->where('performances.status', $status);
+        })
+        ->when($request->from_date, function ($query, $from_date) {
+            $query->where('performances.from_date', '>=', $from_date);
+        })
+        ->when($request->to_date, function ($query, $to_date) {
+            $query->where('performances.to_date','<=', $to_date);
         });
 
         // Search filter
@@ -510,8 +519,11 @@ class ReportRepository extends BaseRepository
         })
         ->when($request->department_id, function ($query, $department_id) {
             $query->where('users.department_id', $department_id);
+        })
+        ->when($request->status, function ($query, $status) {
+            return $query->where('performance_appraisals.status', $status);
         });
-        
+
         // Search filter
         $searchValue = request()->input('search.value');
         if (!empty($searchValue)) {

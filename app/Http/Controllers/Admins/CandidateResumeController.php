@@ -35,7 +35,7 @@ class CandidateResumeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     public function index()
     {
         if (permissionAccess("m3-s1","is_view")->value != "1") {
@@ -99,17 +99,17 @@ class CandidateResumeController extends Controller
         )->whereNotIn('roles.role_type',['employee','admin','developer'])->get();
         $totalUpcomings = User::where('emp_status','Upcoming')->count();
         $totalUpcomingtotalCancel = User::where('emp_status','Cancel')->count();
-        return view('recruitments.candidate_resumes.candidate_resume', 
+        return view('recruitments.candidate_resumes.candidate_resume',
         compact([
-            "position", 
-            "branch", 
-            "gender", 
-            "data", 
-            "autoEmpId", 
-            "role", 
-            "department", 
-            "optionPositionType", 
-            "optionLoan", 
+            "position",
+            "branch",
+            "gender",
+            "data",
+            "autoEmpId",
+            "role",
+            "department",
+            "optionPositionType",
+            "optionLoan",
             "province",
             "dataShortList",
             "dataNon",
@@ -138,12 +138,12 @@ class CandidateResumeController extends Controller
         return view('recruitments.candidate_resumes.candidate_cv',
         compact([
             'permission',
-            "position", 
-            "branch", 
+            "position",
+            "branch",
             "gender",
-            "department", 
-            "optionPositionType", 
-            "optionLoan", 
+            "department",
+            "optionPositionType",
+            "optionLoan",
             "province",
         ]));
     }
@@ -203,14 +203,14 @@ class CandidateResumeController extends Controller
         return view('recruitments.candidate_resumes.processing_contract',
             compact([
                 'permission',
-                "position", 
-                "branch", 
+                "position",
+                "branch",
                 "gender",
-                "autoEmpId", 
-                "role", 
-                "department", 
-                "optionPositionType", 
-                "optionLoan", 
+                "autoEmpId",
+                "role",
+                "department",
+                "optionPositionType",
+                "optionLoan",
                 "province",
                 'lineManager'
             ])
@@ -351,7 +351,7 @@ class CandidateResumeController extends Controller
             ->when($request->status, function ($query, $status) {
                 if ($status == 6) {
                     $query->whereNotIn('interviewed_result', [1,3,4]);
-                    $query->orWhere('interviewed_result', '=', null); 
+                    $query->orWhere('interviewed_result', '=', null);
                     $query->where('status', 3);
                 }else{
                     $query->where('status', $status);
@@ -377,7 +377,7 @@ class CandidateResumeController extends Controller
             })
             ->get();
         }
-        
+
         return response()->json(['datas'=>$datas,"dataUpcomings"=>$dataUpcomings, "dataUpcomingCancels"=>$dataUpcomingCancels]);
     }
 
@@ -474,7 +474,7 @@ class CandidateResumeController extends Controller
         $dataEmp =  User::whereIn('emp_status',['Probation', '1','2','10'])->get();
         return response()->json(['employees'=>$dataEmp]);
     }
-    
+
     public function import(Request $request)
     {
         $file = $request->file;
@@ -528,7 +528,7 @@ class CandidateResumeController extends Controller
                         }
                         $short_list = 1;
                     }else if($shortlistSpaces == "no"){
-                        $short_list = 2;   
+                        $short_list = 2;
                         $status = 2;
                     }
                     if ($csv[22] == 5) {
@@ -574,7 +574,7 @@ class CandidateResumeController extends Controller
             return 0;
         }
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -770,9 +770,9 @@ class CandidateResumeController extends Controller
                         'interviewed_result' =>$request->interviewed_result,
                         'remark' =>$request->remark,
                         'updated_by' => Auth::user()->id,
-                    ]; 
+                    ];
                 }
-            } 
+            }
             if ($request->status == "4") {
                 $dataUpdate = [
                     'status' => $request->status,
@@ -981,7 +981,7 @@ class CandidateResumeController extends Controller
 
     public function duplicate(Request $request){
 
-        
+
         try {
             $date_of_birth = Carbon::createFromDate($request->date_of_birth)->format('Y-m-d');
             $candidate = CandidateResume::where([

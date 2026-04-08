@@ -971,9 +971,9 @@ class PerformanceController extends Controller
                 // បើជួរនោះទទេទាំងស្រុង មិនបាច់ឆែកទេ
                 if (empty($currentForYear) && empty($currentPurpose) && empty($currentKPI)) continue;
 
-                if ($fromValue === null || $toValue === null) {
-                    // ប្រសិនបើអ្នកចង់ឱ្យបង្ហាញ Error តែម្តងសម្រាប់ករណីខ្វះទិន្នន័យក្នុង Sheet មួយ
-                    $errors[] = "Sheet $id: (From ឬ To) ខ្លះខ្វះទិន្នន័យ";
+                if ((string)$fromValue === '' || (string)$toValue === '') {
+                    // បើ User វាយលេខ 0 វានឹងមិនចូលក្នុង Error នេះទេ
+                    $errors[] = "Sheet $id (Row $row): (From ឬ To) ខ្លះខ្វះទិន្នន័យ";
                     continue;
                 }
 
@@ -1028,7 +1028,7 @@ class PerformanceController extends Controller
                     ->where('performance_detail_id', $detail->id)
                     ->orderBy('id', 'asc')
                     ->get();
-                    if ($fromValue !== null && $toValue !== null) {
+                    if ((string)$fromValue !== '' && (string)$toValue !== '') {
                         $goal_from = $fromValue;
                         $goal_to = $toValue;
 

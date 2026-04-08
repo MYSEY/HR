@@ -125,7 +125,7 @@
                             @elseif($type->type == "unpaid_leave")
                                 <h4>{{$LeaveAllocation ? $LeaveAllocation->total_unpaid_leave : 0}}</h4>
                             @elseif($type->type == "long_sick_leave")
-                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_long_sick_leave : 0}}</h4>
+                                <h4>{{ltrim($LeaveAllocation ? $LeaveAllocation->total_long_sick_leave : 0, '-')}}</h4>
                             @endif
                         </div>
                     </div>
@@ -193,43 +193,81 @@
                                     <tbody>
                                         @if (count($dataLeaveRequest) > 0)
                                             @php
-                                                $total_annual_leave= 0;
-                                                $total_sick_leave= 0;
-                                                $total_spacial_leave= 0;
-                                                $total_unpaid_leave= 0;
-                                                $total_long_sick_leave= 0;
+                                                // បង្កើត Array សម្រាប់ទុកការបូកសរុបដាច់ដោយឡែកតាមឆ្នាំ
+                                                $totalsByYear = [];
                                             @endphp
-                                            @foreach ($dataLeaveRequest as $key=>$request)
+
+                                            @foreach ($dataLeaveRequest as $key => $request)
                                                 @php
-                                                    if ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ) {
+                                                    // ១. ទាញយកឆ្នាំពី start_date
+                                                    $requestYear = \Carbon\Carbon::parse($request->start_date)->format('Y');
+
+                                                    // ២. បង្កើត structure បូកសរុបសម្រាប់ឆ្នាំថ្មី (បើមិនទាន់មាន)
+                                                    if (!isset($totalsByYear[$requestYear])) {
+                                                        $totalsByYear[$requestYear] = [
+                                                            'annual' => 0, 'sick' => 0, 'special' => 0, 'unpaid' => 0, 'long_sick' => 0
+                                                        ];
+                                                    }
+
+                                                    // ៣. ឆែក Status (មិនបូកបញ្ចូលករណី rejected ឬ cancel)
+                                                    $isApproved = !in_array($request->status, ['rejected', 'rejected_lm', 'rejected_hod', 'cancel_hod', 'cancel']);
+                                                    
+                                                    if ($isApproved) {
                                                         if ($request->leaveType->type == "annual_leave") {
-                                                            $total_annual_leave += $request->number_of_day;
-                                                        }else if ($request->leaveType->type == "sick_leave") {
-                                                            $total_sick_leave += $request->number_of_day;
-                                                        }else if ($request->leaveType->type == "special_leave") {
-                                                            $total_spacial_leave += $request->number_of_day;
-                                                        }else if ($request->leaveType->type == "unpaid_leave") {
-                                                            $total_unpaid_leave += $request->number_of_day;
-                                                        }else if ($request->leaveType->type == "long_sick_leave") {
-                                                            $total_long_sick_leave += $request->number_of_day;
+                                                            $totalsByYear[$requestYear]['annual'] += $request->number_of_day;
+                                                        } else if ($request->leaveType->type == "sick_leave") {
+                                                            $totalsByYear[$requestYear]['sick'] += $request->number_of_day;
+                                                        } else if ($request->leaveType->type == "special_leave") {
+                                                            $totalsByYear[$requestYear]['special'] += $request->number_of_day;
+                                                        } else if ($request->leaveType->type == "unpaid_leave") {
+                                                            $totalsByYear[$requestYear]['unpaid'] += $request->number_of_day;
+                                                        } else if ($request->leaveType->type == "long_sick_leave") {
+                                                            $totalsByYear[$requestYear]['long_sick'] += $request->number_of_day;
                                                         }
                                                     }
-                                                    
+
+                                                    // ៤. ទាញយកតម្លៃដើម (Initial Balance) ដោយប្រើ Column 'default_...'
+                                                    $currentAlloc = $balances[$requestYear][0] ?? null;
                                                 @endphp
+
                                                 <tr class="odd">
                                                     <td>{{$key+1}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
-                                                    <td>{{$request->leaveType->type == "annual_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ? $request->leaveType->type == "annual_leave" ? $LeaveAllocation->default_annual_leave - $total_annual_leave : 0 : 0}}</td>
-                                                    <td>{{$request->leaveType->type == "sick_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ? $request->leaveType->type == "sick_leave" ? $LeaveAllocation->default_sick_leave - $total_sick_leave : 0 : 0}}</td>
-                                                    <td>{{$request->leaveType->type == "special_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel"? $request->leaveType->type == "special_leave" ? $LeaveAllocation->default_special_leave - $total_spacial_leave : 0 : 0}}</td>
+                                                    <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y')}}</td>
+                                                    <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y')}}</td>
+
+                                                    <td>{{$request->leaveType->type == "annual_leave" ? $request->number_of_day : 0}}</td>
+                                                    <td>
+                                                        @if($currentAlloc && $request->leaveType->type == "annual_leave")
+                                                            {{ $currentAlloc->default_annual_leave - $totalsByYear[$requestYear]['annual'] }}
+                                                        @else 0 @endif
+                                                    </td>
+
+                                                    <td>{{$request->leaveType->type == "sick_leave" ? $request->number_of_day : 0}}</td>
+                                                    <td>
+                                                        @if($currentAlloc && $request->leaveType->type == "sick_leave")
+                                                            {{ $currentAlloc->default_sick_leave - $totalsByYear[$requestYear]['sick'] }}
+                                                        @else 0 @endif
+                                                    </td>
+
+                                                    <td>{{$request->leaveType->type == "special_leave" ? $request->number_of_day : 0}}</td>
+                                                    <td>
+                                                        @if($currentAlloc && $request->leaveType->type == "special_leave")
+                                                            {{ $currentAlloc->default_special_leave - $totalsByYear[$requestYear]['special'] }}
+                                                        @else 0 @endif
+                                                    </td>
+
                                                     <td>{{$request->leaveType->type == "unpaid_leave" ? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->leaveType->type == "unpaid_leave"? $total_unpaid_leave : 0}}</td>
+                                                    <td>
+                                                        {{ $currentAlloc->default_unpaid_leave - $totalsByYear[$requestYear]['unpaid'] }}
+                                                    </td>
+
                                                     <td>{{$request->leaveType->type == "long_sick_leave" ? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->leaveType->type == "long_sick_leave"? $total_long_sick_leave : 0}}</td>
+                                                    <td>
+                                                        @if($currentAlloc && $request->leaveType->type == "long_sick_leave")
+                                                            {{ $currentAlloc->default_long_sick_leave - $totalsByYear[$requestYear]['long_sick'] }}
+                                                        @else 0 @endif
+                                                    </td>
+                                                    
                                                     <td>{{$request->reason}}</td>
                                                     <td>{{$request->remark}}</td>
                                                     <td>
