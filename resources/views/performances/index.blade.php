@@ -86,23 +86,19 @@
                         <li class="breadcrumb-item active">@lang('lang.performance')</li>
                     </ul>
                 </div>
-                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
+                @if ($permission->is_import == 1)
                     <div class="col-auto float-end ms-auto">
-                        @if (permissionAccess("m4-s2","is_import")->value == "1")
-                            <a href="#" class="btn add-btn" data-toggle="modal" id="btnImportKpi">
-                                <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>
-                                @lang('lang.import_kpi')
-                            </a>
-                        @endif
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="btnImportKpi">
+                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>
+                            @lang('lang.import_kpi')
+                        </a>
                     </div>
-                @endif
-                <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("m4-s2","is_import")->value == "1")
+                    <div class="col-auto float-end ms-auto">
                         <a href="#" class="btn add-btn" data-toggle="modal" id="btnImportGoal">
                             <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import_goals')
                         </a>
-                    @endif
-                </div>
+                    </div>
+                @endif
                 <div class="col-auto float-end ms-auto">
                     <a href="{{url('performance/create')}}" class="btn add-btn me-2"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 </div>
