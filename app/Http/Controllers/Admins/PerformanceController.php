@@ -170,7 +170,7 @@ class PerformanceController extends Controller
             $department = Department::all();
         }
         $employee = User::where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
-        return view('performances.index',compact('branch','department','employee'));
+        return view('performances.index',compact('permission','branch','department','employee'));
     }
 
     /**
