@@ -40,8 +40,31 @@ class LeavesEmployeeController extends Controller
         if (permissionAccess("m10-s2","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
+
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
+        // ទាញទិន្នន័យប្រវត្តិឆ្នាំចាស់ៗ
+        $allocationHistory = DB::table('leave_allocation_histories')
+            ->where('employee_id', Auth::user()->id)
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $balances = [];
+        // Loop បញ្ចូល History ដោយទាញឆ្នាំពី created_at
+        foreach ($allocationHistory as $history) {
+            $year = date('Y', strtotime($history->created_at)); 
+            $balances[$year] = [
+                $history
+            ];
+        }
+        
+        if ($LeaveAllocation) {
+            $current_year = date('Y', strtotime($LeaveAllocation->created_at));
+            $balances[$current_year] = [
+                $LeaveAllocation
+            ];
+        }
+
         $employees= DB::table('users')
         ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
         ->select( 'users.*', 'roles.role_type',)
@@ -92,7 +115,7 @@ class LeavesEmployeeController extends Controller
                 }
             })->get();
         $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)->get();
-        return view('leaves_employee.index', compact('dataLeaveType', 'LeaveAllocation', 'employees','delegateEmployees', 'dataLeaveRequest'));
+        return view('leaves_employee.index', compact('dataLeaveType', 'balances', 'LeaveAllocation', 'employees','delegateEmployees', 'dataLeaveRequest'));
     }
 
     public function indexReplcement(){
