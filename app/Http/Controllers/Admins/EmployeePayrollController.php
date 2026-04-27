@@ -1272,7 +1272,7 @@ class EmployeePayrollController extends Controller
                             $dataSeverance = SeverancePay::create([
                                 'employee_id'                   => $item->id,
                                 'number_employee'               => $item->number_employee,
-                                'total_severanec_pay'           => round($dataSeveranc,),
+                                'total_severanec_pay'           => round($dataSeveranc,2),
                                 'total_contract_severance_pay'  => round($totalContractSeverancePay,2),
                                 'payment_date'                  => $request->payment_date,
                                 'type'                          => 'FDC-2',

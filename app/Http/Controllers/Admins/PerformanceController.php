@@ -188,7 +188,6 @@ class PerformanceController extends Controller
             if($RolePermission == 'Employee'){
                 $query->where("users.department_id", Auth::user()->department_id);
                 $query->where("users.branch_id", Auth::user()->branch_id);
-                $query->whereNot("users.id", Auth::user()->id);
             }
             if (in_array($RolePermission, ['BM'])){
                 $query->where("users.branch_id", Auth::user()->branch_id);

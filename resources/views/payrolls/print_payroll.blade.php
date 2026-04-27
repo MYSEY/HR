@@ -157,6 +157,12 @@
                                 <span class="float-end">${{$payslip->other_benefits == 0 ? '0.00' : $payslip->other_benefits}}</span>
                             </td>
                         </tr>
+                        <tr>
+                            <td>@lang('lang.annual_bonus')</td>
+                            <td>
+                                <span class="float-end">${{$payslip->annual_incentive_bonus == 0 ? '0.00' : $payslip->annual_incentive_bonus}}</span>
+                            </td>
+                        </tr>
                         @php
                             $TotalEarnings = $payslip->total_gross + $payslip->total_amount_car;
                         @endphp
