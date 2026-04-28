@@ -326,9 +326,6 @@ class PerformanceController extends Controller
                                 foreach ($kpi['goal'] as $g) {
                                     $from = $g['from'];
                                     $to   = $g['to'];
-                                    if ($from > $to) {
-                                        [$from, $to] = [$to, $from];
-                                    }
                                     PerformanceGoal::create([
                                         'performance_id'         => $performance->id,
                                         'title_id'               => $title->id,
@@ -616,10 +613,10 @@ class PerformanceController extends Controller
                                     foreach ($kpi['goal'] as $g) {
                                         $from = $g['from'];
                                         $to   = $g['to'];
-                                        $isIncrement = str_contains($goalType, 'increment');
-                                        if ($isIncrement && $from > $to) {
-                                            [$from, $to] = [$to, $from];
-                                        }
+                                        // $isIncrement = str_contains($goalType, 'increment');
+                                        // if ($isIncrement && $from > $to) {
+                                        //     [$from, $to] = [$to, $from];
+                                        // }
                                         PerformanceGoal::create([
                                             'performance_id'        => $performance->id,
                                             'title_id'              => $title->id,

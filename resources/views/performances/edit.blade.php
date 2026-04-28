@@ -67,9 +67,6 @@
                                         <td colspan="5" class="text-center">
                                             <input type="text" class="form-control required" style="background: #efa781" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{ $item->title ?? '' }}">
                                         </td>
-                                        {{-- <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td> --}}
                                         <td colspan="1" class="text-center"></td>
                                     </tr>
                                     @foreach ($item->purposes as $purposeItem)
@@ -77,15 +74,7 @@
                                             <td colspan="5" class="text-center">
                                                 <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{ $purposeItem->name ?? '' }}">
                                             </td>
-                                            {{-- <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td> --}}
                                             <td class="text-center">
-                                                {{-- @if ($loop->index == 0)
-                                                    <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i> Add Purpose</button>
-                                                @else
-                                                    <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
-                                                @endif --}}
                                                 <button type="button" class="btn btn-danger btn-sm btnRemovePurpose"><i class="fa fa-minus"></i></button>
                                                 <button type="button" class="btn btn-success btn-sm addNewPurpose"><i class="fa fa-plus"></i></button>
                                             </td>
@@ -94,20 +83,26 @@
                                             @php
                                                 $total_weight += $Detailitem->weight;
                                             @endphp
-                                            
+                                            @php
+                                                if (in_array(Auth::user()->RolePermission, ['admin', 'HRAdmin', 'developer','CEO','BM','DHOD', 'DBM','BOD'])) {
+                                                    $canEdit = 0;
+                                                } else {
+                                                    $canEdit = $Detailitem->is_lock;
+                                                }
+                                            @endphp
                                             <tr class="section-purpose kpi-group">
                                                 <td class="text-center">
                                                     <textarea rows="9" class="form-control required" name="key_kpi[]" placeholder="Enter text here" spellcheck="false"
-                                                        {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->key_kpi }}
+                                                        {{ $canEdit == 1 ? 'disabled' : '' }}>{{ $Detailitem->key_kpi }}
                                                     </textarea>
                                                 </td>
                                                 <td class="text-center">
                                                     <textarea rows="9" class="form-control required" name="action_plan[]" placeholder="Enter text here" spellcheck="false"
-                                                        {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>{{ $Detailitem->action_plan }}
+                                                        {{ $canEdit == 1 ? 'disabled' : '' }}>{{ $Detailitem->action_plan }}
                                                     </textarea>
                                                 </td>
                                                 <td class="text-center">
-                                                    <select class="form-control goal-type-select mt-1 goal_type" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                    <select class="form-control goal-type-select mt-1 goal_type" name="goal_type[]" {{ $canEdit == 1 ? 'disabled' : '' }}>
                                                         <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
                                                         <option value="number_decrement" {{ $Detailitem->goal_type == 'number_decrement' ? 'selected' : '' }}>Number Decrement</option>
 
@@ -121,13 +116,13 @@
                                                         <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
                                                     </select>
 
-                                                    {{-- ✅ ONLY ONE WRAPPER --}}
                                                     <div class="goal-input-wrapper mt-1">
                                                         @php
-                                                            $type = explode('_', $Detailitem->goal_type)[0] ?? 'number';
+                                                            $type = $Detailitem->goal_type;
+                                                            // $type = explode('_', $Detailitem->goal_type)[0] ?? 'number';
                                                             $symbol = $type == 'percent' ? '%' : ($type == 'currency' ? '$' : ($type == 'number' ? '#' : ''));
                                                         @endphp
-
+                                                        {{-- @dd($type); --}}
                                                         @foreach ($Detailitem->performanceGoals as $item)
                                                             <div class="row mb-1">
                                                                 <div class="group d-flex align-items-center">
@@ -136,7 +131,7 @@
                                                                             @if($symbol)
                                                                                 <span class="input-group-text" style="height: 35px;">{{ $symbol }}</span>
                                                                             @endif
-                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control goal-from required" name="goal_from[]" value="{{ $item->from }}" placeholder="From" style="height: 35px;" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control goal-from required" name="goal_from[]" value="{{ $item->from }}" placeholder="From" style="height: 35px;" {{ $canEdit == 1 ? 'disabled' : '' }}>
                                                                         </div>
                                                                     </div>
 
@@ -146,7 +141,7 @@
                                                                             @if($symbol)
                                                                                 <span class="input-group-text" style="height: 35px;">{{ $symbol }}</span>
                                                                             @endif
-                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control goal-to required" name="goal_to[]" value="{{ $item->to }}" placeholder="To" style="height: 35px;" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control goal-to required" name="goal_to[]" value="{{ $item->to }}" placeholder="To" style="height: 35px;" {{ $canEdit == 1 ? 'disabled' : '' }}>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -156,15 +151,8 @@
                                                 </td>
                                                 
                                                 <td class="text-center">
-                                                    <input type="number" step="any" class="form-control required sum_total_weight weight" name="weight[]" placeholder="%" value="{{ $Detailitem->weight }}" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
+                                                    <input type="number" step="any" class="form-control required sum_total_weight weight" name="weight[]" placeholder="%" value="{{ $Detailitem->weight }}" {{ $canEdit == 1 ? 'disabled' : '' }}>
                                                 </td>
-                                                @php
-                                                    if (in_array(Auth::user()->RolePermission, ['admin', 'HRAdmin', 'developer', 'DHOD', 'DBM'])) {
-                                                        $canEdit = 0;
-                                                    } else {
-                                                        $canEdit = $Detailitem->is_lock;
-                                                    }
-                                                @endphp
                                                 <td class="text-center">
                                                     <select class="form-control" name="is_lock[]" id="is_lock" {{ $canEdit == 1 ? 'disabled' : '' }}>
                                                         <option value="0" {{ $Detailitem->is_lock == 0 ? 'selected' : '' }}>No</option>
