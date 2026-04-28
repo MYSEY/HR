@@ -726,7 +726,7 @@ class PerformanceController extends Controller
             $skipped = [];
             foreach ($ids as $id) {
                 $performance = Performance::findOrFail($id);
-                if ($performance->total_weight == 100 && $performance->status == 'accepted') {
+                if ($performance->total_weight == 100) {
                     $performance->update([
                         'status'             => $request->status,
                         'reason'             => $request->reason,
@@ -745,6 +745,7 @@ class PerformanceController extends Controller
                 'success'  => true,
                 'message'  => 'Updated performance status successfully!',
                 'approved' => $approved,
+                'skipped'  => $skipped,
                 'status'   => 200
             ]);
 

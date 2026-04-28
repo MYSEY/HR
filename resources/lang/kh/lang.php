@@ -671,6 +671,7 @@ return[
 	"pending_orders"=>"ការបញ្ជាទិញដែលមិនទាន់សម្រេច",
 	"processing_contract"=> "ដំណើរការកិច្ចសន្យា",
 	"please_check_data"=>"សូមពិនិត្យមើលទិន្នន័យ",
+	"please_check_kpi_total_weight"=> "សូមពិនិត្យមើលទម្ងន់សរុបនៃ KPI ត្រូវតែគ្រប់ ១០០% មុនពេលបញ្ជូនទៅអ្នកត្រួតពិនិត្យបន្ទាប់។",
 	"please_check_to_delete"=>"សូមមើលទិន្នន័យដើម្បីលុប",
 	"please_check_your_email_again"=>"សូមពិនិត្យមើលអុីម៉ែលរបស់អ្នកសារជាថ្មី",
 	"please_check_your_email_and_password_again."=>"សូមពិនិត្យមើលអុីម៉ែលនិងពាក្យសម្ងាត់របស់អ្នកជាថ្មីម្តងទៀត.",
