@@ -393,9 +393,6 @@ class PerformanceAdminController extends Controller
                     $approved[] = $id;
                 } else {
                     $skipped[] = $id;
-                    return response()->json([
-                        'message' => 'weight_must_be_exactly'
-                    ]);
                 }
             }
             DB::commit();
@@ -410,6 +407,7 @@ class PerformanceAdminController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Asign successfully!',
+                'skipped' => $skipped,
                 'status'  => 200
             ]);
         }catch(\Exception $e){
@@ -671,15 +669,16 @@ class PerformanceAdminController extends Controller
                     $approved[] = $id;
                 } else {
                     $skipped[] = $id;
-                    return response()->json([
-                        'message' => 'weight_must_be_exactly'
-                    ]);
+                    // return response()->json([
+                    //     'message' => 'weight_must_be_exactly'
+                    // ]);
                 }
             }
             DB::commit();
             return response()->json([
                 'success' => true,
                 'message' => 'Approve successfully!',
+                'skipped' => $skipped,
                 'status'  => 200
             ]);
         } catch (\Throwable $exp) {

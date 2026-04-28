@@ -351,7 +351,7 @@
                                 } else if(response.data.message == 'weight_must_be_exactly'){
                                     new Noty({
                                         title: "",
-                                        text: 'Total weight must be exactly 100% before approval.',
+                                        text: 'Total weight must be exactly 100% before submit.',
                                         type: "error",
                                         icon: true,
                                         timeout: 3000,
@@ -472,17 +472,29 @@
                             }).then(function(response) {
                                 $('#modal-loading').modal('hide');
                                 if (response.data.success) {
-                                    new Noty({
-                                        title: "",
-                                        text: '@lang("lang.the_process_has_been_successfully")',
-                                        type: "success",
-                                        icon: true
-                                    }).show();
-                                    window.location.replace("{{ URL('performance-admin') }}");
+                                    if (response.data.skipped && response.data.skipped.length > 0) {
+                                        new Noty({
+                                            title: "",
+                                            text: '@lang("lang.please_check_kpi_total_weight")',
+                                            type: "error",
+                                            timeout: 5000,
+                                            icon: true
+                                        }).show();
+                                        dataTables();
+                                    }else{
+                                        new Noty({
+                                            title: "",
+                                            text: '@lang("lang.the_process_has_been_successfully")',
+                                            type: "success",
+                                            icon: true
+                                        }).show();
+                                        window.location.replace("{{ URL('performance-admin') }}");
+                                    }
+                                    
                                 } else if(response.data.message == 'weight_must_be_exactly'){
                                     new Noty({
                                         title: "",
-                                        text: 'Total weight must be exactly 100% before approval.',
+                                        text: 'Total weight must be exactly 100% before submit.',
                                         type: "error",
                                         icon: true,
                                         timeout: 3000,
@@ -560,7 +572,7 @@
                                     // Validation Error: Weight must be 100%
                                     if (response.data.message === 'weight_must_be_exactly') {
                                         new Noty({
-                                            text: 'Total weight must be exactly 100% before approval.',
+                                            text: 'Total weight must be exactly 100% before submit.',
                                             type: "error",
                                             timeout: 3000
                                         }).show();

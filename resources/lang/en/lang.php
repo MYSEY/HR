@@ -690,6 +690,7 @@ return[
     "pdf"=>"PDF",
     "Please input your code"=>"Please input your code",
     "please_check_data"=>"Please check data",
+    "please_check_kpi_total_weight"=> "Total KPI weight must be exactly 100% before submitting to the next reviewer.",
     "please_check_to_delete"=>"Please check to delete",
     "please_check_your_email_again"=>"Please check your email again",
     "please_check_your_email_and_password_again."=>"Please check your Email and password again.",
