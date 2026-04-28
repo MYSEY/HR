@@ -26,9 +26,15 @@ use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Carbon\Carbon;
+use App\Repositories\Admin\EmployeeRepository;
 
 class PerformanceController extends Controller
 {
+    private $employeeRepo;
+    public function __construct(EmployeeRepository $employeeRepo)
+    {
+        $this->employeeRepo = $employeeRepo;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -40,6 +46,7 @@ class PerformanceController extends Controller
     }
     public function index(Request $request)
     {
+        $department_ids = $this->employeeRepo->getRoleHOD();
         $permission = self::permission();
         if (!$permission || $permission["is_view"] != 1) {
             return view('upgrade.access_page');
@@ -103,7 +110,7 @@ class PerformanceController extends Controller
                 });
             }
             if (in_array(Auth::user()->RolePermission, ['HOD'])) {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", $department_ids);
                 if(Auth::user()->department->abbreviations == "CRD"){
                     $branch = Branchs::whereNot("id", Auth::user()->branch_id)->get();
                 }
@@ -512,7 +519,7 @@ class PerformanceController extends Controller
                 $year = Carbon::parse($request->from_date)->format('Y');
                 $type = $employee->emp_status === 'Probation' ? "KPI Probation $year" : "KPI Form $year";
                 $performance->update([
-                    'status'       => 'preparing',
+                    'status'       => $performance->status != 'preparing'? $performance->status : "preparing",
                     'reason'       => '',
                     'employee_id'  => $request->employee_id,
                     'from_date'    => $request->from_date,
