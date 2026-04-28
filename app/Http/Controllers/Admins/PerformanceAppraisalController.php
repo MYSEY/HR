@@ -34,13 +34,19 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Storage;
 use App\Repositories\Admin\ReportRepository;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use App\Repositories\Admin\EmployeeRepository;
 
 class PerformanceAppraisalController extends Controller
 {
+    private $employeeRepo;
     private $reportRepo;
-    public function __construct(ReportRepository $reportRepo)
-    {
+    // បន្ថែម EmployeeRepository ចូលក្នុង constructor
+    public function __construct(
+        ReportRepository $reportRepo, 
+        EmployeeRepository $employeeRepo
+    ) {
         $this->reportRepo = $reportRepo;
+        $this->employeeRepo = $employeeRepo; // បញ្ជាក់តម្លៃឱ្យ variable នេះ
     }
     /**
      * Display a listing of the resource.
@@ -57,6 +63,7 @@ class PerformanceAppraisalController extends Controller
         if (!$permission || $permission['is_view'] != 1) {
             return view('upgrade.access_page');
         }
+        $department_ids = $this->employeeRepo->getRoleHOD();
         if (request()->ajax()) {
             // Define the base query
             $query = PerformanceAppraisal::leftJoin('users', 'performance_appraisals.employee_id', '=', 'users.id')
@@ -113,10 +120,10 @@ class PerformanceAppraisalController extends Controller
                     ->orWhere("performance_appraisals.review_employee_id", Auth::user()->id); // my own
                 });
             }
-
             if (in_array(Auth::user()->RolePermission, ['HOD'])) {
+                $query->whereIn("users.department_id", $department_ids);
                 $query->where("users.department_id", Auth::user()->department_id);
-                $query->orWhere("performance_appraisals.review_employee_id", Auth::user()->id);
+                // $query->orWhere("performance_appraisals.review_employee_id", Auth::user()->id);
             }
 
             if (in_array(Auth::user()->RolePermission, ['BM'])) {
