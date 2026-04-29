@@ -246,6 +246,7 @@ class PerformanceController extends Controller
                     $data['status'] = 'preparing';
                     $data['type'] = $type;
                     $performance = Performance::create($data);
+                    $kpiCounter = 0;
                     foreach ($request->data as $titleItem) {
                         $title = Title::create([
                             'performance_id' => $performance->id,
@@ -308,7 +309,7 @@ class PerformanceController extends Controller
                                     return response()->json([
                                         'message'     => 'not_goal',
                                         'goal_type'   => $goalType,
-                                        'kpi_index'   => $kpiIndex,
+                                        'kpi_index'   => $kpiCounter,
                                         'error'       => 'Invalid goal format for type '.$goalType
                                     ]);
                                 }
@@ -337,6 +338,7 @@ class PerformanceController extends Controller
                                         'created_by'             => Auth::id(),
                                     ]);
                                 }
+                                $kpiCounter++; 
                             }
                         }
                     }
