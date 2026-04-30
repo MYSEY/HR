@@ -146,9 +146,6 @@
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
-                {{-- <a href="javascript:void(0);" class="btn btn-sm btn-secondary mb-3" id="btnApprovedAll" data-userid="{{Auth::user()->id}}">
-                    Approved
-                </a> --}}
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
@@ -156,12 +153,6 @@
                                 <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            {{-- <th>
-                                                <div class="custom-control custom-checkbox custom-control-inline big-checkbox">
-                                                    <input type="checkbox" class="custom-control-input checkAll" name="checkAll" id="checkAll" onClick="toggle(this)">
-                                                    <label class="custom-control-label" for="checkAll"></label>
-                                                </div>
-                                            </th> --}}
                                             <th class="text-nowrap sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.status')</th>
                                             <th class="sorting stuck-scroll-4">@lang('lang.employee_id')</th>
                                             <th class="sorting sorting_asc ">@lang('lang.employee_name')</th>
@@ -174,7 +165,6 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.total_weight')</th>
                                             <th>@lang('lang.approve_by')</th>
                                             <th>@lang('lang.approve') @lang('lang.date')</th>
-                                            {{-- <th>@lang('lang.asign_to')</th> --}}
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
@@ -259,9 +249,6 @@
                                     '<label class="container-checkbox">Review'+
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
                                     '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                    // '<label class="container-checkbox">Accepted'+
-                                    //     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
-                                    // '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
                                     '<label class="container-checkbox">Verify'+
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
                                     '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
@@ -528,9 +515,6 @@
                                 '<label class="container-checkbox">Review'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                // '<label class="container-checkbox">Accepted'+
-                                //     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
-                                // '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
                                 '<label class="container-checkbox">Verify'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
@@ -769,11 +753,6 @@
             }
         }
         function dataTables() {
-            // $('#loading-overlay').show();
-            // // Check if DataTable instance exists, then destroy it
-            // if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
-            //     $('#DataTables_Table_0').DataTable().clear().destroy();
-            // }
             $('#DataTables_Table_0').DataTable({
                 destroy: true,
                 pageLength: 10,
@@ -795,28 +774,11 @@
                     dataSrc: function (json) {
                         userPermission = json.permission || {}; // 👈 Save permission
                         userIdLog = json.userIdLog;
-                        // console.log("Permission Data:", json);
                         return json.data;
                     }
                 },
                 columns: [
-                    // {
-                    //     data: 'id',
-                    //     name: 'id',
-                    //     orderable: false,
-                    //     searchable: false,
-                    //     render: function(data, type, row) {
-                    //         let disabledAttr = "";
-                    //         if (row.status == "preparing") {
-                    //             disabledAttr = "disabled";
-                    //         }
-                    //         return `<div class="custom-control custom-checkbox custom-control-inline big-checkbox">
-                    //             <input type="checkbox" class="custom-control-input sub_chk" ${disabledAttr} name="checkbox" data-status="${row.status}" data-id="${data}" id="${data}" value="${data}">
-                    //             <label class="custom-control-label" for="${data}"></label>
-                    //         </div>`;
-                    //     }
-                    // },
-                     {
+                    {
                         data: 'status',
                         name: 'status',
                         orderable: false,
@@ -883,37 +845,6 @@
                         data: 'approved_date',
                         name: 'approved_date',
                     },
-                    // {
-                    //     data: null,
-                    //     name: 'asign_to',
-                    //     orderable: false,
-                    //     searchable: false,
-                    //     render: function (data, type, row) {
-                    //         let textBtn = "@lang('lang.asign_to')";
-                    //         if (row.status == 4) {
-                    //             textBtn = "@lang('lang.approved')";
-                    //         }
-                    //         if (userIdLog == data.review_employee_id || userPermission.is_access == 1 && (row.status !="preparing" && row.status != "approved")) {
-                    //             return `
-                    //                 <a class="btn btn-white btn-sm btn-rounded btn-asign"
-                    //                 data-id="${row.id}"
-                    //                 data-name="${row.review_employee_name_en}"
-                    //                 data-employeeid="${row.employee_id}"
-                    //                 data-status="${row.status}"
-                    //                 href="#" aria-expanded="false">
-                    //                     <i class="fa fa-dot-circle-o text-success"></i>
-                    //                     <span>${textBtn}</span>
-                    //                 </a>
-                    //             `;
-                    //         } else {
-                    //             return `
-                    //                     <a class="btn btn-white btn-sm btn-rounded" href="#">
-                    //                         <i class="fa fa-dot-circle-o text-danger"></i> <span>You can't asign</span>
-                    //                     </a>
-                    //             `;
-                    //         }
-                    //     }
-                    // },
                     {
                         data: null,
                         name: 'action',
@@ -931,6 +862,9 @@
                                         <a class="dropdown-item" href="{{url('performance-admin/kpi-export')}}/${row.id}">
                                             <i class="fa fa-arrow-circle-down"></i> Export
                                         </a>
+                                        <a class="dropdown-item" href="{{url('performance/duplicate')}}/${row.id}">
+                                            <i class="fa fa-solid-clone"></i> Duplicate 
+                                        </a>
                                     </div>
                                 </div>
                             `;
@@ -939,17 +873,9 @@
                 ],
                 order: [[0, 'desc']],
                 initComplete: function() {
-                    $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
+                    $('#loading-overlay').hide();
                 }
             });
-
-            // $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
-            //     if (processing) {
-            //         $('#loading-overlay').show();
-            //     } else {
-            //         $('#loading-overlay').hide();
-            //     }
-            // });
         }
     </script>
 @endsection

@@ -1108,4 +1108,158 @@ class PerformanceController extends Controller
 
         return response()->json(['status' => 200, 'message' => 'បញ្ចូលទិន្នន័យជោគជ័យ']);
     }
+
+    public function kpiDuplicate(Request $request){
+        $id = $request->id;
+        $data = Performance::with(['titles.purposes.performanceDetail.performanceGoals'])
+        ->leftJoin('users', 'performances.employee_id', '=', 'users.id')
+        ->select(
+            'performances.*',
+            'users.number_employee',
+            'users.employee_name_kh',
+            'users.employee_name_en',
+        )->where('performances.id',$id)->first();
+        $employee = User::where('emp_status','!=',null)->select('id','number_employee','employee_name_kh','employee_name_en')->get();
+        return view('performances.duplicate',compact('employee','data'));
+    }
+
+    public function kpiDuplicateCreate(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $totalWeight = 0;
+            $data = $request->all();
+            foreach ($request->data as $titleItem) {
+                foreach ($titleItem['dataPurpose'] as $purposeItem) {
+                    foreach ($purposeItem['dataKPi'] as $kpi) {
+                        $totalWeight += (int) $kpi['weight'];
+                    }
+                }
+            }
+            if ($totalWeight <= 100) {
+                $user = User::with("branch")->where('id', $request->employee_id)->select('id','department_id','branch_id','line_manager', 'number_employee', 'employee_name_kh', 'employee_name_en', 'emp_status')->first();
+                $type = $user->emp_status === 'Probation' ? 'KPI Probation ' . Carbon::parse($request->from_date)->format('Y') : 'KPI Form ' . Carbon::parse($request->from_date)->format('Y');
+                $data = $request->all();
+                $data['created_by'] = Auth::id();
+                $data['employee_id'] = $request->employee_id;
+                $data['total_weight'] = $totalWeight;
+                $data['status'] = 'preparing';
+                $data['type'] = $type;
+                $performance = Performance::create($data);
+                $kpiCounter = 0;
+                foreach ($request->data as $titleItem) {
+                    $title = Title::create([
+                        'performance_id' => $performance->id,
+                        'title'          => $titleItem['title'],
+                        'created_by'     => Auth::id(),
+                    ]);
+                    foreach ($titleItem['dataPurpose'] as $purposeItem) {
+                        $purpose = Purpose::create([
+                            'performance_id' => $performance->id,
+                            'title_id'       => $title->id,
+                            'name'           => $purposeItem['purpose'],
+                            'created_by'     => Auth::id(),
+                        ]);
+                        foreach ($purposeItem['dataKPi'] as $kpiIndex => $kpi) {
+                            $isValidGoal = true;
+                            $goalType    = $kpi['goal_type'];
+                            foreach ($kpi['goal'] as $g) {
+                                if (!isset($g['from'], $g['to'])) {
+                                    $isValidGoal = false;
+                                    break;
+                                }
+                                $min = $g['from'];
+                                $max = $g['to'];
+                                if (str_contains($goalType, 'number') ||
+                                    str_contains($goalType, 'percent') ||
+                                    str_contains($goalType, 'currency')) {
+                                    if (!is_numeric($min) || !is_numeric($max)) {
+                                        $isValidGoal = false;
+                                        break;
+                                    }
+                                    $min = (float)$min;
+                                    $max = (float)$max;
+                                    if (str_contains($goalType, 'percent') && ($min < 0 || $max > 100)) {
+                                        $isValidGoal = false;
+                                        break;
+                                    }
+                                } elseif (str_contains($goalType, 'date')) {
+                                    try {
+                                        $min = Carbon::parse($min);
+                                        $max = Carbon::parse($max);
+                                    } catch (\Exception $e) {
+                                        $isValidGoal = false;
+                                        break;
+                                    }
+                                } else {
+                                    $isValidGoal = false;
+                                    break;
+                                }
+                                if ($min < $max)       $current = 'inc';
+                                elseif ($min > $max)   $current = 'dec';
+                                else                   $current = 'equal';
+                                $expected = str_contains($goalType, 'increment') ? 'inc' : 'dec';
+                                if ($current !== 'equal' && $current !== $expected) {
+                                    $isValidGoal = false;
+                                    break;
+                                }
+                            }
+                            if (!$isValidGoal) {
+                                DB::rollBack();
+                                return response()->json([
+                                    'message'     => 'not_goal',
+                                    'goal_type'   => $goalType,
+                                    'kpi_index'   => $kpiCounter,
+                                    'error'       => 'Invalid goal format for type '.$goalType
+                                ]);
+                            }
+                            $performanceDetail = PerformanceDetail::create([
+                                'performance_id' => $performance->id,
+                                'title_id'       => $title->id,
+                                'purpose_id'     => $purpose->id,
+                                'key_kpi'        => $kpi['key_kpi'],
+                                'action_plan'    => $kpi['action_plan'],
+                                'weight'         => $kpi['weight'],
+                                'goal_type'      => $goalType,
+                                'is_lock'        => $kpi['is_lock'],
+                                'created_by'     => Auth::id(),
+                            ]);
+                            foreach ($kpi['goal'] as $g) {
+                                $from = $g['from'];
+                                $to   = $g['to'];
+                                PerformanceGoal::create([
+                                    'performance_id'         => $performance->id,
+                                    'title_id'               => $title->id,
+                                    'purpose_id'             => $purpose->id,
+                                    'performance_detail_id'  => $performanceDetail->id,
+                                    'from'                   => $from,
+                                    'to'                     => $to,
+                                    'user_id'                => Auth::id(),
+                                    'created_by'             => Auth::id(),
+                                ]);
+                            }
+                            $kpiCounter++; 
+                        }
+                    }
+                }
+                DB::commit();
+                return response()->json([
+                    'message' => 'successfully'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'The total weight of all KPIs must equal 100%.',
+                    'status' => 422
+                ]);
+            }
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Log::error('Performance creation failed: ' . $exp->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Performance created fail.'
+            ], 500);
+        }
+    }
 }

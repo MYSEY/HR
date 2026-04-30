@@ -724,10 +724,7 @@ class PerformanceAdminController extends Controller
         if (in_array(Auth::user()->RolePermission, ['Employee'])) {
             $query->where('performances.employee_id', Auth::user()->id);
         }
-        // ->groupBy('performances.employee_id')
-        // Fetch paginated data
         $data = $query->get();
-        // dd($data);
         return view('reports.kpi_report',compact('data'));
     }
     public function reportExport(Request $request)

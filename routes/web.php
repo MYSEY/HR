@@ -321,6 +321,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('performance/assign/all', [PerformanceController::class,'performanceAssignAll']);
     Route::post('performance/import', [PerformanceController::class,'performanceImport']);
     Route::post('performance/import/goal', [PerformanceController::class,'kpiImportGoal']);
+    Route::get('performance/duplicate/{id}', [PerformanceController::class,'kpiDuplicate']);
+    Route::post('performance/duplicate/create', [PerformanceController::class,'kpiDuplicateCreate']);
+
 
     //performance Appraisal
     Route::resource('performance-appraisal', PerformanceAppraisalController::class);

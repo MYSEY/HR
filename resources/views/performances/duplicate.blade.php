@@ -3,10 +3,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col">
-                <h3 class="page-title">@lang('lang.performance')</h3>
+                <h3 class="page-title">@lang('lang.duplicate')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.performance')</li>
+                    <li class="breadcrumb-item active">@lang('lang.duplicate')</li>
                 </ul>
             </div>
         </div>
@@ -17,7 +17,7 @@
                 <div class="col-md-4 hr-form-group-select2">
                     <div class="form-group">
                         <label>@lang('lang.employee')</label>
-                        <select class="form-control hr-select2-option" id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
+                        <select class="form-control hr-select2-option" id="employee_id" name="employee_id" value="{{ old('employee_id') }}" disabled>
                             <option selected value=""> -- @lang('lang.select')--</option>
                             @foreach ($employee as $item)
                                 <option value="{{ $item->id }}" {{$item->id == $data->employee_id ? 'selected' : ''}}>
@@ -55,6 +55,7 @@
                                     <th style="min-width: 350px;">គោលដៅ (Goal)</th>
                                     <th style="min-width: 150px;">ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
                                     <th style="min-width: 150px;">Is Lock</th>
+                                    <th style="min-width: 500px;">Comments</th>
                                     <th>@lang('lang.action')</th>
                                 </tr>
                             </thead>
@@ -64,14 +65,14 @@
                                 @endphp
                                 @foreach ($data->titles as $item)
                                     <tr class="title-group" style="background-color: #e5e1e1">
-                                        <td colspan="5" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <input type="text" class="form-control required" style="background: #efa781" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{ $item->title ?? '' }}">
                                         </td>
                                         <td colspan="1" class="text-center"></td>
                                     </tr>
                                     @foreach ($item->purposes as $purposeItem)
                                         <tr class='section-purpose purpose-group' style='text-align: center; background-color: #e5e1e1'>
-                                            <td colspan="5" class="text-center">
+                                            <td colspan="6" class="text-center">
                                                 <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{ $purposeItem->name ?? '' }}">
                                             </td>
                                             <td class="text-center">
@@ -119,7 +120,6 @@
                                                     <div class="goal-input-wrapper mt-1">
                                                         @php
                                                             $type = $Detailitem->goal_type;
-                                                            // $type = explode('_', $Detailitem->goal_type)[0] ?? 'number';
                                                             $symbol = $type == 'percent' ? '%' : ($type == 'currency' ? '$' : ($type == 'number' ? '#' : ''));
                                                         @endphp
                                                         @foreach ($Detailitem->performanceGoals as $item)
@@ -159,6 +159,11 @@
                                                     </select>
                                                 </td>
                                                 <td class="text-center">
+                                                    <textarea rows="6" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false"
+                                                        {{ $canEdit == 1 ? 'disabled' : '' }}>{{ $Detailitem->action_plan }}
+                                                    </textarea>
+                                                </td>
+                                                <td class="text-center">
                                                     @if ($Detailitem->is_lock == 1)
                                                         <button type="button" class="btn btn-secondary btn-sm" disabled><i class="fa fa-lock"></i></button>
                                                     @else
@@ -178,6 +183,7 @@
                                     <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center">
                                         <div class="add-more">
                                             <a class="add-repeatable-element-button addMore"><i class="fa fa-plus-circle"></i> Add More</a>
@@ -191,11 +197,10 @@
             </div>
 
             <div class="submit-section mb-2">
-                <input type="text" name="performance_id" id="performance_id" value="{{ $data->id }}" hidden>
                 <button type="submit" class="btn btn-primary" id="btnCreatePerformance">
                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
                         @lang('lang.loading') </span>
-                    <span class="btn-txt">@lang('lang.submit')</span>
+                    <span class="btn-txt">@lang('lang.save')</span>
                 </button>
                 <a href="{{ url('performance') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
             </div>
@@ -336,10 +341,10 @@
         });
         $(document).on('click', '#btnCreatePerformance', function(e) {
             e.preventDefault();
-            $(this).attr('disabled',true);
-            $('.btn-cancel').addClass('disabled');
-            $(".loading-icon").css("display", "block");
-            $(".btn-txt").css("display", "none");
+            // $(this).attr('disabled',true);
+            // $('.btn-cancel').addClass('disabled');
+            // $(".loading-icon").css("display", "block");
+            // $(".btn-txt").css("display", "none");
             let numRequired = 0;
             $(".required").each(function(e){
                 if($(this).val()==""){ numRequired++;}
@@ -382,7 +387,6 @@
                 }
                 dataKeyKpi.push({ title, dataPurpose });
             }
-            var performance_id = $("#performance_id").val();
             if (numRequired>0) {
                 toastr.error("@lang('lang.input_required')", "@lang('lang.message_title')");
                 $(".required").each(function(){
@@ -390,16 +394,15 @@
                         $(this).css("border-color","red");
                     }
                 });
-                $("#btnCreatePerformance").attr('disabled',false);
-                $('.btn-cancel').removeClass('disabled');;
-                $(".loading-icon").css("display", "none");
-                $(".btn-txt").css("display", "block");
+                // $("#btnCreatePerformance").attr('disabled',false);
+                // $('.btn-cancel').removeClass('disabled');;
+                // $(".loading-icon").css("display", "none");
+                // $(".btn-txt").css("display", "block");
             }else{
                 $.ajax({
                     type: "POST",
-                    url: "{{ url('performance/update') }}",
+                    url: "{{ url('performance/duplicate/create') }}",
                     data: {
-                        performance_id : performance_id,
                         employee_id : $("#employee_id").val(),
                         from_date : $("#from_date").val(),
                         to_date : $("#to_date").val(),
@@ -407,10 +410,10 @@
                     },
                     dataType: "JSON",
                     success: function (response) {
-                        $("#btnCreatePerformance").attr('disabled',false);
-                        $('.btn-cancel').removeClass('disabled');;
-                        $(".loading-icon").css("display", "none");
-                        $(".btn-txt").css("display", "block");
+                        // $("#btnCreatePerformance").attr('disabled',false);
+                        // $('.btn-cancel').removeClass('disabled');;
+                        // $(".loading-icon").css("display", "none");
+                        // $(".btn-txt").css("display", "block");
                         if (response.message == 'successfully') {
                             toastr.success(response.message, 'Success');
                             setTimeout(function() {
@@ -446,7 +449,7 @@
     });
     function addPurposeRow() {
         return `<tr class='section-purpose purpose-group' style='text-align: center; background-color: #e5e1e1'>
-            <td colspan="5" class="text-center">
+            <td colspan="6" class="text-center">
                 <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
             <td colspan="1" class="text-center">
@@ -570,6 +573,9 @@
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>
+            </td>
+            <td class="text-center">
+                <textarea rows="6" class="form-control required" name="comment[]" placeholder="Enter text comment here" spellcheck="false"></textarea>
             </td>
             <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
@@ -703,7 +709,7 @@
     }
     function addMoreRow() {
         return `<tr class='title-group' style='background-color: #e5e1e1'>
-            <td colspan="5" class="text-center">
+            <td colspan="6" class="text-center">
                 <input type="text" class="form-control required" style="background: #efa781" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}">
             </td>
             <td colspan="1" class="text-center">
@@ -711,7 +717,7 @@
             </td>
         </tr>
         <tr class='purpose-group' style='text-align: center; background-color: #e5e1e1'>
-            <td colspan="5" class="text-center">
+            <td colspan="6" class="text-center">
                 <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
             <td colspan="1" class="text-center">
@@ -835,6 +841,9 @@
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>
+            </td>
+            <td class="text-center">
+                <textarea rows="6" class="form-control required" name="comment[]" placeholder="Enter text comment here" spellcheck="false"></textarea>
             </td>
             <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
