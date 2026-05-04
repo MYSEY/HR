@@ -55,6 +55,7 @@
                                     <th style="min-width: 350px;">គោលដៅ (Goal)</th>
                                     <th style="min-width: 150px;">ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
                                     <th style="min-width: 150px;">Is Lock</th>
+                                    <th style="min-width: 500px;">Comments</th>
                                     <th>@lang('lang.action')</th>
                                 </tr>
                             </thead>
@@ -64,14 +65,14 @@
                                 @endphp
                                 @foreach ($data->titles as $item)
                                     <tr class="title-group" style="background-color: #e5e1e1">
-                                        <td colspan="5" class="text-center">
+                                        <td colspan="6" class="text-center">
                                             <input type="text" class="form-control required" style="background: #efa781" id="title" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{ $item->title ?? '' }}">
                                         </td>
                                         <td colspan="1" class="text-center"></td>
                                     </tr>
                                     @foreach ($item->purposes as $purposeItem)
                                         <tr class='section-purpose purpose-group' style='text-align: center; background-color: #e5e1e1'>
-                                            <td colspan="5" class="text-center">
+                                            <td colspan="6" class="text-center">
                                                 <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{ $purposeItem->name ?? '' }}">
                                             </td>
                                             <td class="text-center">
@@ -159,6 +160,11 @@
                                                     </select>
                                                 </td>
                                                 <td class="text-center">
+                                                    <textarea rows="6" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false"
+                                                        {{ $canEdit == 1 ? 'disabled' : '' }}>{{ $Detailitem->comment }}
+                                                    </textarea>
+                                                </td>
+                                                <td class="text-center">
                                                     @if ($Detailitem->is_lock == 1)
                                                         <button type="button" class="btn btn-secondary btn-sm" disabled><i class="fa fa-lock"></i></button>
                                                     @else
@@ -174,7 +180,20 @@
                             </tbody>
                             <tbody>
                                 <tr>
+                                    <td colspan="2" class="text-center">
+                                        <textarea rows="6" class="form-control" name="main_comment" id="main_comment" placeholder="Enter text comment here" spellcheck="false">{{$data->main_comment}}</textarea>
+                                    </td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
                                     <td colspan="2" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
@@ -364,6 +383,7 @@
                             let weight = $kpiRow.find('input[name="weight[]"]').val();
                             let goal_type = $kpiRow.find('select[name="goal_type[]"]').val();
                             let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
+                            let comment = $kpiRow.find('textarea[name="comment[]"]').val();
                             let goal = [];
                             $kpiRow.find('.goal-from').each(function(index) {
                                 let fromVal = $(this).val();
@@ -372,7 +392,7 @@
                                     goal.push({ from: fromVal, to: toVal });
                                 }
                             });
-                            dataKPi.push({ key_kpi, action_plan, goal, weight,goal_type,is_lock });
+                            dataKPi.push({ key_kpi, action_plan, goal, weight,goal_type,is_lock,comment });
                             i++;
                         }
                         dataPurpose.push({ purpose, dataKPi });
@@ -403,6 +423,7 @@
                         employee_id : $("#employee_id").val(),
                         from_date : $("#from_date").val(),
                         to_date : $("#to_date").val(),
+                        main_comment : $("#main_comment").val(),
                         data: dataKeyKpi,
                     },
                     dataType: "JSON",
@@ -446,7 +467,7 @@
     });
     function addPurposeRow() {
         return `<tr class='section-purpose purpose-group' style='text-align: center; background-color: #e5e1e1'>
-            <td colspan="5" class="text-center">
+            <td colspan="6" class="text-center">
                 <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
             <td colspan="1" class="text-center">
@@ -570,6 +591,9 @@
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>
+            </td>
+            <td class="text-center">
+                <textarea rows="6" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false">{{ old('comment') }}</textarea>
             </td>
             <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
@@ -696,6 +720,9 @@
                 </select>
             </td>
             <td class="text-center">
+                <textarea rows="6" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false">{{ old('comment') }}</textarea>
+            </td>
+            <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
@@ -703,7 +730,7 @@
     }
     function addMoreRow() {
         return `<tr class='title-group' style='background-color: #e5e1e1'>
-            <td colspan="5" class="text-center">
+            <td colspan="6" class="text-center">
                 <input type="text" class="form-control required" style="background: #efa781" name="title[]" placeholder="កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}">
             </td>
             <td colspan="1" class="text-center">
@@ -711,7 +738,7 @@
             </td>
         </tr>
         <tr class='purpose-group' style='text-align: center; background-color: #e5e1e1'>
-            <td colspan="5" class="text-center">
+            <td colspan="6" class="text-center">
                 <input type="text" class="form-control required" style="background: #f0cc9b" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}">
             </td>
             <td colspan="1" class="text-center">
@@ -835,6 +862,9 @@
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>
+            </td>
+            <td class="text-center">
+                <textarea rows="6" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false">{{ old('comment') }}</textarea>
             </td>
             <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>

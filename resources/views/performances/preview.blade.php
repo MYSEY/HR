@@ -150,6 +150,7 @@
                                         <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 250px;">គោលដៅ (Goal)</th>
                                         <th>ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
+                                        <th style="min-width: 500px;">Comments</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbl_performance">
@@ -161,7 +162,7 @@
                                             <td colspan="3" class="text-center">
                                                 <input type="text" style="background: #efa781" class="form-control" value="{{ $item->title ?? '' }}" required>
                                             </td>
-                                            {{-- <td colspan="1" class="text-center"></td> --}}
+                                            <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
                                         
@@ -170,7 +171,7 @@
                                                 <td colspan="3" class="text-center">
                                                     <input type="text" class="form-control" style="background: #f0cc9b" value="{{ $purposeItem->name ?? '' }}" required>
                                                 </td>
-                                                {{-- <td colspan="1" class="text-center"></td> --}}
+                                                <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
                                             </tr>
                                             
@@ -185,21 +186,6 @@
                                                     <td class="text-center">
                                                         <textarea rows="9" class="form-control" placeholder="Enter text here" required>{{$Detailitem->action_plan}}</textarea>
                                                     </td>
-                                                    {{-- <td class="text-center">
-                                                        <select class="form-control goal-type-selec goal_type" name="goal_type" disabled>
-                                                            <option value="number_increment"  @selected($Detailitem->goal_type == 'number_increment')>Number Increment</option>
-                                                            <option value="number_decrement"  @selected($Detailitem->goal_type == 'number_decrement')>Number Decrement</option>
-                                                            <option value="date_increment"    @selected($Detailitem->goal_type == 'date_increment')>Date Increment</option>
-                                                            <option value="date_decrement"    @selected($Detailitem->goal_type == 'date_decrement')>Date Decrement</option>
-                                                            <option value="currency_increment" @selected($Detailitem->goal_type == 'currency_increment')>Currency Increment</option>
-                                                            <option value="currency_decrement" @selected($Detailitem->goal_type == 'currency_decrement')>Currency Decrement</option>
-                                                            <option value="percent_increment"  @selected($Detailitem->goal_type == 'percent_increment')>Percent Increment</option>
-                                                            <option value="percent_decrement"  @selected($Detailitem->goal_type == 'percent_decrement')>Percent Decrement</option>
-                                                        </select>
-                                                        <div class="goal-input-wrapper mt-1">
-                                                            <textarea rows="5" class="form-control goal" placeholder="Enter text here" id="goal">{{ $Detailitem->goal }}</textarea>
-                                                        </div>
-                                                    </td> --}}
                                                     <td class="text-center">
                                                         <select class="form-control goal-type-select mt-1" name="goal_type[]" {{ $Detailitem->is_lock == 1 ? 'disabled' : '' }}>
                                                             <option value="number_increment" {{ $Detailitem->goal_type == 'number_increment' ? 'selected' : '' }}>Number Increment</option>
@@ -234,11 +220,24 @@
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
                                                     </td>
+                                                    <td class="text-center">
+                                                        <textarea rows="6" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false">{{ $Detailitem->comment }}</textarea>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         @endforeach
                                     @endforeach
                                     <input type="number" class="preview_total_weight" hidden value="{{$total_weight}}">
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <textarea rows="6" class="form-control" name="main_comment" id="main_comment" placeholder="Enter text comment here" spellcheck="false">{{$data->main_comment}}</textarea>
+                                        </td>
+                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

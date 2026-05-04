@@ -24,6 +24,7 @@ return new class extends Migration
             $table->decimal('total_score_live_staff')->default(0);
             $table->decimal('total_score_direct_chairman')->default(0);
             $table->string('type')->nullable();
+            $table->string('main_comment')->nullable();
             $table->string('remark')->nullable();
             $table->string('status')->nullable();
             $table->integer('approved_by')->nullable();

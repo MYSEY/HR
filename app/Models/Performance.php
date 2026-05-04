@@ -27,6 +27,7 @@ class Performance extends Model
         'type',
         'approved_by',
         'approved_date',
+        'main_comment',
         'remark',
         'noted',
         'review_employee_id',

@@ -322,6 +322,7 @@ class PerformanceController extends Controller
                                     'weight'         => $kpi['weight'],
                                     'goal_type'      => $goalType,
                                     'is_lock'        => $kpi['is_lock'],
+                                    'comment'        => $kpi['comment'],
                                     'created_by'     => Auth::id(),
                                 ]);
                                 foreach ($kpi['goal'] as $g) {
@@ -524,6 +525,7 @@ class PerformanceController extends Controller
                     'from_date'    => $request->from_date,
                     'to_date'      => $request->to_date,
                     'type'         => $type,
+                    'main_comment'  => $request->main_comment,
                     'total_weight' => $totalWeight,
                     'updated_by'   => Auth::id(),
                 ]);
@@ -609,6 +611,7 @@ class PerformanceController extends Controller
                                         'weight'         => $kpi['weight'],
                                         'goal_type'      => $goalType,
                                         'is_lock'        => $kpi['is_lock'],
+                                        'comment'        => $kpi['comment'],
                                         'updated_by'     => Auth::id(),
                                     ]);
 
