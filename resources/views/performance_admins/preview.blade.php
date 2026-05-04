@@ -143,6 +143,7 @@
                                         <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
                                         <th style="min-width: 250px;">គោលដៅ (Goal)</th>
                                         <th>ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
+                                        <th style="min-width: 500px;">Comments</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbl_performance">
@@ -151,20 +152,16 @@
                                     @endphp
                                     @foreach ($data->titles as $item)
                                         <tr>
-                                            <td colspan="4" class="text-center">
+                                            <td colspan="5" class="text-center">
                                                 <input type="text" style="background: #efa781" class="form-control" value="{{ $item->title ?? '' }}" required>
                                             </td>
-                                            {{-- <td colspan="1" class="text-center"></td> --}}
-                                            {{-- <td colspan="1" class="text-center"></td> --}}
                                         </tr>
 
                                         @foreach ($item->purposes as $purposeItem)
                                             <tr>
-                                                <td colspan="4" class="text-center">
+                                                <td colspan="5" class="text-center">
                                                     <input type="text" style="background: #f0cc9b" class="form-control" value="{{ $purposeItem->name ?? '' }}" required>
                                                 </td>
-                                                {{-- <td colspan="1" class="text-center"></td> --}}
-                                                {{-- <td colspan="1" class="text-center"></td> --}}
                                             </tr>
 
                                             @foreach ($purposeItem->performanceDetail as $Detailitem)
@@ -212,11 +209,26 @@
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
                                                     </td>
+                                                    <td class="text-center">
+                                                        <textarea rows="6" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false"
+                                                            >{{ $Detailitem->comment }}
+                                                        </textarea>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         @endforeach
                                     @endforeach
                                     <input type="number" class="preview_total_weight" hidden value="{{$total_weight}}">
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <textarea rows="6" class="form-control" name="main_comment" id="main_comment" placeholder="Enter text comment here" spellcheck="false">{{$data->main_comment}}</textarea>
+                                        </td>
+                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

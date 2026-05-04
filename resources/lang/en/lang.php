@@ -222,6 +222,7 @@ return[
     "carried_forward_leave"=>"Carried Forward Leave",
     "current_salary"=>"Current Salary",
     "commune"=>"Commune",
+    "comment"=>"Comment",
     "dashboard"=>"Dashboard",
     "dashboards"=>"Dashboards",
     "data_approved"=>"Data Approved",

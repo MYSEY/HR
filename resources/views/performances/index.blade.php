@@ -202,6 +202,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.total_weight')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" >@lang('lang.incharge_by')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.reason')</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.comment')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
@@ -787,6 +788,7 @@
                             `;
                         }
                     },
+                    { data: 'main_comment', name: 'main_comment' },
                     {
                         data: null,
                         name: 'action',

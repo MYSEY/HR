@@ -190,7 +190,7 @@ class PerformanceController extends Controller
         $employee= DB::table('users')
         ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
         ->select( 'users.*', 'roles.role_type',)
-        ->whereIn('users.emp_status', ['Probation','1','2','10',])
+        ->whereIn('users.emp_status', ['1','2','10'])
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if($RolePermission == 'Employee'){
                 $query->where("users.department_id", Auth::user()->department_id);
@@ -1225,6 +1225,7 @@ class PerformanceController extends Controller
                                 'weight'         => $kpi['weight'],
                                 'goal_type'      => $goalType,
                                 'is_lock'        => $kpi['is_lock'],
+                                'comment'        => $kpi['comment'],
                                 'created_by'     => Auth::id(),
                             ]);
                             foreach ($kpi['goal'] as $g) {

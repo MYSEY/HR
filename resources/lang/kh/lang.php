@@ -216,6 +216,7 @@ return[
 	"carried_forward_leave"=>"ការឈប់សម្រាកបន្តបន្ទាប់",
 	"current_salary"=>"Current Salary",
     "commune"=>"ឃុំ",
+	"comment"=>"មតិយោបល់",
 	"dashboard"=>"ផ្ទាំងកម្មវិធីដំបូង",
 	"dashboards"=>"ផ្ទាំងកម្មវិធីដំបូង",
 	"data_approved"=>"ទិន្នន័យត្រូវបានអនុម័ត",

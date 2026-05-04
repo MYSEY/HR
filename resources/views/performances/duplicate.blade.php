@@ -179,6 +179,18 @@
                             </tbody>
                             <tbody>
                                 <tr>
+                                    <td colspan="2" class="text-center">
+                                        <textarea rows="6" class="form-control" name="main_comment" id="main_comment" placeholder="Enter text comment here" spellcheck="false">{{ old('main_comment') }}</textarea>
+                                    </td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                    <td colspan="1" class="text-center"></td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
                                     <td colspan="2" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
                                     <td colspan="1" class="text-center"></td>
@@ -341,10 +353,10 @@
         });
         $(document).on('click', '#btnCreatePerformance', function(e) {
             e.preventDefault();
-            // $(this).attr('disabled',true);
-            // $('.btn-cancel').addClass('disabled');
-            // $(".loading-icon").css("display", "block");
-            // $(".btn-txt").css("display", "none");
+            $(this).attr('disabled',true);
+            $('.btn-cancel').addClass('disabled');
+            $(".loading-icon").css("display", "block");
+            $(".btn-txt").css("display", "none");
             let numRequired = 0;
             $(".required").each(function(e){
                 if($(this).val()==""){ numRequired++;}
@@ -369,6 +381,7 @@
                             let weight = $kpiRow.find('input[name="weight[]"]').val();
                             let goal_type = $kpiRow.find('select[name="goal_type[]"]').val();
                             let is_lock = $kpiRow.find('select[name="is_lock[]"]').val();
+                            let comment = $kpiRow.find('textarea[name="comment[]"]').val();
                             let goal = [];
                             $kpiRow.find('.goal-from').each(function(index) {
                                 let fromVal = $(this).val();
@@ -377,7 +390,7 @@
                                     goal.push({ from: fromVal, to: toVal });
                                 }
                             });
-                            dataKPi.push({ key_kpi, action_plan, goal, weight,goal_type,is_lock });
+                            dataKPi.push({ key_kpi, action_plan, goal, weight,goal_type,is_lock,comment });
                             i++;
                         }
                         dataPurpose.push({ purpose, dataKPi });
@@ -394,10 +407,10 @@
                         $(this).css("border-color","red");
                     }
                 });
-                // $("#btnCreatePerformance").attr('disabled',false);
-                // $('.btn-cancel').removeClass('disabled');;
-                // $(".loading-icon").css("display", "none");
-                // $(".btn-txt").css("display", "block");
+                $("#btnCreatePerformance").attr('disabled',false);
+                $('.btn-cancel').removeClass('disabled');;
+                $(".loading-icon").css("display", "none");
+                $(".btn-txt").css("display", "block");
             }else{
                 $.ajax({
                     type: "POST",
@@ -406,14 +419,15 @@
                         employee_id : $("#employee_id").val(),
                         from_date : $("#from_date").val(),
                         to_date : $("#to_date").val(),
+                        main_comment : $("#main_comment").val(),
                         data: dataKeyKpi,
                     },
                     dataType: "JSON",
                     success: function (response) {
-                        // $("#btnCreatePerformance").attr('disabled',false);
-                        // $('.btn-cancel').removeClass('disabled');;
-                        // $(".loading-icon").css("display", "none");
-                        // $(".btn-txt").css("display", "block");
+                        $("#btnCreatePerformance").attr('disabled',false);
+                        $('.btn-cancel').removeClass('disabled');;
+                        $(".loading-icon").css("display", "none");
+                        $(".btn-txt").css("display", "block");
                         if (response.message == 'successfully') {
                             toastr.success(response.message, 'Success');
                             setTimeout(function() {
