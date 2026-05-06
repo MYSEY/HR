@@ -3,10 +3,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col">
-                <h3 class="page-title">@lang('lang.duplicate')</h3>
+                <h3 class="page-title">@lang('lang.duplicate_kip')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.duplicate')</li>
+                    <li class="breadcrumb-item active">@lang('lang.duplicate_kip')</li>
                 </ul>
             </div>
         </div>
@@ -450,7 +450,9 @@
                                 response.error || 'Invalid goal format for type ' + response.goal_type,
                                 'Error'
                             );
-                        }else {
+                        }else if(response.message == 'duplicate_performance')
+                            toastr.error('Performance already exists for this employee and date range.', 'Error');
+                        else {
                             toastr.error(response.message || 'សរុបទម្ងន់ត្រូវតែស្មើនឹង 100%', 'Error');
                         }
                     },

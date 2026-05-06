@@ -257,6 +257,7 @@ return[
 	"disabled"=>"បានបិទ",
 	"discription"=>"ពិពណ៌នា",
 	"duplicate_data"=>"ទិន្នន័យស្ទួន",
+    "duplicate_kip"=>"Duplicate KPI",
 	"date_of_birth"=>"ថ្ងៃខែ​ឆ្នាំ​កំណើត",
 	"date_of_employment"=>"កាលបរិច្ឆេទនៃការងារ",
 	"date_of_commencement"=>"កាលបរិច្ឆេទនៃការចាប់ផ្តើម",

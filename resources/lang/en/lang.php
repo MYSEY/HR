@@ -264,6 +264,7 @@ return[
     "disabled"=>"Disabled",
     "discription"=>"Discription",
     "duplicate_data"=>"Duplicate Data",
+    "duplicate_kip"=>"Duplicate KPI",
     "date_of_birth"=>"Date of Birth",
     "date_of_employment"=>"Joined Date",
     "date_of_commencement"=>"Date of Commencement",

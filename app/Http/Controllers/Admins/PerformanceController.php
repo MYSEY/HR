@@ -1130,6 +1130,18 @@ class PerformanceController extends Controller
     {
         try {
             DB::beginTransaction();
+            $existsPerformance = Performance::where('employee_id', $request->employee_id)
+                ->whereDate('from_date', $request->from_date)
+                ->whereDate('to_date', $request->to_date)
+                ->whereNull('deleted_at')
+                ->exists();
+            if ($existsPerformance) {
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'duplicate_performance'
+                ]);
+            }
+
             $totalWeight = 0;
             $data = $request->all();
             foreach ($request->data as $titleItem) {
