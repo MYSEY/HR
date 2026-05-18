@@ -28,10 +28,10 @@ return new class extends Migration
             $table->decimal('total_annaul_bounus',50,2)->default(0);
             $table->string('status')->nullable();
             $table->string('increasement_of_year');
-            $table->bigInteger('approved_by')->unsigned()->nullable();
-            $table->dateTime('approved_at')->unsigned()->nullable();
-            $table->bigInteger('created_by')->unsigned()->nullable();
-            $table->bigInteger('updated_by')->unsigned()->nullable();
+            $table->bigInteger('approved_by')->nullable();
+            $table->dateTime('approved_at')->nullable();
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });

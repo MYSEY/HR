@@ -36,7 +36,8 @@ class GenerateAnnualSalaryIncreasementController extends Controller
     {
         if ($request->ajax()) {
             // Base query with joins
-            $query = GenerateAnnualSalaryIncreasement::where("generate_annual_salary_increasements.status", "!=", "approved")->leftJoin('users', 'generate_annual_salary_increasements.employee_id', '=', 'users.id')
+            $query = GenerateAnnualSalaryIncreasement::where("generate_annual_salary_increasements.status", "pending")
+                ->leftJoin('users', 'generate_annual_salary_increasements.employee_id', '=', 'users.id')
                 ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
                 ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
                 ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
@@ -68,7 +69,7 @@ class GenerateAnnualSalaryIncreasementController extends Controller
             }
         
             // Pagination
-            $recordsTotal = GenerateAnnualSalaryIncreasement::count();
+            $recordsTotal = GenerateAnnualSalaryIncreasement::where('status','pending')->count();
             $recordsFiltered = $query->count();
             $start = intval(request()->input('start', 0));
             $limit = intval(request()->input('length', 10));
@@ -185,7 +186,7 @@ class GenerateAnnualSalaryIncreasementController extends Controller
                     //     'created_by' => Auth::id(),
                     // ]);
                     // Remove old record if exists for this employee/year
-                    GenerateAnnualSalaryIncreasement::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->delete();
+                    GenerateAnnualSalaryIncreasement::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->where('status','pending')->delete();
                     // Insert new record
                     GenerateAnnualSalaryIncreasement::create([
                         'employee_id' => $employeeId,

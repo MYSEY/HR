@@ -44,17 +44,20 @@ class ConfigeAnnualBonuByBranchCongroller extends Controller
     public function store(Request $request)
     {
         try {
-            $branch  = $request->input('branch_id', []);
-            $percentages     = $request->input('percentage', []);
-            $increasementYears = $request->input('year', []);
+            $branches = $request->input('branch_id', []);
+            $percentages = $request->input('percentage', []);
+            $number_of_months = $request->input('number_of_months_bereceived', []);
+            $years = $request->input('year', []);
+
             $createdBy = Auth::id();
 
-            foreach ($branch as $key => $ranking) {
+            foreach ($branches as $key => $branchId) {
                 AnnualBonuBranch::create([
-                    'branch_id' => $ranking,
-                    'percentage'    => $percentages[$key] ?? null,
-                    'year'  => $increasementYears[$key] ?? null,
-                    'created_by'    => $createdBy,
+                    'branch_id' => $branchId,
+                    'percentage' => $percentages[$key] ?? 0,
+                    'number_of_months_bereceived' => $number_of_months[$key] ?? 0,
+                    'year' => $years[$key] ?? null,
+                    'created_by' => $createdBy,
                 ]);
             }
 

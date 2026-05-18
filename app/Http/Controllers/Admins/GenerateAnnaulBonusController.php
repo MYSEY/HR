@@ -128,19 +128,20 @@ class GenerateAnnaulBonusController extends Controller
                         break;
                     }
                 }
-
                 // Working days adjustment
                 $employee = User::find($employeeId);
-                $dataBonuByBranch = AnnualBonuBranch::where('branch_id', $employee->branch_id)->where('year', $request->increasement_year)->first();      // use first() instead of get()
+                $dataBonuByBranch = AnnualBonuBranch::where('branch_id', $employee->branch_id)->where('year', $request->increasement_year)->first();
                 $percentageByBranch = $dataBonuByBranch ? $dataBonuByBranch->percentage : 0;
-
+                if (!$dataBonuByBranch) {
+                    Toastr::error('Not yet config annual bonus By branch this year.', 'Error');
+                    return back();
+                }
                 // Find related payroll for employee in same year/month
                 $payroll = Payroll::where('employee_id', $employeeId)->whereYear('payment_date', $year)->whereMonth('payment_date', $month)->first();        
                 if (!$payroll) {
                     Toastr::error('Not salary record found for this employee in the selected month and year.', 'Error');
                     return back();
                 }
-
                 $start = Carbon::parse($kpiPerform->from_date);
                 $end   = Carbon::parse($kpiPerform->to_date);
                 // swap if reversed
@@ -159,10 +160,10 @@ class GenerateAnnaulBonusController extends Controller
                 $kpiMonths = $start->diffInMonths($end) + 1;
                 if ($kpiMonths >= 2) {
                     // Final result
-                    $totalPercentage = ($ofIncentivebyPA * $percentageByBranch) / 100;
+                    $totalPercentage = ($percentageByBranch * $ofIncentivebyPA) / 100;
                     $NumberofMonthsReceived = $dataBonuByBranch ? $dataBonuByBranch->number_of_months_bereceived : 0;
                     // Incentive allowance for full year
-                    $annualIncentiveAllowance = ($payroll->basic_salary * $totalPercentage / 100) * $NumberofMonthsReceived;
+                    $totalAnnaulBounus = ($payroll->basic_salary * $totalPercentage / 100) * $NumberofMonthsReceived;
                     $dateOfCommencement = $employee && $employee->date_of_commencement ? Carbon::parse($employee->date_of_commencement) : Carbon::create($year, 1, 1);
                     $endOfYear = Carbon::create($year, 12, 31);
                     // Count working days inside the selected year
@@ -175,21 +176,20 @@ class GenerateAnnaulBonusController extends Controller
                         $totalWorkingDays = $workingDays;
                     }
                     // Prorate bonus by number of days worked
-                    $totalAnnaulBounus = (round($annualIncentiveAllowance,2) / $daysInYear) * $totalWorkingDays;
-                    $workingDaysperYear = $dateOfCommencement->diffInDays($endOfYear) + 1;
+                    // $totalAnnaulBounus = (round($annualIncentiveAllowance,2) / $daysInYear) * $totalWorkingDays;
 
                     // Save report info (debug)
                     // dd([
                     //     'employee_id' => $employeeId,
                     //     'performance_id' => $kpiPerform->id,
                     //     'basic_salary' => $payroll->basic_salary,
-                    //     'working_days_per_year' => $workingDaysperYear,
+                    //     'working_days_per_year' => $workingDays,
                     //     '% Incentive' => $percentageByBranch,
                     //     'PA Score' => $kpiScores,
                     //     '% of Incentive by PA' => $ofIncentivebyPA,
                     //     '% Achieved vs. %PA' => $totalPercentage,
                     //     'Number of months to be received' => $NumberofMonthsReceived,
-                    //     'total_bounus' => $totalAnnaulBounus,
+                    //     'total_bounus' => round($totalAnnaulBounus,4),
                     //     'created_by' => Auth::id(),
                     // ]);
 
@@ -200,7 +200,7 @@ class GenerateAnnaulBonusController extends Controller
                         "employee_id" => $employeeId,
                         "performance_id" => $kpiPerform->id,
                         "basice_salary" => $payroll->basic_salary,
-                        "working_days_per_year" => $workingDaysperYear,
+                        "working_days_per_year" => $workingDays,
                         "incentive" => $percentageByBranch,
                         "pa_score" => $kpiScores,
                         "of_incentive_by_pa" => $ofIncentivebyPA,
@@ -208,7 +208,7 @@ class GenerateAnnaulBonusController extends Controller
                         "number_months_received" => $NumberofMonthsReceived,
                         "increasement_of_year" => $request->increasement_year,
                         "total_annaul_bounus" => $totalAnnaulBounus,
-                        "status" => 'pendding',
+                        "status" => 'pending',
                         "created_by" => Auth::id(),
                     ]);
                 }

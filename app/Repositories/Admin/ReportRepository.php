@@ -290,7 +290,7 @@ class ReportRepository extends BaseRepository
             ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
             ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
             ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
-            ->leftJoin('performances', 'generate_annual_salary_increasements.performance_id', '=', 'performances.id')
+            ->leftJoin('performance_appraisals', 'generate_annual_salary_increasements.performance_id', '=', 'performance_appraisals.id')
             ->leftJoin('users as users_approve', 'generate_annual_salary_increasements.approved_by', '=', 'users_approve.id')
             ->select(
                 'generate_annual_salary_increasements.*',
@@ -304,9 +304,9 @@ class ReportRepository extends BaseRepository
                 'positions.name_khmer as positions_name_kh',
                 'branchs.branch_name_kh',
                 'branchs.branch_name_en',
-                'performances.total_score',
-                'performances.total_score_live_staff',
-                'performances.total_score_direct_chairman',
+                'performance_appraisals.total_score',
+                'performance_appraisals.total_score_live_staff',
+                'performance_appraisals.total_score_direct_chairman',
                 'users_approve.employee_name_kh as approve_employee_name_kh',
                 'users_approve.employee_name_en as approve_employee_name_en',
             )
