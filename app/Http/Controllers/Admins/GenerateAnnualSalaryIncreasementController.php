@@ -111,7 +111,7 @@ class GenerateAnnualSalaryIncreasementController extends Controller
             // Get increasement settings for this year
             $data = AnnualSalaryIncreasement::where('increasement_year', $year)->orderBy('id')->get();
             if ($data->isEmpty()) {
-                Toastr::error('Not annual salary increasement found for the selected year.', 'Error');
+                Toastr::error('Not Config annual salary increasement for this year.', 'Error');
                 return redirect()->back();
             }
             // Get all approved performance records for that year/month

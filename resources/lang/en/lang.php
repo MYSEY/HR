@@ -116,6 +116,7 @@ return[
 	"adjustment_include_taxe"=>"Adjustment (Include Tax)",
 	"adjustment_excluded_tax"=>"Adjustment (Exclued Tax)",
 	"adjustment"=>"Adjustment",
+	"config_annual_salary_increasement"=>"Config Annual Salary Increasement",
 	"annual_salary_increasement"=>"Annual Salary Increasement",
 	"annual_salary_increasement_report"=>"Annual Salary Increasement Report",
 	"asign_to_employee"=>"Asign To Employee",

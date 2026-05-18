@@ -52,14 +52,6 @@
            "App\\": "app/"
         }
     },
-    "autoload": {
-        "psr-4": {
-            "App\\": "app/"
-        },
-        "files": [
-            "app/Helpers/RolePermission.php"
-        ]
-    },
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

@@ -320,7 +320,6 @@ class EmployeePayrollController extends Controller
     public function store(Request $request)
     {
         try{
-            //function import annual_bonus
             $dadaArrayAnnualBonus = [];
             if (file_exists($request->annual_bonus)) {
                 $file_annual_bonus = $request->annual_bonus;
@@ -342,8 +341,6 @@ class EmployeePayrollController extends Controller
                     }
                 }
             }
-
-            //function import other benefit
             $dadaArrayOtherBenefit = [];
             if (file_exists($request->other_benefits)) {
                 $file_other_benefits = $request->other_benefits;
@@ -364,8 +361,7 @@ class EmployeePayrollController extends Controller
                     }
                 }
             }
-        
-            // function import incentive
+    
             $dadaArrayIncentive = [];
             if (file_exists($request->file_incentive)) {
                 $fileIincentive = $request->file_incentive;
@@ -384,7 +380,6 @@ class EmployeePayrollController extends Controller
                     }
                 }
             }
-            // function import Loan
             $dadaArrayLoan = [];
             if (file_exists($request->file_loan)) {
                 $fileLoan = $request->file_loan;
@@ -403,8 +398,6 @@ class EmployeePayrollController extends Controller
                     }
                 }
             }
-
-            //function upload staff book amount
             $dadaArrayStaffBook = [];
             if (file_exists($request->staff_book)) {
                 $file_staff_book = $request->staff_book;
@@ -426,7 +419,6 @@ class EmployeePayrollController extends Controller
                     }
                 }
             }
-            //function upload parking allowance
             $dadaArrayParkingAllowance = [];
             if (file_exists($request->parking_allowance)) {
                 $fileParkingAllowance = $request->parking_allowance;
@@ -452,39 +444,24 @@ class EmployeePayrollController extends Controller
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
-                    // payrollPreview::where('employee_id',$item->id)->delete();
-                    // PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
-                    // GrossSalaryPay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
-                    // SeverancePay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
-                    // PreviewBonus::where('employee_id',$item->id)->delete();
                     $paymentMonth = date('m-Y', strtotime($request->payment_date));
                     payrollPreview::where('employee_id', $item->id)->delete();
                     PreviewNationalSocialSecurityFund::where('employee_id', $item->id)->delete();
                     GrossSalaryPay::where('number_employee', $item->number_employee)->whereRaw("DATE_FORMAT(payment_date, '%m-%Y') = ?", [$paymentMonth])->delete();
                     SeverancePay::where('number_employee', $item->number_employee)->whereRaw("DATE_FORMAT(payment_date, '%m-%Y') = ?", [$paymentMonth])->delete();
                     PreviewBonus::where('employee_id', $item->id)->delete();
-
-                    //function first month join work
                     $totalFirstSeverancPay = 0;
                     $totalBaseSalaryRecived = 0;
                     $totalBasicSalary = 0;
                     $monthlyQuarterlyIncentive = 0;
                     $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('m-y');
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('m-y');
-
-                    //function ajustment
                     $dataPayrollAdjustment = PayrollAdjustment::where('employee_id',$item->id)->get();
                     $adjustmentIncludeTaxe = 0;
                     $adjustmentExcludeTaxe = 0;
                     foreach ($dataPayrollAdjustment as $valueAdjust) {
                         $adjustmentDate = Carbon::createFromDate($valueAdjust->adjustment_date)->format('m-y');
                         if($adjustmentDate == $paymentDate){
-                            // if ($valueAdjust->adjustment_type == 'include_taxe') {
-                            //     $adjustmentIncludeTaxe = $valueAdjust->amount;
-                            // }else{
-                            //     $adjustmentExcludeTaxe = $valueAdjust->amount;
-                            // }
-
                             if ($valueAdjust->adjustment_type === 'include_taxe') {
                                 $adjustmentIncludeTaxe += $valueAdjust->amount;
                             } else {
@@ -492,7 +469,6 @@ class EmployeePayrollController extends Controller
                             }
                         }
                     }
-                    //function difinde day first working
                     if ($joinDate == $paymentDate) {
                         //total day in monthsd
                         // $start_date = Carbon::createFromDate($item->date_of_commencement);
@@ -570,44 +546,37 @@ class EmployeePayrollController extends Controller
                         }
                     }
                     
-                    //fuction check Monthly/Quarterly Incentive
                     if (array_key_exists($item->number_employee, $dadaArrayIncentive)) {
                         $monthlyQuarterlyIncentive = $dadaArrayIncentive[$item->number_employee]['incentive'];
                     } else {
                        $monthlyQuarterlyIncentive = 0;
                     }
-                    //fuction check Annual Bonus
                     if (array_key_exists($item->number_employee, $dadaArrayAnnualBonus)) {
                         $annualBonus = $dadaArrayAnnualBonus[$item->number_employee]['annual_bonus'];
                     } else {
                        $annualBonus = 0;
                     }
-                    //fuction check Other benefit
                     if (array_key_exists($item->number_employee, $dadaArrayOtherBenefit)) {
                         $otherBenefit = $dadaArrayOtherBenefit[$item->number_employee]['other_benefit'];
                     } else {
                        $otherBenefit = 0;
                     }
-                    //fuction check laon amount
                     if (array_key_exists($item->number_employee, $dadaArrayLoan)) {
                         $LoanAmount = $dadaArrayLoan[$item->number_employee]['laon_amount'];
                     } else {
                        $LoanAmount = 0;
                     }
-                    //fuction check staff book
                     if (array_key_exists($item->number_employee, $dadaArrayStaffBook)) {
                         $totalStaffBook = $dadaArrayStaffBook[$item->number_employee]['total_staff_book'];
                     } else {
                        $totalStaffBook = 0;
                     }
-                    //fuction check staff book
                     if (array_key_exists($item->number_employee, $dadaArrayParkingAllowance)) {
                         $totalParkAllowance = $dadaArrayParkingAllowance[$item->number_employee]['totalParkingAllowance'];
                     } else {
                        $totalParkAllowance = 0;
                     }
                     
-                    //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
                         $dataHolidayBunuse = Holiday::where('type','bonus')->whereYear('from', now()->year)->get();
@@ -647,12 +616,10 @@ class EmployeePayrollController extends Controller
                             $totalBunus = $dataBonus->total_allowance ?? 0;
                         }
                     }
-    
-                    // function sum benefit age children <= 18
+
                     $dataDateOfBirth = [];
                     $dataChildren = ChildrenInfor::where('employee_id',$item->id)->get();
                     foreach ($dataChildren as $value) {
-                        // $yearsOfChild = Carbon::parse($value->date_of_birth)->age;
                         $birth_date = $value->date_of_birth;
                         $current_date = date('Y-m-d');
                         $birth_timestamp = strtotime($birth_date);
@@ -665,7 +632,6 @@ class EmployeePayrollController extends Controller
                         }
                     }
                     
-                    //function children allowance
                     $number_of_children = count($dataDateOfBirth);
                     $childrenAllowance = ChildrenAllowance::first();
                     $totalChildAllowance = 0;
@@ -685,7 +651,6 @@ class EmployeePayrollController extends Controller
                         }
                     }
                     
-                    //calcute last severance pay 1
                     $SeverancePay1 = null;
                     $SeverancePay2 = null;
                     $totalSeniority = 0;
@@ -698,7 +663,6 @@ class EmployeePayrollController extends Controller
                     $totalSalarySeverancyPay = $totalSeverancyPaySalary + $adjustmentIncludeTaxe + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                     $totalSeverancePay = $totalFirstSeverancPay != 0 ? $totalFirstSeverancPay : $totalBasicSalary;
                     $totalOtherBenefit = $totalSeverancePay + $adjustmentIncludeTaxe + $monthlyQuarterlyIncentive + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
-                    //function difinde day end FDC
                     if ($item->emp_status == 1 || $item->emp_status == 10) {
                         $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
                         $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
@@ -707,12 +671,10 @@ class EmployeePayrollController extends Controller
                             $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                             $contract_deadline = Carbon::createFromDate($item->fdc_end)->format('Y-m');
                             $currentYear = $contract_deadline.'-'.$totalDayInMonth;
-                            // new salary and new total days
                             $startDate = Carbon::parse($item->fdc_end);
                             $endDate = Carbon::parse($currentYear);
                             $totalNewDays = $startDate->diffInDays($endDate);
                             $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalNewDays;
-                            //old salary and total old days
                             $totalOldDay = $totalDayInMonth - $totalNewDays;
                             $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
                             $type_fdc2 = 'FDC-2';
@@ -720,13 +682,9 @@ class EmployeePayrollController extends Controller
                                 $type_fdc1 = 'FDC-1';
                             }
 
-                           // Start date = contract end date
                             $start_working_day_date = Carbon::parse($item->fdc_end);
-                            // End date = end of the same month as the contract end
                             $end_working_day_date = $start_working_day_date->copy()->endOfMonth();
-                            // Calculate working days (Monday–Friday)
                             $workingDays = $start_working_day_date->diffInWeekdays($end_working_day_date);
-                            // Include start date if it's a weekday
                             if (!$start_working_day_date->isWeekend()) {
                                 $workingDays += 1;
                             }
@@ -745,7 +703,6 @@ class EmployeePayrollController extends Controller
                     $totalSeverancePay2 = $SeverancePay2;
                     $totalBasicSalaryLast = $totalBaseSalaryRecived != 0 ? $totalBaseSalaryRecived : $totalBasicSalary;
                     $totalGrossSalary = (round($totalSeverancyPaySalary,2) + $adjustmentIncludeTaxe + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance);
-                    //function check severanc pay
                     if($item->emp_status == 1){
                         $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
                     }
@@ -775,7 +732,6 @@ class EmployeePayrollController extends Controller
                         $totalSeniority = $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
                     }
                     
-                    //sum salary and sum other benefit befor tax free
                     $dataGrossSalary = GrossSalaryPay::create([
                         'employee_id'               => $item->id,
                         'number_employee'           => $item->number_employee,
@@ -791,7 +747,6 @@ class EmployeePayrollController extends Controller
                         'created_by'                => Auth::user()->id
                     ]);
 
-                    //function Seniority pay
                     $seniorityPayableTax = 0;
                     $taxExemptionSalary = 0;
                     $totaltaxableSalary = 0;
@@ -799,7 +754,6 @@ class EmployeePayrollController extends Controller
                         $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
                         $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
                         if ($currentDate == 6 || $currentDate == 12) {
-                            // $nextYear = Carbon::parse()->format('Y');
                             $nextYear = Carbon::createFromDate($request->payment_date)->format('Y');
                             $currentYear = null;
                             $currentMonth = null;
@@ -817,7 +771,6 @@ class EmployeePayrollController extends Controller
 
                             $totalAVG = (round($totalSalary,2) * 7.5) / 22;
                             $totalSalaryReceive = $totalAVG;
-                            // $totalSalaryReceive = ceil($totalAVG);
                             $totalGrossExchange = 2000000 / $request->exchange_rate;
                             
                             $totalGrossInclucTax = round($totalGrossExchange,2);
@@ -855,7 +808,6 @@ class EmployeePayrollController extends Controller
                         $totalGrossSalaryBeforpension = $dataGrossSalary->total_gross_salary + $totaltaxableSalary;
                     }
                     
-                    // function get age employee <= 60 National Social Security Fund (NSSF) Formula
                     $pension_contribution = 0;
                     if($item->is_type_nssf != 1){
                         $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
@@ -901,14 +853,10 @@ class EmployeePayrollController extends Controller
                         $pension_contribution = round($dataNSSF->pension_contribution_riel,2);
                     }
 
-                    //function ដក​ pensin fund
                     $totalGrossAfterPension = $totalGrossSalaryBeforpension - $pension_contribution;
-                    // functin exchange riel rate gross salary after tax
                     $totalExchangeRiel = round($totalGrossAfterPension, 2) * $request->exchange_rate;
-                    //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
                     $totalChargesReducedChild = $childrenAllowance->reduced_burden_children;
                     $totalChargesReducedSpouse = $childrenAllowance->spouse_allowance;
-                    //not have child and sposes child 1
                     if($number_of_children == 0 && $item->spouse == 0){
                         $totalChargesReduced = 0;
                     }else if($number_of_children == 0 && $item->spouse == 0){
@@ -933,7 +881,6 @@ class EmployeePayrollController extends Controller
                         $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
                     }
                     
-                    //កាត់មូលដ្ឋានគិតពន្ធ
                     if ($number_of_children == 0 && $item->spouse == 0) {
                         $totalTtaxBbaseRiel = $totalExchangeRiel;
                     } else if($number_of_children == 1 && $item->spouse == 0) {
@@ -957,7 +904,6 @@ class EmployeePayrollController extends Controller
                     }
                     
                     $children = $number_of_children;
-                    // អត្រា ពន្ធ(%)
                     if ($number_of_children == 0 && $item->spouse == 0) {
                         if($totalExchangeRiel > 0 && $totalExchangeRiel <= 1500000){
                             $totalTax = 0;
@@ -1244,7 +1190,6 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                         $totalSalaryAfterTax = $totalGrossAfterPension - round($totalSalaryTaxUsd,2);
                     }
-                    //function Severance Pay ti 1
                     $totalSeverancePay = 0;
                     $monthEndDate = Carbon::createFromDate($item->fdc_end)->format('Y-m');
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
