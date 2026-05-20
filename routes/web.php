@@ -625,6 +625,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Block FN Approvals
     Route::get('/fn/approval', [FnApprovalController::class,'index']);
     Route::get('/fn/approval/view/{id}', [FnApprovalController::class,'view']);
+    Route::get('/fn/approval/print/document', [FnApprovalController::class,'getTitle']);
+    
 
     Route::post('/fn/approval', [FNApprovalController::class,'store']);
     Route::post('/fn/approval/update', [FNApprovalController::class,'update']);

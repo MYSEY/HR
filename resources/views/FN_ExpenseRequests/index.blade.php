@@ -515,8 +515,23 @@
             $(".p_approved_by").text("");
             $(".p_date_approve").text("");
             $(".p_location_create").text(datas.request_by.branch.branch_name_kh);
+
             if (datas.approve_by) {
-                $(".p_approved_by").text(datas.approve_by.employee_name_kh);
+                let namePrintDocument = datas.approve_by.employee_name_kh;
+                axios.get('{{ URL("fn/approval/print/document") }}', {
+                    params: {
+                        title: datas.kind_regard
+                    }
+                }).then(function(response) {
+                    if (response.data && response.data.name !== '') {
+                        namePrintDocument = response.data.name;
+                    }
+                    $(".p_approved_by").text(namePrintDocument);
+                    
+                }).catch(function(error) {
+                    $(".p_approved_by").text(namePrintDocument);
+                });
+                // $(".p_approved_by").text(datas.approve_by.employee_name_kh);
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
                 $(".p_date_approve").text(p_date_approve);
             }
@@ -636,7 +651,21 @@
             $(".p_date_approve").text("");
             $(".p_location_create").text(datas.request_by.branch.branch_name_kh);
             if (datas.approve_by) {
-                $(".p_approved_by").text(datas.approve_by.employee_name_kh);
+                let namePrintDocument = datas.approve_by.employee_name_kh;
+                axios.get('{{ URL("fn/approval/print/document") }}', {
+                    params: {
+                        title: datas.kind_regard
+                    }
+                }).then(function(response) {
+                    if (response.data && response.data.name !== '') {
+                        namePrintDocument = response.data.name;
+                    }
+                    $(".p_approved_by").text(namePrintDocument);
+                    
+                }).catch(function(error) {
+                    $(".p_approved_by").text(namePrintDocument);
+                });
+                // $(".p_approved_by").text(datas.approve_by.employee_name_kh);
                 let p_date_approve = moment(datas.date_approve).format('YYYY-MM-DD');
                 $(".p_date_approve").text(p_date_approve);
             }

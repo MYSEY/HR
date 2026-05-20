@@ -878,6 +878,7 @@ return[
     "setting"=>"Setting",
     "setup_amount_approve"=>"Setup amount approval",
     "show_all"=>"Show all",
+    "show_name_approval_on_hard_document"=>"Show name approval on hard document",
     "show_more"=>"Show More",
     "sigin"=>"Sign In",
     "sick_leave"=>"Sick Leave",
