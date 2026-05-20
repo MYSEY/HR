@@ -150,6 +150,12 @@
 @section('script')
 <script>
     $(function(){
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('generate/annual/bonus') }}");
+        });
         var number_employee = null;
         $(".btn_excel").on("click", function() {
             let query = {
