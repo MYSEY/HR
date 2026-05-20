@@ -22,7 +22,7 @@ class ExportAnnualSalaryIncreasement implements FromCollection, WithColumnWidths
     protected $filter;
     
 
-     public function __construct($export_data)
+    public function __construct($export_data)
     {
         $this->totalRecord = count($export_data);
         $i = 0;
@@ -35,7 +35,6 @@ class ExportAnnualSalaryIncreasement implements FromCollection, WithColumnWidths
                 "employee_name"                 =>$value->employee_name_kh,
                 "location"                      =>$value->branch_name_kh,
                 "department"                    =>$value->dep_name_kh,
-                // "gender"                        =>$value->gender_name_khmer,
                 "position"                      =>$value->positions_name_kh,
                 "date_of_commencement"          =>$value->date_of_commencement,
                 "total_score"                   =>$value->total_score,
@@ -55,7 +54,7 @@ class ExportAnnualSalaryIncreasement implements FromCollection, WithColumnWidths
             $this->export_datas,
         ]);
     }
-     public function startCell(): string
+    public function startCell(): string
     {
         return 'A6';
     }
@@ -95,8 +94,7 @@ class ExportAnnualSalaryIncreasement implements FromCollection, WithColumnWidths
                 $drawing->setCoordinates('B1'); // Cell position
                 $drawing->setWorksheet($sheet->getDelegate()); // Bind to sheet
 
-                $sheet->getDelegate()->getStyle('A6:N6')->getFont()->setName('Khmer OS Battambang')
-                ->setSize(9)->setBold('A6:N6');
+                $sheet->getDelegate()->getStyle('A6:N6')->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold('A6:N6');
                 $event->sheet->getStyle('A6:N6')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
@@ -109,27 +107,15 @@ class ExportAnnualSalaryIncreasement implements FromCollection, WithColumnWidths
                 // block merge cells 
                 $sheet->mergeCells('A2:N2');
                 $sheet->setCellValue('A2', "របាយការណ៍ប្រាក់ខែរបស់បុគលិកប្រចាំឆ្នាំ");
-                $sheet->getDelegate()->getStyle('A2:N2')->getFont()
-                ->setName('Khmer OS Muol Light')
-                ->setSize(12)
-                ->getColor()->setARGB('FFFF0000'); 
-                $event->sheet->getDelegate()->getStyle('A2:N2')
-                ->getAlignment()
-                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getDelegate()->getStyle('A2:N2')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->getColor()->setARGB('FFFF0000'); 
+                $event->sheet->getDelegate()->getStyle('A2:N2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $report_date = Carbon::createFromDate()->format('Y');
                 $sheet->mergeCells('A3:N3');
                 $sheet->setCellValue('A3', "សម្រាប់ឆ្នាំ". $report_date);
-                $sheet->getDelegate()->getStyle('A3:N3')->getFont()->setName('Khmer OS Muol Light')
-                ->setSize(12);
-                $event->sheet->getDelegate()->getStyle('A3:Z3')
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-               
-                $event->sheet->getDelegate()->getStyle('A6:N6')
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getDelegate()->getStyle('A3:N3')->getFont()->setName('Khmer OS Muol Light')->setSize(12);
+                $event->sheet->getDelegate()->getStyle('A3:Z3')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $event->sheet->getDelegate()->getStyle('A6:N6')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 //** block body */ 
                 $n=6;
@@ -157,20 +143,20 @@ class ExportAnnualSalaryIncreasement implements FromCollection, WithColumnWidths
     public function headings(): array
     {
         return [
-                "ល.រ",
-                "ប័ណ្ណការងារ",
-                "នាម និង គោត្តនាម",
-                "ទីតាំងការងារ",
-                "នាយកដ្ឋាន",
-                "មុខតំណែង",
-                "ថ្ងៃចូលធ្វើការ",
-                "ពិន្ទុ",
-                "បុគ្គលិកផ្ទាល់",
-                "ប្រធានផ្ទាល់",
-                "Salary Increasement",
-                "Salary request",
-                "Approve By",
-                "Approve Date",
+            "ល.រ",
+            "ប័ណ្ណការងារ",
+            "នាម និង គោត្តនាម",
+            "ទីតាំងការងារ",
+            "នាយកដ្ឋាន",
+            "មុខតំណែង",
+            "ថ្ងៃចូលធ្វើការ",
+            "ពិន្ទុ",
+            "បុគ្គលិកផ្ទាល់",
+            "ប្រធានផ្ទាល់",
+            "Salary Increasement",
+            "Salary request",
+            "Approve By",
+            "Approve Date",
         ];
     }
 }
