@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->json('employee_id');
+            $table->integer('print_document_id')->nullable();
             $table->integer('location_id');
             $table->longText('description')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();

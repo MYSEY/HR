@@ -6,6 +6,74 @@
         max-width: 300px !important; 
         /* word-wrap: break-word !important; */
     }
+     /* The container checkbox */
+     .container-checkbox {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        font-size: 15px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    .container-checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 1;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        border: solid 1px #ccc;
+        background-color: #fff;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container-checkbox:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container-checkbox input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container-checkbox .checkmark:after {
+        left: 7px;
+        top: 4px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
 </style>
 @section('content')
     <div class="">
@@ -109,6 +177,11 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label>@lang('lang.show_name_approval_on_hard_document')</label>
+                                <div id="checkbox_container">
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label>@lang('lang.location') <span class="text-danger">*</span></label>
                                 <select class="form-control @error('location_id') is-invalid @enderror" id="location_id" name="location_id" required>
                                     <option value="" selected> -- @lang('lang.select') --</option>
@@ -154,6 +227,11 @@
                                 <label>@lang('lang.employee') <span class="text-danger">*</span></label>
                                 <select class="form-control hr-select2-option required" id="e_employee_id" name="employee_id[]" multiple="" required>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.show_name_approval_on_hard_document')</label>
+                                <div id="e_checkbox_container">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>@lang('lang.location') <span class="text-danger">*</span></label>
@@ -216,6 +294,48 @@
                 container: 'tr' 
             });
         });
+        $(document).on("click",".checkbox-group", function () {
+            $(".checkbox-group").not(this).prop("checked", false);
+        });
+         $(document).on('change', '#employee_id', function() {
+            // សម្អាតកន្លែងដាក់ Checkbox មុននឹងបង្កើតថ្មី
+            $('#checkbox_container').empty();
+            $(this).find('option:selected').each(function() {
+                let empId = $(this).val().toString();
+                let empName = $(this).text();
+                let checkboxHtml = `
+                    <div class="my-2">
+                        <label class="container-checkbox">${empName}
+                            <input type="checkbox" class="checkbox-group" value="${empId}" name="print_document_id"> 
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                `;
+                $('#checkbox_container').append(checkboxHtml);
+            });
+        });
+        let savedPrintIds = [];
+        $(document).on('change', '#e_employee_id', function() {
+            // សម្អាតកន្លែងដាក់ Checkbox មុននឹងបង្កើតថ្មី
+            $('#e_checkbox_container').empty();
+            $(this).find('option:selected').each(function() {
+                let empId = $(this).val().toString();
+                let empName = $(this).text();
+                
+                // ពិនិត្យមើលថា តើ ID របស់បុគ្គលិកនេះមាននៅក្នុង តារាងដែលបាន store (print_document_id) ដែរឬទេ
+                let isChecked = savedPrintIds.includes(empId) ? 'checked' : '';
+
+                let checkboxHtml = `
+                    <div class="my-2">
+                        <label class="container-checkbox">${empName}
+                            <input type="checkbox" class="checkbox-group" value="${empId}" name="print_document_id" ${isChecked}> 
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                `;
+                $('#e_checkbox_container').append(checkboxHtml);
+            });
+        });
         $('.update').on('click', function() {
             let id = $(this).data("id");
             $(".hr-form-group-select2").each(function(){
@@ -241,15 +361,34 @@
                         $('#e_id').val(response.success.id);
                         $('#e_title').text(response.success.title);
                         $('#e_employee_id').html('');
-                        if (response.success.employee_id !="") {
+                        $('#e_checkbox_container').html('');
+                        if (response.success.print_document_id) {
+                            savedPrintIds = Array.isArray(response.success.print_document_id) 
+                                ? response.success.print_document_id.map(String) // បើជា Array ស្រាប់ បំប្លែងធាតុខាងក្នុងជា String ទាំងអស់
+                                : [response.success.print_document_id.toString()]; // បើមកតែមួយតម្លៃ បំប្លែងវាទៅជា Array
+                        } else {
+                            savedPrintIds = []; // បើគ្មានទិន្នន័យទេ ឱ្យវាទៅជា Array ទទេ
+                        }
+
+                        if (response.employees && response.employees.length > 0) {
+                            let selectedEmployeeIds = Array.isArray(response.success.employee_id) 
+                                ? response.success.employee_id 
+                                : [response.success.employee_id.toString()];
+
                             $.each(response.employees, function(i, item) {
+                                let isSelected = selectedEmployeeIds.includes(item.id.toString());
+
                                 $('#e_employee_id').append($('<option>', {
                                     value: item.id,
                                     text: item.employee_name_en,
-                                    selected: item.id == response.success.employee_id ? true : false
+                                    selected: isSelected 
                                 }));
                             });
+                            
+                            // បន្ទាប់ពី loop ចប់ ទើបយើង trigger change ដើម្បីឱ្យបង្កើត checkbox តាមក្រោយ
+                            $('#e_employee_id').trigger('change');
                         }
+                        
                         $('#e_location_id').html('');
                         if (response.success.location_id !="") {
                             $.each(response.locations, function(i, item) {

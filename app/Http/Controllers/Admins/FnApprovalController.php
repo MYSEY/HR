@@ -57,6 +57,21 @@ class FnApprovalController extends Controller
         return view('FN_Approvals.amount_setup',compact(['permission','FnApproval','datas','amounts']));
     }
 
+    public function getTitle(Request $request) 
+    {
+        $request->validate([
+            'title' => 'required|string',
+        ]);
+        $data = FnApproval::with("printDocument")
+            ->where('title', $request->title)
+            ->first();
+        $name = $data && $data->printDocument ? $data->printDocument->employee_name_kh : "";
+
+        return response()->json([
+            'name' => $name,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -143,6 +158,7 @@ class FnApprovalController extends Controller
             $data['title'] = $request->title;
             // $data['employee_id']    = json_encode($request->employee_id);
             $data['employee_id'] = $request->employee_id;
+            $data['print_document_id'] = $request->print_document_id;
             $data['location_id'] = $request->location_id;
             $data['description'] = $request->description;
             $data['updated_by'] = Auth::user()->id;

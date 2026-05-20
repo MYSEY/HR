@@ -20,6 +20,7 @@ class FnApproval extends Model
     protected $fillable = [
         'title',
         'employee_id',
+        'print_document_id',
         'location_id',
         'description',
         'created_by',
@@ -61,6 +62,26 @@ class FnApproval extends Model
             'date_of_commencement',
             'personal_phone_number',
         )->get() : collect();
+    }
+    public function printDocument()
+    {
+        return $this->belongsTo(User::class, 'print_document_id')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'position_id',
+            'branch_id',
+            'department_id',
+            'gender',
+            'date_of_commencement',
+            'personal_phone_number',
+        )->with(["department","branch"]);
     }
     public function location()
     {
