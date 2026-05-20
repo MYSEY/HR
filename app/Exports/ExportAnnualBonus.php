@@ -187,13 +187,13 @@ class ExportAnnualBonus implements FromCollection, WithColumnWidths, WithHeading
 
 
                 $sheet->mergeCells('A3:O3');
-                $sheet->setCellValue('A3', "សម្រាប់គ្រប់បុគ្គលិកប្រចាំសាខាអង្គស្នួល");
+                $sheet->setCellValue('A3', "សម្រាប់គ្រប់បុគ្គលិកប្រចាំសាខា");
                 $sheet->getDelegate()->getStyle('A3:O3')->getFont()->setName('Khmer OS Fasthand')->setSize(9)->getColor()->setARGB('FF0000FF');
                 $event->sheet->getDelegate()->getStyle('A3:Z3')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $event->sheet->getDelegate()->getStyle('A6:N6')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $lastRow = count($this->export_datas) + 1;
-                $n=4;
+                $n=6;
                 if ($lastRow > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
@@ -211,6 +211,8 @@ class ExportAnnualBonus implements FromCollection, WithColumnWidths, WithHeading
                         ]);
                     }
                 }
+
+                //footer
                 $event->sheet->getStyle('A'.$rows.':O'.$rows)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
@@ -220,8 +222,6 @@ class ExportAnnualBonus implements FromCollection, WithColumnWidths, WithHeading
                     ],
                 ]);
 
-
-                //footer
                 $sheet->mergeCells('A'.$rows.':G'.$rows);
                 $sheet->setCellValue('A'.$rows, "សរុប");
                 $sheet->getDelegate()->getStyle("A".$rows.':G'.$rows)->getFont()->setName('Khmer OS Muol Light')->setSize(9);
@@ -231,7 +231,6 @@ class ExportAnnualBonus implements FromCollection, WithColumnWidths, WithHeading
                 $sheet->setCellValue("H".$rows, number_format($this->totalBasiceSalary, 2));
                 $sheet->getDelegate()->getStyle("H".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("H".$rows);
                 $event->sheet->getDelegate()->getStyle("H".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-
 
                 //total setCellValue O
                 $sheet->setCellValue("O".$rows, number_format($this->totalAnnaulBounus, 2));
