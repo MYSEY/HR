@@ -194,7 +194,7 @@ class GenerateAnnaulBonusController extends Controller
                     // ]);
 
                     // Replace old record for this employee/year
-                    GenerateAnnaulBonus::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->delete();
+                    GenerateAnnaulBonus::where('employee_id', $employeeId)->where('increasement_of_year', $request->increasement_year)->where('status','pending')->delete();
                     // Insert new calculation
                     GenerateAnnaulBonus::create([
                         "employee_id" => $employeeId,
@@ -273,7 +273,7 @@ class GenerateAnnaulBonusController extends Controller
         DB::beginTransaction(); // ⬅ Start transaction
         try {
             $ids = explode(',', $request->id);
-            GenerateAnnaulBonus::whereIn('id', $ids)->update([
+            GenerateAnnaulBonus::whereIn('employee_id', $ids)->update([
                 'status' => 'approved',
                 'approved_by' => Auth::id(),
                 'approved_at' => now(),

@@ -90,23 +90,25 @@ class ExportAnnualBonus implements FromCollection, WithColumnWidths, WithHeading
         }
         
         if ($request->branch_id=='1') {
-            $this->branch_name = 'ការិយាល័យកណ្តាល';
+            $this->branch_name = 'ប្រចាំការិយាល័យកណ្តាល';
         }elseif ($request->branch_id=='2') {
-            $this->branch_name = 'ការិយាល័យប្រតិបត្តិការ';
+            $this->branch_name = 'ប្រចាំការិយាល័យប្រតិបត្តិការ';
         }elseif ($request->branch_id=='3') {
-            $this->branch_name = 'អង្គស្នួល';
+            $this->branch_name = 'ប្រចាំសាខាអង្គស្នួល';
         }elseif ($request->branch_id=='4') {
-            $this->branch_name = 'តាខ្មៅ';
+            $this->branch_name = 'ប្រចាំសាខាតាខ្មៅ';
         }elseif ($request->branch_id=='5') {
-            $this->branch_name = 'គងពិសី';
+            $this->branch_name = 'ប្រចាំសាខាគងពិសី';
         }elseif ($request->branch_id=='6') {
-            $this->branch_name = 'កំពង់ស្ពឺ';
+            $this->branch_name = 'ប្រចាំសាខាកំពង់ស្ពឺ';
         }elseif ($request->branch_id=='7') {
-            $this->branch_name = 'ស្អាង';
+            $this->branch_name = 'ប្រចាំសាខាស្អាង';
         }elseif ($request->branch_id=='8') {
-            $this->branch_name = 'កំពង់ត្រាច';
-        }else{
+            $this->branch_name = 'ប្រចាំសាខាកំពង់ត្រាច';
+        }elseif ($request->branch_id=='9') {
             $this->branch_name = 'ការិយាល័យប្រតិបត្តិការ ផ្នែកឌីជីថល';
+        }else {
+            $this->branch_name = 'គ្រប់សាខា';
         }
         $this->export_datas = $dataExcel;
     }
@@ -205,7 +207,7 @@ class ExportAnnualBonus implements FromCollection, WithColumnWidths, WithHeading
                 $event->sheet->getDelegate()->getStyle('A2:O2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('A3:O3');
-                $sheet->setCellValue('A3', "សម្រាប់គ្រប់បុគ្គលិកប្រចាំសាខា".$this->branch_name);
+                $sheet->setCellValue('A3', "សម្រាប់គ្រប់បុគ្គលិក".$this->branch_name);
                 $sheet->getDelegate()->getStyle('A3:O3')->getFont()->setName('Khmer OS Fasthand')->setSize(9)->getColor()->setARGB('FF0000FF');
                 $event->sheet->getDelegate()->getStyle('A3:Z3')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $event->sheet->getDelegate()->getStyle('A6:N6')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
