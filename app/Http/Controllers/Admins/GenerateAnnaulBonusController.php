@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\AnnualBonuBranch;
 use App\Exports\ExportAnnualBonus;
+use App\Exports\ExportAnnualBonusReport;
 use Illuminate\Support\Facades\DB;
 use App\Models\GenerateAnnaulBonus;
 use Illuminate\Support\Facades\Log;
@@ -32,46 +33,7 @@ class GenerateAnnaulBonusController extends Controller
     {
         if ($request->ajax()) {
             // Base query with joins
-            $query = GenerateAnnaulBonus::leftJoin('users', 'generate_annaul_bonuses.employee_id', '=', 'users.id')
-                ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
-                ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
-                ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
-                ->leftJoin('performance_appraisals', 'generate_annaul_bonuses.performance_id', '=', 'performance_appraisals.id')
-                ->select(
-                    'generate_annaul_bonuses.*',
-                    'users.id',
-                    'users.number_employee',
-                    'users.employee_name_kh',
-                    'users.employee_name_en',
-                    'users.date_of_commencement',
-                    'departments.name_english as dep_name',
-                    'positions.name_english as positions_name',
-                    'branchs.branch_name_en',
-                    'performance_appraisals.total_score',
-                    'performance_appraisals.total_score_live_staff',
-                    'performance_appraisals.total_score_direct_chairman',
-                )->where('generate_annaul_bonuses.status','pending');
-            $query->when($request->employee_id, function ($query, $employee_id) {
-                return $query->where('generate_annaul_bonuses.employee_id', $employee_id);
-            });
-            $query->when($request->employee_name, function ($query, $employee_name) {
-                return $query->where('users.employee_name_en', $employee_name);
-            });
-            $query->when($request->branch_id, function ($query, $branch_id) {
-                return $query->where('users.branch_id', $branch_id);
-            });
-            // Search filter
-            $searchValue = request()->input('search.value');
-            if (!empty($searchValue)) {
-                $query->where(function ($q) use ($searchValue) {
-                    $q->where('users.employee_name_en', 'like', "%{$searchValue}%")
-                      ->orWhere('users.number_employee', 'like', "%{$searchValue}%")
-                      ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
-                      ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
-                      ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
-                });
-            }
-        
+            $query = self::getDatasAnnualBonus($request);
             // Pagination
             $recordsTotal = GenerateAnnaulBonus::where('generate_annaul_bonuses.status','pending')->count();
             $recordsFiltered = $query->count();
@@ -90,6 +52,54 @@ class GenerateAnnaulBonusController extends Controller
         return view('generate_annual_bonus.index',compact('branch'));
     }
 
+    public static function getDatasAnnualBonus($request){
+        $query = GenerateAnnaulBonus::leftJoin('users', 'generate_annaul_bonuses.employee_id', '=', 'users.id')
+            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->leftJoin('performance_appraisals', 'generate_annaul_bonuses.performance_id', '=', 'performance_appraisals.id')
+            ->select(
+                'generate_annaul_bonuses.*',
+                'users.id',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.date_of_commencement',
+                'departments.name_english as dep_name',
+                'positions.name_english as positions_name',
+                'branchs.branch_name_en',
+                'performance_appraisals.total_score',
+                'performance_appraisals.total_score_live_staff',
+                'performance_appraisals.total_score_direct_chairman',
+            )->where('generate_annaul_bonuses.status','pending');
+        $query->when($request->employee_id, function ($query, $employee_id) {
+            return $query->where('generate_annaul_bonuses.employee_id', $employee_id);
+        });
+        $query->when($request->employee_name, function ($query, $employee_name) {
+            return $query->where('users.employee_name_en', $employee_name);
+        });
+        $query->when($request->branch_id, function ($query, $branch_id) {
+            return $query->where('users.branch_id', $branch_id);
+        });
+        // Search filter
+        $searchValue = request()->input('search.value');
+        if (!empty($searchValue)) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('users.number_employee', 'like', "%{$searchValue}%")
+                    ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                    ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
+            });
+        }
+        return $query;
+    }
+
+    public function annaulBonusDownload(Request $request){
+        $query = self::getDatasAnnualBonus($request);
+        $data = $query->get();
+        return Excel::download(new ExportAnnualBonus($data,$request), 'Annual Bonus.xlsx');
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -292,53 +302,11 @@ class GenerateAnnaulBonusController extends Controller
             ], 500);
         }
     }
-    public function annaulBonusDownload(Request $request){
-        return Excel::download(new ExportAnnualBonus($request), 'Annual Bonus.xlsx');
-    }
 
     public function reportAnnualBonus(Request $request){
         if ($request->ajax()) {
             // Base query with joins
-            $query = GenerateAnnaulBonus::leftJoin('users', 'generate_annaul_bonuses.employee_id', '=', 'users.id')
-                ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
-                ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
-                ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
-                ->leftJoin('performance_appraisals', 'generate_annaul_bonuses.performance_id', '=', 'performance_appraisals.id')
-                ->select(
-                    'generate_annaul_bonuses.*',
-                    'users.id',
-                    'users.number_employee',
-                    'users.employee_name_kh',
-                    'users.employee_name_en',
-                    'users.date_of_commencement',
-                    'departments.name_english as dep_name',
-                    'positions.name_english as positions_name',
-                    'branchs.branch_name_en',
-                    'performance_appraisals.total_score',
-                    'performance_appraisals.total_score_live_staff',
-                    'performance_appraisals.total_score_direct_chairman',
-                )->where('generate_annaul_bonuses.status','approved');
-            $query->when($request->employee_id, function ($query, $employee_id) {
-                return $query->where('generate_annaul_bonuses.employee_id', $employee_id);
-            });
-            $query->when($request->employee_name, function ($query, $employee_name) {
-                return $query->where('users.employee_name_en', $employee_name);
-            });
-            $query->when($request->branch_id, function ($query, $branch_id) {
-                return $query->where('users.branch_id', $branch_id);
-            });
-            // Search filter
-            $searchValue = request()->input('search.value');
-            if (!empty($searchValue)) {
-                $query->where(function ($q) use ($searchValue) {
-                    $q->where('users.employee_name_en', 'like', "%{$searchValue}%")
-                    ->orWhere('users.number_employee', 'like', "%{$searchValue}%")
-                    ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
-                    ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
-                    ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
-                });
-            }
-        
+            $query = self::getDatasAnnualBonusApproved($request);
             // Pagination
             $recordsTotal = GenerateAnnaulBonus::where('generate_annaul_bonuses.status','approved')->count();
             $recordsFiltered = $query->count();
@@ -355,5 +323,54 @@ class GenerateAnnaulBonusController extends Controller
         }
         $branch = Branchs::all();
         return view('generate_annual_bonus.annual_bonus_report',compact('branch'));
+    }
+
+    public function reportAnnualBonusDownload(Request $request){
+        $query = self::getDatasAnnualBonusApproved($request);
+        $data = $query->get();
+        return Excel::download(new ExportAnnualBonusReport($data,$request), 'Annual Bonus Report.xlsx');
+    }
+    public static function getDatasAnnualBonusApproved($request)
+    {
+        $query = GenerateAnnaulBonus::leftJoin('users', 'generate_annaul_bonuses.employee_id', '=', 'users.id')
+            ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
+            ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
+            ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->leftJoin('performance_appraisals', 'generate_annaul_bonuses.performance_id', '=', 'performance_appraisals.id')
+            ->select(
+                'generate_annaul_bonuses.*',
+                'users.id',
+                'users.number_employee',
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.date_of_commencement',
+                'departments.name_english as dep_name',
+                'positions.name_english as positions_name',
+                'branchs.branch_name_en',
+                'performance_appraisals.total_score',
+                'performance_appraisals.total_score_live_staff',
+                'performance_appraisals.total_score_direct_chairman',
+            )->where('generate_annaul_bonuses.status','approved');
+        $query->when($request->employee_id, function ($query, $employee_id) {
+            return $query->where('generate_annaul_bonuses.employee_id', $employee_id);
+        });
+        $query->when($request->employee_name, function ($query, $employee_name) {
+            return $query->where('users.employee_name_en', $employee_name);
+        });
+        $query->when($request->branch_id, function ($query, $branch_id) {
+            return $query->where('users.branch_id', $branch_id);
+        });
+        // Search filter
+        $searchValue = request()->input('search.value');
+        if (!empty($searchValue)) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('users.employee_name_en', 'like', "%{$searchValue}%")
+                ->orWhere('users.number_employee', 'like', "%{$searchValue}%")
+                ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%")
+                ->orWhere('departments.name_english', 'like', "%{$searchValue}%");
+            });
+        }
+        return $query;
     }
 }

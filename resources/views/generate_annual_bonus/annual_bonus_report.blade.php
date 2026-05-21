@@ -125,7 +125,7 @@
                 employee_id: $("#employee_id").val(),
                 employee_name: $("#employee_name").val(),
             };
-            var url = "{{URL::to('report/annual/bonus')}}?" + $.param(query)
+            var url = "{{URL::to('report/annual/bonus/download')}}?" + $.param(query)
             window.location = url;
         });
         $('.btn-search').on('click', function() {
@@ -194,8 +194,8 @@
                     }
                 },
                 {
-                    data: 'pa_score',
-                    name: 'pa_score',
+                    data: 'total_score_direct_chairman',
+                    name: 'total_score_direct_chairman',
                     render: function(data, type, row) {
                         return Number(data).toFixed(2);
                     }

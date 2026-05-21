@@ -15,7 +15,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 
-class ExportAnnualBonus implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
+class ExportAnnualBonusReport implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
     protected $export_datas;
     protected $increasement_of_year;

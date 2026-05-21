@@ -858,6 +858,7 @@ return[
     "residents"=>"Residents",
     "review_by"=>"Reveiw By",
     "replace_to_employee"=>"Replace to employee",
+    "report_annual_bonus"=>"Report Annual Bonus",
     "non_resident"=>"Non-Resident",
     "save"=>"Save",
     "save_changes"=>"Save changes",
