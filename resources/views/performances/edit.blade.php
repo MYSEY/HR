@@ -169,8 +169,8 @@
                                                         <button type="button" class="btn btn-secondary btn-sm" disabled><i class="fa fa-lock"></i></button>
                                                     @else
                                                         <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
-                                                        <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
                                                     @endif
+                                                    <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -313,6 +313,16 @@
         $(document).on('click',".addMore", function() {
             $("#tbl_performance").append(addMoreRow());
         });
+        // $(document).on('click', '.addRecord', function () {
+        //     let currentTr = $(this).closest('tr');
+        //     let purposeHeader = currentTr.prevAll('.purpose-group').first(); 
+        //     let rowsUnderPurpose = purposeHeader.nextUntil('.purpose-group, .title-group');
+        //     let lastKpiRow = rowsUnderPurpose.filter('.kpi-group').last();
+        //     let newRow = currentTr.clone();
+        //     newRow.find('textarea').val('');
+        //     newRow.find('input[type=number]').val('');
+        //     lastKpiRow.after(newRow);
+        // });
         $(document).on('click', '.addRecord', function () {
             let currentTr = $(this).closest('tr');
             let purposeHeader = currentTr.prevAll('.purpose-group').first(); 
@@ -320,7 +330,14 @@
             let lastKpiRow = rowsUnderPurpose.filter('.kpi-group').last();
             let newRow = currentTr.clone();
             newRow.find('textarea').val('');
-            newRow.find('input[type=number]').val('');
+            newRow.find('input[type=number], input[type=date]').val('');
+            newRow.find('textarea, select, input').removeAttr('disabled');
+            newRow.find('select[name="is_lock[]"]').val('0');
+            let actionTd = newRow.find('td').last();
+            actionTd.html(`
+                <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
+                <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
+            `);
             lastKpiRow.after(newRow);
         });
         $(document).on('click', '.removeRecord', function() {
