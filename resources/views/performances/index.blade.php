@@ -688,7 +688,7 @@
                                     </div>
                                 `;
                             }
-                            if (row.employee_id == window.userId && row.status === 'preparing') {
+                            if (row.employee_id == window.userId && (row.status === 'preparing' || row.status ==="5")) {
                                 return `
                                         <div class="dropdown action-label">
                                             <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
@@ -788,7 +788,22 @@
                             `;
                         }
                     },
-                    { data: 'main_comment', name: 'main_comment' },
+                    { 
+                        // data: 'main_comment', name: 'main_comment' 
+                        data: 'main_comment',
+                        defaultContent: '',
+                        render: function (data, type, row) {
+
+                            if (!data) return '';
+                            return `
+                                <span data-toggle="tooltip"
+                                    data-html="true"
+                                    title="${data}">
+                                    ${strLimit(data, 30, '...')}
+                                </span>
+                            `;
+                        }
+                    },
                     {
                         data: null,
                         name: 'action',
