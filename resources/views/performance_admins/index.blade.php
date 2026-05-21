@@ -161,7 +161,7 @@
         <div class="row">
             <div class="col-md-12">
                 <a href="javascript:void(0);" class="btn btn-sm btn-secondary mb-3" id="btnApprovedAll" data-userid="{{Auth::user()->id}}">
-                    Approved
+                    Asign to
                 </a>
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
@@ -303,10 +303,10 @@
                                      '<label class="container-checkbox">Accepted'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                    '<label class="container-checkbox">Verify'+
+                                    '<label class="container-checkbox">Verify By HR'+
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
                                     '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                    '<label class="container-checkbox">Approve'+
+                                    '<label class="container-checkbox">Approve by HHRAD/CEO/BOD'+
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="4"> <span class="checkmark"></span>'+
                                     '</label>'+
                                 '</div>'+
@@ -588,10 +588,10 @@
                                 '<label class="container-checkbox">Accepted'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                '<label class="container-checkbox">Verify'+
+                                '<label class="container-checkbox">Verify By HR'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                '<label class="container-checkbox">Approve'+
+                                '<label class="container-checkbox">Approve by HHRAD/CEO/BOD'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="4"> <span class="checkmark"></span>'+
                                 '</label>'+
                             '</div>'+

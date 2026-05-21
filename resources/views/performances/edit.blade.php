@@ -131,7 +131,7 @@
                                                                             @if($symbol)
                                                                                 <span class="input-group-text" style="height: 35px;">{{ $symbol }}</span>
                                                                             @endif
-                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control goal-from required" name="goal_from[]" value="{{ $item->from }}" placeholder="From" style="height: 35px;" {{ $canEdit == 1 ? 'disabled' : '' }}>
+                                                                            <input type="{{ $type == 'date_increment' || $type == 'date_decrement' ? 'date' : 'number' }}" class="form-control goal-from required" name="goal_from[]" value="{{ $item->from }}" placeholder="From" style="height: 35px;" {{ $canEdit == 1 ? 'disabled' : '' }}>
                                                                         </div>
                                                                     </div>
 
@@ -141,7 +141,7 @@
                                                                             @if($symbol)
                                                                                 <span class="input-group-text" style="height: 35px;">{{ $symbol }}</span>
                                                                             @endif
-                                                                            <input type="{{ $type == 'date' ? 'date' : 'number' }}" class="form-control goal-to required" name="goal_to[]" value="{{ $item->to }}" placeholder="To" style="height: 35px;" {{ $canEdit == 1 ? 'disabled' : '' }}>
+                                                                            <input type="{{ $type == 'date_increment' || $type == 'date_decrement' ? 'date' : 'number' }}" class="form-control goal-to required" name="goal_to[]" value="{{ $item->to }}" placeholder="To" style="height: 35px;" {{ $canEdit == 1 ? 'disabled' : '' }}>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -214,7 +214,7 @@
                 <button type="submit" class="btn btn-primary" id="btnCreatePerformance">
                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
                         @lang('lang.loading') </span>
-                    <span class="btn-txt">@lang('lang.submit')</span>
+                    <span class="btn-txt">@lang('lang.save')</span>
                 </button>
                 <a href="{{ url('performance') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
             </div>

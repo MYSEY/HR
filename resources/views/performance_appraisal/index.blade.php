@@ -289,10 +289,10 @@
                                 '<label class="container-checkbox">Review'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                '<label class="container-checkbox">Verify'+
+                                '<label class="container-checkbox">Verify By HR'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                '<label class="container-checkbox">Approve'+
+                                '<label class="container-checkbox">Approve by HHRAD/CEO/BOD'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
                                 '</label>'+
                             '</div>'+

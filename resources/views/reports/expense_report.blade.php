@@ -444,7 +444,6 @@
                 }).then(function(response) {
                     if (response.data && response.data.name !== '') {
                         namePrintDocument = response.data.name;
-                        console.log("dd: ",namePrintDocument);
                     }
                     $(".p_approved_by").text(namePrintDocument);
                     

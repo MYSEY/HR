@@ -90,9 +90,10 @@
                             <tbody>
                                 @foreach ($data->titles as $item)
                                     <tr>
-                                        <td colspan="2" class="text-center">
-                                            <input type="text" class="form-control" value="{{ $item->title ?? '' }}" required>
+                                        <td colspan="12" class="text-center" >
+                                            <input style="background: #efa781" type="text" class="form-control" value="{{ $item->title ?? '' }}" required>
                                         </td>
+                                        {{-- <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
@@ -101,15 +102,15 @@
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
                                         <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
-                                        <td colspan="1" class="text-center"></td>
+                                        <td colspan="1" class="text-center"></td> --}}
                                     </tr>
 
                                     @foreach ($item->purposes as $purposeItem)
                                         <tr>
-                                            <td colspan="2" class="text-center">
-                                                <input type="text" class="form-control" value="{{ $purposeItem->name ?? '' }}" required>
+                                            <td colspan="12" class="text-center">
+                                                <input style="background: #f0cc9b" type="text" class="form-control" value="{{ $purposeItem->name ?? '' }}" required>
                                             </td>
+                                            {{-- <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
@@ -118,8 +119,7 @@
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
-                                            <td colspan="1" class="text-center"></td>
+                                            <td colspan="1" class="text-center"></td> --}}
                                         </tr>
 
                                         @foreach ($purposeItem->performanceDetail as $Detailitem)
@@ -317,7 +317,7 @@
                     <button type="submit" class="btn btn-primary" id="btnSubmit">
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
                             @lang('lang.loading') </span>
-                        <span class="btn-txt">@lang('lang.submit')</span>
+                        <span class="btn-txt">@lang('lang.save')</span>
                     </button>
                 @endif
 
@@ -435,7 +435,7 @@
             let goalType = $row.find('.goal').data("type") || "";
             let progress = $(this).val();
             let scoreAchieved = 0;
-            if (progress) {;
+            if (progress) {
 
                 let lastMax = null;
                 let lastMin = null;
@@ -481,11 +481,15 @@
                             rangeMin = pGoal.from;
                             rangeMax = pGoal.to;
                             if (goalType.includes('decrement') && i == 0){
-                                lastMin = rangeMin;
-                                continue
+                                lastMin = pGoal.from;
+                                // continue
+                            }
+                            if (goalType.includes('decrement')){
+                                rangeMax = pGoal.from;
+                                rangeMin = pGoal.to;
                             }
                             if (goalType.includes('increment')){
-                                lastMax = rangeMax;
+                                lastMax = pGoal.to;
                             }
                         }else{
                             // បំប្លែង from/to ទៅជាលេខ
@@ -493,7 +497,7 @@
                             let max = parseFloat(pGoal.to);
                             if (goalType.includes('decrement') && i == 0){
                                 lastMin = min;
-                                continue
+                                // continue
                             }
                             if (goalType.includes('increment')){
                                 lastMax = max;
@@ -502,7 +506,6 @@
                             rangeMin = Math.min(min, max);
                             rangeMax = Math.max(min, max);
                         }
-
                         if (progress >= rangeMin && progress <= rangeMax) {
                             matched = true;
                         }
