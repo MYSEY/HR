@@ -72,8 +72,23 @@ class PerformanceController extends Controller
                 'reviewEmployee.number_employee as review_employee_number_employee',
                 'reviewEmployee.employee_name_kh as review_employee_name_kh',
                 'reviewEmployee.employee_name_en as review_employee_name_en',
-            )
-            ->whereNot('performances.status', 'approved')
+            );
+            $approvedQuery = clone $query;
+            $approveKPI = $approvedQuery->where('performances.status', 'approved')
+                                        ->where('performances.employee_id', Auth::user()->id)
+                                        ->first();
+            $progressKPI = false;
+            if ($approveKPI && $approveKPI->approved_date) {
+                $approvedDate = Carbon::parse($approveKPI->approved_date);
+                $expiryDate = $approvedDate->copy()->addDays(10);
+                $today = Carbon::now();
+                if ($today->lessThanOrEqualTo($expiryDate)) {
+                    $progressKPI = true; 
+                } else {
+                    $progressKPI = false; 
+                }
+            }
+            $query->whereNot('performances.status', 'approved')
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -165,6 +180,7 @@ class PerformanceController extends Controller
                 'pendingVerify'   => $countPendingVerify,
                 'pendingApprove'  => $countPendingApprove,
                 'pendingReturn'   => $countPendingReturn,
+                'progressKPI'     => $progressKPI
             ]);
         }
         $branch = [];

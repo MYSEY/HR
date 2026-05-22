@@ -87,6 +87,7 @@
                                 $totalWeight = 0;
                                 $totalsByTitleId = [];
                             @endphp
+                            
                             <tbody>
                                 @foreach ($data->titles as $item)
                                     <tr>
@@ -180,7 +181,8 @@
                                                     @endforeach
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="{{$type == 'date' ? 'date' : 'number' }}" step="any" class="form-control progress" name="progress[]" value="{{$Detailitem->progress}}">
+                                                    <input type="{{$type == 'date' ? 'date' : 'number' }}" step="any" class="form-control progress" name="progress[]" value="{{$Detailitem->progress}}"
+                                                    {{ Auth::user()->id == $data->employee_id ? '' : 'readonly' }}>
                                                 </td>
                                                 <td class="text-center">
                                                     <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" name="weight" readonly>
@@ -195,7 +197,14 @@
                                                     <input type="number" step="any" class="form-control personnel_score" name="personnel_score[]" placeholder="0" value="{{$Detailitem->score_live_staff}}" min="0" readonly>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="number" step="any" class="form-control direct_chairman" name="direct_chairman[]" placeholder="0" value="{{$Detailitem->score_direct_chairman}}" min="0" readonly>
+                                                    <input type="number" 
+                                                        step="any" 
+                                                        class="form-control direct_chairman" 
+                                                        name="direct_chairman[]" 
+                                                        placeholder="0" 
+                                                        value="{{ $Detailitem->score_direct_chairman }}" 
+                                                        min="0" 
+                                                        {{ Auth::user()->id == $data->review_employee_id ? '' : 'readonly' }}>
                                                 </td>
                                                 <td class="text-center">
                                                     <textarea rows="5" class="form-control easy_difficult_factors" name="easy_difficult_factors[]" placeholder="Enter text here">{{$Detailitem->easy_difficult_factors}}</textarea>
@@ -427,6 +436,10 @@
                     alert('Error deleting file.');
                 }
             });
+        });
+        $(document).on('change', '.direct_chairman', function () {
+            calculateSubtotals();
+            calculateGrandTotals();
         });
 
         $(document).on('change', '.progress', function () {
