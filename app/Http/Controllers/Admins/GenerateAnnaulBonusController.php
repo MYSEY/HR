@@ -57,6 +57,7 @@ class GenerateAnnaulBonusController extends Controller
             ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
             ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
             ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->leftJoin('options', 'users.gender', '=', 'options.id')
             ->leftJoin('performance_appraisals', 'generate_annaul_bonuses.performance_id', '=', 'performance_appraisals.id')
             ->select(
                 'generate_annaul_bonuses.*',
@@ -67,10 +68,13 @@ class GenerateAnnaulBonusController extends Controller
                 'users.date_of_commencement',
                 'departments.name_english as dep_name',
                 'positions.name_english as positions_name',
+                'positions.name_khmer as positions_name_kh',
                 'branchs.branch_name_en',
+                'branchs.abbreviations',
                 'performance_appraisals.total_score',
                 'performance_appraisals.total_score_live_staff',
                 'performance_appraisals.total_score_direct_chairman',
+                'options.name_khmer as gender_name_kh',
             )->where('generate_annaul_bonuses.status','pending');
         $query->when($request->employee_id, function ($query, $employee_id) {
             return $query->where('generate_annaul_bonuses.employee_id', $employee_id);
@@ -336,6 +340,7 @@ class GenerateAnnaulBonusController extends Controller
             ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
             ->leftJoin('positions', 'users.position_id', '=', 'positions.id')
             ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+            ->leftJoin('options', 'users.gender', '=', 'options.id')
             ->leftJoin('performance_appraisals', 'generate_annaul_bonuses.performance_id', '=', 'performance_appraisals.id')
             ->select(
                 'generate_annaul_bonuses.*',
@@ -345,11 +350,13 @@ class GenerateAnnaulBonusController extends Controller
                 'users.employee_name_en',
                 'users.date_of_commencement',
                 'departments.name_english as dep_name',
-                'positions.name_english as positions_name',
+                'positions.name_khmer as positions_name_kh',
                 'branchs.branch_name_en',
+                'branchs.abbreviations',
                 'performance_appraisals.total_score',
                 'performance_appraisals.total_score_live_staff',
                 'performance_appraisals.total_score_direct_chairman',
+                'options.name_khmer as gender_name_kh',
             )->where('generate_annaul_bonuses.status','approved');
         $query->when($request->employee_id, function ($query, $employee_id) {
             return $query->where('generate_annaul_bonuses.employee_id', $employee_id);

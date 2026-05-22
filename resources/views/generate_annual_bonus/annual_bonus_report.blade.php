@@ -173,7 +173,7 @@
                 },
                 { data: 'branch_name_en', name: 'branch_name_en' },
                 { data: 'dep_name', name: 'dep_name' },
-                { data: 'positions_name', name: 'positions_name' },
+                { data: 'positions_name_kh', name: 'positions_name_kh' },
                 {
                     data: 'date_of_commencement',
                     name: 'date_of_commencement'
