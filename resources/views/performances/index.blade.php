@@ -74,6 +74,120 @@
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
     }
+    :root {
+        --green-color: #4cb61a; /* ពណ៌បៃតងដូចក្នុងរូបភាព */
+        --gray-light: #e0e0e0;  /* ពណ៌ប្រផេះស្រាលសម្រាប់បន្ទាត់ */
+        --gray-dark: #666666;   /* ពណ៌អក្សរ និងរង្វង់មិនទាន់បានបំពេញ */
+    }
+
+    .stepper-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 60%;
+        margin-bottom: 10px;
+        /* margin: 10px auto; */
+        font-family: 'Inter', sans-serif, "Khmer OS Battambang";
+    }
+
+    .step-item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        flex: 1;
+    }
+
+    /* រង្វង់មូល */
+    .circle-wrapper .circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    /* អក្សរខាងក្រោម */
+    .step-label {
+        margin-top: 4px;
+        font-size: 14px;
+        /* text-align: center; */
+        color: var(--gray-dark);
+        white-space: nowrap;
+    }
+
+    /* បន្ទាត់តភ្ជាប់ */
+    .progress-line {
+        position: absolute;
+        top: 22px; /* ចំកណ្តាលរង្វង់មូល */
+        left: calc(1% + 10px + 1px); /* ចេញពីរង្វង់ទី១ បូកគម្លាត 8px */
+        right: calc(-10% + 7px + 1px); /* ទៅដល់រង្វង់បន្ទាប់ ដកគម្លាត 8px */
+        height: 3px; /* កម្រាស់បន្ទាត់ */
+        background-color: var(--gray-light);
+        z-index: -1;
+    }
+
+    .line-fill {
+        height: 100%;
+        background-color: var(--green-color);
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+
+    /* --- លក្ខខណ្ឌសម្រាប់ Step នីមួយៗ --- */
+
+    /* ១. Step ដែលធ្វើរួចរាល់ (Completed) */
+    .step-item.completed .circle {
+        background-color: var(--green-color);
+        border: 2px solid var(--green-color);
+        color: white;
+        font-size: 18px; /* សម្រាប់សញ្ញា ✓ */
+    }
+    .step-item.completed .step-label {
+        color: #4a4a4a;
+    }
+
+    /* ២. Step បច្ចុប្បន្ន (Active) */
+    .step-item.active .circle {
+        background-color: white;
+        border: 2px solid var(--gray-light);
+        color: var(--gray-dark);
+    }
+    .step-item.active .step-label {
+        color: var(--gray-dark);
+    }
+
+    /* ៣. ការគ្រប់គ្រងបន្ទាត់រត់ (Progress Line Fill) */
+    .line-fill.full {
+        width: 100%;
+    }
+    .line-fill.half {
+        width: 35%; /* បន្ទាត់រត់បានបន្តិច រួចដាច់ពណ៌ប្រផេះដូចក្នុងរូបភាព */
+    }
+    .line-fill.empty {
+        width: 0%;
+    }
+
+    /* ស្បែកទូរស័ព្ទ (Responsive) */
+    @media (max-width: 600px) {
+        .step-label {
+            font-size: 11px;
+        }
+        .circle-wrapper .circle {
+            width: 36px;
+            height: 36px;
+            font-size: 14px;
+        }
+        .progress-line {
+            top: 18px;
+            left: calc(50% + 18px + 4px);
+            right: calc(-50% + 18px + 4px);
+        }
+    }
 </style>
 @section('content')
     <div class="">
@@ -104,7 +218,7 @@
                 </div>
             </div>
         </div>
-        <div class="p-6 rounded-lg">
+        {{-- <div class="p-6 rounded-lg">
             <div class="flex items-center space-x-8 ">
                 <label class="flex items-center pb-4 space-x-2 text-gray-500 hover:text-gray-700 me-3">
                     <span>Pending Review</span>
@@ -130,7 +244,8 @@
                     <span id="PendingReturn" class="badge bg-secondary px-2 py-0.5 rounded-pill">0</span>
                 </label>
             </div>
-        </div>
+        </div> --}}
+        <div class="progress_works"></div>
         <div class="row filter-btn">
             <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                 <div class="form-group">
@@ -641,6 +756,23 @@
                         return json.data;
                     }
                 },
+                drawCallback: function(settings) {
+                    let api = this.api();
+                    let rowsData = api.rows({ page: 'current' }).data().toArray(); 
+                    
+                    // រុករកស្វែងរក Record របស់ខ្លួនឯង
+                    let myRecord = rowsData.find(function(row) {
+                        return row.employee_id == window.userId;
+                    });
+                    
+                    if (myRecord) {
+                        // បើមាន Record របស់ខ្លួនឯង ឱ្យបង្ហាញ Stepper ធម្មតា
+                        updateTopProgressStepper(myRecord.status);
+                    } else {
+                        // 🎯 បើគ្មានទេ គឺសម្អាត div .progress_works ឱ្យនៅទំនេរ (លាក់មិនឱ្យបង្ហាញ)
+                        $('.progress_works').html('');
+                    }
+                },
                 columns: [
                     {
                         data: 'id',
@@ -693,8 +825,8 @@
                                         <div class="dropdown action-label">
                                             <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
                                             href="#" data-toggle="dropdown">
-                                                <i class="fa fa-dot-circle-o text-warning"></i>
-                                                <span>Preparing</span>
+                                                <i class="fa fa-dot-circle-o ${row.status ==="5" ? "bg-inverse-danger":"text-warning"}"></i>
+                                                <span>${row.status ==="5" ? "Return" : "Preparing"}</span>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a class="dropdown-item"
@@ -842,6 +974,88 @@
                     $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
                 }
             });
+        }
+        function updateTopProgressStepper(status) {
+            // បង្កើតលំនាំដើមសម្រាប់ Step ទាំង ៥ និងខ្សែតភ្ជាប់ (Line) ទាំង ៤
+            let step1Class = "active", step1Content = "1", line1Class = "empty";
+            let step2Class = "",       step2Content = "2", line2Class = "empty";
+            let step3Class = "",       step3Content = "3", line3Class = "empty";
+            let step4Class = "",       step4Content = "4", line4Class = "empty";
+            let step5Class = "",       step5Content = "5";
+
+            // 🎯 ឆែក Condition ទៅតាមស្ថានភាព (status) នីមួយៗ
+            if (status === 'preparing' || status === '5') {
+                // Step 1: Prepared (កំពុងស្ថិតនៅជំហានទី ១ ឬត្រូវបាន Return មកវិញ)
+                step1Class = "active"; step1Content = "1"; line1Class = "half";
+            } 
+            else if (status === 'accepted') {
+                // Step 2: Accepted (ឆ្លងផុតជំហានទី ១ ចូលមកដល់ជំហានទី ២)
+                step1Class = "completed"; step1Content = "✓"; line1Class = "full";
+                step2Class = "completed";    step2Content = "✓"; line2Class = "half";
+            } 
+            else if (status === '1' || status === '2') {
+                // Step 3: Reviewed (ឆ្លងផុតជំហានទី ១ និងទី ២ ចូលមកដល់ជំហានទី ៣ Pending Review/Accepted)
+                step1Class = "completed"; step1Content = "✓"; line1Class = "full";
+                step2Class = "completed"; step2Content = "✓"; line2Class = "full";
+                step3Class = "active";    step3Content = "3"; line3Class = "half";
+            } 
+            else if (status === '3') {
+                // Step 4: Verified by HR (ចូលមកដល់ជំហានទី ៤ Pending Verify)
+                step1Class = "completed"; step1Content = "✓"; line1Class = "full";
+                step2Class = "completed"; step2Content = "✓"; line2Class = "full";
+                step3Class = "completed"; step3Content = "✓"; line3Class = "full";
+                step4Class = "active";    step4Content = "4"; line4Class = "half";
+            } 
+            else if (status === '4' || status === 'approved') {
+                // Step 5: Approved (ចូលមកដល់ជំហានចុងក្រោយបង្អស់ Pending Approve ឬ Approved រួចរាល់)
+                step1Class = "completed"; step1Content = "✓"; line1Class = "full";
+                step2Class = "completed"; step2Content = "✓"; line2Class = "full";
+                step3Class = "completed"; step3Content = "✓"; line3Class = "full";
+                step4Class = "completed"; step4Content = "✓"; line4Class = "full";
+                
+                if (status === 'approved') {
+                    step5Class = "completed"; step5Content = "✓";
+                } else {
+                    step5Class = "active";    step5Content = "5";
+                }
+            }
+
+            // បង្កើត HTML Stepper (មាន ៥ ជំហាន និង ៤ បន្ទាត់តភ្ជាប់)
+            let stepperHtml = `
+                <div class="stepper-container">
+                    <div class="step-item ${step1Class}">
+                        <div class="circle-wrapper"><div class="circle">${step1Content}</div></div>
+                        <div class="step-label">Prepared</div>
+                        <div class="progress-line"><div class="line-fill ${line1Class}"></div></div>
+                    </div>
+
+                    <div class="step-item ${step2Class}">
+                        <div class="circle-wrapper"><div class="circle">${step2Content}</div></div>
+                        <div class="step-label">Accepted</div>
+                        <div class="progress-line"><div class="line-fill ${line2Class}"></div></div>
+                    </div>
+
+                    <div class="step-item ${step3Class}">
+                        <div class="circle-wrapper"><div class="circle">${step3Content}</div></div>
+                        <div class="step-label">Reviewed</div>
+                        <div class="progress-line"><div class="line-fill ${line3Class}"></div></div>
+                    </div>
+
+                    <div class="step-item ${step4Class}">
+                        <div class="circle-wrapper"><div class="circle">${step4Content}</div></div>
+                        <div class="step-label">Verified by HR</div>
+                        <div class="progress-line"><div class="line-fill ${line4Class}"></div></div>
+                    </div>
+
+                    <div class="step-item ${step5Class}">
+                        <div class="circle-wrapper"><div class="circle">${step5Content}</div></div>
+                        <div class="step-label">Approved by HHRADM/CEO/BOD</div>
+                    </div>
+                </div>
+            `;
+
+            // 🎯 รុញ HTML ទៅកាន់ <div class="progress_works"></div>
+            $('.progress_works').html(stepperHtml);
         }
     </script>
 @endsection
