@@ -86,8 +86,23 @@ class PerformanceAppraisalController extends Controller
                     'reviewEmployee.number_employee as review_employee_number_employee',
                     'reviewEmployee.employee_name_kh as review_employee_name_kh',
                     'reviewEmployee.employee_name_en as review_employee_name_en',
-                )
-            ->whereNot('performance_appraisals.status', 'approved')
+                );
+            $approvedQuery = clone $query;
+            $approvePA = $approvedQuery->where('performance_appraisals.status', 'approved')
+                                        ->where('performance_appraisals.employee_id', Auth::user()->id)
+                                        ->first();
+            $progressPA = false;
+            if ($approvePA && $approvePA->approved_date) {
+                $approvedDate = Carbon::parse($approvePA->approved_date);
+                $expiryDate = $approvedDate->copy()->addDays(10);
+                $today = Carbon::now();
+                if ($today->lessThanOrEqualTo($expiryDate)) {
+                    $progressPA = true; 
+                } else {
+                    $progressPA = false; 
+                }
+            }
+            $query->whereNot('performance_appraisals.status', 'approved')
             ->when($request->employee_id, function ($query, $employee_id) {
                 return $query->where('users.number_employee', $employee_id);
             })
@@ -188,6 +203,7 @@ class PerformanceAppraisalController extends Controller
                 'pendingVerify'   => $countPendingVerify,
                 'pendingApprove'  => $countPendingApprove,
                 'pendingReturn'   => $countPendingReturn,
+                'progressPA'      => $progressPA
             ]);
         }
         $branch = [];

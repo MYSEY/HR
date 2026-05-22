@@ -753,23 +753,24 @@
                         $('#PendingReturn').text(json.pendingReturn || 0);
                         userPermission = json.permission || {}; // 👈 Save permission
                         userIdLog = json.userIdLog;
+                        progressKPI = json.progressKPI;
                         return json.data;
                     }
                 },
                 drawCallback: function(settings) {
                     let api = this.api();
                     let rowsData = api.rows({ page: 'current' }).data().toArray(); 
-                    
-                    // រុករកស្វែងរក Record របស់ខ្លួនឯង
+                    // ១. រុករកស្វែងរក Record របស់ខ្លួនឯងដែលមាននៅក្នុងតារាងបច្ចុប្បន្ន (status: preparing, 1, 2, 3, 5)
                     let myRecord = rowsData.find(function(row) {
-                        return row.employee_id == window.userId;
+                        return row.employee_id == userIdLog;
                     });
-                    
                     if (myRecord) {
-                        // បើមាន Record របស់ខ្លួនឯង ឱ្យបង្ហាញ Stepper ធម្មតា
                         updateTopProgressStepper(myRecord.status);
-                    } else {
-                        // 🎯 បើគ្មានទេ គឺសម្អាត div .progress_works ឱ្យនៅទំនេរ (លាក់មិនឱ្យបង្ហាញ)
+                    } 
+                    else if (progressKPI) {
+                        updateTopProgressStepper('approved');
+                    } 
+                    else {
                         $('.progress_works').html('');
                     }
                 },

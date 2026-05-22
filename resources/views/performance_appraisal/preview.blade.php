@@ -147,7 +147,7 @@
                                                         @endforeach
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="text" step="any" class="form-control" id="progress" name="progress[]" value="{{$Detailitem->progress}}">
+                                                        <input type="text" step="any" class="form-control" id="progress" name="progress[]" value="{{$Detailitem->progress}}" readonly>
                                                     </td>
                                                     <td class="text-center">
                                                         <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$Detailitem->weight}}" id="weight" readonly>
