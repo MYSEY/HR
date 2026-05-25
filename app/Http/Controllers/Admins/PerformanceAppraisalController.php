@@ -302,12 +302,13 @@ class PerformanceAppraisalController extends Controller
                 'draw' => intval(request()->input('draw')),
                 'recordsTotal' => $recordsTotal,
                 'recordsFiltered' => $recordsFiltered,
+                'permission'=>$permission,
                 'data' => $data
             ]);
         }
         $branch = Branchs::all();
         $department = Department::all();
-        return view('performance_appraisal.menual_score',compact('branch','department'));
+        return view('performance_appraisal.menual_score',compact('branch','department','permission'));
     }
 
     public function updateMenalScore(Request $request){

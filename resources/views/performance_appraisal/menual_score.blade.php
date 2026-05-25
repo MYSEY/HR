@@ -10,11 +10,13 @@
                         <li class="breadcrumb-item active">@lang('lang.menual_score')</li>
                     </ul>
                 </div>
-                <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" data-toggle="modal" id="btnImport">
-                        <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import_menual_score')
-                    </a>
-                </div>
+                @if ($permission->is_import == 1)
+                    <div class="col-auto float-end ms-auto">
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="btnImport">
+                            <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import_menual_score')
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
         {!! Toastr::message() !!}
