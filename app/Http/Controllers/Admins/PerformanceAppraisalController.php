@@ -310,6 +310,73 @@ class PerformanceAppraisalController extends Controller
         return view('performance_appraisal.menual_score',compact('branch','department'));
     }
 
+    public function updateMenalScore(Request $request){
+        try {
+            $paPerformance = PerformanceAppraisal::where('employee_id',$request->employee_id)->where('id',$request->id)->first();
+            self::createHistories($paPerformance);
+            $paPerformance->update([
+                'total_score_direct_chairman'  => $request->total_score_direct_chairman,
+                'remark'  => $request->remark,
+                'updated_by' => Auth::id(),
+            ]);
+            DB::commit();
+            return response()->json([
+                'message' => 'successfully'
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Performance created fail.','Error');
+        }
+    }
+    public function importMenualScore(Request $request)
+    {
+        try {
+            $request->validate([
+                'file' => 'required|mimes:xls,xlsx,csv|max:1024'
+            ]);
+            $file = $request->file('file');
+            $spreadsheet = IOFactory::load($file);
+            $allSheets = $spreadsheet->getAllSheets();
+            $dataMenaulScore = $allSheets[0]->toArray();
+            $notFoundEmployees = [];
+            foreach ($dataMenaulScore as $index => $item) {
+                // Skip header row
+                if ($index == 0) {
+                    continue;
+                }
+                if (empty($item[0])) {
+                    continue;
+                }
+                $employee = User::where("number_employee", $item[0])
+                    ->select(
+                        'id',
+                        'number_employee',
+                        'employee_name_kh',
+                        'employee_name_en'
+                    )->first();
+                if ($employee) {
+                    PerformanceAppraisal::where('employee_id', $employee->id)
+                    ->update([
+                        'total_score_direct_chairman' => $item[4] ?? 0,
+                        'updated_by' => Auth::id(),
+                    ]);
+                } else {
+                    $notFoundEmployees[] = $item[0];
+                }
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Import success',
+                'not_found' => $notFoundEmployees
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -681,25 +748,6 @@ class PerformanceAppraisalController extends Controller
         });
     }
 
-    public function updateKpiScore(Request $request){
-        try {
-
-            $paPerformance = PerformanceAppraisal::where('employee_id',$request->employee_id)->where('id',$request->id)->first();
-            self::createHistories($paPerformance);
-             $paPerformance->update([
-                'total_score_direct_chairman'  => $request->total_score_direct_chairman,
-                'remark'  => $request->remark,
-                'updated_by'            => Auth::id(),
-            ]);
-            DB::commit();
-            return response()->json([
-                'message' => 'successfully'
-            ]);
-        } catch (\Throwable $exp) {
-            DB::rollback();
-            Toastr::error('Performance created fail.','Error');
-        }
-    }
     /**
      * Remove the specified resource from storage.
      *

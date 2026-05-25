@@ -10,6 +10,11 @@
                         <li class="breadcrumb-item active">@lang('lang.menual_score')</li>
                     </ul>
                 </div>
+                <div class="col-auto float-end ms-auto">
+                    <a href="#" class="btn add-btn" data-toggle="modal" id="btnImport">
+                        <i class="fa fa-arrow-circle-up" data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import_menual_score')
+                    </a>
+                </div>
             </div>
         </div>
         {!! Toastr::message() !!}
@@ -115,6 +120,7 @@
             <p>Loading Data...</p>
         </div>
     </div>
+    @include('performance_appraisal.import_menual_score')
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
@@ -122,6 +128,11 @@
     <script>
         var number_employee = null;
         $(function(){
+            $("#btnImport").on("click", function() {
+                $(".pa_thanLess").hide();
+                $("#pa_thanLess").text("");
+                $('#importMenualScore').modal('show');
+            });
             // Reload only (DON'T destroy/reinit)
             $('.btn-search').on('click', function() {
                 number_employee = $('#employee_id').val();

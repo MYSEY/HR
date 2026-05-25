@@ -105,7 +105,7 @@
                 <button type="submit" class="btn btn-primary" id="btnCreatePerformance">
                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
                         @lang('lang.loading') </span>
-                    <span class="btn-txt">@lang('lang.submit')</span>
+                    <span class="btn-txt">@lang('lang.save')</span>
                 </button>
                 <a href="{{ url('menual/score') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
             </div>

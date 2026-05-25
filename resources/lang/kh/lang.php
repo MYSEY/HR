@@ -460,6 +460,7 @@ return[
 	"irregular_expense"=>"ចំណាយមិនមានកិច្ចសន្យាឬសេចក្តីសម្រេច",
 	"id_card_number"=>"លេខអត្តសញ្ញាណប័ណ្ណ",
 	"id_number_nssf"=>"លេខប័ណ្ណ ប.ស.ស",
+    "import_menual_score"=>"Import Menual Score",
 	"import"=>"នាំចូល",
 	"important"=>"សំខាន់",
 	"input_required"=>"ត្រូវការបញ្ចូល",

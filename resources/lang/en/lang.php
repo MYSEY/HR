@@ -483,6 +483,7 @@ return[
     "irregular_expense"=>"Irregular Expense",
     "id_card_number"=>"ID Card Number",
     "id_number_nssf"=>"ID number NSSF",
+    "import_menual_score"=>"Import Menual Score",
     "import"=>"Import",
     "important"=>"Important",
     "input_required"=>"Input Required",
