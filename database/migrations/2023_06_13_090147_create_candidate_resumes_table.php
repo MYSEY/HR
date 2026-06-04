@@ -33,6 +33,7 @@ return new class extends Migration
             $table->date('received_date')->nullable();
             $table->date('fdc_date')->nullable();
             $table->string('recruitment_channel')->nullable();
+            $table->string('referral_name')->nullable();
             $table->string('contact_number')->nullable();
             $table->string('status')->nullable();
             $table->string('marital_status')->nullable();

@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\Hash;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Str;
+use App\Exports\ExportCandidateResume;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CandidateResumeController extends Controller
 {
@@ -668,6 +670,7 @@ class CandidateResumeController extends Controller
             $data['location_applied']      = $request->location_applied;
             $data['received_date']         = $request->received_date;
             $data['recruitment_channel']   = $request->recruitment_channel;
+            $data['referral_name']         = $request->referral_name;
             $data['contact_number']        = $request->contact_number;
             $data['status']                = $request->status;
             $data['marital_status']        = $request->marital_status;
@@ -1171,5 +1174,111 @@ class CandidateResumeController extends Controller
     public function preview(Request $request){
         $data = User::where('id',$request->id)->first();
         return view('recruitments.candidate_resumes.preview',compact('data'));
+    }
+
+    public static function getDatas($request)
+    {
+        $search = $request->input('search.value');
+        $fromDate = !empty($request->from_date) 
+                    ? Carbon::createFromDate($request->from_date)->format('Y-m-d') 
+                    : null;
+        $toDate = !empty($request->to_date) 
+                    ? Carbon::createFromDate($request->to_date)->format('Y-m-d') 
+                    : null;
+
+        $query = CandidateResume::with(["branch", "position", "option"])
+            ->select([
+                    'candidate_resumes.*',
+                    'users.emp_status'
+                ])
+            ->leftJoin('users', function ($join) {
+                // 💡 បង្កាត់ពាក្យ 'CC-' ពីមុខ number_employee របស់ candidate_resumes ឱ្យទៅជា 'CC-240-574' ទើបស្មើនឹងខាង users
+                // $join->on('users.number_employee', '=', DB::raw("CONCAT('CC-', candidate_resumes.number_employee)"))
+                $join->on('users.number_employee', '=', "candidate_resumes.number_employee")
+                ->where('users.emp_status', '=', 'Cancel');
+            })
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("candidate_resumes.location_applied", Auth::user()->branch_id);
+                }
+            });
+
+        if (!empty($fromDate)) {
+            $query->whereDate('candidate_resumes.received_date', '>=', $fromDate);
+        }
+        if (!empty($toDate)) {
+            $query->whereDate('candidate_resumes.received_date', '<=', $toDate);
+        }
+
+        // === ប្រព័ន្ធស្វែងរកសកល (Global Search) ===
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('candidate_resumes.name_en', 'like', "%{$search}%")
+                ->orWhere('candidate_resumes.name_kh', 'like', "%{$search}%")
+                ->orWhere('candidate_resumes.current_position', 'like', "%{$search}%")
+                ->orWhere('candidate_resumes.recruitment_channel', 'like', "%{$search}%");
+
+                $q->orWhereHas('branch', function ($subQuery) use ($search) {
+                    $subQuery->where('branch_name_kh', 'like', "%{$search}%")
+                            ->orWhere('branch_name_en', 'like', "%{$search}%");
+                });
+
+                $q->orWhereHas('position', function ($subQuery) use ($search) {
+                    $subQuery->where('name_khmer', 'like', "%{$search}%")
+                            ->orWhere('name_english', 'like', "%{$search}%");
+                });
+
+                $q->orWhereHas('option', function ($subQuery) use ($search) {
+                    $subQuery->where('name_khmer', 'like', "%{$search}%")
+                            ->orWhere('name_english', 'like', "%{$search}%"); 
+                });
+
+                if (strtotime($search)) {
+                    $formattedDate = date('Y-m-d', strtotime($search));
+                    $q->orWhere('candidate_resumes.received_date', 'like', "%{$formattedDate}%");
+                }
+            });
+        }
+
+        return $query;
+    }
+    public function report(Request $request){
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "recruitment/candidate-resume/report")->first();
+        if (!$permission || $permission["is_view"] != "1") {
+            return view('upgrade.access_page');
+        }
+        if ($request->ajax()) {
+            $query = self::getDatas($request);
+            $recordsTotal = $query->count();  // total records without filter
+            $recordsFiltered = $query->count();
+            $start = intval(request()->input('start', 0));
+            $limit = intval(request()->input('length', 20));
+            if ($limit == -1) {
+                $data = $query->get(); // get all rows
+            } else {
+                $data = $query->orderBy('candidate_resumes.id', 'asc')
+                        ->offset($start)
+                        ->limit($limit)
+                        ->get();
+            }
+            
+            return response()->json([
+                'draw'            => intval($request->input('draw')),
+                'recordsTotal'    => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered, 
+                'data'            => $data,
+            ]);
+        }
+        return view('recruitments.candidate_resumes.recruitment_report', compact('permission'));
+    }
+    public function exportReport(Request $request){
+        //*** (យ៉ាងហោច RAM 8GB ឡើងទៅ) **/
+        ini_set('memory_limit', '-1'); 
+        set_time_limit(0);
+
+        $get = self::getDatas($request);
+        $data = $get->get();
+        $date = $request->get('date') ?? date('Y-m-d');
+        return Excel::download(new ExportCandidateResume($data, $date), "Recruitment_Application_Report-".$date.'.xlsx');
     }
 }

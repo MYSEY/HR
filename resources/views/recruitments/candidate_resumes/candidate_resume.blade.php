@@ -492,6 +492,7 @@
                         $('#e_current_address').val(response.success.current_address);
                         $('#e_received_date').val(response.success.received_date);
                         $('#e_recruitment_channel').val(response.success.recruitment_channel);
+                        $('#e_referral_name').val(response.success.referral_name);
                         $('#e_contact_number').val(response.success.contact_number);
                         $('#hidden_cv').val(response.success.cv);
                         // $('#e_remark').val(response.success.remark);
