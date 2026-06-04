@@ -206,7 +206,7 @@ class PerformanceController extends Controller
         $employee= DB::table('users')
         ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
         ->select( 'users.*', 'roles.role_type',)
-        ->whereIn('users.emp_status', ['1','2','10'])
+        ->whereIn('users.emp_status', ['Probation','1','2','10'])
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if($RolePermission == 'Employee'){
                 $query->where("users.department_id", Auth::user()->department_id);
@@ -214,13 +214,13 @@ class PerformanceController extends Controller
             }
             if (in_array($RolePermission, ['BM'])){
                 $query->where("users.branch_id", Auth::user()->branch_id);
-                $query->whereNot("users.id", Auth::user()->id);
+                // $query->whereNot("users.id", Auth::user()->id);
             }
             if (in_array($RolePermission, ['HR','HRAdmin','DHOD','HOD'])){
                 $query->where("users.department_id", Auth::user()->department_id);
                 $query->where("users.branch_id", Auth::user()->branch_id);
                 $query->orWhere("users.line_manager", Auth::user()->id);
-                $query->whereNot("users.id", Auth::user()->id);
+                // $query->whereNot("users.id", Auth::user()->id);
             }
             if (in_array($RolePermission, ['DHOD','DBM'])){
                 $query->where("users.line_manager", Auth::user()->id);

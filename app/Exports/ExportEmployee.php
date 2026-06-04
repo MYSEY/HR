@@ -13,6 +13,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
+use Illuminate\Support\Facades\Auth;
 
 class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents, WithTitle
 {
@@ -22,6 +23,17 @@ class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, 
         $dataExport = [];
         
         foreach ($export_data as $users) {
+            $salary = 0;
+            $phone_allowance = 0;
+            if(permissionAccess("m2-s1","is_view_salary_staff")->value == "1"){
+                $salary = $users->basic_salary;
+                $phone_allowance = $users->phone_allowance;
+            }
+            if(permissionAccess("m2-s1","is_view_salary_staff")->value != "1" && permissionAccess("m2-s1","is_view_salary")->value == "1" && $users->id == Auth::user()->id){
+                $salary = $users->basic_salary;
+                 $phone_allowance = $users->phone_allowance;
+            };
+
             $dataExport[] = [
                 "number_employee" => $users->number_employee,
                 "last_name_kh" => $users->last_name_kh,
@@ -47,8 +59,10 @@ class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, 
                 "level" => $users->level,
                 "nationality" => $users->EmployeeNationality,
                 "marital_status"=> $users->EmployeeMaritalStatus,
-                "basic_salary" => permissionAccess("m2-s1","is_view_salary")->value == "1" ? $users->basic_salary : 0,
-                "phone_allowance" => $users->phone_allowance,
+                "basic_salary" => $salary,
+                "phone_allowance" => $phone_allowance,
+                // "basic_salary" => permissionAccess("m2-s1","is_view_salary")->value == "1" ? $users->basic_salary : 0,
+                // "phone_allowance" => $users->phone_allowance,
                 "guarantee_letter" => "",
                 "employment_book" => "",
                 "personal_phone_number" => $users->personal_phone_number,

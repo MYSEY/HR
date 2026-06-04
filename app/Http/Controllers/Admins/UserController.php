@@ -45,6 +45,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Spatie\Activitylog\Models\Activity;
 use App\Repositories\Admin\EmployeeRepository;
 use Illuminate\Support\Str;
+use App\Models\CandidateResume;
 
 class UserController extends Controller
 {
@@ -764,6 +765,7 @@ class UserController extends Controller
                 if ($request->emp_status == "Cancel") {
                     $users = User::where('id',$request->id)->first();
                     GenerateIdEmployee::where("number_employee",$users->number_employee)->delete();
+                    CandidateResume::where('number_employee',$users->number_employee)->update([ 'number_employee' => 'CC-'.$users->number_employee]);
                     $users->number_employee = "CC-".$users->number_employee;
                     $users->emp_status = $request->emp_status;
                     $users->resign_date = $request->resign_date;

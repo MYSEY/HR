@@ -569,6 +569,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/recruitment/candidate-resume/upcoming/edit/{id}', [CandidateResumeController::class,'staffUpcoming']);
     Route::post('recruitment/candidate-resume/staff/upcoming/update', [CandidateResumeController::class,'staffUpcomingUpdated']);
+    Route::get('/recruitment/candidate-resume/report', [CandidateResumeController::class,'report']);
+    Route::get('/recruitment/candidate-resume/download',[CandidateResumeController::class,'exportReport']);
 
     Route::get('children/allowance',[ChildrenAllowanceController::class,'index']);
     Route::get('children/edit',[ChildrenAllowanceController::class,'edit']);

@@ -344,8 +344,8 @@
 
         // Event to add a new record
         $(document).on('click', '.addRecord', function() {
-            // $(this).closest('tr').before(addNewRecord());
-            $("#tbl_performance").append(addNewRecord());
+            $(this).closest('tr').before(addNewRecord());
+            // $("#tbl_performance").append(addNewRecord());
         });
         $(document).on('click', '.removeRecord', function() {
             $(this).closest('tr').remove();

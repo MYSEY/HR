@@ -37,6 +37,7 @@ class CandidateResume extends Model
         'location_applied',
         'received_date',
         'recruitment_channel',
+        'referral_name',
         'contact_number',
         'status',
         'marital_status',
