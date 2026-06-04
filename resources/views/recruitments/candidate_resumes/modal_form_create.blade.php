@@ -142,6 +142,12 @@
                                 <input class="form-control " type="file" id="candidate_cv" required name="cv">
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang('lang.referral_name')</label>
+                                <input class="form-control @error('referral_name') is-invalid @enderror" type="text" id="referral_name" name="referral_name" value="{{old('referral_name')}}">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="submit-section">

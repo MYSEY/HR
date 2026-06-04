@@ -988,7 +988,7 @@
                                     <a class="btn btn-white btn-sm btn-rounded btn-asign"
                                     data-id="${row.id}"
                                     data-name="${row.review_employee_name_en}"
-                                    data-employeeid="${row.employee_id}"
+                                    data-employeeid="${row.review_employee_id}"
                                     data-status="${row.status}"
                                     href="#" aria-expanded="false">
                                         <i class="fa fa-dot-circle-o text-success"></i>

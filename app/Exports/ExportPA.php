@@ -35,7 +35,7 @@ class ExportPA implements FromCollection, WithColumnWidths, WithHeadings, WithCu
             } else if ($score <= 2.99) {
                 $overallResults = 'ត្រូវកែលម្អ_(ក្រោមផែនការ១០%)';
             } else if ($score <= 3.99) {
-                $overallResults = 'ធម្យម_(អនុវត្តន៍ការងារគ្រប់ផែនការងារ)';
+                $overallResults = 'មធ្យម_(អនុវត្តន៍ការងារគ្រប់ផែនការងារ)';
             } else if ($score <= 4.99) {
                 $overallResults = 'ល្អ_(អនុវត្តន៍ការងារលើសផែនការងារ១០%)';
             } else {

@@ -28,7 +28,7 @@ class AnnualSalaryIncreasementSeeder extends Seeder
             "increasement_year"=> "2026",
         ]);
         AnnualSalaryIncreasement::firstOrCreate([
-            "ranking_work_result"=> "ធម្យម_(អនុវត្តន៍ការងារគ្រប់ផែនការងារ)",
+            "ranking_work_result"=> "មធ្យម_(អនុវត្តន៍ការងារគ្រប់ផែនការងារ)",
             "total_score"=> "3 - 3.99",
             "percentage"=> "2",
             "increasement_year"=> "2026",
