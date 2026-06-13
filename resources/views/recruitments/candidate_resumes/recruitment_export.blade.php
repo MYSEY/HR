@@ -2,7 +2,7 @@
     
     <tr>
         <td colspan="29" style="border: none; padding: 10px 5px; text-align: left; vertical-align: middle;">
-            <img src="{{ asset('/admin/img/camma-logo.png') }}" height="80" style="vertical-align: middle; margin-right: 15px;">
+            {{-- <img src="{{ asset('/admin/img/camma-logo.png') }}" height="80" style="vertical-align: middle; margin-right: 15px;"> --}}
         </td>
     </tr>
 

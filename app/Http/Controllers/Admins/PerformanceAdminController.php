@@ -236,7 +236,11 @@ class PerformanceAdminController extends Controller
             'branchs.abbreviations',
         );
         if (in_array(Auth::user()->RolePermission, ['Employee','DHOD','DBM'])) {
-            $query->where("users.department_id", $kpiUser->department_id)->where("users.branch_id", $kpiUser->branch_id);
+            if (Auth::user()->branch->abbreviations =="HQ" && Auth::user()->department->abbreviations == "CRD") {
+                $query->where("users.department_id", $kpiUser->department_id);
+            }else{
+                $query->where("users.department_id", $kpiUser->department_id)->where("users.branch_id", $kpiUser->branch_id);
+            }
         }
         if (in_array(Auth::user()->RolePermission, ['HR']) && self::permission()->is_access != "1") {
             $query->where("users.department_id", $kpiUser->department_id)->where("users.branch_id", $kpiUser->branch_id);
