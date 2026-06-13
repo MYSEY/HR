@@ -367,6 +367,9 @@
                 if (data) {
                     if (data.gender.name_english == "Female") {
                         $(".pr_mr_or_mrs").text("អ្នកស្រី ");
+                        if (data.employee_marital_status == "Single") {
+                            $(".pr_mr_or_mrs").text("កញ្ញា ");
+                        }
                         $(".pr_gender").text("ស្រី ");
                     }else{
                         $(".pr_mr_or_mrs").text("លោក ");

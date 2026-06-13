@@ -946,11 +946,11 @@
                             let btn_edit = "";
                             let btn_delete = "";
                             // if ((row.employee_id == window.userId && (row.status == 'preparing' || row.status == "5")) || (row.line_manager == window.userId && row.status == 'preparing')) {
-                            if ((row.employee_id == window.userId 
-                                && (row.status == 'preparing' || row.status == "5")) 
+                            if (
+                                (row.employee_id == window.userId  && (row.status == 'preparing' || row.status == "5")) 
                                 || (row.line_manager == window.userId && row.status == 'preparing') 
-                                || row.review_employee_id == window.userId
-                                || row.created_by == window.userId
+                                || (row.review_employee_id == window.userId && (row.status == 'preparing' || row.status == "5"))
+                                || (row.created_by == window.userId && (row.status == 'preparing' || row.status == "5"))
                             ) {  
                                 btn_edit = ` <a href="{{url('/performance')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
                                             <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')

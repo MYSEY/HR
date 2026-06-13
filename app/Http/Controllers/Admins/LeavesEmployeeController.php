@@ -50,18 +50,17 @@ class LeavesEmployeeController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
         $balances = [];
+        if ($LeaveAllocation) {
+            $current_year = date('Y', strtotime($LeaveAllocation->created_at));
+            $balances[$current_year] = [
+                $LeaveAllocation
+            ];
+        }
         // Loop បញ្ចូល History ដោយទាញឆ្នាំពី created_at
         foreach ($allocationHistory as $history) {
             $year = date('Y', strtotime($history->created_at)); 
             $balances[$year] = [
                 $history
-            ];
-        }
-        
-        if ($LeaveAllocation) {
-            $current_year = date('Y', strtotime($LeaveAllocation->created_at));
-            $balances[$current_year] = [
-                $LeaveAllocation
             ];
         }
 
@@ -114,7 +113,12 @@ class LeavesEmployeeController extends Controller
                     $query->whereNot("roles.role_type", "Employee");
                 }
             })->get();
-        $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)->get();
+        $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)
+        // ->whereYear('start_date', now()->year) get data by current year
+        ->orderByRaw('YEAR(start_date) DESC')  // Group by Year first
+        // ->orderByRaw('MONTH(start_date) DESC') // Then by Month
+        ->orderBy('id', 'asc')                // Finally by ID for specific order
+        ->get();
         return view('leaves_employee.index', compact('dataLeaveType', 'balances', 'LeaveAllocation', 'employees','delegateEmployees', 'dataLeaveRequest'));
     }
 
@@ -126,7 +130,7 @@ class LeavesEmployeeController extends Controller
         $employees= DB::table('users')
         ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
         ->select( 'users.*', 'roles.role_type',)
-        ->whereIn('users.emp_status', ['Probation','1','2','10',])
+        // ->whereIn('users.emp_status', ['Probation','1','2','10',])
         // ->whereNot("roles.role_type", "Employee")
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if (in_array($RolePermission, ['BM','DBM'])){
