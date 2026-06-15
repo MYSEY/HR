@@ -225,6 +225,7 @@ class PerformanceAdminController extends Controller
 
         $query = User::with(["branch","department"])
         ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->select(
             'users.id',
             'users.number_employee',
@@ -234,12 +235,26 @@ class PerformanceAdminController extends Controller
             'users.branch_id',
             'users.emp_status',
             'branchs.abbreviations',
+            'departments.abbreviations',
         );
         if (in_array(Auth::user()->RolePermission, ['Employee','DHOD','DBM'])) {
             if (Auth::user()->branch->abbreviations =="HQ" && Auth::user()->department->abbreviations == "CRD") {
                 $query->where("users.department_id", $kpiUser->department_id);
             }else{
-                $query->where("users.department_id", $kpiUser->department_id)->where("users.branch_id", $kpiUser->branch_id);
+                if (Auth::user()->branch->abbreviations != "HQ") {
+                    $query->where(function ($subQuery) use ($kpiUser) {
+                        // Condition A: Matches the target user's branch
+                        $subQuery->where("users.branch_id", $kpiUser->branch_id)
+                        // Condition B: OR matches the special CRD HQ department/branch combo
+                        ->orWhere(function ($nestedQuery) {
+                            $nestedQuery->where("departments.abbreviations", "CRD")
+                                        ->where('branchs.abbreviations', "HQ");
+                        });
+                    });
+                }else{
+                    $query->where("users.department_id", $kpiUser->department_id)
+                    ->where("users.branch_id", $kpiUser->branch_id);
+                }
             }
         }
         if (in_array(Auth::user()->RolePermission, ['HR']) && self::permission()->is_access != "1") {
