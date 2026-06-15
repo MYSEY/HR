@@ -120,8 +120,8 @@
                                                     <div class="goal-input-wrapper mt-1">
                                                         @php
                                                             $type = $Detailitem->goal_type;
-                                                            // $type = explode('_', $Detailitem->goal_type)[0] ?? 'number';
-                                                            $symbol = $type == 'percent' ? '%' : ($type == 'currency' ? '$' : ($type == 'number' ? '#' : ''));
+                                                            $type_symbol = explode('_', $Detailitem->goal_type)[0] ?? 'number';
+                                                            $symbol = $type_symbol == 'percent' ? '%' : ($type_symbol == 'currency' ? '$' : ($type_symbol == 'number' ? '#' : ''));
                                                         @endphp
                                                         @foreach ($Detailitem->performanceGoals as $item)
                                                             <div class="row mb-1">
