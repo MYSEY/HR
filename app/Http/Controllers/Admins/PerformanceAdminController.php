@@ -526,9 +526,18 @@ class PerformanceAdminController extends Controller
                 // 'created_by',
                 // 'updated_by',
             ]);
+            $paForm = "";
+            if($performance->kpi_form == "ទម្រង់ផែនការការងាររបស់បុគ្គលិក"){
+                $paForm = "ទម្រង់វាយតម្លៃការងាររបស់បុគ្គលិក";
+            }else if($performance->kpi_form == "ទម្រង់ផែនការការងារសាកល្បងរបស់បុគ្គលិក"){
+                $paForm = "ទម្រង់វាយតម្លៃការងារសាកល្បងរបស់បុគ្គលិក";
+            }else if($performance->kpi_form=="ទម្រង់ផែនការការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១"){
+                $paForm = "ទម្រងវាយតម្លៃការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១";
+            }
             // Create new PerformanceAppraisal record
             $data['created_by'] = Auth::id();
             $data['status'] = 'new';
+            $data['pa_form'] = $paForm;
             $pa = PerformanceAppraisal::create($data);
             // ✅ Loop over related titles from the Performance model (not $data)
             foreach ($performance->titles as $titleItem) {
@@ -603,6 +612,7 @@ class PerformanceAdminController extends Controller
             $ids = explode(',', $request->performance_id);
             $approved = [];
             $skipped = [];
+            $paForm = "";
             foreach ($ids as $id) {
                 $performance = Performance::findOrFail($id);
                 $data = $performance->only([
@@ -629,8 +639,16 @@ class PerformanceAdminController extends Controller
                     // 'created_by',
                     // 'updated_by',
                 ]);
+                if($performance->kpi_form == "ទម្រង់ផែនការការងាររបស់បុគ្គលិក"){
+                    $paForm = "ទម្រង់វាយតម្លៃការងាររបស់បុគ្គលិក";
+                }else if($performance->kpi_form == "ទម្រង់ផែនការការងារសាកល្បងរបស់បុគ្គលិក"){
+                    $paForm = "ទម្រង់វាយតម្លៃការងារសាកល្បងរបស់បុគ្គលិក";
+                }else if($performance->kpi_form=="ទម្រង់ផែនការការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១"){
+                    $paForm = "ទម្រងវាយតម្លៃការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១";
+                }
                 $data['created_by'] = Auth::id();
                 $data['status'] = 'new';
+                $data['pa_form'] = $paForm;
                 $pa = PerformanceAppraisal::create($data);
 
                 // ✅ Loop over related titles from the Performance model (not $data)

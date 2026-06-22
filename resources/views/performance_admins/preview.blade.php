@@ -89,7 +89,7 @@
                         <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" class="inv-logo" alt="">
                     </div>
                     <div class="col-md-4">
-                        <h4 class="payslip-title">ទម្រង់វាយតម្លៃការងាររបស់បុគ្គលិកសាកល្បង</h4>
+                        <h4 class="payslip-title">{{$data->kpi_form}} </h4>
                         <h5 class="payslip-title">ប្រចាំឆ្នាំ៖ {{ \App\Helpers\Helper::toKhmerNumber(\Carbon\Carbon::parse($data->to_date)->format('Y')) }}</h5>
                     </div>
                 </div>

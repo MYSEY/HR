@@ -17,6 +17,7 @@ class PerformanceHistory extends Model
         'employee_id',
         'from_date',
         'to_date',
+        'kpi_form',
         'total_weight',
         'total_score',
         'total_score_live_staff',

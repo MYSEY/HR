@@ -2,7 +2,14 @@
     <tr>
         <td colspan="11" align="center">
             <img src="{{ public_path('admin/img/logo/commalogo1.png') }}" height="100"><br>
-            <strong> ទម្រង់វាយតម្លៃការងាររបស់បុគ្គលិកសាកល្បង</strong><br>
+            <strong> 
+                @if ($data->kpi_form)
+                    {{$data->kpi_form}}
+                @endif
+                @if ($data->pa_form)
+                    {{$data->pa_form}}
+                @endif
+            </strong><br>
             <span style="font-size: 11px !important">ប្រចាំឆ្នាំ៖ {{ \Carbon\Carbon::parse($data->to_date)->format('Y') }}</span>
         </td>
     </tr>

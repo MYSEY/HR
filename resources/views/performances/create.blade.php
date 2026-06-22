@@ -1,4 +1,17 @@
 @extends('layouts.master')
+<style>
+    .scrollable-tbody {
+        /* display: block; */
+        max-height: 700px; /* កម្ពស់ដែលអ្នកចង់ឱ្យចាត់ផ្តើម Scroll ចុះក្រោម */
+        overflow-y: auto;
+        width: auto;
+    }
+
+    /* រក្សាទុកកម្ពស់ Textarea ឱ្យសមរម្យ */
+    .scrollable-tbody textarea {
+        resize: vertical;
+    }
+</style>
 @section('content')
     <div class="page-header">
         <div class="row">
@@ -16,6 +29,17 @@
         <div class="card-body">
             <form action="" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <select name="kpi_form" id="kpi_form" class="form-select text-center required" required>
+                            <option value="ទម្រង់ផែនការការងាររបស់បុគ្គលិក">ទម្រង់ផែនការការងាររបស់បុគ្គលិកប្រចាំឆ្នាំ</option>
+                            <option value="ទម្រង់ផែនការការងារសាកល្បងរបស់បុគ្គលិក">ទម្រង់ផែនការការងារសាកល្បងរបស់បុគ្គលិក</option>
+                            <option value="ទម្រង់ផែនការការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១">ទម្រង់ផែនការការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div><br>
                 <div class="row">
                     <div class="col-md-4 hr-form-group-select2">
                         <div class="form-group">
@@ -49,16 +73,16 @@
                 </div>
                 <div class="row mb-2">
                     <div class="col-md-12">
-                        <div class="table-responsive">
+                        <div class="table-responsive scrollable-tbody" >
                             <table id="tbl_performance" class="table table-bordered review-table mb-0">
                                 <thead>
                                     <tr>
                                         <th style="min-width: 450px;">(KPI)</th>
-                                        <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
-                                        <th style="min-width: 350px;">គោលដៅ (Goal)</th>
+                                        <th style="min-width: 400px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
+                                        <th style="min-width: 450px;">គោលដៅ (Goal)</th>
                                         <th style="min-width: 150px;">ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
                                         <th style="min-width: 150px;">Is Lock</th>
-                                        <th style="min-width: 500px;">Comments</th>
+                                        <th style="min-width: 400px;">Comments</th>
                                         <th>@lang('lang.action')</th>
                                     </tr>
                                 </thead>
@@ -111,14 +135,15 @@
                                                         <div class="goal-input-wrapper mt-1">
                                                             <div class="row mb-1">
                                                                 <div class="group d-flex align-items-center">
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-6">
                                                                         <div class="input-group">
-                                                                            <span class="input-group-text" style="height: 35px;">#</span>
+                                                                            <span class="input-group-text" style="height: 35px; ">#</span>
                                                                             <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-2 text-center">To</div>
-                                                                    <div class="col-md-5">
+                                                                    
+                                                                    {{-- <div class="col-md-2 text-center">To</div> --}}
+                                                                    <div class="col-md-6 ps-1">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
                                                                             <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -128,14 +153,14 @@
                                                             </div>
                                                             <div class="row mb-1">
                                                                 <div class="group d-flex align-items-center">
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-6">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
                                                                             <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-2 text-center">To</div>
-                                                                    <div class="col-md-5">
+                                                                    {{-- <div class="col-md-2 text-center">To</div> --}}
+                                                                    <div class="col-md-6 ps-1">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
                                                                             <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -146,14 +171,14 @@
                                                             
                                                             <div class="row mb-1">
                                                                 <div class="group d-flex align-items-center">
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-6">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
                                                                             <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-2 text-center">To</div>
-                                                                    <div class="col-md-5">
+                                                                    {{-- <div class="col-md-2 text-center">To</div> --}}
+                                                                    <div class="col-md-6 ps-1">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
                                                                             <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -163,14 +188,14 @@
                                                             </div>
                                                             <div class="row mb-1">
                                                                 <div class="group d-flex align-items-center">
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-6">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
                                                                             <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-2 text-center">To</div>
-                                                                    <div class="col-md-5">
+                                                                    {{-- <div class="col-md-2 text-center">To</div> --}}
+                                                                    <div class="col-md-6 ps-1">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
                                                                             <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -180,14 +205,14 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="group d-flex align-items-center">
-                                                                    <div class="col-md-5">
+                                                                    <div class="col-md-6">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
                                                                             <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-2 text-center">To</div>
-                                                                    <div class="col-md-5">
+                                                                    {{-- <div class="col-md-2 text-center">To</div> --}}
+                                                                    <div class="col-md-6 ps-1">
                                                                         <div class="input-group">
                                                                             <span class="input-group-text" style="height: 35px;">#</span>
                                                                             <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -208,7 +233,7 @@
                                                         </select>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="6" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false">{{ old('comment') }}</textarea>
+                                                        <textarea rows="9" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false">{{ old('comment') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
                                                         <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
@@ -309,14 +334,13 @@
                 return `
                 <div class="row mb-1">
                     <div class="group d-flex align-items-center">
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <div class="input-group">
                                 ${symbol ? `<span class="input-group-text" style="height: 35px;">${symbol}</span>` : ''}
                                 <input type="${inputType}" step="${step}" class="form-control goal-from required" name="goal_from[]" placeholder="${placeholderFrom}" style="height:35px;">
                             </div>
                         </div>
-                        <div class="col-md-2 text-center">To</div>
-                        <div class="col-md-5">
+                        <div class="col-md-6 ps-1">
                             <div class="input-group">
                                 ${symbol ? `<span class="input-group-text" style="height: 35px;">${symbol}</span>` : ''}
                                 <input type="${inputType}" step="${step}" class="form-control goal-to required" name="goal_to[]" placeholder="${placeholderTo}" style="height:35px;">
@@ -465,6 +489,7 @@
                         employee_id : $("#employee_id").val(),
                         from_date : $("#from_date").val(),
                         to_date : $("#to_date").val(),
+                        kpi_form : $("#kpi_form").val(),
                         main_comment : $("#main_comment").val(),
                         data: dataKeyKpi,
                     },
@@ -538,14 +563,13 @@
                 <div class="goal-input-wrapper mt-1">
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -555,14 +579,13 @@
                     </div>
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -573,14 +596,13 @@
                     
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -590,14 +612,13 @@
                     </div>
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -607,14 +628,13 @@
                     </div>
                     <div class="row">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -665,14 +685,13 @@
                 <div class="goal-input-wrapper mt-1">
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -682,14 +701,13 @@
                     </div>
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -700,14 +718,13 @@
                     
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -717,14 +734,13 @@
                     </div>
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -734,14 +750,13 @@
                     </div>
                     <div class="row">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -809,14 +824,13 @@
                 <div class="goal-input-wrapper mt-1">
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -826,14 +840,13 @@
                     </div>
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -844,14 +857,13 @@
                     
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -861,14 +873,13 @@
                     </div>
                     <div class="row mb-1">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
@@ -878,14 +889,13 @@
                     </div>
                     <div class="row">
                         <div class="group d-flex align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-from required" name="goal_from[]" placeholder="From" style="height: 35px;">
                                 </div>
                             </div>
-                            <div class="col-md-2 text-center">To</div>
-                            <div class="col-md-5">
+                            <div class="col-md-6 ps-1">
                                 <div class="input-group">
                                     <span class="input-group-text" style="height: 35px;">#</span>
                                     <input type="number" step="any" class="form-control goal-to required" name="goal_from[]" placeholder="To" style="height:35px;">
