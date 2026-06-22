@@ -540,6 +540,7 @@ class PerformanceController extends Controller
                     'employee_id'  => $request->employee_id,
                     'from_date'    => $request->from_date,
                     'to_date'      => $request->to_date,
+                    'kpi_form'     => $request->kpi_form,
                     'type'         => $type,
                     'main_comment'  => $request->main_comment,
                     'total_weight' => $totalWeight,
@@ -817,17 +818,23 @@ class PerformanceController extends Controller
             $performanceSheet = $spreadsheet->getSheetByName('Performance');
             if ($performanceSheet) {
                 $rows = $performanceSheet->toArray();
+                $kpiForm = "";
                 foreach ($rows as $i => $row) {
                     if ($i == 0) continue; // skip header
 
                     $employee = User::where("number_employee", $row[0])->first();
                     if (!$employee) continue;
-
                     if($row[4] <= 100){
+                        if(in_array($employee->emp_status, ["Probation","Upcoming"])){
+                            $kpiForm = "ទម្រង់ផែនការការងារសាកល្បងរបស់បុគ្គលិក";
+                        }else{
+                            $kpiForm = "ទម្រង់ផែនការការងាររបស់បុគ្គលិក";
+                        }
                         $performance = Performance::create([
                             'employee_id'  => $employee->id,
                             'from_date'    => Carbon::parse($row[1]),
                             'to_date'      => Carbon::parse($row[2]),
+                            'kpi_form'     => $kpiForm,
                             'type'         => $row[3],
                             'total_weight' => $row[4],
                             'status'       => 'preparing',

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('employee_id');
             $table->date('from_date');
             $table->date('to_date');
+            $table->string('kpi_form');
             $table->integer('total_weight')->default(0);
             $table->decimal('total_score')->default(0);
             $table->decimal('total_score_live_staff')->default(0);
