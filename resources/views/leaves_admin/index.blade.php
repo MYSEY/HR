@@ -198,7 +198,7 @@
                                                                         <td>{{$request->number_of_day}} Day</td>
                                                                         <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
-                                                                        <td>{{\Carbon\Carbon::parse($request->created_at)->format('d-M-Y h:i') ?? ''}}</td>
+                                                                        <td>{{$request->created_at ? \Carbon\Carbon::parse($request->created_at)->format('d-M-Y h:i') : ''}}</td>
                                                                         <td> {{$request->createdBy->employee_name_en}} </td>
                                                                         <td data-toggle="tooltip" data-html="true" title="{!! $request->remark !!}">
                                                                              {{ Str::limit($request->remark, 30, '...') }}
@@ -826,7 +826,7 @@
                         $(rows).each(function(e, row) {
                             let start_date = moment(row.start_date).format('D-MMM-YYYY');
                             let end_date = moment(row.end_date).format('D-MMM-YYYY');
-                            let created_at = moment(row.created_at).format('D-MMM-YYYY HH:mm');
+                            let created_at = row.created_at ? moment(row.created_at).format('D-MMM-YYYY HH:mm') : "";
                             if (is_approve == 1 || is_reject == 1) {
                                 if (row.status == "pending" || row.status == "approved_lm" || row.status == "approved_hod") {
                                     candistion = '<button class="btn btn-outline-secondary btn-sm btn-approved" data-id="'+(row.id)+'"'+  
