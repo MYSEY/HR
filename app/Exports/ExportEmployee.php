@@ -33,7 +33,7 @@ class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, 
                 $salary = $users->basic_salary;
                  $phone_allowance = $users->phone_allowance;
             };
-
+            // $langSuffix = (Helper::getLang() == 'en') ? 'name_en' : 'name_km';
             $dataExport[] = [
                 "number_employee" => $users->number_employee,
                 "last_name_kh" => $users->last_name_kh,
@@ -85,14 +85,14 @@ class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, 
                 "permanent_commune" =>  $users->permanent_commune,
                 "permanent_village" =>  $users->permanent_village
 
-                // "current_province"  =>  $users->currentprovince ? $users->currentprovince->name_en : "",
-                // "current_district"  =>  $users->currentdistrict ? $users->currentdistrict->name_en : "",
-                // "current_commune"   =>  $users->currentcommune ? $users->currentcommune->name_en : "",
-                // "current_village"   =>  $users->currentvillage ? $users->currentvillage->name_en : "",
-                // "permanent_province"=>  $users->permanentprovince ? $users->permanentprovince->name_en : "",
-                // "permanent_district"=>  $users->permanent_district ? $users->permanentdistrict->name_en : "",
-                // "permanent_commune" =>  $users->permanent_commune ? $users->permanentcommune->name_en : "",
-                // "permanent_village" =>  $users->permanent_village ? $users->permanentvillage->name_en : "",
+                // "current_province"   => $users->currentprovince?->{$langSuffix} ?? "",
+                // "current_district"   => $users->currentdistrict?->{$langSuffix} ?? "",
+                // "current_commune"    => $users->currentcommune?->{$langSuffix} ?? "",
+                // "current_village"    => $users->currentvillage?->{$langSuffix} ?? "",
+                // "permanent_province" => $users->permanentprovince?->{$langSuffix} ?? "",
+                // "permanent_district" => $users->permanentdistrict?->{$langSuffix} ?? "",
+                // "permanent_commune"  => $users->permanentcommune?->{$langSuffix} ?? "",
+                // "permanent_village"  => $users->permanentvillage?->{$langSuffix} ?? "",
 
             ];
         }
