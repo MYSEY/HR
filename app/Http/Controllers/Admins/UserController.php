@@ -751,9 +751,11 @@ class UserController extends Controller
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == "Probation"){
-                User::where('id',$request->id)->update([
+                DB::table('users')
+                ->where('id', $request->id)
+                ->update([
                     'emp_status' => $request->emp_status,
-                    'resign_reason' => $request->resign_reason
+                    'resign_reason' => $request->resign_reason,
                 ]);
                 $totalUpcomings = User::where('emp_status','Upcoming')->count();
             }else{

@@ -290,9 +290,10 @@
                                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @endif
                                                     </td>
+                                                    {{-- @dd(permissionAccess("m10-s2","is_update")) --}}
                                                     <td class="text-end">
                                                         @if (permissionAccess("m10-s2","is_update")->value == "1" || permissionAccess("m10-s2","is_delete")->value == "1")
-                                                            @if (isset($request->StatusApprve["pending"]))
+                                                            @if (isset($request->StatusApprve["pending"]) || isset($request->StatusApprve["approved_lm"]))
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
