@@ -1173,7 +1173,14 @@ class CandidateResumeController extends Controller
     }
     public function preview(Request $request){
         $data = User::where('id',$request->id)->first();
-        return view('recruitments.candidate_resumes.preview',compact('data'));
+        $dataManagement = User::
+        with("lineManager")
+        ->with("branch")
+        ->with("position")
+        ->with("gender")
+        ->where("department_id", Auth::user()->department_id)
+        ->get();
+        return view('recruitments.candidate_resumes.preview',compact(['data','dataManagement']));
     }
 
     public static function getDatas($request)
