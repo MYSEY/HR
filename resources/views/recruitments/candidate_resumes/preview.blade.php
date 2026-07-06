@@ -20,13 +20,15 @@
                                 <i class="fa fa-print fa-lg"></i> @lang('lang.print')
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" style="">
-                                <a class="dropdown-item" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
-                                <a class="dropdown-item" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
-                                <a class="dropdown-item" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
-                                <a class="dropdown-item" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
-                                <a class="dropdown-item" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
-                                <a class="dropdown-item" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
-                                <a class="dropdown-item" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
+                                <a class="dropdown-item btn-print" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
+                                <a class="dropdown-item btn-print" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
+                                <a class="dropdown-item btn-print" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
+                                <a class="dropdown-item btn-print" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
+                                <a class="dropdown-item btn-print" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
+                                <a class="dropdown-item btn-print" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
+                                <a class="dropdown-item btn-print" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
+                                <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate" data-signed-contract="Employment Certificate NSSF" data-id="{{$data->id}}">Employment Certificate NSSF</a>
+                                <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate_form" data-signed-contract="Employment Cerntificate Form" data-id="{{$data->id}}">Employment Cerntificate Form</a>
                             </div>
                         </div>
                     @endif
@@ -279,6 +281,37 @@
             </div>
         </div>
     </div>
+    <div id="add_select" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form  enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <div class="form-group">
+                            <label>@lang('lang.select') <span class="text-danger">*</span></label>
+                            <select class="form-control select floating" id="management_name" name="management_name" required value="{{old('position_range')}}">
+                                <option selected disabled> --@lang('lang.select')--</option>
+                                @foreach ($dataManagement as $item)
+                                    <option data-position="{{$item->position ? $item->position->name_khmer : ""}}" data-datas="{{$item}}" value="{{$item->employee_name_kh}}">{{Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <input type="" hidden id="add_select_id">
+                        <div class="submit-section">
+                            <button type="button" class="btn btn-primary print-btn">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                <span class="btn-txt">@lang('lang.print')</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     @include('components.loading-modal')
     @include('recruitments.candidate_resumes.prints.signed_contract')
     @include('recruitments.candidate_resumes.prints.contract')
@@ -287,6 +320,8 @@
     @include('recruitments.candidate_resumes.prints.contract_volunteer')
     @include('recruitments.candidate_resumes.prints.confidential_letter')
     @include('recruitments.candidate_resumes.prints.blacklist_agreement')
+    @include('recruitments.candidate_resumes.prints.Employment_Certificate_NSSF')
+    @include('recruitments.candidate_resumes.prints.employment_certificate_form')
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
@@ -294,48 +329,79 @@
 <script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script type="text/javascript">
     $(function() {
-        $('#btn_print_signed_contract').on('click', function(){
+        $(".btn-print").on("click", function(){
             $('#modal-loading').modal('show');
             let id = $(this).data("id");
             let signed_contract = $(this).attr('data-signed-contract');
             printSignContract(id,signed_contract);
         });
-        $('#btn_print_contract').on('click', function(){
-            $('#modal-loading').modal('show');
+        // $('#btn_print_signed_contract').on('click', function(){
+        //     $('#modal-loading').modal('show');
+        //     let id = $(this).data("id");
+        //     let signed_contract = $(this).attr('data-signed-contract');
+        //     printSignContract(id,signed_contract);
+        // });
+        // $('#btn_print_contract').on('click', function(){
+        //     $('#modal-loading').modal('show');
+        //     let id = $(this).data("id");
+        //     let signed_contract = $(this).attr('data-signed-contract');
+        //     printSignContract(id,signed_contract);
+        // });
+        // $('#btn_appointed_letter').on('click', function(){
+        //     $('#modal-loading').modal('show');
+        //     let id = $(this).data("id");
+        //     let signed_contract = $(this).attr('data-signed-contract');
+        //     printSignContract(id,signed_contract);
+        // });
+        // $('#btn_complete_probation').on('click', function(){
+        //     $('#modal-loading').modal('show');
+        //     let id = $(this).data("id");
+        //     let signed_contract = $(this).attr('data-signed-contract');
+        //     printSignContract(id,signed_contract);
+        // });
+        // $('#btn_contract_volunteer').on('click', function(){
+        //     $('#modal-loading').modal('show');
+        //     let id = $(this).data("id");
+        //     let signed_contract = $(this).attr('data-signed-contract');
+        //     printSignContract(id,signed_contract);
+        // });
+        // $('#btn_confidential_letter').on('click', function(){
+        //     $('#modal-loading').modal('show');
+        //     let id = $(this).data("id");
+        //     let signed_contract = $(this).attr('data-signed-contract');
+        //     printSignContract(id,signed_contract);
+        // });
+        $('.btn_certificate').on('click', function(){
             let id = $(this).data("id");
-            let signed_contract = $(this).attr('data-signed-contract');
-            printSignContract(id,signed_contract);
+            let printBy  = $(this).attr('data-signed-contract');
+            $(".print-btn").data("print", printBy);
+            $("#add_select_id").val(id);
+            $('#add_select').modal('show');
         });
-        $('#btn_appointed_letter').on('click', function(){
+        $(".print-btn").on("click", function () {
             $('#modal-loading').modal('show');
-            let id = $(this).data("id");
-            let signed_contract = $(this).attr('data-signed-contract');
-            printSignContract(id,signed_contract);
+            let form  = $(this).data('print');
+            let data_management = $("#management_name option:selected").data("datas");
+            let employee_gender = data_management.gender;
+            $("#gender_male").text("");
+            $("#gender_female").text("");
+            if (employee_gender && (employee_gender.name_english === "Male" || employee_gender.name_khmer === "ប្រុស")) {
+                $("#gender_male").text("✓");
+            } else if (employee_gender && (employee_gender.name_english === "Female" || employee_gender.name_khmer === "ស្រី")) {
+                $("#gender_female").text("✓");
+            }
+            
+            $(".management_name_print").text(data_management.employee_name_kh);
+            $(".management_name_en_print").text(data_management.employee_name_en);
+            $(".management_position_print").text(data_management.position.name_khmer);
+            printSignContract($("#add_select_id").val(),form);
         });
-        $('#btn_complete_probation').on('click', function(){
-            $('#modal-loading').modal('show');
-            let id = $(this).data("id");
-            let signed_contract = $(this).attr('data-signed-contract');
-            printSignContract(id,signed_contract);
-        });
-        $('#btn_contract_volunteer').on('click', function(){
-            $('#modal-loading').modal('show');
-            let id = $(this).data("id");
-            let signed_contract = $(this).attr('data-signed-contract');
-            printSignContract(id,signed_contract);
-        });
-        $('#btn_confidential_letter').on('click', function(){
-            $('#modal-loading').modal('show');
-            let id = $(this).data("id");
-            let signed_contract = $(this).attr('data-signed-contract');
-            printSignContract(id,signed_contract);
-        });
-        $('#btn_blacklist_agreement').on('click', function(){
-            $('#modal-loading').modal('show');
-            let id = $(this).data("id");
-            let signed_contract = $(this).attr('data-signed-contract');
-            printSignContract(id,signed_contract);
-        });
+        // $('#btn_blacklist_agreement').on('click', function(){
+        //     $('#modal-loading').modal('show');
+        //     let id = $(this).data("id");
+        //     let signed_contract = $(this).attr('data-signed-contract');
+        //     printSignContract(id,signed_contract);
+        // });
     });
 
     function printSignContract(id,signed_contract){
@@ -365,13 +431,24 @@
                 let end_month = formatDate(fdc_date, 'km', format_date={month: true});
                 let end_year = formatDate(fdc_date, 'km', format_date={year: true});                
                 if (data) {
+                    $("#pr_status_single").text(" ");
+                    $("#pr_status_married").text(" ");
+                    if (data.employee_marital_status == "Single") {
+                        $("#pr_status_single").text("✓");
+                    }
+                    if (data.employee_marital_status == "Married") {
+                        $("#pr_status_married").text("✓");
+                    }
+                    
                     if (data.gender.name_english == "Female") {
+                        $("#gender_female_staff").text("✓");
                         $(".pr_mr_or_mrs").text("អ្នកស្រី ");
                         if (data.employee_marital_status == "Single") {
                             $(".pr_mr_or_mrs").text("កញ្ញា ");
                         }
                         $(".pr_gender").text("ស្រី ");
                     }else{
+                        $("#gender_male_staff").text("✓");
                         $(".pr_mr_or_mrs").text("លោក ");
                         $(".pr_gender").text("ប្រុស ");
                     }
@@ -380,7 +457,11 @@
                     $(".level").text(data.level);
                     $(".line_manager").text(data.line_manager != null ? data.line_manager.employee_name_kh : "");
                     $(".pr_name").text(data.employee_name_kh +" ");
+                    $(".pr_name_en").text(data.employee_name_en +" ");
                     $(".pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
+                    $(".pr_birth_day").text(day);
+                    $(".pr_birth_month").text(month);
+                    $(".pr_birth_year").text(year);
                     $(".pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
                     $(".pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
                     $(".pr_id_card_number").text(data.id_card_number+ "");
@@ -392,7 +473,19 @@
                     if (data.current_street_no) {
                         number_street = " ផ្លូវលេខ "+data.current_street_no;
                     }
-                    let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
+                    let currentvillage_name = data.currentvillage ? data.currentvillage.name_km : "";
+                    let currentcommune_name = data.currentcommune ? data.currentcommune.name_km : "";
+                    let currentdistrict_name = data.currentdistrict ? data.currentdistrict.name_km : "";
+                    let currentprovince_name = data.currentprovince ? data.currentprovince.name_km : "";
+                    let location = number_home + number_street + " ភូមិ "+currentvillage_name + " ឃុំ/សង្កាត់ " + currentcommune_name + " ស្រុក/ខណ្ឌ " + currentdistrict_name+ " ខេត្ត/ក្រុង "+currentprovince_name;
+                    
+                    $(".pr_number_home").text(number_home);
+                    $(".pr_number_street").text(number_street);
+                    $(".pr_currentvillage_name").text(currentvillage_name);
+                    $(".pr_currentcommune_name").text(currentcommune_name);
+                    $(".pr_currentdistrict_name").text(currentdistrict_name);
+                    $(".pr_currentprovince_name").text(currentprovince_name);
+
                     $(".pr_current_location").text(location);
                     $(".pr_personal_phone_number").text(data.personal_phone_number);
                     $(".pr_join_day").text(join_day);
@@ -404,6 +497,7 @@
                     $(".pr_branch").text(data.branch.branch_name_kh);
                     $("#pr_employee_id").text(data.number_employee);
                     $("#pr_basic_salary").text(data.basic_salary);
+                    $(".pr_basic_salary").text(data.basic_salary);
                     $("#pr_salary_increase").text(data.salary_increas);
                     if (data.recruitment && data.recruitment.pro_rate == "1") {
                         $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
@@ -422,10 +516,14 @@
                         styleContractVolunteer();
                     }else if(signed_contract == 'confildetail letter'){
                         styleConfidentialLetter();
+                    }else if(signed_contract =="Employment Certificate NSSF"){
+                        styleEmploymentCertificateNSSF();
+                    }else if(signed_contract =="Employment Cerntificate Form"){
+                        styleCerntificateForm();
                     }else{
                         styleBlicklistAgreement();
                     }
-                    
+                    $('#add_select').modal('hide');
                     window.setTimeout(function() {
                         $('#modal-loading').modal('hide');
                     }, 2000);
@@ -526,4 +624,31 @@
             doctypeString: "",
         });
     }
+    function styleEmploymentCertificateNSSF() {
+        $(".print_employment_certificate").show();
+        $(".print_employment_certificate").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/employment-certificate-NSSF.css')}}",
+            header: "",
+            printDelay: 2000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
+    function styleCerntificateForm() {
+        $("#print_cerntificate_form").show();
+        $("#print_cerntificate_form").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/employment-certificate-form.css')}}",
+            header: "",
+            printDelay: 2000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
+    
 </script>
