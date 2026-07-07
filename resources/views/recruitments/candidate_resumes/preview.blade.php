@@ -453,6 +453,7 @@
                         $(".pr_gender").text("ប្រុស ");
                     }
                     $(".pr_ceo").text(branch.employee_name_kh);
+                    $(".pr_ceo_position").text(branch.name_khmer);
                     $(".pr_position").text(data.position.name_khmer);
                     $(".level").text(data.level);
                     $(".line_manager").text(data.line_manager != null ? data.line_manager.employee_name_kh : "");
@@ -495,10 +496,10 @@
                     $(".pr_end_month").text(end_month);
                     $(".pr_end_year").text(end_year);
                     $(".pr_branch").text(data.branch.branch_name_kh);
-                    $("#pr_employee_id").text(data.number_employee);
-                    $("#pr_basic_salary").text(data.basic_salary);
+                    $(".pr_employee_id").text(data.number_employee);
                     $(".pr_basic_salary").text(data.basic_salary);
-                    $("#pr_salary_increase").text(data.salary_increas);
+                    $(".pr_basic_salary").text(data.basic_salary);
+                    $(".pr_salary_increase").text(data.salary_increas);
                     if (data.recruitment && data.recruitment.pro_rate == "1") {
                         $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
                     }else{
