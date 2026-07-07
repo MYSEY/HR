@@ -12,12 +12,44 @@
                     src="http://127.0.0.1:8000/admin/img/logo/cammalogo.png">
             </div>
         </div>
-        <div class="font-sub-title">
-            <label class="label-sub">កិច្ចសន្យាការងារពេញសិទ្ធិ</label><br>
-            <label class="label-subs">(កិច្ចសន្យាមានថិរវេលាកំណត់-FDC)</label><br>
-            <label class="label-sub_l">រវាង</label>
-        </div><br>
-        
+        <div style="display: flex; align-items: center; justify-content: center; position: relative; width: 100%;">  
+            <div class="font-sub-title" style="text-align: center;">
+                <label class="label-sub">កិច្ចសន្យាការងារពេញសិទ្ធិ</label><br>
+                <label class="label-subs">(កិច្ចសន្យាមានថិរវេលាកំណត់-FDC)</label><br>
+                <label class="label-sub_l">រវាង</label>
+            </div>
+
+            <div style="
+                    position: absolute;
+                    right: 0;
+                    top: 40%;
+                    transform: translateY(-50%);
+                    width: 2.8cm; 
+                    height: 1.6cm; 
+                    border: 1px solid #9c4543;
+                    box-sizing: border-box; 
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 5px; 
+                    text-align: center;
+                    background-color: #fafafa;
+                    flex-shrink: 0;
+                ">
+                <span style="
+                    font-size: 9pt; 
+                    line-height: 1.3; 
+                    color: #000; 
+                    font-family: 'Arial', 'Siemreap', sans-serif;
+                    font-weight: bold;
+                ">
+                    HRM-020
+                    <br><br>
+                    <span style="font-size: 8pt; font-weight: normal;">Doc No:.............</span>
+                </span>
+            </div>
+        </div>
+        <br>
         <div style="display:flex;" class="set-font">
             <div style="width: 487%;">
                 <table style="width:100%">
