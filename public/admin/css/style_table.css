@@ -67,6 +67,7 @@ ol {
     list-style: none;
     font-family: 'Khmer OS Battambang', serif;
     margin-top: 0%;
+    margin-bottom: 0%;
 }
 ol.s {list-style-type: inherit;}
 

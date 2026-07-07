@@ -112,7 +112,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                លេខអត្តសញ្ញាណបណ្ណការងារ <strong id="pr_employee_id"></strong>។
+                                លេខអត្តសញ្ញាណបណ្ណការងារ <strong class="pr_employee_id"></strong>។
                             </td></tr>
                         </table>
                     </div>
@@ -128,7 +128,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                ប្រាក់បៀវត្សគោលចំនួន <strong id="pr_basic_salary"></strong> ដុល្លារអាមេរិក ក្នុងមួយខែ និងក្រោយឆ្លងផុតការងារសាកល្បង បុគ្គលិកនឹងត្រូវដំឡើងប្រាក់បៀវត្សបន្ថែមចំនួន <strong id="pr_salary_increase"></strong> ដុល្លារអាមេរិក <span id="pr_supporting_or_field_staff"></span> ដោយការបង់ពន្ធលើប្រាក់បៀវត្សប្រចាំខែ ជាបន្ទុករបស់និយោជិត។
+                                ប្រាក់បៀវត្សគោលចំនួន <strong class="pr_basic_salary"></strong> ដុល្លារអាមេរិក ក្នុងមួយខែ និងក្រោយឆ្លងផុតការងារសាកល្បង បុគ្គលិកនឹងត្រូវដំឡើងប្រាក់បៀវត្សបន្ថែមចំនួន <strong class="pr_salary_increase"></strong> ដុល្លារអាមេរិក <span class="pr_supporting_or_field_staff"></span> ដោយការបង់ពន្ធលើប្រាក់បៀវត្សប្រចាំខែ ជាបន្ទុករបស់និយោជិត។
                             </td></tr>
                         </table>
                     </div>
