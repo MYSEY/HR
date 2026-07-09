@@ -27,6 +27,7 @@
                                 <a class="dropdown-item btn-print" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
                                 <a class="dropdown-item btn-print" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
                                 <a class="dropdown-item btn-print" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
+                                <a class="dropdown-item btn-print" href="#" id="btn_code_conduction_agreement" data-signed-contract="code conduction agreement" data-id="{{$data->id}}">Code Conduction Agreement</a>
                                 <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate" data-signed-contract="Employment Certificate NSSF" data-id="{{$data->id}}">Employment Certificate NSSF</a>
                                 <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate_form" data-signed-contract="Employment Cerntificate Form" data-id="{{$data->id}}">Employment Cerntificate Form</a>
                             </div>
@@ -319,6 +320,7 @@
     @include('recruitments.candidate_resumes.prints.complete_probation')
     @include('recruitments.candidate_resumes.prints.contract_volunteer')
     @include('recruitments.candidate_resumes.prints.confidential_letter')
+    @include('recruitments.candidate_resumes.prints.code_conduct_agreement')
     @include('recruitments.candidate_resumes.prints.blacklist_agreement')
     @include('recruitments.candidate_resumes.prints.Employment_Certificate_NSSF')
     @include('recruitments.candidate_resumes.prints.employment_certificate_form')
@@ -517,6 +519,8 @@
                         styleContractVolunteer();
                     }else if(signed_contract == 'confildetail letter'){
                         styleConfidentialLetter();
+                    }else if(signed_contract == 'code conduction agreement'){
+                        styleCodeConductionAgreement();
                     }else if(signed_contract =="Employment Certificate NSSF"){
                         styleEmploymentCertificateNSSF();
                     }else if(signed_contract =="Employment Cerntificate Form"){
@@ -602,6 +606,19 @@
     function styleConfidentialLetter() {
         $("#print_confidential_letter").show();
         $("#print_confidential_letter").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style_table.css')}}",
+            header: "",
+            printDelay: 2000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
+     function styleCodeConductionAgreement() {
+        $("#print_code_conduct_agreement").show();
+        $("#print_code_conduct_agreement").printThis({
             importCSS: false,
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_table.css')}}",
