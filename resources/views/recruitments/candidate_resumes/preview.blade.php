@@ -23,6 +23,7 @@
                                 <a class="dropdown-item btn-print" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
                                 <a class="dropdown-item btn-print" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
                                 <a class="dropdown-item btn-print" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
+                                <a class="dropdown-item btn-print" href="#" id="btn_appointment_resolution" data-signed-contract="Appointment Resolution" data-id="{{$data->id}}">Appointment Resolution</a>
                                 <a class="dropdown-item btn-print" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
                                 <a class="dropdown-item btn-print" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
                                 <a class="dropdown-item btn-print" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
@@ -317,6 +318,7 @@
     @include('recruitments.candidate_resumes.prints.signed_contract')
     @include('recruitments.candidate_resumes.prints.contract')
     @include('recruitments.candidate_resumes.prints.appointed_letter')
+    @include('recruitments.candidate_resumes.prints.appointment_resolution')
     @include('recruitments.candidate_resumes.prints.complete_probation')
     @include('recruitments.candidate_resumes.prints.contract_volunteer')
     @include('recruitments.candidate_resumes.prints.confidential_letter')
@@ -513,6 +515,8 @@
                         stylePrintContract();
                     }else if(signed_contract == 'appointed letter'){
                         stylePrintAppointedLetter();
+                    }else if(signed_contract=='Appointment Resolution'){
+                        styleAppointmentResolution();
                     }else if(signed_contract == 'complete probation'){
                         stylePrintCompleteProbation();
                     }else if(signed_contract == 'contract volunteer'){
@@ -567,6 +571,19 @@
     function stylePrintAppointedLetter() {
         $("#print_appointed_letter").show();
         $("#print_appointed_letter").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style_print_oppointed_letter.css')}}",
+            header: "",
+            printDelay: 2000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
+    function styleAppointmentResolution(){
+        $("#print_appointment_resolution").show();
+        $("#print_appointment_resolution").printThis({
             importCSS: false,
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_print_oppointed_letter.css')}}",
