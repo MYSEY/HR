@@ -1,6 +1,5 @@
 <div id="print_sign_contract" hidden>
     <div class="card-header">
-        {{-- logo company --}}
         <div>
             <div style="text-align: center" class="font-title">
                 <label class="title">ព្រះរាជាណាចក្រកម្ពុជា</label><br>
@@ -12,17 +11,50 @@
                     src="http://127.0.0.1:8000/admin/img/logo/cammalogo.png">
             </div>
         </div>
-        <div class="font-sub-title">
-            <label class="label-sub">កិច្ចសន្យាការងារសាកល្បង</label><br>
-            <label class="label-subs">(កិច្ចសន្យាមានថិរវេលាកំណត់-FDC)</label><br>
-            <label class="label-sub_l">រវាង</label>
-        </div><br>
+        <div style="display: flex; align-items: center; justify-content: center; position: relative; width: 100%;">  
+            <div class="font-sub-title" style="text-align: center;">
+                <label class="label-sub">កិច្ចសន្យាការងារសាកល្បង</label><br>
+                <label class="label-subs">(កិច្ចសន្យាមានថិរវេលាកំណត់-FDC)</label><br>
+                <label class="label-sub_l">រវាង</label>
+            </div>
+
+            <div style="
+                    position: absolute;
+                    right: 0;
+                    top: 40%;
+                    transform: translateY(-50%);
+                    width: 2.8cm; 
+                    height: 1.6cm; 
+                    border: 1px solid #9c4543;
+                    box-sizing: border-box; 
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 5px; 
+                    text-align: center;
+                    background-color: #fafafa;
+                    flex-shrink: 0;
+                ">
+                <span style="
+                    font-size: 9pt; 
+                    line-height: 1.3; 
+                    color: #000; 
+                    font-family: 'Arial', 'Siemreap', sans-serif;
+                    font-weight: bold;
+                ">
+                    HRM-019
+                    <br><br>
+                    <span style="font-size: 8pt; font-weight: normal;">Doc No:.............</span>
+                </span>
+            </div>
+        </div>
+        <br>
         
         <div style="display:flex;" class="set-font">
             <div style="width: 487%;">
                 <table style="width:100%">
                     <tr><td class="table_tr">
-                        <strong>គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត</strong> អាសយដ្ឋានផ្ទះលេខ ១០១A ផ្លូវ ២៨៩ សង្កាត់បឹងកក់ទី១ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ មានអាជ្ញាបណ្ណគ្រឹះស្ថានមីក្រូហិរញ្ញវត្ថុលេខ ម.ហ. ០២៤ (M.F 024) ចុះថ្ងៃទី ២៤ ខែកក្កដា ឆ្នាំ២០២៤  តំណាងដោយ លោក <span style="font-weight: bold; font-family:  Khmer OS Muol Light, serif;" class="pr_ceo">  </span> តួនាទី <span class="pr_position"></span> ដែលតទៅនេះហៅថា <strong>«និយោជក»</strong>។
+                        <strong>គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត</strong> អាសយដ្ឋានផ្ទះលេខ ១០១A ផ្លូវ ២៨៩ សង្កាត់បឹងកក់ទី១ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ មានអាជ្ញាបណ្ណគ្រឹះស្ថានមីក្រូហិរញ្ញវត្ថុលេខ ម.ហ. ០២៤ (M.F 024) ចុះថ្ងៃទី ២៤ ខែកក្កដា ឆ្នាំ២០២៤  តំណាងដោយ លោក <span style="font-weight: bold; font-family:  Khmer OS Muol Light, serif;" class="pr_ceo">  </span> តួនាទី <span class="pr_ceo_position"></span> ដែលតទៅនេះហៅថា <strong>«និយោជក»</strong>។
                     </td></tr>
                 </table>
                 <div style="text-align: center;">
@@ -96,7 +128,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                កន្លែងបម្រើការងារនៅ ប្រចាំ <strong class="pr_branch"></strong> ។
+                                កន្លែងបម្រើការងារនៅ <strong>ប្រចាំ</strong> <strong class="pr_branch"></strong> ។
                             </td></tr>
                         </table>
                     </div>
@@ -128,7 +160,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                ប្រាក់បៀវត្សគោលចំនួន <strong class="pr_basic_salary"></strong> ដុល្លារអាមេរិក ក្នុងមួយខែ និងក្រោយឆ្លងផុតការងារសាកល្បង បុគ្គលិកនឹងត្រូវដំឡើងប្រាក់បៀវត្សបន្ថែមចំនួន <strong class="pr_salary_increase"></strong> ដុល្លារអាមេរិក <span class="pr_supporting_or_field_staff"></span> ដោយការបង់ពន្ធលើប្រាក់បៀវត្សប្រចាំខែ ជាបន្ទុករបស់និយោជិត។
+                                ប្រាក់បៀវត្សគោលចំនួន <strong class="pr_basic_salary"></strong> <strong>ដុល្លារអាមេរិក</strong> ក្នុងមួយខែ និងក្រោយឆ្លងផុតការងារសាកល្បង បុគ្គលិកនឹងត្រូវដំឡើងប្រាក់បៀវត្សបន្ថែមចំនួន..<strong class="pr_salary_increase"></strong>..<strong>ដុល្លារអាមេរិក</strong> <span class="pr_supporting_or_field_staff"></span> ដោយការបង់ពន្ធលើប្រាក់បៀវត្សប្រចាំខែ ជាបន្ទុករបស់និយោជិត។
                             </td></tr>
                         </table>
                     </div>
@@ -300,7 +332,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                និយោជិត យល់ព្រម និងឯកភាពដោយស្ម័គ្រចិត្តលើការបើកប្រាក់បៀវត្សប្រចាំខែគឺ ១(មួយ)ដង ក្នុង១ (មួយ) ខែ នៅចន្លោះថ្ងៃទី២៥ ដល់ថ្ងៃទី៣០ នៃខែនីមួយៗ ដោយអនុលោមទៅតាមគោលការណ៍របស់គ្រឹះស្ថាន។
+                                និយោជិត យល់ព្រម និងឯកភាពដោយស្ម័គ្រចិត្តលើការបើកប្រាក់បៀវត្សប្រចាំខែគឺ <strong>១(មួយ)ដង ក្នុង១ (មួយ) ខែ</strong> នៅចន្លោះថ្ងៃទី២៥ ដល់ថ្ងៃទី៣០ នៃខែនីមួយៗ ដោយអនុលោមទៅតាមគោលការណ៍របស់គ្រឹះស្ថាន។
                             </td></tr>
                         </table>
                     </div>
@@ -315,9 +347,6 @@
                     </div>
                     <div>
                         <table style="width:100%">
-                            {{-- <tr><td class="table_tr">
-                                និយោជិត យល់ព្រម និងឯកភាពលើការបើកបៀវត្សប្រចាំខែ គឺ <strong>១(មួយ)ដង ក្នុង១ខែ</strong> ។ 
-                            </td></tr> --}}
                             <tr><td class="table_tr">
                                 នៅពេលលាឈប់ពីការងារសាកល្បង ឬ បញ្ឈប់ពីការងារសាកល្បង ទោះជាក្នុងករណីណាក៏ដោយ និយោជិតត្រូវរៀបចំផ្ទេរការងារ និងប្រគល់រាល់សម្ភារប្រើប្រាស់ផ្សេងៗដែលនិយោជកបានប្រគល់ឱ្យដើម្បីប្រើប្រាស់ក្នុងតួនាទីរបស់ខ្លួន មកឱ្យនិយោជកវិញក្នុងស្ថានភាពល្អប្ររសើរ (លើកលែងសំណឹកដោយសារអាយុកាលនៃការប្រើប្រាស់)  ឱ្យបានរួចរាល់មុននឹងចាកចេញពីគ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត។
                             </td></tr>
@@ -481,16 +510,13 @@
                     </div>
                     <div>
                         <table style="width:100%">
-                            {{-- <tr><td class="table_tr">
-                                ការរំលាយកិច្ចសន្យាដោយឆន្ទះភាគីនិយោជកតែឯកឯងមុនកាលកំណត់ បើកសិទ្ធិឲ្យភាគីនិយោជិត ទទួល ជំងឺចិត្តដែលមានចំនួនយ៉ាងតិចស្មើនឹងប្រាក់ខែ ដែលនិយោជិតត្រូវបានទទួលរហូតដល់ពេល បញ្ចប់កិច្ចសន្យា។
-                            </td></tr> --}}
                             <tr><td class="table_tr">
                                 ករណីខាងក្រោមនេះ ត្រូវចាត់ទុកជាកំហុសធ្ងន់របស់និយោជិត ដែលនាំឱ្យនិយោជកអាចរំលាយ កិច្ចសន្យាការងារសាកល្បងនេះមុនពេលកំណត់បាន ប្រសិនបើ៖
                                 <ol class="s">
-                                    <li>និយោជិតមិនអាចបំពេញការងារទៅតាមបទពិពណ៌នាការងារ និងមិនសម្រេចទៅតាមផែនការដែលបានកំណត់ក្នុងរយៈពេលនៃកិច្ចសន្យាការងារ។​</li>
+                                    <li>និយោជិតមិនអាចបំពេញការងារទៅតាមបទពិពណ៌នាការងារ និងមិនសម្រេចទៅតាមផែនការដែលបានកំណត់ក្នុងរយៈពេលនៃកិច្ចសន្យាការងារ។</li>
                                     <li>និយោជិតមិនគោរពទៅតាមបទបញ្ជាផ្ទៃក្នុង លក្ខខណ្ឌការងារ គោលការណ៍ នីតិវិធី និងសេចក្តីណែនាំផ្សេងៗ របស់និយោជក។</li>
                                     <li>និយោជិតមិនគោរពតាមគោលការណ៍ដាក់ទោសវិន័យរបស់និយោជក។</li>
-                                    <li>និយោជិតមិនគោរពតាមប្រការ៤ ត្រង់ចំណុច៤.១ និងចំណុច ៤.១០ នៃកិច្ចសន្យាការងារសាកល្បងនេះ ឬបំពានធ្ងន់ធ្ងរលើបញ្ញត្តិផ្សេងទៀតនៃកិច្ចសន្យានេះ។ </li>
+                                    <li>និយោជិតមិនគោរពតាមប្រការ៤ ត្រង់ចំណុច៤.១ និងចំណុច ៤.១០ នៃកិច្ចសន្យាការងារសាកល្បងនេះ ឬបំពានធ្ងន់ធ្ងរលើបញ្ញត្តិផ្សេងទៀតនៃកិច្ចសន្យានេះ។</li>
                                   </ol>
                             </td></tr>
                         </table>
@@ -506,9 +532,6 @@
                     </div>
                     <div>
                         <table style="width:100%">
-                            {{-- <tr><td class="table_tr">
-                                ការរំលាយកិច្ចសន្យាដោយឆន្ទះភាគីនិយោជិតតែឯកឯង ក្នុងអំឡុងពេល<strong>សាកល្បងការងារ</strong> បើកសិទ្ធឲ្យនិយោជកទទួលជំងឺចិត្តស្មើនឹងប្រាក់ឈ្នួល <strong>១ (មួយ)ខែ</strong> ពីភាគីនិយោជិត លើកលែងតែភាគីទាំងពីរមានការឯកភាពគ្នាដោយឡែក។
-                            </td></tr> --}}
                             <tr><td class="table_tr">
                                 ការរំលាយកិច្ចសន្យាការងារសាកល្បងនេះក្នុងករណីមានកំហុសធ្ងន់ អាចធ្វើទៅបានភ្លាមៗ ដោយមិនចាំបាច់ធ្វើការផ្តល់ដំណឹងជាមុនឡើយ។
                             </td></tr>
@@ -525,9 +548,6 @@
                     </div>
                     <div>
                         <table style="width:100%">
-                            {{-- <tr><td class="table_tr">
-                                ភាគីណាមួយនៃកិច្ចសន្យានេះ មានសិទ្ធិបញ្ចប់កិច្ចសន្យាបាន បើដល់កាលកំណត់ដោយគ្រាន់តែជូនដំណឹងមុនជាលាយលក្ខណ៍អក្សរចំនួន <strong>៧ថ្ងៃ</strong> អំពីការផុតរលត់នៃកិច្ចសន្យា ឬ ការមិនបន្តឡើងវិញនៃកិច្ចសន្យា។
-                            </td></tr> --}}
                             <tr><td class="table_tr">
                                 ការបញ្ចប់កិច្ចសន្យាដោយកំហុសធ្ងន់របស់និយោជិត មិនបើកសិទ្ធិឱ្យនិយោជិតទទួលបានសំណង ឬអត្ថប្រយោជន៍ណាមួយឡើយ។ ចំពោះសិទ្ធិទទួលបានអត្ថប្រយោជន៍ និងប្រាក់បំណាច់ផ្សេងៗ ក្នុងករណីបញ្ចប់កិច្ចសន្យាក្រៅពីកំហុសធ្ងន់របស់និយោជិត នឹងត្រូវអនុវត្តតាមច្បាប់ស្តីពីការងារ និងលិខិតបទដ្ឋានគតិយុត្តផ្សេងទៀតដែលមានជាធរមាននៃព្រះរាជាណាចក្រកម្ពុជា។
                             </td></tr>
@@ -609,7 +629,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                យ៉ាងហោចណាស់៧ថ្ងៃមុនកាលបរិច្ឆេទបញ្ចប់នៃកិច្ចសន្យាការងារសាកល្បងនេះ និយោជកត្រូវជូនដំណឹងជាលាយលក្ខណ៍អក្សរទៅនិយោជិត អំពីការផុតរលត់នៃកិច្ចសន្យាការងារសាកស្បងនេះ ឬ បន្តទៅជានិយោជិតពេញសិទ្ធិ។
+                                យ៉ាងហោចណាស់<strong>៧ថ្ងៃ</strong>មុនកាលបរិច្ឆេទបញ្ចប់នៃកិច្ចសន្យាការងារសាកល្បងនេះ និយោជកត្រូវជូនដំណឹងជាលាយលក្ខណ៍អក្សរទៅនិយោជិត អំពីការផុតរលត់នៃកិច្ចសន្យាការងារសាកស្បងនេះ ឬ បន្តទៅជានិយោជិតពេញសិទ្ធិ។
                             </td></tr>
                         </table>
                     </div>
@@ -644,7 +664,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                កិច្ចសន្យាការងារសាកល្បងនេះមានប្រសិទ្ធភាពអនុវត្តចាប់ពីថ្ងៃចុះហត្ថលេខានេះតទៅ។
+                                កិច្ចសន្យាការងារសាកល្បងនេះមានប្រសិទ្ធិភាពអនុវត្តចាប់ពីថ្ងៃចុះហត្ថលេខានេះតទៅ។
                             </td></tr>
                         </table>
                     </div>
@@ -658,11 +678,11 @@
         <div style="display: flex">
             <div class="payslip-title-center" style="margin-left: 5%">
                 <label class="label-subs" style="margin-left: 25"><strong>និយោជិត</strong></label><br><br><br><br><br>
-                <label class="set-fontss">ឈ្មោះ  <span class="set-font pr_name" style="font-size: 14px !important"></span></label>
+                <label >ឈ្មោះ..<strong class="set-font pr_name" style="font-size: 14px !important"></strong>..</label>
             </div>
             <div class="payslip-title-center" style="margin-left: 30%">
                 <label class="label-subs"><strong>និយោជក/នាយក នាយកដ្ឋានធនធានមនុស្ស និងរដ្ឋបាល</strong></label><br><br><br><br><br>
-                <label class="set-fontss" style="float: right">ឈ្មោះ..................................</label>
+                <label style="float: right">ឈ្មោះ..................................</label>
             </div>
         </div>
     </div>
