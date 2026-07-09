@@ -96,8 +96,10 @@ ol.s {list-style-type: inherit;}
 }
 .table_tr{
     border: solid 0px !important; 
-    padding: 0% !important;
-    font-size: 15.7px;
+    padding-right: 0% !important;
+    padding-top: 0% !important;
+    padding-bottom: 0% !important;
+    font-size: 15px;
     text-align: justify; 
     text-justify: inter-word;
 }

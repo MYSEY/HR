@@ -501,7 +501,7 @@
                     $(".pr_basic_salary").text(data.basic_salary);
                     $(".pr_salary_increase").text(data.salary_increas);
                     if (data.recruitment && data.recruitment.pro_rate == "1") {
-                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
+                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនឹងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
                     }else{
                         $("#pr_supporting_or_field_staff").text("");
                     }
