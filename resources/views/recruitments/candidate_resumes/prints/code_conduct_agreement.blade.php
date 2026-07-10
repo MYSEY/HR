@@ -268,7 +268,7 @@
                     position: absolute;
                     left: 80;
                     /* transform: translateY(-50%); */
-                    width: 3.8cm; 
+                    width: 4.8cm; 
                     height: 2.6cm; 
                     box-sizing: border-box; 
                     display: flex;
@@ -280,11 +280,12 @@
                     flex-shrink: 0;
                 ">
                 <span style="
+                    font-family: Khmer OS Battambang, serif;
                     font-size: 12pt; 
                     line-height: 1.3;">
                     ស្នាមមេដៃស្តាំបុគ្គលិក
                     <br><br><br><br><br>
-                    <span>..................................</span>
+                    <span>......<strong class="pr_name"></strong>.....</span>
                 </span>
             </div>
             <div class="payslip-title-center" >
@@ -304,6 +305,7 @@
                     flex-shrink: 0;
                 ">
                 <span style="
+                    font-family: Khmer OS Battambang, serif;
                     font-size: 12pt; 
                     line-height: 1.3;">
                     និយោជក

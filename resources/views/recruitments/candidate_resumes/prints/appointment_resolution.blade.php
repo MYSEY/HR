@@ -89,7 +89,7 @@
         <label class="label-sub" style="font-size: 14px;font-family:Khmer OS Muol Light">ស្តីពី</label>
     </div><br><br>
     <div style="margin-left: 12%">
-        <label class="label-sub" style="font-size: 14px;font-family:Khmer OS Muol Light">ការតែងតាំង លោក/លោកស្រី/កញ្ញា  ...</strong> <strong class="pr_name"></strong>...ជា ...<strong class="pr_position"></strong>...</label><br>
+        <label class="label-sub" style="font-size: 14px;font-family:Khmer OS Muol Light">ការតែងតាំង <span class="pr_mr_or_mrs"></span>  ...</strong> <strong class="pr_name"></strong>...ជា ...<strong class="pr_position"></strong>...</label><br>
     </div><br>
     <div style="display:flex;" class="set-font">
         <div style="width: 487%;">
@@ -132,7 +132,7 @@
                     <table style="width:100%">
                         <tr>
                             <td class="table_tr">
-                                <strong>លោក/លោកស្រី/កញ្ញា</strong> <strong class="pr_name"></strong> តួនាទីជា <strong class="pr_position"></strong> 
+                                <strong class="pr_mr_or_mrs"></strong> <strong class="pr_name"></strong> តួនាទីជា <strong class="pr_position"></strong> 
                                 អត្តសញ្ញាណប័ណ្ណការងារលេខ...<strong class="pr_employee_id"></strong>.... នៅកម្រិតទី...<strong class="level"></strong>...ប្រចាំ...<strong class="pr_branch"></strong>... ហើយនឹងទទួលបានប្រាក់បៀវត្សគោលចំនួន..<strong class="pr_basic_salary"></strong>..<strong>ដុល្លារអាមេរិក</strong> និងអត្ថប្រយោជន៍ផ្សេងៗទៅតាមគោលការណ៍របស់គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត។
                             </td>
                         </tr>
