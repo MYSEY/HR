@@ -215,9 +215,18 @@
                     { data: 'number_employee', defaultContent: '' },
                     { data: 'employee_name_kh', defaultContent: '' },
                     { data: 'employee_name_en', defaultContent: '' },
-                    { data: 'gender.name_english', defaultContent: '' },
-                    { data: 'position.name_english', defaultContent: '' },
-                    { data: 'branch.branch_name_en', defaultContent: '' },
+                    { 
+                        data: "{{ Helper::getLang() == 'en' ? 'gender.name_english' : 'gender.name_khmer' }}", 
+                        defaultContent: '' 
+                    },
+                    { 
+                        data: "{{ Helper::getLang() == 'en' ? 'position.name_english' : 'position.name_khmer' }}", 
+                        defaultContent: '' 
+                    },
+                    { 
+                        data: "{{ Helper::getLang() == 'en' ? 'branch.branch_name_en' : 'branch.branch_name_kh' }}", 
+                        defaultContent: '' 
+                    },
                     { 
                         data: 'date_of_commencement',
                         render: function(data, type, row) {
