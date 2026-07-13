@@ -290,6 +290,14 @@
                     var formContent = "";
                     var columnClassText = 'col-md-4';
                     const allowedStatuses = [1, 2, 3, 5, 'accepted', 'approved'];
+                    const permissionCheck = ['HR','HOD','HRAdmin'];
+                    const userPermissions = @json(Auth::user()->RolePermission ?? []);
+                    let checkApprove =  "";
+                    if (permissionCheck.includes(userPermissions)) {
+                        checkApprove =  '<label class="container-checkbox">Approve by HHRAD/CEO/BOD'+
+                                        '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="4"> <span class="checkmark"></span>'+
+                                    '</label>';
+                    }
                     if (allowedStatuses.includes(condistionStatus)) {
                         titleText = '@lang("lang.asign_to_employee")';
                         columnClassText = 'col-md-6'
@@ -306,9 +314,7 @@
                                     '<label class="container-checkbox">Verify By HR'+
                                         '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
                                     '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                    '<label class="container-checkbox">Approve by HHRAD/CEO/BOD'+
-                                        '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="4"> <span class="checkmark"></span>'+
-                                    '</label>'+
+                                    checkApprove+
                                 '</div>'+
                                 '<div class="form-group">'+
                                     '<label>@lang("lang.employee")</label>'+
@@ -566,6 +572,7 @@
                 $('.e_id').val(id);
             });
             $('body').on('click', '.btn-asign', function() {
+                const userPermissions = @json(Auth::user()->RolePermission ?? []);
                 var pa_id = $(this).data("id");
                 var employee_old = $(this).data("name");
                 var get_employee_id = $(this).data("employeeid");
@@ -575,6 +582,13 @@
                 var formContent = "";
                 var columnClassText = 'col-md-4';
                 const allowedStatuses = [1, 2, 3, 5, 'accepted', 'preparing'];
+                const permissionCheck = ['HR', 'HOD','HRAdmin'];
+                let checkApprove =  "";
+                if (permissionCheck.includes(userPermissions)) {
+                    checkApprove =  '<label class="container-checkbox">Approve by HHRAD/CEO/BOD'+
+                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="4"> <span class="checkmark"></span>'+
+                                '</label>';
+                }
                 if (allowedStatuses.includes(status)) {
                     titleText = '@lang("lang.asign_to_employee")';
                     columnClassText = 'col-md-6'
@@ -591,9 +605,7 @@
                                 '<label class="container-checkbox">Verify By HR'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                                '<label class="container-checkbox">Approve by HHRAD/CEO/BOD'+
-                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="4"> <span class="checkmark"></span>'+
-                                '</label>'+
+                                checkApprove+
                             '</div>'+
                             '<div class="form-group">'+
                                 '<label>@lang("lang.employee")</label>'+

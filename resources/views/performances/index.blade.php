@@ -289,7 +289,7 @@
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
-                <a href="javascript:void(0);" class="btn btn-sm btn-secondary mb-3" id="btnAssignAll">
+                <a href="javascript:void(0);" class="btn btn-sm btn-secondary mb-3" id="btnAssignAll" data-employeeid="{{Auth::user()->id}}">
                     Assign All
                 </a>
                 <div class="table-responsive">
@@ -415,10 +415,10 @@
                             '<div class="form-group">'+
                                 '<label>@lang("lang.employee")</label>'+
                                 '<select class="select form-control hr-select2-option employee_id" id="employee_id">'+
-                                    '<option value="">-- @lang("lang.select") --</option>'+
-                                    '@foreach ($employee as $item)'+
-                                        '<option value="{{ $item->id }}">{{ $item->employee_name_en }}</option>'+
-                                    '@endforeach'+
+                                    // '<option value="">-- @lang("lang.select") --</option>'+
+                                    // '@foreach ($employee as $item)'+
+                                    //     '<option value="{{ $item->id }}">{{ $item->employee_name_en }}</option>'+
+                                    // '@endforeach'+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group">' +
@@ -507,6 +507,34 @@
                         });
                     }
                 });
+                $(document).ready(function(){
+                    $('.hr-select2-option-emp-role').each(function() {
+                        $(this).select2({
+                            width: '100%',
+                            dropdownParent: $(this).parent(),
+                        })
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url('/performance-admin/employees') }}",
+                        data: {
+                            'get_employee_id': get_employee_id
+                        },
+                        dataType: "JSON",
+                        success: function(response) {
+                            let datas = response.datas;
+                            $('#employee_id').html('<option selected value=""> -- @lang("lang.select") --</option>');
+                            if (datas != '') {
+                                $.each(datas, function(i, item) {
+                                    $('#employee_id').append($('<option>', {
+                                        value: item.id,
+                                        html: item.employee_name_en + '&nbsp;&nbsp;' + '(' + '&nbsp;'+ item.department.name_english + '&nbsp;)'
+                                    }));
+                                });
+                            }
+                        }
+                    });
+                });
             });
 
             $('body').on('click','#btnAssignAll',function(){
@@ -514,7 +542,6 @@
                 var employee_old = $(this).data("name");
                 var get_employee_id = $(this).data("employeeid");
                 var status = $(this).data("status");
-
                 var userid = $(this).data("userid");
                 var allVals = [];
                 $(".sub_chk:checked:not(:disabled)").each(function() {
@@ -546,10 +573,10 @@
                             '<div class="form-group">'+
                                 '<label>@lang("lang.employee")</label>'+
                                 '<select class="select form-control hr-select2-option employee_id" id="employee_id">'+
-                                    '<option value="">-- @lang("lang.select") --</option>'+
-                                    '@foreach ($employee as $item)'+
-                                        '<option value="{{ $item->id }}">{{ $item->employee_name_en }}</option>'+
-                                    '@endforeach'+
+                                    // '<option value="">-- @lang("lang.select") --</option>'+
+                                    // '@foreach ($employee as $item)'+
+                                    //     '<option value="{{ $item->id }}">{{ $item->employee_name_en }}</option>'+
+                                    // '@endforeach'+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group">' +
@@ -650,6 +677,34 @@
                                 placeholder: '-- Select Employee --'
                             });
                         }
+                    });
+                    $(document).ready(function(){
+                        $('.hr-select2-option-emp-role').each(function() {
+                            $(this).select2({
+                                width: '100%',
+                                dropdownParent: $(this).parent(),
+                            })
+                        });
+                        $.ajax({
+                            type: "GET",
+                            url: "{{ url('/performance-admin/employees') }}",
+                            data: {
+                                'get_employee_id': get_employee_id
+                            },
+                            dataType: "JSON",
+                            success: function(response) {
+                                let datas = response.datas;
+                                $('#employee_id').html('<option selected value=""> -- @lang("lang.select") --</option>');
+                                if (datas != '') {
+                                    $.each(datas, function(i, item) {
+                                        $('#employee_id').append($('<option>', {
+                                            value: item.id,
+                                            html: item.employee_name_en + '&nbsp;&nbsp;' + '(' + '&nbsp;'+ item.department.name_english + '&nbsp;)'
+                                        }));
+                                    });
+                                }
+                            }
+                        });
                     });
                 }
             });
@@ -813,6 +868,7 @@
                                             <a class="dropdown-item"
                                             id="btnAsignTo"
                                             data-id="${row.id}"
+                                            data-employeeid="${row.review_employee_id}"
                                             data-status="${row.status}">
                                                 <i class="fa fa-dot-circle-o text-primary"></i>
                                                 <span>@lang("lang.asign_to")</span>
@@ -946,11 +1002,11 @@
                             let btn_edit = "";
                             let btn_delete = "";
                             // if ((row.employee_id == window.userId && (row.status == 'preparing' || row.status == "5")) || (row.line_manager == window.userId && row.status == 'preparing')) {
-                            if ((row.employee_id == window.userId 
-                                && (row.status == 'preparing' || row.status == "5")) 
+                            if (
+                                (row.employee_id == window.userId  && (row.status == 'preparing' || row.status == "5")) 
                                 || (row.line_manager == window.userId && row.status == 'preparing') 
-                                || row.review_employee_id == window.userId
-                                || row.created_by == window.userId
+                                || (row.review_employee_id == window.userId && (row.status == 'preparing' || row.status == "5"))
+                                || (row.created_by == window.userId && (row.status == 'preparing' || row.status == "5"))
                             ) {  
                                 btn_edit = ` <a href="{{url('/performance')}}/${row.id}/edit" class="dropdown-item" data-id="${row.id}">
                                             <i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')

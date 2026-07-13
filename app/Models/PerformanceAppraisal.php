@@ -17,6 +17,7 @@ class PerformanceAppraisal extends Model
         'employee_id',
         'from_date',
         'to_date',
+        'pa_form',
         'total_weight',
         'total_score',
         'total_score_live_staff',

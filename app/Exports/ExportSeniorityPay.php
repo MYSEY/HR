@@ -37,15 +37,13 @@ class ExportSeniorityPay implements FromCollection, WithColumnWidths, WithHeadin
             $this->totalTaxExemptionSalary += $value->tax_exemption_salary;
             $this->totalTaxableSalary += round($value->taxable_salary,2);
 
-
-
             $seniority_pay=[
                 $num_,
                 $value->users == null ? '' : $value->users->number_employee,
-                $value->users == null ? '' : $value->users->employee_name_en,
+                $value->users == null ? '' : $value->users->EmployeeName,
                 $value->users == null ? '' : $value->users->EmployeeGender,
                 $value->users == null ? '' : $value->users->EmployeePosition,
-                $value->users == null ? '' : $value->users->EmployeeBranchAbbreviations,
+                $value->users == null ? '' : $value->users->EmployeeBranch,
                 $value->users == null ? '' : $value->users->joinOfDate,
                 $value->payment_of_month,
 

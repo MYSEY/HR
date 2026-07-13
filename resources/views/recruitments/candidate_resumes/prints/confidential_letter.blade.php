@@ -1,6 +1,5 @@
 <div id="print_confidential_letter" hidden>
     <div class="card-header">
-        {{-- logo company --}}
         <div>
             <div style="text-align: center" class="font-title">
                 <label class="title">ព្រះរាជាណាចក្រកម្ពុជា</label><br>
@@ -19,7 +18,7 @@
             </div>
             <div style="margin-left: 5%;text-align: center;border: 1px solid;border-color: red;width:30%;height: 5em;">
                 <div style="margin-top:20px;">
-                    <label style="float: center"><strong>HRM-013</strong></label><br><br>
+                    <label style="float: center"><strong>HRM-014</strong></label><br><br>
                     <label style="float: center"><strong>Doc No: …………</strong></label>
                 </div>
             </div>
@@ -30,8 +29,8 @@
             <div style="width: 487%;">
                 <table style="width:100%">
                     <tr>
-                        <td class="table_tr">
-                            ១-	<strong>និយោជកៈ </strong> គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត អាស័យដ្ឋានផ្ទះលេខ ១០១A ផ្លូវ ២៨៩ សង្កាត់ បឹងកក់ទី១ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ និងអាជ្ញាប័ណ្ណលេខ ម.ហ ២៤ (M.F 24) ចុះថ្ងៃទី២៦ ខែវិច្ឆិកា ឆ្នាំ២០១២  តំណាងដោយលោក <strong class="pr_ceo"></strong> តួនាទី <span class="pr_position"></span> ដែលតទៅនេះហៅថា “និយោជក”។
+                        <td class="table_tr_confi">
+                            ១-	<strong>និយោជកៈ </strong> គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត អាស័យដ្ឋានផ្ទះលេខ ១០១A ផ្លូវ ២៨៩ សង្កាត់ បឹងកក់ទី១ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ និងអាជ្ញាប័ណ្ណលេខ ម.ហ ២៤ ២៤ (M.F 24) ចុះថ្ងៃទី ២៤ ខែកក្កដា ឆ្នាំ២០២៤ តំណាងដោយ លោក <strong class="pr_ceo"></strong> តួនាទី <span class="pr_ceo_position"></span> ដែលតទៅនេះហៅថា “និយោជក”។
                         </td>
                     </tr>
                 </table>
@@ -40,67 +39,148 @@
                 </div>
                 <table style="width:100%">
                     <tr>
-                        <td class="table_tr">
-                            {{-- ២-	<strong>និយោជិតៈ </strong>	ឈ្មោះ............................... តួនាទីជា...................................... ទីតាំងការងារ......................... តទៅនេះហៅកាត់ថាភាគី “ខ”។ ភាគី “ខ” សូមអះអាងថានឹងគោរពឱ្យបានដាច់ខាតនូវកិច្ចព្រមព្រៀងនៃការរក្សា ការសម្ងាត់វិជ្ជាជីវៈ ដោយយល់ព្រមអនុវត្តតាមលក្ខខណ្ឌដូចខាងក្រោម៖ --}}
-                            ២-	<strong>និយោជិតៈ </strong>	ឈ្មោះ <strong class="pr_name"></strong> តួនាទីជា <strong class="pr_position"></strong> ទីតាំងការងារ <strong class="pr_branch"></strong> តទៅនេះហៅកាត់ថាភាគី “ខ”។ ភាគី “ខ” សូមអះអាងថានឹងគោរពឱ្យបានដាច់ខាតនូវកិច្ចព្រមព្រៀងនៃការរក្សា ការសម្ងាត់វិជ្ជាជីវៈ ដោយយល់ព្រមអនុវត្តតាមលក្ខខណ្ឌដូចខាងក្រោម៖
-                        </td>
-                    </tr>
-                </table>
-                <table style="width:100%">
-                    <tr>
-                        <td width="70px" class="table_tr">ប្រការ ១:</td>
-                        <td class="table_tr">
-                            មិនបរិហាបញ្ចេញប្រាប់ដល់ជនណាម្នាក់ក៏ដោយនូវព័ត៌មាន ដែលមានចរិតសម្ងាត់លើសេចក្តីប្រកាស ហេតុការ សារលិខិត តួរលេខ ឫអត្ថន័យនៃឯកសារគណនេយ្យ ឫរដ្ឋបាល ដែលខ្លួនអាចដឹងតាមរយៈ មុខងាររបស់ខ្លួន។
+                        <td class="table_tr_confi">
+                            ២-	<strong>និយោជិតៈ </strong>	ឈ្មោះ...<strong class="pr_name"></strong>...តួនាទីជា...<strong class="pr_position"></strong>...ទីតាំងការងារ...<strong class="pr_branch"></strong>...តទៅនេះហៅកាត់ថាភាគី “និយោជិត”។ និយោជិត សូមអះអាងថានឹងគោរពឱ្យបានដាច់ខាតនូវកិច្ចព្រមព្រៀងនៃការ រក្សាការសម្ងាត់វិជ្ជាជីវៈ ដោយយល់ព្រមអនុវត្តតាមលក្ខខណ្ឌដូចខាងក្រោម៖
                         </td>
                     </tr>
                 </table>
 
-                <table style="width:100%">
-                    <tr>
-                        <td width="70px" class="table_tr">ប្រការ ២:</td>
-                        <td class="table_tr">
-                           មិនបញ្ចេញព័ត៌មានទាក់ទងនឹងស្ថានភាពហិរញ្ញវត្ថុរបស់អតិថិជន និងបុគ្គលិកគ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត ដល់ភាគីទី៣ឡើយ។
-                        </td>
-                    </tr>
-                </table>
-                <table style="width:100%">
-                    <tr>
-                        <td width="70px" class="table_tr">ប្រការ ៣:</td>
-                        <td class="table_tr">
-                           មិនផ្សព្វផ្សាយព័ត៌មានមិនពិត ឫញុះញង់អ្នកដទៃឱ្យចូលរួមក្នុងការផ្សព្វផ្សាយព័ត៌មានទាំងនោះ ដែល ធ្វើឱ្យប៉ះពាល់ដល់កត្តិយស កេរ្តិ៍ឈ្មោះរបស់គ្រឹះស្ថាន ឫបុគ្គលណាមួយឡើយ។
-                        </td>
-                    </tr>
-                </table>
-                <table style="width:100%">
-                    <tr>
-                        <td width="70px" class="table_tr">ប្រការ ៤:</td>
-                        <td class="table_tr">
-                           ក្នុងករណីបំពាន ឫប្រព្រឹត្តសកម្មភាពណាមួយផ្ទុយពីលក្ខខណ្ឌដូចមានចែងក្នុងប្រការខាងលើ ភាគី “ខ” សុខចិត្តទទួលខុសត្រូវចំពោះមុខច្បាប់ និងនីតិវិធី នៃវិធានការវិន័យរបស់គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត រួមមានការព្រមាន ការបណ្តេញចេញពីការងារ ឫប្តឹងដល់អាជ្ញាធរមានសមត្ថកិច្ច ប្រសិន មានលក្ខណៈធ្ងន់ធ្ងរ។
-                        </td>
-                    </tr>
-                </table>
-                <table style="width:100%">
-                    <tr>
-                        <td width="70px" class="table_tr">ប្រការ ៥:</td>
-                        <td class="table_tr">
-                           កិច្ចព្រមព្រៀងនេះមានប្រសិទ្ធភាពអនុវត្តចាប់ថ្ងៃចុះហត្ថលេខានេះតទៅ ។
-                        </td>
-                    </tr>
-                </table>
+                <div class="style-table">
+                    <div>
+                        <table style="width:100%">
+                            <tr>
+                                <td class="table_tr_confi" style="white-space: nowrap !important">ប្រការ ១:</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table style="width:100%">
+                            <tr><td class="table_tr_confi">
+                                មិនបរិហាបញ្ចេញប្រាប់ដល់ជនណាម្នាក់ក៏ដោយនូវព័ត៌មាន ដែលមានចរិតសម្ងាត់លើសេចក្តីប្រកាស ហេតុការ សារលិខិត តួរលេខ ឫអត្ថន័យនៃឯកសារគណនេយ្យ ឫរដ្ឋបាល ដែលខ្លួនអាចដឹងតាមរយៈ មុខងាររបស់ខ្លួន។
+                            </td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="style-table">
+                    <div>
+                        <table style="width:100%">
+                            <tr>
+                                <td class="table_tr_confi" style="white-space: nowrap !important">ប្រការ ២:</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table style="width:100%">
+                            <tr><td class="table_tr_confi">
+                                មិនបញ្ចេញព័ត៌មានទាក់ទងនឹងអតិថិជន និងបុគ្គលិក របស់គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត ទៅដល់ភាគីទី៣ ទោះក្នុងកំឡុងពេលបំពេញការងារ ឬ ក្រោយលាឈប់ពីការងារក៏ដោយ។
+                            </td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="style-table">
+                    <div>
+                        <table style="width:100%">
+                            <tr>
+                                <td class="table_tr_confi" style="white-space: nowrap !important">ប្រការ ៣:</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table style="width:100%">
+                            <tr><td class="table_tr_confi">
+                                មិនផ្សព្វផ្សាយព័ត៌មានមិនពិត ឬញុះញង់អ្នកដទៃឱ្យចូលរួមក្នុងការផ្សព្វផ្សាយព័ត៌មានទាំងនោះ ដែល ធ្វើឱ្យប៉ះពាល់ដល់កត្តិយស កេរ្តិ៍ឈ្មោះរបស់គ្រឹះស្ថាន ឬបុគ្គលណាមួយឡើយ។
+                            </td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="style-table">
+                    <div>
+                        <table style="width:100%">
+                            <tr>
+                                <td class="table_tr_confi" style="white-space: nowrap !important">ប្រការ ៤:</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table style="width:100%">
+                            <tr><td class="table_tr_confi">
+                                ក្នុងករណីបំពាន ឬប្រព្រឹត្តសកម្មភាពណាមួយផ្ទុយពីលក្ខខណ្ឌដូចមានចែងក្នុងប្រការខាងលើ ខ្ញុំបាទ/ នាងខ្ញុំ សុខចិត្តទទួលខុសត្រូវចំពោះមុខច្បាប់ និងនីតិវិធី នៃវិធានការវិន័យរបស់គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត រួមមានការព្រមាន ការបណ្តេញចេញពីការងារ ឬប្តឹងដល់អាជ្ញាធរមានសមត្ថកិច្ច ប្រសិន មានលក្ខណៈធ្ងន់ធ្ងរ។
+                            </td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="style-table">
+                    <div>
+                        <table style="width:100%">
+                            <tr>
+                                <td class="table_tr_confi" style="white-space: nowrap !important">ប្រការ ៥:</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table style="width:100%">
+                            <tr><td class="table_tr_confi" style="white-space: nowrap !important">
+                                កិច្ចព្រមព្រៀងនេះមានប្រសិទ្ធភាពអនុវត្តចាប់ថ្ងៃចុះហត្ថលេខានេះតទៅ។
+                            </td></tr>
+                        </table>
+                    </div>
+                </div>
                 
                 <div style="float: right">
-                    <label style="font-size: 16px;">ភ្នំពេញ, ថ្ងៃទី......... ខែ........ ឆ្នាំ២០.......</label>
+                    <label style="font-size: 16px;">រាជធានី ភ្នំពេញ ថ្ងៃទី......... ខែ........ ឆ្នាំ២០.......</label>
                 </div>
             </div>
         </div><br>
         <div style="display: flex">
-            <div class="payslip-title-center" style="margin-left: 5%">
-                <label class="label-subs" style="margin-left: 5%">ភាគីនិយោជិត/ស្នាមមេដៃស្តាំ</label><br><br><br><br><br>
-                <label>.........................................</label>
+            <div style="
+                    position: absolute;
+                    left: 80;
+                    /* transform: translateY(-50%); */
+                    width: 4.8cm; 
+                    height: 2.6cm; 
+                    box-sizing: border-box; 
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 5px; 
+                    text-align: center;
+                    background-color: #fafafa;
+                    flex-shrink: 0;
+                ">
+                <span style="
+                    font-family: Khmer OS Battambang, serif;
+                    font-size: 12pt; 
+                    line-height: 1.3;">
+                    ស្នាមមេដៃស្តាំបុគ្គលិក
+                    <br><br><br><br><br>
+                    <span>......<strong class="pr_name"></strong>.....</span>
+                </span>
             </div>
-            <div class="payslip-title-center" style="margin-left: 35%">
-                <label class="label-subs">និយោជក/នាយក នាយកដ្ឋាន ធ.ម.រ</label><br><br><br><br><br>
-                <label style="float: right">.........................................</label>
+            <div class="payslip-title-center" >
+            <div style="
+                    position: absolute;
+                    right: 80;
+                    /* transform: translateY(-50%); */
+                    width: 7cm; 
+                    height: 2.6cm; 
+                    box-sizing: border-box; 
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 5px; 
+                    text-align: center;
+                    background-color: #fafafa;
+                    flex-shrink: 0;
+                ">
+                <span style="
+                    font-family: Khmer OS Battambang, serif;
+                    font-size: 12pt; 
+                    line-height: 1.3;">
+                    និយោជក/នាយក នាយកដ្ឋាន ធ.ម.រ
+                    <br><br><br><br><br>
+                    <span>..................................</span>
+                </span>
+            </div>
             </div>
         </div>
     </div>

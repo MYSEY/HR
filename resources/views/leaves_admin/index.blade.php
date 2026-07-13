@@ -14,6 +14,12 @@
     .vertical-center {
         vertical-align: middle;
     }
+    .tooltip-inner {
+        white-space: pre-line !important;
+        text-align: left !important;
+        max-width: 300px !important; 
+        /* word-wrap: break-word !important; */
+    }
 </style>
 @section('content')
     <div class="">
@@ -159,6 +165,7 @@
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="To: activate to sort column ascending">@lang('lang.request_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="request by: activate to sort column ascending">@lang('lang.request_by')</th>
                                                                 <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>  
                                                                 {{-- @if (Auth::user()->RolePermission == 'HRAdmin') --}}
@@ -185,12 +192,17 @@
                                                                         <td>{{$request->Delegated}}</td>
                                                                         
                                                                         <td class="">{{$request->leaveType->name}}</td>
-                                                                        <td>{{$request->reason}}</td>
+                                                                        <td data-toggle="tooltip" data-html="true" title="{!! $request->reason !!}">
+                                                                            {{ Str::limit($request->reason, 30, '...') }}
+                                                                        </td>
                                                                         <td>{{$request->number_of_day}} Day</td>
                                                                         <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
+                                                                        <td>{{$request->created_at ? \Carbon\Carbon::parse($request->created_at)->format('d-M-Y h:i') : ''}}</td>
                                                                         <td> {{$request->createdBy->employee_name_en}} </td>
-                                                                        <td>{{$request->remark}}</td>
+                                                                        <td data-toggle="tooltip" data-html="true" title="{!! $request->remark !!}">
+                                                                             {{ Str::limit($request->remark, 30, '...') }}
+                                                                        </td>
                                                                         <td>{{ $request->Approve ? $request->Approve : ""}}</td>
                                                                         <td>
                                                                             @if ($request->status == "rejected")
@@ -508,6 +520,12 @@
 @section('script')
 <script>
     $(function() {
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip({ 
+                html: true,
+                container: 'tr' 
+            });
+        });
         // datashowTables();
         $("#importPayroll").on("click", function() {
             $(".thanLess").hide();
@@ -808,6 +826,7 @@
                         $(rows).each(function(e, row) {
                             let start_date = moment(row.start_date).format('D-MMM-YYYY');
                             let end_date = moment(row.end_date).format('D-MMM-YYYY');
+                            let created_at = row.created_at ? moment(row.created_at).format('D-MMM-YYYY HH:mm') : "";
                             if (is_approve == 1 || is_reject == 1) {
                                 if (row.status == "pending" || row.status == "approved_lm" || row.status == "approved_hod") {
                                     candistion = '<button class="btn btn-outline-secondary btn-sm btn-approved" data-id="'+(row.id)+'"'+  
@@ -860,7 +879,7 @@
                             }else if(row.status == "approved"){
                                 status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
                             };
-                            if (condistion == "HRAdmin") {
+                            if (condistion == "HRAdmin" || condistion == "admin") {
                                 ckeckbox = '<td class="stuck-scroll-3">'+
                                     '<input type="checkbox" class="sub_chk" data-id="'+(row.id)+'" data-status="'+(row.status)+'">'+
                                 '</td>';
@@ -876,6 +895,7 @@
                                 '<td>' + (row.number_of_day) + ' Day</td>'+
                                 '<td>' + (start_date) + '</td>'+
                                 '<td>' + (end_date) + '</td>'+
+                                '<td>' + (created_at) + '</td>'+
                                 '<td>' +(row.created_by.employee_name_en)+ '</td>'+
                                 '<td>' + (row.remark ? row.remark : "" ) + '</td>'+
                                 '<td>' +(row.approve ? row.approve.employee_name_en : "") +'</td>'+
@@ -1180,10 +1200,10 @@
             ajax: {
                 url: '{{ url("/leaves/admin/show") }}',
                 type: 'GET',
-                 dataSrc: function (response) { 
-                    console.log('Table data only:', response.data); 
-                    return response.data; 
-                }
+                // dataSrc: function (response) { 
+                //     console.log('Table data only:', response.data); 
+                //     return response.data; 
+                // }
             },
             columns: [
                 // ✅ Checkbox (HRAdmin only)
@@ -1255,11 +1275,29 @@
                     render: d => `${d} Day`
                 },
 
-                // Start date
-                { data: 'start_date' },
+                { 
+                    data: 'start_date',
+                    render: function(data, type, row) {
+                        return data ? moment(data).format('D-MMM-YYYY') : '';
+                    }
+                },
 
                 // End date
-                { data: 'end_date' },
+                { 
+                    data: 'end_date',
+                    render: function(data, type, row) {
+                        return data ? moment(data).format('D-MMM-YYYY') : '';
+                    }
+                },
+
+                // Created At
+                { 
+                    data: 'created_at',
+                    render: function(data, type, row) {
+                        // ឆែកលក្ខខណ្ឌបើមានទិន្នន័យ ទើបហៅ Moment.js មក Format កុំឱ្យចេញ error ពេល data null
+                        return data ? moment(data).format('D-MMM-YYYY HH:mm') : '';
+                    }
+                },
 
                 // Created by
                 {

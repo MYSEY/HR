@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class ExportLeaveEmployee implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
@@ -55,6 +56,7 @@ class ExportLeaveEmployee implements FromCollection, WithColumnWidths, WithHeadi
             $i++;
             $start_date = Carbon::createFromDate($request->start_date)->format('d-m-Y');
             $end_date = Carbon::createFromDate($request->end_date)->format('d-m-Y');
+            $created_at = Carbon::createFromDate($request->created_at)->format('d-m-Y H:i');
 
             if ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ) {
                 if ($request->leaveType->type == "annual_leave") {
@@ -97,6 +99,7 @@ class ExportLeaveEmployee implements FromCollection, WithColumnWidths, WithHeadi
                 "department"                        => $request->employee->department->name_english,
                 "from"                              => $start_date,
                 "to"                                => $end_date,
+                "created_at"                        => $created_at,
                 "day_taken1"                        => $annual_leave_numberOfDay,          
                 "balance1"                          => ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ? $request->leaveType->type == "annual_leave" ? $datas["LeaveAllocation"]->default_annual_leave - $totalAnnualLeave : 0 : 0), 
                 "day_taken2"                        => $sick_leave_numberOfDay,           
@@ -160,6 +163,7 @@ class ExportLeaveEmployee implements FromCollection, WithColumnWidths, WithHeadi
                 "Department",
                 "From",
                 "To",
+                "Request Date",
                 "Day Taken",
                 "Balance",
                 "Day Taken",
@@ -257,57 +261,57 @@ class ExportLeaveEmployee implements FromCollection, WithColumnWidths, WithHeadi
                 $sheet->getDelegate()->getStyle('A7:Z7')->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold('A7:Z7');
 
-                $sheet->mergeCells('D7:E7');
+                $sheet->mergeCells('D7:F7');
                 $sheet->setCellValue('D7', "Period of Leave");
-                $event->sheet->getDelegate()->getStyle('D7:E7')
+                $event->sheet->getDelegate()->getStyle('D7:F7')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('F7:G7');
-                $sheet->setCellValue('F7', "Annual Leave");
-                $event->sheet->getDelegate()->getStyle('F7:G7')
+                $sheet->mergeCells('G7:H7');
+                $sheet->setCellValue('G7', "Annual Leave");
+                $event->sheet->getDelegate()->getStyle('G7:H7')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             
-                $sheet->mergeCells('H7:I7');
-                $sheet->setCellValue('H7', "Sick Leave");
-                $event->sheet->getDelegate()->getStyle('H7:I7')
+                $sheet->mergeCells('I7:J7');
+                $sheet->setCellValue('I7', "Sick Leave");
+                $event->sheet->getDelegate()->getStyle('I7:J7')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('J7:K7');
-                $sheet->setCellValue('J7', "Special Leave");
-                $event->sheet->getDelegate()->getStyle('J7:K7')
+                $sheet->mergeCells('K7:L7');
+                $sheet->setCellValue('K7', "Special Leave");
+                $event->sheet->getDelegate()->getStyle('K7:L7')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('L7:M7');
-                $sheet->setCellValue('L7', "Unpaid Leave");
-                $event->sheet->getDelegate()->getStyle('L7:M7')
+                $sheet->mergeCells('M7:N7');
+                $sheet->setCellValue('M7', "Unpaid Leave");
+                $event->sheet->getDelegate()->getStyle('M7:N7')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('N7:O7');
-                $sheet->setCellValue('N7', "Long Sick Leave");
-                $event->sheet->getDelegate()->getStyle('N7:O7')
-                            ->getAlignment()
-                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-                $sheet->mergeCells('P7:P7');
-                $sheet->setCellValue('P7', "Reason");
-                $event->sheet->getDelegate()->getStyle('P7:P7')
+                $sheet->mergeCells('O7:P7');
+                $sheet->setCellValue('O7', "Long Sick Leave");
+                $event->sheet->getDelegate()->getStyle('O7:P7')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('Q7:Q7');
-                $sheet->setCellValue('Q7', "Remark");
+                $sheet->setCellValue('Q7', "Reason");
                 $event->sheet->getDelegate()->getStyle('Q7:Q7')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('R7:R7');
-                $sheet->setCellValue('R7', "Status");
+                $sheet->setCellValue('R7', "Remark");
                 $event->sheet->getDelegate()->getStyle('R7:R7')
+                            ->getAlignment()
+                            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+                $sheet->mergeCells('S7:S7');
+                $sheet->setCellValue('S7', "Status");
+                $event->sheet->getDelegate()->getStyle('S7:S7')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -316,6 +320,52 @@ class ExportLeaveEmployee implements FromCollection, WithColumnWidths, WithHeadi
                 $event->sheet->getDelegate()->getStyle('A8:Y8')
                             ->getAlignment()
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            
+            
+
+                $event->sheet->getStyle('A7'.':S7')->applyFromArray([
+                    'font' => [
+                        'name' => 'Khmer OS Battambang', // Font name
+                        'size' => 9, // Font size
+                    ],
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                    ],
+                ]);
+                $event->sheet->getStyle('A8'.':S8')->applyFromArray([
+                    'font' => [
+                        'name' => 'Khmer OS Battambang', // Font name
+                        'size' => 9, // Font size
+                    ],
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                    ],
+                ]);
+                //** block body */ 
+                $n=8;
+                if ($this->totalRecord > 0) {
+                    foreach ($this->export_datas as $key=>$value) {
+                        $n++;
+                        $event->sheet->getStyle('A'.$n.':S'.$n)->applyFromArray([
+                            'font' => [
+                                'name' => 'Khmer OS Battambang', // Font name
+                                'size' => 9, // Font size
+                            ],
+                            'borders' => [
+                                'allBorders' => [
+                                    'borderStyle' => Border::BORDER_THIN,
+                                    'color' => ['argb' => '000000'],
+                                ],
+                            ],
+                        ]);
+                    }
+                }
             },
         ];
     }

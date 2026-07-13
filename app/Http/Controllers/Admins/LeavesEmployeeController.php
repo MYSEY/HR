@@ -50,18 +50,17 @@ class LeavesEmployeeController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
         $balances = [];
+        if ($LeaveAllocation) {
+            $current_year = date('Y', strtotime($LeaveAllocation->created_at));
+            $balances[$current_year] = [
+                $LeaveAllocation
+            ];
+        }
         // Loop បញ្ចូល History ដោយទាញឆ្នាំពី created_at
         foreach ($allocationHistory as $history) {
             $year = date('Y', strtotime($history->created_at)); 
             $balances[$year] = [
                 $history
-            ];
-        }
-        
-        if ($LeaveAllocation) {
-            $current_year = date('Y', strtotime($LeaveAllocation->created_at));
-            $balances[$current_year] = [
-                $LeaveAllocation
             ];
         }
 
@@ -114,7 +113,12 @@ class LeavesEmployeeController extends Controller
                     $query->whereNot("roles.role_type", "Employee");
                 }
             })->get();
-        $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)->get();
+        $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)
+        // ->whereYear('start_date', now()->year) get data by current year
+        ->orderByRaw('YEAR(start_date) DESC')  // Group by Year first
+        // ->orderByRaw('MONTH(start_date) DESC') // Then by Month
+        ->orderBy('id', 'asc')                // Finally by ID for specific order
+        ->get();
         return view('leaves_employee.index', compact('dataLeaveType', 'balances', 'LeaveAllocation', 'employees','delegateEmployees', 'dataLeaveRequest'));
     }
 
@@ -126,7 +130,7 @@ class LeavesEmployeeController extends Controller
         $employees= DB::table('users')
         ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
         ->select( 'users.*', 'roles.role_type',)
-        ->whereIn('users.emp_status', ['Probation','1','2','10',])
+        // ->whereIn('users.emp_status', ['Probation','1','2','10',])
         // ->whereNot("roles.role_type", "Employee")
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if (in_array($RolePermission, ['BM','DBM'])){
@@ -481,18 +485,9 @@ class LeavesEmployeeController extends Controller
             // $manager = User::where("id", Auth::user()->line_manager)->first();
             $dataBranch = Branchs::where("id", Auth::user()->branch->id)->first();
             if($dataBranch->abbreviations == "HQ"){
-                if(Auth::user()->under_approve){
-                    $data['next_approver'] = Auth::user()->under_approve;
-                }else{
-                    $data['next_approver'] = Auth::user()->department->direct_manager_id;
-                }
-                
+                $data['next_approver'] = Auth::user()->department->direct_manager_id;
             }else{
-                if(Auth::user()->under_approve){
-                    $data['next_approver'] = Auth::user()->under_approve;
-                }else{
-                    $data['next_approver'] = Auth::user()->branch->direct_manager_id;
-                }  
+                $data['next_approver'] = Auth::user()->branch->direct_manager_id;
             }
             $data['status'] = "pending";
             if(Auth::user()->RolePermission == "BOD") {
@@ -500,8 +495,6 @@ class LeavesEmployeeController extends Controller
                 $data['next_approver'] = "Null";
             }else if (Auth::user()->RolePermission == "CEO") {
                 $data['next_approver'] = Auth::user()->line_manager;
-
-                // $data['status'] = "approved_lm";
             }elseif (Auth::user()->RolePermission == "HOD" && Auth::user()->id == Auth::user()->department->direct_manager_id) {
                 $data['next_approver'] = Auth::user()->line_manager;
             }elseif(Auth::user()->RolePermission == "DHOD" && Auth::user()->id == Auth::user()->department->direct_manager_id){
@@ -512,8 +505,9 @@ class LeavesEmployeeController extends Controller
                 $data['next_approver'] = Auth::user()->line_manager;
             }elseif(Auth::user()->RolePermission == "HRAdmin" && Auth::user()->id == Auth::user()->department->direct_manager_id){
                 $data['next_approver'] = Auth::user()->line_manager;
-
-                // $data['status'] = "approved_lm";
+            }
+            if(Auth::user()->under_approve){
+                $data['next_approver'] = Auth::user()->under_approve;
             }
 
             $request_date = Carbon::now()->format('Y-m-d');
@@ -521,6 +515,7 @@ class LeavesEmployeeController extends Controller
             $delegateLeave = DelegateLeave::where("requester_id", $data['next_approver'])
             ->where('start_date', '<=', $request_date)
             ->where('end_date', '>=', $request_date)->first();
+            
             if ($delegateLeave) {
                 if(Auth::user()->id == $delegateLeave->delegate_id){
                     $line_manager_head = User::where("id", $delegateLeave->requester_id)->first();
@@ -558,6 +553,7 @@ class LeavesEmployeeController extends Controller
                 return redirect()->back();
                 DB::commit();
             }
+            
             $leaveAllo = self::LeaveAllocation($request, $LeaveType , Auth::user()->id);
             if($leaveAllo){
                 $data["total_annual_leave"]      = $leaveAllo["total_annual_leave"];
@@ -566,7 +562,6 @@ class LeavesEmployeeController extends Controller
                 $data["total_unpaid_leave"]      = $leaveAllo["total_unpaid_leave"];
                 $data["total_long_sick_leave"]   = $leaveAllo["total_long_sick_leave"];
             }
-
             $data['employee_id'] = Auth::user()->id;
             $data['created_by'] = Auth::user()->id;            
             LeaveRequest::create($data);
@@ -661,18 +656,9 @@ class LeavesEmployeeController extends Controller
             $userRequest = User::where("id", $request->employee_id)->with("department")->with("branch")->with("role")->first();
             $data['line_manager_id'] = $userRequest->line_manager;
             if($userRequest->branch->abbreviations == "HQ"){
-                if($userRequest->under_approve){
-                    $data['next_approver'] = $userRequest->under_approve;
-                }else{
-                    $data['next_approver'] = $userRequest->department->direct_manager_id;
-                }
+                $data['next_approver'] = $userRequest->department->direct_manager_id;
             }else{
-                if($userRequest->under_approve){
-                    $data['next_approver'] = $userRequest->under_approve;
-                }else{
-                    $data['next_approver'] = $userRequest->branch->direct_manager_id;
-                }  
-                // $data['next_approver'] = $userRequest->branch->direct_manager_id;
+               $data['next_approver'] = $userRequest->branch->direct_manager_id;
             }
 
             // *** approve by head or branch *** //
@@ -697,6 +683,9 @@ class LeavesEmployeeController extends Controller
                 $data['status'] = "approved_lm";
             }else{
                 $data['status'] = "pending";
+            }
+            if($userRequest->under_approve){
+                $data['next_approver'] = $userRequest->under_approve;
             }
 
             $request_date = Carbon::now()->format('Y-m-d');

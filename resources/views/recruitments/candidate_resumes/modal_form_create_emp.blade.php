@@ -710,9 +710,9 @@
                                 let end_year = formatDate( fdc_date, 'km', format_date={year: true});
                                 if (data) {
                                     if (data.option.name_english == "Female") {
-                                        $("#pr_mr_or_mrs").text("អ្នកស្រី ");
+                                        $(".pr_mr_or_mrs").text("អ្នកស្រី ");
                                         if (data.marital_status.name_english == "Single") {
-                                            $("#pr_mr_or_mrs").text("កញ្ញា ");
+                                            $(".pr_mr_or_mrs").text("កញ្ញា ");
                                         }
                                         $(".pr_gender").text("ស្រី ");
                                     }else{

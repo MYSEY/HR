@@ -96,7 +96,7 @@
                         <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" class="inv-logo" alt="">
                     </div>
                     <div class="col-md-4">
-                        <h4 class="payslip-title">ទម្រង់វាយតម្លៃការងាររបស់បុគ្គលិកសាកល្បង</h4>
+                        <h4 class="payslip-title">{{$data->kpi_form}}</h4>
                         <h5 class="payslip-title">ប្រចាំឆ្នាំ៖ {{ \App\Helpers\Helper::toKhmerNumber(\Carbon\Carbon::parse($data->to_date)->format('Y')) }}</h5>
                     </div>
                 </div>
@@ -148,8 +148,8 @@
                                     <tr>
                                         <th style="min-width: 450px;">(KPI)</th>
                                         <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
-                                        <th style="min-width: 250px;">គោលដៅ (Goal)</th>
-                                        <th>ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
+                                        <th style="min-width: 400px;">គោលដៅ (Goal)</th>
+                                        <th style="min-width: 150px;">ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
                                         <th style="min-width: 500px;">Comments</th>
                                     </tr>
                                 </thead>
@@ -200,17 +200,31 @@
                                                             <option value="date_increment" {{ $Detailitem->goal_type == 'date_increment' ? 'selected' : '' }}>Date Increment</option>
                                                             <option value="date_decrement" {{ $Detailitem->goal_type == 'date_decrement' ? 'selected' : '' }}>Date Decrement</option>
                                                         </select>
-
+                                                        @php
+                                                            $type = $Detailitem->goal_type;
+                                                            $type_symbol = explode('_', $Detailitem->goal_type)[0] ?? 'number';
+                                                            $symbol = $type_symbol == 'percent' ? '%' : ($type_symbol == 'currency' ? '$' : ($type_symbol == 'number' ? '#' : ''));
+                                                        @endphp
                                                         @foreach ($Detailitem->performanceGoals as $item)
                                                             <div class="goal-input-wrapper mt-1">
                                                                 <div class="row mb-1">
                                                                     <div class="group d-flex align-items-center">
                                                                         <div class="col-md-5">
-                                                                            <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" value="{{ $item->from }}" style="height: 35px;width: 100px;">
+                                                                            <div class="input-group">
+                                                                                @if($symbol)
+                                                                                    <span class="input-group-text" style="height: 35px;">{{ $symbol }}</span>
+                                                                                @endif
+                                                                                <input type="text" step="any" class="form-control weight-from required" name="goal_from[]" placeholder="From" value="{{ $item->from }}" style="height: 35px;width: 100px;">
+                                                                            </div>
                                                                         </div>
                                                                         <div class="col-md-2 text-center">To</div>
                                                                         <div class="col-md-5">
-                                                                            <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" value="{{ $item->to }}" style="height: 35px;width: 100px;">
+                                                                            <div class="input-group">
+                                                                                @if($symbol)
+                                                                                    <span class="input-group-text" style="height: 35px;">{{ $symbol }}</span>
+                                                                                @endif
+                                                                                <input type="text" step="any" class="form-control weight-to required" name="goal_to[]" placeholder="To" value="{{ $item->to }}" style="height: 35px;width: 100px;">
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>

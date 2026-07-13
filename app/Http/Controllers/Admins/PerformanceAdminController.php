@@ -225,6 +225,7 @@ class PerformanceAdminController extends Controller
 
         $query = User::with(["branch","department"])
         ->leftJoin('branchs', 'users.branch_id', '=', 'branchs.id')
+        ->leftJoin('departments', 'users.department_id', '=', 'departments.id')
         ->select(
             'users.id',
             'users.number_employee',
@@ -234,9 +235,27 @@ class PerformanceAdminController extends Controller
             'users.branch_id',
             'users.emp_status',
             'branchs.abbreviations',
+            'departments.abbreviations',
         );
         if (in_array(Auth::user()->RolePermission, ['Employee','DHOD','DBM'])) {
-            $query->where("users.department_id", $kpiUser->department_id)->where("users.branch_id", $kpiUser->branch_id);
+            if (Auth::user()->branch->abbreviations =="HQ" && Auth::user()->department->abbreviations == "CRD") {
+                $query->where("users.department_id", $kpiUser->department_id);
+            }else{
+                if (Auth::user()->branch->abbreviations != "HQ") {
+                    $query->where(function ($subQuery) use ($kpiUser) {
+                        // Condition A: Matches the target user's branch
+                        $subQuery->where("users.branch_id", $kpiUser->branch_id)
+                        // Condition B: OR matches the special CRD HQ department/branch combo
+                        ->orWhere(function ($nestedQuery) {
+                            $nestedQuery->where("departments.abbreviations", "CRD")
+                                        ->where('branchs.abbreviations', "HQ");
+                        });
+                    });
+                }else{
+                    $query->where("users.department_id", $kpiUser->department_id)
+                    ->where("users.branch_id", $kpiUser->branch_id);
+                }
+            }
         }
         if (in_array(Auth::user()->RolePermission, ['HR']) && self::permission()->is_access != "1") {
             $query->where("users.department_id", $kpiUser->department_id)->where("users.branch_id", $kpiUser->branch_id);
@@ -507,9 +526,18 @@ class PerformanceAdminController extends Controller
                 // 'created_by',
                 // 'updated_by',
             ]);
+            $paForm = "";
+            if($performance->kpi_form == "ទម្រង់ផែនការការងាររបស់បុគ្គលិក"){
+                $paForm = "ទម្រង់វាយតម្លៃការងាររបស់បុគ្គលិក";
+            }else if($performance->kpi_form == "ទម្រង់ផែនការការងារសាកល្បងរបស់បុគ្គលិក"){
+                $paForm = "ទម្រង់វាយតម្លៃការងារសាកល្បងរបស់បុគ្គលិក";
+            }else if($performance->kpi_form=="ទម្រង់ផែនការការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១"){
+                $paForm = "ទម្រងវាយតម្លៃការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១";
+            }
             // Create new PerformanceAppraisal record
             $data['created_by'] = Auth::id();
             $data['status'] = 'new';
+            $data['pa_form'] = $paForm;
             $pa = PerformanceAppraisal::create($data);
             // ✅ Loop over related titles from the Performance model (not $data)
             foreach ($performance->titles as $titleItem) {
@@ -584,6 +612,7 @@ class PerformanceAdminController extends Controller
             $ids = explode(',', $request->performance_id);
             $approved = [];
             $skipped = [];
+            $paForm = "";
             foreach ($ids as $id) {
                 $performance = Performance::findOrFail($id);
                 $data = $performance->only([
@@ -610,8 +639,16 @@ class PerformanceAdminController extends Controller
                     // 'created_by',
                     // 'updated_by',
                 ]);
+                if($performance->kpi_form == "ទម្រង់ផែនការការងាររបស់បុគ្គលិក"){
+                    $paForm = "ទម្រង់វាយតម្លៃការងាររបស់បុគ្គលិក";
+                }else if($performance->kpi_form == "ទម្រង់ផែនការការងារសាកល្បងរបស់បុគ្គលិក"){
+                    $paForm = "ទម្រង់វាយតម្លៃការងារសាកល្បងរបស់បុគ្គលិក";
+                }else if($performance->kpi_form=="ទម្រង់ផែនការការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១"){
+                    $paForm = "ទម្រងវាយតម្លៃការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១";
+                }
                 $data['created_by'] = Auth::id();
                 $data['status'] = 'new';
+                $data['pa_form'] = $paForm;
                 $pa = PerformanceAppraisal::create($data);
 
                 // ✅ Loop over related titles from the Performance model (not $data)

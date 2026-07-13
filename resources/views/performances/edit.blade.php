@@ -14,6 +14,18 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-sm-6">
+                    <select name="kpi_form" id="kpi_form" class="form-select text-center required" required>
+                        <option value=""> -- @lang('lang.select')--</option>
+                        <option value="ទម្រង់ផែនការការងាររបស់បុគ្គលិក" {{$data->kpi_form == "ទម្រង់ផែនការការងាររបស់បុគ្គលិក" ? 'selected' : ''}}>ទម្រង់ផែនការការងាររបស់បុគ្គលិកប្រចាំឆ្នាំ</option>
+                        <option value="ទម្រង់ផែនការការងារសាកល្បងរបស់បុគ្គលិក" {{$data->kpi_form == "ទម្រង់ផែនការការងារសាកល្បងរបស់បុគ្គលិក" ? 'selected' : ''}}>ទម្រង់ផែនការការងារសាកល្បងរបស់បុគ្គលិក</option>
+                        <option value="ទម្រង់ផែនការការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១" {{$data->kpi_form == "ទម្រង់ផែនការការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១" ? 'selected' : ''}}>ទម្រង់ផែនការការងាររបស់បុគ្គលិកសម្រាប់ឆមាសទី១</option>
+                    </select>
+                </div>
+                <div class="col-md-3"></div>
+            </div><br>
+            <div class="row">
                 <div class="col-md-4 hr-form-group-select2">
                     <div class="form-group">
                         <label>@lang('lang.employee')</label>
@@ -51,11 +63,11 @@
                             <thead>
                                 <tr>
                                     <th style="min-width: 450px;">(KPI)</th>
-                                    <th style="min-width: 500px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
-                                    <th style="min-width: 350px;">គោលដៅ (Goal)</th>
+                                    <th style="min-width: 400px;">ពណ៌នាផែនការសកម្មភាព (Action Plan)</th>
+                                    <th style="min-width: 450px;">គោលដៅ (Goal)</th>
                                     <th style="min-width: 150px;">ទម្ងន់ (Weight %) <span id="total_weight"></span></th>
                                     <th style="min-width: 150px;">Is Lock</th>
-                                    <th style="min-width: 500px;">Comments</th>
+                                    <th style="min-width: 400px;">Comments</th>
                                     <th>@lang('lang.action')</th>
                                 </tr>
                             </thead>
@@ -120,8 +132,8 @@
                                                     <div class="goal-input-wrapper mt-1">
                                                         @php
                                                             $type = $Detailitem->goal_type;
-                                                            // $type = explode('_', $Detailitem->goal_type)[0] ?? 'number';
-                                                            $symbol = $type == 'percent' ? '%' : ($type == 'currency' ? '$' : ($type == 'number' ? '#' : ''));
+                                                            $type_symbol = explode('_', $Detailitem->goal_type)[0] ?? 'number';
+                                                            $symbol = $type_symbol == 'percent' ? '%' : ($type_symbol == 'currency' ? '$' : ($type_symbol == 'number' ? '#' : ''));
                                                         @endphp
                                                         @foreach ($Detailitem->performanceGoals as $item)
                                                             <div class="row mb-1">
@@ -160,7 +172,7 @@
                                                     </select>
                                                 </td>
                                                 <td class="text-center">
-                                                    <textarea rows="6" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false"
+                                                    <textarea rows="9" class="form-control" name="comment[]" placeholder="Enter text comment here" spellcheck="false"
                                                         {{ $canEdit == 1 ? 'disabled' : '' }}>{{ $Detailitem->comment }}
                                                     </textarea>
                                                 </td>
@@ -440,6 +452,7 @@
                         employee_id : $("#employee_id").val(),
                         from_date : $("#from_date").val(),
                         to_date : $("#to_date").val(),
+                        kpi_form : $("#kpi_form").val(),
                         main_comment : $("#main_comment").val(),
                         data: dataKeyKpi,
                     },

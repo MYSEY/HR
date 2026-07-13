@@ -196,7 +196,6 @@
                                                 // បង្កើត Array សម្រាប់ទុកការបូកសរុបដាច់ដោយឡែកតាមឆ្នាំ
                                                 $totalsByYear = [];
                                             @endphp
-
                                             @foreach ($dataLeaveRequest as $key => $request)
                                                 @php
                                                     // ១. ទាញយកឆ្នាំពី start_date
@@ -229,7 +228,6 @@
                                                     // ៤. ទាញយកតម្លៃដើម (Initial Balance) ដោយប្រើ Column 'default_...'
                                                     $currentAlloc = $balances[$requestYear][0] ?? null;
                                                 @endphp
-
                                                 <tr class="odd">
                                                     <td>{{$key+1}}</td>
                                                     <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y')}}</td>
@@ -258,7 +256,7 @@
 
                                                     <td>{{$request->leaveType->type == "unpaid_leave" ? $request->number_of_day : 0}}</td>
                                                     <td>
-                                                        {{ $currentAlloc->default_unpaid_leave - $totalsByYear[$requestYear]['unpaid'] }}
+                                                        {{ $currentAlloc ? $currentAlloc->default_unpaid_leave - $totalsByYear[$requestYear]['unpaid'] : 0 }}
                                                     </td>
 
                                                     <td>{{$request->leaveType->type == "long_sick_leave" ? $request->number_of_day : 0}}</td>
@@ -292,9 +290,10 @@
                                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @endif
                                                     </td>
+                                                    {{-- @dd(permissionAccess("m10-s2","is_update")) --}}
                                                     <td class="text-end">
                                                         @if (permissionAccess("m10-s2","is_update")->value == "1" || permissionAccess("m10-s2","is_delete")->value == "1")
-                                                            @if (isset($request->StatusApprve["pending"]))
+                                                            @if (isset($request->StatusApprve["pending"]) || isset($request->StatusApprve["approved_lm"]))
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">

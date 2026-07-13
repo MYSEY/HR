@@ -39,6 +39,8 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                aria-label="To: activate to sort column ascending">@lang('lang.request_date')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="Handover Staff: activate to sort column ascending">@lang('lang.handover_staff')</th>
@@ -70,6 +72,7 @@
                                                     <td class="stuck-scroll-3">{{$request->leaveType->name}}</td>
                                                     <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
+                                                    <td>{{$request->created_at ? \Carbon\Carbon::parse($request->created_at)->format('d-M-Y h:i') : ''}}</td>
                                                     <td>{{$request->number_of_day}} Day</td>
                                                     <td>{{$request->handover ? $request->handover->employee_name_en : ""}}</td>
                                                     <td>{{$request->Delegated}}</td>
