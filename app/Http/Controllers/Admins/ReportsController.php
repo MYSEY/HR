@@ -110,6 +110,7 @@ class ReportsController extends Controller
         if (permissionAccess("m7-s13","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
+        
         $from_date = null;
         $to_date = null;
         if ($request->from_date) {
@@ -118,43 +119,71 @@ class ReportsController extends Controller
         if ($request->to_date) {
             $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
         }
-        $employees = User::with("gender")->with('position')->with('branch')
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'Employee') {
-                $query->where("id", Auth::user()->id);
+
+        if (request()->ajax()) {
+            // ១. បង្កើត Base Query 
+            $query = User::with(["gender", "position", "branch"])
+                ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                    if ($RolePermission == 'Employee') {
+                        $query->where("id", Auth::user()->id);
+                    }
+                    if ($RolePermission == 'HOD') {
+                        $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
+                    }
+                    if ($RolePermission == 'BM') {
+                        $query->where("branch_id", Auth::user()->branch_id);
+                    }
+                })
+                ->where("emp_status", 'Probation')
+                ->when($from_date, function ($query, $from_date) {
+                    $query->where('date_of_commencement', '>=', $from_date);
+                })
+                ->when($to_date, function ($query, $to_date) {
+                    $query->where('date_of_commencement', '<=', $to_date);
+                })
+                ->when($request->branch_id, function ($query, $branch_id) {
+                    $query->where('branch_id', $branch_id);
+                })
+                ->when($request->employee_id, function ($query, $employee_id) {
+                    $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
+                })
+                // កែសម្រួលត្រង់នេះ៖ ប្រើ orWhere នៅក្នុង Closure Group ដើម្បីកុំឱ្យជាន់លក្ខខណ្ឌផ្សេង
+                ->when($request->employee_name, function ($query, $employee_name) {
+                    $query->where(function($q) use ($employee_name) {
+                        $q->where('employee_name_en', 'LIKE', '%'.$employee_name.'%')
+                        ->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+                    });
+                });
+            $searchValue = request()->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('employee_name_kh', 'like', "%{$searchValue}%")
+                    ->orWhere('number_employee', 'like', "%{$searchValue}%");
+                });
+            };
+            $recordsTotal = (clone $query)->count();
+            $recordsFiltered = $recordsTotal;
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+
+            // ទាញយកទិន្នន័យពិតប្រាកដ
+            if ($limit == -1) {
+                $data = $query->orderBy('id', 'DESC')->get();
+            } else {
+                $data = $query->orderBy('id', 'DESC')->offset($start)->limit($limit)->get();
             }
-            if ($RolePermission == 'HOD') {
-                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
-            }
-            if ($RolePermission == 'BM') {
-                $query->where("branch_id", Auth::user()->branch_id);
-            }
-        })
-        ->where("emp_status",'Probation')
-        ->when($from_date, function ($query, $from_date) {
-            $query->where('date_of_commencement', '>=', $from_date);
-        })
-        ->when($to_date, function ($query, $to_date) {
-            $query->where('date_of_commencement','<=', $to_date);
-        })
-        ->when($request->branch_id, function ($query, $branch_id) {
-            $query->where('branch_id', $branch_id);
-        })
-        ->when($request->employee_id, function ($query, $employee_id) {
-            $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
-        })
-        ->when($request->employee_name, function ($query, $employee_name) {
-            $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-            $query->where('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
-        })
-        ->get();
+            
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => intval($recordsTotal),
+                'recordsFiltered' => intval($recordsFiltered),
+                'data' => $data,
+            ]);
+        }
 
         $branch = Branchs::all();
-        if ($request->research) {
-            return response()->json(['employees'=>$employees]);
-        }else {
-            return view('reports.new_staff_report', compact('employees', 'branch'));
-        }
+        return view('reports.new_staff_report', compact('branch'));
     }
 
     public function staffResigned(Request $request){
