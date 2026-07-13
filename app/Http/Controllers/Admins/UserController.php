@@ -623,44 +623,45 @@ class UserController extends Controller
 
     public function processing(Request $request)
     {
+
         function convertNumber($value)
         {
             $int = floor($value);                  // whole number part
             $decimal = $value - $int;             // decimal part only
 
-            if ($decimal >= 0.60) {
+            if ($decimal >= 0.50) {
                 return $int + 1;                  // round up to next integer
-            } elseif ($decimal >= 0.50) {
+            } else {
                 return $int + 0.5;                // convert to .5
             }
-            return $int;
         }
+       
         try {
             $totalUpcomings = 0;
             if ($request->emp_status == '1') {
                 $dataSalary = User::where('id',$request->id)->first();
                 $leaveRequest = LeaveAllocation::where('employee_id',$dataSalary->id)->first();
-                $totalRequestLeave = 0;
-                if ($leaveRequest) {
-                    $totalRequestLeave = $leaveRequest->total_annual_leave;
+                $data_request = [
+                    "total_annual_leave" => 0,
+                    "total_sick_leave" => 0,
+                    "total_special_leave" => 0,
+                ];
+                if($leaveRequest){
+                    $data_request = [
+                        "total_annual_leave" => $leaveRequest->total_annual_leave,
+                        "total_sick_leave" => $leaveRequest->total_sick_leave,
+                        "total_special_leave" => $leaveRequest->total_special_leave,
+                    ];
                 }
                 
+                //*** total annual_leave in probation */
                 $toJoinDate  = Carbon::parse($dataSalary->date_of_commencement);
-                $yearLy = Carbon::now()->format('Y');
-                $toJoinDateYear = Carbon::createFromDate($toJoinDate)->format('Y');
-                $startFormYear = Carbon::parse($yearLy."-01-01");
-                
                 $endJoinDate = Carbon::parse($dataSalary->fdc_date);
-                $monthInProbation = $startFormYear->diffInMonths($endJoinDate);
-                $totalDayInProbation = $monthInProbation * 1.5;
-                $year_1 = 0;
-                if ($yearLy != $toJoinDateYear) {
-                    $endDate = $toJoinDateYear."-12-31";
-                    $monthBefor = $toJoinDate->diffInMonths($endDate);
-                    $year_1 = $monthBefor * 1.5;
-                }
-                
+                $monthInProbation = $toJoinDate->diffInMonths($endJoinDate);
+                $totalDayInProbation = 1.5 * $monthInProbation;
                 // dd($totalDayInProbation);
+                //** end */
+
                 //total day in monthsd
                 $start_date = Carbon::createFromDate($request->start_date);
                 $endMonth = Carbon::createFromDate($request->start_date)->endOfMonth();
@@ -673,32 +674,39 @@ class UserController extends Controller
                 $yearLy = Carbon::now()->format('Y');
                 $fromDate = $yearLy."-12-31";
                 $months = $toDate->diffInMonths($fromDate);
+
                 if ($toDays < 15) {
                     $totalDay = 0;
                     $EndMonths = $months - 1;
-                } elseif($toDays >= 15 && $toDays <= 20) {
+                }else if($toDays >= 15 && $toDays <= 20) {
                     $totalDay = 1;
                     $EndMonths = $months - 1;
                 }else{
                     $totalDay = 1.5;
                     $EndMonths = $months;
                 }
-                
+
                 $leaveType = LeaveType::get();
-                // $total_day = 0;
                 foreach ($leaveType as $key => $lt) {
+                    $detault_total_day = ($lt->default_day / 12);
+                    if($toDays > 20 ){
+                        $total_sick_leave = $detault_total_day;
+                    }else {
+                        $total_sick_leave = 0;
+                    }
+                    $total_pass = $detault_total_day * $EndMonths;
+                    $default_annual_leave = $total_pass + $totalDay + $totalDayInProbation;
+
                     if ($lt->type == "annual_leave") {
-                        $totalDayAnnualLeave = (($lt->default_day / 12) * $EndMonths + $totalDay + $totalDayInProbation);
-                        $data['default_annual_leave'] = $totalDayAnnualLeave;
-                        $data['total_annual_leave'] = $totalDayAnnualLeave - abs($totalRequestLeave);
+                        $data['default_annual_leave'] = convertNumber($default_annual_leave);
+                        $data['total_annual_leave'] = convertNumber($default_annual_leave) - abs($data_request["total_annual_leave"]);
                     }else if($lt->type == "sick_leave") {
-                        $totalDaySickLeave = (($lt->default_day / 12) * $EndMonths + $totalDay);
-                        $data['default_sick_leave'] = $totalDaySickLeave;
-                        $data['total_sick_leave'] = $totalDaySickLeave;
+                        $totalDayAnnualLeave = $total_pass + $total_sick_leave;
+                        $data['default_sick_leave'] = convertNumber($totalDayAnnualLeave);
+                        $data['total_sick_leave'] = convertNumber($totalDayAnnualLeave) - abs($data_request["total_sick_leave"]);
                     }else if($lt->type == "special_leave"){
-                        $totalDaySpecialLeave = (($lt->default_day / 12) * $EndMonths + $totalDay);
-                        $data['default_special_leave'] = $totalDaySpecialLeave;
-                        $data['total_special_leave'] = $totalDaySpecialLeave;
+                        $data['default_special_leave'] = $lt->default_day;
+                        $data['total_special_leave'] = $lt->default_day - abs($data_request["total_special_leave"]);
                     }else{
                         $data['default_unpaid_leave'] = 0;
                         $data['total_unpaid_leave'] = 0;
@@ -718,7 +726,7 @@ class UserController extends Controller
                         'total_special_leave' => $data['total_special_leave'],
                         'default_unpaid_leave' => 0,
                         'total_unpaid_leave' => 0,
-                        'year_1' => $year_1,
+                        'year_1' => null,
                         'created_by'    =>  Auth::user()->id,
                     ]
                 );
@@ -735,7 +743,8 @@ class UserController extends Controller
                     'pre_salary' => $dataSalary->basic_salary,
                     'resign_reason' => $request->resign_reason
                 ]);
-            }else if($request->emp_status == '10'){
+            }
+            else if($request->emp_status == '10'){
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
