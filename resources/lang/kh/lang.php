@@ -138,6 +138,8 @@ return[
 	"basic_salary_received"=>"ប្រាក់ខែគោលទទួលបាន",
 	"basic_rate"=>"អត្រាពន្ធ",
 	"back_to_list"=>"ត្រឡប់ទៅបញ្ជី",
+	"back_to_recruitment" => 'Back to Recruitment',
+    "back_to_employee" => 'Back to Employee',
 	"black_list"=>"បញ្ជីខ្មៅ",
 	"branch_from"=>"ពីសាខា",
 	"branch_to"=>"ទៅសាខា",
