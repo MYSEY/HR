@@ -3,34 +3,44 @@
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="page-title">@lang('lang.staff_upcoming')</h3>
+                <h3 class="page-title">@lang('lang.staff_information')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.staff_upcoming')</li>
+                    <li class="breadcrumb-item active">@lang('lang.staff_information')</li>
                 </ul>
             </div>
             <div class="col-auto float-end ms-auto">
             </div>
             <div class="col-auto float-end ms-auto">
                 <div class="btn-group btn-group-sm">
-                    @if (permissionAccess("m3-s1","is_print")->value == "1")
-                        <a class="btn btn-white m-1" href="{{url('/recruitment/candidate-resume/list')}}">@lang('lang.back_to_list')</a>
+                    @if (permissionAccess("m3-s1","is_print")->value == "1" || permissionAccess("m2-s1","is_print")->value == "1")
+                        @if (permissionAccess("m3-s1","is_view")->value == "1")
+                            <a class="btn btn-white m-1" href="{{url('/recruitment/candidate-resume/list')}}">@lang('lang.back_to_recruitment')</a>
+                        @endif
+                        <a class="btn btn-white m-1" href="{{url('/users')}}">@lang('lang.back_to_employee')</a>
+                        {{-- <a class="btn btn-white m-1" onclick="downloadWordBlicklistAgreement()">ទាញយកជា Word</a> --}}
                         <div class="dropdown action-label" style="margin-top: 3px;">
                             <a class="btn btn-white btn-sm dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-print fa-lg"></i> @lang('lang.print')
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" style="">
-                                <a class="dropdown-item btn-print" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_appointment_resolution" data-signed-contract="Appointment Resolution" data-id="{{$data->id}}">Appointment Resolution</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_code_conduction_agreement" data-signed-contract="code conduction agreement" data-id="{{$data->id}}">Code Conduction Agreement</a>
-                                <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate" data-signed-contract="Employment Certificate NSSF" data-id="{{$data->id}}">Employment Certificate NSSF</a>
-                                <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate_form" data-signed-contract="Employment Cerntificate Form" data-id="{{$data->id}}">Employment Cerntificate Form</a>
+                                {{-- *** Recruitment Print ***--}}
+                                {{-- @if (permissionAccess("m3-s1","is_print")->value == "1") --}}
+                                    <a class="dropdown-item btn-print" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_code_conduction_agreement" data-signed-contract="code conduction agreement" data-id="{{$data->id}}">Code Conduction Agreement</a>
+                                {{-- @endif --}}
+                                {{-- *** HR Print ***--}}
+                                {{-- @if (permissionAccess("m2-s1","is_print")->value == "1") --}}
+                                    <a class="dropdown-item btn-print" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_appointment_resolution" data-signed-contract="Appointment Resolution" data-id="{{$data->id}}">Appointment Resolution</a>
+                                    <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate" data-signed-contract="Employment Certificate NSSF" data-id="{{$data->id}}">Employment Certificate NSSF</a>
+                                    <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate_form" data-signed-contract="Employment Cerntificate Form" data-id="{{$data->id}}">Employment Cerntificate Form</a>
+                                {{-- @endif --}}
                             </div>
                         </div>
                     @endif
@@ -685,5 +695,40 @@
             doctypeString: "",
         });
     }
+    // function downloadWordBlicklistAgreement() {
+    //     // បង្ហាញ Div សិនដើម្បីឱ្យ JavaScript ចាប់យកទិន្នន័យដែលមានតម្លៃ Dynamic បានពេញលេញ
+    //     $("#print_blicklist_agreement").show();
+
+    //     // ចាប់យក Content HTML ទាំងអស់នៅក្នុង Div នោះ
+    //     var contentHtml = document.getElementById("print_blicklist_agreement").innerHTML;
+
+    //     // រៀបចំ Template សម្រាប់ Microsoft Word (អាន Font ខ្មែរ និងកំណត់ទំហំក្រដាស A4)
+    //     var wordTemplate = `
+            
+    //         ${contentHtml}
+    //     `;
+
+    //     // បង្កើត Blob Object ក្នុងទម្រង់ MIME type របស់ MS-Word
+    //     var blob = new Blob(['\ufeff' + wordTemplate], {
+    //         type: 'application/msword;charset=utf-8'
+    //     });
+
+    //     // បង្កើត Link ស្វ័យប្រវត្តសម្រាប់ទាញយក File
+    //     var url = URL.createObjectURL(blob);
+    //     var downloadLink = document.createElement('a');
+        
+    //     var today = new Date().toISOString().slice(0, 10);
+    //     downloadLink.href = url;
+    //     downloadLink.download = "Blacklist_Agreement_" + today + ".doc";
+        
+    //     // ដំណើរការដោនឡូត
+    //     document.body.appendChild(downloadLink);
+    //     downloadLink.click();
+    //     document.body.removeChild(downloadLink);
+    //     URL.revokeObjectURL(url);
+
+    //     // លាក់ Div នោះវិញ ប្រសិនបើលោកអ្នកចង់លាក់វានៅលើអេក្រង់ Web ធម្មតា
+    //     // $("#print_blicklist_agreement").hide(); 
+    // }
     
 </script>
