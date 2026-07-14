@@ -25,22 +25,22 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" style="">
                                 {{-- *** Recruitment Print ***--}}
-                                {{-- @if (permissionAccess("m3-s1","is_print")->value == "1") --}}
+                                @if (permissionAccess("m3-s1","is_print")->value == "1")
                                     <a class="dropdown-item btn-print" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
-                                    <a class="dropdown-item btn-print" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
                                     <a class="dropdown-item btn-print" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
                                     <a class="dropdown-item btn-print" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
                                     <a class="dropdown-item btn-print" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
-                                    <a class="dropdown-item btn-print" href="#" id="btn_code_conduction_agreement" data-signed-contract="code conduction agreement" data-id="{{$data->id}}">Code Conduction Agreement</a>
-                                {{-- @endif --}}
-                                {{-- *** HR Print ***--}}
-                                {{-- @if (permissionAccess("m2-s1","is_print")->value == "1") --}}
-                                    <a class="dropdown-item btn-print" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
                                     <a class="dropdown-item btn-print" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
                                     <a class="dropdown-item btn-print" href="#" id="btn_appointment_resolution" data-signed-contract="Appointment Resolution" data-id="{{$data->id}}">Appointment Resolution</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_code_conduction_agreement" data-signed-contract="code conduction agreement" data-id="{{$data->id}}">Code Conduction Agreement</a>
+                                @endif
+                                {{-- *** HR Print ***--}}
+                                @if (permissionAccess("m2-s1","is_print")->value == "1")
+                                <a class="dropdown-item btn-print" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
                                     <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate" data-signed-contract="Employment Certificate NSSF" data-id="{{$data->id}}">Employment Certificate NSSF</a>
                                     <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate_form" data-signed-contract="Employment Cerntificate Form" data-id="{{$data->id}}">Employment Cerntificate Form</a>
-                                {{-- @endif --}}
+                                @endif
                             </div>
                         </div>
                     @endif
@@ -428,22 +428,43 @@
             },
             dataType: "JSON",
             success: function (response) {
-                var data = response.success;                
+                var data = response.success;
+                console.log("data: ", data);
+                                
                 var branch = response.branch;
                 var date_of_birth = new Date(data.date_of_birth);
                 var date_of_commencement = new Date(data.date_of_commencement);
+
                 var fdc_date = new Date(data.fdc_date);
                 fdc_date.setDate(fdc_date.getDate() - 1);
                 fdc_date = new Date(fdc_date);
+
+                var start_fdc_date = new Date(data.fdc_date);
+                start_fdc_date.setDate(start_fdc_date.getDate());
+                start_fdc_date = new Date(start_fdc_date);
+                var fdc_end = new Date(data.fdc_end);
+                fdc_end.setDate(fdc_end.getDate());
+                fdc_end = new Date(fdc_end);
+
                 let day = formatDate(date_of_birth, 'km', format_date={day: true});
                 let month = formatDate(date_of_birth, 'km', format_date={month: true});
                 let year = formatDate(date_of_birth, 'km', format_date={year: true});
                 let join_day = formatDate(date_of_commencement, 'km', format_date={day: true});
                 let join_month = formatDate(date_of_commencement, 'km', format_date={month: true});
                 let join_year = formatDate(date_of_commencement, 'km', format_date={year: true});
+
+                let start_fdc_day = formatDate(start_fdc_date, 'km', format_date={day: true});
+                let start_fdc_month = formatDate(start_fdc_date, 'km', format_date={month: true});
+                let start_fdc_year = formatDate(start_fdc_date, 'km', format_date={year: true});   
+
+                let fdc_end_day = formatDate(fdc_end, 'km', format_date={day: true});
+                let fdc_end_month = formatDate(fdc_end, 'km', format_date={month: true});
+                let fdc_end_year = formatDate(fdc_end, 'km', format_date={year: true});  
+                
                 let end_day = formatDate(fdc_date, 'km', format_date={day: true});
                 let end_month = formatDate(fdc_date, 'km', format_date={month: true});
-                let end_year = formatDate(fdc_date, 'km', format_date={year: true});                
+                let end_year = formatDate(fdc_date, 'km', format_date={year: true}); 
+                
                 if (data) {
                     $("#pr_status_single").text(" ");
                     $("#pr_status_married").text(" ");
@@ -509,6 +530,15 @@
                     $(".pr_end_day").text(end_day);
                     $(".pr_end_month").text(end_month);
                     $(".pr_end_year").text(end_year);
+
+                    $(".pr_fdc_day").text(start_fdc_day);
+                    $(".pr_fdc_month").text(start_fdc_month);
+                    $(".pr_fdc_year").text(start_fdc_year);
+
+                    $(".pr_fdc_end_day").text(fdc_end_day);
+                    $(".pr_fdc_end_month").text(fdc_end_month);
+                    $(".pr_fdc_end_year").text(fdc_end_year);
+
                     $(".pr_branch").text(data.branch.branch_name_kh);
                     $(".pr_employee_id").text(data.number_employee);
                     $(".pr_basic_salary").text(data.basic_salary);
