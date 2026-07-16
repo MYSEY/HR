@@ -349,42 +349,6 @@
             let signed_contract = $(this).attr('data-signed-contract');
             printSignContract(id,signed_contract);
         });
-        // $('#btn_print_signed_contract').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
-        // $('#btn_print_contract').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
-        // $('#btn_appointed_letter').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
-        // $('#btn_complete_probation').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
-        // $('#btn_contract_volunteer').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
-        // $('#btn_confidential_letter').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
         $('.btn_certificate').on('click', function(){
             let id = $(this).data("id");
             let printBy  = $(this).attr('data-signed-contract');
@@ -410,12 +374,6 @@
             $(".management_position_print").text(data_management.position.name_khmer);
             printSignContract($("#add_select_id").val(),form);
         });
-        // $('#btn_blacklist_agreement').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
     });
 
     function printSignContract(id,signed_contract){
@@ -498,8 +456,8 @@
                     $(".pr_birth_day").text(day);
                     $(".pr_birth_month").text(month);
                     $(".pr_birth_year").text(year);
-                    $(".pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
-                    $(".pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
+                    let location_permanent = " ភូមិ "+data.permanentvillage.name_km + " ឃុំ/សង្កាត់ " + data.permanentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.permanentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.permanentprovince.name_km;
+                    $(".pr_permanent_province").text(location_permanent + " ");
                     $(".pr_id_card_number").text(data.id_card_number+ "");
                     let number_home = "";
                     let number_street = "";
@@ -548,6 +506,11 @@
                         $("#pr_supporting_or_field_staff").text("ដោយធៀបនឹងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
                     }else{
                         $("#pr_supporting_or_field_staff").text("");
+                    }
+                    if (data.recruitment && data.recruitment.condition_other == "1") {
+                        $(".Responsible-Lending").css("display","block");
+                    }else{
+                        $(".Responsible-Lending").css("display","none");
                     }
                     if (signed_contract=='signed contract') {
                         stylePrintSignContract();
