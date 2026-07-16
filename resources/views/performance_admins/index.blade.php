@@ -582,7 +582,7 @@
                 var formContent = "";
                 var columnClassText = 'col-md-4';
                 const allowedStatuses = [1, 2, 3, 5, 'accepted', 'preparing'];
-                const permissionCheck = ['HR', 'HOD','HRAdmin'];
+                const permissionCheck = ['HR', 'CEO', 'HOD','HRAdmin'];
                 let checkApprove =  "";
                 if (permissionCheck.includes(userPermissions)) {
                     checkApprove =  '<label class="container-checkbox">Approve by HHRAD/CEO/BOD'+

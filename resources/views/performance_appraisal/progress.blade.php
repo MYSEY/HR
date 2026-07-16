@@ -197,9 +197,9 @@
                                                     <input type="number" step="any" class="form-control personnel_score" name="personnel_score[]" placeholder="0" value="{{$Detailitem->score_live_staff}}" min="0" readonly>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="number" 
+                                                    <input 
                                                         step="any" 
-                                                        class="form-control direct_chairman" 
+                                                        class="form-control direct_chairman action-check-wieg" 
                                                         name="direct_chairman[]" 
                                                         placeholder="0" 
                                                         value="{{ $Detailitem->score_direct_chairman }}" 
@@ -441,7 +441,16 @@
             calculateSubtotals();
             calculateGrandTotals();
         });
-
+        $(document).on("change", '.action-check-wieg', function() {
+            let $row = $(this).closest('tr');
+            const lineWeight = $(this).val();
+            let weight = $row.find('.weight').val();
+            let total =( weight * 5) / 100;
+            if(lineWeight > total){
+                toastr.error("The score isn't higher "+total, 'Error');
+            }
+        });
+        
         $(document).on('change', '.progress', function () {
             let $row = $(this).closest('tr');
             let goals = $row.find('.goal').data("goals");
@@ -545,8 +554,6 @@
                     }
                 }
             }
-
-
             // Update score achieved
             $row.find('.score_achieved').val(scoreAchieved);
             // Calculate weighted score
