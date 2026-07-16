@@ -897,10 +897,11 @@ class PerformanceAppraisalController extends Controller
                         $errors[] = "Sheet $id: For Year ($currentForYear) រកមិនឃើញក្នុងប្រព័ន្ធ";
                         continue;
                     }
+                    
                     // បន្ថែមការឆែក Status "new"
-                    if ($performance->status !== "new") {
+                    if (!in_array($performance->status, ['new', '4'])) {
                         // បង្កើតសារ Error ឱ្យចំបញ្ហា
-                        $errors[] = "Sheet $id: មិនអាច Upload បានទេ ព្រោះ Status គឺ '{$performance->status}' (អនុញ្ញាតបានតែ Status 'new' ប៉ុណ្ណោះ)";
+                        $errors[] = "Sheet $id: មិនអាច Upload បានទេ (អនុញ្ញាតបានតែ Status 'New' ឬ '4' ប៉ុណ្ណោះ)";
                         continue;
                     }
                     $performanceID = $performance->id;
@@ -984,7 +985,7 @@ class PerformanceAppraisalController extends Controller
 
                         // គណនាពិន្ទុតាមទម្ងន់ (Weight)
                         $weightedScore = ($detail->weight * $scoreAchieved) / 100;
-                        
+                        self::createHistories($performance);
                         $detail->update([
                             'progress'              => $progress,
                             'score_achieved'        => $scoreAchieved,
@@ -997,6 +998,7 @@ class PerformanceAppraisalController extends Controller
                         $total_score += $weightedScore;
                     }else{
                         if (!isset($updatedKPIs[$kpiUniqueKey])) {
+                            self::createHistories($performance);
                             $detail->update([
                                 'progress'              => null,
                                 'score_achieved'        => null,
