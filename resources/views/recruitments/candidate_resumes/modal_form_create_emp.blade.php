@@ -724,8 +724,8 @@
 
                                     $(".pr_name").text(data.name_kh +" ");
                                     $(".pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
-                                    $(".pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                                    $(".pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                                    let location_permanent = " ភូមិ "+data.permanentvillage.name_km + " ឃុំ/សង្កាត់ " + data.permanentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.permanentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.permanentprovince.name_km;
+                                    $(".pr_permanent_province").text(location_permanent + " ");
                                     $(".pr_id_card_number").text($("#id_card_number").val()+ "");
 
                                     let number_home = "";
