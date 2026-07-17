@@ -395,26 +395,36 @@
                 var titleText = "";
                 var formContent = "";
                 var columnClassText = 'col-md-4';
+                const permissionCheck = ['HR','CEO','HOD','HRAdmin'];
+                const userPermissions = @json(Auth::user()->RolePermission ?? []);
+                let checkVerify =  "";
+
                 if (status == "new" || status == 1 || status == 2 || status == 3 || status == 4) {
-                    titleText = '@lang("lang.asign_to_employee")';
-                    columnClassText = 'col-md-6'
-                    formContent = ''+
-                        '<form id="add-style">'+
-                            '<div class="mt-2">'+
-                                '<label class="container-checkbox">Review'+
+                    if (permissionCheck.includes(userPermissions)) {
+                        let checkReview = "";
+                        if (get_employee_id == "{{ Auth::user()?->id }}"){
+                            checkReview =  '<label class="container-checkbox">Review'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="1"> <span class="checkmark"></span>'+
-                                '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                                '</label>&nbsp;&nbsp;&nbsp;&nbsp;';
+                        }
+                        checkVerify = '<div class="mt-2">'+
+                                checkReview+
                                 '<label class="container-checkbox">Verify By HR'+
-                                    '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="2"> <span class="checkmark"></span>'+
+                                    '<input type="checkbox" class="checkbox-group action-asign " name="selected_item" value="2"> <span class="checkmark"></span>'+
                                 '</label>&nbsp;&nbsp;&nbsp;&nbsp;'+
                                 '<label class="container-checkbox">Approve by HHRAD/CEO/BOD'+
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="3"> <span class="checkmark"></span>'+
                                 '</label>'+
-                            '</div>'+
+                            '</div>';
+                    }
+                    titleText = '@lang("lang.asign_to_employee")';
+                    columnClassText = 'col-md-6';
+                    formContent = ''+
+                        '<form id="add-style">'+
+                            checkVerify+
                             '<div class="form-group">'+
                                 '<label>@lang("lang.employee")</label>'+
                                 '<select class="form-control hr-select2-option-emp-role form-select asign_employee_id" id="asign_employee_id">'+
-
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group">' +
@@ -430,6 +440,11 @@
                             var asign_employee_id = this.$content.find('.asign_employee_id').val();
                             let actionAsign = this.$content.find('.action-asign:checked').val();
                             let remark = this.$content.find('.remark').val();
+                            if (permissionCheck.includes(userPermissions)) {
+                                actionAsign = actionAsign;
+                            }else{
+                                actionAsign = "1";
+                            }
                             if (!actionAsign) {
                                 $.alert({
                                     title: '<span class="text-danger">@lang("lang.requiered")</span>',
@@ -534,6 +549,8 @@
                         }
                     }
                 }
+
+                // បើក jQuery Confirm Modal
                 $.confirm({
                     title: titleText,
                     contentClass: 'text-center',
@@ -599,39 +616,60 @@
                     },
                     onContentReady: function() {
                         var jc = this;
-                        this.$content.find('form').on('submit', function(e) {
+                        var $content = jc.$content;
+                        $content.find('.hr-select2-option-emp-role').select2({
+                            width: '100%',
+                            dropdownParent: $content.find('.hr-select2-option-emp-role').parent(),
+                        });
+                        function loadEmployees(filterHR) {
+                            var $select = $content.find('#asign_employee_id');
+                            $select.html('<option value="">-- @lang("lang.loading")... --</option>');
+                            var currentLang = "{{ app()->getLocale() }}";
+                            $.ajax({
+                                type: "GET",
+                                url: "{{ url('/performance-admin/employees') }}",
+                                data: {
+                                    'get_employee_id': get_employee_id,
+                                    'is_hr': filterHR
+                                },
+                                dataType: "JSON",
+                                success: function(response) {
+                                    let datas = response.datas;
+                                    $select.html('<option selected value=""> -- @lang("lang.select") --</option>');
+                                    if (datas != '') {
+                                        let dept_br = "";
+                                        $.each(datas, function(i, item) {
+                                            if (item.branch && item.branch.abbreviations == "HQ") {
+                                                dept_br = item.department ? item.department.name_english : '';
+                                            } else {
+                                                dept_br = item.branch ? item.branch.abbreviations : '';
+                                            }
+                                            var displayName = currentLang === 'en' ? item.employee_name_en : item.employee_name_kh;
+                                            $select.append($('<option>', {
+                                                value: item.id,
+                                                html: displayName + '&nbsp;&nbsp;' + '(' + '&nbsp;'+ dept_br + '&nbsp;)'
+                                            }));
+                                        });
+                                    }
+                                    $select.trigger('change');
+                                }
+                            });
+                        }
+                        loadEmployees(0);
+                        $content.find('.action-asign').on('change', function() {
+                            if ($(this).val() == "2" && $(this).is(':checked')) {
+                                loadEmployees(2);
+                            } else if ($(this).val() == "3" && $(this).is(':checked')) {
+                                loadEmployees(3); 
+                            }else{
+                                loadEmployees(0);
+                            }
+                        });
+                        $content.find('form').on('submit', function(e) {
                             e.preventDefault();
                             jc.$$formSubmit.trigger('click');
                         });
                     }
-                });
-                $(document).ready(function(){
-                    $('.hr-select2-option-emp-role').each(function() {
-                        $(this).select2({
-                            width: '100%',
-                            dropdownParent: $(this).parent(),
-                        })
-                    });
-                    $.ajax({
-                        type: "GET",
-                        url: "{{ url('/performance-admin/employees') }}",
-                        data: {
-                            'get_employee_id': get_employee_id
-                        },
-                        dataType: "JSON",
-                        success: function(response) {
-                            let datas = response.datas;
-                            $('#asign_employee_id').html('<option selected value=""> -- @lang("lang.select") --</option>');
-                            if (datas != '') {
-                                $.each(datas, function(i, item) {
-                                    $('#asign_employee_id').append($('<option>', {
-                                        value: item.id,
-                                        html: item.employee_name_en + '&nbsp;&nbsp;' + '(' + '&nbsp;'+ item.department.name_english + '&nbsp;)'
-                                    }));
-                                });
-                            }
-                        }
-                    });
                 });
             });
         });

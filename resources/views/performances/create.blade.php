@@ -501,10 +501,10 @@
                         $(".btn-txt").css("display", "block");
                         if (response.message=='successfully') {
                             toastr.success(response.message, 'Success');
-                            setTimeout(function () {
-                                window.location.href = "{{ url('performance') }}";
-                            }, 2000);
-                            $('#performanceForm').trigger("reset");
+                            // setTimeout(function () {
+                            //     window.location.href = "{{ url('performance') }}";
+                            // }, 2000);
+                            // $('#performanceForm').trigger("reset");
                         } else if (response.message === 'not_goal') {
                             let index = response.kpi_index;
                             $(".goal_type").css("border-color", "");

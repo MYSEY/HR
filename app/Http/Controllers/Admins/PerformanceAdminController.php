@@ -237,38 +237,65 @@ class PerformanceAdminController extends Controller
             'branchs.abbreviations',
             'departments.abbreviations',
         );
-        if (in_array(Auth::user()->RolePermission, ['Employee','DHOD','DBM'])) {
-            if (Auth::user()->branch->abbreviations =="HQ" && Auth::user()->department->abbreviations == "CRD") {
-                $query->where("users.department_id", $kpiUser->department_id);
-            }else{
-                if (Auth::user()->branch->abbreviations != "HQ") {
-                    $query->where(function ($subQuery) use ($kpiUser) {
-                        // Condition A: Matches the target user's branch
-                        $subQuery->where("users.branch_id", $kpiUser->branch_id)
-                        // Condition B: OR matches the special CRD HQ department/branch combo
-                        ->orWhere(function ($nestedQuery) {
-                            $nestedQuery->where("departments.abbreviations", "CRD")
-                                        ->where('branchs.abbreviations', "HQ");
-                        });
-                    });
+        if($request->is_hr == 2){
+            $query->whereNot("users.id", Auth::user()->id)->where("departments.abbreviations", "HRD");
+        }else if($request->is_hr == 3){
+            $query->whereIn("departments.abbreviations", ["BOD","CEO","HRD"]);
+        }else{
+            if (in_array(Auth::user()->RolePermission, ['Employee','DHOD','DBM'])) {
+                if(Auth::user()->RolePermission == 'Employee'){
+                    $query->whereNot("users.id", Auth::user()->id)
+                            ->where("users.department_id", $kpiUser->department_id)
+                            ->where("users.branch_id", $kpiUser->branch_id);
                 }else{
-                    $query->where("users.department_id", $kpiUser->department_id)
-                    ->where("users.branch_id", $kpiUser->branch_id);
+                    if (Auth::user()->branch->abbreviations =="HQ" && Auth::user()->department->abbreviations == "CRD") {
+                        $query->whereNot("users.id", Auth::user()->id)
+                                ->where("users.department_id", $kpiUser->department_id);
+                    }else{
+                        if (Auth::user()->branch->abbreviations != "HQ") {
+                            $query->where(function ($subQuery) use ($kpiUser) {
+                                // Condition A: Matches the target user's branch
+                                $subQuery->where("users.branch_id", $kpiUser->branch_id)
+                                ->whereNot("users.id", Auth::user()->id)
+                                // Condition B: OR matches the special CRD HQ department/branch combo
+                                ->orWhere(function ($nestedQuery) {
+                                    $nestedQuery->where("departments.abbreviations", "CRD")
+                                                ->where('branchs.abbreviations', "HQ");
+                                });
+                            });
+                        }else{
+                            $query->where("users.department_id", $kpiUser->department_id)
+                            ->whereNot("users.id", Auth::user()->id)
+                            ->where("users.branch_id", $kpiUser->branch_id);
+                        }
+                    }
                 }
             }
+            if (in_array(Auth::user()->RolePermission, ['HR']) && self::permission()->is_access != "1") {
+                $query->where("users.department_id", $kpiUser->department_id)
+                ->whereNot("users.id", Auth::user()->id)
+                ->where("users.branch_id", $kpiUser->branch_id);
+            }
+            if (in_array(Auth::user()->RolePermission, ['HOD'])) {
+                if(Auth::user()->department->abbreviations == "CRD"){
+                    $query->where('users.department_id', $kpiUser->department_id)
+                    ->whereNot("users.id", Auth::user()->id)
+                    ->orWhereIn("departments.abbreviations", ["BOD","CEO","HRD"]);
+                }else{
+                    $query->whereNot("users.id", Auth::user()->id)
+                    ->where('branchs.abbreviations', "HQ");
+                }
+            }
+            if (in_array(Auth::user()->RolePermission, ['BM'])) {
+                $query->where("users.branch_id", $kpiUser->branch_id)
+                ->whereNot("users.id", Auth::user()->id)
+                ->orWhere(function ($nestedQuery) {
+                    $nestedQuery->where("departments.abbreviations", "CRD")
+                                ->where('branchs.abbreviations', "HQ");
+                });
+            }
         }
-        if (in_array(Auth::user()->RolePermission, ['HR']) && self::permission()->is_access != "1") {
-            $query->where("users.department_id", $kpiUser->department_id)->where("users.branch_id", $kpiUser->branch_id);
-        }
-        if (in_array(Auth::user()->RolePermission, ['HOD'])) {
-            $query->where('branchs.abbreviations', "HQ");
-        }
-        if (in_array(Auth::user()->RolePermission, ['BM'])) {
-            $query->where("users.branch_id", $kpiUser->branch_id);
-            $query->whereIn('users.emp_status', ['1','2','10','Probation']);
-            $query->orWhere('branchs.abbreviations', "HQ");
-        }
-
+        
         $datas = $query->whereIn('users.emp_status', ['1','2','10','Probation'])->get();
         return response()->json([
             'datas' => $datas
@@ -758,11 +785,6 @@ class PerformanceAdminController extends Controller
             $department = Department::all();
         }
         return view('reports.kpi_report',compact('branch','department','permission'));
-        if (in_array(Auth::user()->RolePermission, ['Employee'])) {
-            $query->where('performances.employee_id', Auth::user()->id);
-        }
-        $data = $query->get();
-        return view('reports.kpi_report',compact('data'));
     }
     public function reportExport(Request $request)
     {
@@ -795,7 +817,7 @@ class PerformanceAdminController extends Controller
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
         )->where('performances.id',$id)->first();
-        return Excel::download(new ExporPerformanceDetail($data), 'performance_appraisal_'.$id.'.xlsx');
+        return Excel::download(new ExporPerformanceDetail($data), 'KPI-'.$data->employee_name_en.'.xlsx');
 
     }
 }

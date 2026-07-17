@@ -190,7 +190,8 @@ class User extends Authenticatable
     public function recruitment(){
         return $this->belongsTo(CandidateResume::class,'number_employee', 'number_employee')->select(
             'number_employee',
-            'pro_rate'
+            'pro_rate',
+            'condition_other'
         );
     }
 

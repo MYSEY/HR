@@ -3,34 +3,44 @@
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="page-title">@lang('lang.staff_upcoming')</h3>
+                <h3 class="page-title">@lang('lang.staff_information')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.staff_upcoming')</li>
+                    <li class="breadcrumb-item active">@lang('lang.staff_information')</li>
                 </ul>
             </div>
             <div class="col-auto float-end ms-auto">
             </div>
             <div class="col-auto float-end ms-auto">
                 <div class="btn-group btn-group-sm">
-                    @if (permissionAccess("m3-s1","is_print")->value == "1")
-                        <a class="btn btn-white m-1" href="{{url('/recruitment/candidate-resume/list')}}">@lang('lang.back_to_list')</a>
+                    @if (permissionAccess("m3-s1","is_print")->value == "1" || permissionAccess("m2-s1","is_print")->value == "1")
+                        @if (permissionAccess("m3-s1","is_view")->value == "1")
+                            <a class="btn btn-white m-1" href="{{url('/recruitment/candidate-resume/list')}}">@lang('lang.back_to_recruitment')</a>
+                        @endif
+                        <a class="btn btn-white m-1" href="{{url('/users')}}">@lang('lang.back_to_employee')</a>
+                        {{-- <a class="btn btn-white m-1" onclick="downloadWordBlicklistAgreement()">ទាញយកជា Word</a> --}}
                         <div class="dropdown action-label" style="margin-top: 3px;">
                             <a class="btn btn-white btn-sm dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-print fa-lg"></i> @lang('lang.print')
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" style="">
-                                <a class="dropdown-item btn-print" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_appointment_resolution" data-signed-contract="Appointment Resolution" data-id="{{$data->id}}">Appointment Resolution</a>
+                                {{-- *** Recruitment Print ***--}}
+                                @if (permissionAccess("m3-s1","is_print")->value == "1")
+                                    <a class="dropdown-item btn-print" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_appointment_resolution" data-signed-contract="Appointment Resolution" data-id="{{$data->id}}">Appointment Resolution</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_code_conduction_agreement" data-signed-contract="code conduction agreement" data-id="{{$data->id}}">Code Conduction Agreement</a>
+                                @endif
+                                {{-- *** HR Print ***--}}
+                                @if (permissionAccess("m2-s1","is_print")->value == "1")
                                 <a class="dropdown-item btn-print" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
-                                <a class="dropdown-item btn-print" href="#" id="btn_code_conduction_agreement" data-signed-contract="code conduction agreement" data-id="{{$data->id}}">Code Conduction Agreement</a>
-                                <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate" data-signed-contract="Employment Certificate NSSF" data-id="{{$data->id}}">Employment Certificate NSSF</a>
-                                <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate_form" data-signed-contract="Employment Cerntificate Form" data-id="{{$data->id}}">Employment Cerntificate Form</a>
+                                    <a class="dropdown-item btn-print" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
+                                    <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate" data-signed-contract="Employment Certificate NSSF" data-id="{{$data->id}}">Employment Certificate NSSF</a>
+                                    <a class="dropdown-item btn_certificate" href="#" id="btn_employment_certificate_form" data-signed-contract="Employment Cerntificate Form" data-id="{{$data->id}}">Employment Cerntificate Form</a>
+                                @endif
                             </div>
                         </div>
                     @endif
@@ -339,42 +349,6 @@
             let signed_contract = $(this).attr('data-signed-contract');
             printSignContract(id,signed_contract);
         });
-        // $('#btn_print_signed_contract').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
-        // $('#btn_print_contract').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
-        // $('#btn_appointed_letter').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
-        // $('#btn_complete_probation').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
-        // $('#btn_contract_volunteer').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
-        // $('#btn_confidential_letter').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
         $('.btn_certificate').on('click', function(){
             let id = $(this).data("id");
             let printBy  = $(this).attr('data-signed-contract');
@@ -400,12 +374,6 @@
             $(".management_position_print").text(data_management.position.name_khmer);
             printSignContract($("#add_select_id").val(),form);
         });
-        // $('#btn_blacklist_agreement').on('click', function(){
-        //     $('#modal-loading').modal('show');
-        //     let id = $(this).data("id");
-        //     let signed_contract = $(this).attr('data-signed-contract');
-        //     printSignContract(id,signed_contract);
-        // });
     });
 
     function printSignContract(id,signed_contract){
@@ -418,22 +386,43 @@
             },
             dataType: "JSON",
             success: function (response) {
-                var data = response.success;                
+                var data = response.success;
+                console.log("data: ", data);
+                                
                 var branch = response.branch;
                 var date_of_birth = new Date(data.date_of_birth);
                 var date_of_commencement = new Date(data.date_of_commencement);
+
                 var fdc_date = new Date(data.fdc_date);
                 fdc_date.setDate(fdc_date.getDate() - 1);
                 fdc_date = new Date(fdc_date);
+
+                var start_fdc_date = new Date(data.fdc_date);
+                start_fdc_date.setDate(start_fdc_date.getDate());
+                start_fdc_date = new Date(start_fdc_date);
+                var fdc_end = new Date(data.fdc_end);
+                fdc_end.setDate(fdc_end.getDate());
+                fdc_end = new Date(fdc_end);
+
                 let day = formatDate(date_of_birth, 'km', format_date={day: true});
                 let month = formatDate(date_of_birth, 'km', format_date={month: true});
                 let year = formatDate(date_of_birth, 'km', format_date={year: true});
                 let join_day = formatDate(date_of_commencement, 'km', format_date={day: true});
                 let join_month = formatDate(date_of_commencement, 'km', format_date={month: true});
                 let join_year = formatDate(date_of_commencement, 'km', format_date={year: true});
+
+                let start_fdc_day = formatDate(start_fdc_date, 'km', format_date={day: true});
+                let start_fdc_month = formatDate(start_fdc_date, 'km', format_date={month: true});
+                let start_fdc_year = formatDate(start_fdc_date, 'km', format_date={year: true});   
+
+                let fdc_end_day = formatDate(fdc_end, 'km', format_date={day: true});
+                let fdc_end_month = formatDate(fdc_end, 'km', format_date={month: true});
+                let fdc_end_year = formatDate(fdc_end, 'km', format_date={year: true});  
+                
                 let end_day = formatDate(fdc_date, 'km', format_date={day: true});
                 let end_month = formatDate(fdc_date, 'km', format_date={month: true});
-                let end_year = formatDate(fdc_date, 'km', format_date={year: true});                
+                let end_year = formatDate(fdc_date, 'km', format_date={year: true}); 
+                
                 if (data) {
                     $("#pr_status_single").text(" ");
                     $("#pr_status_married").text(" ");
@@ -467,8 +456,8 @@
                     $(".pr_birth_day").text(day);
                     $(".pr_birth_month").text(month);
                     $(".pr_birth_year").text(year);
-                    $(".pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
-                    $(".pr_permanent_province").text(data.permanentprovince==null ? "" : data.permanentprovince.name_km + " ");
+                    let location_permanent = " ភូមិ "+data.permanentvillage.name_km + " ឃុំ/សង្កាត់ " + data.permanentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.permanentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.permanentprovince.name_km;
+                    $(".pr_permanent_province").text(location_permanent + " ");
                     $(".pr_id_card_number").text(data.id_card_number+ "");
                     let number_home = "";
                     let number_street = "";
@@ -499,6 +488,15 @@
                     $(".pr_end_day").text(end_day);
                     $(".pr_end_month").text(end_month);
                     $(".pr_end_year").text(end_year);
+
+                    $(".pr_fdc_day").text(start_fdc_day);
+                    $(".pr_fdc_month").text(start_fdc_month);
+                    $(".pr_fdc_year").text(start_fdc_year);
+
+                    $(".pr_fdc_end_day").text(fdc_end_day);
+                    $(".pr_fdc_end_month").text(fdc_end_month);
+                    $(".pr_fdc_end_year").text(fdc_end_year);
+
                     $(".pr_branch").text(data.branch.branch_name_kh);
                     $(".pr_employee_id").text(data.number_employee);
                     $(".pr_basic_salary").text(data.basic_salary);
@@ -508,6 +506,11 @@
                         $("#pr_supporting_or_field_staff").text("ដោយធៀបនឹងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
                     }else{
                         $("#pr_supporting_or_field_staff").text("");
+                    }
+                    if (data.recruitment && data.recruitment.condition_other == "1") {
+                        $(".Responsible-Lending").css("display","block");
+                    }else{
+                        $(".Responsible-Lending").css("display","none");
                     }
                     if (signed_contract=='signed contract') {
                         stylePrintSignContract();
@@ -685,5 +688,40 @@
             doctypeString: "",
         });
     }
+    // function downloadWordBlicklistAgreement() {
+    //     // បង្ហាញ Div សិនដើម្បីឱ្យ JavaScript ចាប់យកទិន្នន័យដែលមានតម្លៃ Dynamic បានពេញលេញ
+    //     $("#print_blicklist_agreement").show();
+
+    //     // ចាប់យក Content HTML ទាំងអស់នៅក្នុង Div នោះ
+    //     var contentHtml = document.getElementById("print_blicklist_agreement").innerHTML;
+
+    //     // រៀបចំ Template សម្រាប់ Microsoft Word (អាន Font ខ្មែរ និងកំណត់ទំហំក្រដាស A4)
+    //     var wordTemplate = `
+            
+    //         ${contentHtml}
+    //     `;
+
+    //     // បង្កើត Blob Object ក្នុងទម្រង់ MIME type របស់ MS-Word
+    //     var blob = new Blob(['\ufeff' + wordTemplate], {
+    //         type: 'application/msword;charset=utf-8'
+    //     });
+
+    //     // បង្កើត Link ស្វ័យប្រវត្តសម្រាប់ទាញយក File
+    //     var url = URL.createObjectURL(blob);
+    //     var downloadLink = document.createElement('a');
+        
+    //     var today = new Date().toISOString().slice(0, 10);
+    //     downloadLink.href = url;
+    //     downloadLink.download = "Blacklist_Agreement_" + today + ".doc";
+        
+    //     // ដំណើរការដោនឡូត
+    //     document.body.appendChild(downloadLink);
+    //     downloadLink.click();
+    //     document.body.removeChild(downloadLink);
+    //     URL.revokeObjectURL(url);
+
+    //     // លាក់ Div នោះវិញ ប្រសិនបើលោកអ្នកចង់លាក់វានៅលើអេក្រង់ Web ធម្មតា
+    //     // $("#print_blicklist_agreement").hide(); 
+    // }
     
 </script>

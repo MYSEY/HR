@@ -62,7 +62,7 @@
                 </div>
                 <table style="width:100%">
                     <tr><td class="table_tr">
-                        <span class="pr_mr_or_mrs"></span><strong class="pr_name"></strong>ភេទ <strong class="pr_gender"></strong>កើតនៅថ្ងៃទី​ <strong class="pr_born_on"></strong> ទីកន្លែងកំណើត <strong class="pr_permanent_province"></strong> កាន់អត្តសញ្ញាណប័ណ្ណលេខ <strong class="pr_id_card_number"></strong> សញ្ជាតិខ្មែរ។ អាស័យដ្ឋាន <span class="pr_current_location"></span> ទូរស័ព្ទលេខ <strong class="pr_personal_phone_number"></strong> ដែលតទៅនេះហៅថា <strong>«និយោជិត»។</strong>
+                        <span class="pr_mr_or_mrs"></span><strong class="pr_name"></strong>ភេទ <strong class="pr_gender"></strong>កើតនៅថ្ងៃទី​ <strong class="pr_born_on"></strong> ទីកន្លែងកំណើត <span class="pr_permanent_province"></span> កាន់អត្តសញ្ញាណប័ណ្ណលេខ <strong class="pr_id_card_number"></strong> សញ្ជាតិខ្មែរ។ អាស័យដ្ឋាន <span class="pr_current_location"></span> ទូរស័ព្ទលេខ <strong class="pr_personal_phone_number"></strong> ដែលតទៅនេះហៅថា <strong>«និយោជិត»។</strong>
                     </td></tr>
                 </table>
                 <div style="text-align: center;">

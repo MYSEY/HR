@@ -96,7 +96,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                រយៈពេលនៃកិច្ចសន្យាការងារពេញសិទ្ធិនេះមានរយៈពេល..១២..(ដប់ពីរខែ) ឆ្នាំ/ខែ គិតចាប់ពីថ្ងៃទី <strong class="pr_join_day"></strong> ខែ <strong class="pr_join_month"></strong> ឆ្នាំ <strong class="pr_join_year"></strong> ដល់ថ្ងៃទី <strong class="pr_end_day"></strong> ខែ <strong class="pr_end_month"></strong> ឆ្នាំ <strong class="pr_end_year"></strong> ។
+                                រយៈពេលនៃកិច្ចសន្យាការងារពេញសិទ្ធិនេះមានរយៈពេល..១២..(ដប់ពីរខែ) ឆ្នាំ/ខែ គិតចាប់ពីថ្ងៃទី <strong class="pr_fdc_day"></strong> ខែ <strong class="pr_fdc_month"></strong> ឆ្នាំ <strong class="pr_fdc_year"></strong> ដល់ថ្ងៃទី <strong class="pr_fdc_end_day"></strong> ខែ <strong class="pr_fdc_end_month"></strong> ឆ្នាំ <strong class="pr_fdc_end_year"></strong> ។
                             </td></tr>
                         </table>
                     </div>

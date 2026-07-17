@@ -197,9 +197,9 @@
                                                     <input type="number" step="any" class="form-control personnel_score" name="personnel_score[]" placeholder="0" value="{{$Detailitem->score_live_staff}}" min="0" readonly>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input type="number" 
+                                                    <input 
                                                         step="any" 
-                                                        class="form-control direct_chairman" 
+                                                        class="form-control direct_chairman action-check-wieg" 
                                                         name="direct_chairman[]" 
                                                         placeholder="0" 
                                                         value="{{ $Detailitem->score_direct_chairman }}" 
@@ -441,7 +441,19 @@
             calculateSubtotals();
             calculateGrandTotals();
         });
-
+        $(document).on("change", '.action-check-wieg', function() {
+            let $row = $(this).closest('tr');
+            const lineWeight = $(this).val();
+            let weight = $row.find('.weight').val();
+            let total =( weight * 5) / 100;
+            if(lineWeight > total){
+                $(this).css("border-color", "red");
+                toastr.error("The score isn't higher "+total, 'Error');
+            }else{
+                $(this).css("border-color", "#e3e3e3");
+            }
+        });
+        
         $(document).on('change', '.progress', function () {
             let $row = $(this).closest('tr');
             let goals = $row.find('.goal').data("goals");
@@ -545,8 +557,6 @@
                     }
                 }
             }
-
-
             // Update score achieved
             $row.find('.score_achieved').val(scoreAchieved);
             // Calculate weighted score
@@ -562,7 +572,6 @@
 
         $(document).on('click', '#btnSubmit', function (e) {
             e.preventDefault();
-
             let token = $('meta[name="csrf-token"]').attr('content');
             let id = $('#id').val();
             let employee_id = $('#employee_id').val();
@@ -571,16 +580,28 @@
             let total_direct_chairman = $('#total_direct_chairman').val();
 
             let performanceDetail = [];
+            let requere_total_weight = 0;
             $('tr.performance-row').each(function () {
                 const $row = $(this);
                 const performance_id = $row.find('input[name="performance_id[]"]').val();
                 const progress = $row.find('input[name="progress[]"]').val();
+                const weight = $row.find('input[name="weight"]').val();
+                
                 const score_achieved = $row.find('input[name="score_achieved[]"]').val();
                 const score = $row.find('input[name="score[]"]').val();
                 const personnel_score = $row.find('input[name="personnel_score[]"]').val();
                 const direct_chairman = $row.find('input[name="direct_chairman[]"]').val();
                 const easy_difficult_factors = $row.find('textarea[name="easy_difficult_factors[]"]').val();
                 const comment = $row.find('textarea[name="comment[]"]').val();
+
+                let totalWeight =( weight * 5) / 100;
+                if(direct_chairman > totalWeight){
+                    requere_total_weight ++;
+                    $row.find('input[name="direct_chairman[]"]').css("border-color", "red");
+                    toastr.error("The score isn't higher "+totalWeight, 'Error');
+                }else{
+                    $row.find('input[name="direct_chairman[]"]').css("border-color", "#e3e3e3");
+                }
 
                 if (progress || score_achieved) {
                     performanceDetail.push({
@@ -595,6 +616,10 @@
                     });
                 }
             });
+            if (requere_total_weight > 0) {
+                console.log(requere_total_weight);
+                return false;
+            }
             $.ajax({
                 type: 'PUT',
                 url: "{{ url('performance-appraisal') }}/" + id,
