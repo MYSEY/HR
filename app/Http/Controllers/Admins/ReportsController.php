@@ -655,7 +655,7 @@ class ReportsController extends Controller
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
         )->where('performance_appraisals.id',$id)->first();
-        return Excel::download(new ExporPerformanceDetail($data), 'performance_appraisal_'.$id.'.xlsx');
+        return Excel::download(new ExporPerformanceDetail($data), 'PA-'.$data->employee_name_en.'.xlsx');
 
     }
 

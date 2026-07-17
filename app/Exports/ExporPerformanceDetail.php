@@ -31,6 +31,7 @@ class ExporPerformanceDetail implements FromView, WithEvents
             AfterSheet::class => function (AfterSheet $event) {
 
                 $sheet = $event->sheet->getDelegate();
+                $sheet->setTitle($this->data->number_employee);
                 // Set Khmer OS Battambang for header
                 $sheet->getStyle('A1:K3')->getFont()->setName('Khmer OS Battambang');
 

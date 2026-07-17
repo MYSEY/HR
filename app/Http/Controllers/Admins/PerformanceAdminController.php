@@ -785,11 +785,6 @@ class PerformanceAdminController extends Controller
             $department = Department::all();
         }
         return view('reports.kpi_report',compact('branch','department','permission'));
-        if (in_array(Auth::user()->RolePermission, ['Employee'])) {
-            $query->where('performances.employee_id', Auth::user()->id);
-        }
-        $data = $query->get();
-        return view('reports.kpi_report',compact('data'));
     }
     public function reportExport(Request $request)
     {
@@ -822,7 +817,7 @@ class PerformanceAdminController extends Controller
             'branchs.branch_name_en',
             'branchs.branch_name_kh',
         )->where('performances.id',$id)->first();
-        return Excel::download(new ExporPerformanceDetail($data), 'performance_appraisal_'.$id.'.xlsx');
+        return Excel::download(new ExporPerformanceDetail($data), 'KPI-'.$data->employee_name_en.'.xlsx');
 
     }
 }
