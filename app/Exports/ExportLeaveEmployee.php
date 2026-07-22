@@ -45,74 +45,112 @@ class ExportLeaveEmployee implements FromCollection, WithColumnWidths, WithHeadi
             }
         };
         
-        $totalAnnualLeave= 0;
-        $totalSickLeave= 0;
-        $totalSpacialLeave= 0;
-        $totalUnpaidLeave= 0;
-        $totalLongSickLeave= 0;
-        $Status=  "";
-        foreach ($datas["dataLeaveRequest"] as $request) {
-           
-            $i++;
-            $start_date = Carbon::createFromDate($request->start_date)->format('d-m-Y');
-            $end_date = Carbon::createFromDate($request->end_date)->format('d-m-Y');
-            $created_at = Carbon::createFromDate($request->created_at)->format('d-m-Y H:i');
+        $totalsByYear = [];
+        $i = 0;
 
-            if ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ) {
-                if ($request->leaveType->type == "annual_leave") {
-                    $totalAnnualLeave += $request->number_of_day;
-                }else if ($request->leaveType->type == "sick_leave") {
-                    $totalSickLeave += $request->number_of_day;
-                }else if ($request->leaveType->type == "special_leave") {
-                    $totalSpacialLeave += $request->number_of_day;
-                }else if ($request->leaveType->type == "unpaid_leave") {
-                    $totalUnpaidLeave += $request->number_of_day;
-                }else if ($request->leaveType->type == "long_sick_leave") {
-                    $totalLongSickLeave += $request->number_of_day;
+        foreach ($datas["dataLeaveRequest"] as $request) {
+            $i++;
+
+            // 1. Extract year and format dates
+            $requestYear = \Carbon\Carbon::parse($request->start_date)->format('Y');
+            $start_date  = \Carbon\Carbon::parse($request->start_date)->format('d-m-Y');
+            $end_date    = \Carbon\Carbon::parse($request->end_date)->format('d-m-Y');
+            $created_at  = \Carbon\Carbon::parse($request->created_at)->format('d-m-Y H:i');
+
+            // 2. Initialize year totals structure if not present
+            if (!isset($totalsByYear[$requestYear])) {
+                $totalsByYear[$requestYear] = [
+                    'annual'    => 0,
+                    'sick'      => 0,
+                    'special'   => 0,
+                    'unpaid'    => 0,
+                    'long_sick' => 0,
+                ];
+            }
+
+            // 3. Accumulate leave days by year (if approved)
+            $rejectedStatuses = ['rejected', 'rejected_lm', 'rejected_hod', 'cancel_hod', 'cancel'];
+            $isApproved       = !in_array($request->status, $rejectedStatuses);
+            $type             = $request->leaveType->type ?? null;
+
+            if ($isApproved) {
+                if ($type === "annual_leave") {
+                    $totalsByYear[$requestYear]['annual'] += $request->number_of_day;
+                } elseif ($type === "sick_leave") {
+                    $totalsByYear[$requestYear]['sick'] += $request->number_of_day;
+                } elseif ($type === "special_leave") {
+                    $totalsByYear[$requestYear]['special'] += $request->number_of_day;
+                } elseif ($type === "unpaid_leave") {
+                    $totalsByYear[$requestYear]['unpaid'] += $request->number_of_day;
+                } elseif ($type === "long_sick_leave") {
+                    $totalsByYear[$requestYear]['long_sick'] += $request->number_of_day;
                 }
             }
-            if ($request->status == "rejected"){
-               $Status = "Rejected";
-            }elseif($request->status == "pending_cancel"){
-               $Status = "Pending Cancel";
-            }elseif($request->status == "cancel_hod" || $request->status == "cancel"){
-               $Status = "Cancel";
-            }elseif ($request->status == "rejected_lm"){
-               $Status = "Rejected by Line Manager";
-            }elseif ($request->status == "rejected_hod"){
-               $Status = "Rejected by ACEO/Head/BM";
-            }elseif ($request->status == "approved_lm" || $request->status == "pending"){
-               $Status ="Waiting Approve by CEO/Head/BM";
-            }elseif ($request->status == "approved_hod"){
-               $Status = "Approved";
-            }elseif($request->status == "approved"){
-                $Status = "Approved";
+
+            // 4. Fetch allocation balance for the specific year
+            $currentAlloc = $datas["balances"][$requestYear][0] ?? null;
+
+            // 5. Map human-readable status
+            $Status = match ($request->status) {
+                'rejected'                      => 'Rejected',
+                'pending_cancel'                => 'Pending Cancel',
+                'cancel_hod', 'cancel'          => 'Cancel',
+                'rejected_lm'                   => 'Rejected by Line Manager',
+                'rejected_hod'                  => 'Rejected by ACEO/Head/BM',
+                'approved_lm', 'pending'        => 'Waiting Approve by CEO/Head/BM',
+                'approved_hod', 'approved'      => 'Approved',
+                default                         => $request->status,
             };
-            $annual_leave_numberOfDay = ($request->leaveType->type == "annual_leave" ? $request->number_of_day : 0);
-            $sick_leave_numberOfDay = ($request->leaveType->type == "sick_leave" ? $request->number_of_day : 0);
-            $special_leave_numberOfDay = ($request->leaveType->type == "special_leave" ? $request->number_of_day : 0);
-            $unpaid_leave_numberOfDay = ($request->leaveType->type == "unpaid_leave" ? $request->number_of_day : 0);
-            $long_sick_leave_numberOfDay = ($request->leaveType->type == "long_sick_leave" ? $request->number_of_day : 0);
+
+            // 6. Calculate day taken per leave type
+            $annual_leave_numberOfDay    = ($type === "annual_leave")    ? $request->number_of_day : 0;
+            $sick_leave_numberOfDay      = ($type === "sick_leave")      ? $request->number_of_day : 0;
+            $special_leave_numberOfDay   = ($type === "special_leave")   ? $request->number_of_day : 0;
+            $unpaid_leave_numberOfDay    = ($type === "unpaid_leave")    ? $request->number_of_day : 0;
+            $long_sick_leave_numberOfDay = ($type === "long_sick_leave") ? $request->number_of_day : 0;
+
+            // 7. Calculate dynamic balances matching the blade view
+            $balance1 = ($currentAlloc && $type === "annual_leave")
+                ? ($currentAlloc->default_annual_leave - $totalsByYear[$requestYear]['annual'])
+                : 0;
+
+            $balance2 = ($currentAlloc && $type === "sick_leave")
+                ? ($currentAlloc->default_sick_leave - $totalsByYear[$requestYear]['sick'])
+                : 0;
+
+            $balance3 = ($currentAlloc && $type === "special_leave")
+                ? ($currentAlloc->default_special_leave - $totalsByYear[$requestYear]['special'])
+                : 0;
+
+            $balance4 = $currentAlloc
+                ? ($currentAlloc->default_unpaid_leave - $totalsByYear[$requestYear]['unpaid'])
+                : 0;
+
+            $balance5 = ($currentAlloc && $type === "long_sick_leave")
+                ? ($currentAlloc->default_long_sick_leave - $totalsByYear[$requestYear]['long_sick'])
+                : 0;
+
+            // 8. Push to export array
             $dataExport[] = [
-                "number"                            => $i,
-                "employee_name"                     => $request->employee->employee_name_en,
-                "department"                        => $request->employee->department->name_english,
-                "from"                              => $start_date,
-                "to"                                => $end_date,
-                "created_at"                        => $created_at,
-                "day_taken1"                        => $annual_leave_numberOfDay,          
-                "balance1"                          => ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ? $request->leaveType->type == "annual_leave" ? $datas["LeaveAllocation"]->default_annual_leave - $totalAnnualLeave : 0 : 0), 
-                "day_taken2"                        => $sick_leave_numberOfDay,           
-                "balance2"                          => ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ? $request->leaveType->type == "sick_leave" ? $datas["LeaveAllocation"]->default_sick_leave - $totalSickLeave : 0 : 0),         
-                "day_taken3"                        => $special_leave_numberOfDay,          
-                "balance3"                          => ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel"? $request->leaveType->type == "special_leave" ? $datas["LeaveAllocation"]->default_special_leave - $totalSpacialLeave : 0 : 0),        
-                "day_taken4"                        => $unpaid_leave_numberOfDay,           
-                "balance4"                          => ($request->leaveType->type == "unpaid_leave"? $totalUnpaidLeave : 0),         
-                "day_taken5"                        => $long_sick_leave_numberOfDay,           
-                "balance5"                          => ($request->leaveType->type == "long_sick_leave"? $totalLongSickLeave : 0),
-                "Reason"                            => $request->reason,
-                "Remark"                            => $request->remark,        
-                "Status"                            => $Status,
+                "number"        => $i,
+                "employee_name" => $request->employee->employee_name_en ?? '',
+                "department"    => $request->employee->department->name_english ?? '',
+                "from"          => $start_date,
+                "to"            => $end_date,
+                "created_at"    => $created_at,
+                "day_taken1"    => $annual_leave_numberOfDay,
+                "balance1"      => $balance1,
+                "day_taken2"    => $sick_leave_numberOfDay,
+                "balance2"      => $balance2,
+                "day_taken3"    => $special_leave_numberOfDay,
+                "balance3"      => $balance3,
+                "day_taken4"    => $unpaid_leave_numberOfDay,
+                "balance4"      => $balance4,
+                "day_taken5"    => $long_sick_leave_numberOfDay,
+                "balance5"      => $balance5,
+                "Reason"        => $request->reason,
+                "Remark"        => $request->remark,
+                "Status"        => $Status,
             ];
         }
         $this->export_datas = $dataExport;
