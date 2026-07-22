@@ -1115,7 +1115,28 @@ class LeavesEmployeeController extends Controller
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::where("employee_id", $request->id)->first();
         $dataLeaveRequest = LeaveRequest::with("leaveType")->with("employee")->where("employee_id", $request->id)->get();
+        // ទាញទិន្នន័យប្រវត្តិឆ្នាំចាស់ៗ
+        $allocationHistory = DB::table('leave_allocation_histories')
+            ->where('employee_id', Auth::user()->id)
+            ->whereNull('deleted_at')
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $balances = [];
+        if ($LeaveAllocation) {
+            $current_year = date('Y', strtotime($LeaveAllocation->created_at));
+            $balances[$current_year] = [
+                $LeaveAllocation
+            ];
+        }
+        // Loop បញ្ចូល History ដោយទាញឆ្នាំពី created_at
+        foreach ($allocationHistory as $history) {
+            $year = date('Y', strtotime($history->created_at)); 
+            $balances[$year] = [
+                $history
+            ];
+        }
         $data = [
+            'balances' => $balances,
             "dataLeaveType"=> $dataLeaveType,
             "LeaveAllocation"=> $LeaveAllocation,
             "dataLeaveRequest"=> $dataLeaveRequest
