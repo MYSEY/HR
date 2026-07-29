@@ -78,7 +78,7 @@ class LeavesAdminController extends Controller
                     }
                 }
                 
-            })->orderBy('id', 'DESC')->get();
+            })->orderBy('id', 'DESC')->count();
         $sumByEmployee = $this->dataRequests->getLeaveReports($request);
         $requestCancels = LeaveRequest::with("employee")->with("handover")
             ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')

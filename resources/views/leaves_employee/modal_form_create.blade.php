@@ -173,62 +173,87 @@
 <script>
     $(function(){
         var total_day = 0;
+
         $("#start_date").on("dp.change", function(e) {
-            let startDates = e.date;
-            $('#end_date').data('DateTimePicker').minDate(startDates);
+            if (!e.date) return;
+
+            // ១. កំណត់ startDates ត្រឹម 00:00:00 ដើម្បីកុំឲ្យទាក់ Time
+            let startDates = e.date.clone().startOf('day');
+            
+            // ២. Update minDate ទៅកាន់ end_date
+            var endDatePicker = $('#end_date').data('DateTimePicker');
+            if (endDatePicker) {
+                endDatePicker.minDate(startDates);
+                
+                // បើសិន end_date បច្ចុប្បន្ន តូចជាង start_date ថ្មី ត្រូវ Set វាឲ្យស្មើ start_date
+                let currentEndDate = endDatePicker.date();
+                if (currentEndDate && currentEndDate.isBefore(startDates, 'day')) {
+                    endDatePicker.date(startDates);
+                }
+            }
+
             let startDate = new Date($(this).val());
             let endDate = new Date($('#end_date').val());
-            let weekdayCount = countWeekdays(startDate,  endDate);
+            let weekdayCount = countWeekdays(startDate, endDate);
+
             $(".half_clear_checkbox").val("");
             $(".half_clear_checkbox").prop('checked', false);
             $(".check_half_day").prop('checked', false);
-            $(".half_start_end_day").css("display","none");
-            $(".half_day").css("display","none");
+            $(".half_start_end_day").css("display", "none");
+            $(".half_day").css("display", "none");
+
             axios.post('{{ URL('holidays/search') }}', {
                 "from_date": $(this).val(),
                 "to_date": $('#end_date').val()
             }).then(function(response) {
                 let holiday = response.data.datas;
                 let nextWorkigDay = 0;
-                if (holiday != '') {
+                if (holiday && holiday.length > 0) {
                     $.each(holiday, function(i, holi) {
-                        nextWorkigDay += countWeekdays(holi.from,  holi.to);
+                        nextWorkigDay += countWeekdays(holi.from, holi.to);
                     });
                 }
                 total_day = weekdayCount - nextWorkigDay;
-                $("#number_of_day").val(total_day);
+                $("#number_of_day").val(total_day < 0 ? 0 : total_day);
             });
         });
 
         // function end date
         $("#end_date").on("dp.change", function(e) {
-            let startDate = $('#start_date').data('DateTimePicker').date();
-            let endDate = e.date;
-            if (startDate > endDate) {
-                $('#end_date').data('DateTimePicker').date(startDate);
+            if (!e.date) return;
+
+            let startDateMoment = $('#start_date').data('DateTimePicker') ? $('#start_date').data('DateTimePicker').date() : null;
+            let endDateMoment = e.date;
+
+            // ប្រៀបធៀបតែ Date (មិនគិត Time)
+            if (startDateMoment && endDateMoment.isBefore(startDateMoment, 'day')) {
+                $('#end_date').data('DateTimePicker').date(startDateMoment.clone().startOf('day'));
+                return;
             }
+
             let startDates = new Date($("#start_date").val());
             let endDates = new Date($(this).val()); 
-            let weekdayCount = countWeekdays(startDates,  endDates);
+            let weekdayCount = countWeekdays(startDates, endDates);
 
             $(".half_clear_checkbox").val("");
             $(".half_clear_checkbox").prop('checked', false);
             $(".check_half_day").prop('checked', false);
-            $(".half_start_end_day").css("display","none");
-            $(".half_day").css("display","none");
+            $(".half_start_end_day").css("display", "none");
+            $(".half_day").css("display", "none");
+
             axios.post('{{ URL('holidays/search') }}', {
                 "from_date": $("#start_date").val(),
                 "to_date": $(this).val()
             }).then(function(response) {
                 let holiday = response.data.datas;
                 let nextWorkigDay = 0;
-                if (holiday != '') {
+                if (holiday && holiday.length > 0) {
                     $.each(holiday, function(i, holi) {
-                        nextWorkigDay += countWeekdays(holi.from,  holi.to);
+                        nextWorkigDay += countWeekdays(holi.from, holi.to);
                     });
                 }
                 total_day = weekdayCount - nextWorkigDay;
-                $("#number_of_day").val(total_day);
+                $("#number_of_day").val(total_day < 0 ? 0 : total_day);
             });
         });
 

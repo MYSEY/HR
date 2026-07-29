@@ -24,7 +24,7 @@ class DepartmentController extends Controller
         if (permissionAccess("m9-s4","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $employee = User::whereIn("emp_status", ["1", "2", "10"])->get();
+        $employee = User::whereIn("emp_status", ["1", "2", "10","Probation"])->get();
         $data = Department::where("parent_id", 0)->orWhere("parent_id", null)->with("headDepartment")->with('child')->orderBy('id','asc')->get();
         return view('department.index',compact('data', "employee"));
     }

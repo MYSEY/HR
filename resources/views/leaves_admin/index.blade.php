@@ -115,7 +115,7 @@
                     <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active tab_leave_none" data-bs-toggle="tab" href="#leave_request" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.leave_requests')
-                                <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($dataLeaveRequest)}}</span> 
+                                <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataLeaveRequest}}</span> 
                             </a>
                         </li>
                         {{-- @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin') --}}
@@ -150,7 +150,7 @@
                                         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <table class="table table-striped custom-table mb-0 no-footer datatable dataTable tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                                    <table class="table table-striped custom-table mb-0 no-footer tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                         <thead>
                                                             <tr>
                                                                 @if (in_array(Auth::user()->RolePermission, ['HRAdmin','admin']))
@@ -176,7 +176,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @if (count($dataLeaveRequest) > 0)
+                                                            {{-- @if (count($dataLeaveRequest) > 0)
                                                                 @foreach ($dataLeaveRequest as $key=>$request)
                                                                     <tr class="odd">
                                                                         @if (in_array(Auth::user()->RolePermission, ['HRAdmin','admin']))
@@ -244,7 +244,7 @@
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
-                                                            @endif
+                                                            @endif --}}
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -526,7 +526,7 @@
                 container: 'tr' 
             });
         });
-        // datashowTables();
+        datashowTables();
         $("#importPayroll").on("click", function() {
             $(".thanLess").hide();
             $("#thanLess").text("");
@@ -1177,7 +1177,9 @@
             });
         });
     });
-
+    function strLimit(str, limit = 30, end = '...') {
+        return str.length > limit ? str.substring(0, limit) + end : str;
+    }
     function datashowTables() {
         let is_reject = "{{ Helper::permissionAccess('m10-s1','is_reject') }}";
         let is_approve = "{{ Helper::permissionAccess('m10-s1','is_approve') }}";
@@ -1267,7 +1269,21 @@
                 },
 
                 // Reason
-                { data: 'reason' },
+                { 
+                     data: 'reason',
+                        defaultContent: '',
+                        render: function (data, type, row) {
+
+                            if (!data) return '';
+                            return `
+                                <span data-toggle="tooltip"
+                                    data-html="true"
+                                    title="${data}">
+                                    ${strLimit(data, 30, '...')}
+                                </span>
+                            `;
+                        }
+                },
 
                 // Days
                 {

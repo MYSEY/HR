@@ -37,18 +37,20 @@ class LeavesEmployeeController extends Controller
      */
     public function index()
     {
-        if (permissionAccess("m10-s2","is_view")->value != "1") {
+        if (permissionAccess("m10-s2", "is_view")->value != "1") {
             return view('upgrade.access_page');
         }
 
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
+        
         // ទាញទិន្នន័យប្រវត្តិឆ្នាំចាស់ៗ
         $allocationHistory = DB::table('leave_allocation_histories')
             ->where('employee_id', Auth::user()->id)
             ->whereNull('deleted_at')
             ->orderBy('created_at', 'asc')
             ->get();
+
         $balances = [];
         if ($LeaveAllocation) {
             $current_year = date('Y', strtotime($LeaveAllocation->created_at));
@@ -56,6 +58,7 @@ class LeavesEmployeeController extends Controller
                 $LeaveAllocation
             ];
         }
+
         // Loop បញ្ចូល History ដោយទាញឆ្នាំពី created_at
         foreach ($allocationHistory as $history) {
             $year = date('Y', strtotime($history->created_at)); 
@@ -64,62 +67,106 @@ class LeavesEmployeeController extends Controller
             ];
         }
 
-        $employees= DB::table('users')
-        ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
-        ->select( 'users.*', 'roles.role_type',)
-        ->whereIn('users.emp_status', ['Probation','1','2','10',])
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if($RolePermission == 'Employee'){
-                $query->where("users.department_id", Auth::user()->department_id);
-                $query->where("users.branch_id", Auth::user()->branch_id);
-                $query->whereNot("users.id", Auth::user()->id);
-            }
-            if (in_array($RolePermission, ['BM','DBM'])){
-                $query->where("users.branch_id", Auth::user()->branch_id);
-                $query->whereNot("users.id", Auth::user()->id);
-            }
-            if (in_array($RolePermission, ['HR','HRAdmin','DHOD','HOD'])){
-                $query->where("users.department_id", Auth::user()->department_id);
-                $query->where("users.branch_id", Auth::user()->branch_id);
-                $query->orWhere("users.line_manager", Auth::user()->id);
-                $query->whereNot("users.id", Auth::user()->id);
-            }
-            if (in_array($RolePermission, ['BOD','CEO'])){
-                $query->whereNot("users.id", Auth::user()->id);
-                $query->whereNot("roles.role_type", "Employee");
-            }
-            })->get();
-        $delegateEmployees= DB::table('users')
+        $employees = DB::table('users')
             ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
-            ->select( 'users.*', 'roles.role_type',)
-            ->whereIn('users.emp_status', ['Probation','1','2','10',])
-            ->whereNot("roles.role_type", "Employee")
+            ->select('users.*', 'roles.role_type')
+            ->whereIn('users.emp_status', ['Probation', '1', '2', '10'])
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if (in_array($RolePermission, ['BM','DBM'])){
+                if ($RolePermission == 'Employee') {
+                    $query->where("users.department_id", Auth::user()->department_id);
                     $query->where("users.branch_id", Auth::user()->branch_id);
                     $query->whereNot("users.id", Auth::user()->id);
-                }else if (in_array($RolePermission, ['HR','DHOD', 'HRAdmin', 'HOD'])){
+                }
+                if (in_array($RolePermission, ['BM', 'DBM'])) {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                    $query->whereNot("users.id", Auth::user()->id);
+                }
+                if (in_array($RolePermission, ['HR', 'HRAdmin', 'DHOD', 'HOD'])) {
                     $query->where("users.department_id", Auth::user()->department_id);
                     $query->where("users.branch_id", Auth::user()->branch_id);
                     $query->orWhere("users.line_manager", Auth::user()->id);
                     $query->whereNot("users.id", Auth::user()->id);
-                }else if($RolePermission == 'Employee'){
-                    $query->where("users.department_id", Auth::user()->department_id);
-                    $query->where("users.branch_id", Auth::user()->branch_id);
-                    $query->whereNot("users.id", Auth::user()->id);
                 }
-                if (in_array($RolePermission, ['BOD','CEO'])){
+                if (in_array($RolePermission, ['BOD', 'CEO'])) {
                     $query->whereNot("users.id", Auth::user()->id);
                     $query->whereNot("roles.role_type", "Employee");
                 }
             })->get();
-        $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)
-        // ->whereYear('start_date', now()->year) get data by current year
-        ->orderByRaw('YEAR(start_date) DESC')  // Group by Year first
-        // ->orderByRaw('MONTH(start_date) DESC') // Then by Month
-        ->orderBy('id', 'asc')                // Finally by ID for specific order
-        ->get();
-        return view('leaves_employee.index', compact('dataLeaveType', 'balances', 'LeaveAllocation', 'employees','delegateEmployees', 'dataLeaveRequest'));
+
+        $delegateEmployees = DB::table('users')
+            ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
+            ->select('users.*', 'roles.role_type')
+            ->whereIn('users.emp_status', ['Probation', '1', '2', '10'])
+            ->whereNot("roles.role_type", "Employee")
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if (in_array($RolePermission, ['BM', 'DBM'])) {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                    $query->whereNot("users.id", Auth::user()->id);
+                } else if (in_array($RolePermission, ['HR', 'DHOD', 'HRAdmin', 'HOD'])) {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
+                    $query->whereNot("users.id", Auth::user()->id);
+                } else if ($RolePermission == 'Employee') {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                    $query->whereNot("users.id", Auth::user()->id);
+                }
+                if (in_array($RolePermission, ['BOD', 'CEO'])) {
+                    $query->whereNot("users.id", Auth::user()->id);
+                    $query->whereNot("roles.role_type", "Employee");
+                }
+            })->get();
+
+        // 1. Fetch leave requests in ASC order for accurate running-total calculations
+        $rawLeaveRequests = LeaveRequest::with("leaveType")
+            ->where("employee_id", Auth::user()->id)
+            ->orderBy('start_date', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $totalsByYear = [];
+
+        // 2. Loop through and compute dynamic balance per row
+        foreach ($rawLeaveRequests as $request) {
+            $requestYear = \Carbon\Carbon::parse($request->start_date)->format('Y');
+
+            if (!isset($totalsByYear[$requestYear])) {
+                $totalsByYear[$requestYear] = [
+                    'annual'    => 0,
+                    'sick'      => 0,
+                    'special'   => 0,
+                    'unpaid'    => 0,
+                    'long_sick' => 0,
+                ];
+            }
+
+            $rejectedStatuses = ['rejected', 'rejected_lm', 'rejected_hod', 'cancel_hod', 'cancel'];
+            $isApproved       = !in_array($request->status, $rejectedStatuses);
+            $type             = $request->leaveType->type ?? null;
+
+            if ($isApproved) {
+                if ($type === "annual_leave") $totalsByYear[$requestYear]['annual'] += $request->number_of_day;
+                elseif ($type === "sick_leave") $totalsByYear[$requestYear]['sick'] += $request->number_of_day;
+                elseif ($type === "special_leave") $totalsByYear[$requestYear]['special'] += $request->number_of_day;
+                elseif ($type === "unpaid_leave") $totalsByYear[$requestYear]['unpaid'] += $request->number_of_day;
+                elseif ($type === "long_sick_leave") $totalsByYear[$requestYear]['long_sick'] += $request->number_of_day;
+            }
+
+            $currentAlloc = $balances[$requestYear][0] ?? null;
+
+            // Attach calculated running balances directly to the model instance
+            $request->calc_annual_bal    = ($currentAlloc && $type === "annual_leave") ? ($currentAlloc->default_annual_leave - $totalsByYear[$requestYear]['annual']) : 0;
+            $request->calc_sick_bal      = ($currentAlloc && $type === "sick_leave") ? ($currentAlloc->default_sick_leave - $totalsByYear[$requestYear]['sick']) : 0;
+            $request->calc_special_bal   = ($currentAlloc && $type === "special_leave") ? ($currentAlloc->default_special_leave - $totalsByYear[$requestYear]['special']) : 0;
+            $request->calc_unpaid_bal    = $currentAlloc ? ($currentAlloc->default_unpaid_leave - $totalsByYear[$requestYear]['unpaid']) : 0;
+            $request->calc_long_sick_bal = ($currentAlloc && $type === "long_sick_leave") ? ($currentAlloc->default_long_sick_leave - $totalsByYear[$requestYear]['long_sick']) : 0;
+        }
+
+        // 3. Reverse collection so the view displays DESC (latest first)
+        $dataLeaveRequest = $rawLeaveRequests->reverse()->values();
+
+        return view('leaves_employee.index', compact('dataLeaveType', 'balances', 'LeaveAllocation', 'employees', 'delegateEmployees', 'dataLeaveRequest'));
     }
 
     public function indexReplcement(){

@@ -17,6 +17,7 @@ use App\Models\ExpenseRequest;
 use App\Models\CandidateResume;
 use App\Models\LeaveAllocation;
 use App\Models\RecruitmentPlan;
+use App\Models\DelegateLeave;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,15 @@ class DashboadController extends Controller
         $LeaveRequest = LeaveRequest::where('employee_id',Auth::user()->id)->orderBy('id', 'DESC')->first();
         $data = LeaveAllocation::where('employee_id',Auth::user()->id)->first();
         $user = Auth::user();
+        $today = Carbon::today()->toDateString();
+        $DelegateLeave = DelegateLeave::with(["userRequest", "userDelegeted"])
+                        ->whereDate('end_date', '>=', $today)
+                        ->whereHas('userRequest', function ($query) {
+                            $query->whereHas('role', function ($roleQuery) {
+                                $roleQuery->where('role_type', '!=', 'Employee');
+                            });
+                        })
+                        ->orderBy('end_date', 'asc')->get();
         $dataExpenseAsign = ExpenseRequest::where('status', '!=', "rejected")
             ->whereNot('created_by', $user->id)
             ->where(function ($query) use ($user) {
@@ -58,7 +68,7 @@ class DashboadController extends Controller
                 ->groupBy('status')
                 ->get()
                 ->pluck('total', 'status');
-        return view('dashboads.employee',compact('data','holiday','LeaveRequest', 'groupedExpenseCounts'));
+        return view('dashboads.employee',compact('data','holiday','LeaveRequest', 'groupedExpenseCounts','DelegateLeave'));
     }
     public function dashboadAdmin(){
         $dataContract = '';
@@ -77,6 +87,15 @@ class DashboadController extends Controller
             $userLoggedIn = User::where('p_status',1)->whereIn('emp_status',['Probation','1','10','2'])->count();
             $userNotLoggedIn = User::where('p_status',0)->whereIn('emp_status',['Probation','1','10','2'])->count();
         }
+        $today = Carbon::today()->toDateString();
+        $DelegateLeave = DelegateLeave::with(["userRequest", "userDelegeted"])
+                        ->whereDate('end_date', '>=', $today)
+                        ->whereHas('userRequest', function ($query) {
+                            $query->whereHas('role', function ($roleQuery) {
+                                $roleQuery->where('role_type', '!=', 'Employee');
+                            });
+                        })
+                        ->orderBy('end_date', 'asc')->get();
         return view('dashboads.admin',compact(
             'dataUpComming',
             'dataProbation',
@@ -84,6 +103,7 @@ class DashboadController extends Controller
             'dataContract',
             'userLoggedIn',
             'userNotLoggedIn',
+            'DelegateLeave'
         ));
         // return view('dashboads.admin');
     }

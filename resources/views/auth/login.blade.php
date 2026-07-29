@@ -28,7 +28,8 @@
         <script src="{{asset('/admin/js/app.js')}}"></script>
         <style>
             body {
-                background: url({{asset('/admin/img/logo/background_login.png')}});
+                background: url({{asset('/admin/img/logo/hero-bg.png')}});
+                /* background: url({{asset('/admin/img/logo/background_login.png')}}); */
                 background-size: cover;
                 font-family: Montserrat;
             }
