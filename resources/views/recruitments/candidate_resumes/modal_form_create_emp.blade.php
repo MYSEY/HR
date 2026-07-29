@@ -749,9 +749,9 @@
                                     $(".pr_end_year").text(end_year);
                                     $(".pr_position").text(data.position.name_khmer);
                                     $(".pr_branch").text(data.branch.branch_name_kh);
-                                    $("#pr_employee_id").text(data.number_employee);
-                                    $("#pr_basic_salary").text(data.basic_salary);
-                                    $("#pr_salary_increase").text($("#salary_to_increase").val());
+                                    $(".pr_employee_id").text(data.number_employee);
+                                    $(".pr_basic_salary").text(data.basic_salary);
+                                    $(".pr_salary_increase").text($("#salary_to_increase").val());
                                     if ($("#Pro-Rate").prop("checked") == true) {
                                         $("#pr_supporting_or_field_staff").text("ដោយធៀបនឹងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
                                     }
