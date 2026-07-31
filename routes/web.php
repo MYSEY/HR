@@ -148,7 +148,16 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // Leave management for admin
     Route::get('/leaves/admin', [LeavesAdminController::class,'index']);
+
+
     Route::get('/leaves/admin/show', [LeavesAdminController::class,'show']);
+
+    
+    Route::get('/leaves/admin/cancel', [LeavesAdminController::class,'showCancel']);
+    Route::get('/leaves/admin/record', [LeavesAdminController::class,'showRecord']);
+    Route::get('/leaves/admin/report', [LeavesAdminController::class,'showReport']);
+    
+
     Route::get('/leave-request/detail/{employee_id}', [LeavesAdminController::class,'detail']);
     Route::get('/leave/admin/employee', [LeavesAdminController::class,'employees']);
     Route::post('/leaves/admin/generate', [LeavesAdminController::class,'generate']);

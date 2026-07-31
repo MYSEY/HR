@@ -1159,36 +1159,57 @@ class LeavesEmployeeController extends Controller
         }
     }
     public function Export(Request $request) {
-        $dataLeaveType = LeaveType::get();
-        $LeaveAllocation = LeaveAllocation::where("employee_id", $request->id)->first();
-        $dataLeaveRequest = LeaveRequest::with("leaveType")->with("employee")->where("employee_id", $request->id)->get();
-        // ទាញទិន្នន័យប្រវត្តិឆ្នាំចាស់ៗ
+        // 1. Ensure employee ID is provided
+        if (!$request->id) {
+            return redirect()->back()->with('error', 'Employee ID is required.');
+        }
+
+        $employeeId = $request->id;
+        $dataLeaveType = LeaveType::all();
+        $LeaveAllocation = LeaveAllocation::where("employee_id", $employeeId)->first();
+        $dataLeaveRequest = LeaveRequest::with(["leaveType", "employee"])
+            ->where("employee_id", $employeeId)
+            ->when($request->start_date, function ($q, $startDate) {
+                $q->whereDate('end_date', '>=', $startDate);
+            })
+            ->when($request->end_date, function ($q, $endDate) {
+                $q->whereDate('start_date', '<=', $endDate);
+            })
+            ->orderBy('start_date', 'desc')
+            ->get();
         $allocationHistory = DB::table('leave_allocation_histories')
-            ->where('employee_id', Auth::user()->id)
+            ->where('employee_id', $employeeId)
             ->whereNull('deleted_at')
             ->orderBy('created_at', 'asc')
             ->get();
+
+        // 1. Group Balances by Year
         $balances = [];
-        if ($LeaveAllocation) {
+
+        if ($LeaveAllocation && $LeaveAllocation->created_at) {
             $current_year = date('Y', strtotime($LeaveAllocation->created_at));
-            $balances[$current_year] = [
-                $LeaveAllocation
-            ];
+            $balances[$current_year] = [$LeaveAllocation];
         }
-        // Loop បញ្ចូល History ដោយទាញឆ្នាំពី created_at
+
         foreach ($allocationHistory as $history) {
-            $year = date('Y', strtotime($history->created_at)); 
-            $balances[$year] = [
-                $history
-            ];
+            if (!empty($history->created_at)) {
+                $year = date('Y', strtotime($history->created_at)); 
+                $balances[$year] = [$history];
+            }
         }
+
+        // 2. Pass Structured Data to Excel Exporter
         $data = [
-            'balances' => $balances,
-            "dataLeaveType"=> $dataLeaveType,
-            "LeaveAllocation"=> $LeaveAllocation,
-            "dataLeaveRequest"=> $dataLeaveRequest
+            'balances'         => $balances,
+            'dataLeaveType'    => $dataLeaveType,
+            'LeaveAllocation'  => $LeaveAllocation,
+            'dataLeaveRequest' => $dataLeaveRequest,
+            'start_date'       => $request->start_date ?? null,
+            'end_date'         => $request->end_date ?? null,
         ];
-        $export = new ExportLeaveEmployee($data);
-        return Excel::download($export, 'Leave Employee.xlsx');
+
+        $filename = 'Leave_Employee_' . $employeeId . '_' . date('Ymd') . '.xlsx';
+
+        return Excel::download(new ExportLeaveEmployee($data), $filename);
     }
 }
