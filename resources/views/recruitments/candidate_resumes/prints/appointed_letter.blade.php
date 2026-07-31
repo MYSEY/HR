@@ -106,7 +106,7 @@
                         </tr>
                         <tr>
                             <td class="table_tr" style="white-space: nowrap !important">
-                                - លទ្ធផលសម្ភាសន៍របស់បេក្ខជន/បេក្ខនារី ចុះថ្ងៃទី.......ខែ.......ឆ្នាំ២០.......។
+                                - លទ្ធផលសម្ភាសន៍របស់បេក្ខជន/បេក្ខនារី ចុះថ្ងៃទី.<strong class="pr_contract_day"></strong>..ខែ.<strong class="pr_contract_month"></strong>..ឆ្នាំ<strong class="pr_contract_year"></strong>។
                             </td>
                         </tr>
                     </table>
@@ -128,7 +128,7 @@
                     <table style="width:100%">
                         <tr>
                             <td class="table_tr">
-                                តែងតាំង <strong class="pr_mr_or_mrs"></strong> <strong class="pr_name"></strong> តួនាទីជា <strong class="pr_position"></strong> នៅកម្រិតទី...<strong class="level"></strong>...ប្រចាំ...<strong class="pr_branch"></strong>... និងក្រោមការគ្រប់គ្រងផ្ទាល់របស់...<strong class="line_manager"></strong>............។
+                                តែងតាំង <strong class="pr_mr_or_mrs"></strong> <strong class="pr_name"></strong> តួនាទីជា <strong class="pr_position"></strong> នៅកម្រិតទី...<strong class="level"></strong>...ប្រចាំ...<strong class="pr_branch"></strong>... និងក្រោមការគ្រប់គ្រងផ្ទាល់របស់...<strong class="pr_line_manager_position"></strong>............។
                             </td>
                         </tr>
                     </table>

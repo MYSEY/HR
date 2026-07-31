@@ -160,7 +160,7 @@ class User extends Authenticatable
         return $this->belongsTo(self::class, 'created_by');
     }
     public function lineManager(){
-        return $this->belongsTo(User::class,'line_manager');
+        return $this->belongsTo(User::class,'line_manager')->with("position");
     }
     public function position(){
         return $this->belongsTo(Position::class,'position_id');
@@ -191,7 +191,8 @@ class User extends Authenticatable
         return $this->belongsTo(CandidateResume::class,'number_employee', 'number_employee')->select(
             'number_employee',
             'pro_rate',
-            'condition_other'
+            'condition_other',
+            'contract_date'
         );
     }
 
