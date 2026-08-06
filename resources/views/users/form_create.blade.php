@@ -176,7 +176,7 @@
                                 <label>@lang('lang.level')</label>
                                 <select class="form-control hr-select2-option" id="level" name="level" value="{{old('level')}}">
                                     <option selected disabled value=""> -- @lang('lang.select')--</option>
-                                    @foreach ($lavel as $item)
+                                    @foreach ($lavel->sortBy('name', SORT_NATURAL) as $item)
                                         <option data-id="{{$item->name}}" value="{{$item->name}}">{{$item->name}}</option>
                                     @endforeach
                                 </select>

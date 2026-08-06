@@ -729,6 +729,13 @@
                     }
                     if (response.lavel != '') {
                         $('#e_level').html('<option selected disabled> -- @lang("lang.select") --</option>');
+
+                        // 1. Sort the lavel array naturally before looping
+                        response.lavel.sort(function(a, b) {
+                            return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+                        });
+
+                        // 2. Append the sorted items to the dropdown
                         $.each(response.lavel, function(i, item) {
                             $('#e_level').append($('<option>', {
                                 value: item.name,

@@ -18,6 +18,7 @@ use App\Http\Controllers\Admins\HolidayController;
 use App\Http\Controllers\Admins\ReportsController;
 use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\Admins\SpecialController;
+use App\Http\Controllers\Admins\LevelController;
 use App\Http\Controllers\Admins\TrainerController;
 use App\Http\Controllers\Admins\DashboadController;
 use App\Http\Controllers\Admins\PositionController;
@@ -606,7 +607,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('import/district', [DistrictsAddressController::class,'ImportDistrict']);
     Route::Resource('address/commune', ConmmuneAddressController::class);
     Route::post('import/commune', [ConmmuneAddressController::class,'ImportCommune']);
-    Route::Resource('address/village', VillageAddressController::class);
+    Route::match(['get', 'post'], 'address/village', [VillageAddressController::class, 'index']);
+    // Route::Resource('address/village', VillageAddressController::class);
     Route::post('import/village', [VillageAddressController::class,'ImportVillage']);
 
     // Block special approvals leave request
@@ -718,7 +720,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('salary-requests/approved/all', [SalaryRequestController::class,'requestApproveAll']);
     Route::post('/salary-requests/delete', [SalaryRequestController::class,'destroy']);
 
-
+     // Block levels
+    Route::get('/level', [LevelController::class,'index']);
+    Route::post('/level/store', [LevelController::class,'store']);
+    Route::post('/level/update', [LevelController::class,'update']);
+    Route::post('/level/delete', [LevelController::class,'destroy']);
+    Route::get('/level/edit', [LevelController::class,'edit']);
 
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);

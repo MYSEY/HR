@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PositionRequest;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Spatie\Activitylog\Models\Activity;
+use App\Models\permissions;
 
 class PositionController extends Controller
 {
@@ -22,13 +23,14 @@ class PositionController extends Controller
      */
     public function index()
     {
-        if (permissionAccess("m9-s2","is_view")->value != "1") {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "position")->first();
+        if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
         $data = Position::all();
         $positionType = Option::where('type','position_type')->get();
         $positionRange = Option::where('type','position_range')->get();
-        return view('positions.index',compact('data','positionType','positionRange'));
+        return view('positions.index',compact('data','positionType','positionRange','permission'));
     }
 
     /**

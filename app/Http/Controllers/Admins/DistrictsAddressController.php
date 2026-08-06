@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use App\Models\permissions;
+use Illuminate\Support\Facades\Auth;
 
 class DistrictsAddressController extends Controller
 {
@@ -17,6 +19,10 @@ class DistrictsAddressController extends Controller
      */
     public function index()
     {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "address/district")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
         $data = DB::table('districts')
         ->leftJoin('provinces','districts.province_id','=','provinces.id')
         ->select(
@@ -24,7 +30,7 @@ class DistrictsAddressController extends Controller
             'provinces.full_name_km as province_name_km',
             'provinces.full_name_en as province_name_en',
         )->get();
-        return view('district.index',compact('data'));
+        return view('district.index',compact('data','permission'));
     }
 
     /**

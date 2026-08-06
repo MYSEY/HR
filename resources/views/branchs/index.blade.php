@@ -11,13 +11,13 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("m9-s3","is_create")->value == "1")
+                    @if ($permission->is_create == "1")
                     <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_branch"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("m9-s3","is_view")->value == "1")
+        @if ($permission->is_view == "1")
             {!! Toastr::message() !!}
             <div class="row">
                 <div class="col-md-12">
@@ -50,14 +50,14 @@
                                                         <td>{{$item->address_kh}}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                         <td class="text-end">
-                                                            @if (permissionAccess("m9-s3","is_update")->value == "1" || permissionAccess("m9-s3","is_delete")->value == "1")
+                                                            @if ($permission->is_update == "1" || $permission->is_delete == "1")
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (permissionAccess("m9-s3","is_update")->value == "1")
+                                                                    @if ($permission->is_update == "1")
                                                                     <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-branch="{{$item->direct_manager_id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
-                                                                    @if (permissionAccess("m9-s3","is_delete")->value == "1")
+                                                                    @if ($permission->is_delete == "1")
                                                                     <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_branch"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     @endif
                                                                 </div>
@@ -221,6 +221,21 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
+        $(document).ready(function() {
+            if ($.fn.DataTable.isDataTable('.datatable')) {
+                $('.datatable').DataTable().destroy();
+            }
+            $('.datatable').DataTable({
+                destroy: true,
+                paging: true,
+                searching: true,
+                ordering: true,
+                order: [[0, 'asc']],
+                columnDefs: [
+                    { orderable: false, targets: -1 }
+                ]
+            });
+        });
         $('.update').on('click',function(){
             let id = $(this).data("id");
             let branch = $(this).data("branch");

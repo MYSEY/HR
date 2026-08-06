@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use App\Models\permissions;
+use Illuminate\Support\Facades\Auth;
 
 class ConmmuneAddressController extends Controller
 {
@@ -17,6 +19,10 @@ class ConmmuneAddressController extends Controller
      */
     public function index()
     {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "address/commune")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
         $data = DB::table('conmmunes')
         ->leftJoin('provinces','provinces.code','=','conmmunes.province_id')
         ->leftJoin('districts','districts.code','=','conmmunes.district_id')
@@ -24,8 +30,8 @@ class ConmmuneAddressController extends Controller
             'conmmunes.*',
             'provinces.full_name_en as province_name_en',
             'districts.full_name_en as districts_name_en',
-        )->paginate(15);
-        return view('conmmune.index',compact('data'));
+        )->get();
+        return view('conmmune.index',compact('data','permission'));
     }
 
     /**
