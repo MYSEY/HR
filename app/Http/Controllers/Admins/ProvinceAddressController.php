@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use App\Models\permissions;
+use Illuminate\Support\Facades\Auth;
 
 class ProvinceAddressController extends Controller
 {
@@ -17,8 +19,12 @@ class ProvinceAddressController extends Controller
      */
     public function index()
     {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "address/province")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
         $data = DB::table('provinces')->get();
-        return view('provinces.index',compact('data'));
+        return view('provinces.index',compact('data','permission'));
     }
 
     /**

@@ -17,16 +17,16 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    {{-- @if (permissionAccess("m11-s1","is_create")->value == "1")
+                    {{-- @if ($permission->is_create == "1")
                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_trainer"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif --}}
-                    @if (permissionAccess("m6-s2","is_import")->value == "1")
+                    @if ($permission->is_import == "1")
                         <a href="#" class="btn add-btn me-2" data-toggle="modal" id="importProvince"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("m11-s1","is_view")->value == "1")
+        @if ($permission->is_view == "1")
             {!! Toastr::message() !!}
             <div class="content">
                 <div class="row">
@@ -74,14 +74,14 @@
                                                             <td>{{$item->address_latin}}</td>
                                                             <td>{{$item->address_en}}</td>
                                                             <td class="text-end">
-                                                                @if (permissionAccess("m11-s1","is_update")->value == "1" || permissionAccess("m11-s1","is_delete")->value == "1")
+                                                                @if ($permission->is_update == "1" || $permission->is_delete == "1")
                                                                     <div class="dropdown dropdown-action">
                                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                                            @if (permissionAccess("m11-s1","is_update")->value == "1")
+                                                                            @if ($permission->is_update == "1")
                                                                             <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                             @endif
-                                                                            @if (permissionAccess("m11-s1","is_delete")->value == "1")
+                                                                            @if ($permission->is_delete == "1")
                                                                             <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                             @endif
                                                                         </div>
@@ -108,6 +108,21 @@
 
 <script>
     $(function(){
+        $(document).ready(function() {
+            if ($.fn.DataTable.isDataTable('.datatable')) {
+                $('.datatable').DataTable().destroy();
+            }
+            $('.datatable').DataTable({
+                destroy: true,
+                paging: true,
+                searching: true,
+                ordering: true,
+                order: [[0, 'asc']],
+                columnDefs: [
+                    { orderable: false, targets: -1 }
+                ]
+            });
+        });
         $("#importProvince").on("click", function() {
             $(".thanLess").hide();
             $("#thanLess").text("");

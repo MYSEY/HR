@@ -20,7 +20,11 @@
         overflow-y: scroll;
         display: flex;
     }
-
+    .card-detail-table {
+        width: auto;
+        height: 250px;
+         overflow-y: scroll;
+    }
 
     /* block style birthday */
     .balloon {
@@ -468,39 +472,38 @@
                                 <h4 class="mb-0">Delegated Responsibilities</h4>
                                 <span class="badge bg-primary fs-6">{{count($DelegateLeave)}}</span>
                             </div>
-                            <div class="card-detail">
+                            <div class="card-detail-table">
                                 <div class="table-responsive">
-                                <table class="table custom-table table-striped mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Department</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                            <th>Delegate To</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($DelegateLeave) > 0)
-                                            @foreach ($DelegateLeave as $item)
-                                                <tr>
-                                                    <td>{{$item->userRequest->employee_name_en ?? '-'}}</td>
-                                                    <td>{{$item->userRequest->department->name_english ?? '-'}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($item->start_date)->format('d-M-Y')}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($item->end_date)->format('d-M-Y')}}</td>
-                                                    <td>{{$item->userDelegeted->employee_name_en ?? '-'}}</td>
-                                                </tr>
-                                            @endforeach
-                                        @else
+                                    <table class="table custom-table table-striped mb-0">
+                                        <thead>
                                             <tr>
-                                                <td colspan="5" class="text-center text-muted py-4">No delegated work found</td>
+                                                <th>Name</th>
+                                                <th>Department</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Delegate To</th>
                                             </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($DelegateLeave) > 0)
+                                                @foreach ($DelegateLeave as $item)
+                                                    <tr>
+                                                        <td>{{$item->userRequest->employee_name_en ?? '-'}}</td>
+                                                        <td>{{$item->userRequest->department->name_english ?? '-'}}</td>
+                                                        <td>{{\Carbon\Carbon::parse($item->start_date)->format('d-M-Y')}}</td>
+                                                        <td>{{\Carbon\Carbon::parse($item->end_date)->format('d-M-Y')}}</td>
+                                                        <td>{{$item->userDelegeted->employee_name_en ?? '-'}}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="5" class="text-center text-muted py-4">No delegated work found</td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            </div>
-                            
                         </div>
                     </div>
                 </div>
