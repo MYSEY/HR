@@ -30,7 +30,7 @@
                     </ul>
                 </div>
                 @if (Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'admin')
-                    @if (permissionAccess("m6-s2","is_export")->value == "1")
+                    @if ($permission->is_export == "1")
                         @if (Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == 'admin')
                             <div class="col-auto float-end ms-auto">
                                 <a href="#" class="btn add-btn" id="btn_export_training" >@lang('lang.export') @lang('lang.staff')</a>
@@ -39,21 +39,19 @@
                                 <a href="#" class="btn add-btn" id="btn_export_trainer" >@lang('lang.export') @lang("lang.trainer")</a>
                             </div>
                         @endif
-                    {{-- @endif
-                    @if (permissionAccess("m6-s2","is_import")->value == "1") --}}
                         <div class="col-auto float-end ms-auto">
                             <a href="#" class="btn add-btn me-2" data-toggle="modal" id="import_update_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>Upload Employee Trainings</a>
                         </div>
                     @endif
                 @endif
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("m6-s2","is_create")->value == "1")
+                    @if ($permission->is_create == "1")
                     <a href="#" class="btn add-btn" id="btn_add_training" ><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("m6-s2","is_view")->value == "1")
+        @if ($permission->is_view == "1")
             <form class="needs-validation" novalidate>
                 @csrf
                 
@@ -222,12 +220,12 @@
                                                                             class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
                                                                         <a class="dropdown-item detail" href="{{ url('/training/detail', $item->id) }}"><i class="fa fa-eye m-r-5"></i> @lang('lang.view_details')</a>
-                                                                        @if (permissionAccess("m6-s2","is_update")->value == "1" )
+                                                                        @if ($permission->is_update == "1" )
                                                                         <a class="dropdown-item update" data-toggle="modal" data-id="{{ $item->id }}"
                                                                             data-target="#edit_training"><i
                                                                                 class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                         @endif
-                                                                        @if (permissionAccess("m6-s2","is_delete")->value == "1" )
+                                                                        @if ($permission->is_delete == "1" )
                                                                             <a class="dropdown-item delete" href="#"
                                                                                 data-toggle="modal" data-id="{{ $item->id }}"
                                                                                 data-target="#delete_training"><i
@@ -284,338 +282,340 @@
 
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
-<script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip({ 
-            html: true,
-            container: 'tr' 
-        });
-    });
-    $(function() {
-        $(".reset-btn").on("click", function() {
-            $(this).prop('disabled', true);
-            $(".btn-text-reset").hide();
-            $("#btn-text-loading").css('display', 'block');
-            window.location.replace("{{ URL('/training/list') }}"); 
-        });
-        $("#btn_export_training").on("click", function () {
-            var url = "{{URL::to('training/export-staff')}}?"
-            window.location = url;
-        });
-        $("#btn_export_trainer").on("click", function () {
-            var url = "{{URL::to('training/export-trainer')}}?"
-            window.location = url;
-        });
-        $("#import_update_employee").on("click", function() {
-            $(".thanLess-e").hide();
-            $("#thanLess-e").text("");
-            $('#importModal').modal('show');
-        });
-        $(".btn_research").on("click", function (){
-            $(this).prop('disabled', true);
-            $(".btn-txt-search").hide();
-            $(".loading-icon-search").css('display', 'block');
-            let params = {
-                course_name: $("#course_name").val(),
-                training_type: $("#filter_training_type").val(),
-                start_date: $("#start_date").val(),
-                end_date: $("#end_date").val(),
-            };
-            showdatas(params);
-        });
-        $("#btn_add_training").on("click", function() {
-            $('#training_type').html('');
-            $('#trainer').html('');
-            $("#e_training_type").val("");
-            $('#training_type').val('');
-            $('#training_type').append(
-                '<option selected disabled value="">@lang("lang.select") ...</option>'+
-                '<option value="1">@lang("lang.internal")</option>'+
-                '<option value="2">@lang("lang.external")</option>'
-            );
-            $("#add_training").modal("show")
-        });
-
-        $("#status,  #e_status").on("change", function(){
-            let _this = $(this).val();
-            if (_this == 0) {
-                $('#inp_duration').addClass("hidden");
-                $('#inp_discount').addClass("hidden");
-                $('#duration').removeAttr('required');
-                $('#duration').val('');
-                $('#discount').val('');
-
-                $('#e_inp_duration').addClass("hidden");
-                $('#e_inp_discount').addClass("hidden");
-                $('#e_duration').removeAttr('required');
-                $('#e_duration').val('');
-                $('#e_discount').val('');
-            }
-            if (_this == 1) {
-                $('#inp_duration').removeClass("hidden");
-                $('#inp_discount').removeClass("hidden");
-                $('#duration').attr('required', true);
-                
-                $('#e_inp_duration').removeClass("hidden");
-                $('#e_inp_discount').removeClass("hidden");
-                $('#e_duration').attr('required', true);
-            }
-        });
-        $("#training_type, #e_training_type").on("change", function() {
-            $('#trainer').html('');
-            $('#e_trainer').html('');
-            var value_id = 0;
-            if ($("#training_type").val()) {
-                value_id = $("#training_type").val();
-            }
-            if ($("#e_training_type").val()) {
-                value_id = $("#e_training_type").val();
-            }
-            if (value_id == 1) {
-                $('#inp_contract').addClass("hidden");
-                $('#inp_duration').addClass("hidden");
-                $('#inp_discount').addClass("hidden");
-                $('#duration').removeAttr('required');
-                $('#duration').val('');
-                $('#discount').val('');
-
-                $('#e_inp_contract').addClass("hidden");
-                $('#e_inp_duration').addClass("hidden");
-                $('#e_inp_discount').addClass("hidden");
-                $('#e_duration').removeAttr('required');
-            }
-            if (value_id == 2) {
-                $('#status').html('');
-                $('#inp_contract').removeClass("hidden");
-                $('#status').append(
-                    '<option value="1">@lang("lang.yes")</option> <option selected value="0">@lang("lang.no")</option>'
-                );
-
-                $('#e_inp_contract').removeClass("hidden");
-            }
-            $.ajax({
-                type: "GET",
-                url: "{{ url('training/trainer') }}",
-                dataType: "JSON",
-                success: function(response) {
-                    if (response.data) {
-                        response.data.map((train) =>{
-                            let option = {};
-                            if (value_id == 1 && train.type == 1) {
-                                option ={
-                                    value: train.id,
-                                    text: train.employee ? train.employee.employee_name_en: "",
-                                    selected: false
-                                }
-                                $('#trainer').append($('<option>',option)); 
-                                $('#e_trainer').append($('<option>',option));
-                            }
-                            if(value_id == 2 && train.type == 2){
-                                option ={
-                                    value: train.id,
-                                    text: train.name_en,
-                                    selected: false
-                                }
-                                $('#trainer').append($('<option>',option)); 
-                                $('#e_trainer').append($('<option>',option));
-                            }
-                        });
-                    }
-                }
+@section('script')
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip({ 
+                html: true,
+                // container: 'tr' 
             });
         });
-        $(document).on('click','.update', function(){
-            $('#trainer').html('');
-            $('#e_trainer').html('');
-            $('#e_status').html('<option value=""></option>');
-            var _this = $(this).parents('tr');
-            let id = $(this).data("id");
-            $('.e_id').val(id);
-            $("#e_id").val(id)
+        $(function() {
+            $(".reset-btn").on("click", function() {
+                $(this).prop('disabled', true);
+                $(".btn-text-reset").hide();
+                $("#btn-text-loading").css('display', 'block');
+                window.location.replace("{{ URL('/training/list') }}"); 
+            });
+            $("#btn_export_training").on("click", function () {
+                var url = "{{URL::to('training/export-staff')}}?"
+                window.location = url;
+            });
+            $("#btn_export_trainer").on("click", function () {
+                var url = "{{URL::to('training/export-trainer')}}?"
+                window.location = url;
+            });
+            $("#import_update_employee").on("click", function() {
+                $(".thanLess-e").hide();
+                $("#thanLess-e").text("");
+                $('#importModal').modal('show');
+            });
+            $(".btn_research").on("click", function (){
+                $(this).prop('disabled', true);
+                $(".btn-txt-search").hide();
+                $(".loading-icon-search").css('display', 'block');
+                let params = {
+                    course_name: $("#course_name").val(),
+                    training_type: $("#filter_training_type").val(),
+                    start_date: $("#start_date").val(),
+                    end_date: $("#end_date").val(),
+                };
+                showdatas(params);
+            });
+            $("#btn_add_training").on("click", function() {
+                $('#training_type').html('');
+                $('#trainer').html('');
+                $("#e_training_type").val("");
+                $('#training_type').val('');
+                $('#training_type').append(
+                    '<option selected disabled value="">@lang("lang.select") ...</option>'+
+                    '<option value="1">@lang("lang.internal")</option>'+
+                    '<option value="2">@lang("lang.external")</option>'
+                );
+                $("#add_training").modal("show")
+            });
+
+            $("#status,  #e_status").on("change", function(){
+                let _this = $(this).val();
+                if (_this == 0) {
+                    $('#inp_duration').addClass("hidden");
+                    $('#inp_discount').addClass("hidden");
+                    $('#duration').removeAttr('required');
+                    $('#duration').val('');
+                    $('#discount').val('');
+
+                    $('#e_inp_duration').addClass("hidden");
+                    $('#e_inp_discount').addClass("hidden");
+                    $('#e_duration').removeAttr('required');
+                    $('#e_duration').val('');
+                    $('#e_discount').val('');
+                }
+                if (_this == 1) {
+                    $('#inp_duration').removeClass("hidden");
+                    $('#inp_discount').removeClass("hidden");
+                    $('#duration').attr('required', true);
+                    
+                    $('#e_inp_duration').removeClass("hidden");
+                    $('#e_inp_discount').removeClass("hidden");
+                    $('#e_duration').attr('required', true);
+                }
+            });
+            $("#training_type, #e_training_type").on("change", function() {
+                $('#trainer').html('');
+                $('#e_trainer').html('');
+                var value_id = 0;
+                if ($("#training_type").val()) {
+                    value_id = $("#training_type").val();
+                }
+                if ($("#e_training_type").val()) {
+                    value_id = $("#e_training_type").val();
+                }
+                if (value_id == 1) {
+                    $('#inp_contract').addClass("hidden");
+                    $('#inp_duration').addClass("hidden");
+                    $('#inp_discount').addClass("hidden");
+                    $('#duration').removeAttr('required');
+                    $('#duration').val('');
+                    $('#discount').val('');
+
+                    $('#e_inp_contract').addClass("hidden");
+                    $('#e_inp_duration').addClass("hidden");
+                    $('#e_inp_discount').addClass("hidden");
+                    $('#e_duration').removeAttr('required');
+                }
+                if (value_id == 2) {
+                    $('#status').html('');
+                    $('#inp_contract').removeClass("hidden");
+                    $('#status').append(
+                        '<option value="1">@lang("lang.yes")</option> <option selected value="0">@lang("lang.no")</option>'
+                    );
+
+                    $('#e_inp_contract').removeClass("hidden");
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('training/trainer') }}",
+                    dataType: "JSON",
+                    success: function(response) {
+                        if (response.data) {
+                            response.data.map((train) =>{
+                                let option = {};
+                                if (value_id == 1 && train.type == 1) {
+                                    option ={
+                                        value: train.id,
+                                        text: train.employee ? train.employee.employee_name_en: "",
+                                        selected: false
+                                    }
+                                    $('#trainer').append($('<option>',option)); 
+                                    $('#e_trainer').append($('<option>',option));
+                                }
+                                if(value_id == 2 && train.type == 2){
+                                    option ={
+                                        value: train.id,
+                                        text: train.name_en,
+                                        selected: false
+                                    }
+                                    $('#trainer').append($('<option>',option)); 
+                                    $('#e_trainer').append($('<option>',option));
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+            $(document).on('click','.update', function(){
+                $('#trainer').html('');
+                $('#e_trainer').html('');
+                $('#e_status').html('<option value=""></option>');
+                var _this = $(this).parents('tr');
+                let id = $(this).data("id");
+                $('.e_id').val(id);
+                $("#e_id").val(id)
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('training/edit') }}",
+                    data: {
+                        id: id
+                    },
+                    dataType: "JSON",
+                    success: function(response) {
+                        if (response.success) {
+                            if (response.success.status == "1") {
+                                $('#e_status').append(
+                                    '<option selected value="1">@lang("lang.yes")</option> <option value="0">@lang("lang.no")</option>'
+                                );
+                                $('#e_inp_duration').removeClass("hidden");
+                                $('#e_inp_discount').removeClass("hidden");
+                            } else if (response.success.status == "0") {
+                                $('#e_status').append(
+                                    '<option selected value="0">@lang("lang.no")</option> <option value="1">@lang("lang.yes")</option>'
+                                );
+                            };
+                            $('#e_training_type').html('');
+                            if (response.success.training_type == "1") {
+                                $('#e_training_type').append(
+                                    '<option selected value="1">@lang("lang.internal")</option> <option value="2">@lang("lang.external")</option>'
+                                );
+                            }
+                            if (response.success.training_type == "2") {
+                                $('#e_training_type').append(
+                                    '<option selected value="2">@lang("lang.external")</option> <option value="1">@lang("lang.internal")</option>'
+                                );
+                                $('#e_inp_contract').removeClass("hidden");
+                            }
+                            if (response.trainer != '') {
+                                $('#e_trainer').html('');
+                                $.each(response.trainer, function(i, item) {
+                                    let id = item.id.toString();
+                                    let index = response.success.trainer_id.indexOf(id);
+                                    if (item.type == 1 && response.success.training_type == 1) {
+                                        if (index > -1) {
+                                            $('#e_trainer').append($('<option>', {
+                                                value: item.id,
+                                                text: item.employee ? item.employee.employee_name_en: item.name_en,
+                                                selected: true
+                                            }));
+                                        } else {
+                                            $('#e_trainer').append($('<option>', {
+                                                value: item.id,
+                                                text: item.employee ? item.employee.employee_name_en: item.name_en,
+                                                selected: false
+                                            }));
+                                        }
+                                    }
+                                    if (item.type == 2 && response.success.training_type == 2) {
+                                        if (index > -1) {
+                                            $('#e_trainer').append($('<option>', {
+                                                value: item.id,
+                                                text: item.name_en,
+                                                selected: true
+                                            }));
+                                        } else {
+                                            $('#e_trainer').append($('<option>', {
+                                                value: item.id,
+                                                text: item.name_en,
+                                                selected: false
+                                            }));
+                                        }
+                                    }
+                                });
+                            }
+                            if (response.trainingType != '') {
+                                $('#e_employee').html('');
+                                $.each(response.employee, function(i, item) {
+                                    let id = item.id.toString();
+                                    let index = response.success.employee_id.indexOf(id);
+                                    if (index > -1) {
+                                        $('#e_employee').append($('<option>', {
+                                            value: item.id,
+                                            text: item.employee_name_en,
+                                            selected: true
+                                        }));
+                                    } else {
+                                        $('#e_employee').append($('<option>', {
+                                            value: item.id,
+                                            text: item.employee_name_en,
+                                            selected: false
+                                        }));
+                                    }
+                                });
+                            }
+                            $('#e_course_name').val(response.success.course_name);
+                            $('#e_cost_price').val(response.success.cost_price);
+                            $('#e_start_date').val(response.success.start_date);
+                            $('#e_end_date').val(response.success.end_date);
+                            $('#e_discount').val(response.success.discount);
+                            $('#e_duration').val(response.success.duration_month);
+                            $('#e_remark').val(response.success.remark);
+                        }
+                    }
+                });
+
+            });
+
+            $('.delete').on('click', function() {
+                let id = $(this).data("id");
+                $('.e_id').val(id);
+            });
+        });
+        function strLimit(str, limit = 30, end = '...') {
+            return str.length > limit ? str.substring(0, limit) + end : str;
+        }
+        function showdatas(params) {
             $.ajax({
-                type: "GET",
-                url: "{{ url('training/edit') }}",
+                type: "post",
+                url: "{{ url('training/list') }}",
                 data: {
-                    id: id
+                    "_token": "{{ csrf_token() }}",
+                    course_name: params.course_name ? params.course_name : null,
+                    training_type: params.training_type ? params.training_type : null,
+                    start_date: params.start_date ? params.start_date : null,
+                    end_date: params.end_date ? params.end_date : null,
                 },
                 dataType: "JSON",
                 success: function(response) {
-                    if (response.success) {
-                        if (response.success.status == "1") {
-                            $('#e_status').append(
-                                '<option selected value="1">@lang("lang.yes")</option> <option value="0">@lang("lang.no")</option>'
-                            );
-                            $('#e_inp_duration').removeClass("hidden");
-                            $('#e_inp_discount').removeClass("hidden");
-                        } else if (response.success.status == "0") {
-                            $('#e_status').append(
-                                '<option selected value="0">@lang("lang.no")</option> <option value="1">@lang("lang.yes")</option>'
-                            );
-                        };
-                        $('#e_training_type').html('');
-                        if (response.success.training_type == "1") {
-                            $('#e_training_type').append(
-                                '<option selected value="1">@lang("lang.internal")</option> <option value="2">@lang("lang.external")</option>'
-                            );
-                        }
-                        if (response.success.training_type == "2") {
-                            $('#e_training_type').append(
-                                '<option selected value="2">@lang("lang.external")</option> <option value="1">@lang("lang.internal")</option>'
-                            );
-                            $('#e_inp_contract').removeClass("hidden");
-                        }
-                        if (response.trainer != '') {
-                            $('#e_trainer').html('');
-                            $.each(response.trainer, function(i, item) {
-                                let id = item.id.toString();
-                                let index = response.success.trainer_id.indexOf(id);
-                                if (item.type == 1 && response.success.training_type == 1) {
-                                    if (index > -1) {
-                                        $('#e_trainer').append($('<option>', {
-                                            value: item.id,
-                                            text: item.employee ? item.employee.employee_name_en: item.name_en,
-                                            selected: true
-                                        }));
-                                    } else {
-                                        $('#e_trainer').append($('<option>', {
-                                            value: item.id,
-                                            text: item.employee ? item.employee.employee_name_en: item.name_en,
-                                            selected: false
-                                        }));
-                                    }
-                                }
-                                if (item.type == 2 && response.success.training_type == 2) {
-                                    if (index > -1) {
-                                        $('#e_trainer').append($('<option>', {
-                                            value: item.id,
-                                            text: item.name_en,
-                                            selected: true
-                                        }));
-                                    } else {
-                                        $('#e_trainer').append($('<option>', {
-                                            value: item.id,
-                                            text: item.name_en,
-                                            selected: false
-                                        }));
-                                    }
-                                }
-                            });
-                        }
-                        if (response.trainingType != '') {
-                            $('#e_employee').html('');
-                            $.each(response.employee, function(i, item) {
-                                let id = item.id.toString();
-                                let index = response.success.employee_id.indexOf(id);
-                                if (index > -1) {
-                                    $('#e_employee').append($('<option>', {
-                                        value: item.id,
-                                        text: item.employee_name_en,
-                                        selected: true
-                                    }));
-                                } else {
-                                    $('#e_employee').append($('<option>', {
-                                        value: item.id,
-                                        text: item.employee_name_en,
-                                        selected: false
-                                    }));
-                                }
-                            });
-                        }
-                        $('#e_course_name').val(response.success.course_name);
-                        $('#e_cost_price').val(response.success.cost_price);
-                        $('#e_start_date').val(response.success.start_date);
-                        $('#e_end_date').val(response.success.end_date);
-                        $('#e_discount').val(response.success.discount);
-                        $('#e_duration').val(response.success.duration_month);
-                        $('#e_remark').val(response.success.remark);
+                    let data =  response.success;
+                    $(".btn_research").prop('disabled', false);
+                    $(".btn-txt-search").show();
+                    $(".loading-icon-search").css('display', 'none');
+                    var tr = "";
+                    if (data.length > 0) {
+                        data.map((row, index) =>{
+                            let start_date = moment(row.start_date).format('D-MMM-YYYY')
+                            let end_date = moment(row.end_date).format('D-MMM-YYYY')
+                            tr += '<tr class="odd">'+
+                                    '<td class="sorting_1 ids">'+(row.id)+'</td>'+
+                                    '<td class="training_type_name">'+(row.training_type == 1 ? "@lang('lang.internal')" : "@lang('lang.external')")+'</td>'+
+                                    '<td class="course_name" data-toggle="tooltip" data-html="true" title="'+ row.course_name +'">'+
+                                        // (row.course_name)+
+                                        strLimit(row.course_name, 30, '...')+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<ul class="team-members">'+
+                                            '<li class="dropdown avatar-dropdown">'+
+                                                '<a href="#" class="all-users dropdown-toggle" aria-expanded="false">'+(row.training_detail_trainer_count)+'</a>'+
+                                            '</li>'+
+                                        '</ul>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<ul class="team-members">'+
+                                            '<li class="dropdown avatar-dropdown">'+
+                                                '<a href="#" class="all-users dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+(row.training_detail_staffs_count)+'</a>'+
+                                            '</li>'+
+                                        '</ul>'+
+                                    '</td>'+
+                                    '<td class="sorting_1">'+
+                                        (start_date)+' - '+(end_date)+
+                                    '</td>'+
+                                    
+                                    '<td>$'+(row.cost_price ? row.cost_price : 0)+'</td>'+
+                                    '<td>'+(row.status == 1 ? "Yes" : "No")+' </td>'+
+                                    '<td data-toggle="tooltip" data-html="true" title="'+ row.remark +'">'+
+                                        (row.remark ? strLimit(row.remark, 30, '...'): "")+
+                                    '</td>'+
+                                    '<td class="text-end">'+
+                                        '<div class="dropdown dropdown-action">'+
+                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                                '<i class="material-icons">more_vert</i>'+
+                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right">'+
+                                                '<a class="dropdown-item detail" href="{{url("/training/detail")}}/'+(row.id)+'">'+
+                                                    '<i class="fa fa-eye m-r-5"></i> @lang("lang.view_details")</a>'+
+                                                '<a class="dropdown-item update" data-toggle="modal" data-id="'+(row.id)+'" data-target="#edit_training">'+
+                                                    '<i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
+                                                '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_training">'+
+                                                    '<i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</td>'+
+                                '</tr>';
+                        });
+                    }else{
+                        var tr = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                     }
+                    $(".btl_training tbody").html(tr);
                 }
             });
-
-        });
-
-        $('.delete').on('click', function() {
-            let id = $(this).data("id");
-            $('.e_id').val(id);
-        });
-    });
-    function strLimit(str, limit = 30, end = '...') {
-        return str.length > limit ? str.substring(0, limit) + end : str;
-    }
-    function showdatas(params) {
-        $.ajax({
-            type: "post",
-            url: "{{ url('training/list') }}",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                course_name: params.course_name ? params.course_name : null,
-                training_type: params.training_type ? params.training_type : null,
-                start_date: params.start_date ? params.start_date : null,
-                end_date: params.end_date ? params.end_date : null,
-            },
-            dataType: "JSON",
-            success: function(response) {
-                let data =  response.success;
-                $(".btn_research").prop('disabled', false);
-                $(".btn-txt-search").show();
-                $(".loading-icon-search").css('display', 'none');
-                var tr = "";
-                if (data.length > 0) {
-                    data.map((row, index) =>{
-                        let start_date = moment(row.start_date).format('D-MMM-YYYY')
-                        let end_date = moment(row.end_date).format('D-MMM-YYYY')
-                        tr += '<tr class="odd">'+
-                                '<td class="sorting_1 ids">'+(row.id)+'</td>'+
-                                '<td class="training_type_name">'+(row.training_type == 1 ? "@lang('lang.internal')" : "@lang('lang.external')")+'</td>'+
-                                '<td class="course_name" data-toggle="tooltip" data-html="true" title="'+ row.course_name +'">'+
-                                    // (row.course_name)+
-                                    strLimit(row.course_name, 30, '...')+
-                                '</td>'+
-                                '<td>'+
-                                    '<ul class="team-members">'+
-                                        '<li class="dropdown avatar-dropdown">'+
-                                            '<a href="#" class="all-users dropdown-toggle" aria-expanded="false">'+(row.training_detail_trainer_count)+'</a>'+
-                                        '</li>'+
-                                    '</ul>'+
-                                '</td>'+
-                                '<td>'+
-                                    '<ul class="team-members">'+
-                                        '<li class="dropdown avatar-dropdown">'+
-                                            '<a href="#" class="all-users dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+(row.training_detail_staffs_count)+'</a>'+
-                                        '</li>'+
-                                    '</ul>'+
-                                '</td>'+
-                                '<td class="sorting_1">'+
-                                    (start_date)+' - '+(end_date)+
-                                '</td>'+
-                                
-                                '<td>$'+(row.cost_price ? row.cost_price : 0)+'</td>'+
-                                '<td>'+(row.status == 1 ? "Yes" : "No")+' </td>'+
-                                '<td data-toggle="tooltip" data-html="true" title="'+ row.remark +'">'+
-                                    (row.remark ? strLimit(row.remark, 30, '...'): "")+
-                                '</td>'+
-                                '<td class="text-end">'+
-                                    '<div class="dropdown dropdown-action">'+
-                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                            '<i class="material-icons">more_vert</i>'+
-                                        '</a>'+
-                                        '<div class="dropdown-menu dropdown-menu-right">'+
-                                            '<a class="dropdown-item detail" href="{{url("/training/detail")}}/'+(row.id)+'">'+
-                                                '<i class="fa fa-eye m-r-5"></i> @lang("lang.view_details")</a>'+
-                                            '<a class="dropdown-item update" data-toggle="modal" data-id="'+(row.id)+'" data-target="#edit_training">'+
-                                                '<i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
-                                            '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_training">'+
-                                                '<i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
-                                        '</div>'+
-                                    '</div>'+
-                                '</td>'+
-                            '</tr>';
-                    });
-                }else{
-                    var tr = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                }
-                $(".btl_training tbody").html(tr);
-            }
-        });
-    }
-</script>
+        }
+    </script>
+@endsection

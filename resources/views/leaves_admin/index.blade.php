@@ -34,7 +34,7 @@
                 </div>
                 @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
                     <div class="col-auto float-end ms-auto">
-                        @if (permissionAccess("m4-s2","is_import")->value == "1")
+                        @if ($permission->is_import == "1")
                             <a href="#" class="btn add-btn" data-toggle="modal" id="importPayroll"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                         @endif
                     </div>
@@ -84,7 +84,7 @@
             </div>
             <div class="col-md-2">
                 <div style="display: flex" class="float-end">
-                    @if (permissionAccess("m10-s1","is_export")->value == "1") 
+                    @if ($permission->is_export == "1") 
                         <div style="display: none" class="btn_excel">
                             <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
                                 <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
@@ -132,7 +132,7 @@
                         {{-- <button type="button" class="btn btn-sm btn-danger reject_all mt-3">@lang('lang.reject')</button> --}}
                     {{-- @endif --}}
                     
-                        @if (permissionAccess("m10-s1","is_approve")->value == "1")
+                        @if ($permission->is_approve == "1")
                             <button type="button" class="btn btn-sm btn-success btn_approved_all mt-3" href="#" data-id=""> @lang('lang.approve')</button>
                             <button style="display: none" type="button" class="btn btn-sm btn-success btn_approved_cancel_all mt-3" href="#" data-id=""> @lang('lang.approve')</button>
                         @endif

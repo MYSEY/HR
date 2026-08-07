@@ -43,12 +43,16 @@ class LeavesAdminController extends Controller
      */
     public function index(Request $request)
     {
-        if (permissionAccess("m10-s1","is_view")->value != "1") {
+        $permission = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where("url", "leaves/admin")
+            ->first();
+        if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
         $location = Branchs::get();
         $department = Department::get();
-        return view('leaves_admin.index', compact('location', 'department'));
+        return view('leaves_admin.index', compact('permission','location', 'department'));
     }
 
     public function detail(Request $request) {

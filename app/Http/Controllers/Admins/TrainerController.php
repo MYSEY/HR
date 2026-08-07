@@ -21,10 +21,13 @@ class TrainerController extends Controller
      */
     public function index()
     {
-        if (permissionAccess("m6-s1","is_view")->value != "1") {
+        $permission = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where("url", "trainer/list")
+            ->first();
+        if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-
         $data = Trainer::with("employee")
         ->leftJoin('users', 'trainers.employee_id', '=', 'users.id')
         ->select(
@@ -33,7 +36,7 @@ class TrainerController extends Controller
             'users.department_id',
             'users.branch_id',
         )
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
             if(in_array($RolePermission, ['HOD', 'BM'])){
                 $query->where("users.department_id", Auth::user()->department_id);
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -45,19 +48,22 @@ class TrainerController extends Controller
             }else if($RolePermission == "Employee") {
                 $query->where("users.id", Auth::user()->id);
 
-            }else if ($RolePermission == 'HR' && permissionAccess("m6-s1","is_access")->value != "1") {
+            }else if ($RolePermission == 'HR' && $permission->is_access != "1") {
                 $query->where("users.line_manager", Auth::user()->id);
                 $query->orWhere("users.id", Auth::user()->id);
             }
         })->get();
         $employee = User::whereIn("emp_status", ['1','2', '10'])->orWhereIn("p_status", ['1','2', '10'])->get();
 
-        return view('trainers.index', compact('data', 'employee'));
+        return view('trainers.index', compact('permission','data', 'employee'));
     }
     public function filter(Request $request)
     {
-        
         try {
+            $permission = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where("url", "trainer/list")
+            ->first();
             $from_date = null;
             $to_date = null;
             if ($request->from_date) {
@@ -78,7 +84,7 @@ class TrainerController extends Controller
                 'users.department_id',
                 'users.branch_id',
             )
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
                 if(in_array($RolePermission, ['HOD', 'BM'])){
                     $query->where("users.department_id", Auth::user()->department_id);
                     $query->where("users.branch_id", Auth::user()->branch_id);
@@ -90,7 +96,7 @@ class TrainerController extends Controller
                 }else if($RolePermission == "Employee") {
                     $query->where("users.id", Auth::user()->id);
     
-                }else if ($RolePermission == 'HR' && permissionAccess("m6-s1","is_access")->value != "1") {
+                }else if ($RolePermission == 'HR' && $permission->is_access != "1") {
                     $query->where("users.line_manager", Auth::user()->id);
                 }
             })
