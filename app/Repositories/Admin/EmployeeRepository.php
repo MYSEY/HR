@@ -10,6 +10,7 @@ use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFiles\UploadFIle;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeRepository extends BaseRepository
 {
@@ -48,10 +49,42 @@ class EmployeeRepository extends BaseRepository
     }
 
     public function getAllUsers($request){
+        // 1. Check salary permissions
+        $salaryPerm = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where('url', 'users')
+            ->first();
+        $canViewStaffSalary    = $salaryPerm && $salaryPerm->is_view_salary_staff == '1'; // View all staff salaries
+        $canViewPersonalSalary = $salaryPerm && $salaryPerm->is_view_salary == '1';       // View personal salary only
+        $currentUserId         = Auth::user()->id;
+
+        // Helper closure to set financial fields to 0 if unauthorized
+        $applySalaryPermission = function ($users) use ($canViewStaffSalary, $canViewPersonalSalary, $currentUserId) {
+            $users->transform(function ($user) use ($canViewStaffSalary, $canViewPersonalSalary, $currentUserId) {
+                // 1. Full access: Can view staff salaries -> keep all values
+                if ($canViewStaffSalary) {
+                    return $user;
+                }
+
+                // 2. Personal access: Can view personal salary AND this record belongs to logged-in user -> keep values
+                if ($canViewPersonalSalary && $user->id == $currentUserId) {
+                    return $user;
+                }
+                $user->basic_salary    = 0;
+                $user->salary_increas  = 0;
+                $user->phone_allowance = 0;
+
+                return $user;
+            });
+
+            return $users;
+        };
         if(Auth::user()->RolePermission == 'Employee') {
-            return User::where('id',Auth::user()->id)
-            ->whereNotIn('emp_status',['1','2','10','Probation'])
-            ->with('role')->with('department')->get();
+            $users = User::where('id',Auth::user()->id)
+                ->whereNotIn('emp_status',['1','2','10','Probation'])
+                ->with('role')->with('department')->get();
+
+            return $applySalaryPermission($users);
         }else{
             if (Auth::user()->RolePermission == 'HOD') {
                 $child_department = Department::where('parent_id', Auth::user()->department_id)->select('departments.id')->get();
@@ -150,10 +183,12 @@ class EmployeeRepository extends BaseRepository
                     }
                     
                 });
-               
-                return $dataUser->get();
+            
+                $users = $dataUser->get();
+                return $applySalaryPermission($users);
             }else{
-                return User::with('role')->with('department')->where('emp_status','Upcoming')->get();
+                $users = User::with('role')->with('department')->where('emp_status','Upcoming')->get();
+                return $applySalaryPermission($users);
             }
         }
     }
