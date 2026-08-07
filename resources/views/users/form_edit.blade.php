@@ -255,7 +255,7 @@
                         </div>
                     </div>
                     {{-- basic salary infor --}}
-                    @if (permissionAccess("m2-s1","is_view_salary")->value == "1" && permissionAccess("m2-s1", "is_view_salary_staff")->value == "1")
+                    @if ($permission->is_view_salary == "1" && $permission->is_view_salary_staff == "1")
                         <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                             <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 20px;font-weight: normal !important;">@lang('lang.basic_salary')</label>
                         </div>
