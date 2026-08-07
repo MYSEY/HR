@@ -17,13 +17,13 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("m6-s1","is_create")->value == "1")
+                    @if ($permission->is_create == "1")
                     <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_trainer"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("m6-s1","is_view")->value == "1")
+        @if ($permission->is_view == "1")
             @if (Auth::user()->RolePermission != 'Employee')
                 <form class="needs-validation" novalidate>
                     @csrf
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         @if (in_array(Auth::user()->RolePermission, ['BOD', 'CEO', 'admin', 'HR', 'HRAdmin', 'developer']))
-                            @if ( Auth::user()->RolePermission == 'HR' && permissionAccess("m6-s1","is_access")->value != "1")
+                            @if ( Auth::user()->RolePermission == 'HR' && $permission->is_access != "1")
                                 <div class="col-sm-8 col-md-8"> </div>
                             @else
                                 <div class="col-sm-2 col-md-2">
@@ -130,7 +130,7 @@
                                                             <td>
                                                                 <input type="hidden" class="status" value="{{$item->status}}">
                                                                 <div class="dropdown action-label">
-                                                                    @if (permissionAccess("m6-s1","is_update")->value == "1")
+                                                                    @if ($permission->is_update == "1")
                                                                         @if ($item->status=='1')
                                                                             <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                                 <i class="fa fa-dot-circle-o text-success"></i>
@@ -166,14 +166,14 @@
                                                             </td>
                                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                             <td class="text-end">
-                                                                @if (permissionAccess("m6-s1","is_update")->value == "1" || permissionAccess("m6-s1","is_delete")->value == "1")
+                                                                @if ($permission->is_update == "1" || $permission->is_delete == "1")
                                                                     <div class="dropdown dropdown-action">
                                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                                            @if (permissionAccess("m6-s1","is_update")->value == "1")
+                                                                            @if ($permission->is_update == "1")
                                                                             <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                             @endif
-                                                                            @if (permissionAccess("m6-s1","is_delete")->value == "1")
+                                                                            @if ($permission->is_delete == "1")
                                                                             <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                             @endif
                                                                         </div>
@@ -587,8 +587,9 @@
         });
     });
     function showdatas(params) {
-        let is_update = "{{ Helper::permissionAccess('m6-s1','is_update') }}";
-        let is_delete = "{{ Helper::permissionAccess('m6-s1','is_delete') }}";
+        const permissions = @json($permission);
+        let is_update = permissions.is_update;
+        let is_delete = permissions.is_delete;
         $.ajax({
             type: "post",
             url: "{{ url('trainer/list') }}",
