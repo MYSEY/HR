@@ -399,7 +399,7 @@
 
             $("#position_type").html('<option selected value="">--@lang("lang.select") --</option>');
             $("#department_id").html('<option selected disabled value="">--@lang("lang.select") --</option>');
-            $("#pr_supporting_or_field_staff").text("");
+            $(".pr_supporting_or_field_staff").text("");
             $("#Pro-Rate").prop("checked", false);
             $("#Responsible-Lending").prop("checked", false);
             $(".clear_data").val("");
@@ -753,7 +753,7 @@
                                     $(".pr_basic_salary").text(data.basic_salary);
                                     $(".pr_salary_increase").text($("#salary_to_increase").val());
                                     if ($("#Pro-Rate").prop("checked") == true) {
-                                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនឹងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
+                                        $(".pr_supporting_or_field_staff").text("ដោយធៀបនឹងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
                                     }
                                     if ($("#Responsible-Lending").prop("checked") == true) {
                                         $(".Responsible-Lending").css("display","block");

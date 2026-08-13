@@ -57,7 +57,7 @@ class LeavesAdminController extends Controller
 
     public function detail(Request $request) {
         if ($request->ajax()) {
-            $query = LeaveRequest::with(["leaveType","employee","approvedby","createdBy"])
+            $query = LeaveRequest::with(["leaveType","employee","handover","approvedby","createdBy"])
             ->where("employee_id", $request->employee_id)
             ->when($request->start_date, function ($q, $start_date) {
                 $q->where('leave_requests.start_date', '>=', $start_date);
