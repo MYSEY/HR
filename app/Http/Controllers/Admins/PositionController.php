@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PositionRequest;
+use App\Models\Department;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Spatie\Activitylog\Models\Activity;
 use App\Models\permissions;
@@ -74,8 +75,10 @@ class PositionController extends Controller
     public function show()
     {
         $data = Position::all();
-         return response()->json([
+        $department = Department::all();
+        return response()->json([
             'datas'=>$data,
+            'department'=>$department
         ]);
     }
 

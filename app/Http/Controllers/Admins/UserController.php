@@ -306,7 +306,7 @@ class UserController extends Controller
     public function edit(Request $request)
     {
         $role = Role::whereNotIn("role_type",['admin', 'developer'])->get();
-        $data = User::where('id',$request->id)->with('role')->first()->makeHidden(['salary', 'basic_salary', 'salary_increas', 'phone_allowance','pre_salary']);
+        $data = User::where('id',$request->id)->with('role')->first();
         $position = Position::all();
         $department = Department::all();
         $optionGender = Option::where('type','gender')->get();

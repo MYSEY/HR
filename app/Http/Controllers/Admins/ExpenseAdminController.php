@@ -120,6 +120,9 @@ class ExpenseAdminController extends Controller
             ExpenseRequestHistory::create($dataHistory);
 
             $data['position_review']    = "[".json_encode($request->position_id)."]";
+            if($request->department_id){
+                $data['location_review']    = $request->department_id;
+            };
             $data['updated_by']         = Auth::user()->id;
             $data->save();
             DB::commit();
