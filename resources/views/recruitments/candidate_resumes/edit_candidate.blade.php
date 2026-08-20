@@ -452,7 +452,7 @@
                                     <select class="form-control hr-select2-option" id="current_district" name="current_district" value="{{old('current_district')}}">
                                         @if (count($district)>0)
                                             @foreach ($district as $item)
-                                                <option value="{{$item->code}}" {{$dataUpcomings->current_commune == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                                <option value="{{$item->code}}" {{$dataUpcomings->current_district  == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -473,7 +473,7 @@
                                 <select class="form-control hr-select2-option no-error-border" id="current_commune" name="current_commune" value="{{old('current_commune')}}">
                                     @if (count($conmmunes)>0)
                                         @foreach ($conmmunes as $item)
-                                            <option value="{{$item->code}}" {{$dataUpcomings->current_district == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                            <option value="{{$item->code}}" {{$dataUpcomings->current_commune== $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
                                         @endforeach
                                     @endif
                                 </select>
