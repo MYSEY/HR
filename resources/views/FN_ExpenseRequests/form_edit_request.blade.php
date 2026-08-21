@@ -311,7 +311,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" value="{{$data->ge_total_cost_usd}}"class="form-control" disabled placeholder="0.00" id="exp_total_cost_dollar">
+                                            <input type="text" value="{{$data->ge_total_cost_usd}}"class="form-control khmer-toEnglish-number-only" disabled placeholder="0.00" id="exp_total_cost_dollar">
                                         </div>
                                     </div>
                                 </div>
@@ -319,7 +319,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" value="{{$data->ge_total_cost_riel}}" disabled placeholder="0.00" class="form-control" id="exp_total_cost_rial">
+                                            <input type="text" value="{{$data->ge_total_cost_riel}}" disabled placeholder="0.00" class="form-control khmer-toEnglish-number-only" id="exp_total_cost_rial">
                                         </div>
                                     </div>
                                 </div>
@@ -419,7 +419,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control" value="{{$data->ge_total_amount_usd}}" disabled placeholder="0.00" id="exp_total_paid_dollar">
+                                            <input type="text" class="form-control khmer-toEnglish-number-only" value="{{$data->ge_total_amount_usd}}" disabled placeholder="0.00" id="exp_total_paid_dollar">
                                         </div>
                                     </div>
                                 </div>
@@ -427,7 +427,7 @@
                                     <div style="margin-bottom: 0.4rem;">
                                         <div class="input-group">
                                             <span class="input-group-text" style="font-size: 20px">៛</span>
-                                            <input type="number" disabled value="{{$data->ge_total_amount_riel}}" placeholder="0.00" class="form-control" id="exp_total_paid_rial">
+                                            <input type="text" disabled value="{{$data->ge_total_amount_riel}}" placeholder="0.00" class="form-control" id="exp_total_paid_rial">
                                         </div>
                                     </div>
                                 </div>
