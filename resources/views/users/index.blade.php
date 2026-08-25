@@ -728,6 +728,7 @@
                 }); 
             }else if(status == 3 || status == 4 || status == 5 || status == 6 || status == 7 || status == 8 || status == 9){
                 var selectOption = '<select class="form-control select floating resign_reason" name="department_id"></select>';
+                var selectPerformanceNote = '<select class="form-control select floating performance_note" name="performance_note"></select>';
                 let resign_date = $(this).attr('data-resign-date');
                 $.confirm({
                     title: '@lang("lang.employee_status")',
@@ -755,6 +756,10 @@
                                     '<label>@lang("lang.reason")</label>'+
                                     selectOption+
                                 '</div>'+
+                                '<div class="form-group">'+
+                                    '<label>@lang("lang.performance_note")</label>'+
+                                    selectPerformanceNote+
+                                '</div>'+
                             '</div>'+
                         '</form>',
                     buttons: {
@@ -767,6 +772,7 @@
                                 var resign_date = this.$content.find('.resign_date').val();
                                 var resign_reason = this.$content.find('.resign_reason').val();
                                 var line_manager = this.$content.find('.line_manager').val();
+                                var performance_note = this.$content.find(".performance_note").val();
                                 if (!resign_date) {
                                     $.alert({
                                         title: '@lang("lang.requiered")',
@@ -776,10 +782,11 @@
                                 }                               
                                 axios.post('{{ URL('employee/status') }}', {
                                         'id': id,
-                                        'emp_status': emp_status,
-                                        'resign_date': resign_date,
-                                        'resign_reason': resign_reason,
-                                        'line_manager': line_manager
+                                        'emp_status':       emp_status,
+                                        'resign_date':      resign_date,
+                                        'resign_reason':    resign_reason,
+                                        'line_manager':     line_manager,
+                                        'performance_note': performance_note
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
@@ -839,6 +846,16 @@
                                 }
                                 $('.resign_reason').append($('<option>', option));
                             });
+                            var performanceNote = response.performance_note
+                            $('.performance_note').html('<option selected > -- @lang("lang.select") --</option>');
+                            $.each(performanceNote, function(i, item) {
+                                let option = {
+                                    value: item.id,
+                                    text: item.name_english,
+                                }
+                                $('.performance_note').append($('<option>', option));
+                            });
+                            
                         }
                     });
                 });

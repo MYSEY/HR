@@ -548,7 +548,7 @@ class ReportRepository extends BaseRepository
             $to_date = Carbon::createFromDate($request->to_date)->format('Y-m-d H:i:s');
         }
 
-        $employees = User::with("gender")->with('position')->with('branch')
+        $employees = User::with("gender")->with('position')->with('branch')->with('performanceNote')
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
                 $query->where("id", Auth::user()->id);

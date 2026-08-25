@@ -126,6 +126,7 @@
                                                     rowspan="1" colspan="1"
                                                     aria-label="Remark: activate to sort column ascending"
                                                     style="width: 125.15px;">@lang('lang.reason_of_resign')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0">@lang('lang.performance_note')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Remark: activate to sort column ascending"
@@ -152,6 +153,7 @@
                                                         <td>
                                                             {{$item->EmployeeResignReason == null ? $item->resign_reason : $item->EmployeeResignReason}}
                                                         </td>
+                                                        <td>{{$item->performanceNote ? $item->performanceNote->name_english : ""}}</td>
                                                         <td>{{ $item->remark }}</td>
                                                     </tr>
                                                 @endforeach
@@ -219,6 +221,7 @@
                                     '<td>'+( date_of_commencement )+'</td>'+
                                     '<td>'+( resign_date )+'</td>'+
                                     '<td>'+( resign_reason )+'</td>'+
+                                    '<td>'+( row.performance_note ? row.performance_note.name_english : "" )+'</td>'+
                                     '<td>'+( row.remark ? row.remark : "" )+'</td>'+
                                 '</tr>';
                     });

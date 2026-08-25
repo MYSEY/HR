@@ -655,6 +655,7 @@
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.resign_reason')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">@lang('lang.loan')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">@lang('lang.status')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">@lang('lang.performance_note')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
@@ -798,6 +799,7 @@
                                                             </div>
                                                         </div>
                                                     </td>
+                                                    <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{$item->performanceNote ? $item->performanceNote->name_english : ""}}</span></td>
                                                     <td class="text-end">
                                                         @if ($permission->is_delete == "1")
                                                             <div class="dropdown dropdown-action">
@@ -1009,7 +1011,7 @@
                         let emp_status = "";
                         let status_color = "";
                         let td = "";
-                       
+                        let td_performance_note = "";
                         let resign_status_td ='<td>'+(emp.resign_status ? emp.resign_status.name_english : emp.resign_reason)+'</td>';
                         all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
                                 '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-Salary-Increase="'+(emp.salary_increas)+'" data-id="1" href="#">'+
@@ -1141,6 +1143,7 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '4'){
                             emp_status = "Termination";
                             status_color = "text-danger";
@@ -1168,6 +1171,7 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '5'){
                             emp_status = "Death";
                             status_color = "text-danger";
@@ -1195,6 +1199,7 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '6'){
                             emp_status = "Retired";
                             status_color = "text-danger";
@@ -1223,10 +1228,12 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '7'){
                             emp_status = "Lay off";
                             status_color = "text-danger";
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '8'){
                             emp_status = "Suspension";
                             status_color = "text-danger";
@@ -1254,6 +1261,7 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '9'){
                             emp_status = "Fall Probation";
                             status_color = "text-danger";
@@ -1281,6 +1289,7 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == 'Cancel'){
                             emp_status = "Cancel";
                             status_color = "text-danger";
@@ -1383,6 +1392,7 @@
                                 '<td>'+
                                     (empStatus)+
                                 '</td>'+
+                                (td_performance_note)+
                                 '<td class="text-end">'+
                                     (dropdown_action)+
                                 '</td>'+

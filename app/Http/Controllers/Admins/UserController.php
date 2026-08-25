@@ -77,14 +77,14 @@ class UserController extends Controller
             $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->orderBy('date_of_commencement', 'desc');
             $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10']);
             $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2');
-            $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc');
+            $dataResign = User::with('role')->with('department')->with('position')->with("performanceNote")->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc');
             $dataEmployees = User::whereIn('emp_status', ['Probation','1','2','10',])->orderBy('id', 'DESC')->get();
         }
         if (Auth::user()->RolePermission == 'HR' && $permission->is_access == "1") {
             $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->orderBy('date_of_commencement', 'desc');
             $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10']);
             $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2');
-            $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc');
+            $dataResign = User::with('role')->with('department')->with('position')->with("performanceNote")->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc');
             $dataEmployees = User::whereIn('emp_status', ['Probation','1','2','10',])->orderBy('id', 'DESC')->get();
         }
         if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM']) && $permission->is_access != "1"){
@@ -109,7 +109,7 @@ class UserController extends Controller
                 }
             });
 
-            $dataResign = User::with('role')->with('department')->with('position')->where("line_manager", Auth::user()->id)
+            $dataResign = User::with('role')->with('department')->with('position')->with("performanceNote")->where("line_manager", Auth::user()->id)
             ->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc');
         }
         if (Auth::user()->RolePermission == 'HOD') {
@@ -117,20 +117,20 @@ class UserController extends Controller
             $dataProbation = User::with('role')->with('department')->with('position')->whereIn("department_id", $department_ids)->where('emp_status','Probation')->orderBy('date_of_commencement', 'desc');
             $dataFDC = User::with('role')->with('department')->with('position')->whereIn("department_id",  $department_ids)->whereIn('emp_status',['1','10']);
             $dataUDC = User::with('role')->with('department')->with('position')->whereIn("department_id",  $department_ids)->where('emp_status','2');
-            $dataResign = User::with('role')->with('department')->with('position')->whereIn("department_id",  $department_ids)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc');
+            $dataResign = User::with('role')->with('department')->with('position')->with("performanceNote")->whereIn("department_id",  $department_ids)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc');
         }
         if (Auth::user()->RolePermission == 'BM') {
             $dataProbation = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->where('emp_status','Probation')->orderBy('date_of_commencement', 'desc');
             $dataFDC = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->whereIn('emp_status',['1','10']);
             $dataUDC = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->where('emp_status','2');
-            $dataResign = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc');
+            $dataResign = User::with('role')->with('department')->with('position')->with("performanceNote")->where("branch_id", Auth::user()->branch_id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc');
         }
 
         if(Auth::user()->RolePermission == 'Employee'){
             $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->where('id',Auth::user()->id)->orderBy('date_of_commencement', 'desc');
             $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->where('id',Auth::user()->id);
             $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2')->where('id',Auth::user()->id);
-            $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->where('id',Auth::user()->id);
+            $dataResign = User::with('role')->with('department')->with('position')->with("performanceNote")->whereIn('emp_status', ['3','4','5','6','7','8','9'])->where('id',Auth::user()->id);
         }
 
         // if (Auth::user()->RolePermission != 'Employee') {
@@ -534,6 +534,7 @@ class UserController extends Controller
 
     public function reasonOption(Request $request){
         $options = Option::where("type", "emp_status")->get();
+        $performance_note = Option::where("type", "performance_note")->get();
         $line_manager = User::where("line_manager", '=', $request->line_manager_id)->count();
         $dataEmployee = [];
         if ($line_manager > 0 ) {
@@ -541,7 +542,8 @@ class UserController extends Controller
         }
         return response()->json([
             'options' => $options,
-            'dataEmployee'=> $dataEmployee
+            'dataEmployee'=> $dataEmployee,
+            'performance_note'=>$performance_note
         ]);
     }
 
@@ -850,7 +852,8 @@ class UserController extends Controller
                         'pre_salary' => $users->basic_salary,
                         'basic_salary' => $totalSalaryStaffResign,
                         'status' => 'Unactive',
-                        'resign_reason' => $request->resign_reason
+                        'resign_reason' => $request->resign_reason,
+                        'performance_note' => $request->performance_note
                     ]);
                 }
             }

@@ -115,6 +115,7 @@ class User extends Authenticatable
         'account_number',
         'users_permission',
         'status',
+        'performance_note',
         'emp_status',
         'p_status',
         'is_loan',
@@ -186,6 +187,9 @@ class User extends Authenticatable
     }
     public function resignStatus(){
         return $this->belongsTo(Option::class,'resign_reason', 'id');
+    }
+    public function performanceNote(){
+        return $this->belongsTo(Option::class,'performance_note', 'id');
     }
     public function recruitment(){
         return $this->belongsTo(CandidateResume::class,'number_employee', 'number_employee')->select(

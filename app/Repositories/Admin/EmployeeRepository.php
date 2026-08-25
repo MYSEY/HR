@@ -99,7 +99,11 @@ class EmployeeRepository extends BaseRepository
             }
             if($request->emp_status || $request->employee_id || $request->employee_name){
                 $dataUser = [];
-                $dataUser = User::with('role')->with("gender")->with('department')->with('position')->with('branch')->with('positiontype')
+                $dataUser = User::with('role')->with("gender")->with('department')
+                ->with('position')
+                ->with('branch')
+                ->with('performanceNote')
+                ->with('positiontype')
                 ->with("currentprovince")
                 ->with("currentdistrict")
                 ->with("currentcommune")

@@ -34,6 +34,7 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
                 "date_of_commencement" => $users->date_of_commencement ? Carbon::createFromDate($users->date_of_commencement)->format('d-m-Y') : "",
                 'resign_date'=> $users->resign_date ? Carbon::createFromDate($users->resign_date)->format('d-m-Y'): "",
                 'resign_reason'=> $users->EmployeeResignReason == null ? $users->resign_reason : $users->EmployeeResignReason,
+                'performance_note'=>$users->performanceNote ? $users->performanceNote->name_english : "",
                 'remark'=> $users->remark ? $users->remark : "",
             ];
         }
@@ -63,9 +64,9 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
                 $drawing->setCoordinates('B1'); // Cell position
                 $drawing->setWorksheet($sheet->getDelegate()); // Bind to sheet
 
-                $sheet->getDelegate()->getStyle('A4:K4')->getFont()->setName('Khmer OS Battambang')
-                ->setSize(9)->setBold('A4:K4');
-                $event->sheet->getStyle('A4:K4')->applyFromArray([
+                $sheet->getDelegate()->getStyle('A4:L4')->getFont()->setName('Khmer OS Battambang')
+                ->setSize(9)->setBold('A4:L4');
+                $event->sheet->getStyle('A4:L4')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -75,19 +76,19 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
                 ]);
 
                 // block merge cells 
-                $sheet->mergeCells('A2:K2');
+                $sheet->mergeCells('A2:L2');
                 $sheet->setCellValue('A2', "CAMMA Microfinance Limited");
-                $sheet->getDelegate()->getStyle('A2:K2')->getFont()->setName('Khmer OS Muol Light')
-                ->setSize(12)->setUnderline('A2:K2');
-                $event->sheet->getDelegate()->getStyle('A2:K2')
+                $sheet->getDelegate()->getStyle('A2:L2')->getFont()->setName('Khmer OS Muol Light')
+                ->setSize(12)->setUnderline('A2:L2');
+                $event->sheet->getDelegate()->getStyle('A2:L2')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A3:K3');
+                $sheet->mergeCells('A3:L3');
                 $sheet->setCellValue('A3', "Staff resign report");
-                $sheet->getDelegate()->getStyle('A3:K3')->getFont()->setName('Arial')
+                $sheet->getDelegate()->getStyle('A3:L3')->getFont()->setName('Arial')
                 ->setSize(10);
-                $event->sheet->getDelegate()->getStyle('A3:K3')
+                $event->sheet->getDelegate()->getStyle('A3:L3')
                                 ->getAlignment()
                                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -96,7 +97,7 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
                 if ($this->totalRecord > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':K'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':L'.$n)->applyFromArray([
                             'font' => [
                                 'name' => 'Khmer OS Battambang', // Font name
                                 'size' => 9, // Font size
@@ -132,6 +133,7 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
             'I' => 20,
             'J' => 50,
             'K' => 50,
+            'L' => 50,
         ];
     }
     public function headings(): array
@@ -147,6 +149,7 @@ class ExportStaffResign implements FromCollection,WithColumnWidths, WithHeadings
             "Join Date",
             "Resigned Date",
             "Reason of Resign",
+            'Performance Note',
             "Remark",
         ];
     }
