@@ -48,7 +48,7 @@ class LeaveRepository extends BaseRepository
             'users.branch_id',
             'users.line_manager',
         )
-        ->whereIn("leave_requests.status", ["approved", "approved_hod"])
+        ->whereIn("leave_requests.status", ["approved", "approved_hod","approved_lm"])
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if($RolePermission == 'Employee'){
                 $query->whereNot("users.id", Auth::user()->id);
@@ -202,12 +202,22 @@ class LeaveRepository extends BaseRepository
                     $query->whereYear('leave_requests.start_date', now()->year);
                 }
             )
-            ->when($request->start_date, function ($query, $start_date) {
-                $query->where('leave_requests.start_date', '>=', $start_date);
+            ->when($request->start_date && $request->end_date, function ($q) use ($request) {
+                $q->where('leave_requests.start_date', '<=', $request->end_date)
+                ->where('leave_requests.end_date', '>=', $request->start_date);
             })
-            ->when($request->end_date, function ($query, $end_date) {
-                $query->where('leave_requests.end_date', '<=', $end_date);
+            ->when($request->start_date && !$request->end_date, function ($q) use ($request) {
+                $q->where('leave_requests.end_date', '>=', $request->start_date);
             })
+            ->when($request->end_date && !$request->start_date, function ($q) use ($request) {
+                $q->where('leave_requests.start_date', '<=', $request->end_date);
+            })
+            // ->when($request->start_date, function ($query, $start_date) {
+            //     $query->where('leave_requests.start_date', '>=', $start_date);
+            // })
+            // ->when($request->end_date, function ($query, $end_date) {
+            //     $query->where('leave_requests.end_date', '<=', $end_date);
+            // })
             ->when($request->employee_id, function ($query, $employee_id) {
                 $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
             })
@@ -331,12 +341,22 @@ class LeaveRepository extends BaseRepository
         ->when(!$request->start_date && !$request->end_date, function ($q) {
             $q->whereYear('leave_requests.start_date', now()->year);
         })
-        ->when($request->start_date, function ($q, $start_date) {
-            $q->where('leave_requests.start_date', '>=', $start_date);
+        ->when($request->start_date && $request->end_date, function ($q) use ($request) {
+            $q->where('leave_requests.start_date', '<=', $request->end_date)
+            ->where('leave_requests.end_date', '>=', $request->start_date);
         })
-        ->when($request->end_date, function ($q, $end_date) {
-            $q->where('leave_requests.end_date', '<=', $end_date);
+        ->when($request->start_date && !$request->end_date, function ($q) use ($request) {
+            $q->where('leave_requests.end_date', '>=', $request->start_date);
         })
+        ->when($request->end_date && !$request->start_date, function ($q) use ($request) {
+            $q->where('leave_requests.start_date', '<=', $request->end_date);
+        })
+        // ->when($request->start_date, function ($q, $start_date) {
+        //     $q->where('leave_requests.start_date', '>=', $start_date);
+        // })
+        // ->when($request->end_date, function ($q, $end_date) {
+        //     $q->where('leave_requests.end_date', '<=', $end_date);
+        // })
         // 3. User & Department Filters
         ->when($request->employee_id, function ($q, $employee_id) {
             $q->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
