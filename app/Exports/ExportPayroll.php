@@ -57,6 +57,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
     protected $totalLoanAmount;
     protected $totalAmountCar;
     protected $totalSalaryNetPay;
+    protected $totalSalaryNetPayKh;
     public function __construct($request)
     {
         $startOfLastMonth = null;
@@ -137,7 +138,8 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             $this->totalLoanAmount += $pay->loan_amount;
             $this->totalAmountCar += $pay->total_amount_car;
             $this->totalSalaryNetPay += $pay->total_salary;
-
+            $this->totalSalaryNetPayKh += $pay->total_salary * $pay->exchange_rate;
+            
             $payroll[]=[
                 $i,
                 $pay->users == null ? '' : $pay->users->number_employee,
@@ -158,20 +160,21 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 number_format($pay->total_gross, 2),
                 number_format($pay->total_pension_fund, 2),
                 number_format($pay->base_salary_received_usd, 2),
-                number_format($pay->base_salary_received_riel),
+                number_format($pay->base_salary_received_riel, 2),
                 number_format($pay->spouse, 2),
                 number_format($pay->children, 2),
-                number_format($pay->total_charges_reduced),
-                number_format($pay->total_tax_base_riel),
+                number_format($pay->total_charges_reduced, 2),
+                number_format($pay->total_tax_base_riel, 2),
                 number_format($pay->total_rate, 2),
                 number_format($pay->total_salary_tax_usd, 2),
-                number_format($pay->total_salary_tax_riel),
+                number_format($pay->total_salary_tax_riel, 2),
                 number_format($pay->seniority_pay_excluded_tax, 2),
                 number_format($pay->seniority_backford, 2),
                 number_format($pay->total_severance_pay, 2),
                 number_format($pay->loan_amount, 2),
                 number_format($pay->total_amount_car, 2),
-                $pay->total_salary
+                number_format($pay->total_salary, 2),
+                number_format($pay->total_salary * $pay->exchange_rate, 2),
             ];
         }
         $this->export_datas = $payroll;
@@ -202,7 +205,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 $event->sheet->getDelegate()->getStyle('A2')->getFont()->getColor()->setARGB('DD4B39');
                 $event->sheet->getDelegate()->getStyle('A3')->getFont()->getColor()->setARGB('0000CC');
                 $event->sheet->getDelegate()->getStyle('A4')->getFont()->getColor()->setARGB('3923A9');
-                $event->sheet->getStyle('A5:AG5')->applyFromArray([
+                $event->sheet->getStyle('A5:AH5')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -214,7 +217,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 if ($this->num > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':AG'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':AH'.$n)->applyFromArray([
                             'borders' => [
                                 'allBorders' => [
                                     'borderStyle' => Border::BORDER_THIN,
@@ -224,7 +227,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                         ]);
                     }
                 }
-                $event->sheet->getStyle('A'.$rows.':AG'.$rows)->applyFromArray([
+                $event->sheet->getStyle('A'.$rows.':AH'.$rows)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -232,31 +235,31 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                         ],
                     ],
                 ]);
-                $sheet->getDelegate()->getStyle('A5:AG5')->getFont()->getColor()->setARGB('3923A9');
-                $sheet->getDelegate()->getStyle('A5:AG5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
-                $event->sheet->getDelegate()->getStyle('A5:AG5')->getAlignment()
+                $sheet->getDelegate()->getStyle('A5:AH5')->getFont()->getColor()->setARGB('3923A9');
+                $sheet->getDelegate()->getStyle('A5:AH5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
+                $event->sheet->getDelegate()->getStyle('A5:AH5')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 // block merge cells 
-                $sheet->mergeCells('A2:AG2');
+                $sheet->mergeCells('A2:AH2');
                 $sheet->setCellValue('A2',"ខេមា​ មីក្រូហិរញ្ញវត្ថុ លីមីតធីត");
-                $sheet->getDelegate()->getStyle('A2:AG2')->getFont()->setSize(18)->setName('Khmer OS Muol Pali')->setUnderline('A2:AG2');
-                $event->sheet->getDelegate()->getStyle('A2:AG2')->getAlignment()
+                $sheet->getDelegate()->getStyle('A2:AH2')->getFont()->setSize(18)->setName('Khmer OS Muol Pali')->setUnderline('A2:AH2');
+                $event->sheet->getDelegate()->getStyle('A2:AH2')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A3:AG3');
+                $sheet->mergeCells('A3:AH3');
                 $sheet->setCellValue('A3', "តារាងលំអិតអំពីប្រាក់បៀវត្សរបស់បុគ្គលិក");
-                $sheet->getDelegate()->getStyle('A3:AG3')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->setUnderline('A3:AG3');
-                $event->sheet->getDelegate()->getStyle('A3:AG3')->getAlignment()
+                $sheet->getDelegate()->getStyle('A3:AH3')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->setUnderline('A3:AH3');
+                $event->sheet->getDelegate()->getStyle('A3:AH3')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A4:AG4');
+                $sheet->mergeCells('A4:AH4');
                 $sheet->setCellValue('A4',$this->getKhmerMonths());
-                $sheet->getDelegate()->getStyle('A4:AG4')->getFont()->setSize(9)->setName('Khmer OS Fasthand')->setSize(10);
-                $event->sheet->getDelegate()->getStyle('A4:AG4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getDelegate()->getStyle('A4:AH4')->getFont()->setSize(9)->setName('Khmer OS Fasthand')->setSize(10);
+                $event->sheet->getDelegate()->getStyle('A4:AH4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 //footer
                 $sheet->mergeCells('A'.$rows.':H'.$rows);
@@ -368,6 +371,10 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 $sheet->setCellValue("AG".$rows, number_format($this->totalSalaryNetPay, 2));
                 $sheet->getDelegate()->getStyle("AG".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AG".$rows);
                 $event->sheet->getDelegate()->getStyle("AG".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                //total setCellValue AH
+                $sheet->setCellValue("AH".$rows, number_format(abs($this->totalSalaryNetPayKh), 2));
+                $sheet->getDelegate()->getStyle("AH".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AH".$rows);
+                $event->sheet->getDelegate()->getStyle("AH".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             },
         ];
     }
@@ -386,14 +393,14 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             'A' => 5,
             'B' => 10,
             'C' => 20,
-            'D' => 30,
+            'D' => 5,
             'E' => 40,
             'F' => 40,
             'G' => 15,
             'H' => 15,
             'I' => 14,
             'J' => 18,
-            'K' => 15,
+            'K' => 10,
             'L' => 20,
             'M' => 15,
             'N' => 20,
@@ -403,11 +410,11 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             'R' => 15,
             'S' => 22,
             'T' => 10,
-            'U' => 10,
-            'V' => 18,
+            'U' => 7,
+            'V' => 10,
             'W' => 20,
-            'X' => 10,
-            'Y' => 20,
+            'X' => 15,
+            'Y' => 10,
             'Z' => 20,
             'AA' => 18,
             'AB' => 22,
@@ -415,7 +422,8 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             'AD' => 14,
             'AE' => 13,
             'AF' => 15,
-            'AG' => 15
+            'AG' => 15,
+            'AH' => 15,
         ];
     }
     public function headings(): array
@@ -453,7 +461,8 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             "ប្រាក់បំណាច់កិច្ចសន្យា",
             "ចំនួនប្រាក់កម្ចី",
             "ប្រាកឧបត្ថម្ភថ្លៃផ្ញើរឡាន",
-            "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ($)"
+            "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ($)",
+            "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ(៛)",
         ];
     }
 }

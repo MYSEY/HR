@@ -348,6 +348,7 @@ class PerformanceAppraisalController extends Controller
                 if (empty($item[0])) {
                     continue;
                 }
+                
                 $employee = User::where("number_employee", $item[0])
                     ->select(
                         'id',
@@ -355,6 +356,8 @@ class PerformanceAppraisalController extends Controller
                         'employee_name_kh',
                         'employee_name_en'
                     )->first();
+                $paPerformance = PerformanceAppraisal::where('employee_id',$request->id)->first();
+                self::createHistories($paPerformance);
                 if ($employee) {
                     PerformanceAppraisal::where('employee_id', $employee->id)
                     ->update([

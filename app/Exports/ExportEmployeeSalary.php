@@ -48,6 +48,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
     protected $totalStaffBook;
     protected $totalAmountCar;
     protected $totalSalaryNetPay;
+    protected $totalSalaryNetPayKh;
     public function __construct($request)
     {
         $Monthly = null;
@@ -133,6 +134,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             $this->totalStaffBook += $value->total_staff_book;
             $this->totalAmountCar += $value->total_amount_car;
             $this->totalSalaryNetPay += $value->total_salary;
+            $this->totalSalaryNetPayKh += $value->total_salary * $value->exchange_rate;
 
             if (is_numeric($value->basic_salary)) {
                 $basic_salary = number_format($value->basic_salary, 2);
@@ -176,7 +178,8 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "Loan Amount"                   => number_format($value->loan_amount, 2),
                 "total_staff_book"              => $value->total_staff_book,
                 "Total Amount Car"              => number_format($value->total_amount_car, 2),
-                "net_salary"                    => $total_salary
+                "net_salary"                    => $total_salary,
+                "net_salary_kh"                 => $value->total_salary * $value->exchange_rate
             ];
         }
         $this->export_datas = $dataExport;
@@ -199,17 +202,17 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
     {
         return [
             'A' => 4,
-            'B' => 15,
+            'B' => 10,
             'C' => 20,
-            'D' => 40,
+            'D' => 5,
             'E' => 40,
             'F' => 22,
             'G' => 13,
-            'H' => 20,
-            'I' => 20,
+            'H' => 15,
+            'I' => 15,
             'J' => 15,
-            'K' => 15,
-            'L' => 20,
+            'K' => 10,
+            'L' => 15,
             'M' => 15,
             'N' => 25,
             'O' => 20,
@@ -217,21 +220,22 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             'Q' => 20,
             'R' => 25,
             'S' => 25,
-            'T' => 7,
-            'U' => 13,
-            'V' => 24,
+            'T' => 15,
+            'U' => 5,
+            'V' => 10,
             'W' => 20,
             'X' => 14,
-            'Y' => 20,
-            'Z' => 20,
-            'AA' => 20,
+            'Y' => 10,
+            'Z' => 15,
+            'AA' => 15,
             'AB' => 20,
             'AC' => 20,
             'AD' => 18,
-            'AE' => 20,
-            'AF' => 20,
+            'AE' => 10,
+            'AF' => 10,
             'AG' => 15,
             'AH' => 15,
+            'AI' => 20,
         ];
     }
     public function registerEvents(): array {
@@ -245,7 +249,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $event->sheet->getDelegate()->getStyle('A3')->getFont()->getColor()->setARGB('0000CC');
                 $event->sheet->getDelegate()->getStyle('A4')->getFont()->getColor()->setARGB('3923A9');
                 
-                $event->sheet->getStyle('A5:AH5')->applyFromArray([
+                $event->sheet->getStyle('A5:AI5')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -257,7 +261,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 if ($this->num > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':AH'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':AI'.$n)->applyFromArray([
                             'borders' => [
                                 'allBorders' => [
                                     'borderStyle' => Border::BORDER_THIN,
@@ -268,7 +272,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                     }
                 }
 
-                $event->sheet->getStyle('A'.$rows.':AH'.$rows)->applyFromArray([
+                $event->sheet->getStyle('A'.$rows.':AI'.$rows)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -276,9 +280,9 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                         ],
                     ],
                 ]);
-                $sheet->getDelegate()->getStyle('A5:AH5')->getFont()->getColor()->setARGB('3923A9');
-                $sheet->getDelegate()->getStyle('A5:AH5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
-                $event->sheet->getDelegate()->getStyle('A5:AH5')->getAlignment()
+                $sheet->getDelegate()->getStyle('A5:AI5')->getFont()->getColor()->setARGB('3923A9');
+                $sheet->getDelegate()->getStyle('A5:AI5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
+                $event->sheet->getDelegate()->getStyle('A5:AI5')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -417,6 +421,10 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $sheet->setCellValue("AH".$rows, number_format(abs($this->totalSalaryNetPay), 2));
                 $sheet->getDelegate()->getStyle("AH".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AH".$rows);
                 $event->sheet->getDelegate()->getStyle("AH".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                  //total setCellValue AI
+                $sheet->setCellValue("AI".$rows, number_format(abs($this->totalSalaryNetPay), 2));
+                $sheet->getDelegate()->getStyle("AI".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AI".$rows);
+                $event->sheet->getDelegate()->getStyle("AI".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             },
         ];
     }
@@ -466,7 +474,8 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             "ចំនួនប្រាក់កម្ចី",
             "សៀវភៅបុគ្គលិកសរុប",
             "ប្រាកឧបត្ថម្ភថ្លៃផ្ញើរឡាន",
-            "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ($)"
+            "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ($)",
+            "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ(រៀល)",
         ];
     }
 }

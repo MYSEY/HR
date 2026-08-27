@@ -186,6 +186,10 @@
                                                         aria-label="Join Date: activate to sort column ascending">@lang('lang.severance_pay')
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 51.475px;">@lang('lang.net_salary')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Salary: activate to sort column ascending">@lang('lang.net_salary') (@lang('lang.reil'))
+                                                    </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">@lang('lang.payment_date')</th>
                                                 </tr>
                                             </thead>
@@ -218,6 +222,7 @@
                                                             <td>$<a href="#">{{ $item->seniority_backford}}</a></td>
                                                             <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
                                                             <td>$<a href="#">{{ $item->total_salary }}</a></td>
+                                                            <td><span>៛</span><a href="#">{{ number_format($item->total_salary * $item->exchange_rate) }}</a></td>
                                                             <td>{{ $item->payment_date}}</td>
                                                         </tr>
                                                     @endforeach
@@ -338,6 +343,7 @@
                             '<td>'+(dollar)+'<a href="#">'+(row.seniority_backford)+'</a></td>'+
                             '<td>'+(dollar)+'<a href="#">'+(row.total_severance_pay)+'</a></td>'+
                             '<td>'+(dollar)+'<a href="#">'+(row.total_salary )+'</a></td>'+
+                           '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary * row.exchange_rate))+'</a></td>'+
                             '<td>'+(payment_date)+'</td>'+
                         '</tr>';
                     });

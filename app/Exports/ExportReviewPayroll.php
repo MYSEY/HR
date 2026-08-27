@@ -49,44 +49,12 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
     protected $totalStaffBook;
     protected $totalAmountCar;
     protected $totalSalaryNetPay;
-    public function __construct($request)
+    protected $totalSalaryNetPayKh;
+    public function __construct($data)
     {
-        $Monthly = null;
-        $yearLy = null;
-        if ($request->filter_month) {
-            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
-            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
-        }
-        $PreviewPayroll = payrollPreview::with("users")
-        ->leftJoin('users', 'payroll_previews.employee_id', '=', 'users.id')
-        ->leftJoin('options', 'users.gender', '=', 'options.id')
-        ->select(
-            'payroll_previews.*',
-            'users.number_employee',
-            'users.employee_name_en',
-            'users.employee_name_kh',
-            'users.branch_id',
-            'options.name_english',
-            'options.name_khmer',
-        )
-        ->when($request->employee_id, function ($query, $employee_id) {
-            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
-        })
-        ->when($request->employee_name, function ($query, $employee_name) {
-            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-        })
-        ->when($request->branch_id, function ($query, $branch_id) {
-            $query->where('users.branch_id', $branch_id);
-        })
-        ->when($Monthly, function ($query, $Monthly) {
-            $query->whereMonth('payment_date', $Monthly);
-        })
-        ->when($yearLy, function ($query, $yearLy) {
-            $query->whereYear('payment_date', $yearLy);
-        })->orderBy('payroll_previews.number_employee', 'asc')->get();
         $dataExport = [];
         $i = 0;
-        foreach ($PreviewPayroll as $key=>$value) {
+        foreach ($data as $value) {
             $i++;
             $this->num = $i;
             $this->totalAmountBasicSalary += $value->basic_salary;
@@ -120,15 +88,16 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             $this->totalSalaryNetPay += $value->total_salary;
             $totalSalaryTaxRiel = $value->total_salary_tax_riel;
             $total_salary = $value->total_salary;
+            $this->totalSalaryNetPayKh += $total_salary * $value->exchange_rate;
             $dataExport[] = [
                 "no" => $i,
                 "employee_id"       => $value->users->number_employee,
                 "name"              => Helper::getLang() == 'en' ? $value->users->employee_name_en : $value->users->employee_name_kh,
                 "Gender"             => $value->name_khmer,
-                "position"          => $value->users->EmployeePosition,
-                "department"        => $value->users->EmployeeDepartment,
-                "location"          => $value->users->EmployeeBranch,
-                "Join Date"         => $value->users->joinOfDate,
+                "position"          => $value->post_name_en,
+                "department"        => $value->depart_name_en,
+                "location"          => $value->branch_name_en,
+                "Join Date"         => $value->date_of_commencement,
                 "Basic Salary"      => $value->basic_salary,
                 "Base Salary Received"          => $value->total_gross_salary,
                 "Child Allowance"               => $value->total_child_allowance,
@@ -157,7 +126,8 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 "Loan Amount"                   => $value->loan_amount == 0.0 ? '0' : $value->loan_amount,
                 "total_staff_book"              => $value->total_staff_book,
                 "Total Amount Car"              => $value->total_amount_car,
-                "net_salary"                    => $total_salary
+                "net_salary"                    => $total_salary,
+                "net_salary_kh"                 => $total_salary * $value->exchange_rate,
             ];
         }
         $this->export_datas = $dataExport;
@@ -182,40 +152,41 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             'A' => 4,
             'B' => 15,
             'C' => 20,
-            'D' => 40,
+            'D' => 5,
             'E' => 40,
             'F' => 22,
             'G' => 13,
             'H' => 10,
-            'I' => 20,
+            'I' => 15,
             'J' => 20,
-            'K' => 15,
+            'K' => 10,
             'L' => 15,
             'M' => 20,
             'N' => 15,
-            'O' => 25,
-            'P' => 20,
+            'O' => 20,
+            'P' => 15,
             'Q' => 20,
             'R' => 20,
             'S' => 20,
-            'T' => 25,
-            'U' => 25,
+            'T' => 20,
+            'U' => 20,
             'V' => 15,
-            'W' => 13,
-            'X' => 24,
+            'W' => 5,
+            'X' => 10,
             'Y' => 20,
             'Z' => 14,
-            'AA' => 20,
+            'AA' => 10,
             'AB' => 20,
             'AC' => 20,
             'AD' => 20,
             'AE' => 22,
             'AF' => 20,
             'AG' => 18,
-            'AH' => 20,
+            'AH' => 10,
             'AI' => 15,
             'AJ' => 15,
             'AK' => 15,
+            'AL' => 15,
         ];
     }
     public function registerEvents(): array {
@@ -229,7 +200,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 $event->sheet->getDelegate()->getStyle('A3')->getFont()->getColor()->setARGB('0000CC');
                 $event->sheet->getDelegate()->getStyle('A4')->getFont()->getColor()->setARGB('3923A9');
                 
-                $event->sheet->getStyle('A5:AK5')->applyFromArray([
+                $event->sheet->getStyle('A5:AL5')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -241,7 +212,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 if ($this->num > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':AK'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':AL'.$n)->applyFromArray([
                             'borders' => [
                                 'allBorders' => [
                                     'borderStyle' => Border::BORDER_THIN,
@@ -252,7 +223,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                     }
                 }
 
-                $event->sheet->getStyle('A'.$rows.':AK'.$rows)->applyFromArray([
+                $event->sheet->getStyle('A'.$rows.':AL'.$rows)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -260,9 +231,9 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                         ],
                     ],
                 ]);
-                $sheet->getDelegate()->getStyle('A5:AK5')->getFont()->getColor()->setARGB('3923A9');
-                $sheet->getDelegate()->getStyle('A5:AK5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
-                $event->sheet->getDelegate()->getStyle('A5:AK5')->getAlignment()
+                $sheet->getDelegate()->getStyle('A5:AL5')->getFont()->getColor()->setARGB('3923A9');
+                $sheet->getDelegate()->getStyle('A5:AL5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
+                $event->sheet->getDelegate()->getStyle('A5:AL5')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -418,6 +389,10 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 $sheet->setCellValue("AK".$rows, number_format(abs($this->totalSalaryNetPay), 2));
                 $sheet->getDelegate()->getStyle("AK".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AK".$rows);
                 $event->sheet->getDelegate()->getStyle("AK".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                //total setCellValue AL
+                $sheet->setCellValue("AL".$rows, number_format(abs($this->totalSalaryNetPayKh), 2));
+                $sheet->getDelegate()->getStyle("AL".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AL".$rows);
+                $event->sheet->getDelegate()->getStyle("AL".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             },
         ];
     }
@@ -470,7 +445,8 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             "ចំនួនប្រាក់កម្ចី",
             "សៀវភៅបុគ្គលិកសរុប",
             "ប្រាកឧបត្ថម្ភថ្លៃផ្ញើរឡាន",
-            "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ($)"
+            "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ($)",
+            "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ(រៀល)",
         ];
     }
 }

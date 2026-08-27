@@ -232,6 +232,10 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.net_salary') (@lang('lang.riel'))
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Salary: activate to sort column ascending">@lang('lang.payment_date')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -242,7 +246,6 @@
                                                             rowspan="1" colspan="1"
                                                             aria-label="Payslip: activate to sort column ascending">@lang('lang.payslip')
                                                         </th>
-                                                        {{-- <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th> --}}
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -293,6 +296,7 @@
                                                                 <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
                                                                 <td>$<a href="#">{{ $item->loan_amount == null ? "0.00" : $item->loan_amount}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
+                                                                <td><span>៛</span><a href="#">{{ number_format($item->total_salary * $item->exchange_rate) }}</a></td>
                                                                 <td>{{ Carbon\Carbon::parse($item->payment_date)->format('d-M-Y') }}</td>
                                                                 <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                                 <td><a class="btn btn-sm btn-primary" target="_blank" href="{{ url('payslip', $item->id) }}">@lang('lang.generate_payslip')</a></td>
@@ -685,6 +689,7 @@
                             '<td>$<a href="#">'+(row.total_severance_pay)+'</a></td>'+
                             '<td>$<a href="#">'+(row.loan_amount == null ? "0.00" : row.loan_amount)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary * row.exchange_rate))+'</a></td>'+
                             '<td>'+(payment_date)+'</td>'+
                             '<td>'+(created_at)+'</td>'+
                             '<td><a class="btn btn-sm btn-primary" href="{{url("payslip")}}/'+(row.id)+'">@lang("lang.generate_payslip")</a></td>'+

@@ -223,6 +223,10 @@
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
+                                                aria-label="Salary: activate to sort column ascending">@lang('lang.net_salary') (@lang('lang.riel'))
+                                            </th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1"
                                                 aria-label="Salary: activate to sort column ascending">@lang('lang.payment_date')
                                             </th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -378,7 +382,7 @@
 
 @section('script')
 <script>
-    var lang = @json(Helper::getLang());
+    var lang = @json(app()->getLocale());
     var number_employee = null;
     $(function(){
         $(".btn-search").on("click", function(){
@@ -861,6 +865,13 @@
                 { 
                     data: 'total_salary', 
                     name: 'total_salary',
+                },
+                { 
+                    data: 'total_salary', 
+                    name: 'total_salary',
+                    render: function(data, type, row) {
+                        return formatCurrencyKH(row.total_salary*row.exchange_rate)
+                    }
                 },
                 { 
                     data: 'payment_date', 
