@@ -27,6 +27,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\CarbonPeriod;
+use App\Models\Holiday;
+use App\Models\LeaveDetail;
 
 class LeavesEmployeeController extends Controller
 {
@@ -505,6 +507,102 @@ class LeavesEmployeeController extends Controller
         }
     }
 
+    public static function generateLeaveDetail($leaveRequestId, $request)
+    {
+        $start = Carbon::parse($request->start_date);
+        $end = Carbon::parse($request->end_date);
+        $startDateStr = $start->format('Y-m-d');
+        $endDateStr = $end->format('Y-m-d');
+
+        // 1. ទាញយកថ្ងៃ Holidays ក្នុង range
+        $holidays = Holiday::where('from', '<=', $endDateStr)
+            ->where('to', '>=', $startDateStr)
+            ->get();
+
+        $holidayDates = [];
+        foreach ($holidays as $holiday) {
+            $period = CarbonPeriod::create($holiday->from, $holiday->to);
+            foreach ($period as $date) {
+                $holidayDates[] = $date->format('Y-m-d');
+            }
+        }
+        $holidayDates = array_unique($holidayDates);
+
+        // 2. ស្រង់យកតែ "ថ្ងៃធ្វើការ" ត្រឹមត្រូវ (ដក Weekend & Holiday)
+        $leavePeriod = CarbonPeriod::create($start, $end);
+        $validDates = [];
+
+        foreach ($leavePeriod as $date) {
+            if ($date->isWeekend()) {
+                continue;
+            }
+
+            $formattedDate = $date->format('Y-m-d');
+
+            if (in_array($formattedDate, $holidayDates)) {
+                continue;
+            }
+
+            $validDates[] = $formattedDate;
+        }
+
+        // ប្រសិនបើគ្មានថ្ងៃធ្វើការសោះ ត្រូវលុប Detail ចាស់ចោលទាំងអស់
+        if (empty($validDates)) {
+            LeaveDetail::where('leave_request_id', $leaveRequestId)->delete();
+            return 0;
+        }
+
+        // 3. កំណត់ First Row និង Last Row ជាមួយ Half Day
+        $firstDate = $validDates[0];
+        $lastDate = end($validDates);
+        $totalDays = count($validDates);
+
+        $startHalfDay = strtolower($request->start_half_day ?? ''); 
+        $endHalfDay = strtolower($request->end_half_day ?? '');     
+
+        $newDetailsData = [];
+
+        foreach ($validDates as $currentDate) {
+            $dayValue = 1; // Default ជា 1 ថ្ងៃ
+
+            if ($totalDays === 1) {
+                if (!empty($startHalfDay) || !empty($endHalfDay)) {
+                    $dayValue = 0.5;
+                }
+            } else {
+                if ($currentDate === $firstDate && !empty($startHalfDay)) {
+                    $dayValue = 0.5;
+                } elseif ($currentDate === $lastDate && !empty($endHalfDay)) {
+                    $dayValue = 0.5;
+                }
+            }
+
+            $newDetailsData[$currentDate] = $dayValue;
+        }
+
+        // 4. លុបចោលតែ Record ណាដែលមិនស្ថិតក្នុង Range ថ្មី (ករណី Update កាត់បន្ថយថ្ងៃ)
+        LeaveDetail::where('leave_request_id', $leaveRequestId)
+            ->whereNotIn('date', array_keys($newDetailsData))
+            ->delete();
+
+        // 5. Update ឬ Insert (Upsert) ចូល Table leave_details 
+        foreach ($newDetailsData as $date => $number_of_day) {
+            LeaveDetail::updateOrCreate(
+                [
+                    'leave_request_id' => $leaveRequestId,
+                    'date'             => $date,
+                ],
+                [
+                    'number_of_day'    => $number_of_day,
+                    'created_at'       => now(), // នឹងបំពេញស្វ័យប្រវត្តិបើជា record ថ្មី
+                    'updated_at'       => now(),
+                ]
+            );
+        }
+
+        return count($newDetailsData);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -611,7 +709,8 @@ class LeavesEmployeeController extends Controller
             }
             $data['employee_id'] = Auth::user()->id;
             $data['created_by'] = Auth::user()->id;            
-            LeaveRequest::create($data);
+            $leaveRequest = LeaveRequest::create($data);
+            Self::generateLeaveDetail($leaveRequest->id, $request);
             DB::commit();
             // for send email
             $manager1 = User::where("id", Auth::user()->line_manager)->first();
@@ -827,7 +926,8 @@ class LeavesEmployeeController extends Controller
             $data['created_by'] = Auth::user()->id;
             $data['request_to'] = Auth::user()->id;
             
-            LeaveRequest::create($data);
+            $leaveRequest = LeaveRequest::create($data);
+            Self::generateLeaveDetail($leaveRequest->id, $request);
 
             $staff_request = User::where("id", $request->employee_id)->with("position")->with("branch")->first();
             $manager1 = User::where("id", $staff_request->line_manager)->first();
@@ -937,6 +1037,7 @@ class LeavesEmployeeController extends Controller
      */
     public function update(Request $request)
     {
+        DB::beginTransaction();
         try{
             $duplicate  = self::duplicateLeace($request, Auth::user()->id);
             if ($duplicate) {
@@ -988,6 +1089,8 @@ class LeavesEmployeeController extends Controller
             $data['updated_by'] = Auth::user()->id;
 
             $data->save();
+            Self::generateLeaveDetail($data->id, $request);
+            DB::commit();
             return response()->json([
                 'success'=>'leave_request_created_successfully',
                 'status'=>200,
@@ -1003,6 +1106,7 @@ class LeavesEmployeeController extends Controller
 
     public function replcementUpdate(Request $request)
     {
+         DB::beginTransaction();
         try{
             $duplicate  = self::duplicateLeace($request, $request->employee_id);
             if ($duplicate) {
@@ -1054,6 +1158,8 @@ class LeavesEmployeeController extends Controller
             $data['updated_by'] = Auth::user()->id;
 
             $data->save();
+            Self::generateLeaveDetail($data->id, $request);
+            DB::commit();
             return response()->json([
                 'success'=>'leave_request_created_successfully',
                 'status'=>200,
@@ -1100,6 +1206,7 @@ class LeavesEmployeeController extends Controller
             DelegateLeave::where('requester_id', $data->employee_id)->where("start_date",$data->start_date)->where("end_date",$data->end_date)->delete();
 
             LeaveRequest::destroy($request->id);
+            LeaveDetail::where('leave_request_id', $request->id)->delete();
            
             Toastr::success('Leave requsest deleted successfully.','Success');
             return redirect()->back();
