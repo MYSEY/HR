@@ -113,6 +113,47 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-12 col-lg-12 col-xl-12 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-body">
+                        <div class="statistic-header">
+                            <h4>Delegated Responsibilities <strong>{{count($DelegateLeave)}}</strong></h4>
+                        </div>
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer card-detail">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <thead>
+                                                <tr>
+                                                    <th >Name</th>
+                                                    <th >Department</th>
+                                                    <th >Start Date</th>
+                                                    <th >End Date</th>
+                                                    <th >Delegate To</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($DelegateLeave)>0)
+                                                    @foreach ($DelegateLeave as $key=>$item)
+                                                        <tr class="odd">
+                                                            <td>{{$item->userRequest->employee_name_en}}</td>
+                                                            <td>{{$item->userRequest->department->name_english}}</td>
+                                                            <td>{{\Carbon\Carbon::parse($item->start_date)->format('d-M-Y')}}</td>
+                                                            <td>{{\Carbon\Carbon::parse($item->end_date)->format('d-M-Y')}}</td>
+                                                            <td>{{$item->userDelegeted->employee_name_en}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         

@@ -39,7 +39,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.position_type')</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">@lang('lang.contact_number')</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.role_name')</th>
-                                        @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
+                                        @if ($permission->is_view_salary == "1")
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.basic_salary')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
@@ -80,7 +80,7 @@
                                                     <td>{{$item->position == "" ? "" : $item->position->position_type}}</td>
                                                     <td>{{$item->personal_phone_number}}</td>
                                                     <td>
-                                                        @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                        @if ($permission->is_update == "1")
                                                             <a class="btn btn-white btn-sm btn-rounded btn-emp-role" data-emid="{{$item->id}}" data-roleid="{{$item->role_id}}" href="#" aria-expanded="false">
                                                                 <i class="fa fa-dot-circle-o text-success"></i>
                                                                 <span >{{ $item->role == null ? "" : $item->role->role_name }}</span>
@@ -91,15 +91,15 @@
                                                             </a>
                                                         @endif
                                                     </td>
-                                                    @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
+                                                    @if ($permission->is_view_salary == "1")
                                                         <td>$<a href="#"> {{
-                                                            Auth::user()->id == $item->id ? $item->basic_salary : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->basic_salary : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->basic_salary : ($permission->is_view_salary_staff == "1" ?  $item->basic_salary : '0.00')
                                                         }}</a></td>
                                                         <td>$<a href="#">{{
-                                                            Auth::user()->id == $item->id ? $item->salary_increas : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->salary_increas : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->salary_increas : ($permission->is_view_salary_staff == "1" ?  $item->salary_increas : '0.00')
                                                         }}</a></td>
                                                         <td>$<a href="#">{{
-                                                            Auth::user()->id == $item->id ? $item->phone_allowance : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->phone_allowance : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->phone_allowance : ($permission->is_view_salary_staff == "1" ?  $item->phone_allowance : '0.00')
                                                         }}</a></td>
                                                     @endif
                                                     <td>{{$item->joinOfDate}}</td>
@@ -114,7 +114,7 @@
                                                     <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='Probation')
-                                                                @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                                @if ($permission->is_update == "1")
                                                                     <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                         <i class="fa fa-dot-circle-o text-success"></i>
                                                                         <span>{{ $item->emp_status }}</span>
@@ -160,17 +160,17 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
+                                                        @if ($permission->is_update == "1" || $permission->is_delete == "1")
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                                    @if ($permission->is_update == "1")
                                                                         <a href="{{url("user/form/edit",$item->id)}}" class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
-                                                                    @if ((Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin') && permissionAccess("m2-s1","is_print")->value == "1")
+                                                                    @if ((Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin') && $permission->is_print == "1")
                                                                         <a class="dropdown-item" href="{{url("/recruitment/candidate-resume/preview",$item->id)}}"><i class="fa fa-regular fa-eye"></i> @lang("lang.preview")</a>
                                                                     @endif
-                                                                    @if (permissionAccess("m2-s1","is_delete")->value == "1")
+                                                                    @if ($permission->is_delete == "1")
                                                                         <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     @endif
                                                                 </div>
@@ -232,7 +232,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.position_type')</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">@lang('lang.contact_number')</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.role_name')</th>
-                                        @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
+                                        @if ($permission->is_view_salary == "1")
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.basic_salary')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
@@ -274,7 +274,7 @@
                                                     <td>{{$item->position == "" ? "" : $item->position->position_type}}</td>
                                                     <td>{{$item->personal_phone_number}}</td>
                                                     <td>
-                                                        @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                        @if ($permission->is_update == "1")
                                                             <a class="btn btn-white btn-sm btn-rounded btn-emp-role" data-emid="{{$item->id}}" data-roleid="{{$item->role_id}}" href="#" aria-expanded="false">
                                                                 <i class="fa fa-dot-circle-o text-success"></i>
                                                                 <span >{{ $item->role == null ? "" : $item->role->role_name }}</span>
@@ -286,15 +286,15 @@
                                                         @endif
                                                         {{-- <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span> --}}
                                                     </td>
-                                                    @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
+                                                    @if ($permission->is_view_salary == "1")
                                                         <td>$<a href="#"> {{
-                                                            Auth::user()->id == $item->id ? $item->basic_salary : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->basic_salary : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->basic_salary : ($permission->is_view_salary_staff == "1" ?  $item->basic_salary : '0.00')
                                                         }}</a></td>
                                                         <td>$<a href="#">{{
-                                                            Auth::user()->id == $item->id ? $item->salary_increas : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->salary_increas : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->salary_increas : ($permission->is_view_salary_staff == "1" ?  $item->salary_increas : '0.00')
                                                         }}</a></td>
                                                         <td>$<a href="#">{{
-                                                            Auth::user()->id == $item->id ? $item->phone_allowance : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->phone_allowance : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->phone_allowance : ($permission->is_view_salary_staff == "1" ?  $item->phone_allowance : '0.00')
                                                         }}</a></td>
                                                     @endif
                                                     <td>{{$item->joinOfDate}}</td>
@@ -311,7 +311,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="dropdown action-label">
-                                                            @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                            @if ($permission->is_update == "1")
                                                                 @if ($item->emp_status=='1')
                                                                     <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                         <i class="fa fa-dot-circle-o text-info"></i>
@@ -369,17 +369,17 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
+                                                        @if ($permission->is_update == "1" || $permission->is_delete == "1")
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                                    @if ($permission->is_update == "1")
                                                                         <a href="{{url("user/form/edit",$item->id)}}" class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
-                                                                    @if ((Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin') && permissionAccess("m2-s1","is_print")->value == "1")
+                                                                    @if ((Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin') && $permission->is_print == "1")
                                                                         <a class="dropdown-item" href="{{url("/recruitment/candidate-resume/preview",$item->id)}}"><i class="fa fa-regular fa-eye"></i> @lang("lang.preview")</a>
                                                                     @endif
-                                                                    @if (permissionAccess("m2-s1","is_delete")->value == "1")
+                                                                    @if ($permission->is_delete == "1")
                                                                         <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     @endif
                                                                 </div>
@@ -442,7 +442,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.position_type')</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">@lang('lang.contact_number')</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.role_name')</th>
-                                        @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
+                                        @if ($permission->is_view_salary == "1")
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.basic_salary')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
@@ -483,7 +483,7 @@
                                                     <td>{{$item->position == "" ? "" : $item->position->position_type}}</td>
                                                     <td>{{$item->personal_phone_number}}</td>
                                                     <td>
-                                                        @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                        @if ($permission->is_update == "1")
                                                             <a class="btn btn-white btn-sm btn-rounded btn-emp-role" data-emid="{{$item->id}}" data-roleid="{{$item->role_id}}" href="#" aria-expanded="false">
                                                                 <i class="fa fa-dot-circle-o text-success"></i>
                                                                 <span >{{ $item->role == null ? "" : $item->role->role_name }}</span>
@@ -495,15 +495,15 @@
                                                         @endif
                                                         {{-- <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span> --}}
                                                     </td>
-                                                    @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
+                                                    @if ($permission->is_view_salary == "1")
                                                         <td>$<a href="#"> {{
-                                                            Auth::user()->id == $item->id ? $item->basic_salary : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->basic_salary : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->basic_salary : ($permission->is_view_salary_staff == "1" ?  $item->basic_salary : '0.00')
                                                         }}</a></td>
                                                         <td>$<a href="#">{{
-                                                            Auth::user()->id == $item->id ? $item->salary_increas : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->salary_increas : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->salary_increas : ($permission->is_view_salary_staff == "1" ?  $item->salary_increas : '0.00')
                                                         }}</a></td>
                                                         <td>$<a href="#">{{
-                                                            Auth::user()->id == $item->id ? $item->phone_allowance : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->phone_allowance : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->phone_allowance : ($permission->is_view_salary_staff == "1" ?  $item->phone_allowance : '0.00')
                                                         }}</a></td>
                                                     @endif
                                                     <td>{{$item->joinOfDate}}</td>
@@ -520,7 +520,7 @@
                                                     <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='2')
-                                                                @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                                @if ($permission->is_update == "1")
                                                                     <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                         <i class="fa fa-dot-circle-o text-dark"></i>
                                                                         <span>UDC</span>
@@ -557,17 +557,17 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
+                                                        @if ($permission->is_update == "1" || $permission->is_delete == "1")
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                                    @if ($permission->is_update == "1")
                                                                         <a href="{{url("user/form/edit",$item->id)}}" class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
-                                                                    @if ((Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin') && permissionAccess("m2-s1","is_print")->value == "1")
+                                                                    @if ((Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin') && $permission->is_print == "1")
                                                                         <a class="dropdown-item" href="{{url("/recruitment/candidate-resume/preview",$item->id)}}"><i class="fa fa-regular fa-eye"></i> @lang("lang.preview")</a>
                                                                     @endif
-                                                                    @if (permissionAccess("m2-s1","is_delete")->value == "1")
+                                                                    @if ($permission->is_delete == "1")
                                                                         <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     @endif
                                                                 </div>
@@ -645,7 +645,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.position_type')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">@lang('lang.contact_number')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.role_name')</th>
-                                            @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
+                                            @if ($permission->is_view_salary == "1")
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.basic_salary')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
@@ -655,6 +655,7 @@
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.resign_reason')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">@lang('lang.loan')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">@lang('lang.status')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">@lang('lang.performance_note')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
@@ -689,15 +690,15 @@
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
-                                                    @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
+                                                    @if ($permission->is_view_salary == "1")
                                                         <td>$<a href="#"> {{
-                                                            Auth::user()->id == $item->id ? $item->basic_salary : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->basic_salary : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->basic_salary : ($permission->is_view_salary_staff == "1" ?  $item->basic_salary : '0.00')
                                                         }}</a></td>
                                                         <td>$<a href="#">{{
-                                                            Auth::user()->id == $item->id ? $item->salary_increas : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->salary_increas : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->salary_increas : ($permission->is_view_salary_staff == "1" ?  $item->salary_increas : '0.00')
                                                         }}</a></td>
                                                         <td>$<a href="#">{{
-                                                            Auth::user()->id == $item->id ? $item->phone_allowance : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->phone_allowance : '0.00')
+                                                            Auth::user()->id == $item->id ? $item->phone_allowance : ($permission->is_view_salary_staff == "1" ?  $item->phone_allowance : '0.00')
                                                         }}</a></td>
                                                     @endif
                                                     <td>{{$item->joinOfDate}}</td>
@@ -736,7 +737,7 @@
                                                     <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='3')
-                                                                @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                                @if ($permission->is_update == "1")
                                                                     <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                         <i class="fa fa-dot-circle-o text-dark"></i>
                                                                         <span>Resignation</span>
@@ -798,8 +799,9 @@
                                                             </div>
                                                         </div>
                                                     </td>
+                                                    <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{$item->performanceNote ? $item->performanceNote->name_english : ""}}</span></td>
                                                     <td class="text-end">
-                                                        @if (permissionAccess("m2-s1","is_delete")->value == "1")
+                                                        @if ($permission->is_delete == "1")
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
@@ -904,12 +906,12 @@
                         $(".pr_join_day").text(join_day);
                         $(".pr_join_month").text(join_month);
                         $(".pr_join_year").text(join_year);
-                        $("#pr_end_day").text(end_day);
-                        $("#pr_end_month").text(end_month);
-                        $("#pr_end_year").text(end_year);
-                        $("#pr_position").text(data.position.name_khmer);
-                        $("#pr_branch").text(data.branch.branch_name_kh);
-                        $("#pr_employee_id").text(data.number_employee);
+                        $(".pr_end_day").text(end_day);
+                        $(".pr_end_month").text(end_month);
+                        $(".pr_end_year").text(end_year);
+                        $(".pr_position").text(data.position.name_khmer);
+                        $(".pr_branch").text(data.branch.branch_name_kh);
+                        $(".pr_employee_id").text(data.number_employee);
                         $("#pr_basic_salary").text(data.basic_salary);
                         $("#pr_salary_increase").text(data.salary_increas);
                         if (data.position.position_type == "Field Staff") {
@@ -943,10 +945,11 @@
         });
     });
     function showDatabytab(tab, filter){
-        let is_update = "{{ Helper::permissionAccess('m2-s1','is_update') }}";
-        let is_delete = "{{ Helper::permissionAccess('m2-s1','is_delete') }}";
-        let is_view_salary = "{{ Helper::permissionAccess('m2-s1','is_view_salary') }}";
-        let is_view_salary_staff = "{{ Helper::permissionAccess('m2-s1','is_view_salary_staff') }}";
+        const permissions = @json($permission);
+        let is_update = permissions.is_update;
+        let is_delete = permissions.is_delete
+        let is_view_salary = permissions.is_view_salary
+        let is_view_salary_staff = permissions.is_view_salary_staff
         var localeLanguage = '{{ config('app.locale') }}';
         let data = {
             "_token": "{{ csrf_token() }}",
@@ -1008,7 +1011,7 @@
                         let emp_status = "";
                         let status_color = "";
                         let td = "";
-                       
+                        let td_performance_note = "";
                         let resign_status_td ='<td>'+(emp.resign_status ? emp.resign_status.name_english : emp.resign_reason)+'</td>';
                         all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
                                 '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-Salary-Increase="'+(emp.salary_increas)+'" data-id="1" href="#">'+
@@ -1140,6 +1143,7 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '4'){
                             emp_status = "Termination";
                             status_color = "text-danger";
@@ -1167,6 +1171,7 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '5'){
                             emp_status = "Death";
                             status_color = "text-danger";
@@ -1194,6 +1199,7 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '6'){
                             emp_status = "Retired";
                             status_color = "text-danger";
@@ -1222,10 +1228,12 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '7'){
                             emp_status = "Lay off";
                             status_color = "text-danger";
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '8'){
                             emp_status = "Suspension";
                             status_color = "text-danger";
@@ -1253,6 +1261,7 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == '9'){
                             emp_status = "Fall Probation";
                             status_color = "text-danger";
@@ -1280,6 +1289,7 @@
                                 '</a>'+
                             '</div>';
                             PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
+                            td_performance_note ='<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp.performance_note ? emp.performance_note.name_english : "")+'</span></td>';
                         }else if(emp.emp_status == 'Cancel'){
                             emp_status = "Cancel";
                             status_color = "text-danger";
@@ -1331,8 +1341,6 @@
                         let salary_increas = "";
                         let phone_allowance = "";
 
-                        // Auth::user()->id == $item->id ? $item->basic_salary : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->basic_salary : '0.00')
-                        
                         if (is_view_salary == 1) {
                             if ($("#user-id-login").val() == emp.id) {
                                 basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
@@ -1349,10 +1357,6 @@
                                     phone_allowance = '<td>$ <a href="#">0.00</a></td>';
                                 }
                             }
-                           
-                            // basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
-                            // salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas == null ? '0.00' : emp.salary_increas)+'</a></td>';
-                            // phone_allowance = '<td>$ <a href="#">'+(emp.phone_allowance == null ? '0.00' : emp.phone_allowance)+'</a></td>';
                         }
                         tr +='<tr class="odd">'+
                                 '<td class="ids stuck-scroll-4">'+(index)+'</td>'+
@@ -1388,6 +1392,7 @@
                                 '<td>'+
                                     (empStatus)+
                                 '</td>'+
+                                (td_performance_note)+
                                 '<td class="text-end">'+
                                     (dropdown_action)+
                                 '</td>'+

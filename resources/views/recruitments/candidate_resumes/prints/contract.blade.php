@@ -705,6 +705,60 @@
             </div>
         </div><br>
         <div style="display: flex">
+            <div style="
+                    position: absolute;
+                    left: 50;
+                    /* transform: translateY(-50%); */
+                    width: 4.8cm; 
+                    height: 2.6cm; 
+                    box-sizing: border-box; 
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 5px; 
+                    text-align: center;
+                    background-color: #fafafa;
+                    flex-shrink: 0;
+                ">
+                <span style="
+                    font-family: Khmer OS Battambang, serif;
+                    font-size: 12pt; 
+                    line-height: 1.3;">
+                    និយោជិត
+                    <br><br><br><br><br>
+                    <span>ឈ្មោះ៖...<span class="pr_name"></span>...</span>
+                </span>
+            </div>
+            <div class="payslip-title-center" >
+            <div style="
+                    position: absolute;
+                    right: 0;
+                    /* transform: translateY(-50%); */
+                    width: 10cm; 
+                    height: 2.6cm; 
+                    box-sizing: border-box; 
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 5px; 
+                    text-align: center;
+                    background-color: #fafafa;
+                    flex-shrink: 0;
+                ">
+                <span style="
+                    font-family: Khmer OS Battambang, serif;
+                    font-size: 12pt; 
+                    line-height: 1.3;">
+                    និយោជក/នាយក នាយកដ្ឋានធនធានមនុស្ស និងរដ្ឋបាល
+                    <br><br><br><br><br>
+                    <span>ឈ្មោះ៖....................................</span>
+                </span>
+            </div>
+            </div>
+        </div>
+
+
+        {{-- <div style="display: flex">
             <div class="payslip-title-center" style="margin-left: 5%">
                 <label class="label-subs" style="margin-left: 25"><strong>និយោជិត</strong></label><br><br><br><br><br>
                 <label>ឈ្មោះ៖... <span class="set-font pr_name" style="font-size: 14px !important"></span> .....</label>
@@ -713,7 +767,7 @@
                 <label class="label-subs"><strong>និយោជក/នាយក នាយកដ្ឋានធនធានមនុស្ស និងរដ្ឋបាល</strong></label><br><br><br><br><br>
                 <label style="float: right">ឈ្មោះ៖....................................</label>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>
 

@@ -43,81 +43,74 @@ class LeavesAdminController extends Controller
      */
     public function index(Request $request)
     {
-        if (permissionAccess("m10-s1","is_view")->value != "1") {
+        $permission = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where("url", "leaves/admin")
+            ->first();
+        if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
         $location = Branchs::get();
         $department = Department::get();
-        $LeaveAllocation = $this->dataRequests->getLeaveAllocation($request);
-        $dataLeaveRequest = LeaveRequest::with(["employee", "handover", "createdBy", "leaveType","LeaveAllocation"])->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"])
-            ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
-            ->select(
-                'leave_requests.*',
-                'users.line_manager',
-                'users.department_id',
-                'users.branch_id',
-            )
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if(in_array($RolePermission, ['BOD', 'CEO','HOD', 'DHOD', 'BM', 'DBM'])){
-                    $query->where("leave_requests.next_approver", Auth::user()->id);
-                }else if ($RolePermission == 'HR') {
-                    if(permissionAccess("m10-s1","is_access")->value == "1"){
-                        $query->whereNot("leave_requests.status", "approved");
-                    }else{
-                        $query->where("leave_requests.next_approver", Auth::user()->id);
-                    }
-                }else if(in_array($RolePermission, ['HRAdmin', 'admin','developer'])){
-                    $query->whereNot("leave_requests.status", "approved");
-                }else if($RolePermission == 'Employee'){
-                    if(permissionAccess("m10-s1","is_access")->value == "1"){
-                        $query->where("users.department_id", Auth::user()->department_id);
-                        $query->where("users.branch_id", Auth::user()->branch_id);
-                        $query->whereNot("leave_requests.status", "approved");
-                    }else{
-                        $query->where("leave_requests.next_approver", Auth::user()->id);
-                    }
-                }
-                
-            })->orderBy('id', 'DESC')->get();
-        $sumByEmployee = $this->dataRequests->getLeaveReports($request);
-        $requestCancels = LeaveRequest::with("employee")->with("handover")
-            ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
-            ->select(
-                'leave_requests.*',
-                'users.line_manager',
-                'users.department_id',
-                'users.branch_id',
-            )
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if(in_array($RolePermission, ['BOD', 'CEO','HOD', 'DHOD', 'BM', 'DBM'])){
-                    $query->where("leave_requests.status", "pending_cancel");
-                    $query->where("leave_requests.next_approver", Auth::user()->id);
-                }else if ($RolePermission == 'HR') {
-                    if(permissionAccess("m10-s1","is_access")->value == "1"){
-                        $query->whereIn("leave_requests.status", ["cancel_hod","cancel","pending_cancel"]);
-                    }else{
-                        $query->where("leave_requests.status", "pending_cancel");
-                        $query->where("leave_requests.next_approver", Auth::user()->id);
-                    }
-                }else if(in_array($RolePermission, ['HRAdmin', 'admin','developer'])){
-                    $query->whereIn("leave_requests.status", ["cancel_hod","cancel","pending_cancel"]);
-                }else if($RolePermission == 'Employee'){
-                    if(permissionAccess("m10-s1","is_access")->value == "1"){
-                        $query->where("users.department_id", Auth::user()->department_id);
-                        $query->where("users.branch_id", Auth::user()->branch_id);
-                        $query->whereIn("leave_requests.status", ["cancel_hod","cancel","pending_cancel"]);
-                    }else{
-                        $query->where("leave_requests.status", "pending_cancel");
-                        $query->where("leave_requests.next_approver", Auth::user()->id);
-                    }
-                }
-            })->orderBy('id', 'DESC')->get();
-        return view('leaves_admin.index', compact('location', 'department', 'LeaveAllocation', 'dataLeaveRequest', 'requestCancels', 'sumByEmployee'));
+        return view('leaves_admin.index', compact('permission','location', 'department'));
     }
 
     public function detail(Request $request) {
-        $leave_requests = LeaveRequest::with("leaveType")->with("employee")->with("approvedby")->where("employee_id", $request->employee_id)->get();
-        return view('leaves_admin.leave_detail', compact('leave_requests'));
+        if ($request->ajax()) {
+            $query = LeaveRequest::with(["leaveType","employee","handover","approvedby","createdBy"])
+            ->where("employee_id", $request->employee_id)
+            ->when($request->start_date, function ($q, $start_date) {
+                $q->where('leave_requests.start_date', '>=', $start_date);
+            })
+            ->when($request->end_date, function ($q, $end_date) {
+                $q->where('leave_requests.end_date', '<=', $end_date);
+            });
+            $searchValue = $request->input('search.value');
+
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('leave_requests.id', 'like', "%{$searchValue}%")
+                    ->orWhere('leave_requests.start_date', 'like', "%{$searchValue}%")
+                    ->orWhere('leave_requests.end_date', 'like', "%{$searchValue}%");
+
+                    $q->orWhereHas('employee', function ($q2) use ($searchValue) {
+                        $q2->where('number_employee', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_kh', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_en', 'like', "%{$searchValue}%");
+                    });
+
+                    $q->orWhereHas('handover', function ($q2) use ($searchValue) {
+                        $q2->where('employee_name_en', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_kh', 'like', "%{$searchValue}%");
+                    });
+                    $q->orWhereHas('leaveType', function ($q2) use ($searchValue) {
+                        $q2->where('name', 'like', "%{$searchValue}%");
+                    });
+                });
+            }
+
+            // Total count matching status filters
+            $recordsTotal = (clone $query)->count();
+            $recordsFiltered = $query->count();
+
+            // Pagination
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+
+            if ($limit == -1) {
+                $data = $query->orderBy('leave_requests.id', 'DESC')->get();
+            } else {
+                $data = $query->orderBy('leave_requests.id', 'DESC')->offset($start)->limit($limit)->get();
+            }
+
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
+        return view('leaves_admin.leave_detail');
     }
 
     public function employees() {
@@ -131,73 +124,6 @@ class LeavesAdminController extends Controller
         return response()->json([
             'employees' => $employees
         ]);
-    }
-
-    public function filter(Request $request)
-    {
-        if ($request->condiction_tab == 3) {
-            $LeaveAllocation = $this->dataRequests->getLeaveAllocation($request);
-            return response()->json([
-                'LeaveAllocations'=>$LeaveAllocation,
-            ]);
-        }elseif($request->condiction_tab == 4){
-            $sumByEmployee = $this->dataRequests->getLeaveReports($request);
-            return response()->json([
-                'success'=>$sumByEmployee,
-            ]);
-        }else{
-            $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")->with("handover")->with("createdBy")->with("approve")
-            ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
-            ->select(
-                'leave_requests.*',
-                'users.number_employee',
-                'users.employee_name_en',
-                'users.employee_name_kh',
-                'users.profile',
-            )
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if(in_array($RolePermission, ['BOD', 'CEO','HOD', 'DHOD', 'BM', 'DBM', 'Employee'])){
-                    $query->where("leave_requests.next_approver", Auth::user()->id);
-                }else if(in_array($RolePermission, ['HR', 'HRAdmin'])){
-                    if ($RolePermission == "HR") {
-                        if(permissionAccess("m10-s1","is_access")->value == "1"){
-                            $query->whereNot("leave_requests.status", "approved");
-                        }else{
-                            $query->where("leave_requests.next_approver", Auth::user()->id);
-                        }
-                    }else{
-                        $query->whereNot("leave_requests.status", "approved");
-                    }
-                }
-            })
-            ->when($request->condiction_tab, function ($query, $condiction_tab) {
-                if ($condiction_tab == 1) {
-                    $query->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"]);
-                }else{
-                    if (Auth::user()->RolePermission == 'HR' && permissionAccess("m10-s1","is_access")->value == "1") {
-                        $query->whereIn('leave_requests.status', ["cancel_hod", "cancel", "pending_cancel"]);
-                    }else if(in_array(Auth::user()->RolePermission, ['HRAdmin','admin','developer'])){
-                        $query->whereIn('leave_requests.status', ["cancel_hod", "cancel", "pending_cancel"]);
-                    }else{
-                        $query->where('leave_requests.status', "pending_cancel");
-                        $query->where("leave_requests.next_approver", Auth::user()->id);
-                    }
-                }
-            })
-            ->when($request->employee_id, function ($query, $employee_id) {
-                $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
-            })
-            ->when($request->employee_name, function ($query, $employee_name) {
-                $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-            })->orderBy('id', 'DESC')->get();
-            foreach ($dataLeaveRequest as $leaveRequest) {
-                $leaveRequest->delegated_employee = $leaveRequest->getDelegatedAttribute();
-            }
-            return response()->json([
-                'success'=>$dataLeaveRequest,
-            ]);
-        }
-        
     }
 
     public function generate(Request $request){
@@ -566,7 +492,7 @@ class LeavesAdminController extends Controller
         if ($request->ajax()) {
 
             $query = LeaveRequest::with(["employee", "handover", "createdBy", "leaveType","LeaveAllocation"])
-            ->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"])
+            // ->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"])
             ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
             ->select(
                 'leave_requests.*',
@@ -576,16 +502,21 @@ class LeavesAdminController extends Controller
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if(in_array($RolePermission, ['BOD', 'CEO','HOD', 'DHOD', 'BM', 'DBM'])){
+                    $query->whereIn("leave_requests.status", ["pending"]);
                     $query->where("leave_requests.next_approver", Auth::user()->id);
+                    
                 }else if ($RolePermission == 'HR') {
                     if(permissionAccess("m10-s1","is_access")->value == "1"){
                         $query->whereNot("leave_requests.status", "approved");
                     }else{
                         $query->where("leave_requests.next_approver", Auth::user()->id);
                     }
-                }else if(in_array($RolePermission, ['HRAdmin', 'admin','developer'])){
-                    $query->whereNot("leave_requests.status", "approved");
-                }else if($RolePermission == 'Employee'){
+                }
+                else if(in_array($RolePermission, ['HRAdmin', 'admin','developer'])){
+                    $query->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"]);
+                    // $query->whereNot("leave_requests.status", "approved");
+                }
+                else if($RolePermission == 'Employee'){
                     if(permissionAccess("m10-s1","is_access")->value == "1"){
                         $query->where("users.department_id", Auth::user()->department_id);
                         $query->where("users.branch_id", Auth::user()->branch_id);
@@ -632,9 +563,7 @@ class LeavesAdminController extends Controller
                     });
                 });
             }
-
-            // Counts
-            $recordsTotal = LeaveRequest::whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"])->count();
+            $recordsTotal = (clone $query)->count();
             $recordsFiltered = $query->count();
 
             // Pagination
@@ -656,7 +585,199 @@ class LeavesAdminController extends Controller
             ]);
         }
     }
+    public function showCancel(Request $request){
+        if ($request->ajax()) {
 
+            // 1. Eager load ALL relations required by the frontend
+            $query = LeaveRequest::with(["employee", "handover", "leaveType", "createdBy"])
+                ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
+                ->select(
+                    'leave_requests.*',
+                    'users.line_manager',
+                    'users.department_id',
+                    'users.branch_id'
+                )
+                ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                    if(in_array($RolePermission, ['BOD', 'CEO','HOD', 'DHOD', 'BM', 'DBM'])){
+                        $query->where("leave_requests.status", "pending_cancel");
+                        $query->where("leave_requests.next_approver", Auth::user()->id);
+                    } else if ($RolePermission == 'HR') {
+                        if(permissionAccess("m10-s1","is_access")->value == "1"){
+                            $query->whereIn("leave_requests.status", ["cancel_hod","cancel","pending_cancel"]);
+                        } else {
+                            $query->where("leave_requests.status", "pending_cancel");
+                            $query->where("leave_requests.next_approver", Auth::user()->id);
+                        }
+                    } else if(in_array($RolePermission, ['HRAdmin', 'admin','developer'])){
+                        $query->whereIn("leave_requests.status", ["cancel_hod","cancel","pending_cancel"]);
+                    } else if($RolePermission == 'Employee'){
+                        if(permissionAccess("m10-s1","is_access")->value == "1"){
+                            $query->where("users.department_id", Auth::user()->department_id);
+                            $query->where("users.branch_id", Auth::user()->branch_id);
+                            $query->whereIn("leave_requests.status", ["cancel_hod","cancel","pending_cancel"]);
+                        } else {
+                            $query->where("leave_requests.status", "pending_cancel");
+                            $query->where("leave_requests.next_approver", Auth::user()->id);
+                        }
+                    }
+                });
+
+            $searchValue = $request->input('search.value');
+
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('leave_requests.id', 'like', "%{$searchValue}%")
+                    ->orWhere('leave_requests.start_date', 'like', "%{$searchValue}%")
+                    ->orWhere('leave_requests.end_date', 'like', "%{$searchValue}%");
+
+                    $q->orWhereHas('employee', function ($q2) use ($searchValue) {
+                        $q2->where('number_employee', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_kh', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_en', 'like', "%{$searchValue}%");
+                    });
+
+                    $q->orWhereHas('handover', function ($q2) use ($searchValue) {
+                        $q2->where('employee_name_en', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_kh', 'like', "%{$searchValue}%");
+                    });
+
+                    $q->orWhereHas('createdBy', function ($q2) use ($searchValue) {
+                        $q2->where('employee_name_en', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_kh', 'like', "%{$searchValue}%");
+                    });
+
+                    $q->orWhereHas('leaveType', function ($q2) use ($searchValue) {
+                        $q2->where('name', 'like', "%{$searchValue}%");
+                    });
+                });
+            }
+
+            // Total count matching status filters
+            $recordsTotal = (clone $query)->count();
+            $recordsFiltered = $query->count();
+
+            // Pagination
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+
+            if ($limit == -1) {
+                $data = $query->orderBy('leave_requests.id', 'DESC')->get();
+            } else {
+                $data = $query->orderBy('leave_requests.id', 'DESC')->offset($start)->limit($limit)->get();
+            }
+
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
+    }
+    public function showRecord(Request $request)
+    {
+        if ($request->ajax()) {
+
+            // 1. Get base query with joins and role permission scope applied
+            $baseQuery = $this->dataRequests->getLeaveAllocationQuery($request);
+
+            // 2. Total records matching the user's role permissions (before search/filters)
+            $recordsTotal = (clone $baseQuery)->count();
+
+            // 3. Apply custom request filters (employee_id, employee_name, department, branch)
+            $query = $baseQuery->when($request->employee_id, function ($q, $employee_id) {
+                $q->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+            })
+            ->when($request->employee_name, function ($q, $employee_name) {
+                $q->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            })
+            ->when($request->department_id, function ($q, $department) {
+                $q->where('users.department_id', $department);
+            })
+            ->when($request->branch_id, function ($q, $branch) {
+                $q->where('users.branch_id', $branch);
+            });
+
+            // 4. Apply DataTables Global Search Box
+            $searchValue = $request->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('users.number_employee', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
+                    ->orWhere('leave_allocations.id', 'like', "%{$searchValue}%");
+                });
+            }
+
+            // 5. Total records after search and filters are applied
+            $recordsFiltered = $query->count();
+
+            // 6. Data Fetching & Pagination
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+
+            if ($limit == -1) {
+                $data = $query->orderBy('users.number_employee', 'asc')->get();
+            } else {
+                $data = $query->orderBy('users.number_employee', 'asc')
+                            ->offset($start)
+                            ->limit($limit)
+                            ->get();
+            }
+
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
+    }
+    public function showReport(Request $request)
+    {
+        if ($request->ajax()) {
+
+            // Get base query with roles applied
+            $baseQuery = $this->dataRequests->getStaffReports($request);
+
+            // Calculate total count before global search
+            $recordsTotal = DB::table(DB::raw("({$baseQuery->toSql()}) as sub"))
+                ->mergeBindings($baseQuery->getQuery())
+                ->count();
+
+            // Handle DataTables search
+            $searchValue = $request->input('search.value');
+            if (!empty($searchValue)) {
+                $baseQuery->whereHas('employee', function ($q) use ($searchValue) {
+                    $q->where('number_employee', 'like', "%{$searchValue}%")
+                    ->orWhere('employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('employee_name_kh', 'like', "%{$searchValue}%");
+                });
+            }
+
+            // Count after search filters
+            $recordsFiltered = DB::table(DB::raw("({$baseQuery->toSql()}) as sub"))
+                ->mergeBindings($baseQuery->getQuery())
+                ->count();
+
+            // Pagination
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+
+            if ($limit == -1) {
+                $data = $baseQuery->get();
+            } else {
+                $data = $baseQuery->offset($start)->limit($limit)->get();
+            }
+
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
+    }
     /**
      * Show the form for editing the specified resource.
      *

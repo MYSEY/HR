@@ -17,16 +17,16 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    {{-- @if (permissionAccess("m11-s4","is_create")->value == "1")
+                    {{-- @if ($permission->is_create == "1")
                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_trainer"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif --}}
-                    @if (permissionAccess("m11-s4","is_import")->value == "1")
+                    @if ($permission->is_import == "1")
                         <a href="#" class="btn add-btn me-2" data-toggle="modal" id="importVillage"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("m11-s4","is_view")->value == "1")
+        @if ($permission->is_view == "1")
             {!! Toastr::message() !!}
             <div class="content">
                 <div class="row">
@@ -35,72 +35,33 @@
                             <div id="" class=" dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-striped custom-table mb-0 no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <table class="table table-striped custom-table mb-0 tbl-village">
                                             <thead>
                                                 <tr>
-                                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending" style="width: 772.237px;">@lang('lang.code')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.phum_name_km')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (KH): activate to sort column ascending" style="width: 772.237px;">@lang('lang.phum_name_latin')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (EN): activate to sort column ascending" style="width: 772.237px;">@lang('lang.phum_name_en')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Phone Numer: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name_kh')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name_latin')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name_en')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 772.237px;">@lang('lang.full_name_km')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.full_name_latin')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.full_name_en')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.commune')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.districts')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.province')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.address_km')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.address_latin')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.address_en')</th>
-                                                    <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
+                                                    <th style="width: 30px;">#</th>
+                                                    <th>@lang('lang.code')</th>
+                                                    <th>@lang('lang.phum_name_km')</th>
+                                                    <th>@lang('lang.phum_name_latin')</th>
+                                                    <th>@lang('lang.phum_name_en')</th>
+                                                    <th>@lang('lang.name_km')</th>
+                                                    <th>@lang('lang.name_latin')</th>
+                                                    <th>@lang('lang.name_en')</th>
+                                                    <th>@lang('lang.full_name_km')</th>
+                                                    <th>@lang('lang.full_name_latin')</th>
+                                                    <th>@lang('lang.full_name_en')</th>
+                                                    <th>@lang('lang.commune')</th>
+                                                    <th>@lang('lang.districts')</th>
+                                                    <th>@lang('lang.province')</th>
+                                                    <th>@lang('lang.address_km')</th>
+                                                    <th>@lang('lang.address_latin')</th>
+                                                    <th>@lang('lang.address_en')</th>
+                                                    <th class="text-end">@lang('lang.action')</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if (count($data)>0)
-                                                    @foreach ($data as $key=>$item)
-                                                        <tr class="odd">
-                                                            <td class="sorting_1">{{++$key}}</td>
-                                                            <td>{{$item->code}}</td>
-                                                            <td>{{$item->phum_name_km}}</td>
-                                                            <td>{{$item->phum_name_latin}}</td>
-                                                            <td>{{$item->phum_name_en}}</td>
-                                                            <td>{{$item->name_km}}</td>
-                                                            <td>{{$item->name_latin}}</td>
-                                                            <td>{{$item->name_en}}</td>
-                                                            <td>{{$item->full_name_km}}</td>
-                                                            <td>{{$item->full_name_latin}}</td>
-                                                            <td>{{$item->full_name_en}}</td>
-                                                            <td>{{$item->conmmune_name}}</td>
-                                                            <td>{{$item->districts_name_en}}</td>
-                                                            <td>{{$item->province_name_en}}</td>
-                                                            <td>{{$item->address_km}}</td>
-                                                            <td>{{$item->address_latin}}</td>
-                                                            <td>{{$item->address_en}}</td>
-                                                            <td class="text-end">
-                                                                @if (permissionAccess("m11-s4","is_update")->value == "1" || permissionAccess("m11-s4","is_delete")->value == "1")
-                                                                    <div class="dropdown dropdown-action">
-                                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                                            @if (permissionAccess("m11-s4","is_update")->value == "1")
-                                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                            @endif
-                                                                            @if (permissionAccess("m11-s4","is_delete")->value == "1")
-                                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                                            @endif
-                                                                        </div>
-                                                                    </div>
-                                                                @endif
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endif
+                                                <!-- Data populated dynamically via ServerSide AJAX -->
                                             </tbody>
                                         </table>
-                                        <br>
-                                        {!! $data->withQueryString()->links('pagination::bootstrap-5') !!}
                                     </div>
                                 </div>
                             </div>
@@ -116,10 +77,51 @@
 
 <script>
     $(function(){
+        $(document).ready(function() {
+            datashow();
+        });
         $("#importVillage").on("click", function() {
             $(".thanLess").hide();
             $("#thanLess").text("");
             $('#importVillageModal').modal('show');
         });
     });
+    function datashow() {
+        let table = $('.tbl-village').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            searching: true,
+            pageLength: 10,
+            order: [[0, 'desc']],
+            lengthMenu: [
+                [10, 25, 50, 100],
+                [10, 25, 50, 100]
+            ],
+            ajax: {
+                url: "{{ url('address/village') }}",
+                type: "POST", // ប្តូរទៅប្រើ POST
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // បន្ថែម CSRF Token
+                },
+                error: function(xhr, error, code) {
+                    console.log(xhr.responseText);
+                }
+            },
+            columnDefs: [
+                { orderable: false, targets: -1 }
+            ]
+        });
+
+        let searchTimer;
+        $('.dataTables_filter input')
+            .off('keyup search input')
+            .on('keyup', function() {
+                clearTimeout(searchTimer);
+                let searchVal = this.value;
+                searchTimer = setTimeout(function() {
+                    table.search(searchVal).draw();
+                }, 500);
+            });
+    }
 </script>

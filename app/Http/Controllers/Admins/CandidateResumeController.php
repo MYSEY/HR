@@ -1055,7 +1055,7 @@ class CandidateResumeController extends Controller
         ->select(
             'users.*',
             'roles.role_type',
-        )->whereNotIn('roles.role_type',['Employee','admin','developer'])->get();
+        )->whereNotIn('roles.role_type',['Employee','admin','developer'])->get()->makeHidden(['salary', 'basic_salary', 'salary_increas', 'phone_allowance','pre_salary']);
         return view('recruitments.candidate_resumes.edit_candidate',compact(
             'dataUpcomings',
             'role',

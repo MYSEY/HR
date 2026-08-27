@@ -398,6 +398,7 @@
                 fdc_date = new Date(fdc_date);
 
                 var start_fdc_date = new Date(data.fdc_date);
+                var contract_date = new Date(data.recruitment.contract_date);
                 start_fdc_date.setDate(start_fdc_date.getDate());
                 start_fdc_date = new Date(start_fdc_date);
                 var fdc_end = new Date(data.fdc_end);
@@ -422,6 +423,14 @@
                 let end_day = formatDate(fdc_date, 'km', format_date={day: true});
                 let end_month = formatDate(fdc_date, 'km', format_date={month: true});
                 let end_year = formatDate(fdc_date, 'km', format_date={year: true}); 
+
+                let pr_contract_day = formatDate(contract_date, 'km', format_date={day: true});
+                let pr_contract_month = formatDate(contract_date, 'km', format_date={month: true});
+                let pr_contract_year = formatDate(contract_date, 'km', format_date={year: true}); 
+
+                $(".pr_contract_day").text(pr_contract_day);
+                $(".pr_contract_month").text(pr_contract_month);
+                $(".pr_contract_year").text(pr_contract_year);
                 
                 if (data) {
                     $("#pr_status_single").text(" ");
@@ -450,6 +459,7 @@
                     $(".pr_position").text(data.position.name_khmer);
                     $(".level").text(data.level);
                     $(".line_manager").text(data.line_manager != null ? data.line_manager.employee_name_kh : "");
+                    $(".pr_line_manager_position").text(data.line_manager != null ? data.line_manager.position.name_khmer:"");
                     $(".pr_name").text(data.employee_name_kh +" ");
                     $(".pr_name_en").text(data.employee_name_en +" ");
                     $(".pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
@@ -503,9 +513,9 @@
                     $(".pr_basic_salary").text(data.basic_salary);
                     $(".pr_salary_increase").text(data.salary_increas);
                     if (data.recruitment && data.recruitment.pro_rate == "1") {
-                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនឹងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
+                        $(".pr_supporting_or_field_staff").text("ដោយធៀបនឹងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
                     }else{
-                        $("#pr_supporting_or_field_staff").text("");
+                        $(".pr_supporting_or_field_staff").text("");
                     }
                     if (data.recruitment && data.recruitment.condition_other == "1") {
                         $(".Responsible-Lending").css("display","block");

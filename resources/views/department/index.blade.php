@@ -16,14 +16,14 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("m9-s4","is_create")->value == "1")
+                    @if ($permission->is_create == "1")
                         {{-- <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_department_sub"><i class="fa fa-plus"></i> @lang('lang.add_new_sub')</a> --}}
                         <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_department"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                      @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("m9-s4","is_view")->value == "1")
+        @if ($permission->is_view == "1")
             {!! Toastr::message() !!}
             <div class="row">
                 <div class="col-md-12">
@@ -58,14 +58,14 @@
                                                         <td> {{$item->headDepartment ? $item->headDepartment->employee_name_en : ""}}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                         <td class="text-end">
-                                                            @if (permissionAccess("m9-s4","is_update")->value == "1" || permissionAccess("m9-s4","is_delete")->value == "1")
+                                                            @if ($permission->is_update == "1" || $permission->is_delete == "1")
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if(permissionAccess("m9-s4","is_update")->value == "1")
+                                                                    @if($permission->is_update == "1")
                                                                     <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-department="{{$item->direct_manager_id}}" data-target="#edit_department"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
-                                                                    @if(permissionAccess("m9-s4","is_delete")->value == "1")
+                                                                    @if($permission->is_delete == "1")
                                                                     <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_department"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     @endif
                                                                 </div>
@@ -83,14 +83,14 @@
                                                                 <td> {{$sub->headDepartment ? $sub->headDepartment->employee_name_en : ""}}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($sub->created_at)->format('d-M-Y') ?? '' }}</td>
                                                                 <td class="text-end">
-                                                                    @if (permissionAccess("m9-s4","is_update")->value == "1" || permissionAccess("m9-s4","is_delete")->value == "1")
+                                                                    @if ($permission->is_update == "1" || $permission->is_delete == "1")
                                                                     <div class="dropdown dropdown-action">
                                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                                            @if(permissionAccess("m9-s4","is_update")->value == "1")
+                                                                            @if($permission->is_update == "1")
                                                                                 <a class="dropdown-item update" data-toggle="modal" data-parent={{$sub->parent_id}} data-department="{{$sub->direct_manager_id}}" data-id="{{$sub->id}}" data-target="#edit_department"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                             @endif
-                                                                            @if(permissionAccess("m9-s4","is_delete")->value == "1")
+                                                                            @if($permission->is_delete == "1")
                                                                                 <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$sub->id}}" data-target="#delete_department"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                             @endif
                                                                         </div>

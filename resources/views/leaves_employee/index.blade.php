@@ -71,6 +71,12 @@
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
     }
+    .tooltip-inner {
+        white-space: pre-line !important;
+        text-align: left !important;
+        max-width: 300px !important; 
+        /* word-wrap: break-word !important; */
+    }
 </style>
 @section('content')
     <div class="">
@@ -192,82 +198,41 @@
                                     </thead>
                                     <tbody>
                                         @if (count($dataLeaveRequest) > 0)
-                                            @php
-                                                // បង្កើត Array សម្រាប់ទុកការបូកសរុបដាច់ដោយឡែកតាមឆ្នាំ
-                                                $totalsByYear = [];
-                                            @endphp
                                             @foreach ($dataLeaveRequest as $key => $request)
                                                 @php
-                                                    // ១. ទាញយកឆ្នាំពី start_date
-                                                    $requestYear = \Carbon\Carbon::parse($request->start_date)->format('Y');
-
-                                                    // ២. បង្កើត structure បូកសរុបសម្រាប់ឆ្នាំថ្មី (បើមិនទាន់មាន)
-                                                    if (!isset($totalsByYear[$requestYear])) {
-                                                        $totalsByYear[$requestYear] = [
-                                                            'annual' => 0, 'sick' => 0, 'special' => 0, 'unpaid' => 0, 'long_sick' => 0
-                                                        ];
-                                                    }
-
-                                                    // ៣. ឆែក Status (មិនបូកបញ្ចូលករណី rejected ឬ cancel)
-                                                    $isApproved = !in_array($request->status, ['rejected', 'rejected_lm', 'rejected_hod', 'cancel_hod', 'cancel']);
-                                                    
-                                                    if ($isApproved) {
-                                                        if ($request->leaveType->type == "annual_leave") {
-                                                            $totalsByYear[$requestYear]['annual'] += $request->number_of_day;
-                                                        } else if ($request->leaveType->type == "sick_leave") {
-                                                            $totalsByYear[$requestYear]['sick'] += $request->number_of_day;
-                                                        } else if ($request->leaveType->type == "special_leave") {
-                                                            $totalsByYear[$requestYear]['special'] += $request->number_of_day;
-                                                        } else if ($request->leaveType->type == "unpaid_leave") {
-                                                            $totalsByYear[$requestYear]['unpaid'] += $request->number_of_day;
-                                                        } else if ($request->leaveType->type == "long_sick_leave") {
-                                                            $totalsByYear[$requestYear]['long_sick'] += $request->number_of_day;
-                                                        }
-                                                    }
-
-                                                    // ៤. ទាញយកតម្លៃដើម (Initial Balance) ដោយប្រើ Column 'default_...'
-                                                    $currentAlloc = $balances[$requestYear][0] ?? null;
+                                                    $leaveType = $request->leaveType->type ?? null;
                                                 @endphp
                                                 <tr class="odd">
-                                                    <td>{{$key+1}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y')}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y')}}</td>
+                                                    <td>{{ $key + 1 }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($request->start_date)->format('d-M-Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($request->end_date)->format('d-M-Y') }}</td>
 
-                                                    <td>{{$request->leaveType->type == "annual_leave" ? $request->number_of_day : 0}}</td>
-                                                    <td>
-                                                        @if($currentAlloc && $request->leaveType->type == "annual_leave")
-                                                            {{ $currentAlloc->default_annual_leave - $totalsByYear[$requestYear]['annual'] }}
-                                                        @else 0 @endif
-                                                    </td>
+                                                    <!-- Annual Leave -->
+                                                    <td>{{ $leaveType == "annual_leave" ? $request->number_of_day : 0 }}</td>
+                                                    <td>{{ $request->calc_annual_bal }}</td>
 
-                                                    <td>{{$request->leaveType->type == "sick_leave" ? $request->number_of_day : 0}}</td>
-                                                    <td>
-                                                        @if($currentAlloc && $request->leaveType->type == "sick_leave")
-                                                            {{ $currentAlloc->default_sick_leave - $totalsByYear[$requestYear]['sick'] }}
-                                                        @else 0 @endif
-                                                    </td>
+                                                    <!-- Sick Leave -->
+                                                    <td>{{ $leaveType == "sick_leave" ? $request->number_of_day : 0 }}</td>
+                                                    <td>{{ $request->calc_sick_bal }}</td>
 
-                                                    <td>{{$request->leaveType->type == "special_leave" ? $request->number_of_day : 0}}</td>
-                                                    <td>
-                                                        @if($currentAlloc && $request->leaveType->type == "special_leave")
-                                                            {{ $currentAlloc->default_special_leave - $totalsByYear[$requestYear]['special'] }}
-                                                        @else 0 @endif
-                                                    </td>
+                                                    <!-- Special Leave -->
+                                                    <td>{{ $leaveType == "special_leave" ? $request->number_of_day : 0 }}</td>
+                                                    <td>{{ $request->calc_special_bal }}</td>
 
-                                                    <td>{{$request->leaveType->type == "unpaid_leave" ? $request->number_of_day : 0}}</td>
-                                                    <td>
-                                                        {{ $currentAlloc ? $currentAlloc->default_unpaid_leave - $totalsByYear[$requestYear]['unpaid'] : 0 }}
-                                                    </td>
+                                                    <!-- Unpaid Leave -->
+                                                    <td>{{ $leaveType == "unpaid_leave" ? $request->number_of_day : 0 }}</td>
+                                                    <td>{{ $request->calc_unpaid_bal }}</td>
 
-                                                    <td>{{$request->leaveType->type == "long_sick_leave" ? $request->number_of_day : 0}}</td>
-                                                    <td>
-                                                        @if($currentAlloc && $request->leaveType->type == "long_sick_leave")
-                                                            {{ $currentAlloc->default_long_sick_leave - $totalsByYear[$requestYear]['long_sick'] }}
-                                                        @else 0 @endif
-                                                    </td>
+                                                    <!-- Long Sick Leave -->
+                                                    <td>{{ $leaveType == "long_sick_leave" ? $request->number_of_day : 0 }}</td>
+                                                    <td>{{ $request->calc_long_sick_bal }}</td>
                                                     
-                                                    <td>{{$request->reason}}</td>
-                                                    <td>{{$request->remark}}</td>
+                                                    <td data-toggle="tooltip" data-html="true" title="{!! $request->reason !!}">
+                                                        {{ Str::limit($request->reason, 30, '...') }}
+                                                    </td>
+                                                    <td>{{ $request->remark }}</td>
+                                                    
+                                                    <!-- Status Column -->
                                                     <td>
                                                         @if ($request->status == "rejected")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
@@ -279,23 +244,19 @@
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by Line Manager</span>
                                                         @elseif ($request->status == "rejected_hod")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by ACEO/Head/BM</span>
-                                                        {{-- @elseif ($request->status == "pending")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by Line Manager</span> --}}
                                                         @elseif ($request->status == "approved_lm" || $request->status == "pending")
                                                             <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by CEO/Head/BM</span>
-                                                        @elseif ($request->status == "approved_hod")
-                                                            {{-- <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span> --}}
-                                                            <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
-                                                        @elseif($request->status == "approved")
+                                                        @elseif ($request->status == "approved_hod" || $request->status == "approved")
                                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @endif
                                                     </td>
-                                                    {{-- @dd(permissionAccess("m10-s2","is_update")) --}}
+
+                                                    <!-- Action Dropdown Column -->
                                                     <td class="text-end">
                                                         @if (permissionAccess("m10-s2","is_update")->value == "1" || permissionAccess("m10-s2","is_delete")->value == "1")
                                                             @if (isset($request->StatusApprve["pending"]) || isset($request->StatusApprve["approved_lm"]))
                                                                 <div class="dropdown dropdown-action">
-                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
                                                                         @if (permissionAccess("m10-s2","is_update")->value == "1")
                                                                             <a class="dropdown-item update" data-toggle="modal" data-id="{{$request->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
@@ -305,30 +266,28 @@
                                                                         @endif
 
                                                                         @if($request->status == "approved_hod")
-                                                                        {{-- @if (permissionAccess("m10-s1","is_cancel")->value == "1") --}}
                                                                             <button class="btn btn-outline-danger btn-sm btn-cancel" 
                                                                                 data-id="{{$request->id}}"
                                                                                 data-condiction="{{Auth::user()->RolePermission}}"
                                                                             >@lang('lang.cancel')</button>
-                                                                        {{-- @endif --}}
                                                                         @endif
                                                                     </div>
                                                                 </div>
                                                             @endif
                                                         @endif
+
                                                         @php
-                                                           $currentDate = \Carbon\Carbon::now();
-                                                           $end = \Carbon\Carbon::parse($request->end_date)->addDays(7);
+                                                        $currentDate = \Carbon\Carbon::now();
+                                                        $end = \Carbon\Carbon::parse($request->end_date)->addDays(7);
                                                         @endphp
                                                         @if ($currentDate->lte($end))
                                                             @if($request->status == "approved_hod" || $request->status == "approved")
                                                                 <div class="dropdown dropdown-action">
-                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
                                                                         <a class="dropdown-item btn-cancel" href="#" data-id="{{$request->id}}">
                                                                             <i class="fa fa-close m-r-5"></i> @lang('lang.cancel')
                                                                         </a>
-                                                                    
                                                                     </div>
                                                                 </div>
                                                             @endif
@@ -382,6 +341,12 @@
 @include('includs.script')
 <script>
     $(function(){
+        // $(document).ready(function () {
+        //     $('[data-toggle="tooltip"]').tooltip({ 
+        //         html: true,
+        //         container: 'tr' 
+        //     });
+        // });
         $('.leaveDelete').on('click',function(){
             let id = $(this).data("id");
             let numberday = $(this).data("numberday");

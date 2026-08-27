@@ -790,6 +790,7 @@ return[
 	"phum_name_latin"=> "Phum Name Latin",
 	"phum_name_en"=> "Phum Name EN",
 	"parking_allowance"=> "Parking Allowance",
+    "performance_note" => "Performance Note",
     "performance_management"=>"Performance Management",
     "performance"=>"KPI Management",
 	"performance_review"=>"Performance Review",

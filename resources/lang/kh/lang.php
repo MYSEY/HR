@@ -757,6 +757,7 @@ return[
 	"phum_name_latin"=> "Phum Name Latin",
 	"phum_name_en"=> "Phum Name EN",
 	"parking_allowance"=> "ប្រាក់ឧបត្ថម្ភកន្លែងចតរថយន្ត",
+	"performance_note" => "Performance Note",
 	"performance_management"=>"ការគ្រប់គ្រងការអនុវត្ត",
 	"performance"=>"KPI Management",
 	"performance_review"=>"Performance Review",

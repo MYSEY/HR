@@ -29,17 +29,17 @@ class TrainingController extends Controller
      */
     public function index(Request $request)
     {
-        if (permissionAccess("m6-s2","is_view")->value != "1") {
+        $permission = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where("url", "training/list")
+            ->first();
+        if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-        // $filteredTrainings = Training::withCount('trainingDetailStaffs')->withCount("trainingDetailTrainer")->orderBy('id', 'DESC');
-        // $dataTrainings = $filteredTrainings->filter(function ($training) {
-        //     return $training->isStaff();
-        // });
         $filteredTrainings = Training::withCount(['trainingDetailStaffs', 'trainingDetailTrainer'])
-        ->whereHas('trainingDetailStaffs', function ($query) {
+        ->whereHas('trainingDetailStaffs', function ($query) use ($permission) {
             $query->leftJoin('users', 'training_detail_staff.employee_id', '=', 'users.id')
-                ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
                     if (in_array($RolePermission, ['HOD', 'BM'])) {
                         $query->where("users.department_id", Auth::user()->department_id)
                             ->where("users.branch_id", Auth::user()->branch_id);
@@ -48,7 +48,7 @@ class TrainingController extends Controller
                             ->orWhere("users.line_manager", Auth::user()->id);
                     } elseif ($RolePermission == "Employee") {
                         $query->where("users.id", Auth::user()->id);
-                    } elseif ($RolePermission == 'HR' && permissionAccess("m6-s2", "is_access")->value != 1) {
+                    } elseif ($RolePermission == 'HR' && $permission->is_access != 1) {
                         $query->where("training_detail_staff.employee_id", Auth::user()->id)
                             ->orWhere("users.line_manager", Auth::user()->id);
                     }
@@ -68,7 +68,7 @@ class TrainingController extends Controller
         $employee = User::whereIn("emp_status", ['Probation','Upcoming','1','10','2'])->get();
 
         
-        return view('training.index', compact('trainer', 'employee', 'dataTrainings'));
+        return view('training.index', compact('permission','trainer', 'employee', 'dataTrainings'));
     }
     public function trainer(){
         $trainer = Trainer::where("status", 1)->with("employee")->get();
@@ -78,10 +78,14 @@ class TrainingController extends Controller
     }
     public function detail(Request $request)
     {
+        $permission = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where("url", "training/list")
+            ->first();
         $training = Training::where("id", $request->id)->first();
         $trainer = TrainingDetailTrainer::where('training_id', $request->id)->with("trainer")->get();
         $employees = TrainingDetailStaff::where("training_id", $request->id)->with("employee")->get();
-        return view('training.training_detail', compact('training','trainer','employees'));
+        return view('training.training_detail', compact('permission','training','trainer','employees'));
     }
 
     public function filter(Request $request)

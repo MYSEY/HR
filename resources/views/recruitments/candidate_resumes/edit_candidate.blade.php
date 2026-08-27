@@ -26,9 +26,8 @@
                             <div class="profile-img-wrap edit-img">
                                 <img class="inline-block" id="blah" src="#" alt="user">
                                 <div class="fileupload btn">
-                                    <span class="btn-text">@lang('lang.edit_profile')</span>
+                                    <span class="btn-text">@lang('lang.profile')</span>
                                     <input class="upload" type="file" name="profile" id="profile">
-                                    <input type="hidden" name="hidden_image" id="e_profile" value="">
                                 </div>
                             </div>
                         </div>
@@ -163,7 +162,7 @@
                                 <label>@lang('lang.level')</label>
                                 <select class="form-control hr-select2-option" id="level" name="level" value="">
                                     <option selected value=""> -- @lang('lang.select')--</option>
-                                    @foreach ($level as $item)
+                                    @foreach ($level->sortBy('name', SORT_NATURAL) as $item)
                                         <option value="{{$item->name}}" {{$dataUpcomings->level == $item->id ? "selected" : ""}}>{{$item->name}}</option>
                                     @endforeach
                                 </select>
@@ -453,7 +452,7 @@
                                     <select class="form-control hr-select2-option" id="current_district" name="current_district" value="{{old('current_district')}}">
                                         @if (count($district)>0)
                                             @foreach ($district as $item)
-                                                <option value="{{$item->code}}" {{$dataUpcomings->current_commune == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                                <option value="{{$item->code}}" {{$dataUpcomings->current_district  == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -474,7 +473,7 @@
                                 <select class="form-control hr-select2-option no-error-border" id="current_commune" name="current_commune" value="{{old('current_commune')}}">
                                     @if (count($conmmunes)>0)
                                         @foreach ($conmmunes as $item)
-                                            <option value="{{$item->code}}" {{$dataUpcomings->current_district == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                            <option value="{{$item->code}}" {{$dataUpcomings->current_commune== $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -600,6 +599,11 @@
 <script src="{{asset('/admin/js/noty.js')}}"></script>
 <script>
     $(function(){
+        if (!$("#profile").val()){
+            $('#blah')
+                    .attr('src', "{{asset('admin/img/defuals/2023-10-12_10-04-19-removebg-preview.png')}}")
+                    .width(150);
+        }
         var url = window.location.pathname;
         var id = url.substring(url.lastIndexOf('/') + 1);
         $("#e_position").on("change", function() {

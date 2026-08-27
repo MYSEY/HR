@@ -20,11 +20,7 @@
         overflow-y: scroll;
         display: flex;
     }
-    .card-detail-table {
-        width: auto;
-        height: 250px;
-         overflow-y: scroll;
-    }
+
 
     /* block style birthday */
     .balloon {
@@ -270,360 +266,411 @@
         }
     }
 </style>
+{{-- style_dashboard.css --}}
+{{-- <link href="{{ asset('admin/css/style_dashboard.css') }}" rel="stylesheet" type="text/css"> --}}
 @section('content')
-    <div>
-        {{-- Breadcrumb Header --}}
+    <div class="">
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
             <div class="my-auto mb-2">
-                <h3 class="page-title">
-                    @lang("lang.welcome") {{ Helper::getLang() == 'en' ? Auth::user()->employee_name_en : Auth::user()->employee_name_kh }}!
-                </h3>
-                <ul class="breadcrumb mb-0">
+                <h3 class="page-title">@lang("lang.welcome") {{Helper::getLang() == 'en' ? Auth::user()->employee_name_en :  Auth::user()->employee_name_kh}}!</h3>
+                <ul class="breadcrumb">
                     <li class="breadcrumb-item active">@lang('lang.dashboard')</li>
                 </ul>
             </div>
             @if (Auth::user()->RolePermission == 'HRAdmin')
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
+                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
                     <div class="ms-2 head-icons">
-                        <p class="mb-0">
-                            User logged <span class="text-primary"><a href="{{url('user/logged')}}">{{$userLoggedIn}}</a></span> 
-                            And <a href="{{url('user/not/logged')}}"><span class="text-primary">{{$userNotLoggedIn}}</span></a> User not login In system HRMS
-                        </p>
+                        <p>User logged <span class="text-primary"><a href="{{url('user/logged')}}">{{$userLoggedIn}}</a></span> And <a href="{{url('user/not/logged')}}"><span class="text-primary">{{$userNotLoggedIn}}</span></a> User not login In system HRMS</p>
                     </div>
                 </div>
             @endif
         </div>
-
-        @php
-            // Check if user has AT LEAST one permission on dashboard
-            $dashPerm = permissionAccess("m1-s1","is_dashboard")->is_dashboard ?? [];
-            $hasAnyWidget = ($dashPerm['is_employee'] ?? 0) == "1" || 
-                            ($dashPerm['is_age_of_employee'] ?? 0) == "1" || 
-                            ($dashPerm['is_birthday_reminder'] ?? 0) == "1" || 
-                            ($dashPerm['is_leave'] ?? 0) == "1" || 
-                            ($dashPerm['is_total_resigned_staff'] ?? 0) == "1" || 
-                            ($dashPerm['is_promoted_staff'] ?? 0) == "1" || 
-                            ($dashPerm['is_transferred_staff'] ?? 0) == "1" || 
-                            ($dashPerm['is_training'] ?? 0) == "1";
-        @endphp
-
-        @if ($hasAnyWidget || count($DelegateLeave) > 0)
-            {{-- Main Dashboard Grid with Grid Gap --}}
-            <div class="row g-3 align-items-stretch">
-                
-                {{-- 1. Employee Stats Card --}}
-                @if (($dashPerm['is_age_of_employee'] ?? 0) == "1")
-                    <div class="col-12 col-md-6 col-xl-4 d-flex">
-                        <div class="card flex-fill w-100 mb-0">
-                            <div class="card-body">
-                                <h4 class="card-title">@lang('lang.employee')</h4>
-                                <div class="statistics">
-                                    <div class="row">
-                                        <div class="col-6 text-center">
-                                            <div class="stats-box mb-3">
-                                                <p class="text-muted mb-1">@lang('lang.total_employee')</p>
-                                                <h3 id="total-staff" class="mb-0"></h3>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 text-center">
-                                            <div class="stats-box mb-3">
-                                                <p class="text-muted mb-1">@lang('lang.total_female')</p>
-                                                <h3 id="total-female" class="mb-0">0</h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="progress mb-3" style="height: 10px;">
-                                    <div class="progress-bar bg-purple" role="progressbar" style="width: 30%"><span id="percentage-interview"></span></div>
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 22%"><span id="percantage-probation"></span></div>
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 24%"><span id="percantage-fdc"></span></div>
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 26%"><span id="percantage-udc"></span></div>
-                                </div>
-                                <div>
-                                    <p class="mb-2"><i class="fa fa-dot-circle-o text-purple me-2"></i>@lang('lang.up-coming')<span id="total-interview" class="float-end fw-bold">0</span></p>
-                                    <p class="mb-2"><i class="fa fa-dot-circle-o text-success me-2"></i>@lang('lang.probation')<span id="total-probation" class="float-end fw-bold">0</span></p>
-                                    <p class="mb-2"><i class="fa fa-dot-circle-o text-info me-2"></i>@lang('lang.fdc')<span id="total-fdc" class="float-end fw-bold">0</span></p>
-                                    <p class="mb-0"><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.udc') <span id="total-udc" class="float-end fw-bold">0</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
-                {{-- 2. Age of Employee Card --}}
-                @if (($dashPerm['is_age_of_employee'] ?? 0) == "1")
-                    <div class="col-12 col-md-6 col-xl-4 d-flex">
-                        <div class="card flex-fill dash-statistics w-100 mb-0">
-                            <div class="card-body">
-                                <h4 class="card-title">@lang('lang.age_of_employee')</h4>
-                                <p class="text-muted"><i class="fa fa-dot-circle-o text-info me-1"></i> <span>@lang('lang.age')</span></p>
-                                <div class="stats-list">
-                                    <div class="stats-info mb-3">
-                                        <p class="d-flex justify-content-between mb-1">18 - 24 <strong id="total-age-18">0</strong></p>
-                                        <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-success" role="progressbar" id="progressbar-18"></div>
-                                        </div>
-                                    </div>
-                                    <div class="stats-info mb-3">
-                                        <p class="d-flex justify-content-between mb-1">25 - 44 <strong id="total-age-25">0</strong></p>
-                                        <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-info" role="progressbar" id="progressbar-25"></div>
-                                        </div>
-                                    </div>
-                                    <div class="stats-info mb-0">
-                                        <p class="d-flex justify-content-between mb-1">45 - 60 <strong id="total-age-45">0</strong></p>
-                                        <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-danger" role="progressbar" id="progressbar-45"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
-                {{-- 3. Birthday Reminder Card --}}
-                @if (($dashPerm['is_birthday_reminder'] ?? 0) == "1")
-                    <div class="col-12 col-md-6 col-xl-4 d-flex">
-                        <div class="card flex-fill w-100 mb-0">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <div>
-                                    <h4 class="card-title d-flex justify-content-between align-items-center">
-                                        @lang('lang.birthday_reminder') 
-                                        <span class="badge bg-inverse-danger" id="total-date-birthday">0</span>
-                                    </h4>
-                                    <div class="card-detail mt-3">
-                                        <div id="birthday-staff" style="width: 100%;"></div>
-                                    </div>
-                                </div>
-                                <div class="load-more text-center mt-3" id="btn-more">
-                                    <a class="text-dark fw-bold" href="{{ url('/users/birthday') }}">@lang('lang.more') <i class="fa fa-angle-right ms-1"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
-                {{-- 4. Attendance & Leaves Card --}}
-                @if (($dashPerm['is_leave'] ?? 0) == "1")
-                    <div class="col-12 col-md-6 col-xl-6 d-flex">
-                        <div class="card flex-fill w-100 mb-0">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <div>
-                                    <div class="statistic-header d-flex justify-content-between align-items-center mb-3">
-                                        <h4 class="mb-0">Attendance &amp; Leaves</h4>
-                                        <div class="dropdown statistic-dropdown">
-                                            <a class="dropdown-toggle text-muted" data-bs-toggle="dropdown" href="javascript:void(0);">
-                                                <label id="current_year_leave" class="mb-0 cursor-pointer"></label>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="attendance-list my-3">
-                                        <div class="row text-center g-2">
-                                            <div class="col-3">
-                                                <div class="attendance-details p-2 border rounded">
-                                                    <h4 class="text-info leavePending mb-1">0</h4>
-                                                    <p class="mb-0 text-muted small">@lang('lang.pending')</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-3">
-                                                <div class="attendance-details p-2 border rounded">
-                                                    <h4 class="text-success leaveApproval mb-1">0</h4>
-                                                    <p class="mb-0 text-muted small">@lang('lang.approval')</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-3">
-                                                <div class="attendance-details p-2 border rounded">
-                                                    <h4 class="text-danger leaveReject mb-1">0</h4>
-                                                    <p class="mb-0 text-muted small">@lang('lang.reject')</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-3">
-                                                <div class="attendance-details p-2 border rounded">
-                                                    <h4 class="text-secondary leaveCancel mb-1">0</h4>
-                                                    <p class="mb-0 text-muted small">@lang('lang.cancel')</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="pt-2">
-                                    <div class="view-attendance mb-2">
-                                        <a href="{{ url('/leaves/admin') }}" class="text-primary">
-                                            <i class="fa fa-arrow-right me-1"></i> @lang('lang.apply_leave')
-                                        </a>
-                                    </div>
-                                    <div class="view-attendance">
-                                        <a href="{{ url('/dashboad/view-leave') }}" class="text-primary">
-                                            <i class="fa fa-arrow-right me-1"></i> @lang('lang.view_all_leave_request')
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
-                {{-- 5. Delegated Responsibilities Block --}}
-                <div class="col-12 col-md-6 col-xl-6 d-flex">
-                    <div class="card flex-fill w-100 mb-0">
+        <div class="row">
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_employee"] == "1")
+                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                    <div class="card flex-fill">
                         <div class="card-body">
-                            <div class="statistic-header mb-3 d-flex justify-content-between align-items-center">
-                                <h4 class="mb-0">Delegated Responsibilities</h4>
-                                <span class="badge bg-primary fs-6">{{count($DelegateLeave)}}</span>
+                            <h4 class="card-title">@lang('lang.employee')</h4>
+                            <div class="statistics">
+                                <div class="row">
+                                    <div class="col-md-6 col-6 text-center">
+                                        <div class="stats-box mb-4">
+                                            <p>@lang('lang.total_employee')</p>
+                                            <h3 id="total-staff"></h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-6 text-center">
+                                        <div class="stats-box mb-4">
+                                            <p>@lang('lang.total_female')</p>
+                                            <h3 id="total-female">0</h3>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-detail-table">
-                                <div class="table-responsive">
-                                    <table class="table custom-table table-striped mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Department</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th>
-                                                <th>Delegate To</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (count($DelegateLeave) > 0)
-                                                @foreach ($DelegateLeave as $item)
-                                                    <tr>
-                                                        <td>{{$item->userRequest->employee_name_en ?? '-'}}</td>
-                                                        <td>{{$item->userRequest->department->name_english ?? '-'}}</td>
-                                                        <td>{{\Carbon\Carbon::parse($item->start_date)->format('d-M-Y')}}</td>
-                                                        <td>{{\Carbon\Carbon::parse($item->end_date)->format('d-M-Y')}}</td>
-                                                        <td>{{$item->userDelegeted->employee_name_en ?? '-'}}</td>
-                                                    </tr>
-                                                @endforeach
-                                            @else
-                                                <tr>
-                                                    <td colspan="5" class="text-center text-muted py-4">No delegated work found</td>
-                                                </tr>
-                                            @endif
-                                        </tbody>
-                                    </table>
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percentage-interview"></span></div>
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 22%" aria-valuenow="18"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-probation"></span></div>
+                                <div class="progress-bar bg-text-info" role="progressbar" style="width: 24%" aria-valuenow="12"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-fdc"></span></div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 26%" aria-valuenow="14"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
+                            </div>
+                            <div>
+                                <p><i class="fa fa-dot-circle-o text-purple me-2"></i>@lang('lang.up-coming')<span
+                                        id="total-interview" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-success me-2"></i>@lang('lang.probation')<span
+                                        id="total-probation" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-info me-2"></i>@lang('lang.fdc')<span
+                                        id="total-fdc" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.udc') <span
+                                        id="total-udc" class="float-end">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_age_of_employee"] == "1")
+                <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+                    <div class="card flex-fill dash-statistics">
+                        <div class="card-body">
+                            <h5 class="card-title">@lang('lang.age_of_employee')</h5>
+                            <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">@lang('lang.age')</span></p>
+                            <div class="stats-list">
+                                <div class="stats-info">
+                                    <p>18 - 24 <strong><small id="total-age-18">0</small></strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
+                                    </div>
+                                </div>
+                                <div class="stats-info">
+                                    <p>25 - 44 <strong id="total-age-25">0</strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info" role="progressbar" id="progressbar-25" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="stats-info">
+                                    <p>45 - 60 <strong id="total-age-45">0</strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar"
+                                        id="progressbar-45" aria-valuemin="0"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                {{-- 6. Expense Request Card --}}
-                {{-- @if (($dashPerm['is_expense'] ?? 0) == "1") --}}
-                    <div class="col-12 col-md-6 col-xl-6 d-flex">
-                        <div class="card flex-fill w-100 mb-0">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <div>
-                                    <div class="statistic-header mb-3">
-                                        <h4 class="mb-0">@lang('lang.expense_request')</h4>
-                                    </div>
-                                    <div class="attendance-list my-3">
-                                        <div class="row text-center g-2">
-                                            <div class="col-6">
-                                                <div class="attendance-details p-3 border rounded">
-                                                    <h4 class="text-info expensePending mb-1">0</h4>
-                                                    <p class="mb-0 text-muted">@lang('lang.pending_review')</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="attendance-details p-3 border rounded">
-                                                    <h4 class="text-success expenseApproval mb-1">0</h4>
-                                                    <p class="mb-0 text-muted">@lang('lang.pending_approved')</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="view-attendance pt-2">
-                                    <a href="{{ url('/expense-request/list') }}" class="text-primary">
-                                        <i class="fa fa-arrow-right me-1"></i> @lang('lang.click_to') @lang('lang.review') @lang('lang.or') @lang('lang.approval')
+            @endif
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_birthday_reminder"] == "1")
+                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h4 class="card-title">@lang('lang.birthday_reminder') <span class="bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
+                            <div class="card-detail">
+                                <div id="birthday-staff" style="width: -webkit-fill-available"></div>
+                            </div>
+                            <div class="load-more text-center" id="btn-more">
+                                <a class="text-dark" href="{{ url('/users/birthday') }}">@lang('lang.more')</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_leave"] == "1")
+                <div class="col-md-12 col-lg-6 col-xl-6 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <div class="statistic-header">
+                                <h4>Attendance &amp; Leaves</h4>
+                                <div class="dropdown statistic-dropdown">
+                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                        <label id="current_year_leave"></label>
                                     </a>
+                                    {{-- <div class="dropdown-menu dropdown-menu-end">
+                                        <a href="javascript:void(0);" class="dropdown-item">
+                                            2025
+                                        </a>
+                                        <a href="javascript:void(0);" class="dropdown-item">
+                                            2026
+                                        </a>
+                                        <a href="javascript:void(0);" class="dropdown-item">
+                                            2027
+                                        </a>
+                                    </div> --}}
+                                </div>
+                            </div>
+                            <div class="attendance-list">
+                                <div class="row">
+                                    
+                                    <div class="col-md-3">
+                                        <div class="attendance-details">
+                                            <h4 class="text-info leavePending"></h4>
+                                            <p>@lang('lang.pending')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="attendance-details">
+                                            <h4 class="text-success leaveApproval"></h4>
+                                            <p>@lang('lang.approval')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="attendance-details">
+                                            <h4 class="text-danger leaveReject"></h4>
+                                            <p>@lang('lang.reject')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="attendance-details">
+                                            <h4 class="text-danger leaveCancel"></h4>
+                                            <p>@lang('lang.cancel')</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="view-attendance">
+                                <a href="{{ url('/leaves/admin') }}">
+                                    <i class="fa fa-arrow-right"></i> @lang('lang.apply_leave')
+                                </a>
+                            </div><br>
+                            <div class="view-attendance">
+                                <a href="{{ url('/dashboad/view-leave') }}">
+                                    <i class="fa fa-arrow-right"></i> @lang('lang.view_all_leave_request')
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            {{-- *** Block Delegate *** --}}
+            <div class="col-md-12 col-lg-6 col-xl-6 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-body">
+                        <div class="statistic-header">
+                            <h4>Delegated Responsibilities <strong>{{count($DelegateLeave)}}</strong></h4>
+                        </div>
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer card-detail">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table custom-table table-striped no-footer">
+                                            <thead>
+                                                <tr>
+                                                    <th >Name</th>
+                                                    <th >Department</th>
+                                                    <th >Start Date</th>
+                                                    <th >End Date</th>
+                                                    <th >Delegate To</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($DelegateLeave)>0)
+                                                    @foreach ($DelegateLeave as $key=>$item)
+                                                        <tr class="odd">
+                                                            <td>{{$item->userRequest->employee_name_en}}</td>
+                                                            <td>{{$item->userRequest->department->name_english}}</td>
+                                                            <td>{{\Carbon\Carbon::parse($item->start_date)->format('d-M-Y')}}</td>
+                                                            <td>{{\Carbon\Carbon::parse($item->end_date)->format('d-M-Y')}}</td>
+                                                            <td>{{$item->userDelegeted->employee_name_en}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                {{-- @endif --}}
-
-                {{-- 7. Resigned / Promoted / Transferred / Training Widgets Group --}}
-                <div class="col-12 col-md-6 col-xl-6">
-                    <div class="row g-2">
-                        @if (($dashPerm['is_total_resigned_staff'] ?? 0) == "1")
-                            <div class="col-12 col-sm-6">
-                                <div class="card dash-widget mb-0 h-100">
-                                    <div class="card-body d-flex align-items-center">
-                                        <span class="dash-widget-icon bg-inverse-danger text-danger"><i class="fa fa-user"></i></span>
-                                        <div class="dash-widget-info ms-3">
-                                            <h3 id="total-resigned-staff" class="mb-0">0</h3>
-                                            <a href="{{ url('/reports/staff-resigned-report') }}" ><span class="text-muted">@lang('lang.resigned_staff')</span></a>
+                </div>
+            </div>
+            {{-- @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_expense"] == "1") --}}
+                <div class="col-md-12 col-lg-6 col-xl-6 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <div class="statistic-header">
+                                <h4>@lang('lang.expense_request')</h4>
+                            </div>
+                            <div class="attendance-list">
+                                <div class="row">
+                                    
+                                    <div class="col-md-6">
+                                        <div class="attendance-details">
+                                            <h4 class="text-info expensePending"></h4>
+                                            <p>@lang('lang.pending_review')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="attendance-details">
+                                            <h4 class="text-success expenseApproval"></h4>
+                                            <p>@lang('lang.pending_approved')</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
-
-                        @if (($dashPerm['is_promoted_staff'] ?? 0) == "1")
-                            <div class="col-12 col-sm-6">
-                                <div class="card dash-widget mb-0 h-100">
-                                    <div class="card-body d-flex align-items-center">
-                                        <span class="dash-widget-icon bg-inverse-success text-success"><i class="fa fa-user"></i></span>
-                                        <div class="dash-widget-info ms-3">
-                                            <h3 id="total-promoted-staff" class="mb-0">0</h3>
-                                            <a href="{{ url('/reports/promoted-staff-report') }}"><span class="text-muted">@lang('lang.promoted_staff')</span></a>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="view-attendance">
+                                <a href="{{ url('/expense-request/list') }}">
+                                    <i class="fa fa-arrow-right"></i> @lang('lang.click_to') @lang('lang.review') @lang('lang.or') @lang('lang.approval')</p>
+                                </a>
                             </div>
-                        @endif
-
-                        @if (($dashPerm['is_transferred_staff'] ?? 0) == "1")
-                            <div class="col-12 col-sm-6">
-                                <div class="card dash-widget mb-0 h-100">
-                                    <div class="card-body d-flex align-items-center">
-                                        <span class="dash-widget-icon bg-inverse-info text-info"><i class="fa fa-user"></i></span>
-                                        <div class="dash-widget-info ms-3">
-                                            <h3 id="total-transferred-staff" class="mb-0">0</h3>
-                                            <a href="{{ url('/reports/transferred-staff-report') }}"><span class="text-muted">@lang('lang.transferred_staff')</span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-
-                        @if (($dashPerm['is_training'] ?? 0) == "1")
-                            <div class="col-12 col-sm-6">
-                                <div class="card dash-widget mb-0 h-100">
-                                    <div class="card-body d-flex align-items-center">
-                                        <span class="dash-widget-icon bg-inverse-warning text-warning"><i class="la la-edit"></i></span>
-                                        <div class="dash-widget-info ms-3">
-                                            <h3 id="total-training" class="mb-0">0</h3>
-                                            <a href="{{ url('/training/list') }}"><span class="text-muted">@lang('lang.training')</span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+                        </div>
                     </div>
                 </div>
-
+            {{-- @endif --}}
+            <div class="col-md-12 col-lg-12 col-xl-6">
+                <div class="row">
+                    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_total_resigned_staff"] == "1")
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3 id="total-resigned-staff"></h3>
+                                    <a href="{{ url('/reports/staff-resigned-report') }}"> <span>@lang('lang.resigned_staff')</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_promoted_staff"] == "1")
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3 id="total-promoted-staff"></h3>
+                                        <a href="{{ url('/reports/promoted-staff-report') }}"><span>@lang('lang.promoted_staff')</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_transferred_staff"] == "1")
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3 id="total-transferred-staff"></h3>
+                                        <a href="{{ url('/reports/transferred-staff-report') }}"> <span>@lang('lang.transferred_staff')</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_training"] == "1")
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="la la-edit"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3 id="total-training"></h3>
+                                        <a href="{{ url('/training/list') }}"><span>@lang('lang.training')</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
-        @else
-            {{-- Fallback UI when User has NO Dashboard Permission at all --}}
-            <div class="card text-center py-5 shadow-sm border-0">
-                <div class="card-body py-5">
-                    <div class="mb-3">
-                        <i class="la la-user-shield text-primary" style="font-size: 64px;"></i>
+        </div>
+        @include('dashboads.chart_board')
+        @if ($dataUpComming || $dataProbation || $dataShortList || $dataContract)
+            <div id="showNotyfication" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-lg-12 col-xl-12">
+                                    <section class="dash-section">
+                                        <h1 class="dash-sec-title">TASK FOR TODAY</h1>
+                                        <div class="dash-sec-content">
+                                            @if ($dataShortList)
+                                                <div class="form-group">
+                                                    <label for="" class="text-danger">Candidate CVs</label>
+                                                    <div class="dash-info-list">
+                                                        <div class="dash-card">
+                                                            <div class="dash-card-container">
+                                                                <div class="dash-card-icon">
+                                                                    <i class="fa fa-user-plus"></i>
+                                                                </div>
+                                                                <div class="dash-card-content">
+                                                                    <p>{{$dataShortList}} People will be check short list <a href="{{url('/recruitment/candidate-resume/list')}}" target="_blank">link>></a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            @if ($dataContract)
+                                                <div class="form-group">
+                                                    <label for="" class="text-danger">Signature Contract</label>
+                                                    <div class="dash-info-list">
+                                                        <div class="dash-card">
+                                                            <div class="dash-card-container">
+                                                                <div class="dash-card-icon">
+                                                                    <i class="fa fa-user-plus"></i>
+                                                                </div>
+                                                                <div class="dash-card-content">
+                                                                    <p>{{$dataContract}} People will be signature contract today <a href="{{url('/recruitment/candidate-resume/list')}}" target="_blank">link>></a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if ($dataUpComming)
+                                                <div class="form-group">
+                                                    <label for="" class="text-danger">Please change status Upcoming to probation</label>
+                                                    <div class="dash-info-list">
+                                                        <div class="dash-card">
+                                                            <div class="dash-card-container">
+                                                                <div class="dash-card-icon">
+                                                                    <i class="fa fa-user-plus"></i>
+                                                                </div>
+                                                                <div class="dash-card-content">
+                                                                    <p>{{$dataUpComming}} People Will be changed Upcoming to Probation <a href="{{url('users')}}" target="_blank">link>></a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            @if ($dataProbation)
+                                               <div class="form-group">
+                                                    <label for="" class="text-danger">Please change status Probation to FDC</label>
+                                                    <div class="dash-info-list">
+                                                        <div class="dash-card">
+                                                            <div class="dash-card-container">
+                                                                <div class="dash-card-icon">
+                                                                    <i class="fa fa-user-plus"></i>
+                                                                </div>
+                                                                <div class="dash-card-content">
+                                                                    <p>{{$dataProbation}} People Will be changed to employee <a href="{{url('users')}}" target="_blank">link>></a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                               </div>
+                                            @endif
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            <input type="hidden" id="" class="hidden" value="{{$dataUpComming}}">
+                            <input type="hidden" id="" class="hidden" value="{{$dataProbation}}">
+                        </div>
                     </div>
-                    <h3 class="fw-bold">@lang("lang.welcome"), {{ Auth::user()->employee_name_en }}!</h3>
-                    <p class="text-muted mx-auto" style="max-width: 500px;">
-                        You are logged into CAMMA HRMS System. Please use the navigation menu on the left to access your permitted modules.
-                    </p>
                 </div>
             </div>
         @endif
-        <br>
-
-        {{-- Chart Board Section --}}
-        @include('dashboads.chart_board')
     </div>
 @endsection
 @include('includs.script')

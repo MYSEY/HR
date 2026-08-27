@@ -179,7 +179,7 @@
                 $(".sub_chk").prop('checked',false);
             }  
         });
-       $('body').on('click','.btn_approved_all',function(){
+        $('body').on('click','.btn_approved_all',function(){
             var allVals = [];  
             $(".sub_chk:checked").each(function() {
                 if ($(this).data('status') == "approved") {
@@ -244,11 +244,17 @@
                 contentClass: 'text-center',
                 // backgroundDismiss: 'cancel',
                 content: ''+
-                    '<form id="add-style" style="height: 25em;">'+
+                    '<form id="add-style" style="height: 30em;">'+
                         '<p class="text-danger">Old position review: </p> <p>'+position_old+'</p>'+
                         '<div class="form-group">'+
                             '<label>@lang("lang.position") <span class="text-danger">*</span></label>'+
                             '<select class="form-control hr-select2-option-emp-role form-select position_id" id="position_id">'+
+                            
+                            '</select>'+
+                        '</div>'+
+                        '<div class="form-group">'+
+                            '<label>@lang("lang.department")</label>'+
+                            '<select class="form-control hr-select2-option-emp-role form-select department_id" id="department_id">'+
                             
                             '</select>'+
                         '</div>'+
@@ -259,7 +265,7 @@
                         btnClass: 'add-btn-status',
                         action: function() {
                             var position_id = this.$content.find('.position_id').val();
-
+                            var department_id = this.$content.find('.department_id').val();
                             if (!position_id) {
                                 $.alert({
                                     title: '<span class="text-danger">@lang("lang.requiered")</span>',
@@ -270,7 +276,8 @@
                             $('#modal-loading').modal('show');
                             axios.post('{{ URL('admin-expense/asign') }}', {
                                 'id': expense_id,
-                                'position_id': position_id
+                                'position_id': position_id,
+                                'department_id':department_id
                             }).then(function(response) {
                                 $('#modal-loading').modal('hide');
                                 new Noty({
@@ -318,11 +325,21 @@
                     dataType: "JSON",
                     success: function(response) {
                         let datas = response.datas;
+                        let department = response.department;
                         
                         $('#position_id').html('<option selected value=""> -- @lang("lang.select") --</option>');
                         if (datas != '') {
                             $.each(datas, function(i, item) {
                                 $('#position_id').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english
+                                }));
+                            });
+                        };
+                        $('#department_id').html('<option selected value=""> -- @lang("lang.select") --</option>');
+                        if (department != '') {
+                            $.each(department, function(i, item) {
+                                $('#department_id').append($('<option>', {
                                     value: item.id,
                                     text: item.name_english
                                 }));

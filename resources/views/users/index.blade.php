@@ -24,24 +24,24 @@
 
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("m2-s1","is_import")->value == "1")
+                    @if ($permission->is_import == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import')</a>
                     @endif
                     @if (Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "admin" || Auth::user()->RolePermission == 'HRAdmin')
                         <a href="#" class="btn add-btn me-2" data-toggle="modal" id="import_update_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>Import Update Employee</a>
                     @endif
                     @if (Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "admin")
-                        @if (permissionAccess("m2-s1","is_update")->value == "1")
+                        @if ($permission->is_update == "1")
                             <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#change_line_manager"><i class="fa fa-plus"></i> @lang('lang.line_manager')</a>
                         @endif
                     @endif
-                    @if (permissionAccess("m2-s1","is_create")->value == "1")
+                    @if ($permission->is_create == "1")
                         <a href="{{url('user/form/create')}}" class="btn add-btn me-2"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("m2-s1","is_view")->value == "1")
+        @if ($permission->is_view == "1")
             @if (Auth::user()->RolePermission != 'Employee')
                 <form class="needs-validation" novalidate>
                     @csrf
@@ -69,7 +69,7 @@
                                         <i class="fa fa-search"></i>
                                     </span>
                                 </button>
-                                @if (permissionAccess("m2-s1","is_export")->value == "1")
+                                @if ($permission->is_export == "1")
                                     <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2" id="icon-search-download-reload">
                                         <span class="export-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                                         <span class="btn-export-txt">
@@ -214,8 +214,9 @@
         </div>
         <!-- /Delete User Modal -->
     </div>
+    @include('components.loading-modal')
 @endsection
-@include('components.loading-modal')
+
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
@@ -727,6 +728,7 @@
                 }); 
             }else if(status == 3 || status == 4 || status == 5 || status == 6 || status == 7 || status == 8 || status == 9){
                 var selectOption = '<select class="form-control select floating resign_reason" name="department_id"></select>';
+                var selectPerformanceNote = '<select class="form-control select floating performance_note" name="performance_note"></select>';
                 let resign_date = $(this).attr('data-resign-date');
                 $.confirm({
                     title: '@lang("lang.employee_status")',
@@ -754,6 +756,10 @@
                                     '<label>@lang("lang.reason")</label>'+
                                     selectOption+
                                 '</div>'+
+                                '<div class="form-group">'+
+                                    '<label>@lang("lang.performance_note")</label>'+
+                                    selectPerformanceNote+
+                                '</div>'+
                             '</div>'+
                         '</form>',
                     buttons: {
@@ -766,6 +772,7 @@
                                 var resign_date = this.$content.find('.resign_date').val();
                                 var resign_reason = this.$content.find('.resign_reason').val();
                                 var line_manager = this.$content.find('.line_manager').val();
+                                var performance_note = this.$content.find(".performance_note").val();
                                 if (!resign_date) {
                                     $.alert({
                                         title: '@lang("lang.requiered")',
@@ -775,10 +782,11 @@
                                 }                               
                                 axios.post('{{ URL('employee/status') }}', {
                                         'id': id,
-                                        'emp_status': emp_status,
-                                        'resign_date': resign_date,
-                                        'resign_reason': resign_reason,
-                                        'line_manager': line_manager
+                                        'emp_status':       emp_status,
+                                        'resign_date':      resign_date,
+                                        'resign_reason':    resign_reason,
+                                        'line_manager':     line_manager,
+                                        'performance_note': performance_note
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
@@ -838,6 +846,16 @@
                                 }
                                 $('.resign_reason').append($('<option>', option));
                             });
+                            var performanceNote = response.performance_note
+                            $('.performance_note').html('<option selected > -- @lang("lang.select") --</option>');
+                            $.each(performanceNote, function(i, item) {
+                                let option = {
+                                    value: item.id,
+                                    text: item.name_english,
+                                }
+                                $('.performance_note').append($('<option>', option));
+                            });
+                            
                         }
                     });
                 });

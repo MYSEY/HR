@@ -261,65 +261,94 @@
             });
         });
 
+        // Function start date (Edit)
         $("#e_start_date").on("dp.change", function(e) {
-            let startDates = e.date;
-            $('#e_end_date').data('DateTimePicker').minDate(startDates);
+            if (!e.date) return;
+
+            // 1. Reset time component to 00:00:00 to avoid time-stamp conflicts
+            let startDates = e.date.clone().startOf('day');
+            
+            // 2. Set minDate on the end datepicker
+            let endDatePicker = $('#e_end_date').data('DateTimePicker');
+            if (endDatePicker) {
+                endDatePicker.minDate(startDates);
+                
+                // If current e_end_date is before the new e_start_date, reset it to e_start_date
+                let currentEndDate = endDatePicker.date();
+                if (currentEndDate && currentEndDate.isBefore(startDates, 'day')) {
+                    endDatePicker.date(startDates);
+                }
+            }
+
             let startDate = new Date($(this).val());
             let endDate = new Date($('#e_end_date').val());
-            let weekdayCount = countWeekdays(startDate,  endDate);
+            let weekdayCount = countWeekdays(startDate, endDate);
+
             $(".e_half_clear_checkbox").val("");
             $(".e_half_clear_checkbox").prop('checked', false);
             $(".e_check_half_day").prop('checked', false);
-            $(".e_half_start_end_day").css("display","none");
-            $(".e_half_day").css("display","none");
+            $(".e_half_start_end_day").css("display", "none");
+            $(".e_half_day").css("display", "none");
             $(".e_check_half_day").attr('disabled', false);
             $(".e_half_clear_checkbox").attr('disabled', false);
+
             axios.post('{{ URL('holidays/search') }}', {
                 "from_date": $(this).val(),
                 "to_date": $('#e_end_date').val()
             }).then(function(response) {
                 let holiday = response.data.datas;
                 let nextWorkigDay = 0;
-                if (holiday != '') {
+                if (holiday && holiday.length > 0) {
                     $.each(holiday, function(i, holi) {
-                        nextWorkigDay += countWeekdays(holi.from,  holi.to);
+                        nextWorkigDay += countWeekdays(holi.from, holi.to);
                     });
                 }
                 total_day = weekdayCount - nextWorkigDay;
+                total_day = total_day < 0 ? 0 : total_day;
                 total_current_number_day = total_day;
                 $("#e_number_of_day").val(total_day);
             });
         });
 
-        // function end date
+        // Function end date (Edit)
         $("#e_end_date").on("dp.change", function(e) {
-            let startDate = $('#e_start_date').data('DateTimePicker').date();
-            let endDate = e.date;
-            if (startDate > endDate) {
-                $('#e_end_date').data('DateTimePicker').date(startDate);
+            if (!e.date) return;
+
+            let startDatePicker = $('#e_start_date').data('DateTimePicker');
+            let startDateMoment = startDatePicker ? startDatePicker.date() : null;
+            let endDateMoment = e.date;
+
+            // Compare strictly on a date/day level (ignoring hours/minutes)
+            if (startDateMoment && endDateMoment.isBefore(startDateMoment, 'day')) {
+                $('#e_end_date').data('DateTimePicker').date(startDateMoment.clone().startOf('day'));
+                return;
             }
+
             let startDates = new Date($("#e_start_date").val());
             let endDates = new Date($(this).val()); 
-            let weekdayCount = countWeekdays(startDates,  endDates);
+            let weekdayCount = countWeekdays(startDates, endDates);
+
             $(".e_half_clear_checkbox").val("");
             $(".e_half_clear_checkbox").prop('checked', false);
             $(".e_check_half_day").prop('checked', false);
-            $(".e_half_start_end_day").css("display","none");
-            $(".e_half_day").css("display","none");
+            $(".e_half_start_end_day").css("display", "none");
+            $(".e_half_day").css("display", "none");
             $(".e_check_half_day").attr('disabled', false);
             $(".e_half_clear_checkbox").attr('disabled', false);
+
             axios.post('{{ URL('holidays/search') }}', {
                 "from_date": $("#e_start_date").val(),
                 "to_date": $(this).val()
             }).then(function(response) {
                 let holiday = response.data.datas;
                 let nextWorkigDay = 0;
-                if (holiday != '') {
+                if (holiday && holiday.length > 0) {
                     $.each(holiday, function(i, holi) {
-                        nextWorkigDay += countWeekdays(holi.from,  holi.to);
+                        nextWorkigDay += countWeekdays(holi.from, holi.to);
                     });
                 }
                 total_day = weekdayCount - nextWorkigDay;
+                total_day = total_day < 0 ? 0 : total_day;
                 total_current_number_day = total_day;
                 $("#e_number_of_day").val(total_day);
             });

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\BranchsRequest;
 use App\Models\User;
 use Spatie\Activitylog\Models\Activity;
+use App\Models\permissions;
 
 class BranchController extends Controller
 {
@@ -21,12 +22,13 @@ class BranchController extends Controller
      */
     public function index()
     {
-        if (permissionAccess("m9-s3","is_view")->value != "1") {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "branch")->first();
+        if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
         $employee = User::whereIn("emp_status", ["Probation","1", "2", "10"])->get();
         $data = Branchs::with("branchholder")->get();
-        return view('branchs.index',compact('data', 'employee'));
+        return view('branchs.index',compact('data', 'employee','permission'));
     }
 
     /**
