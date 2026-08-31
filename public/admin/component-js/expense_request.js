@@ -614,7 +614,7 @@ function totalPaidDollar(){
         total_paid = (total_cost_dollar - total_cost);
     }
 
-    $("#exp_total_paid_dollar").val(total_paid.toFixed(2));
+    $("#exp_total_paid_dollar").val(formatWithComma(total_paid.toFixed(2)));
     
     let convertPaid = total_paid.toFixed(2);
     if (total_paid == 0) {
@@ -641,7 +641,7 @@ function totalPaidRial(){
         total_paid = (total_cost_rial - total_cost);
     }
 
-    $("#exp_total_paid_rial").val(total_paid.toFixed(2));
+    $("#exp_total_paid_rial").val(formatWithComma(total_paid.toFixed(2)));
     
     // បន្ថែមលក្ខខណ្ឌបើ 0 ឲ្យលុបអក្សរចេញដូច dollar ដែរ
     if (total_paid == 0) {
