@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use App\Models\User;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Department extends Model
 {
     use SoftDeletes;
+    use LogsActivity;
+
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -16,12 +20,33 @@ class Department extends Model
     */
 
     protected $table = 'departments';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+    
+    protected $fillable = [
+        'direct_manager_id',
+        'name_khmer',
+        'name_english',
+        'abbreviations',
+        'parent_id',
+        'head_department',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+    ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
+     
+    public function headDepartment(){
+        return $this->belongsTo(User::class, 'direct_manager_id','id');
+    }
+    public function child(){
+        return $this->hasMany(Department::class, 'parent_id','id')->with("headDepartment");
+    }
 
     /*
     |--------------------------------------------------------------------------

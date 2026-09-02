@@ -9,6 +9,9 @@ use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\BranchsRequest;
+use App\Models\User;
+use Spatie\Activitylog\Models\Activity;
+use App\Models\permissions;
 
 class BranchController extends Controller
 {
@@ -19,8 +22,13 @@ class BranchController extends Controller
      */
     public function index()
     {
-        $data = Branchs::all();
-        return view('branchs.index',compact('data'));
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "branch")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        $employee = User::whereIn("emp_status", ["Probation","1", "2", "10"])->get();
+        $data = Branchs::with("branchholder")->get();
+        return view('branchs.index',compact('data', 'employee','permission'));
     }
 
     /**
@@ -32,6 +40,7 @@ class BranchController extends Controller
     public function store(BranchsRequest $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by']    = Auth::user()->id;
             Branchs::create($data);
@@ -61,10 +70,12 @@ class BranchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $data = Branchs::find($id);
-        return view('branchs.edit',compact('data'));
+        $data = Branchs::where('id',$request->id)->first();
+        return response()->json([
+            'success'=>$data,
+        ]);
     }
 
     /**
@@ -77,11 +88,16 @@ class BranchController extends Controller
     public function update(Request $request)
     {
         try{
-            Branchs::where('id',$request->id)->update([
-                'branch_name_kh'  => $request->branch_name_kh,
-                'branch_name_en'  => $request->branch_name_en,
-                'updated_by'    => Auth::user()->id 
-            ]);
+            $data = Branchs::find($request->id);
+            $data['branch_name_kh'] = $request->branch_name_kh;
+            $data['branch_name_en'] = $request->branch_name_en;
+            $data['abbreviations'] = $request->abbreviations;
+            $data['direct_manager_id'] = $request->direct_manager_id;
+            $data['address'] = $request->address;
+            $data['address_kh'] = $request->address_kh;
+            $data['updated_by'] = Auth::user()->id ;
+            $data->save();
+            Activity::all()->last();
             Toastr::success('Branch updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

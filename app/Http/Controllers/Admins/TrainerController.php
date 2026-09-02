@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
-use App\Models\Trainer;
-use App\Models\User;
-use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Trainer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class TrainerController extends Controller
 {
@@ -20,13 +21,49 @@ class TrainerController extends Controller
      */
     public function index()
     {
-        $data = Trainer::with("employee")->get();
-        $employee = User::whereIn("emp_status", ['1','2'])->get();
-        return view('trainers.index', compact('data', 'employee'));
+        $permission = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where("url", "trainer/list")
+            ->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        $data = Trainer::with("employee")
+        ->leftJoin('users', 'trainers.employee_id', '=', 'users.id')
+        ->select(
+            'trainers.*',
+            'users.line_manager',
+            'users.department_id',
+            'users.branch_id',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
+            if(in_array($RolePermission, ['HOD', 'BM'])){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+
+            }else if(in_array($RolePermission, ['DHOD', 'DBM'])){
+                $query->where("users.line_manager", Auth::user()->id);
+                $query->orWhere("users.id", Auth::user()->id);
+
+            }else if($RolePermission == "Employee") {
+                $query->where("users.id", Auth::user()->id);
+
+            }else if ($RolePermission == 'HR' && $permission->is_access != "1") {
+                $query->where("users.line_manager", Auth::user()->id);
+                $query->orWhere("users.id", Auth::user()->id);
+            }
+        })->get();
+        $employee = User::whereIn("emp_status", ['1','2', '10'])->orWhereIn("p_status", ['1','2', '10'])->get();
+
+        return view('trainers.index', compact('permission','data', 'employee'));
     }
     public function filter(Request $request)
     {
         try {
+            $permission = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where("url", "trainer/list")
+            ->first();
             $from_date = null;
             $to_date = null;
             if ($request->from_date) {
@@ -35,7 +72,7 @@ class TrainerController extends Controller
             if ($request->to_date) {
                 $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
             }
-            $data = Trainer::join('users', 'trainers.employee_id', '=', 'users.id')
+            $data = Trainer::leftJoin('users', 'trainers.employee_id', '=', 'users.id')
             ->select(
                 'trainers.*', 
                 'users.employee_name_kh',
@@ -43,7 +80,26 @@ class TrainerController extends Controller
                 'users.personal_phone_number',
                 'users.email as  user_email',
                 'users.remark as user_remark',
+                'users.line_manager',
+                'users.department_id',
+                'users.branch_id',
             )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
+                if(in_array($RolePermission, ['HOD', 'BM'])){
+                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+    
+                }else if(in_array($RolePermission, ['DHOD', 'DBM'])){
+                    $query->where("users.line_manager", Auth::user()->id);
+                    $query->orWhere("users.id", Auth::user()->id);
+    
+                }else if($RolePermission == "Employee") {
+                    $query->where("users.id", Auth::user()->id);
+    
+                }else if ($RolePermission == 'HR' && $permission->is_access != "1") {
+                    $query->where("users.line_manager", Auth::user()->id);
+                }
+            })
             ->when($from_date, function ($query, $from_date) {
                 $query->where('trainers.created_at', '>=', $from_date);
             })
@@ -51,18 +107,19 @@ class TrainerController extends Controller
                 $query->where('trainers.created_at','<=', $to_date);
             })
             ->when($request->trainer_type, function ($query, $trainer_type) {
-                $query->where('type', $trainer_type);
+                $query->where('trainers.type', $trainer_type);
             })
             ->when($request->company_name, function ($query, $company_name) {
-                $query->where('company_name', 'LIKE', '%'.$company_name.'%');
+                $query->where('trainers.company_name', 'LIKE', '%'.$company_name.'%');
             })
             ->when($request->trainer_name, function ($query, $trainer_name) {
-                $query->where('name_en', 'LIKE', '%'.$trainer_name.'%');
-                $query->orWhere('name_kh', 'LIKE', '%'.$trainer_name.'%');
-                $query->orWhere('employee_name_en', 'LIKE', '%'.$trainer_name.'%');
-                $query->orWhere('employee_name_kh', 'LIKE', '%'.$trainer_name.'%');
+                $query->where('users.name_en', 'LIKE', '%'.$trainer_name.'%');
+                $query->orWhere('users.name_kh', 'LIKE', '%'.$trainer_name.'%');
+                $query->orWhere('users.employee_name_en', 'LIKE', '%'.$trainer_name.'%');
+                $query->orWhere('users.employee_name_kh', 'LIKE', '%'.$trainer_name.'%');
             })
             ->get();
+            
             return response()->json([
                 'success'=>$data,
             ]);
@@ -91,6 +148,7 @@ class TrainerController extends Controller
     public function store(Request $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
             Trainer::create($data);
@@ -140,19 +198,18 @@ class TrainerController extends Controller
     public function update(Request $request)
     {
         try{
-            $dataUpdate =[
-                'type' => $request->type,
-                'company_name' => $request->company_name,
-                'employee_id' => $request->employee_id,
-                'name_en' => $request->name_en,
-                'name_kh' => $request->name_kh,
-                'email' => $request->email,
-                'number_phone' => $request->number_phone,
-                'remark' => $request->remark,
-                'status' => $request->status,
-                'updated_by' => Auth::user()->id 
-            ];
-            Trainer::where('id',$request->id)->update($dataUpdate);
+            $data = Trainer::find($request->id);
+            $data['type'] = $request->type;
+            $data['company_name'] = $request->company_name;
+            $data['employee_id'] = $request->employee_id;
+            $data['name_en'] = $request->name_en;
+            $data['name_kh'] = $request->name_kh;
+            $data['email'] = $request->email;
+            $data['number_phone'] = $request->number_phone;
+            $data['remark'] = $request->remark;
+            $data['status'] = $request->status;
+            $data['updated_by'] = Auth::user()->id;
+            $data->save();
             Toastr::success('Training type Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

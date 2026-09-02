@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
 use App\Models\Taxes;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class TaxesController extends Controller
 {
@@ -18,6 +19,9 @@ class TaxesController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m8-s1","is_view")->value != "1") {
+            return view('upgrade.access_page');
+        }
         $data = Taxes::all();
         return view('taxes.index',compact('data'));
     }
@@ -41,6 +45,7 @@ class TaxesController extends Controller
     public function store(Request $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
             Taxes::create($data);
@@ -86,13 +91,13 @@ class TaxesController extends Controller
     public function update(Request $request)
     {
         try{
-            Taxes::where('id',$request->id)->update([
-                'tax_rate' => $request->tax_rate,
-                'from' => $request->name,
-                'to' => $request->to,
-                'tax_deduction_amount' => $request->tax_deduction_amount,
-                'updated_by' => Auth::user()->id 
-            ]);
+            $data = Taxes::find($request->id);
+            $data['tax_rate'] = $request->tax_rate;
+            $data['from'] = $request->from;
+            $data['to'] = $request->to;
+            $data['tax_deduction_amount'] = $request->tax_deduction_amount;
+            $data['updated_by'] = Auth::user()->id;
+            $data->save();
             Toastr::success('Taxes Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

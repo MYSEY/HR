@@ -2,25 +2,34 @@
 
 namespace App\Models;
 
-use App\Traits\UploadFiles\UploadFIle;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use App\Traits\UploadFiles\UploadFIle;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CandidateResume extends Model
 {
     use HasFactory;
     use UploadFIle;
     use SoftDeletes;
+    use LogsActivity;
 
     protected $table = 'candidate_resumes';
     protected $guarded = ['id'];
+    protected $appends = ['CandidateGender','CandidatePosition', 'CandidateBranch'];
     protected $fillable = [
         'number_employee',
+        'last_name_kh',
+        'first_name_kh',
+        'last_name_en',
+        'first_name_en',
         'name_kh',
         'name_en',
         'gender',
+        'line_manager',
         'current_position',
         'companey_name',
         'position_applied',
@@ -28,8 +37,10 @@ class CandidateResume extends Model
         'location_applied',
         'received_date',
         'recruitment_channel',
+        'referral_name',
         'contact_number',
         'status',
+        'marital_status',
         'cv',
         'interviewed_date',
         'committee_interview',
@@ -42,9 +53,11 @@ class CandidateResume extends Model
         'interviewed_channel',
         'fdc_date',
         'id_card_number',
+        'id_number_nssf',
         'basic_salary',
         'salary_increas',
         'position_type',
+        'pro_rate',
         'department_id',
         'date_of_birth',
         'current_province',
@@ -62,8 +75,19 @@ class CandidateResume extends Model
         'created_by',
         'updated_by',
     ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
+    
     public function option(){
         return $this->belongsTo(Option::class,'gender');
+    }
+    public function maritalStatus(){
+        return $this->belongsTo(Option::class,'marital_status');
     }
     public function position(){
         return $this->belongsTo(Position::class,'position_applied');
@@ -93,6 +117,15 @@ class CandidateResume extends Model
     //// Permanent address
     public function permanentprovince(){
         return $this->belongsTo(Province::class,'permanent_province','code');
+    }
+    public function permanentdistrict(){
+        return $this->belongsTo(District::class,'permanent_district','code');
+    }
+    public function permanentcommune(){
+        return $this->belongsTo(Conmmunes::class,'permanent_commune','code');
+    }
+    public function permanentvillage(){
+        return $this->belongsTo(Villages::class,'permanent_village','code');
     }
 
     public function createdBy()

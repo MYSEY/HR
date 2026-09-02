@@ -3,14 +3,18 @@
 namespace App\Models;
 
 use App\Models\Option;
+use App\Helpers\Helper;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Experience extends Model
 {
     use HasFactory;
+    use LogsActivity;
     use SoftDeletes;
 
     protected $table = 'experiences';
@@ -27,15 +31,21 @@ class Experience extends Model
         'description',
         'updated_by'
     ];
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     public function getEmpEmploymentTypeAttribute(){
         $data = Option::where('type','experience')->get();
         foreach($data as $item){
             if($this->employment_type == $item->id){
-                $Emploype = $item->name_khmer;
+                $Emploype = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
             }
         }
-        return $Emploype;
+        return $Emploype ?? "";
     }
 
     public function getExperienceStartDateEdnDateAttribute(){

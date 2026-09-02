@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:200,600');
+@import url('https://fonts.googleapis.com/css?family=Nokora');
+a{
+    text-decoration: none;
+ }
+/* #ivoice{
+    background-color:white !important;
+} */
+.table-a {
+    font-family: 'Nunito','Nokora', sans-serif, serif;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+    
+}
+.print_table_training{
+    font-family: 'Nunito','Nokora', sans-serif, serif;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12px;
+}
+.tbody_print tr, th, td{
+    padding: 1.5%;
+    border: 0.5px solid #dee2e6;
+}
+.td-border {
+    border: none !important
+}
+.tr-bckground-ch {
+    background-color: chocolate !important
+}
+.tr-background-83 {
+    background-color: #83d85c;
+}
+.td-background-cc {
+    background-color: #cccccc !important;
+}
+
+
+/* block style print candidate resume */
+ol {
+    list-style: none;
+    font-family: 'Khmer OS Battambang', serif;
+    margin-top: 0%;
+}
+ol.s {list-style-type: inherit;}
+
+.set-font,p{
+    font-family:'Khmer OS Battambang', serif;
+    margin-top: -15px;
+    font-size: 12px;
+}
+.set-fontss{
+    font-family:'Khmer OS Muol Light', serif;
+}
+.font-title, .title{
+    font-family: 'Khmer OS Muol Light', serif;
+    font-size: 26px;
+}
+.font-title, p {
+    font-family: 'Khmer OS Bokor', serif;
+    font-size: 12px;
+    margin-top: -2px;
+}
+.font-sub-title{
+    text-align: center; 
+    margin-top: -12px;
+}
+.label-sub{
+    font-family: "Khmer OS Muol Light", serif;
+    font-size: 26px;
+}
+.label-subs{
+    font-family: 'Khmer OS Siemreap', serif;
+    font-size: 24px;
+}
+.label-subss{
+    font-family: 'Khmer OS Siemreap', serif;
+    font-size: 20px;
+}
+.label-sub_l{
+    font-weight: bold;
+    font-family: 'Khmer OS Bokor', serif;
+    font-size: 20px;
+}
+.label-sub_ll{
+    font-weight: bold;
+    font-family: 'Khmer OS Bokor', serif;
+    font-size: 14px;
+}
+.label-sub_lll {
+    font-family: "Khmer OS Muol Light", serif;
+    font-size: 14px;
+}
+
+.style-table {
+    display: flex;
+    /* margin-left: 2%; */
+}
+.table_tr{
+    /* border: solid 0px !important; 
+    padding: 0% !important;
+    font-size: 13px;
+    text-align: justify; 
+    text-justify: inter-word; */
+    /* white-space: nowrap; */
+    
+    border: solid 0px !important; 
+    padding: 0% !important;
+    font-size: 24px;
+    
+    /* 1. ប្តូរមកជាតម្រឹមខាងឆ្វេង ដើម្បីកុំឱ្យរីកចន្លោះអក្សរឆ្ងាយពេក */
+    text-align: left; 
+    
+    /* 2. លុប text-justify: inter-word; ចេញ */
+    /* text-justify: inter-word; <- លុបចោល ឬ Comment ចោល */
+    
+    /* 3. បន្ថែមការកំណត់ដាច់ពាក្យឱ្យបានស្អាត និងកំណត់កម្ពស់ជួរ (Line height) */
+    word-break: break-word;
+    line-height: 1.8;
+    white-space: nowrap;
+}
+.nssf-box {
+    border: 1px solid #000;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 22px;
+    font-size: 12pt;
+    font-weight: bold;
+    margin: 0 1px;
+}
+/* ប្រអប់ Checkbox */
+.checkbox-box {
+    display: inline-flex;       /* ប្តូរមកជា inline-flex ដើម្បីងាយរុញអក្សរខាងក្នុង */
+    align-items: center;        /* តម្រឹមចំកណ្តាលបញ្ឈរ */
+    justify-content: center;    /* តម្រឹមចំកណ្តាលផ្តេក */
+    
+    width: 22px;                /* បង្កើនទទឹងបន្តិចឱ្យសមសមាមាត្រ */
+    height: 22px;               /* បង្កើនកម្ពស់បន្តិច */
+    border: 1px solid #000;
+    margin-right: 4px;
+    vertical-align: middle;
+    font-size: 20px;
+    
+    /* 👑 គន្លឹះ៖ ប្រើ padding-top ដើម្បីរុញទម្លាក់សញ្ញាគ្រីសមកក្រោមបន្តិចតាមចិត្ត */
+    padding-top: 1px;           
+    box-sizing: border-box;     /* ការពារកុំឱ្យ padding រុញប្រអប់ឱ្យរីកធំ */
+}

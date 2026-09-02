@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
 use App\Models\TrainingType;
-use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class TrainingTypeController extends Controller
 {
@@ -41,6 +42,7 @@ class TrainingTypeController extends Controller
     public function store(Request $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
             TrainingType::create($data);
@@ -85,12 +87,12 @@ class TrainingTypeController extends Controller
     public function update(Request $request)
     {
         try{
-            TrainingType::where('id',$request->id)->update([
-                'type_name' => $request->type_name,
-                'description' => $request->description,
-                'status' => $request->status,
-                'updated_by' => Auth::user()->id 
-            ]);
+            $data = TrainingType::find('id',$request->id);
+            $data['type_name'] = $request->type_name;
+            $data['description'] = $request->description;
+            $data['status'] = $request->status;
+            $data['updated_by'] = Auth::user()->id;
+            $data->save();
             Toastr::success('Training type Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

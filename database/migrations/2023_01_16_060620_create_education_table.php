@@ -9,6 +9,7 @@ class CreateEducationTable extends Migration
     /**
      * Run the migrations.
      *
+     * php artisan migrate:refresh --path=database/migrations/2023_01_16_060620_create_education_table.php
      * @return void
      */
     public function up()

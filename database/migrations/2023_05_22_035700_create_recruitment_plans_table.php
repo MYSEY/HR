@@ -8,6 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_05_22_035700_create_recruitment_plans_table.php
+     * 
      *
      * @return void
      */

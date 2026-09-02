@@ -8,6 +8,7 @@ class CreateStaffPromotedsTable extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_01_23_032147_create_staff_promoteds_table.php
      *
      * @return void
      */

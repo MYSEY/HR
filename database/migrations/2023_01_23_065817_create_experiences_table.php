@@ -8,6 +8,7 @@ class CreateExperiencesTable extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_01_23_065817_create_experiences_table.php
      *
      * @return void
      */

@@ -3,7 +3,9 @@
 namespace App\Exports;
 
 use App\Models\User;
+use App\Repositories\Admin\EmployeeRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
@@ -16,11 +18,22 @@ class ExportEmployeeReport implements FromCollection, WithColumnWidths, WithHead
     protected $export_datas;
     public function __construct($request)
     {
-        $users = User::whereNot("emp_status", null)
+        $users = User::with("bank")->whereNot("emp_status", null)
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where('id',Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->emp_status, function ($query, $emp_status) {
             $query->where('emp_status', $emp_status);
         })
-        ->when($request->employee_id, function ($query, $employee_id) {
+        ->when($request->number_employee, function ($query, $employee_id) {
             $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
         })
         ->when($request->employee_name, function ($query, $employee_name) {
@@ -57,6 +70,7 @@ class ExportEmployeeReport implements FromCollection, WithColumnWidths, WithHead
             }else if ($value->emp_status=='Cancel'){
                 $emp_status = "Cancel";
             };
+            $account_number = "\t" . $value->account_number;
             $dataExport[] = [
                 "no" => $i,
                 "employee_id" => $value->number_employee,
@@ -71,6 +85,9 @@ class ExportEmployeeReport implements FromCollection, WithColumnWidths, WithHead
                 "martial_status" => $value->marital_status,
                 "basic_salary" => $value->basic_salary,
                 "status" => $emp_status,
+                "bank_name"=>  ($value->bank ? $value->bank->name : ""),
+                "account_name" =>  $value->account_name,
+                "account_number" => $account_number
             ];
             $i++;
         }
@@ -106,6 +123,9 @@ class ExportEmployeeReport implements FromCollection, WithColumnWidths, WithHead
             'K' => 10,      
             'L' => 10,      
             'M' => 10,
+            'N' => 10,
+            'O' => 10,
+            'P' => 10,
         ];
     }
     public function registerEvents(): array {
@@ -115,19 +135,19 @@ class ExportEmployeeReport implements FromCollection, WithColumnWidths, WithHead
                 $sheet = $event->sheet;
 
                 // block merge cells 
-               $sheet->mergeCells('A2:M2');
+                $sheet->mergeCells('A2:P2');
                 $sheet->setCellValue('A2', "CAMMA Microfinance Limited");
-                $sheet->getDelegate()->getStyle('A2:M2')->getFont()->setName('Khmer OS Muol Light')
-                ->setSize(12)->setUnderline('A2:M2');
-                $event->sheet->getDelegate()->getStyle('A2:M2')
+                $sheet->getDelegate()->getStyle('A2:P2')->getFont()->setName('Khmer OS Muol Light')
+                ->setSize(12)->setUnderline('A2:P2');
+                $event->sheet->getDelegate()->getStyle('A2:P2')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A3:M3');
+                $sheet->mergeCells('A3:P3');
                 $sheet->setCellValue('A3', "Employee Report");
-                $sheet->getDelegate()->getStyle('A3:M3')->getFont()->setName('Arial')
+                $sheet->getDelegate()->getStyle('A3:P3')->getFont()->setName('Arial')
                 ->setSize(10);
-                $event->sheet->getDelegate()->getStyle('A3:M3')
+                $event->sheet->getDelegate()->getStyle('A3:P3')
                                 ->getAlignment()
                                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             },
@@ -149,6 +169,9 @@ class ExportEmployeeReport implements FromCollection, WithColumnWidths, WithHead
             "Martial Status",
             "Basic Salary",
             "Status",
+            "Bank Name",
+            "Account Name",
+            "Account Number",
         ];
     }
 }

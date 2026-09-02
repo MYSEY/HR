@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 class SettingController extends Controller
 {
     public function changePassword(){
+        if (permissionAccess("m9-s5","is_view")->value != "1") {
+            return view('upgrade.access_page');
+        }
         return view('settins.index');
     }
     public function updatePassword(Request $request){
@@ -24,7 +27,8 @@ class SettingController extends Controller
             if($hashedPassword->number_employee == $request->number_employee){
                 if ($request->password == $request->password_confirmation) {
                     User::where('number_employee', $request->number_employee)->update([
-                        'password'  =>  Hash::make($request->password)
+                        'password'  =>  Hash::make($request->password),
+                        'p_status'  =>  0
                     ]);
                     Toastr::success('Updated password successfully.','Success');
                 }else{

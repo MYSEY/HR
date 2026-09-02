@@ -10,7 +10,7 @@ a{
     font-family: 'Nunito','Nokora', sans-serif, serif;
     border-collapse: collapse;
     width: 100%;
-    /* font-size: 12px; */
+    font-size: 14px;
     
 }
 .print_table_training{
@@ -67,6 +67,7 @@ ol {
     list-style: none;
     font-family: 'Khmer OS Battambang', serif;
     margin-top: 0%;
+    margin-bottom: 0%;
 }
 ol.s {list-style-type: inherit;}
 
@@ -74,6 +75,9 @@ ol.s {list-style-type: inherit;}
     font-family:'Khmer OS Battambang', serif;
     margin-top: -15px;
     font-size: 12px;
+}
+.set-fontss{
+    font-family:'Khmer OS Muol Light', serif;
 }
 .font-title, .title{
     font-family: 'Khmer OS Muol Light', serif;
@@ -95,6 +99,10 @@ ol.s {list-style-type: inherit;}
 .label-subs{
     font-family: 'Khmer OS Siemreap', serif;
     font-size: 14px;
+}
+.label-subss{
+    font-family: 'Khmer OS Siemreap', serif;
+    font-size: 16px;
 }
 .label-sub_l{
     font-weight: bold;
@@ -122,45 +130,33 @@ ol.s {list-style-type: inherit;}
     text-align: justify; 
     text-justify: inter-word;
 }
-/* .tbody_print tr,th, .float-end{
-    float: right!important;
-} */
-/* .table_c{
-    margin-left:auto;
-    margin-top:0.8%;
-    color: #4747d1;
-    font-family: 'Nunito','Nokora', sans-serif, serif;
-    border-collapse: collapse;
-    width: 33%;
-    
-} */
-/* .table-d {
-    color: #4747d1;
-    margin-top:30px;
-    font-family: 'Nunito','Nokora', sans-serif, serif;
-    border-collapse: collapse;
-    width: 100%;
-    
-} */
-/* .table_dd {
-    font-family: 'Nunito','Nokora', sans-serif, serif;
-    width: 100%;
-    color: #4747d1;
-    border-collapse: collapse;
-} */
-/* .border_print{
-    padding:7px; 
-    border-bottom: 0px solid #ffffff !important;
-    border-left: 0px solid #ffffff !important
+.nssf-box {
+    border: 1px solid #000;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    line-height: 22px;
+    font-size: 11pt;
+    font-weight: bold;
+    margin: 0 1px;
 }
-.remove_border_botton_print{
-    font-size: 14px;
-    border-bottom: 0px solid #ffffff !important;
-}
-.remove_border_top_print{
-    border-top: 0px solid #ffffff !important;
-}
-.one-font{
-    font-family: 'Nunito','Nokora', sans-serif, serif;
-} */
 
+.table_tr_blicklist{
+    border: solid 0px !important; 
+    padding-right: 0% !important;
+    padding-top: 0% !important;
+    padding-bottom: 0% !important;
+    font-size: 15.7px;
+    text-align: justify; 
+    text-justify: inter-word;
+}
+.table_tr_confi{
+    border: solid 0px !important; 
+    padding-right: 0% !important;
+    padding-top: 0% !important;
+    padding-bottom: 0% !important;
+    font-size: 15.7px;
+    text-align: justify; 
+    text-justify: inter-word;
+}

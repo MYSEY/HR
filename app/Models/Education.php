@@ -3,13 +3,20 @@
 namespace App\Models;
 
 use App\Models\Option;
+use App\Helpers\Helper;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Education extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
+
     protected $table = 'education';
     protected $guarded = ['id'];
     protected $fillable = [
@@ -24,13 +31,26 @@ class Education extends Model
         'created_by',
         'updated_by'
     ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
 
+    public function optionDegree(){
+        return $this->belongsTo(Option::class,'degree');
+    }
+    public function optionFieldofstudy(){
+        return $this->belongsTo(Option::class,'field_of_study');
+    }
 
     public function getEdcutionFieldOfStudyAttribute(){
         $data = Option::where('type','field_of_study')->get();
         foreach($data as $item){
             if($this->field_of_study == $item->id){
-                $FieldOfStudy = $item->name_khmer;
+                $FieldOfStudy = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
             }
         }
         return $FieldOfStudy ?? null;
@@ -39,7 +59,7 @@ class Education extends Model
         $data = Option::where('type','degree')->get();
         foreach($data as $item){
             if($this->degree == $item->id){
-                $dataDegree = $item->name_khmer;
+                $dataDegree = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
             }
         }
         return $dataDegree ?? null;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Models\Option;
 use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -9,6 +10,10 @@ use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PositionRequest;
+use App\Models\Department;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Spatie\Activitylog\Models\Activity;
+use App\Models\permissions;
 
 class PositionController extends Controller
 {
@@ -19,8 +24,14 @@ class PositionController extends Controller
      */
     public function index()
     {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "position")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
         $data = Position::all();
-        return view('positions.index',compact('data'));
+        $positionType = Option::where('type','position_type')->get();
+        $positionRange = Option::where('type','position_range')->get();
+        return view('positions.index',compact('data','positionType','positionRange','permission'));
     }
 
     /**
@@ -42,6 +53,7 @@ class PositionController extends Controller
     public function store(PositionRequest $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by']    = Auth::user()->id;
             Position::create($data);
@@ -60,9 +72,14 @@ class PositionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $data = Position::all();
+        $department = Department::all();
+        return response()->json([
+            'datas'=>$data,
+            'department'=>$department
+        ]);
     }
 
     /**
@@ -71,10 +88,16 @@ class PositionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $data = Position::find($id);
-        return view('positions.edit',compact('data'));
+        $data = Position::where('id',$request->id)->first();
+        $positionType = Option::where('type','position_type')->get();
+        $positionRange = Option::where('type','position_range')->get();
+        return response()->json([
+            'success'=>$data,
+            'positionType'  => $positionType,
+            'positionRange' => $positionRange
+        ]);
     }
 
     /**
@@ -87,11 +110,13 @@ class PositionController extends Controller
     public function update(Request $request)
     {
         try{
-            Position::where('id',$request->id)->update([
-                'name_khmer'  => $request->name_khmer,
-                'name_english'  => $request->name_english,
-                'updated_by'    => Auth::user()->id 
-            ]);
+            $data = Position::find($request->id);
+            $data['name_khmer']  = $request->name_khmer;
+            $data['name_english']  = $request->name_english;
+            $data['position_type']  = $request->position_type;
+            $data['position_range']  = $request->position_range;
+            $data['updated_by']    = Auth::user()->id;
+            $data->save(); 
             Toastr::success('Position Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
@@ -117,6 +142,36 @@ class PositionController extends Controller
             DB::rollback();
             Toastr::error('Position delete fail.','Error');
             return redirect()->back();
+        }
+    }
+    public function ImpotPosition(Request $request){
+        $file = $request->file;
+        $filesize = filesize($file);
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        $AllPosition = $spreadsheet->getActiveSheet()->toArray();
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $i = 0;
+            $dataArray = [];
+            foreach ($AllPosition as $item) {
+                $i++;
+                if ($i != 1) {
+                    Position::firstOrCreate([
+                        'name_english'   => $item[0],
+                        'name_khmer'   => $item[1],
+                        'position_range'   => $item[2],
+                        'position_type'   => $item[3],
+                        'position_type_number'   => $item[4],
+                        'created_by'    => Auth::user()->id,
+                    ]);
+                }
+            }
+            if($dataArray){
+                return response()->json(['error'=>$dataArray]);
+            }
+            return 1;
+        } else {
+            return 0;
         }
     }
 }

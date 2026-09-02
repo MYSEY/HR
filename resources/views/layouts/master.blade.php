@@ -5,6 +5,89 @@
     data-layout-style="default">
 
 <head>
+    @if (App::getLocale() == "kh")
+        <link href="{{ asset('admin/css/style-font-kh.css') }}" rel="stylesheet" type="text/css">
+    @else
+        <link href="{{ asset('admin/css/style-font-en.css') }}" rel="stylesheet" type="text/css">
+    @endif
+    <style>
+        .page-wrapper{
+            min-height: 0px !important
+        }
+        /** class scroll 2 nth child*/
+        thead th.stuck {
+            background: #fff !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 1 !important;
+        }
+        thead th.stuck:nth-child(2) {
+            left:  80px !important;
+        }
+        tbody td.stuck {
+            background: #fff !important;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+        tbody td.stuck:nth-child(2) {
+            left: 84px;
+        }
+
+        /** class scroll 3 bth-child */
+        thead th.stuck-scroll-3 {
+            background: #fff !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 1 !important;
+        }
+        thead th.stuck-scroll-3:nth-child(3) {
+            left:  80px !important;
+        }
+        tbody td.stuck-scroll-3 {
+            background: #fff !important;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+        tbody td.stuck-scroll-3:nth-child(3) {
+            left: 84px;
+        }
+        
+        /** class scroll 4 bth-child */
+        thead th.stuck-scroll-4 {
+            background: #fff !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 1 !important;
+        }
+        thead th.stuck-scroll-4:nth-child(4) {
+            left:  80px !important;
+        }
+        tbody td.stuck-scroll-4 {
+            background: #fff !important;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+        tbody td.stuck-scroll-4:nth-child(4) {
+            left: 84px;
+        }
+
+        /** class scroll one nth-child*/
+        thead th.stuck-scroll {
+            background: #fff !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 1 !important;
+        }
+        .table-striped .stuck-scroll {
+            background-color: #fff;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+    </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -12,9 +95,10 @@
     <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>HRMS</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Camma Microfinance Limited</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/commalogo1.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/favicon.ico') }}">
     {{-- <link rel="shortcut icon" type="image/x-icon" href="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/favicon.png"> --}}
 
     <link rel="stylesheet" href="{{ asset('admin/css/bootstrap.min.css') }}">
@@ -26,6 +110,8 @@
     <link href="{{ asset('admin/css/select2.min.css') }}" rel="stylesheet" type="text/css">
 
     <link href="{{ asset('admin/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+
 
     <link href="{{ asset('admin/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css">
 
@@ -35,109 +121,85 @@
     <link rel="stylesheet" href="{{ asset('admin/css/daterangepicker/daterangepicker.css') }}">
 
     {{-- <link rel="stylesheet" href="{{ asset('admin/css/summernote-bs4.css') }}"> --}}
-
     <link href="{{ asset('admin/css/morris.css') }}" rel="stylesheet" type="text/css">
 
     <link href="{{ asset('admin/css/fullcalendar.min.css') }}" rel="stylesheet" type="text/css">
+    {{-- style_dashboard.css --}}
+    <link href="{{ asset('admin/css/style_dashboard.css') }}" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/css/noty.css')}}">
-    {{-- <link rel="stylesheet" href="{{ asset('admin/css/noty.css.map')}}"> --}}
-    <link rel="stylesheet" href="{{ asset('admin/css/mint.css')}}">
+    <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/mint.css') }}">
     {{-- message toastr --}}
-	<link rel="stylesheet" href="{{ asset('admin/css/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/toastr.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-
-    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 </head>
 
 <body>
 
     <div class="main-wrapper">
         <div class="header">
+            <a id="toggle_btn" href="javascript:void(0);">
+                <span class="bar-icon">
+                    <svg viewBox="64 64 896 896" focusable="false" data-icon="menu-fold" width="1em" height="1em" fill="currentColor" aria-hidden="true">
+                        <path style="display: none" id="menu-unfold" d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM142.4 642.1L298.7 519a8.84 8.84 0 000-13.9L142.4 381.9c-5.8-4.6-14.4-.5-14.4 6.9v246.3a8.9 8.9 0 0014.4 7z"></path>
+                        <path id="menu-fold" d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 000 13.8z"></path>
+                    </svg>
+                </span>
             <div class="header-left">
                 <a href="#" class="logo">
-                    <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" width="100" height="100" alt="">
-                </a>
-                <a href="#" class="logo2">
-                    <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" width="100" height="100" alt="">
+                    <img src="{{ asset('/admin/img/camma-logo.png') }}" alt="Image" style="width: 100%;
+                    max-width: 248px;
+                    height: auto;
+                    margin: 0 auto;">
                 </a>
             </div>
 
-            <a id="toggle_btn" href="javascript:void(0);">
-                <span class="bar-icon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </span>
-            </a>
-            <a id="mobile_btn" class="mobile_btn" href=""><i class="fa fa-bars"></i></a>
+            <a id="mobile_btn" class="mobile_btn" href=""></a>
 
             <ul class="nav user-menu">
-
                 <li class="nav-item dropdown has-arrow flag-nav">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button">
-                        <img src="{{asset('/admin/img/us.png')}}" alt="" height="20">
-                        <span>English</span>
+                        @switch(App::getLocale())
+                            @case('en')
+                                <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"><span>{{Helper::getLang() == 'en' ? 'English' : 'អង់គ្លេស'}}</span>
+                            @break
+                            
+                            @case('kh')
+                                <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="20"><span> {{Helper::getLang() == 'en' ? 'Khmer' : 'ខ្មែរ'}}</span>
+                            @break
+                            @default
+                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"><span>{{Helper::getLang() == 'en' ? 'English' : 'អង់គ្លេស'}}</span>
+                        @endswitch
                     </a>
+                    
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a href="javascript:void(0);" class="dropdown-item">
-                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="16"> English
+                        <a href="{{ url('lang/en') }}" class="dropdown-item">
+                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"> {{Helper::getLang() == 'en' ? 'English' : 'អង់គ្លេស'}}
                         </a>
-                        <a href="javascript:void(0);" class="dropdown-item">
-                            <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="16"> Khmer
+                        <a href="{{ url('lang/kh') }}" class="dropdown-item">
+                            <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="20"> {{Helper::getLang() == 'en' ? 'Khmer' : 'ខ្មែរ'}}
                         </a>
                     </div>
-                </li>
-
-                <li class="nav-item dropdown">
-                    {{-- <a href="" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <i class="fa fa-bell-o"></i> <span class="badge rounded-pill">3</span>
-                    </a> --}}
-                    {{-- <div class="dropdown-menu notifications">
-                        <div class="topnav-dropdown-header">
-                            <span class="notification-title">Notifications</span>
-                        </div>
-                        <div class="noti-content">
-                            <ul class="notification-list">
-                                <li class="notification-message">
-                                    <a href="">
-                                        <div class="media d-flex">
-                                            <span class="avatar flex-shrink-0">
-                                                <img alt="" src="{{asset('/admin/img/avatar-02.jpg')}}">
-                                            </span>
-                                            <div class="media-body flex-grow-1">
-                                                <p class="noti-details"><span class="noti-title">John Doe</span> added new task 
-                                                    <span class="noti-title">Patient appointment booking</span>
-                                                </p>
-                                                <p class="noti-time"><span class="notification-time">4 mins ago</span></p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="topnav-dropdown-footer">
-                            <a href="">View all Notifications</a>
-                        </div>
-                    </div> --}}
                 </li>
 
                 <li class="nav-item dropdown has-arrow main-drop">
                     <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <span class="avatar">
-                            @if (Auth::user()->profile==null)
-                                <img alt="avatar" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                            @if (Auth::user()->profile == null)
+                                <img alt="avatar" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
                             @else
-                                <img src="{{asset('/uploads/images/'.Auth::user()->profile)}}" alt="">
+                                <img src="{{ asset('/uploads/images/' . Auth::user()->profile) }}" alt="">
                             @endif
-                            <span class="status online"></span></span>
-                        <span>{{Auth::user()->employee_name_en}}</span>
+                            <span class="status online"></span>
+                        </span>
+                        <span>{{ Helper::getLang() == 'en' ? Auth::user()->employee_name_en : Auth::user()->employee_name_kh }}</span>
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{url('/employee/profile/'.Auth::user()->id)}}">My Profile</a>
+                        <a class="dropdown-item" href="{{ url('/employee/profile/' . Auth::user()->id) }}">@lang("lang.my_profile")</a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> {{ __('Logout') }}
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            @lang("lang.log_out")
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
@@ -148,11 +210,13 @@
 
 
             <div class="dropdown mobile-user-menu">
-                <a href="" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <a href="" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="{{url('/employee/profile/'.Auth::user()->id)}}">My Profile</a>
+                    <a class="dropdown-item" href="{{ url('/employee/profile/' . Auth::user()->id) }}">@lang("lang.my_profile")</a>
                     <a class="dropdown-item" href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> {{ __('Logout') }}
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        @lang("lang.log_out")
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
@@ -160,54 +224,52 @@
                 </div>
             </div>
         </div>
-       
         <div class="sidebar" id="sidebar">
             <div class="slimScrollDiv" style="position: relative; overflow:hidden; width: 100%; height: 346px;">
-                <div class="sidebar-inner slimscroll" style="overflow: auto; width: 100%; height: 346px;">
+                <div class="sidebar-inner slimscroll">
                     <div id="sidebar-menu" class="sidebar-menu">
                         <ul class="sidebar-vertical">
-                            @foreach (menu() as $menu)
-                                @if (isset($menu['child']))
-                                    @if (RolePermission($menu['table'],$menu['permission']))
-                                        <li class="menu-title">
-                                            <span>{{$menu['name']}}</span>
-                                        </li>
+                            <li class="menu-title"><span style="border-bottom: 3px solid #dc0000; font-weight: bold; font-size: 17px;">@lang('lang.hr_management_system')</span></li>
+                            @foreach (RolePermission()->menu as $menu)
+                                @if ($menu["menu_id"] == null && $menu["sub_menu_id"] == null)
+                                    <li style="@if (Request::path() == $menu['url']) background-color: #9F2E32 @endif">
+                                        <a class="@if (Request::path() == $menu['url']) active @endif" style="border-bottom: 3px solid #f0f0f0; @if (Request::path() == $menu['url']) color: white @endif" href="{{url($menu['url'])}}"><i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span></a>
+                                    </li>
+                                @else
+                                    {{-- @if ($menu["name"] !="lang.employee" || Auth::user()->RolePermission !="Employee") --}}
                                         <li class="submenu">
-                                            <a class="" href="javascript:void(0);">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span><span class="menu-arrow"></span></a>
-                                            <ul style="display: none;">
-                                                @foreach ($menu['child'] as $sub_menu)
-                                                    @if (RolePermission($sub_menu['table'],$sub_menu['permission']))
+                                            <a class="@if (Request::path() == $menu['url']) active @endif"  href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">
+                                                <i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span><span class="menu-arrow"></span>
+                                            </a>
+                                            <ul>
+                                                @foreach (RolePermission()->subMenu as $sub_menu)
+                                                    @if ($sub_menu["sub_menu_id"] == $menu["menu_id"])
                                                         <li>
-                                                            <a class="" href="{{url($sub_menu['url'])}}">
-                                                                {{$sub_menu['value']}}
-                                                            </a>
+                                                            @if (Auth::user()->RolePermission =="Employee" && $sub_menu["name"] =="lang.all_employee")
+                                                                <a style="@if (Request::path() == $sub_menu['url']) background-color: #9F2E32; color:white @endif" class="@if (Request::path() == $sub_menu['url']) active @endif"  href="{{url($sub_menu['url'])}}">@lang("lang.profile_employee")</a>
+                                                            @else
+                                                                <a style="@if (Request::path() == $sub_menu['url']) background-color: #9F2E32; color:white @endif" class="@if (Request::path() == $sub_menu['url']) active @endif"  href="{{url($sub_menu['url'])}}">@lang($sub_menu["name"])</a>
+                                                            @endif
                                                         </li>
                                                     @endif
                                                 @endforeach
                                             </ul>
                                         </li>
-                                    @endif
-                                @else
-                                    @if (RolePermission($menu['table'],$menu['permission']))
-                                        <li class="menu-title">
-                                            <span>{{$menu['name']}}</span>
-                                        </li>
-                                        <li>
-                                            <a class="" href="{{url($menu['url'])}}">
-                                                {!! $menu['icon'] !!}
-                                                <span>{{$menu['value']}}</span>
-                                            </a>
-                                        </li>
-                                    @endif
+                                    {{-- @endif --}}
                                 @endif
                             @endforeach
                         </ul>
                     </div>
                 </div>
-                <div class="slimScrollBar" style="background: rgb(204, 204, 204); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 68.5659px;"></div>
-                <div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>
+                <div class="slimScrollBar"
+                    style="background: rgb(204, 204, 204); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 68.5659px;">
+                </div>
+                <div class="slimScrollRail"
+                    style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;">
+                </div>
             </div>
         </div>
+
         <div class="page-wrapper" style="min-height: 406px;">
             <div class="content">
                 <div class="content-wrapper">
@@ -217,56 +279,171 @@
         </div>
     </div>
 
-   
+    <input hidden type="text" name="" id="rolePermission" value="{{Auth::user()->RolePermission}}">
 
-    <script src="{{asset('/admin/js/jquery.min.js.download')}}"></script>
+    <script src="{{ asset('/admin/js/jquery.min.js') }}"></script>
 
     <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 
-    <script src="{{asset('/admin/js/bootstrap.bundle.min.js.download')}}"></script>
+    <script src="{{ asset('/admin/js/bootstrap.bundle.min.js') }}"></script>
 
-    <script src="{{asset('/admin/js/jquery.slimscroll.min.js.download')}}"></script>
-    <script src="{{asset('/admin/js/moment.min.js.download')}}"></script>
-    <script src="{{asset('/admin/js/jquery-ui.min.js.download')}}"></script>
+    <script src="{{ asset('/admin/js/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('/admin/js/moment.min.js') }}"></script>
+    <script src="{{ asset('/admin/js/jquery-ui.min.js') }}"></script>
 
-    <script src="{{asset('/admin/js/select2.min.js')}}"></script>
+    <script src="{{ asset('/admin/js/select2.min.js') }}"></script>
 
-    <script src="{{asset('/admin/js/jquery.dataTables.min.js.download')}}"></script>
-    <script src="{{asset('/admin/js/dataTables.bootstrap4.min.js.download')}}"></script>
+    {{-- <script src="{{ asset('/admin/js/jquery.dataTables.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('/admin/js/dataTables.bootstrap4.min.js') }}"></script> --}}
 
-    <script src="{{asset('/admin/js/bootstrap-datetimepicker.min.js.download')}}"></script>
-    <script src="{{asset('/admin/js/daterangepicker.js.download')}}"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 
-    <script src="{{asset('/admin/js/bootstrap-tagsinput.min.js.download')}}"></script>
+    <script src="{{ asset('/admin/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('/admin/js/daterangepicker.js') }}"></script>
 
-    <script src="{{asset('/admin/js/sticky-kit.min.js.download')}}"></script>
+    <script src="{{ asset('/admin/js/bootstrap-tagsinput.min.js') }}"></script>
 
-    <script src="{{asset('/admin/js/summernote-bs4.js.download')}}"></script>
+    <script src="{{ asset('/admin/js/sticky-kit.min.js') }}"></script>
 
-    <script src="{{asset('/admin/js/fullcalendar.min.js.download')}}"></script>
-    <script src="{{asset('/admin/js/jquery.fullcalendar.js.download')}}"></script>
+    <script src="{{ asset('/admin/js/summernote-bs4.js') }}"></script>
 
-    <script src="{{asset('/admin/js/jquery.maskedinput.js.download')}}"></script>
+    <script src="{{ asset('/admin/js/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('/admin/js/jquery.fullcalendar.js') }}"></script>
 
-    <script src="{{asset('/admin/js/task.js.download')}}"></script>
+    <script src="{{ asset('/admin/js/jquery.maskedinput.js') }}"></script>
 
-    <script src="{{asset('/admin/js/layout.js.download')}}"></script>
-    <script src="{{asset('/admin/js/theme-settings.js.download')}}"></script>
-    <script src="{{asset('/admin/js/greedynav.js.download')}}"></script>
+    <script src="{{ asset('/admin/js/task.js') }}"></script>
 
-    <script src="{{asset('/admin/js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('/admin/js/app.js')}}"></script>
+    <script src="{{ asset('/admin/js/layout.js') }}"></script>
+    <script src="{{ asset('/admin/js/theme-settings.js') }}"></script>
+    <script src="{{ asset('/admin/js/greedynav.js') }}"></script>
+
+    <script src="{{ asset('/admin/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('/admin/js/app.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
-    <script src="{{asset('/admin/js/chart_board.js')}}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
-    <script type="text/javascript" src="{{asset('/admin/js/noty.js')}}"></script>
-    <script type="text/javascript" src="{{asset('/admin/js/noty.min.js')}}"></script>
+    <script src="{{ asset('/admin/js/chart_board.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js">
+    </script>
+    <script type="text/javascript" src="{{ asset('/admin/js/noty.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/admin/js/noty.min.js') }}"></script>
+    <script src="{{asset('/admin/js/bootstrap3-typeahead.min.js')}}"></script>
+
+    {{-- <script>
+        var rolePermission = $("#rolePermission").val();
+        if (rolePermission != "HRAdmin") {
+            let idleTime = 0;
+            const maxIdleTime = 60 * 60 * 1000; // 5 minutes (in milliseconds)
+        
+            function resetIdleTimer() {
+                clearTimeout(idleTime);
+                idleTime = setTimeout(() => {
+                    logoutAndRedirect();
+                }, maxIdleTime);
+            }
+        
+            function logoutAndRedirect() {
+                fetch('{{ route("logout") }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = "{{ route('login') }}";
+                    } else {
+                        alert('Failed to log out. Please try again.');
+                    }
+                }).catch(error => {
+                    console.error('Logout failed:', error);
+                });
+            }
+            window.onload = resetIdleTimer;
+            window.onmousemove = resetIdleTimer;
+            window.onkeypress = resetIdleTimer;
+            window.onclick = resetIdleTimer;
+            window.onscroll = resetIdleTimer;
+        
+            function warnUserBeforeLogout() {
+                setTimeout(() => {
+                    // alert("You have been inactive for too long. You will be logged out soon.");
+                }, maxIdleTime - 60000); // Warn 1 minute before logout
+            }
+        
+            warnUserBeforeLogout();   
+        }
+    </script> --}}
+    
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     {{-- <script src="{{asset('/admin/js/MSelectDBox.min.js')}}"></script> --}}
     <div class="sidebar-overlay"></div>
+    @yield('script')
+
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        // (function () {
+        //     // Disable right click
+        //     document.addEventListener('contextmenu', function (e) {
+        //         e.preventDefault();
+        //     });
+
+        //     // Disable key shortcuts
+        //     document.addEventListener('keydown', function (e) {
+        //         // F12
+        //         if (e.keyCode === 123) {
+        //             e.preventDefault();
+        //             return false;
+        //         }
+
+        //         // Ctrl + Shift + I / J / C
+        //         if (e.ctrlKey && e.shiftKey && (
+        //             e.keyCode === 73 || // I
+        //             e.keyCode === 74 || // J
+        //             e.keyCode === 67    // C
+        //         )) {
+        //             e.preventDefault();
+        //             return false;
+        //         }
+
+        //         // Ctrl + U (view source)
+        //         if (e.ctrlKey && e.keyCode === 85) {
+        //             e.preventDefault();
+        //             return false;
+        //         }
+        //     });
+        // })();
+        // var element = document.querySelector('body');
+        //     element.addEventListener('keydown', function(e) {
+        //     if (e.keyCode == 91 && e.ctrlKey && e.shiftKey) {
+        //         e.preventDefault();
+        //         alert('You cannot inspect this page.');
+        //     }
+        // });
+        // document.addEventListener('keydown', function(e) {
+        //     if (e.keyCode === 123) {
+        //         e.preventDefault();
+        //     }
+        // });
+        // document.addEventListener('contextmenu', function(e) {
+        //   e.preventDefault();
+        // });
+        // setInterval(function () {
+        //     if (
+        //         window.outerWidth - window.innerWidth > 160 ||
+        //         window.outerHeight - window.innerHeight > 160
+        //     ) {
+        //         document.body.innerHTML = '<h1>DevTools is not allowed</h1>';
+        //     }
+        // }, 100);
+    </script>
 </body>
 
 </html>

@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MotorRentalDetail extends Model
 {
     use HasFactory;
+    // use SoftDeletes;
+    use LogsActivity;
 
     protected $table = 'motor_rental_details';
     protected $guarded = ['id'];
@@ -15,25 +20,52 @@ class MotorRentalDetail extends Model
 
     protected $fillable = [
         'employee_id',
-        'gasoline_price_per_liter',
+        'motor_rental_id',
         'start_date',
         'end_date',
         'product_year',
         'expired_year',
+        'motor_color',
         'shelt_life',
         'number_plate',
+        'motorcycle_brand',
+        'category',
+        'body_number',
+        'engine_number',
         'total_gasoline',
         'total_work_day',
         'price_engine_oil',
         'price_motor_rentel',
         'taplab_rentel',
+        'taplab_imei',
+        'start_date_taplab',
         'price_taplab_rentel',
+        'resigned_date',
+        'gasoline_price_per_liter',
+        'amount_price_motor_rentel',
+        'amount_price_engine_oil',
+        'amount_price_taplab_rentel',
+        'adjust_amount_exclude',
+        'adjust_amount_tabple_exclude',
+        'adjust_amount_include',
+        'adjust_amount_tabple_include',
+        'adjust_amount_kh',
+        'adjust_amount_engine_oil',
         'tax_rate',
+        'status',
+        'from_date',
+        'to_date',
         'created_by',
         'updated_by',
     ];
 
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -42,7 +74,9 @@ class MotorRentalDetail extends Model
     {
         return $this->belongsTo(User::class ,'updated_by');
     }
-
+    public function motorrental(){
+        return $this->belongsTo(MotorRentel::class,'motor_rental_id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class ,'employee_id')
@@ -56,6 +90,11 @@ class MotorRentalDetail extends Model
             'branch_id',
             'gender'])
         ->with('department')->with('position')->with('gender')->with('branch');
+    }
+
+    public function getMotorRentalAttribute(){
+        $motor = MotorRentel::where("id", $this->motor_rental_id)->first();
+        return $motor;
     }
 
     public function getMotorEmployeeAttribute(){

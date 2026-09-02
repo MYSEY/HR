@@ -1,100 +1,301 @@
 @extends('layouts.master')
+<style>
+    .card_background_color {
+        background-color: #f8f9fa !important;
+    }
+    /* The container checkbox */
+    .container-checkbox {
+        /* display: block; */
+        position: relative;
+        padding-left: 35px;
+        /* margin-bottom: 5px; */
+        cursor: pointer;
+        font-size: 15px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    .container-checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 1;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        border: solid 1px #ccc;
+        background-color: #fff;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container-checkbox:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container-checkbox input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container-checkbox .checkmark:after {
+        left: 7px;
+        top: 4px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+    .tooltip-inner {
+        white-space: pre-line !important;
+        text-align: left !important;
+        max-width: 300px !important; 
+        /* word-wrap: break-word !important; */
+    }
+</style>
 @section('content')
     <div class="">
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Leaves</h3>
+                    <h3 class="page-title">@lang('lang.leaves_employee')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Leaves</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.leaves_employee')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i class="fa fa-plus"></i> Add Leave</a>
+                    {{-- <a href="#" class="btn btn-print-delegate"><i class="fa fa-plus"></i>@lang('lang.print')</a> --}}
+                    @if (permissionAccess("m10-s2","is_create")->value == "1") <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i class="fa fa-plus"></i>@lang('lang.request_leave')</a>@endif
                 </div>
             </div>
         </div>
-
+        {{-- @if (Auth::user()->RolePermission=="Employee") --}}
+            <div class="page-header">
+                <div class="row align-items-center" style="display: flow;">
+                    <div class="col">
+                        <h4>@lang('lang.carried_forward_leave')</h4>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item">@lang('lang.year_1') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_1 : 0}}</span> @lang('lang.days')</li>
+                            <li class="breadcrumb-item">@lang('lang.year_2') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_2 : 0}}</span> @lang('lang.days')</li>
+                            <li class="breadcrumb-item">@lang('lang.year_3') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_3 : 0}}</span> @lang('lang.days')</li>
+                        </ul>
+                        
+                    </div>
+                    @if (permissionAccess("m10-s2","is_export")->value == "1")
+                        <div style="text-align: end;">
+                            <a href="#" class="btn btn btn-outline-secondary btn_excel" data-id="{{Auth::user()->id}}"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i> @lang('lang.export')</a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        {{-- @endif --}}
+        
         <div class="row">
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>Annual Leave</h6>
-                    <h4>12</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>Medical Leave</h6>
-                    <h4>3</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>Other Leave</h6>
-                    <h4>4</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>Remaining Leave</h6>
-                    <h4>5</h4>
-                </div>
-            </div>
+            @if (count($dataLeaveType) > 0)
+                @foreach ($dataLeaveType as $type)
+                    <div class="col-md-2 col-sm-4">
+                        <div class="stats-info">
+                            <h6>{{$type->name}}</h6>
+                            @if ($type->type == "annual_leave")
+                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_annual_leave : 0}}</h4>
+                            @elseif($type->type == "sick_leave")
+                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_sick_leave : 0}}</h4>
+                            @elseif($type->type == "special_leave")
+                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_special_leave : 0}}</h4>
+                            @elseif($type->type == "unpaid_leave")
+                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_unpaid_leave : 0}}</h4>
+                            @elseif($type->type == "long_sick_leave")
+                                <h4>{{ltrim($LeaveAllocation ? $LeaveAllocation->total_long_sick_leave : 0, '-')}}</h4>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            @endif
         </div>
-
+        {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer staff-transfer-report"
+                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Leave Type: activate to sort column descending" style="width: 125.037px;">Leave Type</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="From: activate to sort column ascending" style="width: 97.625px;">From</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="To: activate to sort column ascending" style="width: 97.625px;">To</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="No of Days: activate to sort column ascending" style="width: 99.65px;">No of Days</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Reason: activate to sort column ascending" style="width: 141.712px;">Reason</th>
-                                            <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 114.475px;">Status</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Approved by: activate to sort column ascending" style="width: 147.512px;">Approved by</th>
-                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Actions: activate to sort column ascending" style="width: 69.5625px;">Actions</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending"
+                                                aria-label="#: activate to sort column descending">#</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2" aria-label="Period of Leave: activate to sort column descending"
+                                                style="text-align: center">@lang('lang.period_of_leave')</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2" aria-label="Annual: activate to sort column descending"
+                                                style="text-align: center">@lang('lang.annual_leave')</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2"  aria-sort="ascending" aria-label="Sick: activate to sort column descending"
+                                                style="text-align: center">@lang('lang.sick_leave')</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
+                                                style="text-align: center">@lang('lang.special_leave')</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2"  aria-sort="ascending" aria-label="unpaid_leave: activate to sort column descending"
+                                                style="text-align: center">@lang('lang.unpaid_leave')</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2"  aria-sort="ascending" aria-label="long_sick_leave: activate to sort column descending"
+                                                style="text-align: center">@lang('lang.long_sick_leave')</th>
+
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending" aria-label="reason: activate to sort column descending">@lang('lang.reason')</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending" aria-label="remark: activate to sort column descending">@lang('lang.remark')</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending"
+                                                aria-label="actions: activate to sort column descending">@lang('lang.actions')</th>
+                                        </tr>
+                                        <tr>
+                                            <th>@lang('lang.from')</th>
+                                            <th>@lang('lang.to')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="odd">
-                                            <td class="sorting_1">Casual Leave</td>
-                                            <td>8 Mar 2019</td>
-                                            <td>9 Mar 2019</td>
-                                            <td>2 days</td>
-                                            <td>Going to Hospital</td>
-                                            <td class="text-center">
-                                                <div class="action-label">
-                                                    <a class="btn btn-white btn-sm btn-rounded"
-                                                        href="javascript:void(0);">
-                                                        <i class="fa fa-dot-circle-o text-purple"></i> New
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="" class="avatar avatar-xs">
-                                                        <img src="{{asset('admin/img/avatar-09.jpg')}}" alt="">
-                                                    </a>
-                                                    <a href="#">Richard Miles</a>
-                                                </h2>
-                                            </td>
-                                            <td class="text-end">
-                                                <div class="dropdown dropdown-action">
-                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_leave"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_approve"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        @if (count($dataLeaveRequest) > 0)
+                                            @foreach ($dataLeaveRequest as $key => $request)
+                                                @php
+                                                    $leaveType = $request->leaveType->type ?? null;
+                                                @endphp
+                                                <tr class="odd">
+                                                    <td>{{ $key + 1 }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($request->start_date)->format('d-M-Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($request->end_date)->format('d-M-Y') }}</td>
+
+                                                    <!-- Annual Leave -->
+                                                    <td>{{ $leaveType == "annual_leave" ? $request->number_of_day : 0 }}</td>
+                                                    <td>{{ $request->calc_annual_bal }}</td>
+
+                                                    <!-- Sick Leave -->
+                                                    <td>{{ $leaveType == "sick_leave" ? $request->number_of_day : 0 }}</td>
+                                                    <td>{{ $request->calc_sick_bal }}</td>
+
+                                                    <!-- Special Leave -->
+                                                    <td>{{ $leaveType == "special_leave" ? $request->number_of_day : 0 }}</td>
+                                                    <td>{{ $request->calc_special_bal }}</td>
+
+                                                    <!-- Unpaid Leave -->
+                                                    <td>{{ $leaveType == "unpaid_leave" ? $request->number_of_day : 0 }}</td>
+                                                    <td>{{ $request->calc_unpaid_bal }}</td>
+
+                                                    <!-- Long Sick Leave -->
+                                                    <td>{{ $leaveType == "long_sick_leave" ? $request->number_of_day : 0 }}</td>
+                                                    <td>{{ $request->calc_long_sick_bal }}</td>
+                                                    
+                                                    <td data-toggle="tooltip" data-html="true" title="{!! $request->reason !!}">
+                                                        {{ Str::limit($request->reason, 30, '...') }}
+                                                    </td>
+                                                    <td>{{ $request->remark }}</td>
+                                                    
+                                                    <!-- Status Column -->
+                                                    <td>
+                                                        @if ($request->status == "rejected")
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                        @elseif($request->status == "pending_cancel")
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Pending Cancel</span>
+                                                        @elseif($request->status == "cancel_hod" || $request->status == "cancel")
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
+                                                        @elseif ($request->status == "rejected_lm")
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by Line Manager</span>
+                                                        @elseif ($request->status == "rejected_hod")
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by ACEO/Head/BM</span>
+                                                        @elseif ($request->status == "approved_lm" || $request->status == "pending")
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by CEO/Head/BM</span>
+                                                        @elseif ($request->status == "approved_hod" || $request->status == "approved")
+                                                            <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                        @endif
+                                                    </td>
+
+                                                    <!-- Action Dropdown Column -->
+                                                    <td class="text-end">
+                                                        @if (permissionAccess("m10-s2","is_update")->value == "1" || permissionAccess("m10-s2","is_delete")->value == "1")
+                                                            @if (isset($request->StatusApprve["pending"]) || isset($request->StatusApprve["approved_lm"]))
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        @if (permissionAccess("m10-s2","is_update")->value == "1")
+                                                                            <a class="dropdown-item update" data-toggle="modal" data-id="{{$request->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                        @endif
+                                                                        @if (permissionAccess("m10-s2","is_delete")->value == "1")
+                                                                            <a class="dropdown-item leaveDelete" href="#" data-toggle="modal" data-id="{{$request->id}}" data-numberday="{{$request->number_of_day}}" data-target="#delete_leave"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @endif
+
+                                                                        @if($request->status == "approved_hod")
+                                                                            <button class="btn btn-outline-danger btn-sm btn-cancel" 
+                                                                                data-id="{{$request->id}}"
+                                                                                data-condiction="{{Auth::user()->RolePermission}}"
+                                                                            >@lang('lang.cancel')</button>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        @endif
+
+                                                        @php
+                                                        $currentDate = \Carbon\Carbon::now();
+                                                        $end = \Carbon\Carbon::parse($request->end_date)->addDays(7);
+                                                        @endphp
+                                                        @if ($currentDate->lte($end))
+                                                            @if($request->status == "approved_hod" || $request->status == "approved")
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        <a class="dropdown-item btn-cancel" href="#" data-id="{{$request->id}}">
+                                                                            <i class="fa fa-close m-r-5"></i> @lang('lang.cancel')
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -104,58 +305,166 @@
             </div>
         </div>
     </div>
+    @include('leaves_employee.modal_form_create')
+    @include('leaves_employee.modal_form_edit')
 
-
-    <div id="add_leave" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <!-- Delete leave request Modal -->
+    <div class="modal custom-modal fade" id="delete_leave" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Leave</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label>Leave Type <span class="text-danger">*</span></label>
-                            <select class="select select2-hidden-accessible" name="leave_type" id="leave_type" data-select2-id="select2-data-1-ba0m" tabindex="-1" aria-hidden="true">
-                                <option data-select2-id="select2-data-3-eg68">Select Leave Type</option>
-                                <option value="Casual Leave 12 Days">Casual Leave 12 Days</option>
-                                <option value="Medical Leave">Medical Leave</option>
-                                <option value="Loss of Pay">Loss of Pay</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>From <span class="text-danger">*</span></label>
-                            <div class="cal-icon">
-                                <input class="form-control datetimepicker" name="from" id="from" type="text">
+                    <div class="form-header">
+                        <h3>@lang('lang.delete')</h3>
+                        <p>@lang('lang.are_you_sure_want_to_delete')?</p>
+                    </div>
+                    <div class="modal-btn delete-action">
+                        <form action="{{url('leaves/employee/delete')}}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" class="e_id">
+                            <input type="hidden" name="number_of_day" class="number_of_day">
+                            <div class="row">
+                                <div class="submit-section" style="text-align: center">
+                                    <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>To <span class="text-danger">*</span></label>
-                            <div class="cal-icon">
-                                <input class="form-control datetimepicker" name="to" id="to" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Number of days <span class="text-danger">*</span></label>
-                            <input class="form-control" readonly="" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label>Remaining Leaves <span class="text-danger">*</span></label>
-                            <input class="form-control" readonly="" value="12" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label>Leave Reason <span class="text-danger">*</span></label>
-                            <textarea rows="4" id="leave_reason" name="leave_reason" class="form-control"></textarea>
-                        </div>
-                        <div class="submit-section">
-                            <button class="btn btn-primary submit-btn">Submit</button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+{{-- @include('leaves_employee.templet_print_delegate')
+@include('leaves_employee.template_print_delegate_CEO') --}}
+@include('motor_rentels.print_signed_contract')
+@include('includs.script')
+<script>
+    $(function(){
+        // $(document).ready(function () {
+        //     $('[data-toggle="tooltip"]').tooltip({ 
+        //         html: true,
+        //         container: 'tr' 
+        //     });
+        // });
+        $('.leaveDelete').on('click',function(){
+            let id = $(this).data("id");
+            let numberday = $(this).data("numberday");
+            $('.e_id').val(id);
+            $('.number_of_day').val(numberday);
+        });
+        $('.btn-print-delegate').on('click',function(){
+            print_pdf();
+        });
+
+        $(".btn-cancel").on("click", function() {
+            let id = $(this).data("id");
+            let condiction = $(this).data("condiction");
+            let description = "@lang('lang.are_you_sure_want_to_cancel')?";
+            let button_cancel = {
+                text: '@lang("lang.submit")',
+                btnClass: 'btn-red btn-sm',
+                action: function () {
+                    var id = this.$content.find('.id').val();
+                    let remark = this.$content.find('.remark').val();
+                    if (remark == ""){
+                        $(".remark").css("border","solid 1px red");
+                        new Noty({
+                            title: "",
+                            text: "Please enter infomation in the remark.",
+                            type: "error",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                        return false;
+                    }
+                    axios.post('{{ URL('leaves/employee/cancel') }}', {
+                        'id': id,
+                        'remark': remark,
+                        'status': "pending_cancel",
+                    }).then(function(response) {
+                        new Noty({
+                            title: "",
+                            text: "@lang('lang.the_process_has_been_successfully').",
+                            type: "success",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                        window.location.replace("{{ URL('/leaves/employee') }}"); 
+                    }).catch(function(error) {
+                        new Noty({
+                            title: "",
+                            text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                            type: "error",
+                            icon: true
+                        }).show();
+                    });
+                }
+            };
+            $.confirm({
+                icon: 'fa fa-warning',
+                title: 'Cancel request leave',
+                titleClass: 'text-center',
+                type: 'blue',
+                content: '' +
+                '<form action="" class="formName">' +
+                    '<div class="form-group" style="text-align: center">' +
+                        '<label>'+(description)+'</label>' +
+                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                    '</div>' +
+                    '<div class="form-group">'+
+                        '<label>Remark <span class="text-danger">*</span></label>'+
+                        '<textarea class="form-control remark"></textarea>'+
+                    '</div>'+
+                '</form>',
+                buttons: {
+                    button_cancel,
+                    cancel: {
+                        text: '@lang("lang.close")',
+                        btnClass: 'btn-secondary btn-sm',
+                    },
+                },
+                onContentReady: function () {
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click');
+                    });
+                }
+            });
+        });
+        $(".btn_excel").on("click", function () {
+        let id = $(this).data("id");
+            var query = {
+                id:id
+            }
+            var url = "{{URL::to('leaves/employee/export')}}?" + $.param(query)
+            window.location = url;
+        });
+    });
+    function print_pdf() {
+        $("#print_delegate_ceo").show();
+        // window.setTimeout(function() {
+        //     $("#print_purchase").hide();
+        //     $("#save-print").prop('disabled', false);
+        //     $(".btn-text-print").show();
+        //     $("#btn-print-loading").css('display', 'none');
+        //     $("#add_motor_rentel").modal("hide")
+
+        //     $("#btn-e-save-print").prop('disabled', false);
+        //     $(".btn-e-text-print").show();
+        //     $("#btn-e-print-loading").css('display', 'none');
+        //     $("#edit_motor_rentel").modal("hide")
+        // }, 2000);
+        $("#print_delegate_ceo").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style-delegate-staff.css')}}",
+            header: "",
+            printDelay: 1500,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
+</script>

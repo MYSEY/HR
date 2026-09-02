@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class ChildrenAllowanceController extends Controller
 {
@@ -18,6 +19,9 @@ class ChildrenAllowanceController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m8-s4","is_view")->value != "1") {
+            return view('upgrade.access_page');
+        }
         $data = ChildrenAllowance::all();
         return view('children-allowance.index',compact('data'));
     }
@@ -76,12 +80,12 @@ class ChildrenAllowanceController extends Controller
     public function update(Request $request)
     {
         try{
-            ChildrenAllowance::where('id',$request->id)->update([
-                'total_children_allowance' => $request->total_children_allowance,
-                'spouse_allowance' => $request->spouse_allowance,
-                'reduced_burden_children' => $request->reduced_burden_children,
-                'updated_by' => Auth::user()->id 
-            ]);
+            $data = ChildrenAllowance::find($request->id);
+            $data['total_children_allowance']   = $request->total_children_allowance;
+            $data['spouse_allowance']           = $request->spouse_allowance;
+            $data['reduced_burden_children']    = $request->reduced_burden_children;
+            $data['updated_by']                 = Auth::user()->id;
+            $data->save();
             Toastr::success('Children allowance create successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

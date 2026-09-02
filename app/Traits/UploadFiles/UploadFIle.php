@@ -34,7 +34,7 @@ trait UploadFIle
             $filename = self::generatFileName($file);
             $file->move(public_path('uploads/images'), $filename);
         }
-        return $filename;
+        return $filename ?? '';
     }
 
     public function multiUpload($attr, $request): array

@@ -8,6 +8,7 @@ class CreateOptionsTable extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_01_16_081619_create_options_table.php
      *
      * @return void
      */
