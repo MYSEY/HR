@@ -745,7 +745,7 @@
             lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
             ajax: {
                 url: '{{ URL("payroll/review") }}',
-                type: 'GET',
+                type: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },

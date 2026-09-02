@@ -278,7 +278,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('payslip/{id}',[EmployeePayrollController::class,'paySlip']);
     Route::post('import/payroll',[EmployeePayrollController::class,'importPayroll']);
 
-    Route::get('payroll/review',[EmployeePayrollController::class,'payrollReview']);
+    Route::match( ['GET', 'POST'],'payroll/review',[EmployeePayrollController::class, 'payrollReview']);
+    // Route::get('payroll/review',[EmployeePayrollController::class,'payrollReview']);
     Route::post('payroll/review/search',[EmployeePayrollController::class,'payrollReviewSearch']);
     Route::post('payroll/approved',[EmployeePayrollController::class,'payrollApproved']);
     Route::get('payroll/review/export',[EmployeePayrollController::class,'payrollPreviwExport']);
