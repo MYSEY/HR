@@ -70,12 +70,11 @@ class EmployeePayrollController extends Controller
             return view('upgrade.access_page');
         }
         if (request()->ajax()) {
-            // Cheap, unfiltered count for DataTables' "recordsTotal".
             $recordsTotal = payrollPreview::count();
             $query = self::getDatas($request, false);
             $recordsFiltered = $query->count();
             $start = intval($request->input('start', 0));
-            $limit = min(intval($request->input('length', 10)), 100); // hard cap
+            $limit = min(intval($request->input('length', 10)), 100);
             $data = $query->offset($start)->limit($limit)->get();
             return response()->json([
                 'draw'            => intval($request->input('draw')),
@@ -98,6 +97,58 @@ class EmployeePayrollController extends Controller
         $data  = $query->get();
         return Excel::download(new ExportReviewPayroll($data), 'ReviewPayroll.xlsx');
     }
+    // public static function getDatas($request){
+    //     $query = payrollPreview::leftJoin('users', 'payroll_previews.employee_id', '=', 'users.id')
+    //         ->leftJoin('positions','users.position_id','=','positions.id')
+    //         ->leftJoin('departments','users.department_id','=','departments.id')
+    //         ->leftJoin('branchs','users.branch_id','=','branchs.id')
+    //         ->leftJoin('options', 'users.gender', '=', 'options.id')
+    //         ->select(
+    //             'payroll_previews.*',
+    //             'users.position_id',
+    //             'users.department_id',
+    //             'users.branch_id',
+    //             'users.number_employee',
+    //             'users.employee_name_en',
+    //             'users.employee_name_kh',
+    //             'users.date_of_commencement',
+    //             'users.basic_salary',
+    //             'positions.name_khmer as post_name_kh',
+    //             'positions.name_english as post_name_en',
+    //             'departments.name_khmer as depart_name_kh',
+    //             'departments.name_english as depart_name_en',
+    //             'branchs.branch_name_kh',
+    //             'branchs.branch_name_en',
+    //             'options.name_khmer',
+    //             'options.name_english',
+    //         );
+    //         $query->when($request->employee_name, function ($query, $employee_name) {
+    //             return $query->where('users.employee_name_en', 'LIKE', "%$employee_name%");
+    //         })
+    //         ->when($request->number_employee, function ($query, $number_employee) {
+    //             return $query->where('users.number_employee', $number_employee);
+    //         })
+    //         ->when($request->branch_id, function ($query, $branch_id) {
+    //             return $query->where('users.branch_id', $branch_id);
+    //         })
+    //         ->when($request->filter_month, function ($query, $filter_month) {
+    //             return $query->whereMonth('payroll_previews.payment_date', date('m', strtotime($filter_month)));
+    //         })->orderBy('users.number_employee', 'ASC');
+
+    //         $searchValue = request()->input('search.value');
+    //         if (!empty($searchValue)) {
+    //             $query->where(function ($q) use ($searchValue) {
+    //                 $q->where('payroll_previews.id', 'like', "%{$searchValue}%")
+    //                 ->orWhere('payroll_previews.number_employee', 'like', "%{$searchValue}%")
+    //                 ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
+    //                 ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+    //                 ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+    //                 ->orWhere('departments.name_english', 'like', "%{$searchValue}%")
+    //                 ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%");
+    //             });
+    //         }
+    //     return $query;
+    // }
 
     public static function getDatas(Request $request, bool $forExport = false)
     {
