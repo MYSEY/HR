@@ -8,6 +8,7 @@ use App\Models\Villages;
 use App\Models\Conmmunes;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ProvinceController extends Controller
 {
@@ -19,20 +20,17 @@ class ProvinceController extends Controller
 
     public function showDistrict(Request $request)
     {
-        $district = District::where('province_id',$request->province_id)
-                        ->get();
+        $district = DB::table('districts')->where('province_id',$request->province_id)->get();
         return response()->json(['data'=>$district]);
     }
     public function showCommune(Request $request)
     {
-        $communes = Conmmunes::where('district_id',$request->district_id)
-                        ->get();
+        $communes = DB::table('conmmunes')->where('district_id',$request->district_id)->get();
         return response()->json(['data'=>$communes]);
     }
     public function showVillage(Request $request)
     {
-        $villages = Villages::where('commune_id',$request->commune_id)
-                        ->get();
+        $villages = DB::table('villages')->where('commune_id',$request->commune_id)->get();
         return response()->json(['data'=>$villages]);
     }
 }

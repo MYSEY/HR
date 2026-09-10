@@ -2,36 +2,47 @@
 
 namespace App\Models;
 
-use DateTime;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-// use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Holiday extends Model
 {
-    // use CrudTrait;
-
-    /*
-    |--------------------------------------------------------------------------
-    | GLOBAL VARIABLES
-    |--------------------------------------------------------------------------
-    */
+    use HasFactory;
+    use SoftDeletes;
+    use LogsActivity;
 
     protected $table = 'holidays';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+
+    protected $fillable = [
+        'title_kh',
+        'title_en',
+        'amount_percent',
+        'period_month',
+        'from',
+        'to',
+        'type',
+        'created_by',
+        'updated_by',
+    ];
 
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -99,7 +110,7 @@ class Holiday extends Model
         
         $holidays = null;
         $int = (int)$day;
-        if ($int > 1) {
+        if ($diffInDays > 1) {
             for ($i=0; $i < $diffInDays; $i++) { 
                 if ($int > 9) {
                     $holidays .= $int + $i.',';
@@ -109,7 +120,11 @@ class Holiday extends Model
             }
             return $end_month.' '.$holidays.$end_day;
         }else{
-            return $end_month.' '.'0'.$int;
+            if($int > 9){  
+                return $end_month.' '.$int;
+            }else{
+                return $end_month.' '.'0'.$int;
+            }
         }
     }
     /*

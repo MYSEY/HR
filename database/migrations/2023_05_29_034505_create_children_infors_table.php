@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_05_29_034505_create_children_infors_table.php
      *
      * @return void
      */

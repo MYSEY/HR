@@ -2,15 +2,23 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
+use App\Exports\ExportTrainingDetailStaff;
+use App\Exports\ExportTrainingDetailTrainer;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Trainer;
 use App\Models\Training;
-use App\Models\User;
-use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\TrainingDetailStaff;
+use App\Models\TrainingDetailTrainer;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Spatie\Activitylog\Models\Activity;
 
 class TrainingController extends Controller
 {
@@ -19,56 +27,65 @@ class TrainingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $dataTrainings = Training::get();
-        $trainer = Trainer::all();
-       
-        // $trainingType = TrainingType::all();
-        $employee = User::whereNot("emp_status", null)->get();
-        // $dataTrainings = [];
-        // foreach ($data as $key => $item) {
-        //     $trainers = [];
-        //     foreach ($item->trainer_id as $key => $trai) {
-        //         $dataTrainer = Trainer::where('id', $trai)->first();
-        //         $trainers[] = [
-        //             "name_kh" => $dataTrainer->name_kh,
-        //             "name_en" => $dataTrainer->name_en,
-        //             "email" =>  $dataTrainer->email,
-        //             "number_phone" => $dataTrainer->number_phone,
-        //             "remark" => $dataTrainer->remark,
-        //             "status" => $dataTrainer->status
-        //         ];
-
-        //     }
-        //     $employees = [];
-        //     foreach ($item->employee_id as $key => $empl) {
-        //         $em =  User::where('id', $empl)->select("employee_name_kh", "employee_name_en", "profile")->get();
-        //         $employees[] = [
-        //            "employee_name_kh" => $em[0]->employee_name_kh,
-        //            "employee_name_en" => $em[0]->employee_name_en,
-        //            "profile" => $em[0]->profile
-        //         ];
-        //     }
-        //     $item["trainers"] = $trainers;
-        //     $item["employees"] = $employees;
-        //     $dataTrainings[] = $item;
-        // }
+        $permission = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where("url", "training/list")
+            ->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        $filteredTrainings = Training::withCount(['trainingDetailStaffs', 'trainingDetailTrainer'])
+        ->whereHas('trainingDetailStaffs', function ($query) use ($permission) {
+            $query->leftJoin('users', 'training_detail_staff.employee_id', '=', 'users.id')
+                ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
+                    if (in_array($RolePermission, ['HOD', 'BM'])) {
+                        $query->where("users.department_id", Auth::user()->department_id)
+                            ->where("users.branch_id", Auth::user()->branch_id);
+                    } elseif (in_array($RolePermission, ['DHOD', 'DBM'])) {
+                        $query->where("training_detail_staff.employee_id", Auth::user()->id)
+                            ->orWhere("users.line_manager", Auth::user()->id);
+                    } elseif ($RolePermission == "Employee") {
+                        $query->where("users.id", Auth::user()->id);
+                    } elseif ($RolePermission == 'HR' && $permission->is_access != 1) {
+                        $query->where("training_detail_staff.employee_id", Auth::user()->id)
+                            ->orWhere("users.line_manager", Auth::user()->id);
+                    }
+                });
+        })
+        ->orderByDesc('id');
         
-        return view('training.index', compact('trainer', 'employee', 'dataTrainings'));
+        $perPage = $request->get('per_page', 10);
+
+        if ($perPage === 'all') {
+            $dataTrainings = $filteredTrainings->get();
+        } else {
+            $dataTrainings = $filteredTrainings->paginate($perPage);
+        }
+
+        $trainer = Trainer::where("status", 1)->get();
+        $employee = User::whereIn("emp_status", ['Probation','Upcoming','1','10','2'])->get();
+
+        
+        return view('training.index', compact('permission','trainer', 'employee', 'dataTrainings'));
     }
     public function trainer(){
-        $trainer = Trainer::with("employee")->get();
+        $trainer = Trainer::where("status", 1)->with("employee")->get();
         return response()->json([
             'data'=>$trainer,
         ]);
     }
     public function detail(Request $request)
     {
+        $permission = DB::table('permissions')
+            ->where('role_id', Auth::user()->role_id)
+            ->where("url", "training/list")
+            ->first();
         $training = Training::where("id", $request->id)->first();
-        $trainer = Trainer::whereIn('id', $training->trainer_id)->get();
-        $employees = User::whereIn("id", $training->employee_id)->get();
-        return view('training.training_detail', compact('training','trainer','employees'));
+        $trainer = TrainingDetailTrainer::where('training_id', $request->id)->with("trainer")->get();
+        $employees = TrainingDetailStaff::where("training_id", $request->id)->with("employee")->get();
+        return view('training.training_detail', compact('permission','training','trainer','employees'));
     }
 
     public function filter(Request $request)
@@ -82,7 +99,8 @@ class TrainingController extends Controller
             if ($request->end_date) {
                 $end_date = Carbon::createFromDate($request->end_date.' '.'23:59:59')->format('Y-m-d H:i:s');
             }
-            $data = Training::when($request->training_type, function ($query, $training_type) {
+            $filteredTrainings = Training::withCount('trainingDetailStaffs')->withCount("trainingDetailTrainer")
+            ->when($request->training_type, function ($query, $training_type) {
                 $query->where('training_type', $training_type);
             })
             ->when($request->course_name, function ($query, $course_name) {
@@ -95,8 +113,12 @@ class TrainingController extends Controller
                 $query->where('end_date','<=', $end_date);
             })
             ->get();
+            $data = $filteredTrainings->filter(function ($training) {
+                return $training->isStaff();
+            });
+
             return response()->json([
-                'success'=>$data,
+                'success'=>$data->values(),
             ]);
         } catch (\Throwable $exp) {
             DB::rollback();
@@ -122,12 +144,30 @@ class TrainingController extends Controller
     public function store(Request $request)
     {
         try {
+            DB::beginTransaction();
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
-            Training::create($data);
+            $dataTraining = Training::create($data);
+            if (count($request->employee_id) > 0) {
+                foreach ($request->employee_id as $key => $emID) {
+                    $data_detail['training_id'] = $dataTraining->id;
+                    $data_detail['employee_id'] = $emID;
+                    $data_detail['created_by']  = Auth::user()->id;
+                    TrainingDetailStaff::create($data_detail);
+                }
+            }
+            if (count($request->trainer_id) > 0) {
+                foreach ($request->trainer_id as $key => $tr) {
+                    $data_Trainer['training_id'] = $dataTraining->id;
+                    $data_Trainer['trainer_id'] = $tr;
+                    $data_Trainer['created_by']  = Auth::user()->id; 
+                    TrainingDetailTrainer::create($data_Trainer);
+                }
+            }
+            DB::commit();
             Toastr::success('Training created successfully.','Success');
             return redirect()->back();
-            DB::commit();
         } catch (\Throwable $exp) {
             DB::rollback();
             Toastr::error('Training created fail.','Error');
@@ -155,7 +195,7 @@ class TrainingController extends Controller
     {
         $data = Training::where("id", $request->id)->first();
         $trainer = Trainer::with("employee")->get();
-        $employee = User::all();
+        $employee = User::get();
 
         return response()->json([
             'success'=>$data,
@@ -174,20 +214,41 @@ class TrainingController extends Controller
     public function update(Request $request)
     {
         try{
-            $dataUpdate = [
-                'training_type' => $request->training_type,
-                'course_name' => $request->course_name,
-                'trainer_id' => $request->trainer_id,
-                'employee_id' => $request->employee_id,
-                'cost_price' => $request->cost_price,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
-                'duration_month' => $request->duration_month,
-                'remark' => $request->remark,
-                'status' => $request->status,
-                'updated_by' => Auth::user()->id 
-            ];
-            Training::where('id',$request->id)->update($dataUpdate);
+            DB::beginTransaction();
+            $data = Training::find($request->id);
+            $data['training_type'] = $request->training_type;
+            $data['course_name'] = $request->course_name;
+            $data['trainer_id'] = $request->trainer_id;
+            $data['employee_id'] = $request->employee_id;
+            $data['cost_price'] = $request->cost_price;
+            $data['discount'] = $request->discount;
+            $data['start_date'] = $request->start_date;
+            $data['end_date'] = $request->end_date;
+            $data['duration_month'] = $request->duration_month;
+            $data['remark'] = $request->remark;
+            $data['status'] = $request->status;
+            $data['updated_by'] = Auth::user()->id;
+            $data->save();
+
+            if (count($request->employee_id) > 0) {
+                TrainingDetailStaff::where('training_id', $data->id)->delete();
+                foreach ($request->employee_id as $key => $emID) {
+                    $data_detail['training_id'] = $data->id;
+                    $data_detail['employee_id'] = $emID;
+                    $data_detail['created_by']  = Auth::user()->id;
+                    TrainingDetailStaff::create($data_detail);
+                }
+            }
+            if (count($request->trainer_id) > 0) {
+                TrainingDetailTrainer::where('training_id', $data->id)->delete();
+                foreach ($request->trainer_id as $key => $tr) {
+                    $data_Trainer['training_id'] = $data->id;
+                    $data_Trainer['trainer_id'] = $tr;
+                    $data_Trainer['created_by']  = Auth::user()->id; 
+                    TrainingDetailTrainer::create($data_Trainer);
+                }
+            }
+            DB::commit();
             Toastr::success('Training Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
@@ -221,14 +282,102 @@ class TrainingController extends Controller
      */
     public function destroy(Request $request)
     {
-        try{
+        DB::beginTransaction();
+        try {
+            // Delete the main training record
             Training::destroy($request->id);
-            Toastr::success('Training deleted successfully.','Success');
-            return redirect()->back();
-        }catch(\Exception $e){
+
+            // Delete related records
+            TrainingDetailStaff::where('training_id', $request->id)->delete();
+            TrainingDetailTrainer::where('training_id', $request->id)->delete();
+
+            DB::commit();
+
+            Toastr::success('Training deleted successfully.', 'Success');
+        } catch (\Exception $e) {
             DB::rollback();
-            Toastr::error('Training delete fail.','Error');
-            return redirect()->back();
+
+            // Log the exception for debugging
+            Log::error('Training deletion failed: '.$e->getMessage());
+
+            Toastr::error('Training delete failed.', 'Error');
+        }
+        return redirect()->back();
+    }
+
+    public function staffTrainingExport(){
+        $data = Training::get();
+        $dataTrainings = [];
+        foreach ($data as $key => $item) {
+            $em =  User::whereIn('id', $item->employee_id)
+            ->with("gender")->with("position")->with("branch")
+            ->get();
+            $item["employees"] = $em;
+            $dataTrainings[] = $item;
+        }
+        $export = new ExportTrainingDetailStaff($dataTrainings);
+        return Excel::download($export, 'Staff_Training.xlsx');
+    }
+    public function trainerTrainingExport(){
+        $data = Training::get();
+        $dataTrainings = [];
+        foreach ($data as $key => $item) {
+            $dataTrainer = Trainer::whereIn('id', $item->trainer_id)->with("employee")->get();
+            $item["trainers"] = $dataTrainer;
+            $dataTrainings[] = $item;
+        }
+        $export = new ExportTrainingDetailTrainer($dataTrainings);
+        return Excel::download($export, 'Staff_Training.xlsx');
+
+    }
+
+    public function uploads(Request $request){
+        $file = $request->file;
+        $filesize = filesize($file);
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $allSheetNames = $spreadsheet->getSheetNames();
+            foreach ($allSheetNames as $sheetName) {
+                // upload staff trainings
+                if ($sheetName == "Staff_trainings") {
+                    $i = 0;
+                    $staff_training =  $spreadsheet->getSheetByName($sheetName)->toArray();
+                    foreach ($staff_training as $item) {
+                        $i++;
+                        if ($i > 2) {
+                            $employee = user::where('number_employee',$item[1])->first();
+                            if ($employee) {
+                                    $dataCreate['training_id']              = $item[0];
+                                    $dataCreate['employee_id']              = $employee->id;
+                                    $dataCreate['updated_by']               = Auth::user()->id;
+                                    TrainingDetailStaff::create($dataCreate);
+                            }
+                        }
+                    }
+                }
+                // upload trainer to trainings
+                if ($sheetName == "Trainer_upload") {
+                    $i = 0;
+                    $employees_trainer =  $spreadsheet->getSheetByName($sheetName)->toArray();
+                    foreach ($employees_trainer as $item) {
+                        $i++;
+                        if ($i > 2) {
+                            $trainer = Trainer::where('id',$item[1])->first();
+                            if ($trainer) {
+                                $dataTrainer['training_id']              = $item[0];
+                                $dataTrainer['trainer_id']               = $trainer->id;
+                                $dataTrainer['updated_by']               = Auth::user()->id;
+                                TrainingDetailTrainer::create($dataTrainer);
+                            }
+                        }
+                    }
+                }
+            }
+            return 1;
+        } else {
+            return 0;
         }
     }
 }

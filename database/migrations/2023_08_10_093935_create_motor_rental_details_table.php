@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_08_10_093935_create_motor_rental_details_table.php
      *
      * @return void
      */
@@ -16,20 +17,42 @@ return new class extends Migration
         Schema::create('motor_rental_details', function (Blueprint $table) {
             $table->id();
             $table->string('employee_id');
-            $table->decimal('gasoline_price_per_liter')->nullable();
+            $table->string('motor_rental_id');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('product_year')->nullable();
             $table->string('expired_year')->nullable();
             $table->integer('shelt_life')->nullable();
+            $table->string('motor_color')->nullable();
             $table->string('number_plate')->nullable();
+            $table->string('motorcycle_brand')->nullable();
+            $table->string('category')->nullable();
+            $table->string('body_number')->nullable();
+            $table->string('engine_number')->nullable();
             $table->integer('total_gasoline')->nullable();
-            $table->integer('total_work_day')->nullable();
+            $table->decimal('total_work_day',50,1)->nullable();
             $table->decimal('price_engine_oil')->nullable();
             $table->decimal('price_motor_rentel')->nullable();
             $table->string('taplab_rentel')->nullable();
+            $table->string('taplab_imei')->nullable();
+            $table->date('start_date_taplab')->nullable();
             $table->decimal('price_taplab_rentel')->nullable();
+            $table->date('resigned_date')->nullable();
+            $table->decimal('gasoline_price_per_liter')->nullable();
+            $table->decimal('amount_price_motor_rentel')->nullable();
+            $table->decimal('amount_price_engine_oil')->nullable();
+            $table->decimal('amount_price_taplab_rentel')->nullable();
+            $table->decimal('adjust_amount_exclude')->nullable();
+            $table->decimal('adjust_amount_tabple_exclude')->nullable();
+            $table->decimal('adjust_amount_include')->nullable();
+            $table->decimal('adjust_amount_tabple_include')->nullable();
+            $table->decimal('adjust_amount_kh')->nullable();
+            $table->decimal('adjust_amount_engine_oil')->nullable();
+            $table->decimal('adjust_fee_tax')->nullable();
             $table->integer('tax_rate')->nullable();
+            $table->string('status')->nullable();
+            $table->date('from_date')->nullable();
+            $table->date('to_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

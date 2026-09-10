@@ -3,10 +3,15 @@
 namespace App\Models;
 
 use App\Models\User;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Branchs extends Model
 {
+
+
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -15,19 +20,30 @@ class Branchs extends Model
     */
 
     protected $table = 'branchs';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
-
+    protected $fillable = [
+        'branch_name_kh',
+        'branch_name_en',
+        'direct_manager_id',
+        'abbreviations',
+        'address',
+        'address_kh',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+    ];
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -41,6 +57,11 @@ class Branchs extends Model
     {
         return $this->belongsTo(User::class ,'updated_by');
     }
+
+    public function branchholder(){
+        return $this->belongsTo(User::class, 'direct_manager_id','id');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

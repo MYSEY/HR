@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Exports\ExportRecruitmentPlan;
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\Branchs;
 use App\Models\Position;
-use App\Models\RecruitmentPlan;
-use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\RecruitmentPlan;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportRecruitmentPlan;
+use Spatie\Activitylog\Models\Activity;
+
 class RecruitmentPlanController extends Controller
 {
     /**
@@ -22,7 +24,15 @@ class RecruitmentPlanController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m3-s2","is_view")->value != "1") {
+            return view('upgrade.access_page');
+        }
         $data = RecruitmentPlan::with('position')->with('branch')
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })
         ->orderBy('id', 'desc')
         ->get();
         $positions = Position::all();
@@ -49,6 +59,7 @@ class RecruitmentPlanController extends Controller
     public function store(Request $request)
     {
         try {
+            Activity::all()->last();
             $currentday = Carbon::createFromDate()->format('d');
             foreach ($request->plan_date as $key => $plan_date) {
                 $data = [
@@ -95,6 +106,11 @@ class RecruitmentPlanController extends Controller
             ->when($by_year, function ($query, $filter_year) {
                 $query->whereYear('plan_date', $filter_year);
             })
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("branch_id", Auth::user()->branch_id);
+                }
+            })
             ->orderBy('plan_date', 'desc')
             ->get();
             return response()->json([
@@ -140,16 +156,19 @@ class RecruitmentPlanController extends Controller
     {
         try{
             $currentday = Carbon::createFromDate()->format('d');
-            RecruitmentPlan::where('id',$request->id)->update([
-                'position_id' => $request->position_id,
-                'branch_id' => $request->branch_id,
-                'plan_date' => $request->plan_date.'-'.$currentday,
-                'total_staff' => $request->total_staff,
-                'remark' => $request->remark,
-                'updated_by' => Auth::user()->id 
-            ]);
+            $plan_date = $request->plan_date.'-'.$currentday;
+            $dataPlan = RecruitmentPlan::where("id", $request->id)->first();
+            $dataPlan->position_id = $request->position_id;
+            $dataPlan->branch_id = $request->branch_id;
+            $dataPlan->plan_date = $plan_date;
+            $dataPlan->total_staff = $request->total_staff;
+            $dataPlan->remark = $request->remark;
+            $dataPlan->updated_by = Auth::user()->id;
+            $dataPlan->save();
             Toastr::success('Recruitment plan updated successfully.','Success');
-            return redirect()->back();
+            return response()->json([
+                'success'=>$dataPlan,
+            ]);
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Recruitment plan updated fail.','Error');

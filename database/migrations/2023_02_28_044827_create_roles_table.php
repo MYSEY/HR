@@ -16,18 +16,14 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('role_name')->nullable();
+            $table->string('role_type')->nullable();
             $table->integer('status')->default(1);
+            $table->bigInteger('created_by')->unsigned()->nullable();
+            $table->bigInteger('updated_by')->unsigned()->nullable();
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
-        DB::table('roles')->insert(
-            [
-                'name'=>'Administrator',
-                'status'=>1,
-                'created_at'=>now(),
-                'updated_at'=>now()
-            ]
-        );
     }
 
     /**

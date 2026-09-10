@@ -1,34 +1,70 @@
 <?php
 
+use App\Models\StaffPromoted;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\Admins\RoleConroller;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admins\BankController;
 use App\Http\Controllers\Admins\UserController;
+use App\Http\Controllers\Admins\FNTaxController;
 use App\Http\Controllers\Admins\TaxesController;
+use App\Http\Controllers\Admins\BackupController;
 use App\Http\Controllers\Admins\BranchController;
 use App\Http\Controllers\Admins\HolidayController;
 use App\Http\Controllers\Admins\ReportsController;
 use App\Http\Controllers\Admins\SettingController;
+use App\Http\Controllers\Admins\SpecialController;
+use App\Http\Controllers\Admins\LevelController;
 use App\Http\Controllers\Admins\TrainerController;
 use App\Http\Controllers\Admins\DashboadController;
 use App\Http\Controllers\Admins\PositionController;
 use App\Http\Controllers\Admins\ProvinceController;
 use App\Http\Controllers\Admins\TrainingController;
+use App\Http\Controllers\Admins\LeaveTypeController;
 use App\Http\Controllers\Admins\DepartmentController;
+use App\Http\Controllers\Admins\FnApprovalController;
 use App\Http\Controllers\Admins\PermissionController;
+use App\Http\Controllers\Admins\ActivityLogController;
+use App\Http\Controllers\Admins\LeavesAdminController;
 use App\Http\Controllers\Admins\MotorRentelController;
 use App\Http\Controllers\Admins\PayrollItemController;
+use App\Http\Controllers\Admins\PerformanceController;
 use App\Http\Controllers\Admins\ExchangeRateController;
+use App\Http\Controllers\Admins\ExpenseAdminController;
 use App\Http\Controllers\Admins\TrainingTypeController;
+use App\Http\Controllers\Admins\ExpenseReportController;
+use App\Http\Controllers\Admins\FnPaymentTermController;
+use App\Http\Controllers\Admins\FringeBenefitController;
 use App\Http\Controllers\Admins\PayrollReportController;
+use App\Http\Controllers\Admins\SalaryRequestController;
+use App\Http\Controllers\Admins\ExpenseRequestController;
+use App\Http\Controllers\Admins\FNExchangeRateController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
+use App\Http\Controllers\Admins\VillageAddressController;
 use App\Http\Controllers\Admins\CandidateResumeController;
+use App\Http\Controllers\Admins\ConmmuneAddressController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
+use App\Http\Controllers\Admins\FnLevelReviewerController;
+use App\Http\Controllers\Admins\MotorAdjustmentController;
+use App\Http\Controllers\Admins\ProvinceAddressController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
+use App\Http\Controllers\Admins\DistrictsAddressController;
+use App\Http\Controllers\Admins\PerformanceAdminController;
+use App\Http\Controllers\Admins\AnnualBonuConfigeController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
+use App\Http\Controllers\Admins\FnRegularExspenseController;
+use App\Http\Controllers\Admins\CategoryPermissionController;
+use App\Http\Controllers\Admins\GenerateAnnaulBonusController;
+use App\Http\Controllers\Admins\PerformanceAppraisalController;
+use App\Http\Controllers\Admins\AnnualSalaryIncreasementController;
+use App\Http\Controllers\Admins\ConfigeAnnualBonuByBranchCongroller;
+use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
+use App\Http\Controllers\Admins\GenerateAnnualSalaryIncreasementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,41 +77,151 @@ use App\Http\Controllers\Admins\ChildrenAllowanceController;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login']);
+Route::post('/login/change/password', [LoginController::class, 'changePassword']);
+Route::post('/user/change/password', [LoginController::class, 'UserChangePassword']);
 Auth::routes();
 Route::middleware(['auth:sanctum'])->group(function(){
+    Route::get('/page/not-found', function() {
+        return view('upgrade.feature_not_available');
+    });
+
+    Route::get('admin/activity-log', [ActivityLogController::class,'index']);
     Route::get('/dashboad/employee', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboad.employee');
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);
     Route::get('/dashboad/admin', [DashboadController::class, 'dashboadAdmin']);
     Route::get('/dashboad/show', [DashboadController::class, 'show']);
+    Route::get('/dashboad/view-leave', [DashboadController::class, 'viewLeave']);
+    Route::post('/dashboad/view-leave/search', [DashboadController::class, 'searchLeaveRequest']);
 
     Route::get('/employee/profile/{id}', [EmployeeProfileController::class, 'employeeProfile'])->name('employee.profile');
-    Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
-    Route::post('employee/experience', [EmployeeProfileController::class, 'updateOrCreateExperience'])->name('employee.experience');
-    Route::post('employee/promote', [EmployeeProfileController::class, 'updateOrCreatePromote'])->name('employee.promote');
-    Route::post('employee/transferred', [EmployeeProfileController::class, 'updatedTransferred'])->name('employee.transferred');
-    Route::post('employee/training', [EmployeeProfileController::class, 'updatedTraining'])->name('employee.training');
     Route::post('employee/contact', [EmployeeProfileController::class, 'employeeContact'])->name('employee.contact');
+    Route::get('employee/contact/edit', [EmployeeProfileController::class, 'editContact']);
+    Route::post('employee/contact/update', [EmployeeProfileController::class, 'updateContact']);
+    Route::post('employee/contact/delete', [EmployeeProfileController::class, 'deleteContact']);
+
+    Route::post('employee/experience', [EmployeeProfileController::class, 'createExperience'])->name('employee.experience');
+    Route::get('employee/experience/edite', [EmployeeProfileController::class, 'editeExperience'])->name('employee.experience.edite');
+    Route::post('employee/experience/update', [EmployeeProfileController::class, 'updateExperience'])->name('employee.experience.update');
+    Route::post('employee/experience/delete', [EmployeeProfileController::class, 'deleteExperience'])->name('employee.experience.delete');
+    //Education
+    Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
+    Route::get('employee/education/edit', [EmployeeProfileController::class, 'educationEdit'])->name('employee.educationEdit');
+    Route::post('employee/education/update', [EmployeeProfileController::class, 'educationUpdate'])->name('employee.educationUpdate');
+    Route::post('employee/education/delete', [EmployeeProfileController::class, 'educationDelete'])->name('employee.educationDelete');
+
+    //Training
+    Route::post('employee/training/create', [EmployeeProfileController::class, 'createTraining']);
+    Route::get('employee/training/edit', [EmployeeProfileController::class, 'editTraining']);
+    Route::post('employee/training/update', [EmployeeProfileController::class, 'updateTraining']);
+    Route::post('employee/training/delete', [EmployeeProfileController::class, 'deleteTraining']);
+    // StaffPromoted
+    Route::post('promote/create', [EmployeeProfileController::class, 'createPromote']);
+    Route::get('promote/edit', [EmployeeProfileController::class, 'editPromote']);
+    Route::post('promote/update', [EmployeeProfileController::class, 'updatePromote']);
+    Route::post('promote/delete', [EmployeeProfileController::class, 'deletePromote']);
+
+    //Children
     Route::post('employee/children', [EmployeeProfileController::class, 'employeeChildren'])->name('employee.children');
     Route::get('employee/children/edit', [EmployeeProfileController::class, 'editChildrenInformation']);
     Route::post('employee/children/update', [EmployeeProfileController::class, 'childrenUpdate']);
+    Route::post('employee/children/delete', [EmployeeProfileController::class, 'childrenDelate']);
+    Route::post('employee/change-password', [EmployeeProfileController::class, 'changePassword']);
+
+    //Transferrend
+    Route::post('transferred/create', [EmployeeProfileController::class, 'createTransferred']);
+    Route::get('transferred/edit',[EmployeeProfileController::class,'editTransferend']);
+    Route::post('transferred/update',[EmployeeProfileController::class,'updateTransferend']);
+    Route::post('transferrend/delete',[EmployeeProfileController::class,'deleteTransferend']);
+
+
     Route::get('/holidays', [HolidayController::class, 'index']);
+    Route::post('/holidays/search', [HolidayController::class, 'search']);
     Route::post('/holidays/create', [HolidayController::class, 'store']);
     Route::get('/holidays/edit', [HolidayController::class, 'edit']);
     Route::post('/holidays/update', [HolidayController::class, 'update']);
+
+    // test create data to connection database 2
+    Route::post('/holidays/test-create', [HolidayController::class, 'mysqlSuppotForm']);
     // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
-    // Route::Resource('/leaves/admin', LeavesAdminController::class);
+
+    // Leave management for admin
+    Route::get('/leaves/admin', [LeavesAdminController::class,'index']);
+
+
+    Route::get('/leaves/admin/show', [LeavesAdminController::class,'show']);
+
+    
+    Route::get('/leaves/admin/cancel', [LeavesAdminController::class,'showCancel']);
+    Route::get('/leaves/admin/record', [LeavesAdminController::class,'showRecord']);
+    Route::get('/leaves/admin/report', [LeavesAdminController::class,'showReport']);
+    
+
+    Route::get('/leave-request/detail/{employee_id}', [LeavesAdminController::class,'detail']);
+    Route::get('/leave/admin/employee', [LeavesAdminController::class,'employees']);
+    Route::post('/leaves/admin/generate', [LeavesAdminController::class,'generate']);
+    Route::post('/leaves/admin/update', [LeavesAdminController::class,'update']);
+    Route::post('/leaves/admin/filter', [LeavesAdminController::class,'filter']);
+    Route::post('/leaves/admin/approve', [LeavesAdminController::class,'approve']);
+    Route::post('/leaves/admin/approveds', [LeavesAdminController::class,'approveds']);
+    Route::post('/leaves/admin/cancel', [LeavesAdminController::class,'reject']);
+    Route::post('/leaves/admin/reject', [LeavesAdminController::class,'reject']);
+    Route::get('admin/generat/leaves', [LeavesAdminController::class,'GenerateLeave']);
+    Route::get('/leaves/report', [LeavesAdminController::class,'Report']);
+    Route::post('/leaves/filter-report', [LeavesAdminController::class,'FilterReport']);
+    Route::get('/leaves/export-report', [LeavesAdminController::class,'Export']);
+    Route::post('/generat/leaves/create', [LeavesAdminController::class,'CreateGenerateLeave']);
+    Route::get('/generat/leaves', [LeavesAdminController::class,'GenerateLeave']);
+    // Route::get('admin/generat/leaves', [LeavesAdminController::class,'GenerateLeave']);
+    // Route::get('/leaves/report', [LeavesAdminController::class,'Report']);
+    // Route::post('/leaves/filter-report', [LeavesAdminController::class,'FilterReport']);
+    // Route::get('/leaves/export-report', [LeavesAdminController::class,'Export']);
+    Route::post('/leaves/import', [LeavesAdminController::class,'ImportLeave']);
+    Route::post('/leaves/admin/cancel/all', [LeavesAdminController::class,'cancels']);
+    Route::get('/leaves/admin/export-allocation', [LeavesAdminController::class,'ExportLeaveAllocation']);
+
+    // Leave for employees
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
+    Route::post('/leaves/employee/store', [LeavesEmployeeController::class,'store']);
+    Route::get('/leaves/employee/edit', [LeavesEmployeeController::class,'edit']);
+    Route::post('/leaves/employee/update', [LeavesEmployeeController::class,'update']);
+    Route::post('/leaves/employee/delete', [LeavesEmployeeController::class,'destroy']);
+    Route::post('/leaves/employee/cancel', [LeavesEmployeeController::class,'cancel']);
+    Route::get('/leaves/employee/export', [LeavesEmployeeController::class,'Export']);
+
+    Route::get('/leaves/replcement', [LeavesEmployeeController::class,'indexReplcement']);
+    Route::post('/leaves/replacement/store', [LeavesEmployeeController::class,'replcementCreate']);
+    Route::post('/leaves/replacement/update', [LeavesEmployeeController::class,'replcementUpdate']);
+
+    Route::get('/leaves/type', [LeaveTypeController::class,'index']);
+    Route::post('/leave/type/create', [LeaveTypeController::class,'store']);
+    Route::get('/leave/type/edit', [LeaveTypeController::class,'edit']);
+    Route::post('/leave/type/update', [LeaveTypeController::class,'update']);
 
     Route::get('role', [RoleConroller::class,'index']);
+    Route::post('role/search', [RoleConroller::class,'filter']);
+    Route::get('role/create', [RoleConroller::class,'formCreate']);
+    Route::get('role/edit/{id}', [RoleConroller::class,'edit']);
+    Route::post('role/create', [RoleConroller::class,'create']);
+    Route::post('role/createPermission', [RoleConroller::class,'createPermission']);
+    Route::post('role/updatePermission', [RoleConroller::class,'updatePermission']);
     Route::post('role/store', [RoleConroller::class,'store']);
     Route::post('role/update', [RoleConroller::class,'update']);
+    Route::post('role/update-role', [RoleConroller::class,'updateRole']);
     Route::post('role/delete', [RoleConroller::class,'destroy']);
+    Route::get('role/detail/{id}', [RoleConroller::class,'detail']);
+    Route::post('role/status', [RoleConroller::class,'processing']);
     Route::Resource('permission', PermissionController::class);
+    Route::get('role/show', [RoleConroller::class,'show']);
+
+    // *** **** //
+    Route::get('category-permission', [CategoryPermissionController::class,'index']);
+    Route::get('category-permission/show', [CategoryPermissionController::class,'show']);
+    Route::post('category-permission/store', [CategoryPermissionController::class,'store']);
+    Route::post('category-permission/update', [CategoryPermissionController::class,'update']);
+    Route::post('category-permission/delete', [CategoryPermissionController::class,'destroy']);
 
     Route::get('/department', [DepartmentController::class,'index']);
     Route::post('/department/store', [DepartmentController::class,'store']);
@@ -83,19 +229,27 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/department/update', [DepartmentController::class,'update']);
 
     Route::get('/position', [PositionController::class,'index']);
+    Route::get('/position/show', [PositionController::class,'show']);
     Route::post('/position/store', [PositionController::class,'store']);
+    Route::get('/position/edit', [PositionController::class,'edit']);
     Route::post('/position/update', [PositionController::class,'update']);
     Route::post('/position/delete', [PositionController::class,'destroy']);
+    Route::post('/import/position', [PositionController::class,'ImpotPosition']);
 
     Route::get('/branch', [BranchController::class,'index']);
     Route::post('/branch/store', [BranchController::class,'store']);
+    Route::get('/branch/edit', [BranchController::class,'edit']);
     Route::post('/branch/delete', [BranchController::class,'destroy']);
     Route::post('/branch/update', [BranchController::class,'update']);
 
     // users
+    Route::get('admins/user/autocomplet', [UserController::class,'autocomplet']);
     Route::get('users', [UserController::class,'index']);
+    Route::get('user/form/create', [UserController::class,'formCreate']);
+    Route::get('user/form/edit/{id}', [UserController::class,'formEdit']);
     Route::post('users', [UserController::class,'filter']);
     Route::post('users/store', [UserController::class,'store']);
+    Route::post('users/create', [UserController::class,'create']);
     Route::post('users/update', [UserController::class,'update']);
     Route::post('users/delete', [UserController::class,'destroy']);
     Route::get('users/edit', [UserController::class,'edit']);
@@ -103,12 +257,110 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('users/reasonoption', [UserController::class, 'reasonOption']);
     Route::get('users/birthday', [UserController::class, 'showDetailBirthday']);
     Route::get('users/print', [UserController::class, 'print']);
+    Route::post('import/employee',[UserController::class,'employImport']);
+    Route::get('users/export',[UserController::class,'export']);
+    Route::get('users/line-manager',[UserController::class,'lineManagere']);
+    Route::post('users/update/line-manager',[UserController::class,'updateLineManager']);
+    Route::post('users/duplicate', [UserController::class, 'duplicateEmployeeId']);
+    Route::post('users/import/update/employee', [UserController::class, 'importUpdateEmployee']);
+    Route::post('users/update/role', [UserController::class, 'updateRole']);
+
+    //user log
+    Route::get('user/not/logged', [UserController::class, 'userNotLogged']);
+    Route::get('user/logged', [UserController::class, 'userLogged']);
 
     //Employee Payroll
     Route::get('payroll',[EmployeePayrollController::class,'index']);
     Route::post('payroll-search',[EmployeePayrollController::class,'search']);
     Route::get('payroll-export',[EmployeePayrollController::class,'export']);
-    
+    Route::post('payroll/create',[EmployeePayrollController::class,'store']);
+    Route::post('payroll/delete',[EmployeePayrollController::class,'destroy']);
+    Route::get('payslip/{id}',[EmployeePayrollController::class,'paySlip']);
+    Route::post('import/payroll',[EmployeePayrollController::class,'importPayroll']);
+
+    Route::match( ['GET', 'POST'],'payroll/review',[EmployeePayrollController::class, 'payrollReview']);
+    // Route::get('payroll/review',[EmployeePayrollController::class,'payrollReview']);
+    Route::post('payroll/review/search',[EmployeePayrollController::class,'payrollReviewSearch']);
+    Route::post('payroll/approved',[EmployeePayrollController::class,'payrollApproved']);
+    Route::get('payroll/review/export',[EmployeePayrollController::class,'payrollPreviwExport']);
+    Route::post('payroll/review/delete',[EmployeePayrollController::class,'payrollReviewDelete']);
+
+    Route::get('payroll/staff/resign',[EmployeePayrollController::class,'payrollStaffResign']);
+    Route::post('payroll/staff/resign/approved',[EmployeePayrollController::class,'approvedPayrollStaffResign']);
+    Route::post('payroll/staff/resign/delete',[EmployeePayrollController::class,'payrollStaffResignDelete']);
+    Route::post('payroll/staff/risign/create',[EmployeePayrollController::class,'payrollStaffResignCreate']);
+    Route::post('payroll/staff/risign/search',[EmployeePayrollController::class,'payrollStaffResignSearch']);
+
+    ///performance admins
+    Route::get('performance-admin', [PerformanceAdminController::class,'index']);
+    Route::get('performance-admin/employees', [PerformanceAdminController::class,'employees']);
+
+    Route::get('performance-admin/kpi-report', [PerformanceAdminController::class,'kpiReport']);
+    Route::get('performance-admin/kpi-export', [PerformanceAdminController::class,'reportExport']);
+    Route::get('performance-admin/kpi-export/{id}', [PerformanceAdminController::class,'kpiReportExportDetail']);
+
+    Route::get('performance-admin/{id}/{url}', [PerformanceAdminController::class,'show']);
+    Route::get('performance-admin/histories/{id}/{url}', [PerformanceAdminController::class,'histories']);
+    Route::get('performance-admin/histories-detail/{id}/{url}/{urlpage}', [PerformanceAdminController::class,'historiesDetail']);
+    Route::post('performance-admin/asign', [PerformanceAdminController::class,'asign']);
+    Route::post('performance-admin/asigns', [PerformanceAdminController::class,'asigns']);
+    Route::post('performance-admin/return', [PerformanceAdminController::class,'return']);
+    Route::post('performance-admin/returns', [PerformanceAdminController::class,'returns']);
+    Route::post('performance-admin/approved', [PerformanceAdminController::class,'approved']);
+    Route::post('performance-admin/approveds', [PerformanceAdminController::class,'approveds']);
+
+    ///performance
+    Route::get('performance', [PerformanceController::class,'index']);
+    Route::get('performance/create', [PerformanceController::class,'create']);
+    Route::post('performance/store', [PerformanceController::class,'store']);
+    Route::get('performance/{id}', [PerformanceController::class,'show']);
+    Route::get('performance/{id}/edit', [PerformanceController::class,'edit']);
+    Route::post('performance/update', [PerformanceController::class,'update']);
+    Route::post('performance/delete', [PerformanceController::class,'destroy']);
+    Route::post('performance/assign', [PerformanceController::class,'performanceAssign']);
+    Route::post('performance/accepted', [PerformanceController::class,'performanceAccepted']);
+    Route::post('performance/assign/all', [PerformanceController::class,'performanceAssignAll']);
+    Route::post('performance/import', [PerformanceController::class,'performanceImport']);
+    Route::post('performance/import/goal', [PerformanceController::class,'kpiImportGoal']);
+    Route::get('performance/duplicate/{id}', [PerformanceController::class,'kpiDuplicate']);
+    Route::post('performance/duplicate/create', [PerformanceController::class,'kpiDuplicateCreate']);
+
+
+    //performance Appraisal
+    Route::resource('performance-appraisal', PerformanceAppraisalController::class);
+    Route::post('performance-appraisal/asign', [PerformanceAppraisalController::class,'paAsign']);
+    Route::post('performance-appraisal/approved', [PerformanceAppraisalController::class,'paApproved']);
+    Route::post('performance-appraisal/return', [PerformanceAppraisalController::class,'paReturn']);
+    Route::get('performance/appraisal/export/{id}', [PerformanceAppraisalController::class,'performanceAppraisalExport']);
+    Route::post('performance/appraisal/import', [PerformanceAppraisalController::class,'performanceAppraisalImport']);
+    Route::get('performance-appraisal-preview/{id}', [PerformanceAppraisalController::class,'performanceAppraisalPreview']);
+    Route::get('menual/score', [PerformanceAppraisalController::class,'menualScore']);
+    Route::post('performance/appraisal/update/score', [PerformanceAppraisalController::class,'updateMenalScore']);
+    Route::post('performance/appraisal/import/menual/score', [PerformanceAppraisalController::class,'importMenualScore']);
+    Route::get('performance/appraisal/download', [PerformanceAppraisalController::class,'performanceAppraisalDownload']);
+    Route::post('performance/appraisal/import/result', [PerformanceAppraisalController::class,'paResult']);
+
+    Route::post('performance/upload-reference', [PerformanceAppraisalController::class, 'uploadReference']);
+    Route::delete('performance/delete-reference/{id}', [PerformanceAppraisalController::class, 'deleteReference']);
+    Route::get('/performance/view-reference/{id}', [PerformanceAppraisalController::class, 'viewReference']);
+
+    Route::get('performance/appraisal/pa-report', [ReportsController::class,'PaReport']);
+    Route::get('performance/appraisal/pa-export', [ReportsController::class,'PaReportExport']);
+    Route::get('performance/appraisal/pa-export/{id}', [ReportsController::class,'PaReportExportDetail']);
+
+    Route::get('generate/annual/salary/increasement/download', [GenerateAnnualSalaryIncreasementController::class,'export']);
+    Route::resource('annual/salary/increasement', AnnualSalaryIncreasementController::class);
+    Route::resource('generate/annual/salary/increasement', GenerateAnnualSalaryIncreasementController::class);
+    Route::post('generate/annual/salary/increasement/approved', [GenerateAnnualSalaryIncreasementController::class,'annualSalaryIncreasementApproved']);
+
+    Route::resource('annual/bonus', AnnualBonuConfigeController::class);
+    Route::resource('confige/annual/bonus/branch', ConfigeAnnualBonuByBranchCongroller::class);
+    Route::resource('generate/annual/bonus', GenerateAnnaulBonusController::class);
+    Route::post('generate/annual/bonus/approved', [GenerateAnnaulBonusController::class,'approved']);
+    Route::get('annual-bonus-download', [GenerateAnnaulBonusController::class,'annaulBonusDownload']);
+    Route::get('report/annual/bonus', [GenerateAnnaulBonusController::class,'reportAnnualBonus']);
+    Route::get('report/annual/bonus/download', [GenerateAnnaulBonusController::class,'reportAnnualBonusDownload']);
+
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
     Route::get('motor-rentel/edit',[MotorRentelController::class,'edit']);
@@ -120,19 +372,32 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('motor-rentel/pay',[MotorRentelController::class,'indexPay']);
     Route::post('motor-rentel/search',[MotorRentelController::class,'indexPaySearch']);
     Route::post('motor-rentel/create-pay',[MotorRentelController::class,'storePay']);
+    Route::post('motor-rentel/status',[MotorRentelController::class,'processing']);
 
+    Route::get('motor-rentel/pay-review',[MotorRentelController::class,'indexReviewPay']);
+    Route::post('motor-rentel/approved',[MotorRentelController::class,'payApproved']);
+    Route::post('motor-rentel/review/delete',[MotorRentelController::class,'deletePay']);
 
-    Route::post('payroll/create',[EmployeePayrollController::class,'store']);
-    Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
+     // Motor Rental adjustment
+    Route::get('motor-rentel/adjustment',[MotorAdjustmentController::class,'index']);
+    Route::get('motor-rentel/adjustment/edit',[MotorAdjustmentController::class,'edit']);
+    Route::post('motor-rentel/adjustment/store',[MotorAdjustmentController::class,'store']);
+    Route::post('motor-rentel/adjustment/update',[MotorAdjustmentController::class,'update']);
+    Route::post('motor-rentel/adjustment/delete',[MotorAdjustmentController::class,'destroy']);
 
     //Payroll Item
-    Route::get('payroll/item',[PayrollItemController::class,'index']);
+    Route::get('payroll/adjustment',[PayrollItemController::class,'index']);
+    Route::post('payroll/adjustment/store',[PayrollItemController::class,'store']);
+    Route::get('payroll/adjustment/{id}/edit', [PayrollItemController::class, 'edit']);
+    Route::post('payroll/adjustment/update',[PayrollItemController::class,'update']);
+    Route::delete('payroll/adjustment/{id}',[PayrollItemController::class,'destroy']);
+    Route::post('payroll/adjustment/import',[PayrollItemController::class,'adjustmentImport']);
     // route province
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);
     Route::post('commune', [ProvinceController::class,'showCommune']);
     Route::post('village', [ProvinceController::class,'showVillage']);
-    
+
     // route banks
     Route::get('/bank', [BankController::class,'index']);
     Route::post('/bank/store', [BankController::class,'store']);
@@ -157,6 +422,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/training/status', [TrainingController::class,'processing']);
     Route::get('/training/detail/{id}', [TrainingController::class,'detail']);
 
+    Route::get('/training/export-staff', [TrainingController::class,'staffTrainingExport']);
+    Route::get('/training/export-trainer', [TrainingController::class,'trainerTrainingExport']);
+    Route::post('/training/uploads', [TrainingController::class,'uploads']);
+
     // route trainer
     Route::get('/trainer/list', [TrainerController::class,'index']);
     Route::post('/trainer/list', [TrainerController::class,'filter']);
@@ -176,6 +445,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // route exchange rate
     Route::get('/exchange-rate/list', [ExchangeRateController::class,'index']);
     Route::post('/exchange-rate/store', [ExchangeRateController::class,'store']);
+    Route::post('/exchange-rate/create', [ExchangeRateController::class,'create']);
     Route::post('/exchange-rate/update', [ExchangeRateController::class,'update']);
     Route::get('/exchange-rate/edit', [ExchangeRateController::class,'edit']);
     Route::post('/exchange-rate/delete', [ExchangeRateController::class,'destroy']);
@@ -190,14 +460,50 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/reports/payroll-report', [PayrollReportController::class,'filter']);
     Route::get('/reports/payroll-export', [PayrollReportController::class,'payrollExport']);
 
+    // Route::get('/import-nssf', [PayrollReportController::class,'ImportIndex']);
+    Route::get('/nssf-export', [PayrollReportController::class,'nssfExport']);
+    Route::post('/import-nssf', [PayrollReportController::class,'ImportNSSF']);
+    //NSSF
+    Route::resource('/import-nssf', NationalSocialSecurityFundController::class);
+    Route::get('/nssf-export-review', [NationalSocialSecurityFundController::class,'NssfExportReview']);
+
+    //Report nssf
+    Route::get('/reports/nssf-report', [PayrollReportController::class,'reportNssf']);
+    Route::post('/reports/nssf-report', [PayrollReportController::class,'nssfFilter']);
+    Route::get('/reports/nssf-export', [PayrollReportController::class,'nssfExportReport']);
+    //Report benefit
+    Route::get('/reports/benefit-report', [PayrollReportController::class,'reportBenefitKNYPCh']);
+    Route::post('/reports/benefit-report', [PayrollReportController::class,'BenefitFilter']);
+    Route::get('/reports/benefit-export', [PayrollReportController::class,'BenefitExport']);
+    //Severancey pay
+    Route::get('/severance-pay', [PayrollReportController::class,'SeverancePay']);
+    Route::post('/severance-pay', [PayrollReportController::class,'SeverancePayFil']);
+    Route::get('/severance/create/{id}', [PayrollReportController::class,'SeveranceCreate']);
+    Route::post('/severance/update', [PayrollReportController::class,'SeveranceUpdate']);
+    Route::post('/import/severance-pay', [PayrollReportController::class,'importSeverancePay']);
+    Route::get('/gross-salary-pay-export', [PayrollReportController::class,'grossSalaryPayExport']);
+    //Report Severancey pay
+    Route::get('/reports/severance-pay-report', [PayrollReportController::class,'reportSeverancePay']);
+    Route::post('/reports/severance-pay-report', [PayrollReportController::class,'SeverancePayFilter']);
+    Route::get('/reports/severance-pay-export', [PayrollReportController::class,'SeverancePayExport']);
+    //Report Senority pay
+    Route::get('/reports/seniorities-pay', [PayrollReportController::class,'reportSenorityPay']);
+    Route::post('/reports/seniorities-pay', [PayrollReportController::class,'SenorityPayFilter']);
+    Route::get('/reports/seniorities-pay-export', [PayrollReportController::class,'SenorityPayExport']);
+    //Tax Report
+    Route::get('/reports/tax-report', [PayrollReportController::class,'TaxReport']);
+    Route::post('/reports/tax-report', [PayrollReportController::class,'TaxFilter']);
+    Route::get('/reports/tax-report-export', [PayrollReportController::class,'TaxExport']);
+
     Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::get('/reports/export-motor-rentel-report', [PayrollReportController::class,'export']);
-    
+
     Route::get('/reports/new_staff-report', [ReportsController::class,'newStaff']);
     Route::post('/reports/new_staff-report', [ReportsController::class,'newStaff']);
 
     Route::get('/reports/staff-resigned-report', [ReportsController::class,'staffResigned']);
+    Route::get('/reports/staff-resigned-report/export', [ReportsController::class,'staffResignedExport']);
     Route::post('/reports/staff-resigned-report', [ReportsController::class,'staffResigned']);
 
     Route::get('/reports/promoted-staff-report', [ReportsController::class,'staffPromoted']);
@@ -207,10 +513,30 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/reports/transferred-staff-report', [ReportsController::class,'staffTransferred']);
 
     Route::get('/reports/training-report', [ReportsController::class,'trainingReport']);
+    Route::post('/reports/training-report-filter', [ReportsController::class,'filterTraining']);
     Route::post('/reports/training-report', [ReportsController::class,'trainingReport']);
     Route::get('/reports/training-export', [ReportsController::class,'trainingExport']);
-    
-    // test export excel
+
+    Route::get('/reports/bank-transfer', [ReportsController::class,'bankTransfer']);
+    Route::post('/reports/bank-transfer', [ReportsController::class,'bankTransfer']);
+    Route::get('/reports/bank-transfer-export', [ReportsController::class,'bankTransferExport']);
+
+    Route::get('/reports/e-filing', [ReportsController::class,'eFilingSalary']);
+    Route::post('/reports/e-filing-filter', [ReportsController::class,'eFilingFilter']);
+    Route::get('/reports/e-filing-export', [ReportsController::class,'efilingSalaryExport']);
+
+    Route::get('/reports/e-form', [ReportsController::class,'eFormSalary']);
+    Route::post('/reports/e-form-filter', [ReportsController::class,'eFormFilter']);
+    Route::get('/reports/e-form-export', [ReportsController::class,'eFormSalaryExport']);
+
+    Route::get('/reports/fringe-benefits-report', [ReportsController::class,'fringeBenefit']);
+    Route::post('/reports/fringe-benefits-filter', [ReportsController::class,'fringeBenefitFilter']);
+    Route::get('/reports/fringe-benefits-export', [ReportsController::class,'fringeBenefitExport']);
+
+    Route::get('/report/annual/salary/increasement', [ReportsController::class,'AnnualSalaryIncreasement']);
+    Route::get('/report/annual/salary/export', [ReportsController::class,'AnnualSalaryIncreasementExport']);
+
+    // export excel
     Route::get('motor-rentel/export',[PayrollReportController::class,'export']);
     Route::post('motor-rentel/import',[MotorRentelController::class,'import']);
 
@@ -230,16 +556,178 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // route block recruitment candidate resume
     Route::get('/recruitment/candidate-resume/list', [CandidateResumeController::class,'index']);
+    Route::get('/recruitment/candidate-resume/cvs', [CandidateResumeController::class,'indexCVs']);
+    Route::get('/recruitment/candidate-resume/shortlisted', [CandidateResumeController::class,'indexShortlisted']);
+    Route::get('/recruitment/candidate-resume/non/shortlisted', [CandidateResumeController::class,'indexNonShortlisted']);
+    Route::get('/recruitment/candidate-resume/interfailed', [CandidateResumeController::class,'indexInterfailed']);
+    Route::get('/recruitment/candidate-resume/interresult', [CandidateResumeController::class,'indexInterresult']);
+    Route::get('/recruitment/candidate-resume/processing/contract', [CandidateResumeController::class,'indexProcessingContract']);
+    Route::get('/recruitment/candidate-resume/processing/cancel', [CandidateResumeController::class,'indexProcessingCancel']);
+    Route::get('/recruitment/candidate-resume/upcoming/staff', [CandidateResumeController::class,'indexUpcomingStaff']);
+    Route::get('/recruitment/candidate-resume/upcoming/cancel', [CandidateResumeController::class,'indexCanceledContract']);
+    Route::get('/recruitment/candidate-resume/indexshow', [CandidateResumeController::class,'dataShow']);
+    Route::get('/recruitment/candidate-resume/preview/{id}', [CandidateResumeController::class,'preview']);
     Route::get('/recruitment/candidate-resume/show', [CandidateResumeController::class,'show']);
+    Route::get('/recruitment/candidate-resume/ajaxShow', [CandidateResumeController::class,'ajaxShow']);
     Route::post('/recruitment/candidate-resume/store', [CandidateResumeController::class,'store']);
     Route::get('/recruitment/candidate-resume/edit', [CandidateResumeController::class,'edit']);
     Route::post('/recruitment/candidate-resume/update', [CandidateResumeController::class,'update']);
     Route::post('/recruitment/candidate-resume/status', [CandidateResumeController::class,'processing']);
     Route::post('/recruitment/candidate-resume/delete', [CandidateResumeController::class,'destroy']);
     Route::post('/recruitment/candidate-resume/createemp', [CandidateResumeController::class,'createemp']);
+    Route::get('/recruitment/candidate-resume/employee', [CandidateResumeController::class,'showemp']);
+    Route::post('/recruitment/candidate-resume/import', [CandidateResumeController::class,'import']);
+    Route::post('/recruitment/candidate-resume/duplicate', [CandidateResumeController::class,'duplicate']);
+
+    Route::get('/recruitment/candidate-resume/upcoming/edit/{id}', [CandidateResumeController::class,'staffUpcoming']);
+    Route::post('recruitment/candidate-resume/staff/upcoming/update', [CandidateResumeController::class,'staffUpcomingUpdated']);
+    Route::get('/recruitment/candidate-resume/report', [CandidateResumeController::class,'report']);
+    Route::get('/recruitment/candidate-resume/download',[CandidateResumeController::class,'exportReport']);
 
     Route::get('children/allowance',[ChildrenAllowanceController::class,'index']);
     Route::get('children/edit',[ChildrenAllowanceController::class,'edit']);
     Route::post('children/update',[ChildrenAllowanceController::class,'update']);
     Route::post('children/delete',[ChildrenAllowanceController::class,'destroy']);
+
+    // route fringe benefits
+    Route::get('/fringe-benefit', [FringeBenefitController::class,'index']);
+    Route::post('/fringe-benefit/store', [FringeBenefitController::class,'store']);
+    Route::post('/fringe-benefit/update', [FringeBenefitController::class,'update']);
+    Route::get('/fringe-benefit/edit', [FringeBenefitController::class,'edit']);
+    Route::post('/fringe-benefit/delete', [FringeBenefitController::class,'destroy']);
+    Route::post('/fringe-benefit/import', [FringeBenefitController::class,'import']);
+
+    // for test send email
+    Route::get('/email', [SendEmailController::class,'index']);
+    Route::post('/email/store', [SendEmailController::class,'store']);
+    Route::get('/email/create/{id}', [SendEmailController::class,'formCreate']);
+    Route::post('/email-send', [SendEmailController::class,'send'])->name('send');
+
+    Route::Resource('address/province', ProvinceAddressController::class);
+    Route::post('import/province', [ProvinceAddressController::class,'ImportProvince']);
+    Route::Resource('address/district', DistrictsAddressController::class);
+    Route::post('import/district', [DistrictsAddressController::class,'ImportDistrict']);
+    Route::Resource('address/commune', ConmmuneAddressController::class);
+    Route::post('import/commune', [ConmmuneAddressController::class,'ImportCommune']);
+    Route::match(['get', 'post'], 'address/village', [VillageAddressController::class, 'index']);
+    // Route::Resource('address/village', VillageAddressController::class);
+    Route::post('import/village', [VillageAddressController::class,'ImportVillage']);
+
+    // Block special approvals leave request
+    Route::get('/special/approve', [SpecialController::class,'index']);
+    Route::post('/special/approve/store', [SpecialController::class,'store']);
+    Route::get('/special/approve/employees', [SpecialController::class,'employees']);
+    Route::post('/special/approve/update', [SpecialController::class,'update']);
+    Route::post('/special/approve/delete', [SpecialController::class,'destroy']);
+    Route::post('/special/approve/delete/employee', [SpecialController::class,'destroyEmploee']);
+    Route::get('/special/approve/edit', [SpecialController::class,'edit']);
+
+    // Block FN Taxes
+    Route::get('/fn/taxe', [FNTaxController::class,'index']);
+    Route::post('/fn/taxe', [FNTaxController::class,'store']);
+    Route::post('/fn/taxe/update', [FNTaxController::class,'update']);
+    Route::post('/fn/taxe/delete', [FNTaxController::class,'destroy']);
+    Route::get('/fn/taxe/edit', [FNTaxController::class,'edit']);
+    // Block FN Approvals
+    Route::get('/fn/approval', [FnApprovalController::class,'index']);
+    Route::get('/fn/approval/view/{id}', [FnApprovalController::class,'view']);
+    Route::get('/fn/approval/print/document', [FnApprovalController::class,'getTitle']);
+    
+
+    Route::post('/fn/approval', [FNApprovalController::class,'store']);
+    Route::post('/fn/approval/update', [FNApprovalController::class,'update']);
+    Route::post('/fn/approval/delete', [FNApprovalController::class,'destroy']);
+    Route::get('/fn/approval/edit', [FNApprovalController::class,'edit']);
+
+    Route::post('/fn/approval/create/amount', [FNApprovalController::class,'create']);
+    Route::post('/fn/approval/delete/amount', [FNApprovalController::class,'deleteAmount']);
+
+    // Block FN Payment Terms
+    Route::get('/fn/payment-term', [FnPaymentTermController::class,'index']);
+    Route::post('/fn/payment-term', [FNPaymentTermController::class,'store']);
+    Route::post('/fn/payment-term/update', [FNPaymentTermController::class,'update']);
+    Route::post('/fn/payment-term/delete', [FNPaymentTermController::class,'destroy']);
+    Route::get('/fn/payment-term/edit', [FNPaymentTermController::class,'edit']);
+    Route::post('/fn/payment-term/processing', [FNPaymentTermController::class,'processing']);
+    // Block FN  Level Reviewer
+    Route::get('/fn/level-reviewer', [FnLevelReviewerController::class,'index']);
+    Route::post('/fn/level-reviewer/search', [FnLevelReviewerController::class,'filter']);
+    Route::get('/fn/level-reviewer/create', [FnLevelReviewerController::class,'formCreate']);
+    Route::get('/fn/level-reviewer/view/{id}', [FnLevelReviewerController::class,'view']);
+    Route::get('/fn/level-reviewer/edit/{id}', [FnLevelReviewerController::class,'formEdit']);
+    Route::post('/fn/level-reviewer/create', [FnLevelReviewerController::class,'create']);
+    Route::post('/fn/level-reviewer/update', [FnLevelReviewerController::class,'update']);
+    Route::post('/fn/level-reviewer/delete', [FnLevelReviewerController::class,'destroy']);
+    Route::get('/fn/level-reviewer/export', [FnLevelReviewerController::class,'export']);
+    Route::get('/fn/level-reviewer/export/details', [FnLevelReviewerController::class,'exportDetails']);
+    // Block FN RegularExspense
+    Route::get('/fn/regular-expense', [FnRegularExspenseController::class,'index']);
+    Route::get('/fn/regular-expense/indexshow', [FnRegularExspenseController::class,'dataShow']);
+    Route::post('/fn/regular-expense', [FnRegularExspenseController::class,'store']);
+    Route::post('/fn/regular-expense/update', [FnRegularExspenseController::class,'update']);
+    Route::post('/fn/regular-expense/delete', [FnRegularExspenseController::class,'destroy']);
+    Route::get('/fn/regular-expense/edit', [FnRegularExspenseController::class,'edit']);
+    Route::post('/fn/regular-expense/processing', [FnRegularExspenseController::class,'processing']);
+
+    // route exchange rate
+    Route::get('/fn/exchange-rate/list', [FNExchangeRateController::class,'index']);
+    Route::post('/fn/exchange-rate/store', [FNExchangeRateController::class,'store']);
+    Route::post('/fn/exchange-rate/create', [FNExchangeRateController::class,'create']);
+    Route::post('/fn/exchange-rate/update', [FNExchangeRateController::class,'update']);
+    Route::get('/fn/exchange-rate/edit', [FNExchangeRateController::class,'edit']);
+    Route::post('/fn/exchange-rate/delete', [FNExchangeRateController::class,'destroy']);
+    Route::post('/fn/exchange-rate/status', [FNExchangeRateController::class,'processing']);
+
+    // Block FN Exspense Request
+    Route::get('/expense-request/list', [ExpenseRequestController::class,'index']);
+    Route::post('/fn/expense-request', [ExpenseRequestController::class,'store']);
+    Route::get('/fn/expense-request/create', [ExpenseRequestController::class,'create']);
+    Route::post('/fn/expense-request/update', [ExpenseRequestController::class,'update']);
+    Route::post('/fn/expense-request/delete', [ExpenseRequestController::class,'destroy']);
+    Route::get('/fn/expense-request/edit/{id}', [ExpenseRequestController::class,'edit']);
+    Route::post('/fn/expense-request/processing', [ExpenseRequestController::class,'processing']);
+    Route::post('/fn/expense-request/reject', [ExpenseRequestController::class,'reject']);
+    // Block FN Tax Exspense
+    Route::get('/fn/tax-expense/create', [ExpenseRequestController::class,'createTax']);
+    Route::get('/fn/tax-expense/edit/{id}', [ExpenseRequestController::class,'editTax']);
+    Route::post('/fn/tax-expense/update', [ExpenseRequestController::class,'updateTax']);
+
+    // Block FN Exspense Admin
+    Route::get('/admin-expense/list', [ExpenseAdminController::class,'index']);
+    Route::post('/admin-expense/cancel', [ExpenseAdminController::class,'cancel']);
+    Route::post('/admin-expense/approveds', [ExpenseAdminController::class,'approveds']);
+    Route::post('/admin-expense/asign', [ExpenseAdminController::class,'asign']);
+    Route::get('/admin-expense/histories/{id}', [ExpenseAdminController::class,'histories']);
+    Route::get('/admin-expense/histories-export', [ExpenseAdminController::class,'historiesExport']);
+
+    // Block Exspense report
+    Route::get('/fn/expense/report', [ExpenseReportController::class,'index']);
+    Route::post('/fn/expense/search', [ExpenseReportController::class,'filter']);
+    Route::get('/fn/expense/report/export', [ExpenseReportController::class,'reportExport']);
+    Route::get('/fn/expense/report/export-histories', [ExpenseReportController::class,'historiesExport']);
+
+    // Block backup database and file upload
+    Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
+    Route::get('/backup/database', [BackupController::class, 'databaseBackup'])->name('backup.database');
+    Route::get('/backup/files', [BackupController::class, 'filesBackup'])->name('backup.files');
+    Route::get('/backup/full', [BackupController::class, 'fullBackup'])->name('backup.full');
+    Route::post('/restore/database', [BackupController::class, 'restoreDatabase'])->name('restore.database');
+    Route::post('/restore/files', [BackupController::class, 'restoreFiles'])->name('restore.files');
+
+    // Block Salary requests
+    Route::get('/salary-requests', [SalaryRequestController::class,'index']);
+    Route::get('/salary-requests/edit', [SalaryRequestController::class,'edit']);
+    Route::post('/salary-requests/store', [SalaryRequestController::class,'store']);
+    Route::post('/salary-requests/update', [SalaryRequestController::class,'update']);
+    Route::post('salary-requests/approved/all', [SalaryRequestController::class,'requestApproveAll']);
+    Route::post('/salary-requests/delete', [SalaryRequestController::class,'destroy']);
+
+     // Block levels
+    Route::get('/level', [LevelController::class,'index']);
+    Route::post('/level/store', [LevelController::class,'store']);
+    Route::post('/level/update', [LevelController::class,'update']);
+    Route::post('/level/delete', [LevelController::class,'destroy']);
+    Route::get('/level/edit', [LevelController::class,'edit']);
+
 });
+Route::get('lang/{locale}', [LanguageController::class, "lang"]);

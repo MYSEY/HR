@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\User;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class ParyllStaffResign extends Model
+{
+    use HasFactory;
+    protected $table = 'paryll_staff_resigns';
+    protected $guarded = ['id'];
+    protected $fillable = [
+        'employee_id',
+        'number_employee',
+        'basic_salary',
+        'total_gross_salary',
+        'payment_date',
+        'children',
+        'spouse',
+        'total_child_allowance',
+        'phone_allowance',
+        'monthly_quarterly_bonuses',
+        'total_kny_phcumben',
+        'annual_incentive_bonus',
+        'seniority_pay_included_tax',
+        'other_benefits',
+        'total_gross',
+        'total_pension_fund',
+        'base_salary_received_usd',
+        'base_salary_received_riel',
+        'total_amount_reduced',
+        'total_rate',
+        'pension_contribution',
+        'total_charges_reduced',
+        'total_tax_base_riel',
+        'total_salary_tax_usd',
+        'total_salary_tax_riel',
+        'seniority_pay_excluded_tax',
+        'seniority_backford',
+        'total_severance_pay',
+        'loan_amount',
+        'total_amount_car',
+        'total_salary',
+        'exchange_rate',
+        'adjustment',
+        'adjustment_include_taxe',
+        'total_amount_car',
+        'total_staff_book',
+        'leaves',
+        'created_by',
+        'updated_by',
+    ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class ,'employee_id')
+        ->with("gender")->with('department')->with('position')->with("positiontype")->with('branch')->with("totalChild")->with('bank');
+    }
+
+    public function getCreatedAttribute(){
+        if ($this->created_at) {
+            return Carbon::parse($this->created_at)->format('d-M-Y');
+        }
+    }
+    public function getPayrollPaymentDateAttribute(){
+        if ($this->payment_date) {
+            return Carbon::parse($this->payment_date)->format('d-M-Y');
+        }
+    }
+}

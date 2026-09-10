@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_06_13_090147_create_candidate_resumes_table.php
      *
      * @return void
      */
@@ -16,9 +17,14 @@ return new class extends Migration
         Schema::create('candidate_resumes', function (Blueprint $table) {
             $table->id();
             $table->string('number_employee')->nullable();
+            $table->string('last_name_kh');
+            $table->string('first_name_kh');
+            $table->string('last_name_en');
+            $table->string('first_name_en');
             $table->string('name_kh');
             $table->string('name_en')->nullable();
             $table->string('gender')->nullable();
+            $table->integer('line_manager')->nullable();
             $table->string('current_position')->nullable();
             $table->string('companey_name')->nullable();
             $table->string('position_applied')->nullable();
@@ -27,8 +33,10 @@ return new class extends Migration
             $table->date('received_date')->nullable();
             $table->date('fdc_date')->nullable();
             $table->string('recruitment_channel')->nullable();
+            $table->string('referral_name')->nullable();
             $table->string('contact_number')->nullable();
             $table->string('status')->nullable();
+            $table->string('marital_status')->nullable();
             $table->longText('cv')->nullable();
             $table->dateTime('interviewed_date')->nullable();
             $table->string('committee_interview')->nullable();
@@ -41,10 +49,12 @@ return new class extends Migration
             $table->string('interviewed_channel')->nullable();
             $table->string('department_id')->nullable();
             $table->string('position_type')->nullable();
+            $table->enum('pro_rate', ['0', '1'])->default('0');
             $table->date('date_of_birth')->nullable();
             $table->decimal('basic_salary',50,2)->default(0);
             $table->decimal('salary_increas')->default(0);
             $table->string('id_card_number')->nullable();
+            $table->string('id_number_nssf')->nullable();
             $table->string('current_province')->nullable();
             $table->string('current_district')->nullable();
             $table->string('current_commune')->nullable();

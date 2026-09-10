@@ -1,0 +1,2067 @@
+
+$(function(){
+    // block dahboard admin
+    $("#dashboad_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".dashboad_checkbox").prop("checked", false);
+            $(".dashboad_checkbox").val(0);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".dashboad_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".dashboad_checkbox").val(1);
+        }
+    });
+    $(".dashboad_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let checkboxes = $('.dashboad_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.dashboad_checkbox').length) {
+                $("#dashboad_all").prop("checked", true);
+                $("#dashboad_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.dashboad_checkbox').length) {
+                $("#dashboad_all").prop("checked", false);
+                $("#dashboad_all").val(0)
+            };
+        });
+    });
+    // blcok dahboard employee
+    $("#employee_dashboard").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).val(0);
+        }
+        if ($(this).prop("checked")) {
+            $(this).val(1)
+        }    
+    });
+
+
+    // blcok employee
+    $("#employee_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".employee_checkbox").prop("checked", false);
+            $(this).val(0);
+            $(".employee_checkbox").val(0);
+        }
+        if ($(this).prop("checked")) {
+            $(".employee_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".employee_checkbox").val(1);
+        }    
+    });
+    $("#all_employee").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".all_employee_checkbox").prop("checked", false);
+            $(this).val(0)
+            $(".all_employee_checkbox").val(0);
+        }
+        if ($(this).prop("checked")) {
+            $(".all_employee_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".all_employee_checkbox").val(1);
+        }
+        
+    });
+    $(".all_employee_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let allEmployees = $('.all_employee_checkbox');
+        allEmployees.change(function(){
+            let countAllCheckboxes = allEmployees.filter(':checked').length;
+            if (countAllCheckboxes == $('input.all_employee_checkbox').length) {
+                $("#all_employee").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.all_employee_checkbox').length) {
+                $("#all_employee").prop("checked", false);
+            };
+        });
+
+        let checkboxes = $('.employee_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.employee_checkbox').length) {
+                $("#employee_all").prop("checked", true);
+                $("#employee_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.employee_checkbox').length) {
+                $("#employee_all").prop("checked", false);
+                $("#employee_all").val(0)
+            };
+        });
+    });
+
+    // block leave
+    $("#leave_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".leave_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".leave_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".leave_checkbox").val(1);
+        }    
+    });
+    $("#leaves_employee").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".leaves_employee_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".leaves_employee_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".leaves_employee_checkbox").val(1);
+        }
+    });
+    $(".leaves_employee_checkbox").on("click", function () {
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#request_replacement").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".request_replacement_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".request_replacement_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".request_replacement_checkbox").val(1);
+        }
+    });
+    $(".request_replacement_checkbox").on("click", function () {
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#leaves_admin").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".leaves_admin_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".leaves_admin_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".leaves_admin_checkbox").val(1);
+        }
+    });
+    $(".leaves_admin_checkbox").on("click", function () {
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#leaves_report").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".leave_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".leave_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".leave_report_checkbox").val(1);
+        }
+    });
+    $(".leave_report_checkbox").on("click", function () {
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+
+    $(document).ready(function(){
+        let leavesAdmin = $('.leaves_admin_checkbox');
+        leavesAdmin.change(function(){
+            let countleavesAdminCheckboxes = leavesAdmin.filter(':checked').length;
+            if (countleavesAdminCheckboxes == $('input.leaves_admin_checkbox').length) {
+                $("#leaves_admin").prop("checked", true);
+            };
+            if (countleavesAdminCheckboxes < $('input.leaves_admin_checkbox').length) {
+                $("#leaves_admin").prop("checked", false);
+            };
+        });
+
+        let leavesEmployee = $('.leaves_employee_checkbox');
+        leavesEmployee.change(function(){
+            let countleavesEmployeeCheckboxes = leavesEmployee.filter(':checked').length;
+            if (countleavesEmployeeCheckboxes == $('input.leaves_employee_checkbox').length) {
+                $("#leaves_employee").prop("checked", true);
+            };
+            if (countleavesEmployeeCheckboxes < $('input.leaves_employee_checkbox').length) {
+                $("#leaves_employee").prop("checked", false);
+            };
+        });
+
+        let request_replacement = $('.request_replacement_checkbox');
+        request_replacement.change(function(){
+            let countrequest_replacementCheckboxes = request_replacement.filter(':checked').length;
+            if (countrequest_replacementCheckboxes == $('input.request_replacement_checkbox').length) {
+                $("#request_replacement").prop("checked", true);
+            };
+            if (countrequest_replacementCheckboxes < $('input.request_replacement_checkbox').length) {
+                $("#request_replacement").prop("checked", false);
+            };
+        });
+
+        let leavesReport = $('.leave_report_checkbox');
+        leavesReport.change(function(){
+            let countleavesReportCheckboxes = leavesReport.filter(':checked').length;
+            if (countleavesReportCheckboxes == $('input.leave_report_checkbox').length) {
+                $("#leaves_report").prop("checked", true);
+            };
+            if (countleavesReportCheckboxes < $('input.leave_report_checkbox').length) {
+                $("#leaves_report").prop("checked", false);
+            };
+        });
+
+        let checkboxes = $('.leave_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.leave_checkbox').length) {
+                $("#leave_all").prop("checked", true);
+                $("#leave_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.leave_checkbox').length) {
+                $("#leave_all").prop("checked", false);
+                $("#leave_all").val(0)
+            };
+        });
+    });
+
+    // blcok recruitment
+    $("#recruitments_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".recruitment_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".recruitment_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".recruitment_checkbox").val(1);
+        }   
+    });
+    $("#candidate_CVs").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".candidate_CVs_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".candidate_CVs_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".candidate_CVs_checkbox").val(1);
+        }
+    });
+    $(".candidate_CVs_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#recruitment_plans").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".recruitment_plans_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".recruitment_plans_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".recruitment_plans_checkbox").val(1);
+        }
+    });
+    $(".recruitment_plans_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let candidate_CVs_checkbox = $('.candidate_CVs_checkbox');
+        candidate_CVs_checkbox.change(function(){
+            let countAllCheckboxes = candidate_CVs_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.candidate_CVs_checkbox').length) {
+                $("#candidate_CVs").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.candidate_CVs_checkbox').length) {
+                $("#candidate_CVs").prop("checked", false);
+            };
+        });
+
+        let recruitment_plans_checkbox = $('.recruitment_plans_checkbox');
+        recruitment_plans_checkbox.change(function(){
+            let countAllCheckboxes = recruitment_plans_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.recruitment_plans_checkbox').length) {
+                $("#recruitment_plans").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.recruitment_plans_checkbox').length) {
+                $("#recruitment_plans").prop("checked", false);
+            };
+        });
+
+        let checkboxes = $('.recruitment_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.recruitment_checkbox').length) {
+                $("#recruitments_all").prop("checked", true);
+                $("#recruitments_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.recruitment_checkbox').length) {
+                $("#recruitments_all").prop("checked", false);
+                $("#recruitments_all").val(0)
+            };
+        });
+    });
+
+    // blcok C&B
+    $("#generate_payroll").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".g_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".g_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".g_checkbox").val(1);
+        }
+    });
+    $("#payroll_staff_resign").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".payroll_staff_resign_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".payroll_staff_resign_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".payroll_staff_resign_checkbox").val(1);
+        }
+    });
+    $(".payroll_staff_resign_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+
+    //function check parent for payment adjustment
+    $("#payroll_adjustment").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".payroll_adjustment_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".payroll_adjustment_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".payroll_adjustment_checkbox").val(1);
+        }
+    });
+    //function check child for payment adjustment
+    $(".payroll_adjustment_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(".g_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+
+    $("#c_and_b_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".c_and_b_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".c_and_b_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".c_and_b_checkbox").val(1);
+        }
+    });
+    $("#employee_salary").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".employee_salary_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".employee_salary_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".employee_salary_checkbox").val(1);
+        }
+    });
+    $(".employee_salary_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#cb_nssf").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".cb_nssf_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".cb_nssf_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".cb_nssf_checkbox").val(1);
+        }
+    });
+    $(".cb_nssf_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#severance_pay").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".severance_pay_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".severance_pay_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".severance_pay_checkbox").val(1);
+        }
+    });
+    $(".severance_pay_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#fringe_benefits").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".fringe_benefits_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".fringe_benefits_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".fringe_benefits_checkbox").val(1);
+        }
+    });
+    $(".fringe_benefits_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let g_checkbox = $('.g_checkbox');
+        g_checkbox.change(function(){
+            let countAllCheckboxes = g_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.g_checkbox').length) {
+                $("#generate_payroll").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.g_checkbox').length) {
+                $("#generate_payroll").prop("checked", false);
+            };
+        });
+        let employee_salary_checkbox = $('.employee_salary_checkbox');
+        employee_salary_checkbox.change(function(){
+            let countAllCheckboxes = employee_salary_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.employee_salary_checkbox').length) {
+                $("#employee_salary").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.employee_salary_checkbox').length) {
+                $("#employee_salary").prop("checked", false);
+            };
+        });
+
+        let cb_nssf_checkbox = $('.cb_nssf_checkbox');
+        cb_nssf_checkbox.change(function(){
+            let countAllCheckboxes = cb_nssf_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.cb_nssf_checkbox').length) {
+                $("#cb_nssf").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.cb_nssf_checkbox').length) {
+                $("#cb_nssf").prop("checked", false);
+            };
+        });
+
+        let severance_pay_checkbox = $('.severance_pay_checkbox');
+        severance_pay_checkbox.change(function(){
+            let countAllCheckboxes = severance_pay_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.severance_pay_checkbox').length) {
+                $("#severance_pay").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.severance_pay_checkbox').length) {
+                $("#severance_pay").prop("checked", false);
+            };
+        });
+
+        let fringe_benefits_checkbox = $('.fringe_benefits_checkbox');
+        fringe_benefits_checkbox.change(function(){
+            let countAllCheckboxes = fringe_benefits_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.fringe_benefits_checkbox').length) {
+                $("#fringe_benefits").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.fringe_benefits_checkbox').length) {
+                $("#fringe_benefits").prop("checked", false);
+            };
+        });
+
+        let payroll_staff_resign_checkbox = $('.payroll_staff_resign_checkbox');
+        payroll_staff_resign_checkbox.change(function(){
+            let countAllCheckboxes = payroll_staff_resign_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.payroll_staff_resign_checkbox').length) {
+                $("#payroll_staff_resign").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.payroll_staff_resign_checkbox').length) {
+                $("#payroll_staff_resign").prop("checked", false);
+            };
+        });
+        
+        let payroll_adjustment_checkbox = $('.payroll_adjustment_checkbox');
+        payroll_adjustment_checkbox.change(function(){
+            let countAllCheckboxes = payroll_adjustment_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.payroll_adjustment_checkbox').length) {
+                $("#payroll_adjustment").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.payroll_adjustment_checkbox').length) {
+                $("#payroll_adjustment").prop("checked", false);
+            };
+        });
+
+        let checkboxes = $('.c_and_b_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.c_and_b_checkbox').length) {
+                $("#c_and_b_all").prop("checked", true);
+                $("#c_and_b_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.c_and_b_checkbox').length) {
+                $("#c_and_b_all").prop("checked", false);
+                $("#c_and_b_all").val(0)
+            };
+        });
+    });
+
+    // blcok performac
+    $("#performace_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".performance_checkbox").val(1);
+        }
+    });
+    $("#performance").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".performance_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".performance_checkbox").val(1);
+        }
+    });
+    $("#performance_review").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".pr_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".pr_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".pr_checkbox").val(1);
+        }
+    });
+
+    // block exspanse management
+    $("#exspanse_management_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".exspanse_request_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".exspanse_request_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".exspanse_request_checkbox").val(1);
+        }
+    });
+    $("#exspanse_request").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".exspanse_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".exspanse_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".exspanse_checkbox").val(1);
+        }
+    });
+    $(".exspanse_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let exspanse_checkbox = $('.exspanse_checkbox');
+        exspanse_checkbox.change(function(){
+            let countAllCheckboxes = exspanse_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.exspanse_checkbox').length) {
+                $("#exspanse_request").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.exspanse_checkbox').length) {
+                $("#exspanse_request").prop("checked", false);
+            };
+        });
+        let exspanse_request_checkbox = $('.exspanse_request_checkbox');
+        exspanse_request_checkbox.change(function(){
+            let countCheckedCheckboxes = exspanse_request_checkbox.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.exspanse_request_checkbox').length) {
+                $("#exspanse_management_all").prop("checked", true);
+                $("#exspanse_management_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.exspanse_request_checkbox').length) {
+                $("#exspanse_management_all").prop("checked", false);
+                $("#exspanse_management_all").val(0)
+            };
+        });
+    });
+
+    
+
+    // blcok motor rental
+    $("#motor_rental_check_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".motor_rental_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".motor_rental_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".motor_rental_checkbox").val(1);
+        }
+    });
+    $("#motor_rentals").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".motor_rentals_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".motor_rentals_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".motor_rentals_checkbox").val(1);
+        }
+    });
+    $(".motor_rentals_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+
+    $("#adjustment_mt").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".adjustment_mt_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".adjustment_mt_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".adjustment_mt_checkbox").val(1);
+        }
+    });
+    $(".adjustment_mt_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+
+    $("#generate_pay_motor_rentals").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".generate_pay_motor_rentals_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".generate_pay_motor_rentals_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".generate_pay_motor_rentals_checkbox").val(1);
+        }
+    });
+    $(".generate_pay_motor_rentals_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    
+    $("#pay_motor_rentals").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".pay_motor_rentals_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".pay_motor_rentals_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".pay_motor_rentals_checkbox").val(1);
+        }
+    });
+    $(".pay_motor_rentals_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let motor_rentals_checkbox = $('.motor_rentals_checkbox');
+        motor_rentals_checkbox.change(function(){
+            let countAllCheckboxes = motor_rentals_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.motor_rentals_checkbox').length) {
+                $("#motor_rentals").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.motor_rentals_checkbox').length) {
+                $("#motor_rentals").prop("checked", false);
+            };
+        });
+
+        let adjustment_mt_checkbox = $('.adjustment_mt_checkbox');
+        adjustment_mt_checkbox.change(function(){
+            let countAllCheckboxes = adjustment_mt_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.adjustment_mt_checkbox').length) {
+                $("#adjustment_mt").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.adjustment_mt_checkbox').length) {
+                $("#adjustment_mt").prop("checked", false);
+            };
+        });
+
+        let generate_pay_motor_rentals_checkbox = $('.generate_pay_motor_rentals_checkbox');
+        generate_pay_motor_rentals_checkbox.change(function(){
+            let countAllCheckboxes = generate_pay_motor_rentals_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.generate_pay_motor_rentals_checkbox').length) {
+                $("#generate_pay_motor_rentals").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.generate_pay_motor_rentals_checkbox').length) {
+                $("#generate_pay_motor_rentals").prop("checked", false);
+            };
+        });
+
+
+        let pay_motor_rentals_checkbox = $('.pay_motor_rentals_checkbox');
+        pay_motor_rentals_checkbox.change(function(){
+            let countAllCheckboxes = pay_motor_rentals_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.pay_motor_rentals_checkbox').length) {
+                $("#pay_motor_rentals").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.pay_motor_rentals_checkbox').length) {
+                $("#pay_motor_rentals").prop("checked", false);
+            };
+        });
+
+        let checkboxes = $('.motor_rental_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.motor_rental_checkbox').length) {
+                $("#motor_rental_check_all").prop("checked", true);
+                $("#motor_rental_check_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.motor_rental_checkbox').length) {
+                $("#motor_rental_check_all").prop("checked", false);
+                $("#motor_rental_check_all").val(0)
+            };
+        });
+    });
+
+    // blcok training
+    $("#training_check_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".training_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".training_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".training_checkbox").val(1);
+        }
+    });
+    $("#trainer").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".trainer_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".trainer_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".trainer_checkbox").val(1);
+        }
+    });
+    $(".trainer_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#training").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".training_checkbox_block").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".training_checkbox_block").prop("checked", true);
+            $(this).val(1)
+            $(".training_checkbox_block").val(1);
+        }
+    });
+    $(".training_checkbox_block").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#training_reports").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".training_reports_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".training_reports_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".training_reports_checkbox").val(1);
+        }
+    });
+    $(".training_reports_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let trainer_checkbox = $('.trainer_checkbox');
+        trainer_checkbox.change(function(){
+            let countAllCheckboxes = trainer_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.trainer_checkbox').length) {
+                $("#trainer").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.trainer_checkbox').length) {
+                $("#trainer").prop("checked", false);
+            };
+        });
+        let training_checkbox_block = $('.training_checkbox_block');
+        training_checkbox_block.change(function(){
+            let countAllCheckboxes = training_checkbox_block.filter(':checked').length;
+            if (countAllCheckboxes == $('input.training_checkbox_block').length) {
+                $("#training").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.training_checkbox_block').length) {
+                $("#training").prop("checked", false);
+            };
+        });
+        let training_reports_checkbox = $('.training_reports_checkbox');
+        training_reports_checkbox.change(function(){
+            let countAllCheckboxes = training_reports_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.training_reports_checkbox').length) {
+                $("#training_reports").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.training_reports_checkbox').length) {
+                $("#training_reports").prop("checked", false);
+            };
+        });
+
+        let checkboxes = $('.training_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.training_checkbox').length) {
+                $("#training_check_all").prop("checked", true);
+                $("#training_check_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.training_checkbox').length) {
+                $("#training_check_all").prop("checked", false);
+                $("#training_check_all").val(0)
+            };
+        });
+    });
+
+    // blcok reports
+    $("#reports_check_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".reports_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".reports_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".reports_checkbox").val(1);
+        }
+    });
+    $("#employee_reports").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".employee_reports_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".employee_reports_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".employee_reports_checkbox").val(1);
+        }
+    });
+    $(".employee_reports_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#payroll_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".payroll_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".payroll_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".payroll_report_checkbox").val(1);
+        }
+    });
+    $(".payroll_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#tax_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".tax_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".tax_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".tax_report_checkbox").val(1);
+        }
+    });
+    $(".tax_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#nssf_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".nssf_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".nssf_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".nssf_report_checkbox").val(1);
+        }
+    });
+    $(".nssf_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#kmh_pchum_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".kmh_pchum_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".kmh_pchum_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".kmh_pchum_report_checkbox").val(1);
+        }
+    });
+    $(".kmh_pchum_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#severance_pay_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".severance_pay_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".severance_pay_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".severance_pay_report_checkbox").val(1);
+        }
+    });
+    $(".severance_pay_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#seniorities_pay_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".seniorities_pay_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".seniorities_pay_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".seniorities_pay_report_checkbox").val(1);
+        }
+    });
+    $(".seniorities_pay_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#fringe_benefits_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".fringe_benefits_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".fringe_benefits_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".fringe_benefits_report_checkbox").val(1);
+        }
+    });
+    $(".fringe_benefits_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#bank_transfer_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".bank_transfer_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".bank_transfer_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".bank_transfer_report_checkbox").val(1);
+        }
+    });
+    $(".bank_transfer_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#e_filing_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".e_filing_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".e_filing_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".e_filing_report_checkbox").val(1);
+        }
+    });
+    $(".e_filing_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#e_form_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".e_form_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".e_form_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".e_form_report_checkbox").val(1);
+        }
+    });
+    $(".e_form_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#motor_rental_reports").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".motor_rental_reports_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".motor_rental_reports_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".motor_rental_reports_checkbox").val(1);
+        }
+    });
+    $(".motor_rental_reports_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#new_staff_reports").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".new_staff_reports_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".new_staff_reports_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".new_staff_reports_checkbox").val(1);
+        }
+    });
+    $(".new_staff_reports_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#staff_resigned_reports").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".staff_resigned_reports_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".staff_resigned_reports_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".staff_resigned_reports_checkbox").val(1);
+        }
+    });
+    $(".staff_resigned_reports_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#transferred_staff_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".transferred_staff_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".transferred_staff_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".transferred_staff_report_checkbox").val(1);
+        }
+    });
+    $(".transferred_staff_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#promoted_staff_report").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".promoted_staff_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".promoted_staff_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".promoted_staff_report_checkbox").val(1);
+        }
+    });
+    $(".promoted_staff_report_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let employee_reports_checkbox = $('.employee_reports_checkbox');
+        employee_reports_checkbox.change(function(){
+            let countAllCheckboxes = employee_reports_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.employee_reports_checkbox').length) {
+                $("#employee_reports").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.employee_reports_checkbox').length) {
+                $("#employee_reports").prop("checked", false);
+            };
+        });
+        let payroll_report_checkbox = $('.payroll_report_checkbox');
+        payroll_report_checkbox.change(function(){
+            let countAllCheckboxes = payroll_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.payroll_report_checkbox').length) {
+                $("#payroll_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.payroll_report_checkbox').length) {
+                $("#payroll_report").prop("checked", false);
+            };
+        });
+        let tax_report_checkbox = $('.tax_report_checkbox');
+        tax_report_checkbox.change(function(){
+            let countAllCheckboxes = tax_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.tax_report_checkbox').length) {
+                $("#tax_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.tax_report_checkbox').length) {
+                $("#tax_report").prop("checked", false);
+            };
+        });
+        let nssf_report_checkbox = $('.nssf_report_checkbox');
+        nssf_report_checkbox.change(function(){
+            let countAllCheckboxes = nssf_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.nssf_report_checkbox').length) {
+                $("#nssf_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.nssf_report_checkbox').length) {
+                $("#nssf_report").prop("checked", false);
+            };
+        });
+        let kmh_pchum_report_checkbox = $('.kmh_pchum_report_checkbox');
+        kmh_pchum_report_checkbox.change(function(){
+            let countAllCheckboxes = kmh_pchum_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.kmh_pchum_report_checkbox').length) {
+                $("#kmh_pchum_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.kmh_pchum_report_checkbox').length) {
+                $("#kmh_pchum_report").prop("checked", false);
+            };
+        });
+        let severance_pay_report_checkbox = $('.severance_pay_report_checkbox');
+        severance_pay_report_checkbox.change(function(){
+            let countAllCheckboxes = severance_pay_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.severance_pay_report_checkbox').length) {
+                $("#severance_pay_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.severance_pay_report_checkbox').length) {
+                $("#severance_pay_report").prop("checked", false);
+            };
+        });
+        let seniorities_pay_report_checkbox = $('.seniorities_pay_report_checkbox');
+        seniorities_pay_report_checkbox.change(function(){
+            let countAllCheckboxes = seniorities_pay_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.seniorities_pay_report_checkbox').length) {
+                $("#seniorities_pay_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.seniorities_pay_report_checkbox').length) {
+                $("#seniorities_pay_report").prop("checked", false);
+            };
+        });
+        let fringe_benefits_report_checkbox = $('.fringe_benefits_report_checkbox');
+        fringe_benefits_report_checkbox.change(function(){
+            let countAllCheckboxes = fringe_benefits_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.fringe_benefits_report_checkbox').length) {
+                $("#fringe_benefits_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.fringe_benefits_report_checkbox').length) {
+                $("#fringe_benefits_report").prop("checked", false);
+            };
+        });
+        let bank_transfer_report_checkbox = $('.bank_transfer_report_checkbox');
+        bank_transfer_report_checkbox.change(function(){
+            let countAllCheckboxes = bank_transfer_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.bank_transfer_report_checkbox').length) {
+                $("#bank_transfer_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.bank_transfer_report_checkbox').length) {
+                $("#bank_transfer_report").prop("checked", false);
+            };
+        });
+        let e_filing_report_checkbox = $('.e_filing_report_checkbox');
+        e_filing_report_checkbox.change(function(){
+            let countAllCheckboxes = e_filing_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.e_filing_report_checkbox').length) {
+                $("#e_filing_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.e_filing_report_checkbox').length) {
+                $("#e_filing_report").prop("checked", false);
+            };
+        });
+        let e_form_report_checkbox = $('.e_form_report_checkbox');
+        e_form_report_checkbox.change(function(){
+            let countAllCheckboxes = e_form_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.e_form_report_checkbox').length) {
+                $("#e_form_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.e_form_report_checkbox').length) {
+                $("#e_form_report").prop("checked", false);
+            };
+        });
+        let motor_rental_reports_checkbox = $('.motor_rental_reports_checkbox');
+        motor_rental_reports_checkbox.change(function(){
+            let countAllCheckboxes = motor_rental_reports_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.motor_rental_reports_checkbox').length) {
+                $("#motor_rental_reports").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.motor_rental_reports_checkbox').length) {
+                $("#motor_rental_reports").prop("checked", false);
+            };
+        });
+        let new_staff_reports_checkbox = $('.new_staff_reports_checkbox');
+        new_staff_reports_checkbox.change(function(){
+            let countAllCheckboxes = new_staff_reports_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.new_staff_reports_checkbox').length) {
+                $("#new_staff_reports").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.new_staff_reports_checkbox').length) {
+                $("#new_staff_reports").prop("checked", false);
+            };
+        });
+        let staff_resigned_reports_checkbox = $('.staff_resigned_reports_checkbox');
+        staff_resigned_reports_checkbox.change(function(){
+            let countAllCheckboxes = staff_resigned_reports_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.staff_resigned_reports_checkbox').length) {
+                $("#staff_resigned_reports").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.staff_resigned_reports_checkbox').length) {
+                $("#staff_resigned_reports").prop("checked", false);
+            };
+        });
+        let transferred_staff_report_checkbox = $('.transferred_staff_report_checkbox');
+        transferred_staff_report_checkbox.change(function(){
+            let countAllCheckboxes = transferred_staff_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.transferred_staff_report_checkbox').length) {
+                $("#transferred_staff_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.transferred_staff_report_checkbox').length) {
+                $("#transferred_staff_report").prop("checked", false);
+            };
+        });
+        let promoted_staff_report_checkbox = $('.promoted_staff_report_checkbox');
+        promoted_staff_report_checkbox.change(function(){
+            let countAllCheckboxes = promoted_staff_report_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.promoted_staff_report_checkbox').length) {
+                $("#promoted_staff_report").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.promoted_staff_report_checkbox').length) {
+                $("#promoted_staff_report").prop("checked", false);
+            };
+        });
+        let checkboxes = $('.reports_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.reports_checkbox').length) {
+                $("#reports_check_all").prop("checked", true);
+                $("#reports_check_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.reports_checkbox').length) {
+                $("#reports_check_all").prop("checked", false);
+                $("#reports_check_all").val(0)
+            };
+        });
+    });
+
+    // blcok configuration
+    $("#configuration_check_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".configuration_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".configuration_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".configuration_checkbox").val(1);
+        }
+    });
+    $("#taxes").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".taxes_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".taxes_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".taxes_checkbox").val(1);
+        }
+    });
+    $(".taxes_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#exchange_rate").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".exchange_rate_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".exchange_rate_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".exchange_rate_checkbox").val(1);
+        }
+    });
+    $(".exchange_rate_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#public_holidays").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".public_holidays_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".public_holidays_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".public_holidays_checkbox").val(1);
+        }
+    });
+    $(".public_holidays_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#children_allowance").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".children_allowance_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".children_allowance_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".children_allowance_checkbox").val(1);
+        }
+    });
+    $(".children_allowance_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#leave_type").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".leave_type_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".leave_type_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".leave_type_checkbox").val(1);
+        }
+    });
+    $(".leave_type_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let taxes_checkbox = $('.taxes_checkbox');
+        taxes_checkbox.change(function(){
+            let countAllCheckboxes = taxes_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.taxes_checkbox').length) {
+                $("#taxes").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.taxes_checkbox').length) {
+                $("#taxes").prop("checked", false);
+            };
+        });
+        let exchange_rate_checkbox = $('.exchange_rate_checkbox');
+        exchange_rate_checkbox.change(function(){
+            let countAllCheckboxes = exchange_rate_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.exchange_rate_checkbox').length) {
+                $("#exchange_rate").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.exchange_rate_checkbox').length) {
+                $("#exchange_rate").prop("checked", false);
+            };
+        });
+        let public_holidays_checkbox = $('.public_holidays_checkbox');
+        public_holidays_checkbox.change(function(){
+            let countAllCheckboxes = public_holidays_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.public_holidays_checkbox').length) {
+                $("#public_holidays").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.public_holidays_checkbox').length) {
+                $("#public_holidays").prop("checked", false);
+            };
+        });
+        let children_allowance_checkbox = $('.children_allowance_checkbox');
+        children_allowance_checkbox.change(function(){
+            let countAllCheckboxes = children_allowance_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.children_allowance_checkbox').length) {
+                $("#children_allowance").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.children_allowance_checkbox').length) {
+                $("#children_allowance").prop("checked", false);
+            };
+        });
+        let leave_type_checkbox = $('.leave_type_checkbox');
+        leave_type_checkbox.change(function(){
+            let countAllCheckboxes = leave_type_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.leave_type_checkbox').length) {
+                $("#leave_type").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.leave_type_checkbox').length) {
+                $("#leave_type").prop("checked", false);
+            };
+        });
+        let checkboxes = $('.configuration_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.configuration_checkbox').length) {
+                $("#configuration_check_all").prop("checked", true);
+                $("#configuration_check_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.configuration_checkbox').length) {
+                $("#configuration_check_all").prop("checked", false);
+                $("#configuration_check_all").val(0)
+            };
+        });
+    });
+
+    // blcok setting
+    $("#setting_check_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".setting_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".setting_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".setting_checkbox").val(1);
+        }
+    });
+    $("#bank").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".bank_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".bank_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".bank_checkbox").val(1);
+        }
+    });
+    $(".bank_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#position").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".position_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".position_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".position_checkbox").val(1);
+        }
+    });
+    $(".position_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#branch").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".branch_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".branch_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".branch_checkbox").val(1);
+        }
+    });
+    $(".branch_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#department").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".department_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".department_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".department_checkbox").val(1);
+        }
+    });
+    $(".department_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $("#forgot_password").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".forgot_password_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".forgot_password_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".forgot_password_checkbox").val(1);
+        }
+    });
+    $(".forgot_password_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let bank_checkbox = $('.bank_checkbox');
+        bank_checkbox.change(function(){
+            let countAllCheckboxes = bank_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.bank_checkbox').length) {
+                $("#bank").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.bank_checkbox').length) {
+                $("#bank").prop("checked", false);
+            };
+        });
+        let position_checkbox = $('.position_checkbox');
+        position_checkbox.change(function(){
+            let countAllCheckboxes = position_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.position_checkbox').length) {
+                $("#position").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.position_checkbox').length) {
+                $("#position").prop("checked", false);
+            };
+        });
+        let branch_checkbox = $('.branch_checkbox');
+        branch_checkbox.change(function(){
+            let countAllCheckboxes = branch_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.branch_checkbox').length) {
+                $("#branch").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.branch_checkbox').length) {
+                $("#branch").prop("checked", false);
+            };
+        });
+        let department_checkbox = $('.department_checkbox');
+        department_checkbox.change(function(){
+            let countAllCheckboxes = department_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.department_checkbox').length) {
+                $("#department").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.department_checkbox').length) {
+                $("#department").prop("checked", false);
+            };
+        });
+        let forgot_password_checkbox = $('.forgot_password_checkbox');
+        forgot_password_checkbox.change(function(){
+            let countAllCheckboxes = forgot_password_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.forgot_password_checkbox').length) {
+                $("#forgot_password").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.forgot_password_checkbox').length) {
+                $("#forgot_password").prop("checked", false);
+            };
+        });
+        let checkboxes = $('.setting_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.setting_checkbox').length) {
+                $("#setting_check_all").prop("checked", true);
+                $("#setting_check_all").val(1);
+            };
+            if (countCheckedCheckboxes < $('input.setting_checkbox').length) {
+                $("#setting_check_all").prop("checked", false);
+                $("#setting_check_all").val(0);
+            };
+        });
+    });
+  
+
+    // blcok address
+    $("#address_check_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".address_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".address_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".address_checkbox").val(1);
+        }
+    });
+    // province
+    $("#province").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".province_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".province_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".province_checkbox").val(1);
+        }
+    });
+    $(".province_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    // district
+    $("#district").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".district_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".district_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".district_checkbox").val(1);
+        }
+    });
+    $(".district_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    //commune
+    $("#commune").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".commune_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".commune_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".commune_checkbox").val(1);
+        }
+    });
+    $(".commune_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    //village
+    $("#village").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".village_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".village_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".village_checkbox").val(1);
+        }
+    });
+    $(".village_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let province_checkbox = $('.province_checkbox');
+        province_checkbox.change(function(){
+            let countAllCheckboxes = province_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.province_checkbox').length) {
+                $("#province").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.province_checkbox').length) {
+                $("#province").prop("checked", false);
+            };
+        });
+        let district_checkbox = $('.district_checkbox');
+        district_checkbox.change(function(){
+            let countAllCheckboxes = district_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.district_checkbox').length) {
+                $("#district").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.district_checkbox').length) {
+                $("#district").prop("checked", false);
+            };
+        });
+        let commune_checkbox = $('.commune_checkbox');
+        commune_checkbox.change(function(){
+            let countAllCheckboxes = commune_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.commune_checkbox').length) {
+                $("#commune").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.commune_checkbox').length) {
+                $("#commune").prop("checked", false);
+            };
+        });
+        let village_checkbox = $('.village_checkbox');
+        village_checkbox.change(function(){
+            let countAllCheckboxes = village_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.village_checkbox').length) {
+                $("#village").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.village_checkbox').length) {
+                $("#village").prop("checked", false);
+            };
+        });
+        let checkboxes = $('.address_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.address_checkbox').length) {
+                $("#address_check_all").prop("checked", true);
+                $("#address_check_all").val(1);
+            };
+            if (countCheckedCheckboxes < $('input.address_checkbox').length) {
+                $("#address_check_all").prop("checked", false);
+                $("#address_check_all").val(0);
+            };
+        });
+    });
+    // blcok role
+    $("#role_check_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".role_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".role_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".role_checkbox").val(1);
+        }
+    });
+    $(".role_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let checkboxes = $('.role_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.role_checkbox').length) {
+                $("#role_check_all").prop("checked", true);
+                $("#role_check_all").val(1);
+            };
+            if (countCheckedCheckboxes < $('input.role_checkbox').length) {
+                $("#role_check_all").prop("checked", false);
+                $("#role_check_all").val(0);
+            };
+        });
+    });
+});

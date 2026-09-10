@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
+use Spatie\Activitylog\Models\Activity;
 
 class PermissionController extends Controller
 {
@@ -46,6 +47,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        Activity::all()->last();
         $data=[
             'table_id'              =>$request->table_id,
             'role_id'               =>$request->role_id,
@@ -56,7 +58,8 @@ class PermissionController extends Controller
         ];
         if($request->checked==1){
             DB::table('permissions')->insert($data);
-            Toastr::success('You have no permission to insert it !! :)','Success');
+            DB::commit();
+            Toastr::success('You have permission to insert it','Success');
         }else{
             DB::table('permissions')->where(
                 [
@@ -65,9 +68,9 @@ class PermissionController extends Controller
                     ['permission_type_id','=',$data['permission_type_id']]
                 ]
             )->delete();
-            Toastr::success('You have no permission to update it !! :)','Success');
+            DB::commit();
+            Toastr::success('You have no permission to update it','Success');
         }
-        // return response()->json(['success'=>'You have no permission to update it !!']);
     }
 
     /**

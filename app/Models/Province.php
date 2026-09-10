@@ -8,4 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Province extends Model
 {
     use HasFactory;
+    protected $table = 'provinces';
+    protected $guarded = ['id'];
+    protected $fillable = [
+        'code',
+        'khaet_name_km',
+        'khaet_name_latin',
+        'khaet_name_en',
+        'name_km',
+        'name_latin',
+        'name_en',
+        'full_name_km',
+        'full_name_latin',
+        'full_name_en',
+        'address_km',
+        'address_latin',
+        'address_en',
+    ];
 }

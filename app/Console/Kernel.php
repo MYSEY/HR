@@ -16,6 +16,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('sync:hr-pgsql')
+        ->everyMinute();
+        // ->withoutOverlapping();
+        // ->runInBackground()
+        // ->appendOutputTo(storage_path('logs/hr-sync.log'));
     }
 
     /**

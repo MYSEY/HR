@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 use App\Http\Requests\DepartmentRequest;
+use App\Models\User;
+use App\Models\permissions;
 
 class DepartmentController extends Controller
 {
@@ -19,8 +22,13 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $data = Department::orderBy('id','DESC')->get();
-        return view('department.index',compact('data'));
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "department")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.access_page');
+        }
+        $employee = User::whereIn("emp_status", ["1", "2", "10","Probation"])->get();
+        $data = Department::where("parent_id", 0)->orWhere("parent_id", null)->with("headDepartment")->with('child')->orderBy('id','asc')->get();
+        return view('department.index',compact('data', "employee",'permission'));
     }
 
     /**
@@ -32,9 +40,10 @@ class DepartmentController extends Controller
     public function store(DepartmentRequest $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
-            $data['created_by']    = Auth::user()->id;
-            $data['head_department']    = Auth::user()->id;
+            $data['created_by'] = Auth::user()->id;
+            $data['head_department'] = Auth::user()->id;
             Department::create($data);
             Toastr::success('Department created successfully.','Success');
             return redirect()->back();
@@ -43,7 +52,7 @@ class DepartmentController extends Controller
             DB::rollBack();
         }
     }
-
+    
     /**
      * Display the specified resource.
      *
@@ -77,11 +86,13 @@ class DepartmentController extends Controller
     public function update(Request $request)
     {
         try{
-            Department::where('id',$request->id)->update([
-                'name_khmer'  => $request->name_khmer,
-                'name_english'  => $request->name_english,
-                'updated_by'    => Auth::user()->id 
-            ]);
+            $data = Department::find($request->id);
+            $data['parent_id']  = $request->parent_id ? $request->parent_id : null;
+            $data['direct_manager_id']  = $request->direct_manager_id ? $request->direct_manager_id : null;
+            $data['name_khmer']  = $request->name_khmer;
+            $data['name_english']  = $request->name_english;
+            $data['updated_by']  = Auth::user()->id;
+            $data->save();
             Toastr::success('Department Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
