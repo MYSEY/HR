@@ -790,7 +790,6 @@ class EmployeePayrollController extends Controller
                 }
     
                 $totalTtaxBbaseRiel = ($cappedChildren == 0 && !$hasSpouse) ? $totalExchangeRiel : $totalExchangeRiel - $totalChargesReduced;
-    
                 $children = $number_of_children;
     
                 // Tax base differs only for the "0 children, no spouse" case (uses
@@ -871,16 +870,12 @@ class EmployeePayrollController extends Controller
     
                 payrollPreview::create($data);
             }
-    
             DB::commit();
             Toastr::success('Created payroll successfully.', 'Success');
             return redirect()->back();
-    
         } catch (\Exception $e) {
             DB::rollback();
             Toastr::error('Payroll created fail', 'Error');
-            // While debugging, consider logging the real exception rather than swallowing it:
-            // \Log::error('Payroll store failed: '.$e->getMessage(), ['exception' => $e]);
             return redirect()->back();
         }
     }

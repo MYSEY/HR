@@ -220,7 +220,7 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Salary: activate to sort column ascending">@lang('lang.net_salary')
+                                                    aria-label="Salary: activate to sort column ascending">@lang('lang.net_salary') (@lang('lang.usd'))
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
@@ -727,16 +727,6 @@
         }
         // Check if DataTable instance exists, then destroy it
         $('#tbl_payroll_review').DataTable({
-            // responsive: false,
-            // pageLength: 10,
-            // destroy: true,
-            // processing: true,
-            // serverSide: true,
-            // scrollX: true,
-            // scrollY: '400px',
-            // scroller: true,
-            // order: [[0, 'desc']],
-            // lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
             destroy: true,
             pageLength: 10,
             processing: true,
