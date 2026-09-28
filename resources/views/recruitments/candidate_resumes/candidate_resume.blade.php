@@ -1213,7 +1213,7 @@
                 {
                     data: 'received_date',
                     render: function (data) {
-                        return data ? moment(data).format('DD-MMM-YYYY') : '';
+                        return data ? moment(data).format('DDD-MMM-YYYY') : '';
                     }
                 },
                 { data: 'recruitment_channel' },
@@ -1260,6 +1260,7 @@
                     }
                 },
                 { data: 'remark' },
+                {data:"created_by.employee_name_en"},
                 {
                     data: 'id',
                     orderable: false,
@@ -1353,7 +1354,7 @@
                             let interviewed_date = "";
                             let time = "";
                             if (staff.interviewed_date) {
-                                interviewed_date = moment(staff.interviewed_date).format('MMM-D-YYYY');
+                                interviewed_date = moment(staff.interviewed_date).format('DD-MMM-YYYY');
                                 time = moment(staff.interviewed_date).format('hh:mm A');
                             }
                             let text_status = "";
@@ -1408,6 +1409,8 @@
                                         cv+
                                     '</td>'+
                                     '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
+                                    '<td>'+(staff.created_by ? staff.created_by.employee_name_en: "")+'</td>'+
+                                    '<td>'+(staff.updated_by ? staff.updated_by.employee_name_en: "")+'</td>'+
                                 '</tr>';
                                 num ++;
                             }else if (staff.short_list == 2 || staff.short_list == 7) {
@@ -1434,6 +1437,8 @@
                                         status_black_list+
                                     '</td>'+
                                     '<td >'+(staff.remark ? staff.remark : "")+'</td>'+
+                                    '<td>'+(staff.created_by ? staff.created_by.employee_name_en: "")+'</td>'+
+                                    '<td>'+(staff.updated_by ? staff.updated_by.employee_name_en: "")+'</td>'+
                                 '</tr>';
                                 num ++;
                             }
@@ -1458,7 +1463,7 @@
                                 interview_result = "No";
                             };
                             let status_show_failed = "";
-                            let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
+                            let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('DD-MMM-YYYY') : "";
                             if (staff_result.interviewed_result != "7") {
                                 let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
@@ -1500,6 +1505,8 @@
                                 '<td >'+(status_show_failed)+'</td>'+
                                 '<td >'+(interview_result)+'</td>'+
                                 '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
+                                '<td>'+(staff_result.created_by ? staff_result.created_by.employee_name_en: "")+'</td>'+
+                                '<td>'+(staff_result.updated_by ? staff_result.updated_by.employee_name_en: "")+'</td>'+
                             '</tr>';
                             num ++;
                         })
@@ -1527,7 +1534,7 @@
                             };
                             let status_show = "";
                             let complete = '';
-                            let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
+                            let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('DD-MMM-YYYY') : "";
                             if (staff_result.interviewed_result == 1) {
                                 complete = '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
                                             '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.complete")'+
@@ -1561,6 +1568,8 @@
                                 '<td ><span class="badge bg-inverse-success">'+(interview_result)+'</snap></td>'+
                                 '<td >'+(status_show)+'</td>'+
                                 '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
+                                '<td>'+(staff_result.created_by ? staff_result.created_by.employee_name_en: "")+'</td>'+
+                                '<td>'+(staff_result.updated_by ? staff_result.updated_by.employee_name_en: "")+'</td>'+
                             '</tr>';
                             num ++;
                         })
@@ -1572,9 +1581,9 @@
                             if (staff_result.interviewed_result == 1) {
                                 interview_result = "@lang('lang.passed')";
                             }
-                            let join_date = staff_result.join_date ? moment(staff_result.join_date).format('MMM-D-YYYY') : "";
-                            let contract_date = staff_result.contract_date ? moment(staff_result.contract_date).format('MMM-D-YYYY') : "";
-                            let updated_at =  moment(staff_result.updated_at).format('MMM-D-YYYY');
+                            let join_date = staff_result.join_date ? moment(staff_result.join_date).format('DD-MMM-YYYY') : "";
+                            let contract_date = staff_result.contract_date ? moment(staff_result.contract_date).format('DD-MMM-YYYY') : "";
+                            let updated_at =  moment(staff_result.updated_at).format('DD-MMM-YYYY');
                             if (staff_result.status == "Cancel") {
                                 action = "";
                                 tr_ct_cancel += ' <tr class="odd">'+
@@ -1590,6 +1599,8 @@
                                     '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
                                     '<td ><span class="badge bg-inverse-danger">'+(staff_result.status)+'</snap></td>'+
                                     '<td >'+(updated_at)+'</td>'+
+                                    '<td>'+(staff_result.created_by ? staff_result.created_by.employee_name_en: "")+'</td>'+
+                                    '<td>'+(staff_result.updated_by ? staff_result.updated_by.employee_name_en: "")+'</td>'+
                                 '</tr>';
                                 num ++;
                             }else{
@@ -1641,6 +1652,8 @@
                                     '<td ><input type="date" class="join_date" data-join-date="'+(staff_result.join_date)+'" hidden>'+(join_date)+'</td>'+
                                     '<td ><span class="badge bg-inverse-success">'+(interview_result)+'</snap></td>'+
                                     '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
+                                    '<td>'+(staff_result.created_by ? staff_result.created_by.employee_name_en: "")+'</td>'+
+                                    '<td>'+(staff_result.updated_by ? staff_result.updated_by.employee_name_en: "")+'</td>'+
                                     '<td>'+
                                         '<input type="text" class="phone_number" data-phone-number="'+(staff_result.contact_number)+'" hidden>'+
                                         (dropdown_action)+
@@ -1651,11 +1664,11 @@
                         });
                     }
                 }else {
-                    var tr = '<tr><td colspan=13 align="center">@lang("lang.no_record_to_display")</td></tr>';
-                    var tr_not_list = '<tr><td colspan=9 align="center">@lang("lang.no_record_to_display")</td></tr>';
-                    var tr_failed = '<tr><td colspan=10 align="center">@lang("lang.no_record_to_display")</td></tr>';
-                    var tr_re = '<tr><td colspan=10 align="center">@lang("lang.no_record_to_display")</td></tr>';
-                    var tr_ct = '<tr><td colspan=11 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr = '<tr><td colspan=15 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_not_list = '<tr><td colspan=11 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_failed = '<tr><td colspan=13 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_re = '<tr><td colspan=12 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_ct = '<tr><td colspan=13 align="center">@lang("lang.no_record_to_display")</td></tr>';
                    
                 }
                 var tr_upcoming = "";
@@ -1719,10 +1732,10 @@
                             }
 
                             let td = "";
-                            let DOB = moment(emp.date_of_birth).format('D-MMM-YYYY')
-                            let joinOfDate = moment(emp.date_of_commencement).format('D-MMM-YYYY')
-                            let PassDate = moment(emp.fdc_date).format('D-MMM-YYYY')
-                            let fdc_end = moment(emp.fdc_end).format('D-MMM-YYYY')
+                            let DOB = moment(emp.date_of_birth).format('DD-MMM-YYYY')
+                            let joinOfDate = moment(emp.date_of_commencement).format('DD-MMM-YYYY')
+                            let PassDate = moment(emp.fdc_date).format('DD-MMM-YYYY')
+                            let fdc_end = moment(emp.fdc_end).format('DD-MMM-YYYY')
                             let basic_salary = "";
                             let salary_increas = "";
                             // if (is_view_salary == 1) {
@@ -1753,13 +1766,15 @@
                                     '<td>'+
                                         (dropdown_status)+
                                     '</td>'+
+                                    '<td>'+(emp.created_by ? emp.created_by.employee_name_en: "")+'</td>'+
+                                    '<td>'+(emp.upldated_by ? emp.upldated_by.employee_name_en: "")+'</td>'+
                                     '<td class="text-end">'+
                                         (dropdown_action)+
                                     '</td>'+
                             '</tr>';
                         });
                     }else{
-                        tr_upcoming = '<tr><td colspan=19 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                        tr_upcoming = '<tr><td colspan=21 align="center">@lang("lang.no_record_to_display")</td></tr>';
                     }
                 }
                 var tr_upcoming_cancel = "";
@@ -1791,9 +1806,9 @@
                             }
 
                             let td = "";
-                            let DOB = moment(emp.date_of_birth).format('D-MMM-YYYY')
-                            let joinOfDate = moment(emp.date_of_commencement).format('D-MMM-YYYY')
-                            let PassDate = moment(emp.fdc_date).format('D-MMM-YYYY')
+                            let DOB = moment(emp.date_of_birth).format('DD-MMM-YYYY')
+                            let joinOfDate = moment(emp.date_of_commencement).format('DD-MMM-YYYY')
+                            let PassDate = moment(emp.fdc_date).format('DD-MMM-YYYY')
                             tr_upcoming_cancel += '<tr class="odd">'+
                                                     '<td class="ids stuck-scroll-4">'+(index)+'</td>'+
                                                     '<td class="sorting_1 stuck-scroll-4">'+
@@ -1817,13 +1832,15 @@
                                                         '<span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>'+
                                                     '</td>'+
                                                     '<td>'+emp.resign_reason+'</td>'+
+                                                    '<td>'+(emp.created_by ? emp.created_by.employee_name_en: "")+'</td>'+
+                                                    '<td>'+(emp.upldated_by ? emp.upldated_by.employee_name_en: "")+'</td>'+
                                                     '<td class="text-end">'+
                                                         (btn_delete)+
                                                     '</td>'+
                                                 '</tr>';
                         });
                     }else{
-                        tr_upcoming_cancel = '<tr><td colspan=17 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                        tr_upcoming_cancel = '<tr><td colspan=19 align="center">@lang("lang.no_record_to_display")</td></tr>';
                     }
                 }
                 $(".tbl-short-list tbody").html(tr);

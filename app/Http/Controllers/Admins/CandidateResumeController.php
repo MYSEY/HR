@@ -247,7 +247,7 @@ class CandidateResumeController extends Controller
     {
         if ($request->ajax()) {
 
-            $query = CandidateResume::where("status", "1")
+            $query = CandidateResume::where("status", "1")->with("createdBy")
                 ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                     if ($RolePermission == 'BM') {
                         $query->where("location_applied", Auth::user()->branch_id);
@@ -349,7 +349,7 @@ class CandidateResumeController extends Controller
         $dataUpcomingCancels =[];
         $datas =[];
         if ($request->status == 3 || $request->status == 6) {
-            $datas = CandidateResume::with("branch")->with("position")->with("option")
+            $datas = CandidateResume::with("branch")->with("position")->with("option")->with("createdBy")->with("updatedBy")
             ->when($request->status, function ($query, $status) {
                 if ($status == 6) {
                     $query->whereNotIn('interviewed_result', [1,3,4]);
@@ -367,11 +367,11 @@ class CandidateResumeController extends Controller
             })
            ->get();
         }else if($request->status == 7){
-            $dataUpcomings = User::with('branch')->with('department')->with("position")->with("gender")->where('emp_status','Upcoming')->get();
+            $dataUpcomings = User::with('branch')->with('department')->with("position")->with("gender")->with("createdBy")->with("upldatedBy")->where('emp_status','Upcoming')->get();
         }else if($request->status == 8){
-            $dataUpcomingCancels = User::with('branch')->with('department')->with("position")->with("gender")->where('emp_status','Cancel')->get();
+            $dataUpcomingCancels = User::with('branch')->with('department')->with("position")->with("gender")->with("createdBy")->with("upldatedBy")->where('emp_status','Cancel')->get();
         }else{
-            $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")
+            $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")->with("createdBy")->with("updatedBy")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'BM') {
                     $query->where("location_applied", Auth::user()->branch_id);
@@ -402,7 +402,7 @@ class CandidateResumeController extends Controller
             } else {
 
                 // CANDIDATE RESUME
-                $query = CandidateResume::with(['branch','position','option'])
+                $query = CandidateResume::with(['branch','position','option','createdBy','updatedBy'])
 
                 ->when($request->status, function ($q, $status) {
 
@@ -911,6 +911,7 @@ class CandidateResumeController extends Controller
                     'status' => "Active",
                     'password' => Hash::make("Camma@123"),
                     'created_by' => Auth::user()->id,
+                    'updated_by' => Auth::user()->id,
                 ];
                 $userData = User::create($emp_data);
                 CandidateResume::where('id',$candidate->id)->update([ 'status' => 5, 'line_manager' => $request->line_manager]);
@@ -1196,7 +1197,7 @@ class CandidateResumeController extends Controller
                     ? Carbon::createFromDate($request->to_date)->format('Y-m-d') 
                     : null;
 
-        $query = CandidateResume::with(["branch", "position", "option"])
+        $query = CandidateResume::with(["branch", "position", "option",'createdBy','updatedBy'])
             ->select([
                     'candidate_resumes.*',
                     'users.emp_status'

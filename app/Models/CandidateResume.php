@@ -130,11 +130,45 @@ class CandidateResume extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->select([
+            'id', 
+            'employee_name_en',
+            'employee_name_kh',
+            'number_employee',
+            'department_id',
+            'position_id',
+            'branch_id',
+            'line_manager',
+            'gender',
+            'date_of_birth',
+            'current_province',
+            'current_district',
+            'current_commune',
+            'current_village',
+            'current_house_no',
+            'current_street_no',
+        ]);
     }
-    public function upldatedBy()
+    public function updatedBy()
     {
-        return $this->belongsTo(User::class ,'updated_by');
+        return $this->belongsTo(User::class ,'updated_by')->select([
+            'id', 
+            'employee_name_en',
+            'employee_name_kh',
+            'number_employee',
+            'department_id',
+            'position_id',
+            'branch_id',
+            'line_manager',
+            'gender',
+            'date_of_birth',
+            'current_province',
+            'current_district',
+            'current_commune',
+            'current_village',
+            'current_house_no',
+            'current_street_no',
+        ]);
     }
 
     public function setCVAttribute($value)
