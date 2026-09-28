@@ -147,6 +147,9 @@
                                 <th class="sorting" aria-controls="Candidate_CVs" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" >@lang('lang.join_date')</th>
                                 <th class="sorting" aria-controls="Candidate_CVs" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" >@lang('lang.remark')</th>
                                 <th class="sorting" aria-controls="Candidate_CVs" rowspan="1" colspan="1" aria-label="CV: activate to sort column ascending" >@lang('lang.cv')</th>
+                                <th class="sorting" aria-controls="Candidate_CVs" rowspan="1" colspan="1" aria-label="created_by: activate to sort column ascending" >@lang('lang.created_by')</th>
+                                <th class="sorting" aria-controls="Candidate_CVs" rowspan="1" colspan="1" aria-label="updated_by: activate to sort column ascending" >@lang('lang.updated_by')</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -321,8 +324,7 @@
                             if (!data) return '';
                             return `<span data-toggle="tooltip" data-html="true" title="${data}">${data.substring(0, 30)}...</span>`;
                         }
-                    },                                                             // 29. Remarks
-                    
+                    },                                                           // 29. Remarks
                     // --- ផ្នែក CV Preview (មិនបាច់បញ្ជូនទៅ Excel ទេ ទុកមើលលើ Web) ---
                     {
                         data: 'cv',
@@ -331,7 +333,9 @@
                         render: function (cv) {
                             return cv ? `<small><a href="{{asset('/uploads/images')}}/${cv}" target="_blank">Preview</a></small>` : 'No CV';
                         }
-                    }                                                              // 30. CV Action
+                    },
+                    { data: "created_by.employee_name_en"},
+                    { data: 'updated_by.employee_name_en' }
                 ],
                 initComplete: function () {
                     $('#loading-overlay').hide();

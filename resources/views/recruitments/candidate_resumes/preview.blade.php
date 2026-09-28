@@ -387,7 +387,6 @@
             dataType: "JSON",
             success: function (response) {
                 var data = response.success;
-                console.log("data: ", data);
                                 
                 var branch = response.branch;
                 var date_of_birth = new Date(data.date_of_birth);

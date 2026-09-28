@@ -702,12 +702,14 @@ class UserController extends Controller
                 if ($request->emp_status == "Cancel") {
                     $users = User::where('id',$request->id)->first();
                     GenerateIdEmployee::where("number_employee",$users->number_employee)->delete();
-                    CandidateResume::where('number_employee',$users->number_employee)->update([ 'number_employee' => 'CC-'.$users->number_employee]);
+                    CandidateResume::where('number_employee',$users->number_employee)
+                    ->update([ 'number_employee' => 'CC-'.$users->number_employee]);
                     $users->number_employee = "CC-".$users->number_employee;
                     $users->emp_status = $request->emp_status;
                     $users->resign_date = $request->resign_date;
                     $users->resign_reason = $request->resign_reason;
                     $users->status = 'Unactive';
+                    $users->updated_by = Auth::user()->id;
                     $users->save();
                 }else{
                     $users = User::where('id',$request->id)->first();
