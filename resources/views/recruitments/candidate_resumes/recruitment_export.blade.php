@@ -1,19 +1,19 @@
 <table id="recruitment-export" border="1" style="border-collapse: collapse; width: 100%; font-family: 'Kantumruy Pro', 'Khmer OS Battambang', sans-serif; font-size: 11px;">
     
     <tr>
-        <td colspan="29" style="border: none; padding: 10px 5px; text-align: left; vertical-align: middle;">
+        <td colspan="30" style="border: none; padding: 10px 5px; text-align: left; vertical-align: middle;">
             {{-- <img src="{{ asset('/admin/img/camma-logo.png') }}" height="80" style="vertical-align: middle; margin-right: 15px;"> --}}
         </td>
     </tr>
 
     <tr>
-        <td colspan="29" style="border: none; padding: 5px; text-align: left; font-size: 16pt; font-weight: bold; color: #000;">
+        <td colspan="30" style="border: none; padding: 5px; text-align: left; font-size: 16pt; font-weight: bold; color: #000;">
             Recruitment_Application Report
         </td>
     </tr>
 
     <tr style="height: 15px;">
-        <td colspan="29" style="border: none;"></td>
+        <td colspan="30" style="border: none;"></td>
     </tr>
 
     <thead>
@@ -32,6 +32,9 @@
             </td>
             <td rowspan="2" style="background-color: #f2f2f2; text-align: center; border: 1px solid #000; font-weight: bold; vertical-align: middle; font-size: 12px; width: 120px;">
                 Remarks
+            </td>
+            <td rowspan="2" style="background-color: #f2f2f2; text-align: center; border: 1px solid #000; font-weight: bold; vertical-align: middle; font-size: 12px; width: 120px;">
+                Created By
             </td>
         </tr>
 
@@ -65,6 +68,7 @@
             <th style="border: 1px solid #000; font-weight: bold; vertical-align: middle">Contract_Date</th>
             <th style="border: 1px solid #000; color: #ff0000; font-weight: bold; vertical-align: middle">Month</th>
             <th style="border: 1px solid #000; font-weight: bold; vertical-align: middle">Join_Date</th>
+            <th></th>
             </tr>
     </thead>
     <tbody>
@@ -80,7 +84,7 @@
                     <td style="border: 1px solid #000;">{{ $row->current_address ?? '' }}</td>
                     <td style="border: 1px solid #000;">{{ $row->CandidatePosition ?? '' }}</td>
                     <td style="border: 1px solid #000;">{{ $row->CandidateBranch ?? '' }}</td>
-                    <td style="border: 1px solid #000; text-align: center;">{{ $row->received_date ? \Carbon\Carbon::parse($row->received_date)->format('D-M-Y') : '' }}</td>
+                    <td style="border: 1px solid #000; text-align: center;">{{ $row->received_date ? \Carbon\Carbon::parse($row->received_date)->format('d-M-Y') : '' }}</td>
                     <td style="border: 1px solid #000; text-align: center; color: #ff0000;">{{ $row->received_date ? \Carbon\Carbon::parse($row->received_date)->format('F') : '' }}</td>
                     <td style="border: 1px solid #000;">{{ $row->recruitment_channel ?? '' }}</td>
                     <td style="border: 1px solid #000;">
@@ -118,7 +122,7 @@
                             Short List
                         @endif
                     </td>
-                    <td style="border: 1px solid #000; text-align: center;">{{ $row->interviewed_date ? \Carbon\Carbon::parse($row->interviewed_date)->format('D-M-Y') : '' }}</td>
+                    <td style="border: 1px solid #000; text-align: center;">{{ $row->interviewed_date ? \Carbon\Carbon::parse($row->interviewed_date)->format('d-M-Y') : '' }}</td>
                     <td style="border: 1px solid #000; text-align: center; color: #ff0000;">{{ $row->interviewed_date ? \Carbon\Carbon::parse($row->interviewed_date)->format('F') : '' }}</td>
                     <td style="border: 1px solid #000;">{{ $row->interviewed_channel ?? '' }}</td>
                     <td style="border: 1px solid #000;">{{ $row->committee_interview ?? '' }}</td>
@@ -153,11 +157,12 @@
                             @endif
                         @endif
                     </td>
-                    <td style="border: 1px solid #000; text-align: center;">{{ $row->contract_date ? \Carbon\Carbon::parse($row->contract_date)->format('D-M-Y') : '' }}</td>
+                    <td style="border: 1px solid #000; text-align: center;">{{ $row->contract_date ? \Carbon\Carbon::parse($row->contract_date)->format('d-M-Y') : '' }}</td>
                     <td style="border: 1px solid #000; text-align: center; color: #ff0000;">{{ $row->contract_date ? \Carbon\Carbon::parse($row->contract_date)->format('F') : '' }}</td>
-                    <td style="border: 1px solid #000; text-align: center;">{{ $row->join_date ? \Carbon\Carbon::parse($row->join_date)->format('D-M-Y') : '' }}</td>
+                    <td style="border: 1px solid #000; text-align: center;">{{ $row->join_date ? \Carbon\Carbon::parse($row->join_date)->format('d-M-Y') : '' }}</td>
                     
                     <td style="border: 1px solid #000;">{{ $row->remark ?? '' }}</td>
+                    <td style="border: 1px solid #000;">{{ $row->createdBy->employee_name_en ?? '' }}</td>
                 </tr>
             @endforeach
         @endif
