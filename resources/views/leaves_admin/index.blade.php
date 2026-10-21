@@ -1284,12 +1284,23 @@
                 render: function (data, type, row) {
                     let defaultVal = parseFloat(row.default_annual_leave ?? 0);
                     let totalVal = parseFloat(row.total_annual_leave ?? 0);
+                    if (totalVal == 0) {
+                        return (totalVal);
+                    }
                     return (defaultVal - totalVal);
                 }
             },
             // 4. Annual Leave - Balance
             {
                 data: 'total_annual_leave',
+                render: function (data, type, row) {
+                    let defaultVal = parseFloat(row.default_annual_leave ?? 0);
+                    let totalVal = parseFloat(row.total_annual_leave ?? 0);
+                    if (totalVal > 0) {
+                        return totalVal;
+                    }
+                    return defaultVal;
+                },
                 defaultContent: '0'
             },
             // 5. Sick Leave - Day Taken
@@ -1298,12 +1309,23 @@
                 render: function (data, type, row) {
                     let defaultVal = parseFloat(row.default_sick_leave ?? 0);
                     let totalVal = parseFloat(row.total_sick_leave ?? 0);
+                    if (totalVal == 0) {
+                        return (totalVal);
+                    }
                     return (defaultVal - totalVal);
                 }
             },
             // 6. Sick Leave - Balance
             {
                 data: 'total_sick_leave',
+                render: function (data, type, row) {
+                    let defaultVal = parseFloat(row.default_sick_leave ?? 0);
+                    let totalVal = parseFloat(row.total_sick_leave ?? 0);
+                    if (totalVal > 0) {
+                        return totalVal;
+                    }
+                    return defaultVal;
+                },
                 defaultContent: '0'
             },
             // 7. Special Leave - Day Taken
@@ -1312,12 +1334,23 @@
                 render: function (data, type, row) {
                     let defaultVal = parseFloat(row.default_special_leave ?? 0);
                     let totalVal = parseFloat(row.total_special_leave ?? 0);
+                    if (totalVal == 0) {
+                        return (totalVal);
+                    }
                     return (defaultVal - totalVal);
                 }
             },
             // 8. Special Leave - Balance
             {
                 data: 'total_special_leave',
+                render: function (data, type, row) {
+                    let defaultVal = parseFloat(row.default_special_leave ?? 0);
+                    let totalVal = parseFloat(row.total_special_leave ?? 0);
+                    if (totalVal > 0) {
+                        return totalVal;
+                    }
+                    return defaultVal;
+                },
                 defaultContent: '0'
             },
             // 9. Carried Forward - Year 1

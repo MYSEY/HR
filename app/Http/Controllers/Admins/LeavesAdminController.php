@@ -386,6 +386,11 @@ class LeavesAdminController extends Controller
                     'approved_date' => Carbon::now(),
                     'approved_by'   => Auth::user()->id,
             ]);
+            DB::table('leave_details')
+                ->whereIn('leave_request_id', $request->ids)
+                ->update([
+                    'status'        => "cancel",
+            ]);
             DB::commit();
             return response()->json([
                 'message' => 'The process has been successfully.'
@@ -933,10 +938,10 @@ class LeavesAdminController extends Controller
                         $defaultDays = $request->annual_leave;
                         $sick_leave = $request->sick_leave;
                         $special_leave = $request->special_leave;
-                        $remain_year_1 = $data->year_1;
-                        $remain_year_2 = $data->year_2;
-                        $remain_year_3 = $data->year_3;
-                        if($diffYears){
+                        // $remain_year_1 = $data->year_1;
+                        // $remain_year_2 = $data->year_2;
+                        // $remain_year_3 = $data->year_3;
+                        // if($diffYears){
                             $remainingDay = $data->total_annual_leave;
                             $calculateAnnualLeave = self::calculateAnnualLeave($dbDate, $remainingDay);
                             $totalAnnualLeave = $calculateAnnualLeave['total'];
@@ -947,7 +952,7 @@ class LeavesAdminController extends Controller
                             $remain_year_2 = $rotated["remain_year_2"];
                             $remain_year_3 = $rotated["remain_year_3"];
                             $defaultDays = $totalAnnualLeave;
-                        }
+                        // }
                         $totalRequestLeaves = self:: totalRequestLeave($item->id);
                         LeaveAllocation::where('employee_id',$item->id)->update([
                             'default_annual_leave'  => $defaultDays,

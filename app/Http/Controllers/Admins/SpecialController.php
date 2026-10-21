@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admins;
 use App\Http\Controllers\Controller;
 use App\Models\permissions;
 use App\Models\User;
+use App\Models\SpecialApproveLeaveHistory;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -85,10 +86,21 @@ class SpecialController extends Controller
             DB::beginTransaction();
             Activity::all()->last();
             if (count($request->employee_id) > 0) {
+                $datahistories = [];$now = now();
                 foreach ($request->employee_id as $key => $emID) {
                     $dataUpdata = User::where("id", $emID)->first();
                     $dataUpdata->under_approve = $request->under_approve;
                     $dataUpdata->save();
+                    $datahistories[] = [
+                        "under_approve" => $request->under_approve,
+                        "employee_id"   => $dataUpdata->id,
+                        "created_by"    => Auth::user()->id,
+                        "created_at"    => $now,
+                    ];
+                    
+                }
+                if (!empty($datahistories)) {
+                    SpecialApproveLeaveHistory::insert($datahistories);
                 }
             }
             DB::commit();
@@ -180,6 +192,11 @@ class SpecialController extends Controller
             User::where("under_approve", $request->id)->update([
                 "under_approve" => null
             ]);
+            $now = now();
+            SpecialApproveLeaveHistory::where("under_approve", $request->id)->where("updated_at",null)->update([
+                "updated_by"    => Auth::user()->id,
+                "updated_at"    => $now,
+            ]);
 
             DB::commit(); // Commit transaction
 
@@ -198,6 +215,11 @@ class SpecialController extends Controller
             User::where("id", $request->id)->update([
                 "under_approve" => null,
                 "line_manager" => null
+            ]);
+            $now = now();
+            SpecialApproveLeaveHistory::where("employee_id", $request->id)->update([
+                "updated_by"    => Auth::user()->id,
+                "updated_at"    => $now,
             ]);
 
             DB::commit(); // Commit transaction

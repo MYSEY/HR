@@ -2,59 +2,40 @@
 
 namespace App\Models;
 
-use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 
-class MotorRentalDetail extends Model
+
+class PaymentRental extends Model
 {
     use HasFactory;
-    // use SoftDeletes;
     use LogsActivity;
 
-    protected $table = 'motor_rental_details';
+    protected $table = 'payment_rentals';
     protected $guarded = ['id'];
 
 
     protected $fillable = [
-        'employee_id',
-        'motor_rental_id',
-        'start_date',
-        'end_date',
-        'product_year',
-        'expired_year',
-        'motor_color',
-        'shelt_life',
-        'number_plate',
-        'motorcycle_brand',
-        'category',
-        'body_number',
-        'engine_number',
-        'total_gasoline',
-        'total_work_day',
-        'price_engine_oil',
-        'price_motor_rentel',
-        'taplab_rentel',
-        'taplab_imei',
-        'start_date_taplab',
-        'price_taplab_rentel',
-        'resigned_date',
-        'gasoline_price_per_liter',
-        'amount_price_motor_rentel',
-        'amount_price_engine_oil',
-        'amount_price_taplab_rentel',
-        'adjust_amount_exclude',
-        'adjust_amount_tabple_exclude',
-        'adjust_amount_include',
-        'adjust_amount_tabple_include',
-        'adjust_amount_kh',
-        'adjust_amount_engine_oil',
-        'tax_rate',
-        'status',
-        'from_date',
-        'to_date',
+        "employee_id",
+        "location_id",
+        "motor_rental_id",
+        "total_amount_khr",
+        "total_amount_usd",
+        "total_leave_amount_khr",
+        "total_leave_amount_usd",
+        "total_tax_fee_khr",
+        "total_tax_fee_usd",
+        "total_adjust_amount_excl",
+        "total_adjust_amount_incl",
+        "total_adjust_tax_fee",
+        "total_adjust_amount_khr",
+        "total_net_amount_khr",
+        "total_net_amount_usd",
+        "resigned_date",
+        "from_date",
+        "to_date",
         'created_by',
         'updated_by',
     ];
@@ -85,11 +66,19 @@ class MotorRentalDetail extends Model
             'employee_name_en',
             'employee_name_kh',
             'number_employee',
+            'date_of_commencement',
             'department_id',
             'position_id',
             'branch_id',
             'gender'])
         ->with('department')->with('position')->with('gender')->with('branch');
+    }
+    public function details()
+    {
+        return $this->hasMany(PaymentRentalDetail::class, 'payment_rental_id', 'id')->with("position");
+    }
+    public function branch(){
+        return $this->belongsTo(Branchs::class ,'location_id');
     }
 
     public function getMotorRentalAttribute(){

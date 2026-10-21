@@ -17,11 +17,11 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>@lang('lang.promoted_from')</label>
-                                @if (count($empPromoted) > 0)
+                                {{-- @if (count($empPromoted) > 0)
                                     <input class="form-control" type="text" id="posit_id" name="posit_id" value="{{$empPromoted[0]->department_promoted_to}}" readonly="">
-                                @else
+                                @else --}}
                                     <input class="form-control" type="text" id="posit_id" name="posit_id" value="{{$data->EmployeePosition}}" readonly="">
-                                @endif
+                                {{-- @endif --}}
                             </div>
                         </div>
                         <div class="col-md-6">

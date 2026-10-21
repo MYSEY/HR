@@ -37,6 +37,7 @@ use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\PayrollRepository;
 use App\Repositories\Admin\EmployeeRepository;
 use App\Models\PreviewNationalSocialSecurityFund;
+use App\Models\PaymentRental;
 
 class EmployeePayrollController extends Controller
 {
@@ -831,9 +832,21 @@ class EmployeePayrollController extends Controller
                     ]);
                     $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
                 }
+
+                //** block sum net amount rental */
+                $total_rental = 0;
+                // PaymentRental::where("employee_id", $item->id)
+                //                 ->when($request->payment_date, function ($query, $paymentDate) {
+                //                     $date = Carbon::parse($paymentDate);
+                //                     $query->whereYear('created_at', $date->year)
+                //                         ->whereMonth('created_at', $date->month);
+                //                 })->sum('total_net_amount_usd') ?? 0;
+                //** end */
+
     
-                $totalSalaryBeforPension = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary + $totalParkAllowance;
+                $totalSalaryBeforPension = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary + $totalParkAllowance + $total_rental;
                 $totalNetSalary = $totalSalaryBeforPension - $LoanAmount - $totalStaffBook;
+
     
                 $data = $request->all();
                 $data['employee_id']                = $item->id;
@@ -864,7 +877,7 @@ class EmployeePayrollController extends Controller
                 $data['total_staff_book']           = $totalStaffBook;
                 $data['adjustment']                 = $adjustmentExcludeTaxe;
                 $data['adjustment_include_taxe']    = $adjustmentIncludeTaxe;
-                $data['total_amount_car']           = $totalParkAllowance;
+                $data['total_amount_car']           = ($totalParkAllowance +  $total_rental);
                 $data['total_salary']               = $totalNetSalary;
                 $data['exchange_rate']              = $request->exchange_rate;
                 $data['created_by']                 = $userId;

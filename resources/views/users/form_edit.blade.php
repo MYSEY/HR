@@ -120,6 +120,12 @@
                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                 </select>
                             </div>
+                            <div class="form-group" id="transferred_wrap" hidden>
+                                <label>@lang('lang.branch') @lang('lang.transferred_date')</label>
+                                <div class="cal-icon">
+                                    <input type="text" id="transferred_date" name="transferred_date" class="form-control datetimepicker">
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group hr-form-group-select2">
@@ -135,6 +141,12 @@
                                 <select class="form-control hr-select2-option @error('position_id') is-invalid @enderror" name="position_id" id="e_position" required>
                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                 </select>
+                            </div>
+                            <div class="form-group" id="promote_wrap" hidden>
+                                <label>@lang('lang.position') @lang('lang.promoted') @lang('lang.date')<span class="text-danger">*</span></label>
+                                <div class="cal-icon">
+                                    <input type="text" id="promote_date" name="promote_date" class="form-control datetimepicker">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -565,7 +577,11 @@
         var url = window.location.pathname;
         var id = url.substring(url.lastIndexOf('/') + 1);
         showDataEdit(id);
+        $("#e_branch_id").on("change", function(){
+            toggleBranch();
+        });
         $("#e_position").on("change", function() {
+            togglePromote();
             let position_type = $("#e_position option:checked").attr('data-id');
             if (position_type == 1) {
                 $('#e_position_type').find('option').each(function(){
@@ -689,6 +705,7 @@
                         $.each(response.position, function(i, item) {
                             $('#e_position').append($('<option>', {
                                 "data-id" : item.position_type_number,
+                                "data-old": response.success.position_id,
                                 value: item.id,
                                 text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                 selected: item.id == response.success.position_id
@@ -721,6 +738,7 @@
                         $('#e_branch_id').html('<option selected disabled> -- @lang("lang.select") --</option>');
                         $.each(response.branch, function(i, item) {
                             $('#e_branch_id').append($('<option>', {
+                                "data-old": response.success.branch_id,
                                 value: item.id,
                                 text: localeLanguage == 'en' ? item.branch_name_en : item.branch_name_kh,
                                 selected: item.id == response.success.branch_id
@@ -1043,5 +1061,25 @@
                 }
             }
         });
+    }
+    function toggleBranch() {
+        const $branch   = $("#e_branch_id");
+        const oldId  = String($branch.find("option[data-old]").first().attr("data-old") ?? "");
+        const newId  = String($branch.val() ?? "");
+        const changed = oldId !== "" && newId !== "" && newId !== oldId;
+
+        $("#transferred_wrap").prop("hidden", !changed);
+        $("#transferred_date").prop("required", changed);
+        if (!changed) $("#transferred_date").val("");
+    }
+    function togglePromote() {
+        const $pos   = $("#e_position");
+        const oldId  = String($pos.find("option[data-old]").first().attr("data-old") ?? "");
+        const newId  = String($pos.val() ?? "");
+        const changed = oldId !== "" && newId !== "" && newId !== oldId;
+
+        $("#promote_wrap").prop("hidden", !changed);
+        $("#promote_date").prop("required", changed);
+        if (!changed) $("#promote_date").val("");
     }
 </script>

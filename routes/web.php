@@ -31,6 +31,7 @@ use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\ActivityLogController;
 use App\Http\Controllers\Admins\LeavesAdminController;
 use App\Http\Controllers\Admins\MotorRentelController;
+use App\Http\Controllers\Admins\RentalPaymentController;
 use App\Http\Controllers\Admins\PayrollItemController;
 use App\Http\Controllers\Admins\PerformanceController;
 use App\Http\Controllers\Admins\ExchangeRateController;
@@ -51,6 +52,9 @@ use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\FnLevelReviewerController;
 use App\Http\Controllers\Admins\MotorAdjustmentController;
+use App\Http\Controllers\Admins\RentalBrandController;
+use App\Http\Controllers\Admins\BundledRentalRateController;
+use App\Http\Controllers\Admins\FormRentalController;
 use App\Http\Controllers\Admins\ProvinceAddressController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\DistrictsAddressController;
@@ -364,19 +368,50 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
     Route::get('motor-rentel/edit',[MotorRentelController::class,'edit']);
-    Route::get('motor-rentel/detail/{id}',[MotorRentelController::class,'detail']);
     Route::post('motor-rentel/store',[MotorRentelController::class,'store']);
     Route::post('motor-rentel/update',[MotorRentelController::class,'update']);
     Route::post('motor-rentel/delete',[MotorRentelController::class,'destroy']);
     Route::post('motor-rentel/list',[MotorRentelController::class,'index']);
-    Route::get('motor-rentel/pay',[MotorRentelController::class,'indexPay']);
-    Route::post('motor-rentel/search',[MotorRentelController::class,'indexPaySearch']);
-    Route::post('motor-rentel/create-pay',[MotorRentelController::class,'storePay']);
-    Route::post('motor-rentel/status',[MotorRentelController::class,'processing']);
 
-    Route::get('motor-rentel/pay-review',[MotorRentelController::class,'indexReviewPay']);
-    Route::post('motor-rentel/approved',[MotorRentelController::class,'payApproved']);
-    Route::post('motor-rentel/review/delete',[MotorRentelController::class,'deletePay']);
+    Route::post('motor-rentel/status',[MotorRentelController::class,'processing']);
+    Route::post('motor-rentel/terminate',[MotorRentelController::class,'terminate']);
+    Route::post('rental/contract/upload',[MotorRentelController::class,'upload']);
+
+    Route::get('motor-rentel/form', [MotorRentelController::class,'formCreate']);
+    Route::get('motor-rentel/form-edit/{id}', [MotorRentelController::class,'formEdit']);
+
+
+    Route::post('rental-brand/update', [RentalBrandController::class, 'update'])->name('rental-brand.update-custom');
+    Route::post('/rental-brand/delete', [RentalBrandController::class, 'destroy'])->name('rental-brand.delete-custom');
+    Route::resource('rental-brand', RentalBrandController::class);
+
+    Route::get('bundled-rental-rate/form', [BundledRentalRateController::class,'formCreate']);
+    Route::get('bundled-rental-rate/edit/{id}', [BundledRentalRateController::class, 'formEdit'])->name('bundled-rental-rate.edit');
+    Route::post('bundled-rental-rate/store', [BundledRentalRateController::class,'store']);
+    Route::post('bundled-rental-rate/update', [BundledRentalRateController::class,'update']);
+    Route::post('bundled-rental-rate/delete',[BundledRentalRateController::class,'destroy']);
+    Route::resource('bundled-rental-rate', BundledRentalRateController::class);
+    
+    Route::get('form-rental/form', [FormRentalController::class,'formCreate']);
+    Route::get('form-rental/edit/{id}', [FormRentalController::class, 'formEdit'])->name('form-rental.edit');
+    Route::get('form-rental/view', [FormRentalController::class, 'formView']);
+    Route::post('form-rental/store', [FormRentalController::class,'store']);
+    Route::post('form-rental/update', [FormRentalController::class,'update']);
+    Route::post('form-rental/delete',[FormRentalController::class,'destroy']);
+    Route::post('form-rental/status',[FormRentalController::class,'processing']);
+    Route::resource('form-rental', FormRentalController::class);
+
+
+    Route::get('rental-pay/generate',[RentalPaymentController::class,'indexGenerate']);
+    Route::post('rental-pay/generate',[RentalPaymentController::class,'generate']);
+    Route::post('rental-pay/approved',[RentalPaymentController::class,'payApproved']);
+    Route::post('rental-pay/replace-approve',[RentalPaymentController::class,'replaceApprove']);
+    
+    Route::get('rental-pay/preview/export',[RentalPaymentController::class,'previewExport']);
+    Route::get('rental-pay/export',[RentalPaymentController::class,'export']);
+
+    Route::get('rental-pay',[RentalPaymentController::class,'index']);
+    Route::post('rental-pay/generate/delete',[RentalPaymentController::class,'deletePay']);
 
      // Motor Rental adjustment
     Route::get('motor-rentel/adjustment',[MotorAdjustmentController::class,'index']);
@@ -495,9 +530,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/reports/tax-report', [PayrollReportController::class,'TaxFilter']);
     Route::get('/reports/tax-report-export', [PayrollReportController::class,'TaxExport']);
 
-    Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
-    Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
-    Route::get('/reports/export-motor-rentel-report', [PayrollReportController::class,'export']);
+    Route::get('/reports/rental', [PayrollReportController::class,'rental']);
+    Route::get('/reports/rental-export', [PayrollReportController::class,'export']);
 
     Route::get('/reports/new_staff-report', [ReportsController::class,'newStaff']);
     Route::post('/reports/new_staff-report', [ReportsController::class,'newStaff']);

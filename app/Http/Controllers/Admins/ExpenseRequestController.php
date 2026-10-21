@@ -1815,7 +1815,7 @@ class ExpenseRequestController extends Controller
         try{
             $exp = ExpenseRequest::find($request->id);
             if ($exp) {
-                $exp->tracking_id     = "D".$exp->tracking_id;
+                $exp->tracking_id     = date('H:i') . ",D".$exp->tracking_id;
                 $exp->save();
                 $reference = explode(',', $exp->reference);
                 $FnRegularList = FnRegularExspense::whereIn("serialref", $reference)->get();

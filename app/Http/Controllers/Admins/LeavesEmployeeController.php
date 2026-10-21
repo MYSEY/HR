@@ -507,7 +507,7 @@ class LeavesEmployeeController extends Controller
         }
     }
 
-    public static function generateLeaveDetail($leaveRequestId, $request)
+    public static function generateLeaveDetail($leaveRequestId, $employee_id, $request)
     {
         $start = Carbon::parse($request->start_date);
         $end = Carbon::parse($request->end_date);
@@ -593,6 +593,7 @@ class LeavesEmployeeController extends Controller
                     'date'             => $date,
                 ],
                 [
+                    'employee_id'       => $employee_id,
                     'number_of_day'    => $number_of_day,
                     'created_at'       => now(), // នឹងបំពេញស្វ័យប្រវត្តិបើជា record ថ្មី
                     'updated_at'       => now(),
@@ -710,7 +711,7 @@ class LeavesEmployeeController extends Controller
             $data['employee_id'] = Auth::user()->id;
             $data['created_by'] = Auth::user()->id;            
             $leaveRequest = LeaveRequest::create($data);
-            Self::generateLeaveDetail($leaveRequest->id, $request);
+            Self::generateLeaveDetail($leaveRequest->id, Auth::user()->id, $request);
             DB::commit();
             // for send email
             $manager1 = User::where("id", Auth::user()->line_manager)->first();
@@ -927,7 +928,7 @@ class LeavesEmployeeController extends Controller
             $data['request_to'] = Auth::user()->id;
             
             $leaveRequest = LeaveRequest::create($data);
-            Self::generateLeaveDetail($leaveRequest->id, $request);
+            Self::generateLeaveDetail($leaveRequest->id, $request->employee_id, $request);
 
             $staff_request = User::where("id", $request->employee_id)->with("position")->with("branch")->first();
             $manager1 = User::where("id", $staff_request->line_manager)->first();
@@ -1089,7 +1090,7 @@ class LeavesEmployeeController extends Controller
             $data['updated_by'] = Auth::user()->id;
 
             $data->save();
-            Self::generateLeaveDetail($data->id, $request);
+            Self::generateLeaveDetail($data->id, $data->employee_id, $request);
             DB::commit();
             return response()->json([
                 'success'=>'leave_request_created_successfully',
@@ -1158,7 +1159,7 @@ class LeavesEmployeeController extends Controller
             $data['updated_by'] = Auth::user()->id;
 
             $data->save();
-            Self::generateLeaveDetail($data->id, $request);
+            Self::generateLeaveDetail($data->id, $data->employee_id, $request);
             DB::commit();
             return response()->json([
                 'success'=>'leave_request_created_successfully',
@@ -1254,9 +1255,13 @@ class LeavesEmployeeController extends Controller
             $data['remark'] = $request->remark;
             // $data['next_approver'] = $data->approved_by;
             $data['updated_by'] = Auth::user()->id;
-
+            DB::table('leave_details')
+                ->where('leave_request_id', $request->id)
+                ->update([
+                    'status'        => "pending_cancel",
+            ]);
             $data->save();
-           
+            
             Toastr::success('Cancel successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

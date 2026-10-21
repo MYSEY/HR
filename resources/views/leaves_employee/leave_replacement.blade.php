@@ -164,9 +164,9 @@
                                                     <td>{{$request->leaveType->type == "special_leave"? $request->number_of_day : 0}}</td>
                                                     <td>{{$request->leaveType->type == "special_leave"? $request->total_special_leave : 0}}</td>
                                                     <td>{{$request->leaveType->type == "unpaid_leave" ? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->leaveType->type == "unpaid_leave"? $total_unpaid_leave : 0}}</td>
+                                                    <td>{{$request->leaveType->type == "unpaid_leave"? $request->total_unpaid_leave : 0}}</td>
                                                     <td>{{$request->leaveType->type == "long_sick_leave" ? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->leaveType->type == "long_sick_leave"? $total_long_sick_leave : 0}}</td>
+                                                    <td>{{$request->leaveType->type == "long_sick_leave" ? $request->total_long_sick_leave : 0}}</td>
                                                     <td>{{$request->reason}}</td>
                                                     <td>{{$request->remark}}</td>
                                                     <td>

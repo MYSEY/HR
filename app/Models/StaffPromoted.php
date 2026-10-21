@@ -23,7 +23,9 @@ class StaffPromoted extends Model
     protected $fillable = [
         'employee_id',
         'posit_id',
+        'position_from_id',
         'position_promoted_to',
+        'position_to_id',
         'depart_id',
         'department_promoted_to',
         'date',
