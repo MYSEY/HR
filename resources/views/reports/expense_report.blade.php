@@ -260,7 +260,7 @@
 </div>
 @endsection
 @include('includs.script')
-<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/ui-lightness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="{{ asset('admin/css/jquery-datepicker-1.11.4-ui.css') }}">
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{asset('/admin/js/convertNumberToWordsExp.js')}}"></script>
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
@@ -676,7 +676,7 @@
                             if (ref?.file_upload) {
                                 referenceTd += `
                                     <small class="block text-ellipsis">
-                                        <a href="/uploads/FnRegularExspenses/${ref.file_upload}" target="_blank">
+                                        <a href="{{asset("/uploads/FnRegularExspenses")}}/${ref.file_upload}" target="_blank">
                                             ${ref.serialref || item.reference}
                                         </a>
                                     </small>
@@ -687,7 +687,7 @@
                                 if (ref?.file_upload) {
                                     referenceTd += `
                                         <small class="block text-ellipsis">
-                                            <a href="/uploads/FnRegularExspenses/${ref.file_upload}" target="_blank">
+                                            <a href="{{asset("/uploads/FnRegularExspenses")}}/${ref.file_upload}" target="_blank">
                                                 ${ref.serialref}
                                             </a>
                                         </small>

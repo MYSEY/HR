@@ -18,7 +18,7 @@
                                 <span id="thanLess"></span>
                             </div>
                             <div class="col-md-12" style="padding-left: 2%;">
-                                <input type="file" id="result_file">
+                                <input type="file" id="result_file" accept=".xlsx, .xls, .csv">
                             </div>
                         </div><br>
                         <div class="text-end ">
@@ -33,6 +33,21 @@
         </div>
     </div>
 </div>
+<div id="error-container" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="error-message" class="modal-title">@lang('lang.import_goals')</h5>
+                <button type="button" class="close btn-close btn-close-error" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ol id="error-list" class="list-group list-group-numbered"></ol>
+            </div>
+        </div>
+    </div>
+</div>
 
 @include('includs.script')
 
@@ -43,27 +58,33 @@
             $(".thanLess").hide();
             $("#thanLess").text("");
         });
+        $(".btn-close-error").on("click", function (){
+            window.location.reload();
+        });
 
         $(".upload_file_data").on("click", function() {
             if ($('#result_file').val() == "") {
-                $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css(
-                    "color", "red");
+                $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css("color", "red");
                 $(".thanLess").show();
                 return false;
             }
+
             var file_data = $('#result_file').prop('files')[0];
             var fileName = file_data['name'];
-            var form_data = new FormData();
-            var fileExtension = fileName.split('.').pop();
+            var fileExtension = fileName.split('.').pop().toLowerCase();
             var fileSize = file_data['size'];
-            form_data.append('file', file_data);
-            form_data.append('_token', "{{ csrf_token() }}");
-            if (fileExtension == "xls" || fileExtension == "xlsx" || fileExtension == "csv" && fileSize < 1048576) {
+
+            // ឆែកមើលប្រភេទ File និង ទំហំ (< 1MB)
+            if ((fileExtension === "xls" || fileExtension === "xlsx" || fileExtension === "csv") && fileSize < 1048576) {
+                
+                var form_data = new FormData();
+                form_data.append('file', file_data);
+                form_data.append('_token', "{{ csrf_token() }}");
+
                 $(".upload_file_data").prop('disabled', true);
                 $(".btn-text-submit").hide();
                 $("#btn-loading").css('display', 'block');
 
-                $("#import_motor_rentel").modal("show");
                 $.ajax({
                     type: 'POST',
                     url: "{{ url('motor-rentel/import') }}",
@@ -71,33 +92,56 @@
                     contentType: false,
                     cache: false,
                     processData: false,
-                    success: function(data) {
-                        if (data == 1) {
+                    success: function(response) {
+                        if (response.status === 1) {
                             $("#import_motor_rentel").modal("hide");
-                            toastr.success('Data has been save success');
-                            window.location.replace("{{ URL('motor-rentel/list') }}");
-                        }
-                        if (data == 2) {
-                            $("#import_motor_rentel").modal("hide");
-                            $("#thanLess").text("Data duplicate").css("color", "red");
+
+                            if (response.imported_count > 0) {
+                                toastr.success(response.imported_count + ' Data imported successfully.');
+                            }
+
+                            if (response.failed_rows && response.failed_rows.length > 0) {
+                                let errorHtml = '';
+
+                                response.failed_rows.forEach(function(item) {
+                                    let badgeClass = item.reason.includes("Duplicate") ? "bg-warning text-dark" : "bg-danger text-white";
+                                    
+                                    errorHtml += `
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong>Row ${item.row}:</strong> Employee ID [<code>${item.employee_no}</code>]
+                                            </div>
+                                            <span class="badge ${badgeClass} p-2">${item.reason}</span>
+                                        </li>`;
+                                });
+
+                                $('#error-message').html("បញ្ជីខាងក្រោម<strong>មិនបាន Save ចូល Table ទេ</strong> ដោយសារ Employee ស្ទួន ឬខ្វះ Data ៖");
+                                $('#error-list').html(errorHtml);
+                                $('#error-container').modal("show");
+                            } else {
+                                setTimeout(function() {
+                                    window.location.replace("{{ URL('motor-rentel/list') }}");
+                                }, 1000);
+                            }
+                        } else {
+                            $("#thanLess").text(response.message).css("color", "red");
                             $(".thanLess").show();
                         }
-                        if (data == 0) {
-                            $("#import_motor_rentel").modal("show");
-                            data == 0;
-                            $("#thanLess").text(
-                                "@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')"
-                                ).css("color", "red");
-                            $(".thanLess").show();
-                        }
+
                         $("#btn-loading").hide();
                         $(".btn-text-submit").show();
-                        $(".upload_file_data").prop("disabled",false);
+                        $(".upload_file_data").prop("disabled", false);
+                    },
+                    error: function() {
+                        $("#thanLess").text("Something went wrong! Please try again.").css("color", "red");
+                        $(".thanLess").show();
+                        $("#btn-loading").hide();
+                        $(".btn-text-submit").show();
+                        $(".upload_file_data").prop("disabled", false);
                     }
                 });
-            }else{
-                $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css(
-                    "color", "red");
+            } else {
+                $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css("color", "red");
                 $(".thanLess").show();
             }
         });

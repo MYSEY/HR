@@ -29,12 +29,12 @@
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.promoted_to')<span class="text-danger">*</span></label>
                                 <select class="form-control form-select hr-select2-option requered" id="e_position_promoted_to" name="position_promoted_to" required>
-                                    <option value="">-- @lang('lang.select') --</option>
+                                    {{-- <option value="">-- @lang('lang.select') --</option>
                                     @if (count($position)>0)
                                         @foreach ($position as $item)
                                             <option value="{{Helper::getLang() == 'en' ? $item->name_english :  $item->name_khmer}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                         @endforeach
-                                    @endif
+                                    @endif --}}
                                 </select>
                             </div>
                         </div>

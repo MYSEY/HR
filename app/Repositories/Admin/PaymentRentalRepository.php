@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Admin;
 
-use App\Models\MotorRentalDetail;
+use App\Models\PaymentRental;
 use App\Models\MotorRentel;
 use App\Models\Seniority;
 use App\Models\SeverancePay;
@@ -11,7 +11,7 @@ use App\Traits\UploadFiles\UploadFIle;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-class MotorRentalRepository extends BaseRepository
+class PaymentRentalRepository extends BaseRepository
 {
     use UploadFIle;
     /**
@@ -47,17 +47,16 @@ class MotorRentalRepository extends BaseRepository
             $monthly =  Carbon::createFromDate(Carbon::now())->format('m');
             $currentYear =  Carbon::createFromDate(Carbon::now())->format('Y');
         }
-        $data = MotorRentalDetail::with('user')
-            ->leftJoin('users', 'motor_rental_details.employee_id', '=', 'users.id')
+        $data = PaymentRental::with(['branch','user','details'])
+            ->leftJoin('users', 'payment_rentals.employee_id', '=', 'users.id')
             ->select(
-                'motor_rental_details.*',
+                'payment_rentals.*',
                 'users.employee_name_en',
                 'users.employee_name_kh',
                 'users.number_employee',
                 'users.branch_id',
                 'users.department_id',
             )
-            ->where("motor_rental_details.status", "approve")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'Employee') {
                     if(permissionAccess("m5-s1","is_access")->value == "1" || permissionAccess("m7-s12","is_access")->value == "1"){
@@ -76,10 +75,10 @@ class MotorRentalRepository extends BaseRepository
                 }
             })
             ->when($monthly, function ($query, $monthly) {
-                $query->whereMonth('motor_rental_details.created_at', $monthly);
+                $query->whereMonth('payment_rentals.created_at', $monthly);
             })
             ->when($currentYear, function ($query, $currentYear) {
-                $query->whereYear('motor_rental_details.created_at', $currentYear);
+                $query->whereYear('payment_rentals.created_at', $currentYear);
             })
             ->when($request->employee_id, function ($query, $employee_id) {
                 $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
@@ -97,14 +96,19 @@ class MotorRentalRepository extends BaseRepository
             ->when($request->department_id, function ($query, $department_id) {
                 $query->where('users.department_id', $department_id);
             })
+            ->when($request->year_month, function ($query, $yearMonth) {
+                $startDate = Carbon::parse($yearMonth)->startOfMonth();
+                $endDate   = Carbon::parse($yearMonth)->endOfMonth();
+                $query->whereBetween('payment_rentals.created_at', [$startDate, $endDate]);
+            })
             ->when($from_date, function ($query, $from_date) {
-                $query->where('motor_rental_details.created_at', '>=', $from_date);
+                $query->where('payment_rentals.created_at', '>=', $from_date);
             })
             ->when($to_date, function ($query, $to_date) {
-                $query->where('motor_rental_details.created_at','<=', $to_date);
-            })
-            ->orderBy('id', 'desc')
-            ->get();
+                $query->where('payment_rentals.created_at','<=', $to_date);
+            });
+            // ->orderBy('id', 'desc')
+            // ->get();
         return $data;
     }
 

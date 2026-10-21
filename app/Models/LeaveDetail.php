@@ -13,6 +13,8 @@ class LeaveDetail extends Model
 
     protected $fillable = [
         'leave_request_id',
+        'employee_id',
+        'status',
         'date',
         'number_of_day'
     ];

@@ -4,13 +4,13 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.adjustment')</h3>
+                    <h3 class="page-title">@lang('lang.adjustment_rental')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.adjustment')</li>
+                        <li class="breadcrumb-item active">@lang('lang.adjustment_rental')</li>
                     </ul>
                 </div>
-                @if (permissionAccess("m5-s4","is_create")->value == "1")
+                @if ($permission->is_create == "1")
                     <div class="col-auto float-end ms-auto">
                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#Add_Adjustment"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     </div>
@@ -30,11 +30,10 @@
                                         <tr>
                                             <th>#</th>
                                             <th>@lang('lang.name')</th>
+                                            <th>@lang('lang.type')</th>
                                             <th>@lang('lang.adjustment_type')</th>
-                                            <th>@lang('lang.amount') @lang('lang.motor') (@lang('lang.usd'))</th>
-                                            <th>@lang('lang.amount') @lang('lang.tablet') (@lang('lang.usd'))</th>
+                                            <th>@lang('lang.amount') (@lang('lang.usd'))</th>
                                             <th>@lang('lang.amount') (@lang('lang.kh'))</th>
-                                            <th>@lang('lang.amount') @lang('lang.engine_oil') (@lang('lang.usd'))</th>
                                             <th>@lang('lang.adjustment_date')</th>
                                             <th>@lang('lang.remark')</th>
                                             <th>@lang('lang.created_at')</th>
@@ -47,23 +46,22 @@
                                                 <tr>
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
                                                     <td>{{$item->EmployeeName}}</td>
-                                                    <td>{{$item->adjustment_type == 'include_taxe' ? 'Include Taxe' : 'Exclude Taxe'}}</td>
-                                                    <td>{{$item->amount_usd}} $</td>
-                                                    <td>{{$item->amount_table_usd}} $</td>
-                                                    <td>{{$item->amount_kh}} ៛</td>
-                                                    <td>{{$item->amount_engine_oil}} $</td>
+                                                    <td>{{$item->type}}</td>
+                                                    <td>{{$item->adjustment_type == 'include_tax' ? 'Include Tax' : 'Exclude Tax'}}</td>
+                                                    <td>{{$item->amount_usd ? $item->amount_usd : "0.00"}}$</td>
+                                                    <td>{{$item->amount_kh ? number_format($item->amount_kh): "0.00"}}៛</td>
                                                     <td class="position_type">{{ \Carbon\Carbon::parse($item->adjustment_date)->format('d-M-Y') ?? '' }}</td>
                                                     <td class="position_range">{{$item->description}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                     <td class="text-end">
-                                                        @if (permissionAccess("m5-s4","is_update")->value == "1" || permissionAccess("m5-s4","is_delete")->value == "1")
+                                                        @if ($permission->is_update == "1" || $permission->is_delete == "1")
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (permissionAccess("m5-s4","is_update")->value == "1")
+                                                                    @if ($permission->is_update == "1")
                                                                         <a class="dropdown-item btn-get-data-id" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_adjustment"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
-                                                                    @if (permissionAccess("m5-s4","is_delete")->value == "1")
+                                                                    @if ($permission->is_delete == "1")
                                                                         <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_adjustment"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     @endif
                                                                 </div>
@@ -104,31 +102,46 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>@lang('lang.amount') @lang('lang.motor') @lang('lang.usd')<span class="text-danger">*</span></label>
+                                <label>@lang('lang.type') <span class="text-danger">*</span></label>
+                                <select class="form-control type_requered type" name="type" id="type">
+                                    <option value="" selected disabled>--- @lang('lang.select') ---</option>
+                                    
+                                    <!-- Group 1: Vehicles -->
+                                    <optgroup label="@lang('lang.vehicles')">
+                                        <option value="motorcycle">@lang('lang.motorcycle')</option>
+                                        <option value="car">@lang('lang.car')</option>
+                                        <option value="tuk_tuk">@lang('lang.tuk_tuk')</option>
+                                        <option value="truck">@lang('lang.truck')</option>
+                                        <option value="bicycle">@lang('lang.bicycle')</option>
+                                    </optgroup>
+
+                                    <!-- Group 2: IT & Devices -->
+                                    <optgroup label="@lang('lang.it_equipment')">
+                                        <option value="tablet">@lang('lang.tablet')</option>
+                                        <option value="laptop">@lang('lang.laptop')</option>
+                                        <option value="desktop">@lang('lang.desktop')</option>
+                                        <option value="camera">@lang('lang.camera')</option>
+                                    </optgroup>
+
+                                    <!-- Group 3: Other -->
+                                    <optgroup label="@lang('lang.other')">
+                                        <option value="machinery">@lang('lang.machinery')</option>
+                                        <option value="other">@lang('lang.other')</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.amount') @lang('lang.usd')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="text" class="form-control adjust_require_amount" name="amount_usd" id="amount_usd" required>
+                                    <input type="number" class="form-control adjust_require_amount" name="amount_usd" id="amount_usd" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>@lang('lang.amount') @lang('lang.tablet') @lang('lang.usd')<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input type="text" class="form-control adjust_require_amount" name="amount_table_usd" id="amount_table_usd" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.amount') @lang('lang.kh')<span class="text-danger">*</span></label>
+                                <label>@lang('lang.amount') @lang('lang.khr')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">៛</span>
-                                    <input type="text" class="form-control adjust_require_amount" name="amount_kh" id="amount_kh" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.amount') @lang('lang.engine_oil') @lang('lang.usd')<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input type="text" class="form-control adjust_require_amount" name="amount_engine_oil" id="amount_engine_oil" required>
+                                    <input type="number" class="form-control adjust_require_amount" name="amount_kh" id="amount_kh" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -140,8 +153,8 @@
                             <div class="form-group">
                                 <label>@lang('lang.adjustment_type')<span class="text-danger">*</span></label>
                                 <select class="form-control select floating" name="adjustment_type" id="adjustment_type" required>
-                                    <option value="exclude_taxe">Exclude Taxe</option>
-                                    <option value="include_taxe">Include Taxe</option>
+                                    <option value="exclude_tax">Exclude Tax</option>
+                                    <option value="include_tax">Include Tax</option>
                                 </select>
                             </div>
                             {{-- <div class="form-group include_tax_rate" style="display: none">
@@ -183,31 +196,44 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label>@lang('lang.type') <span class="text-danger">*</span></label>
+                                <select class="form-control requered e_type" name="type" id="e_type">
+                                    <!-- Group 1: Vehicles -->
+                                    <optgroup label="@lang('lang.vehicles')">
+                                        <option value="motorcycle">@lang('lang.motorcycle')</option>
+                                        <option value="car">@lang('lang.car')</option>
+                                        <option value="tuk_tuk">@lang('lang.tuk_tuk')</option>
+                                        <option value="truck">@lang('lang.truck')</option>
+                                        <option value="bicycle">@lang('lang.bicycle')</option>
+                                    </optgroup>
+
+                                    <!-- Group 2: IT & Devices -->
+                                    <optgroup label="@lang('lang.it_equipment')">
+                                        <option value="tablet">@lang('lang.tablet')</option>
+                                        <option value="laptop">@lang('lang.laptop')</option>
+                                        <option value="desktop">@lang('lang.desktop')</option>
+                                        <option value="camera">@lang('lang.camera')</option>
+                                    </optgroup>
+
+                                    <!-- Group 3: Other -->
+                                    <optgroup label="@lang('lang.other')">
+                                        <option value="machinery">@lang('lang.machinery')</option>
+                                        <option value="other">@lang('lang.other')</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>@lang('lang.amount') @lang('lang.usd')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="text" class="form-control e_adjust_require_amount" name="amount_usd" id="e_amount_usd" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.amount') @lang('lang.tablet') @lang('lang.usd')<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input type="text" class="form-control e_adjust_require_amount" name="amount_table_usd" id="e_amount_table_usd" required>
+                                    <input type="number" class="form-control e_adjust_require_amount" name="amount_usd" id="e_amount_usd" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>@lang('lang.amount') @lang('lang.kh')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="text" class="form-control e_adjust_require_amount" name="amount_kh" id="e_amount_kh" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.amount') @lang('lang.engine_oil') @lang('lang.gasoline') @lang('lang.usd')<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input type="text" class="form-control e_adjust_require_amount" name="amount_engine_oil" id="e_amount_engine_oil" required>
+                                    <input type="number" class="form-control e_adjust_require_amount" name="amount_kh" id="e_amount_kh" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -218,7 +244,12 @@
                             </div>
                             <div class="form-group">
                                 <label>@lang('lang.adjustment_type')<span class="text-danger">*</span></label>
-                                <select class="form-control select floating" name="adjustment_type" id="e_adjustment_type" required>
+                                <select class="form-control" name="adjustment_type" id="e_adjustment_type" required>
+                                    
+                                    <optgroup label="@lang('lang.tax')">
+                                        <option value="exclude_tax">Exclude Tax</option>
+                                        <option value="include_tax">Include Tax</option>
+                                    </optgroup>
                                 </select>
                             </div>
                             {{-- <div class="form-group e_include_tax_rate" style="display: none">
@@ -298,13 +329,20 @@
                     length++;
                 }
             });
+            $(".type_requered").each(function () {
+                if ($.trim($(this).val()) === "") {
+                    num_miss++;
+                    $(this).addClass("is-invalid").removeClass("is-valid");
+                } else {
+                    $(this).removeClass("is-invalid").addClass("is-valid");
+                }
+            });
 
             if($(".adjust_require_amount").length == length){
                 $(".adjust_require_amount").css("border-color","#dc3545")
             }else{
                 $(".adjust_require_amount").css("border-color","#198754")
             }
-
             $(".adjust_require").each(function(){
                 if($(this).val()==""){ 
                     num_miss++;
@@ -328,10 +366,9 @@
                     data: {
                         "_token":           "{{ csrf_token() }}",
                         employee_id:        $("#employee_id").val(),
-                        amount_usd:         ($("#amount_usd").val() ? $("#amount_usd").val() : 0),
-                        amount_table_usd:   ($("#amount_table_usd").val() ? $("#amount_table_usd").val() : 0),
-                        amount_kh:          ($("#amount_kh").val() ? $("#amount_kh").val() : 0),
-                        amount_engine_oil:  ($("#amount_engine_oil").val() ? $("#amount_engine_oil").val() : 0),
+                        type:               $("#type").val(),
+                        amount_usd:         $("#amount_usd").val(),
+                        amount_kh:          $("#amount_kh").val(),
                         adjustment_date:    $("#adjustment_date").val(),
                         adjustment_type:    $("#adjustment_type").val(),
                         description:        $("#description").val()
@@ -353,7 +390,6 @@
             }
         });
         $('.btn-get-data-id').on('click',function(){
-            $("#e_adjustment_type").html("");
             var localeLanguage = '{{ config('app.locale') }}';
             let id = $(this).data("id");
             $.ajax({
@@ -375,20 +411,17 @@
                             });
                         }
                         
-                        if (response.success.adjustment_type == 'include_taxe') {
+                        if (response.success.adjustment_type == 'include_tax') {
                             $(".e_include_tax_rate").css('display', 'block');
-                            $("#e_adjustment_type").append('<option selected value="include_taxe">Include Taxe</option> <option value="exclude_taxe">Exclude Taxe</option>');
                         } else {
                             $(".e_include_tax_rate").css('display', 'none');
-                            $("#e_adjustment_type").append('<option selected value="exclude_taxe">Exclude Taxe</option> <option value="include_taxe">Include Taxe</option>');   
                         }
                         
                         $('#e_id').val(response.success.id);
+                        $('#e_type').val(response.success.type);
+                        $('#e_adjustment_type').val(response.success.adjustment_type);
                         $('#e_amount_usd').val(response.success.amount_usd);
-                        $('#e_amount_table_usd').val(response.success.amount_table_usd);
                         $('#e_amount_kh').val(response.success.amount_kh);
-                        $('#e_amount_engine_oil').val(response.success.amount_engine_oil);
-                        $('#e_tax_rate').val(response.success.tax_rate);
                         $('#e_adjustment_date').val(response.success.adjustment_date);
                         $('#e_description').val(response.success.description);
                     }
@@ -413,6 +446,7 @@
             }else{
                 $(".e_adjust_require_amount").css("border-color","#198754")
             }
+
             $(".e_adjust_require").each(function(){
                 if($(this).val()==""){ 
                     e_num_miss++;
@@ -437,13 +471,11 @@
                         "_token":           "{{ csrf_token() }}",
                         id:                 $("#e_id").val(),
                         employee_id:        $("#e_employee_id").val(),
+                        type:               $("#e_type").val(),
                         amount_usd:         $("#e_amount_usd").val(),
-                        amount_table_usd:   $("#e_amount_table_usd").val(),
                         amount_kh:          $("#e_amount_kh").val(),
-                        amount_engine_oil:  $("#e_amount_engine_oil").val(),
                         adjustment_date:    $("#e_adjustment_date").val(),
                         adjustment_type:    $("#e_adjustment_type").val(),
-                        tax_rate:           $("#e_tax_rate").val(),
                         description:        $("#e_description").val()
                     },
                     dataType: "JSON",

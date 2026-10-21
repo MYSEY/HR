@@ -27,6 +27,7 @@ use App\Models\StaffTraining;
 use App\Traits\GeneratingCode;
 use Illuminate\Support\Carbon;
 use App\Exports\ExportEmployee;
+use App\Helpers\Helper;
 use App\Models\LeaveAllocation;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\UserRequest;
@@ -482,7 +483,59 @@ class UserController extends Controller
     public function update(Request $request)
     {
         try{
-            $this->employeeRepo->updatedUsers($request);
+            DB::transaction(function () use ($request) {
+
+                // ទាញ user ម្តង (មុន updatedUsers ដើម្បីបាន position/department/branch "ចាស់")
+                $user = User::with(['position', 'department', 'branch'])->findOrFail($request->id);
+    
+                $lang   = Helper::getLang();
+                $name   = fn ($m) => $m ? ($lang === 'en' ? $m->name_english : $m->name_khmer) : null;
+                $name_br   = fn ($m) => $m ? ($lang === 'en' ? $m->branch_name_en : $m->branch_name_kh) : null;
+    
+                $positionChanged = $request->filled('position_id')
+                    && (int) $request->position_id !== (int) $user->position_id;
+    
+                $branchChanged = $request->filled('branch_id')
+                    && (int) $request->branch_id !== (int) $user->branch_id;
+    
+                // ---------- Promoted: តែពេលប្តូរ Position ពិតប្រាកដ ----------
+                if ($positionChanged) {
+                    $newPosition   = Position::find($request->position_id);
+                    $newDepartment = Department::find($request->department_id);
+    
+                    StaffPromoted::create([
+                        'employee_id'            => $user->id,
+                        'posit_id'               => $name($user->position),
+                        'position_from_id'       => $user->position_id,
+                        'position_promoted_to'   => $name($newPosition),
+                        'position_to_id'         => $request->position_id,
+                        'depart_id'              => $name($user->department),
+                        'department_promoted_to' => $name($newDepartment),
+                        'date'                   => $request->promote_date,
+                        'created_by'             => Auth::id(),
+                    ]);
+                }
+    
+                // ---------- Transferred: តែពេលប្តូរ Branch ពិតប្រាកដ ----------
+                if ($branchChanged) {
+                    $newBranch   = Branchs::find($request->branch_id);
+                    $newPosition = Position::find($request->position_id);
+    
+                    Transferred::create([
+                        'employee_id'              => $user->id,
+                        'branch_id'                => $name_br($user->branch),
+                        'tranferend_branch_name'   => $name_br($newBranch),
+                        'position_id'              => $name($user->position),
+                        'tranferend_position_name' => $name($newPosition),
+                        'date'                     => $request->transferred_date,
+                        'created_by'               => Auth::id(),
+                    ]);
+                }
+    
+                // update ទិន្នន័យបុគ្គលិក (ក្នុង transaction ដូចគ្នា)
+                $this->employeeRepo->updatedUsers($request);
+            });
+            // $this->employeeRepo->updatedUsers($request);
             DB::commit();
             Toastr::success('Updated employee successfully.','Success');
             return redirect('users');
@@ -582,10 +635,10 @@ class UserController extends Controller
                 
                 //*** total annual_leave in probation */
                 $toJoinDate  = Carbon::parse($dataSalary->date_of_commencement);
-                $endJoinDate = Carbon::parse($dataSalary->fdc_date);
+                $endJoinDate = Carbon::parse($request->start_date);
                 $monthInProbation = $toJoinDate->diffInMonths($endJoinDate);
                 $totalDayInProbation = 1.5 * $monthInProbation;
-                // dd($totalDayInProbation);
+                // dd($monthInProbation);
                 //** end */
 
                 //total day in monthsd

@@ -4,30 +4,27 @@ namespace App\Http\Controllers\Admins;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\RentalBrand;
 use App\Models\MotorRentel;
 use Illuminate\Http\Request;
-use App\Models\MotorRentalDetail;
 use App\Exports\ExportMotorRentel;
-use App\Helpers\Helper;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Holiday;
-use App\Models\LeaveRequest;
-use App\Models\MotorAdjustment;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use Spatie\Activitylog\Models\Activity;
 use App\Repositories\Admin\EmployeeRepository;
-use App\Repositories\Admin\MotorRentalRepository;
+use App\Repositories\Admin\PaymentRentalRepository;
+use App\Models\permissions;
+use App\Models\FormRental;
 
 // use Excel;
 
 class MotorRentelController extends Controller
 {
     private $dataMotorPays;
-    public function __construct(MotorRentalRepository $dataMotorPay)
+    public function __construct(PaymentRentalRepository $dataMotorPay)
     {
         $this->dataMotorPays = $dataMotorPay;
     }
@@ -38,7 +35,8 @@ class MotorRentelController extends Controller
      */
     public function index(Request $request)
     {
-        if (permissionAccess("m5-s1","is_view")->value != "1") {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "motor-rentel/list")->first();
+        if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
         $from_date = null;
@@ -47,7 +45,8 @@ class MotorRentelController extends Controller
             $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s'); //2023-05-09 00:00:00
             $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s'); //2023-05-09 23:59:59
         }
-        $data = MotorRentel::with('user')->leftJoin('users', 'motor_rentels.employee_id', '=', 'users.id')
+        if ($request->ajax()) {
+            $query = MotorRentel::with('user')->leftJoin('users', 'motor_rentels.employee_id', '=', 'users.id')
             ->select(
                 'motor_rentels.*',
                 'users.employee_name_en',
@@ -57,9 +56,9 @@ class MotorRentelController extends Controller
                 'users.department_id',
                 'users.resign_date',
             )
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
                 if ($RolePermission == 'Employee') {
-                    if(permissionAccess("m5-s1","is_access")->value == "1"){
+                    if($permission->is_access == "1"){
                         $query->where("users.department_id", Auth::user()->department_id);
                         $query->where("users.branch_id", Auth::user()->branch_id);
                     }else{
@@ -72,163 +71,99 @@ class MotorRentelController extends Controller
                 if ($RolePermission == 'BM' || $RolePermission == 'HR') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })
-            ->when($request->employee_id, function ($query, $employee_id) {
-                $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
-            })
-            ->when($request->employee_name, function ($query, $employee_name) {
-                $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-                // $query->orWhere('users.employee_name_kh', 'LIKE', '%'.$employee_name.'%');
             })
             ->when($from_date, function ($query, $from_date) {
                 $query->where('motor_rentels.created_at', '>=', $from_date);
             })
             ->when($to_date, function ($query, $to_date) {
                 $query->where('motor_rentels.created_at','<=', $to_date);
-            })
-            ->orderBy('id', 'desc')
-            ->get();
+            });
+               
+            $searchValue = $request->input('search.value');
 
-        $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if ($RolePermission == 'Employee') {
-                    if(permissionAccess("m5-s1","is_access")->value == "1"){
-                        $query->where("users.department_id", Auth::user()->department_id);
-                        $query->where("users.branch_id", Auth::user()->branch_id);
-                    }else{
-                        $query->where('users.id',Auth::user()->id);
-                    }
-                }
-                if ($RolePermission == 'HOD') {
-                    $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
-                }
-                if ($RolePermission == 'HR') {
-                    $query->where("branch_id", Auth::user()->branch_id);
-                }
-                if ($RolePermission == 'BM') {
-                    $query->where("branch_id", Auth::user()->branch_id);
-                }
-            })
-            ->get();
-        if ($request->research) {
-            return response()->json(['data'=>$data]);
-        }else {
-            return view('motor_rentels.index', compact('data', 'employees'));
-        }
-    }
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
 
-    public function indexReviewPay(Request $request)
-    {
-        if (permissionAccess("m5-s3","is_view")->value != "1") {
-            return view('upgrade.access_page');
-        }
-        $monthly = Carbon::now()->format('m');
-        $currentYear = Carbon::now()->format('Y');
-        $data = MotorRentalDetail::with('motorrental')->with('user')
-            ->leftJoin('users', 'motor_rental_details.employee_id', '=', 'users.id')
-            ->select(
-                'motor_rental_details.*',
-                'users.employee_name_en',
-                'users.employee_name_kh',
-                'users.number_employee',
-                'users.branch_id',
-                'users.department_id',
-            )
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if ($RolePermission == 'Employee') {
-                    if(permissionAccess("m5-s3","is_access")->value == "1"){
-                        $query->where("users.department_id", Auth::user()->department_id);
-                        $query->where("users.branch_id", Auth::user()->branch_id);
-                    }else{
-                        $query->where('users.id',Auth::user()->id);
-                    }
-                }
-                if ($RolePermission == 'HOD') {
-                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
-                }
-                if ($RolePermission == 'BM' || $RolePermission == 'HR') {
-                    $query->where("users.branch_id", Auth::user()->branch_id);
-                }
-            })
-            ->where("motor_rental_details.status", null)
-            ->whereMonth('motor_rental_details.created_at', $monthly)
-            ->whereYear('motor_rental_details.created_at', $currentYear)
-            ->orderBy('id', 'desc')
-            ->get();
-        return view('motor_rentels.review',  compact('data'));
-    }
+                    // 🔹 Search main table
+                    $q->where('motor_rentels.id', 'like', "%{$searchValue}%")
+                    ->orWhere('motor_rentels.start_date', 'like', "%{$searchValue}%");
 
-    public function indexPay(Request $request)
-    {
-        if (permissionAccess("m5-s2","is_view")->value != "1") {
-            return view('upgrade.access_page');
-        }
-        $monthly = Carbon::now()->format('m');
-        $currentYear = Carbon::now()->format('Y');
-        $data = MotorRentalDetail::with('motorrental')->with('user')
-            ->leftJoin('users', 'motor_rental_details.employee_id', '=', 'users.id')
-            ->select(
-                'motor_rental_details.*',
-                'users.employee_name_en',
-                'users.employee_name_kh',
-                'users.number_employee',
-                'users.branch_id',
-                'users.department_id',
-            )
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if ($RolePermission == 'Employee') {
-                    if(permissionAccess("m5-s2","is_access")->value == "1"){
-                        $query->where("users.department_id", Auth::user()->department_id);
-                        $query->where("users.branch_id", Auth::user()->branch_id);
-                    }else{
-                        $query->where('users.id',Auth::user()->id);
-                    }
-                }
-                if ($RolePermission == 'HOD') {
-                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
-                }
-                if ($RolePermission == 'BM' || $RolePermission == 'HR') {
-                    $query->where("users.branch_id", Auth::user()->branch_id);
-                }
-            })
-            ->where("motor_rental_details.status", "approve")
-            ->whereMonth('motor_rental_details.created_at', $monthly)
-            ->whereYear('motor_rental_details.created_at', $currentYear)
-            ->orderBy('id', 'desc')
-            ->get();
-        return view('motor_rentels.pay_motor_rental',  compact('data'));
-    }
-
-    public function payApproved(Request $request){
-        try{
-            $dataPay = MotorRentalDetail::whereIn('id',explode(",",$request->id))->update(['status' => 'approve']);
-            if ($dataPay) {
-                Toastr::success('Approved successfully.','Success');
-            } else {
-                Toastr::error('Approved fail','Error');
+                    // 🔹 Search employee
+                    $q->orWhereHas('user', function ($q2) use ($searchValue) {
+                        $q2->where('number_employee', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_kh', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_en', 'like', "%{$searchValue}%");
+                    });
+                });
             }
-            return redirect()->back();
-            DB::commit();
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Approved fail','Error');
-            return redirect()->back();
+            $recordsTotal = (clone $query)->count();
+            $recordsFiltered = $query->count();
+
+            // Pagination
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+
+            // 🔥 HANDLE "ALL"
+            if ($limit == -1) {
+                $data = $query->get(); // get all rows
+            } else {
+                $data = $query->orderBy('id', 'DESC')->offset($start)->limit($limit)->get();
+            }
+
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
         }
+        return view('motor_rentels.index', compact('permission'));
     }
 
-    public function indexPaySearch(Request $request)
-    {
-        $request["monthly"] = true;
-        $data = $this->dataMotorPays->getDatas($request);
-        return response()->json(['data'=>$data]);
+    public function formCreate(Request $request) {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "motor-rentel/list")->first();
+        $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10",'3','4','5','6','7','8','9'])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission)use ($permission) {
+            if ($RolePermission == 'Employee') {
+                if($permission->is_access == "1"){
+                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }else{
+                    $query->where('users.id',Auth::user()->id);
+                }
+            }
+            if ($RolePermission == 'HOD') {
+                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
+            }
+            if ($RolePermission == 'HR') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->get();
+        if ($request->ajax()) {
+            $dataForms = FormRental::where("status", 0)->with(['rentalRate', 'fields', 'createdBy'])->get();
+            return response()->json([
+                'dataForms' => $dataForms
+            ]);
+        }
+        
+        return view('motor_rentels.form_create', compact(['employees']));
     }
 
-    public function detail(Request $request)
-    {
-        $data = MotorRentalDetail::where("id", $request->id)->first();
-        return view('motor_rentels.detail', compact('data'));
+    public function formEdit(Request $request, $id) {
+        $data = MotorRentel::where("id", $id)->firstOrFail();
+        $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10",'3','4','5','6','7','8','9'])->get();
+        if ($request->ajax()) {
+            return response()->json([
+                'dataForms' => $data
+            ]);
+        }
+        return view('motor_rentels.form_edit', compact('employees', 'data'));
     }
- 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -237,272 +172,63 @@ class MotorRentelController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            Activity::all()->last();
-            $data = $request->all();
-            $data['status'] = 1;
-            $data['created_by'] = Auth::user()->id;
-            $motor = MotorRentel::create($data);
-            Toastr::success('Created successfully.', 'Success');
-            $getData = MotorRentel::with('user')->where("id", $motor->id)->first();
-            if ($request->status_print) {
-                return response()->json([
-                    'success' => $getData,
-                ]);
-            }else{
-                return redirect()->back();
-            }
-            DB::commit();
-        } catch (\Throwable $exp) {
-            DB::rollback();
-            Toastr::error('Created fail.', 'Error');
-        }
-    }
-
-    public function storePay(Request $request)
-    {
         DB::beginTransaction();
         try {
+            // 1. ឆែកមើល Duplicate Employee
+            $isDuplicateInDB = DB::table('motor_rentels')
+                ->where('employee_id', $request->employee_id)
+                ->whereNull('deleted_at')
+                ->exists();
 
-            // $month = Carbon::now()->month;
-            // $year = Carbon::now()->year;
-            $month = Carbon::createFromDate($request->from_date)->format('m');
-            $year = Carbon::createFromDate($request->from_date)->format('Y');
-
-            MotorRentalDetail::where('status',null)->delete();
-
-            // **** Logic Public Holiday
-            $holidays = Holiday::where('from', '<=', $request->to_date)
-            ->where('to', '>=', $request->from_date)
-            ->get();
-
-            $totaHolidays = 0;
-            if (count($holidays) > 0){
-                foreach ($holidays as $key => $hl) {
-                    $totaHolidays += Helper::countWorkingDays($hl->from, $hl->to);
+            if ($isDuplicateInDB) {
+                DB::rollBack();
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json([
+                        'status' => 400,
+                        'error' => "Duplicate Employee.",
+                        'message' => "Employee នេះមានក្នុងប្រព័ន្ធរួចហើយ!"
+                    ], 400);
                 }
+                Toastr::error('Duplicate Employee.', 'Error');
+                return redirect()->back();
             }
-            // **** end
 
-            // count current last day of the month
-            $motorRentals = MotorRentel::leftJoin('users', 'motor_rentels.employee_id', '=', 'users.id')
-                            ->select(
-                                'motor_rentels.*',
-                                'users.employee_name_en',
-                                'users.employee_name_kh',
-                                'users.number_employee',
-                                'users.branch_id',
-                                'users.department_id',
-                            )
-                            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                                if ($RolePermission == 'Employee') {
-                                    if(permissionAccess("m5-s3","is_access")->value == "1"){
-                                        $query->where("users.department_id", Auth::user()->department_id);
-                                        $query->where("users.branch_id", Auth::user()->branch_id);
-                                    }else{
-                                        $query->where('users.id',Auth::user()->id);
-                                    }
-                                }
-                                if ($RolePermission == 'HOD') {
-                                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
-                                }
-                                if ($RolePermission == 'BM' || $RolePermission == 'HR') {
-                                    $query->where("users.branch_id", Auth::user()->branch_id);
-                                }
-                            })
-                            ->where('start_date', '<=', $request->to_date)
-                            ->where(function ($query) use ($request) {
-                                $query->where('motor_rentels.resigned_date', '>=', $request->from_date)
-                                      ->orWhereNull('motor_rentels.resigned_date');
-                            })
-                            ->get();
-            
-            foreach ($motorRentals as $key => $motor) {
-
-                // **** Logic count total request leave
-                $dataLeaveRequest = LeaveRequest::where('employee_id', $motor->employee_id)
-                ->whereIn('status', ["approved_hod", "approved_hod", "approved"])
-                ->where('start_date', '<=', $request->to_date)
-                ->where('end_date', '>=', $request->from_date)
-                ->get();
-                $totalLeave = 0;
-                if (count($dataLeaveRequest) > 0){
-                    foreach ($dataLeaveRequest as $key => $lr) {
-                        $totalLeave += $lr->number_of_day;
-                    }
-                }
-                // **** end
-            
-
-                $totalWorkDay = (Helper::countWorkingDays($request->from_date, $request->to_date) - $totaHolidays - $totalLeave);
-                // **** price motor by year
-                $ageMotorrentel = Helper::calculateAgeMotor($motor->product_year);
-                $priceMotorRentel = 0;
-                if ($ageMotorrentel >= 0 && $ageMotorrentel <= 5) {
-                    $priceMotorRentel = 30;
-                } elseif ($ageMotorrentel > 5 && $ageMotorrentel <= 7) {
-                    $priceMotorRentel = 25;
-                } elseif ($ageMotorrentel > 7 && $ageMotorrentel <= 10) {
-                    $priceMotorRentel = 20;
-                }
-
-                // **** logic pay adjustment by month and year
-                $adjust_amount_exclude = 0;
-                $adjust_amount_tabple_exclude = 0;
-                $adjust_amount_include = 0;
-                $adjust_amount_tabple_include = 0;
-                $adjust_amount_kh = 0;
-                $adjust_amount_engine_oil = 0;
-                $adjusts = MotorAdjustment::where('employee_id',$motor->employee_id)
-                ->where('adjustment_date', '<=', $request->to_date)
-                ->where('adjustment_date', '>=', $request->from_date)
-
-                // ->whereMonth('adjustment_date', $month)
-                // ->whereYear('adjustment_date', $year)
-                ->first();
-                
-                if ($adjusts) {
-                    $adjust_amount_kh =  $adjusts->amount_kh;
-                    $adjust_amount_engine_oil = $adjusts->amount_engine_oil;
-                    if ($adjusts->adjustment_type == "include_taxe") {
-                        $adjust_amount_include =  $adjusts->amount_usd;
-                        $adjust_amount_tabple_include = $adjusts->amount_table_usd;
-                    }else{
-                        $adjust_amount_exclude = $adjusts->amount_usd;
-                        $adjust_amount_tabple_exclude = $adjusts->amount_table_usd;
-                    }
-                }
-
-                // **** login pay by start date on tablet
-                $amount_price_taplab_rentel = $motor->price_taplab_rentel;
-                if ($motor->status == 1 && ($motor->start_date_taplab >= $request->from_date && $motor->start_date_taplab <= $request->to_date)) {
-                    if ($motor->start_date_taplab == $request->from_date) {
-                       $amount_price_taplab_rentel = $motor->price_taplab_rentel;
-                    }else{
-                        $totalWorkingStartTablet = Helper::countWorkingDays($motor->start_date_taplab, $request->to_date);
-                        $totalDay = Helper::countWorkingDays($request->from_date, $request->to_date);
-                        $amountTaplabRentelInDayStartTablet = ($motor->price_taplab_rentel / $totalDay);
-                        $amount_price_taplab_rentel = ($amountTaplabRentelInDayStartTablet * $totalWorkingStartTablet);
-                    }
-                }
-
-                // **** login pay by start date on motor
-                $amount_price_motor_rentel = $priceMotorRentel;
-                $amount_price_engine_oil = $motor->price_engine_oil;
-                
-                if ($motor->status == 1 && ($motor->start_date >= $request->from_date && $motor->start_date <= $request->to_date)) {
-
-                    // **** Logic Public Holiday
-                    $holidays = Holiday::where('from', '<=', $request->to_date)
-                    ->where('to', '>=', $motor->start_date)
-                    ->get();
-
-                    $totaHolidayStart = 0;
-                    if (count($holidays) > 0){
-                        foreach ($holidays as $key => $hl) {
-                            $totaHolidayStart += Helper::countWorkingDays($hl->from, $hl->to);
-                        }
-                    }
-                    // **** end
-
-                    if ($motor->start_date == $request->from_date) {
-                        $amount_price_motor_rentel = $priceMotorRentel;
-                        $amount_price_engine_oil = $motor->price_engine_oil;
-                        $totalWorkDay = (Helper::countWorkingDays($request->from_date, $request->to_date) - $totaHolidayStart - $totalLeave);
-                    }else{
-
-                        $totalWorkingStart = Helper::countWorkingDays($motor->start_date, $request->to_date);
-                        $totalDay = Helper::countWorkingDays($request->from_date, $request->to_date);
-                        $amountMotorPriceInDayStart = $priceMotorRentel / $totalDay;
-                        $totalWorkDay = ($totalWorkingStart - $totaHolidayStart - $totalLeave);
-                        $amountEngineOilInDayStart = ($motor->price_engine_oil / $totalDay);
-                        $amount_price_motor_rentel = ($amountMotorPriceInDayStart * $totalWorkingStart);
-                        $amount_price_engine_oil = ($amountEngineOilInDayStart * $totalWorkingStart);
-                    }
-                }
-
-                // **** Logic pay resigned date
-                if ($motor->status == 0 && ($motor->resigned_date >= $request->from_date && $motor->resigned_date <= $request->to_date)) {
-                    
-                    // **** Logic Public Holiday
-                    $holidays = Holiday::where('from', '<=', $motor->resigned_date)
-                    ->where('to', '>=', $request->from_date)
-                    ->get();
-
-                    $totaHolidaysResign = 0;
-                    if (count($holidays) > 0){
-                        foreach ($holidays as $key => $hl) {
-                            $totaHolidaysResign += Helper::countWorkingDays($hl->from, $hl->to);
-                        }
-                    }
-                    // **** end
-
-                    if ($motor->resigned_date == $request->to_date) {
-                        $amount_price_motor_rentel = $priceMotorRentel;
-                        $amount_price_engine_oil = $motor->price_engine_oil;
-                        $amount_price_taplab_rentel = $motor->price_taplab_rentel;
-                        $totalDay = Helper::countWorkingDays($request->from_date, $request->to_date);
-                        $totalWorkDay = ($totalDay - $totaHolidaysResign - $totalLeave);
-                    }else{
-                        $totalWorkingResign = Helper::countWorkingDays($request->from_date, $motor->resigned_date);
-                        $totalDay = Helper::countWorkingDays($request->from_date, $request->to_date);
-                        $totalWorkDay = ($totalWorkingResign - $totaHolidaysResign - $totalLeave);
-                        
-                        $amountMotorPriceInDayResign = $priceMotorRentel / $totalDay;
-                        $amountEngineOilInDayResign = $motor->price_engine_oil / $totalDay;
-                        $amount_price_motor_rentel = ($amountMotorPriceInDayResign * $totalWorkingResign);
-                        $amount_price_engine_oil = ($amountEngineOilInDayResign * $totalWorkingResign);
-
-                        $amountTaplabRentelInDayResign = $motor->price_taplab_rentel / $totalDay;
-                        $amount_price_taplab_rentel = ($amountTaplabRentelInDayResign * $totalWorkingResign);
-                    }
-                }
-                $data = [
-                    'employee_id' => $motor->employee_id,
-                    'motor_rental_id' => $motor->id,
-                    'start_date' => $motor->start_date,
-                    'end_date' => $motor->end_date,
-                    'product_year' => $motor->product_year,
-                    'expired_year' => $motor->expired_year,
-                    'motor_color' => $motor->motor_color,
-                    'shelt_life' => $ageMotorrentel,
-                    'number_plate' => $motor->number_plate,
-                    'motorcycle_brand' => $motor->motorcycle_brand,
-                    'category' => $motor->category,
-                    'body_number' => $motor->body_number,
-                    'engine_number' => $motor->engine_number,
-                    'total_gasoline' => $motor->total_gasoline,
-                    'total_work_day' => $totalWorkDay,
-                    'price_engine_oil' => $motor->price_engine_oil,
-                    'price_motor_rentel' => ($motor->is_motor_fee !=1 ? $priceMotorRentel: 0),
-                    'taplab_rentel' => $motor->taplab_rentel,
-                    'taplab_imei' => $motor->taplab_imei,
-                    'start_date_taplab' => $motor->start_date_taplab,
-                    'price_taplab_rentel' => $motor->price_taplab_rentel,
-                    'resigned_date' => $motor->resigned_date,
-                    'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
-                    'amount_price_motor_rentel'=> ($motor->is_motor_fee !=1 ? $amount_price_motor_rentel : 0),
-                    'amount_price_engine_oil' => $amount_price_engine_oil,
-                    'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
-                    'adjust_amount_exclude'         => $adjust_amount_exclude,
-                    'adjust_amount_tabple_exclude'  => $adjust_amount_tabple_exclude,   
-                    'adjust_amount_include'         => $adjust_amount_include,
-                    'adjust_amount_tabple_include'  => $adjust_amount_tabple_include,
-                    'adjust_amount_kh'              => $adjust_amount_kh,
-                    'adjust_amount_engine_oil'      => $adjust_amount_engine_oil,
-                    'from_date'                     => $request->from_date,
-                    'to_date'                       => $request->to_date,
-                    'tax_rate' => $request->tax_rate,
-                    'created_by' => Auth::user()->id
-                ];
-                MotorRentalDetail::create($data);
-            }
+            // 2. រៀបចំ Data សម្រាប់ Save
+            $data = [
+                'employee_id'       => $request->employee_id,
+                'form_rental'       => json_encode($request->forms), // Encode Array forms ទៅជា JSON
+                'payment_status'    => "new",
+                'status'            => 1,
+                'created_by'        => Auth::id(),
+            ];
+            $motor = MotorRentel::create($data);
             DB::commit();
-            Toastr::success('Created successfully.', 'Success');
+
+            // 4. Response ត្រឡប់ទៅវិញតាម Ajax
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'រក្សាទុកទិន្នន័យបានជោគជ័យ!',
+                    'data' => $motor
+                ]);
+            }
+
+            Toastr::success('Data saved successfully.', 'Success');
             return redirect()->back();
-        } catch (\Throwable $exp) {
-            DB::rollback();
-            Toastr::error('Created fail.', 'Error');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'status' => 500,
+                    'error' => $e->getMessage(),
+                    'message' => 'មានបញ្ហាក្នុងការ Save ទិន្នន័យ!'
+                ], 500);
+            }
+
+            Toastr::error('Something went wrong!', 'Error');
+            return redirect()->back();
         }
     }
 
@@ -515,100 +241,147 @@ class MotorRentelController extends Controller
     public function edit(Request $request)
     {
         $data = MotorRentel::where("id", $request->id)->first();
-        $employee = User::whereIn("emp_status", ["Probation", "1", "2", "10"])->get();
+        $employee = User::whereIn("emp_status", ["Probation", "1", "2", "10",'3','4','5','6','7','8','9'])->get();
         return response()->json([
             'success' => $data,
             'employee' => $employee,
         ]);
     }
 
-    public function export()
-    {
-        $dataMotorrentels = MotorRentel::leftJoin('users', 'motor_rentels.employee_id', '=', 'users.id')->orderBy('id', 'desc')
-        ->select(
-            'motor_rentels.*',
-            'users.employee_name_en',
-            'users.employee_name_kh',
-            'users.number_employee',
-            'users.branch_id',
-            'users.department_id',
-            'users.resign_date',
-        )
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'Employee') {
-                if(permissionAccess("m5-s1","is_access")->value == "1"){
-                    $query->where("users.department_id", Auth::user()->department_id);
-                    $query->where("users.branch_id", Auth::user()->branch_id);
-                }else{
-                    $query->where('users.id',Auth::user()->id);
-                }
-            }
-            if ($RolePermission == 'HOD') {
-                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
-            }
-            if ($RolePermission == 'BM' || $RolePermission == 'HR') {
-                $query->where("users.branch_id", Auth::user()->branch_id);
-            }
-        })
-        ->get();
-        $export = new ExportMotorRentel($dataMotorrentels);
-        return Excel::download($export, 'MotorRentel.xlsx');
-    }
-
     public function import(Request $request)
     {
-        $file = $request->file;
-        $filesize = filesize($file);
-        $extension = $request->file->extension();
-        $spreadsheet = IOFactory::load($file);
-        $allDataInSheet = $spreadsheet->getActiveSheet()->toArray();
-        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
-            $userID = Auth::user()->id;
-            $i = 0;
-            $re = 1;
-            foreach ($allDataInSheet as $csv) {
-                $i++;
-                if ($i != 1) {
-                    $employee = User::where("number_employee", $csv[0])->first();
-                    $start_date = Carbon::createFromDate($csv[1])->format('Y-m-d'); // 2023-04-19
-                    $end_date = Carbon::createFromDate($csv[2])->format('Y-m-d'); // 2023-04-19
-                    $start_date_taplab = $csv[18] ? Carbon::createFromDate($csv[18])->format('Y-m-d') : null; // 2023-04-19
-                    if ($employee) {
-                        $arr = [
-                            'employee_id'           => $employee->id,
-                            'start_date'            => $start_date,
-                            'end_date'              => $end_date,
-                            'product_year'          => $csv[3],
-                            'expired_year'          => $csv[4],
-                            'shelt_life'            => $csv[5],
-                            'number_plate'          => $csv[6],
-                            'motorcycle_brand'      => $csv[7],
-                            'category'              => $csv[8],
-                            'body_number'           => $csv[9],
-                            'engine_number'         => $csv[10],
-                            'motor_color'           => $csv[11],
-                            'total_gasoline'        => $csv[12],
-                            'total_work_day'        => $csv[13],
-                            'price_engine_oil'      => $csv[14],
-                            'price_motor_rentel'    => $csv[15],
-                            'taplab_rentel'         => $csv[16],
-                            'taplab_imei'           => $csv[17],
-                            'start_date_taplab'     => $start_date_taplab,
-                            'price_taplab_rentel'   => $csv[19],
-                            'status' => 1,
-                            'created_by'        => $userID,
-                            'created_at'       => Carbon::now(),
-                        ];
-                        DB::table('motor_rentels')->insert($arr);
-                    }
-                }
-            }
-            return 1;
-        } else {
-            return 0;
+        $file = $request->file('file');
+        
+        if (!$file) {
+            return response()->json(['status' => 0, 'message' => 'សូមជ្រើសរើស File!']);
         }
-    }
 
+        $extension = strtolower($file->getClientOriginalExtension());
+
+        if (in_array($extension, ['xlsx', 'xls', 'csv'])) {
+            $spreadsheet = IOFactory::load($file);
+            $allDataInSheet = $spreadsheet->getActiveSheet()->toArray();
+
+            $userID = Auth::id();
+            $importedCount = 0;
+            $failedRows = [];
+            $excelEmployeeIds = []; // សម្រាប់កត់ត្រាឆែក Duplicate ក្នុង Excel Sheet ខ្លួនឯង
+
+            foreach ($allDataInSheet as $index => $csv) {
+                // រំលង Header Row (Row ទី ១)
+                if ($index === 0) continue;
+
+                $rowNum          = $index + 1;
+                $employee_no     = trim($csv[0] ?? '');
+                $start_date_raw  = trim($csv[1] ?? '');
+                $product_year    = trim($csv[2] ?? '');
+                $motor_brand     = trim($csv[3] ?? '');
+                $number_plate    = trim($csv[4] ?? '');
+                $category        = trim($csv[5] ?? '');
+                $body_number     = trim($csv[7] ?? '');
+                $engine_number   = trim($csv[8] ?? '');
+
+                // 1. ឆែករក Employee តាម number_employee
+                $employee = User::where("number_employee", $employee_no)->first();
+
+                // 2. ឆែក Required Fields
+                if (
+                    empty($employee) || 
+                    empty($start_date_raw) || 
+                    empty($product_year) || 
+                    empty($motor_brand) || 
+                    empty($number_plate) || 
+                    empty($category) || 
+                    empty($body_number) || 
+                    empty($engine_number)
+                ) {
+                    $reason = empty($employee) ? "រកមិនឃើញ Employee ID ក្នុងប្រព័ន្ធ" : "ខ្វះ Required Fields";
+                    $failedRows[] = [
+                        'row' => $rowNum,
+                        'employee_no' => $employee_no ?: 'N/A',
+                        'reason' => $reason
+                    ];
+                    continue;
+                }
+
+                // 3. ឆែក Duplicate employee_id ក្នុង Excel File ខ្លួនឯង
+                if (in_array($employee->id, $excelEmployeeIds)) {
+                    $failedRows[] = [
+                        'row' => $rowNum,
+                        'employee_no' => $employee_no,
+                        'reason' => "Employee នេះមានស្ទួនក្នុង Excel File"
+                    ];
+                    continue;
+                }
+
+                // 4. ឆែក Duplicate employee_id ក្នុង Database (Table motor_rentels)
+                $isDuplicateInDB = DB::table('motor_rentels')
+                    ->where('employee_id', $employee->id)
+                    ->whereNull('deleted_at')
+                    ->exists();
+
+                if ($isDuplicateInDB) {
+                    $failedRows[] = [
+                        'row' => $rowNum,
+                        'employee_no' => $employee_no,
+                        'reason' => "Employee នេះមាន Record រួចហើយក្នុងប្រព័ន្ធ (Duplicate Employee)"
+                    ];
+                    continue;
+                }
+
+                // 5. Format Dates
+                try {
+                    $start_date = Carbon::parse($start_date_raw)->format('Y-m-d');
+                    $start_date_taplab = !empty($csv[9]) ? Carbon::parse($csv[9])->format('Y-m-d') : null;
+                } catch (\Exception $e) {
+                    $failedRows[] = [
+                        'row' => $rowNum,
+                        'employee_no' => $employee_no,
+                        'reason' => "Format កាលបរិច្ឆេទមិនត្រឹមត្រូវ"
+                    ];
+                    continue;
+                }
+
+                // 6. Insert ចូល Database
+                $brand = RentalBrand::where('brand_name', $motor_brand)->first() 
+                        ?? RentalBrand::where('brand_name', 'Other')->first();
+                                    
+                $arr = [
+                    'employee_id'           => $employee->id,
+                    'start_date'            => $start_date,
+                    'product_year'          => $product_year,
+                    'motor_brand_id'        => $brand->id,
+                    'motorcycle_brand'      => $brand->brand_name,
+                    'number_plate'          => $number_plate,
+                    'category'              => $category,
+                    'motor_color'           => trim($csv[6] ?? ''),
+                    'body_number'           => $body_number,
+                    'engine_number'         => $engine_number,
+                    'start_date_taplab'     => $start_date_taplab,
+                    'taplab_rentel'         => trim($csv[10] ?? ''),
+                    'taplab_imei'           => trim($csv[11] ?? ''),
+                    'price_taplab_rentel'   => trim($csv[12] ?? 0),
+                    'status'                => 1,
+                    'created_by'            => $userID,
+                    'created_at'            => Carbon::now(),
+                ];
+
+                DB::table('motor_rentels')->insert($arr);
+                
+                // កត់ត្រា ID ទុកឆែក Duplicate ក្នុង Excel Row បន្ទាប់ៗ
+                $excelEmployeeIds[] = $employee->id;
+                $importedCount++;
+            }
+
+            return response()->json([
+                'status'         => 1,
+                'imported_count' => $importedCount,
+                'failed_rows'    => $failedRows
+            ]);
+        }
+
+        return response()->json(['status' => 0, 'message' => 'ប្រភេទ File មិនត្រឹមត្រូវ!']);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -619,44 +392,127 @@ class MotorRentelController extends Controller
     public function update(Request $request)
     {
         try {
-            $data = MotorRentel::find($request->id);
-            $data['employee_id']        = $request->employee_id;
-            $data['number_plate']       = $request->number_plate;
-            $data['motorcycle_brand']   = $request->motorcycle_brand;
-            $data['category']           = $request->category;
-            $data['body_number']        = $request->body_number;
-            $data['engine_number']      = $request->engine_number;
-            $data['start_date']         = $request->start_date;
-            $data['end_date']           = $request->end_date;
-            $data['product_year']       = $request->product_year;
-            $data['expired_year']       = $request->expired_year;
-            $data['shelt_life']         = $request->shelt_life;
-            $data['total_gasoline']     = $request->total_gasoline;
-            $data['total_work_day']     = $request->total_work_day;
-            $data['price_engine_oil']   = $request->price_engine_oil;
-            $data['is_motor_fee']   = $request->is_motor_fee;
-            $data['price_motor_rentel'] = $request->price_motor_rentel;
-            $data['taplab_rentel']      = $request->taplab_rentel;
-            $data['price_taplab_rentel'] = $request->price_taplab_rentel;
-            $data['motor_color']         = $request->motor_color;
-            $data['taplab_imei']        = $request->taplab_imei;
-            $data['start_date_taplab']  = $request->start_date_taplab;
-            $data['updated_by']         = Auth::user()->id;
+            $id          = $request->input('id');
+            $employee_id = $request->input('employee_id');
+            $forms       = $request->input('forms', []);
+
+            // 1. Check Duplicate Employee (រំលង ID ខ្លួនឯង)
+            $isDuplicateInDB = DB::table('motor_rentels')
+                ->where('employee_id', $employee_id)
+                ->where('id', '!=', $id)
+                ->whereNull('deleted_at')
+                ->exists();
+
+            if ($isDuplicateInDB) {
+                // Return Response 422 សម្រាប់ AJAX (Swal.fire នឹងបង្ហាញ)
+                if ($request->ajax() || $request->wantsJson() || $request->status_print) {
+                    return response()->json([
+                        'status'  => 422,
+                        'message' => "បុគ្គលិកនេះមានក្នុងប្រព័ន្ធរួចរាល់ហើយ (Duplicate Employee)!",
+                        'errors'  => ['employee_id' => ['Duplicate Employee.']]
+                    ], 422);
+                }
+                
+                Toastr::error('Duplicate Employee.', 'Error');
+                return redirect()->back();
+            }
+            
+            // 2. Find & Update Data
+            $data = MotorRentel::findOrFail($id);
+            $data->employee_id = $employee_id;
+
+            // រៀបចំ JSON payload
+            $data->form_rental = is_string($forms) ? $forms : json_encode($forms);
+            $data->payment_status  = ($data->payment_status === 'new' || empty($data->payment_status)) ? 'new' : 'update';
+            $data->updated_by  = Auth::id();
             $data->save();
-            Toastr::success('Updated successfully.', 'Success');
-            $getData = MotorRentel::with('user')->where("id", $request->id)->first();
+
+            // 3. Response Processing
+            $getData = MotorRentel::with('user')->find($id);
+
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'status'  => 200,
+                    'success' => true,
+                    'message' => 'ធ្វើបច្ចុប្បន្នភាពទិន្នន័យបានជោគជ័យ!',
+                    'data'    => $getData
+                ]);
+            }
+
             if ($request->status_print) {
                 return response()->json([
                     'success' => $getData,
                 ]);
-            }else{
-                return redirect()->back();
             }
-            DB::commit();
+
+            Toastr::success('Updated successfully.', 'Success');
+            return redirect()->back();
+
         } catch (\Exception $e) {
-            DB::rollback();
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'status'  => 500,
+                    'message' => 'Updated fail: ' . $e->getMessage()
+                ], 500);
+            }
+
             Toastr::error('Updated fail.', 'Error');
             return redirect()->back();
+        }
+    }
+   public function upload(Request $request)
+    {
+        // 1. Validation លើ File និង Request ID (កំណត់ 3MB = 3072 KB)
+        $request->validate([
+            'id'   => 'required|exists:motor_rentels,id',
+            'file' => 'required|file|mimes:pdf,zip,rar,7z|max:3072', 
+        ]);
+
+        DB::beginTransaction();
+        try {
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+
+                // 2. បង្កើតឈ្មោះ File ថ្មីដើម្បីការពារការជាន់ឈ្មោះគ្នា
+                $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+
+                // 3. កំណត់ Destination Path
+                $destinationPath = public_path('uploads/rentalContracts');
+
+                // 4. បង្កើត Folder បើមិនទាន់មាន
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0777, true);
+                }
+
+                // 5. Move File ចូលទៅក្នុង Folder ជាក់ស្តែង
+                $file->move($destinationPath, $filename);
+
+                // 6. Update ទិន្នន័យទៅក្នុង Database
+                MotorRentel::where('id', $request->id)->update([
+                    'contract'   => $filename,
+                    'updated_by' => Auth::id(),
+                    'updated_at' => now(),
+                ]);
+
+                DB::commit();
+
+                return response()->json([
+                    'status'   => 200,
+                    'message'  => 'File uploaded successfully.',
+                    'filename' => $filename,
+                ]);
+            }
+
+            return response()->json(['message' => 'No file selected.'], 400);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status'  => 500,
+                'message' => 'Upload failed.',
+                'error'   => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -675,6 +531,57 @@ class MotorRentelController extends Controller
             return response()->json(['message' => $exp->getMessage()], 500);
         }
     }
+
+    public function terminate(Request $request) 
+    {
+        // Validate Input 
+        $request->validate([
+            'id'             => 'required',
+            'form_rental_id' => 'required',
+            'terminate_date' => 'required',
+        ]);
+
+        DB::beginTransaction(); // បន្ថែម beginTransaction ដើម្បីសុវត្ថិភាព Database
+        try {
+            $data = MotorRentel::where('id', $request->id)->firstOrFail();
+            
+            // 1. Decode form_rental JSON មកជា PHP Array
+            $forms = is_string($data->form_rental) ? json_decode($data->form_rental, true) : $data->form_rental;
+
+            if (!is_array($forms)) {
+                $forms = [];
+            }
+
+            // 2. Loop រក form_rental_id ដែលត្រូវគ្នា រួច Append/Update terminate_date
+            foreach ($forms as $key => $form) {
+                if (isset($form['form_rental_id']) && $form['form_rental_id'] == $request->form_rental_id) {
+                    $forms[$key]['terminate_date'] = $request->terminate_date;
+                    $forms[$key]['status'] = 'terminated'; // (Optional) បន្ថែម status បញ្ជាក់ថាឈប់ជួល
+                    break;
+                }
+            }
+
+            // 3. Encode និង រក្សាទុកចូល Column form_rental
+            $data->form_rental = json_encode($forms);
+            $data->updated_by  = Auth::id();
+            $data->save();
+
+            DB::commit();
+
+            return response()->json([
+                'status'  => 200,
+                'message' => 'The process has been completed successfully.'
+            ]);
+
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json([
+                'status'  => 500,
+                'message' => 'Error: ' . $exp->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -685,18 +592,6 @@ class MotorRentelController extends Controller
     {
         try {
             MotorRentel::destroy($request->id);
-            Toastr::success('Deleted successfully.', 'Success');
-            return redirect()->back();
-        } catch (\Exception $e) {
-            DB::rollback();
-            Toastr::error('Delete fail.', 'Error');
-            return redirect()->back();
-        }
-    }
-    public function deletePay(Request $request)
-    {
-        try {
-            MotorRentalDetail::whereIn('id',explode(",",$request->id))->delete();
             Toastr::success('Deleted successfully.', 'Success');
             return redirect()->back();
         } catch (\Exception $e) {

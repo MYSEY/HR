@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('leave_details', function (Blueprint $table) {
             $table->id();
             $table->integer('leave_request_id');
+            $table->integer('employee_id');
+            $table->string('status')->nullable();
             $table->date('date');
             $table->string('number_of_day')->nullable();
             $table->timestamps();

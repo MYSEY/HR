@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\permissions;
 use App\Models\Bonus;
 use App\Helpers\Helper;
 use App\Models\Branchs;
@@ -31,7 +32,7 @@ use App\Models\PreviewGrossSalaryPay;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\EmployeeRepository;
-use App\Repositories\Admin\MotorRentalRepository;
+use App\Repositories\Admin\PaymentRentalRepository;
 use App\Repositories\Admin\SeverancePayRepository;
 
 class PayrollReportController extends Controller
@@ -43,7 +44,7 @@ class PayrollReportController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function __construct(MotorRentalRepository $dataMotors)
+    public function __construct(PaymentRentalRepository $dataMotors)
     {
         $this->dataMotor = $dataMotors;
     }
@@ -468,25 +469,68 @@ class PayrollReportController extends Controller
         $Seniority = $this->dataMotor->getDataSenorityPay($request);
         return Excel::download(new ExportSeniorityPay($Seniority), 'seniority_pay.xlsx');
     }
-    public function motorrentel(Request $request)
+    public function rental(Request $request)
     {
-        if (permissionAccess("m7-s12","is_view")->value != "1") {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("url", "reports/rental")->first();
+        if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
         $data = $this->dataMotor->getDatas($request);
+        if ($request->ajax()) {
+            $query = $this->dataMotor->getDatas($request);
+               
+            $searchValue = $request->input('search.value');
+
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+
+                    // 🔹 Search main table
+                    $q->where('payment_rentals.id', 'like', "%{$searchValue}%")
+                    ->orWhere('payment_rentals.from_date', 'like', "%{$searchValue}%");
+
+                    // 🔹 Search employee
+                    $q->orWhereHas('user', function ($q2) use ($searchValue) {
+                        $q2->where('number_employee', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_kh', 'like', "%{$searchValue}%")
+                        ->orWhere('employee_name_en', 'like', "%{$searchValue}%")
+                        // 🔥 បន្ថែមការ Search លើ Position (តាម Column ឈ្មោះ position)
+                        ->orWhereHas('position', function ($q3) use ($searchValue) {
+                            $q3->where('name_english', 'like', "%{$searchValue}%")
+                            ->orWhere('name_khmer', 'like', "%{$searchValue}%");
+                        });
+                    });
+                });
+            }
+            $recordsTotal = (clone $query)->count();
+            $recordsFiltered = $query->count();
+
+            // Pagination
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+
+            if ($limit == -1) {
+                $data = $query->get();
+            } else {
+                $data = $query->orderBy('id', 'DESC')->offset($start)->limit($limit)->get();
+            }
+            return response()->json([
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
+
         $branchs = Branchs::get();
         $departments = Department::get();
-        if ($request->research) {
-            return response()->json(['data'=>$data]);
-        }else {
-            return view('reports.motor_rentel_report', compact('data', 'branchs', 'departments'));
-        }
+        return view('reports.motor_rentel_report', compact('data', 'branchs', 'departments','permission'));
     }
     // Export List motor rentel in payroll
     public function export(Request $request)
     {
-        $data = $this->dataMotor->getDatas($request);
-        return Excel::download(new ExportMotorRentel($data), 'MotorRentel.xlsx');
+        $data = $this->dataMotor->getDatas($request)->orderBy('id', 'desc')->get();
+        $date = $request->get('date') ?? date('Y-m-d');
+        return Excel::download(new ExportMotorRentel($data, $date), "MotorRental-Reports-".$date.'.xlsx');
     }
     public function grossSalaryPayExport(Request $request){
         return Excel::download(new ExportGrossSalaryPay($request), 'Gross Salary.xlsx');

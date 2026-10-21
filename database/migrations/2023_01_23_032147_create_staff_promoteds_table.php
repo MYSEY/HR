@@ -18,7 +18,9 @@ class CreateStaffPromotedsTable extends Migration
             $table->id();
             $table->integer('employee_id')->nullable();
             $table->text('posit_id')->nullable();
+            $table->integer('position_from_id')->nullable();
             $table->text('position_promoted_to')->nullable();
+            $table->integer('position_to_id')->nullable();
             $table->text('depart_id')->nullable();
             $table->text('department_promoted_to')->nullable();
             $table->date('date')->nullable();

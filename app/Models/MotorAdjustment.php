@@ -15,10 +15,9 @@ class MotorAdjustment extends Model
     protected $fillable = [
         'employee_id',
         'amount_usd',
-        'amount_table_usd',
         'amount_kh',
-        'amount_engine_oil',
         'adjustment_date',
+        'type',
         'adjustment_type',
         'description',
         'created_by',

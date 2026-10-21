@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ChildrenRequest;
 use Spatie\Activitylog\Models\Activity;
 use App\Http\Requests\EmployeeContactRequest;
+use App\Helpers\Helper;
 
 class EmployeeProfileController extends Controller
 {
@@ -236,15 +237,31 @@ class EmployeeProfileController extends Controller
         }
     }
     public function createPromote(Request $request){
+        DB::beginTransaction();
         try{
-            StaffPromoted::create([
-                'employee_id'   => $request->employee_id,
-                'posit_id'      => $request->posit_id,
-                'position_promoted_to'      => $request->position_promoted_to,
-                'depart_id'     => $request->depart_id,
-                'department_promoted_to'     => $request->department_promoted_to,
-                'date'          => $request->promote_date,
-                'created_by'    => Auth::id(),
+            if (Helper::getLang() == 'en') {
+                $positionFrom = Position::where("name_english", $request->posit_id)->first();
+                $positionTo   = Position::where("name_english", $request->position_promoted_to)->first();
+            } else {
+                $positionFrom = Position::where("name_khmer", $request->posit_id)->first();
+                $positionTo   = Position::where("name_khmer", $request->position_promoted_to)->first();
+            }
+            $staffPromoted = StaffPromoted::create([
+                'employee_id'            => $request->employee_id,
+                'posit_id'               => $request->posit_id,                      // រក្សាទុកឈ្មោះ position ដើម
+                'position_from_id'       => $positionFrom ? $positionFrom->id : null, // រក្សាទុក ID នៃ Position ចាស់
+                'position_promoted_to'   => $request->position_promoted_to,         // រក្សាទុកឈ្មោះ position ថ្មី
+                'position_to_id'         => $positionTo ? $positionTo->id : null,     // រក្សាទុក ID នៃ Position ថ្មី
+                'depart_id'              => $request->depart_id,
+                'department_promoted_to' => $request->department_promoted_to,
+                'date'                   => $request->promote_date,
+                'created_by'             => Auth::id(),
+            ]);
+            $now = now();
+            User::where('id', $request->employee_id)->update([
+                'position_id' => $positionTo->id,
+                'updated_by'       => Auth::id(),
+                'updated_at'       => $now,
             ]);
 
             DB::commit();
@@ -270,15 +287,31 @@ class EmployeeProfileController extends Controller
     }
     public function updatePromote(Request $request){
         try{
-            $data = StaffPromoted::find();
-            $data['employee_id']               = $request->employee_id;
-            $data['posit_id']                  = $request->posit_id;
-            $data['position_promoted_to']      = $request->position_promoted_to;
-            $data['depart_id']                 = $request->depart_id;
-            $data['department_promoted_to']    = $request->department_promoted_to;
-            $data['date']                      = $request->promote_date;
-            $data['created_by']                = Auth::id();
+            if (Helper::getLang() == 'en') {
+                $positionFrom = Position::where("name_english", $request->posit_id)->first();
+                $positionTo   = Position::where("name_english", $request->position_promoted_to)->first();
+            } else {
+                $positionFrom = Position::where("name_khmer", $request->posit_id)->first();
+                $positionTo   = Position::where("name_khmer", $request->position_promoted_to)->first();
+            }
+
+            $data = StaffPromoted::find($request->id);
+            $data['employee_id']                = $request->employee_id;
+            $data['posit_id']                   = $request->posit_id;
+            $data['position_from_id']           = $positionFrom ? $positionFrom->id : null;
+            $data['position_promoted_to']       = $request->position_promoted_to;
+            $data['position_to_id']             = $positionTo ? $positionTo->id : null;
+            $data['depart_id']                  = $request->depart_id;
+            $data['department_promoted_to']     = $request->department_promoted_to;
+            $data['date']                       = $request->promote_date;
+            $data['created_by']                 = Auth::id();
             $data->save();
+            $now = now();
+            User::where('id', $request->employee_id)->update([
+                'position_id' => $positionTo->id,
+                'updated_by'       => Auth::id(),
+                'updated_at'       => $now,
+            ]);
             DB::commit();
             Toastr::success('Update promoted successfully.','Success');
             return redirect()->back();
