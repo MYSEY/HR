@@ -57,10 +57,12 @@ class MotorRentelController extends Controller
                 'users.resign_date',
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) use ($permission) {
-                if ($RolePermission == 'Employee') {
+                if (in_array($RolePermission, ['Employee', 'DHOD', 'DBM'])) {
                     if($permission->is_access == "1"){
                         $query->where("users.department_id", Auth::user()->department_id);
-                        $query->where("users.branch_id", Auth::user()->branch_id);
+                        if($RolePermission == "DBM"){
+                            $query->where("users.branch_id", Auth::user()->branch_id);
+                        }
                     }else{
                         $query->where('users.id',Auth::user()->id);
                     }
@@ -68,8 +70,16 @@ class MotorRentelController extends Controller
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
-                if ($RolePermission == 'BM' || $RolePermission == 'HR') {
+                if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+                if ($RolePermission == 'HR') {
+                     if($permission->is_access == "1"){
+                        // $query->where("users.department_id", Auth::user()->department_id);
+                        // $query->where("users.branch_id", Auth::user()->branch_id);
+                    }else{
+                        $query->where('users.id',Auth::user()->id);
+                    }
                 }
             })
             ->when($from_date, function ($query, $from_date) {

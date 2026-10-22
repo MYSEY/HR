@@ -58,20 +58,29 @@ class PaymentRentalRepository extends BaseRepository
                 'users.department_id',
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if ($RolePermission == 'Employee') {
+                if (in_array($RolePermission, ['Employee', 'DHOD', 'DBM'])) {
                     if(permissionAccess("m5-s1","is_access")->value == "1" || permissionAccess("m7-s12","is_access")->value == "1"){
                         $query->where("users.department_id", Auth::user()->department_id);
-                        $query->where("users.branch_id", Auth::user()->branch_id);
+                        if($RolePermission == "DBM"){
+                            $query->where("users.branch_id", Auth::user()->branch_id);
+                        }
                     }else{
                         $query->where('users.id',Auth::user()->id);
                     }
-                    // $query->where('users.id',Auth::user()->id);
                 }
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
-                if ($RolePermission == 'BM' || $RolePermission == 'HR') {
+                if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+                if ($RolePermission == 'HR') {
+                    if(permissionAccess("m5-s1","is_access")->value == "1"){
+                        // $query->where("users.department_id", Auth::user()->department_id);
+                        // $query->where("users.branch_id", Auth::user()->branch_id);
+                    }else{
+                        $query->where('users.id',Auth::user()->id);
+                    }
                 }
             })
             ->when($monthly, function ($query, $monthly) {

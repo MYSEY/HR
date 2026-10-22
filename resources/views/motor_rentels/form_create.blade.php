@@ -87,6 +87,7 @@
 <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
 <script src="{{ asset('/admin/js/noty.js') }}"></script>
 <script>
+    const appBaseUrl   = "{{ url('/') }}";
     const submitUrl = "{{ url('motor-rentel/store') }}";
     const listUrl = "{{ url('motor-rentel/list') }}";
     const buttonSubmit = "submit-btn";

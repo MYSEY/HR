@@ -1,5 +1,5 @@
 // កំណត់ Base URL ជា Global ដោយស្វ័យប្រវត្តិ (ករណីមិនបានបញ្ជូនមកពី Blade)
-var appBaseUrl = window.appUrl || window.location.origin;
+// var appBaseUrl = window.appUrl || window.location.origin;
 
 $(function () {
     $(document).ready(function () {

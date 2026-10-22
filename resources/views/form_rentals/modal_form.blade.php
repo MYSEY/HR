@@ -40,6 +40,17 @@
     #formRentalModal .btn-m.p{ background:#9f2e32; border-color:#9f2e32; color:#fff; }
     #formRentalModal .btn-m:disabled{ opacity:.6; cursor:wait; }
     #formRentalModal .act{ display:flex; justify-content:flex-end; gap:8px; margin-top:16px; }
+    #fieldRows{
+        max-height: 45vh;              /* ប្តូរតាមចិត្ត ឧ. 400px ឬ 50vh */
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 2px 6px 2px 2px;      /* កុំឱ្យរង្វង់ focus របស់ input ត្រូវកាត់ */
+        margin-right: -6px;
+        scrollbar-width: thin;         /* Firefox */
+        scrollbar-color: #d9d0d1 transparent;
+    }
+    #fieldRows::-webkit-scrollbar{ width: 6px; }                                  /* Chrome/Edge/Safari */
+    #fieldRows::-webkit-scrollbar-thumb{ background: #d9d0d1; border-radius: 6px; }
 </style>
 <div class="modal fade" id="formRentalModal" tabindex="-1" aria-labelledby="formRentalModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
