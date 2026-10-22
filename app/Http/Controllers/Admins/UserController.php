@@ -638,31 +638,30 @@ class UserController extends Controller
                 $endJoinDate = Carbon::parse($request->start_date);
                 $monthInProbation = $toJoinDate->diffInMonths($endJoinDate);
                 $totalDayInProbation = 1.5 * $monthInProbation;
-                // dd($monthInProbation);
                 //** end */
 
-                //total day in monthsd
+                //** count total day in current month start pass */
                 $start_date = Carbon::createFromDate($request->start_date);
                 $endMonth = Carbon::createFromDate($request->start_date)->endOfMonth();
                 $end_date = Date::createFromDate($endMonth);
                 $commencementDate   = Carbon::parse($start_date);
                 $resumptionDate     = Carbon::parse($end_date);
                 $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + 1;
-                
+                //** end */
+                 
+                //*** ccount from month pass to last month year */
                 $toDate = Carbon::parse($request->start_date);
                 $yearLy = Carbon::now()->format('Y');
                 $fromDate = $yearLy."-12-31";
                 $months = $toDate->diffInMonths($fromDate);
+                //** end */
 
                 if ($toDays < 15) {
                     $totalDay = 0;
-                    $EndMonths = $months - 1;
                 }else if($toDays >= 15 && $toDays <= 20) {
                     $totalDay = 1;
-                    $EndMonths = $months - 1;
                 }else{
                     $totalDay = 1.5;
-                    $EndMonths = $months;
                 }
 
                 $leaveType = LeaveType::get();
@@ -673,7 +672,7 @@ class UserController extends Controller
                     }else {
                         $total_sick_leave = 0;
                     }
-                    $total_pass = $detault_total_day * $EndMonths;
+                    $total_pass = $detault_total_day * $months;
                     $default_annual_leave = $total_pass + $totalDay + $totalDayInProbation;
 
                     if ($lt->type == "annual_leave") {

@@ -307,6 +307,7 @@ return[
 
     "edit"=>"Edit", 
     "edit_roles"=>"Edit Roles", 
+    "edit_rental"=>"Edit Rental",
     "edit_account"=>"Edit Account",
     "edit_details"=>"Edit ",
     "edit_department"=>"Edit Department ",

@@ -285,6 +285,7 @@ return[
 	"do_you_really_want_to_change_status"=>"តើអ្នកពិតជាចង់ផ្លាស់ប្តូរស្ថានភាព",
 	"edit"=>"កែប្រែ",
 	"edit_roles"=>"កែសម្រួលតួនាទី", 
+	"edit_rental"=>"កែប្រែការជួល",
 	"edit_account"=>"កែប្រែគណនី",
 	"edit_plan"=>"កែសម្រួលផែនការ",
 	"edit_postion"=>"កែសម្រួលតួនាទី",

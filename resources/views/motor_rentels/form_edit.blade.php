@@ -81,14 +81,24 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
 <script src="{{ asset('/admin/js/noty.js') }}"></script>
+@php
+    $raw = $data->form_rental ?? null;
 
+    if (is_string($raw)) {
+        $decoded = json_decode($raw, true);
+        $raw = json_last_error() === JSON_ERROR_NONE ? $decoded : null;   // JSON ខូច/ទទេ → null
+    }
+
+    $savedRentalData = $raw ?: [];        // null, '' → []
+@endphp
 <script>
+    const appBaseUrl   = "{{ url('/') }}";
     const submitUrl = "{{ url('motor-rentel/update') }}";
     const listUrl = "{{ url('motor-rentel/list') }}";
     const buttonSubmit = "submit-update-btn";
 
     // Pass Existing Forms Data ពី DB ទៅកាន់ JS Global Variable
-    const savedRentalData = {!! is_string($data->form_rental) ? $data->form_rental : json_encode($data->form_rental) !!};
+    const savedRentalData = {{ \Illuminate\Support\Js::from($savedRentalData) }};
 </script>
 
 <script src="{{ asset('/admin/component-js/employee_rental.js') }}"></script>
