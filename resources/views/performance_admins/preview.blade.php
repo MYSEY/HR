@@ -330,7 +330,7 @@
                                     '<input type="checkbox" class="checkbox-group action-asign" name="selected_item" value="4"> <span class="checkmark"></span>'+
                                 '</label>';
                 }
-                if (status == 1 || status == 2 || status == 3 || status == "preparing" || status == 5) {
+                if (status == "accepted" || status == 1 || status == 2 || status == 3 || status == "preparing" || status == 5) {
                     titleText = '@lang("lang.asign_to_employee")';
                     columnClassText = 'col-md-6'
                     formContent = ''+
