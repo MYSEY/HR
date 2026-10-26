@@ -786,6 +786,53 @@ class PerformanceAppraisalController extends Controller
         return Excel::download(new ExportKpis($id), 'PA.xlsx');
     }
 
+    private function parseExcelDate($value, bool $monthFirst = true): ?string
+    {
+        if ($value === null || trim((string) $value) === '') {
+            return null;
+        }
+
+        // Excel serial number (real date cell)
+        if (is_numeric($value) && (float) $value > 0 && (float) $value < 100000) {
+            return Carbon::instance(Date::excelToDateTimeObject((float) $value))
+                ->format('Y-m-d');
+        }
+
+        $value = trim((string) $value);
+
+        // Text date: 11/22/2026, 22-11-2026, 2026-11-22, 22.11.26 ...
+        if (!preg_match('/^(\d{1,4})[\/\-.](\d{1,2})[\/\-.](\d{1,4})$/', $value, $m)) {
+            return null;
+        }
+
+        [, $a, $b, $c] = $m;
+
+        if (strlen($a) === 4) {
+            // Y-m-d
+            $year = (int) $a; $month = (int) $b; $day = (int) $c;
+        } else {
+            $year = strlen($c) === 2 ? 2000 + (int) $c : (int) $c;
+            $a = (int) $a; $b = (int) $b;
+
+            if ($a > 12 && $b <= 12) {        // d/m/Y
+                $day = $a; $month = $b;
+            } elseif ($b > 12 && $a <= 12) {  // m/d/Y
+                $month = $a; $day = $b;
+            } elseif ($a <= 12 && $b <= 12) { // ambiguous, use default
+                if ($monthFirst) { $month = $a; $day = $b; }
+                else             { $day = $a;   $month = $b; }
+            } else {
+                return null;
+            }
+        }
+
+        if (!checkdate($month, $day, $year)) {
+            return null;
+        }
+
+        return sprintf('%04d-%02d-%02d', $year, $month, $day);
+    }
+
     public function performanceAppraisalImport(Request $request){
         $file = $request->file;
         $filesize = $file->getSize(); // ✅ use getSize()
@@ -807,32 +854,110 @@ class PerformanceAppraisalController extends Controller
                     if ($employee) {
                         $goalText = trim($item[7] ?? '');
                         $lines = preg_split('/\r\n|\r|\n/', $goalText);
-                        $scoreAchieved = null; // default
-                        foreach ($lines as $index => $line) {
-                            $parts = preg_split('/\s+/', trim($line));
+                        $scoreAchieved = 0; // default
+                        // foreach ($lines as $index => $line) {
+                        //     $parts = preg_split('/\s+/', trim($line));
 
-                            // Expect exactly 2 numbers (min and max)
-                            if (count($parts) !== 2) {
-                                $isValidGoal = false;
-                                break;
+                        //     // Expect exactly 2 numbers (min and max)
+                        //     if (count($parts) !== 2) {
+                        //         $isValidGoal = false;
+                        //         break;
+                        //     }
+
+                        //     [$minRaw, $maxRaw] = $parts;
+
+                        //     // Convert to numeric
+                        //     $min = (float) $minRaw;
+                        //     $max = (float) $maxRaw;
+                        //     $progress = $item[9]; // the value to compare
+
+                        //     if ($progress >= $min && $progress < $max) {
+                        //         $scoreAchieved = $index + 1; // mimic JS: index + 1
+                        //         break; // stop looping once found
+                        //     }else{
+                        //         $scoreAchieved = 5;
+                        //     }
+                        // }
+                        $detail = PaDetail::with(['performanceGoals' => fn ($q) => $q->orderBy('id')])
+                            ->where('performance_id', $item[2])
+                            ->where('purpose_id', $item[4])
+                            ->where('key_kpi', $item[5])
+                            ->first();
+
+                        if (!$detail) {
+                            $errors[] = "រកមិនឃើញ KPI ($item[5])។";
+                            continue;
+                        }
+
+                        $goals = $detail->performanceGoals->values();
+                        if ($goals->isEmpty()) {
+                            $errors[] = "KPI ($item[5]) មិនទាន់មាន Goal។";
+                            continue;
+                        }
+
+                        $goalType = $detail->goal_type;
+                        $isDate   = str_contains($goalType, 'date');
+                        $progress = $item[9];
+
+                        // ---- Normalize progress ----
+                        if ($isDate) {
+                            $progress = $this->parseExcelDate($progress, true);
+                            if ($progress === null) {
+                                $errors[] = "ថ្ងៃខែមិនត្រឹមត្រូវ ($item[9])។";
+                                continue;
                             }
+                        } else {
+                            $progress = str_replace([',', '%', ' '], '', (string) $progress);
+                            if (!is_numeric($progress)) {
+                                $errors[] = "តម្លៃមិនត្រឹមត្រូវ ($item[9])។";
+                                continue;
+                            }
+                            $progress = (float) $progress;
+                        }
 
-                            [$minRaw, $maxRaw] = $parts;
+                        // ---- Normalize ranges ----
+                        $normalize = fn ($v) => $isDate ? Carbon::parse($v)->format('Y-m-d') : (float) $v;
 
-                            // Convert to numeric
-                            $min = (float) $minRaw;
-                            $max = (float) $maxRaw;
-                            $progress = $item[9]; // the value to compare
+                        $ranges = $goals->map(function ($g, $i) use ($normalize) {
+                            $a = $normalize($g->from);
+                            $b = $normalize($g->to);
+                            return [
+                                'score' => $i + 1,
+                                'min'   => min($a, $b),
+                                'max'   => max($a, $b),
+                            ];
+                        });
 
-                            if ($progress >= $min && $progress < $max) {
-                                $scoreAchieved = $index + 1; // mimic JS: index + 1
-                                break; // stop looping once found
-                            }else{
-                                $scoreAchieved = 5;
+                        // ---- Find score ----
+                        $scoreAchieved = 0; // reset every row
+                        foreach ($ranges as $r) {
+                            if ($progress >= $r['min'] && $progress <= $r['max']) {
+                                $scoreAchieved = $r['score'];
+                                break;
                             }
                         }
 
-                        $totalScore = ($item[10] * $scoreAchieved) / 100;
+                        // ---- Not inside any range ----
+                        if ($scoreAchieved === 0) {
+                            $maxScore    = $ranges->count();
+                            $lowest      = $ranges->min('min');
+                            $highest     = $ranges->max('max');
+                            $isIncrement = str_contains($goalType, 'increment');
+
+                            if ($progress > $highest) {
+                                // increment: higher is better, decrement: higher is worse
+                                $scoreAchieved = $isIncrement ? $maxScore : 1;
+                            } elseif ($progress < $lowest) {
+                                $scoreAchieved = $isIncrement ? 1 : $maxScore;
+                            } else {
+                                // Falls in a gap between two ranges: use the lower (conservative) neighbour score
+                                $below = $ranges->where('max', '<', $progress)->sortByDesc('max')->first();
+                                $above = $ranges->where('min', '>', $progress)->sortBy('min')->first();
+                                $scoreAchieved = min($below['score'] ?? $maxScore, $above['score'] ?? $maxScore);
+                            }
+                        }
+
+                        $totalScore = ($detail->weight * $scoreAchieved) / 100;
                         $score  = $totalScore;
                         $live   = $totalScore;
                         $chair  = $totalScore;
@@ -860,7 +985,7 @@ class PerformanceAppraisalController extends Controller
                             ->where('purpose_id', $item[4])
                             ->where('key_kpi', $item[5]) // extra condition
                             ->update([
-                                'progress' => !empty($item[9]) ? $item[9] : null,
+                                'progress' => $progress,
                                 'score_achieved' => $scoreAchieved,
                                 'score' => $score,
                                 'score_live_staff' => $live,
@@ -874,8 +999,6 @@ class PerformanceAppraisalController extends Controller
                     }
                 }
             }
-
-
             if($dataArray){
                 return response()->json(['error'=>$dataArray]);
             }

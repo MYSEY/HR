@@ -507,7 +507,7 @@ class LeavesAdminController extends Controller
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if(in_array($RolePermission, ['BOD', 'CEO','HOD', 'DHOD', 'BM', 'DBM'])){
-                    $query->whereIn("leave_requests.status", ["pending"]);
+                    $query->whereIn("leave_requests.status", ["pending",'approved_lm']);
                     $query->where("leave_requests.next_approver", Auth::user()->id);
                     
                 }else if ($RolePermission == 'HR') {

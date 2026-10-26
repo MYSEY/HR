@@ -454,117 +454,139 @@
             }
         });
         
+        // $(document).on('change', '.progress', function () {
+        //     let $row = $(this).closest('tr');
+        //     let goals = $row.find('.goal').data("goals");
+        //     let goalType = $row.find('.goal').data("type") || "";
+        //     let progress = $(this).val();
+        //     let scoreAchieved = 0;
+        //     if (progress) {
+
+        //         let lastMax = null;
+        //         let lastMin = null;
+
+        //         // Convert value based on goal type
+        //         const getParsedValue = (val, type) => {
+        //             if (!val) return null;
+        //             val = val.toString().trim();
+        //             switch (type) {
+
+        //                 case 'date_increment':
+        //                 case 'date_decrement':
+        //                     return Date.parse(val);
+
+        //                 case 'percent_increment':
+        //                 case 'percent_decrement':
+        //                     return parseFloat(val.replace('%', ''));
+
+        //                 case 'currency_increment':
+        //                 case 'currency_decrement':
+        //                     return parseFloat(val.replace(/[^\d.]/g, ''));
+
+        //                 case 'number_increment':
+        //                 case 'number_decrement':
+        //                     return parseFloat(val);
+
+        //                 default:
+        //                     return parseFloat(val);
+        //             }
+        //         };
+
+        //         const input = getParsedValue(progress, goalType);
+
+        //         if (isNaN(input)) return;
+
+        //         if (Array.isArray(goals) && goalType !== "") {
+        //             for (let i = 0; i < goals.length; i++) {
+        //                 let pGoal = goals[i];
+        //                 let matched = false;
+        //                 let rangeMin = null;
+        //                 let rangeMax  = null;
+        //                 if (goalType == "date_increment" || goalType =="date_decrement") {
+        //                     rangeMin = pGoal.from;
+        //                     rangeMax = pGoal.to;
+        //                     if (goalType.includes('decrement') && i == 0){
+        //                         lastMin = pGoal.from;
+        //                         // continue
+        //                     }
+        //                     if (goalType.includes('decrement')){
+        //                         rangeMax = pGoal.from;
+        //                         rangeMin = pGoal.to;
+        //                     }
+        //                     if (goalType.includes('increment')){
+        //                         lastMax = pGoal.to;
+        //                     }
+        //                 }else{
+        //                     // បំប្លែង from/to ទៅជាលេខ
+        //                     let min = parseFloat(pGoal.from);
+        //                     let max = parseFloat(pGoal.to);
+        //                     if (goalType.includes('decrement') && i == 0){
+        //                         lastMin = min;
+        //                         // continue
+        //                     }
+        //                     if (goalType.includes('increment')){
+        //                         lastMax = max;
+        //                     }
+        //                     if (isNaN(min) || isNaN(max)) continue;
+        //                     rangeMin = Math.min(min, max);
+        //                     rangeMax = Math.max(min, max);
+        //                 }
+        //                 if (progress >= rangeMin && progress <= rangeMax) {
+        //                     matched = true;
+        //                 }
+        //                 if (matched) {
+        //                     scoreAchieved = i + 1; // ជួរទី១ = ១ពិន្ទុ, ជួរទី២ = ២ពិន្ទុ...
+        //                     break; // ឈប់រកពេលឃើញហើយ
+        //                 }else{
+        //                     scoreAchieved = 0;
+        //                 }
+        //             }
+        //         }
+        //         // Handle exceed range
+        //         if (scoreAchieved === 0 && lastMax !== null) {
+        //             if (goalType.includes('increment') && progress > lastMax) {
+        //                 scoreAchieved = 5;
+        //             }
+        //         }
+
+        //         if(scoreAchieved === 0 && lastMin !== null){
+        //             if (goalType.includes('decrement') && progress > lastMin) {
+        //                 scoreAchieved = 1;
+        //             }else{
+        //                 scoreAchieved = 5;
+        //             }
+        //         }
+        //     }
+        //     // Update score achieved
+        //     $row.find('.score_achieved').val(scoreAchieved);
+        //     // Calculate weighted score
+        //     let weight = parseFloat($row.find('.weight').val()) || 0;
+        //     let score = (weight * scoreAchieved) / 100;
+        //     $row.find('.score').val(score.toFixed(2));
+        //     $row.find('.personnel_score').val(score.toFixed(2));
+        //     $row.find('.direct_chairman').val(score.toFixed(2));
+
+        //     calculateSubtotals();
+        //     calculateGrandTotals();
+        // });
+
         $(document).on('change', '.progress', function () {
-            let $row = $(this).closest('tr');
-            let goals = $row.find('.goal').data("goals");
-            let goalType = $row.find('.goal').data("type") || "";
-            let progress = $(this).val();
+            const $row     = $(this).closest('tr');
+            const goals    = $row.find('.goal').data('goals');
+            const goalType = $row.find('.goal').data('type') || '';
             let scoreAchieved = 0;
-            if (progress) {
 
-                let lastMax = null;
-                let lastMin = null;
+            const input = parseValue($(this).val(), goalType);
 
-                // Convert value based on goal type
-                const getParsedValue = (val, type) => {
-                    if (!val) return null;
-                    val = val.toString().trim();
-                    switch (type) {
-
-                        case 'date_increment':
-                        case 'date_decrement':
-                            return Date.parse(val);
-
-                        case 'percent_increment':
-                        case 'percent_decrement':
-                            return parseFloat(val.replace('%', ''));
-
-                        case 'currency_increment':
-                        case 'currency_decrement':
-                            return parseFloat(val.replace(/[^\d.]/g, ''));
-
-                        case 'number_increment':
-                        case 'number_decrement':
-                            return parseFloat(val);
-
-                        default:
-                            return parseFloat(val);
-                    }
-                };
-
-                const input = getParsedValue(progress, goalType);
-
-                if (isNaN(input)) return;
-
-                if (Array.isArray(goals) && goalType !== "") {
-                    for (let i = 0; i < goals.length; i++) {
-                        let pGoal = goals[i];
-                        let matched = false;
-                        let rangeMin = null;
-                        let rangeMax  = null;
-                        if (goalType == "date_increment" || goalType =="date_decrement") {
-                            rangeMin = pGoal.from;
-                            rangeMax = pGoal.to;
-                            if (goalType.includes('decrement') && i == 0){
-                                lastMin = pGoal.from;
-                                // continue
-                            }
-                            if (goalType.includes('decrement')){
-                                rangeMax = pGoal.from;
-                                rangeMin = pGoal.to;
-                            }
-                            if (goalType.includes('increment')){
-                                lastMax = pGoal.to;
-                            }
-                        }else{
-                            // បំប្លែង from/to ទៅជាលេខ
-                            let min = parseFloat(pGoal.from);
-                            let max = parseFloat(pGoal.to);
-                            if (goalType.includes('decrement') && i == 0){
-                                lastMin = min;
-                                // continue
-                            }
-                            if (goalType.includes('increment')){
-                                lastMax = max;
-                            }
-                            if (isNaN(min) || isNaN(max)) continue;
-                            rangeMin = Math.min(min, max);
-                            rangeMax = Math.max(min, max);
-                        }
-                        if (progress >= rangeMin && progress <= rangeMax) {
-                            matched = true;
-                        }
-                        if (matched) {
-                            scoreAchieved = i + 1; // ជួរទី១ = ១ពិន្ទុ, ជួរទី២ = ២ពិន្ទុ...
-                            break; // ឈប់រកពេលឃើញហើយ
-                        }else{
-                            scoreAchieved = 0;
-                        }
-                    }
-                }
-                // Handle exceed range
-                if (scoreAchieved === 0 && lastMax !== null) {
-                    if (goalType.includes('increment') && progress > lastMax) {
-                        scoreAchieved = 5;
-                    }
-                }
-
-                if(scoreAchieved === 0 && lastMin !== null){
-                    if (goalType.includes('decrement') && progress > lastMin) {
-                        scoreAchieved = 1;
-                    }else{
-                        scoreAchieved = 5;
-                    }
-                }
+            if (!isNaN(input) && Array.isArray(goals) && goalType !== '') {
+                scoreAchieved = calcScore(input, goals, goalType);
             }
-            // Update score achieved
+
             $row.find('.score_achieved').val(scoreAchieved);
-            // Calculate weighted score
-            let weight = parseFloat($row.find('.weight').val()) || 0;
-            let score = (weight * scoreAchieved) / 100;
-            $row.find('.score').val(score.toFixed(2));
-            $row.find('.personnel_score').val(score.toFixed(2));
-            $row.find('.direct_chairman').val(score.toFixed(2));
+
+            const weight = parseFloat($row.find('.weight').val()) || 0;
+            const score  = (weight * scoreAchieved) / 100;
+            $row.find('.score, .personnel_score, .direct_chairman').val(score.toFixed(2));
 
             calculateSubtotals();
             calculateGrandTotals();
@@ -715,6 +737,65 @@
                 color = 'green';
             }
             $('#overall_results').val(overallResults).css('color', color);
+        }
+
+        function parseDate(val) {
+            let m;
+            // Y-m-d (date picker or DB)
+            if ((m = val.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})$/))) {
+                return Date.UTC(+m[1], m[2] - 1, +m[3]);
+            }
+            // m/d/Y or d/m/Y
+            if ((m = val.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})$/))) {
+                let a = +m[1], b = +m[2], y = +m[3];
+                if (y < 100) y += 2000;
+                let month, day;
+                if (a > 12) { day = a; month = b; }   // d/m/Y
+                else        { month = a; day = b; }   // m/d/Y (default, same as PHP)
+                return Date.UTC(y, month - 1, day);
+            }
+            return NaN;
+        }
+
+        function parseValue(val, type) {
+            if (val === null || val === undefined || String(val).trim() === '') return NaN;
+            val = String(val).trim();
+            if (type.startsWith('date')) return parseDate(val);
+            if (type.startsWith('currency') || type.startsWith('percent')) {
+                return parseFloat(val.replace(/[^\d.\-]/g, ''));
+            }
+            return parseFloat(val.replace(/,/g, ''));
+        }
+
+        function calcScore(input, goals, goalType) {
+            const isIncrement = goalType.includes('increment');
+
+            // Build parsed ranges (same logic for numbers and dates)
+            const ranges = [];
+            goals.forEach((g, i) => {
+                const a = parseValue(g.from, goalType);
+                const b = parseValue(g.to, goalType);
+                if (isNaN(a) || isNaN(b)) return;
+                ranges.push({ score: i + 1, min: Math.min(a, b), max: Math.max(a, b) });
+            });
+            if (!ranges.length) return 0;
+
+            // 1) inside a range
+            const hit = ranges.find(r => input >= r.min && input <= r.max);
+            if (hit) return hit.score;
+
+            // 2) outside all ranges
+            const maxScore = goals.length;
+            const lowest   = Math.min(...ranges.map(r => r.min));
+            const highest  = Math.max(...ranges.map(r => r.max));
+
+            if (input > highest) return isIncrement ? maxScore : 1;
+            if (input < lowest)  return isIncrement ? 1 : maxScore;
+
+            // 3) gap between two ranges: use the lower neighbour score
+            const below = ranges.filter(r => r.max < input).sort((x, y) => y.max - x.max)[0];
+            const above = ranges.filter(r => r.min > input).sort((x, y) => x.min - y.min)[0];
+            return Math.min(below ? below.score : maxScore, above ? above.score : maxScore);
         }
     });
 </script>
