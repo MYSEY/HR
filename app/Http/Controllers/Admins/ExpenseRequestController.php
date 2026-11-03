@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use App\Mail\SendEmail;
 use App\Models\FnAmountApproval;
+use App\Models\FnSpecialReview;
 use App\Models\LeaveRequest;
 use App\Models\mail as ModelsMail;
 use Illuminate\Support\Facades\Mail;
@@ -46,7 +47,8 @@ class ExpenseRequestController extends Controller
         if (!$permission || $permission->is_view != "1") {
             return view('upgrade.access_page');
         }
-        $datas = ExpenseRequest::with(["requestBy","locationDetails","departments", "createdBy","reviewBy",'approveBy'])->where("request_by", Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $datas = ExpenseRequest::with(["requestBy","locationDetails","departments", "createdBy","reviewBy",'approveBy'])
+        ->where("request_by", Auth::user()->id)->orderBy('id', 'DESC')->get();
         $user = Auth::user();
         $dataAsign = ExpenseRequest::with(['requestBy', 'locationDetails', 'departments', 'createdBy', 'reviewBy','approveBy'])
             ->where('status', '!=', "rejected")
@@ -279,62 +281,6 @@ class ExpenseRequestController extends Controller
         }
     }
 
-    //**  old condition review flow */
-    // function levelReview($dataLevelView){
-    //     $query = FnLevelReviewer::with(["departmentView", "modelReview"])
-    //         ->when($dataLevelView["by_location"], function ($query, $by_location) use ($dataLevelView) {
-    //             $query->where('from_location', $by_location);
-    //             if ((string) $by_location === "2") {
-    //                 $query->where('model_review', $dataLevelView["model_review"]);
-    //             } else {
-    //                 $query->whereNull("model_review");
-    //             }
-    //         })
-    //         ->when(isset($dataLevelView["request_type"]), function ($query) use ($dataLevelView) {
-    //             $request_type = $dataLevelView["request_type"];
-    //             $query->where('request_type', $request_type);
-    //             if($dataLevelView["reference_type"] == "on" || (string) $request_type === "1"){
-    //                 $query->where('special_fixed_asset', $dataLevelView["special_fixed_asset"]);
-    //             }
-    //             if ((string) $request_type === "0") {
-    //                 $query->where('reference_type', $dataLevelView["reference_type"]);
-    //             }
-    //         })
-    //         ->when($dataLevelView["amount"], function ($query, $amount) {
-    //             $query->where("from_amount", "<", $amount)
-    //                 ->where("to_amount", ">=", $amount);
-    //         });
-
-    //     // 🔹 Try first with position check
-    //     if ($dataLevelView["position_request"]) {
-    //         $positionReview = (clone $query) // clone again to keep base query clean
-    //             ->whereJsonContains('id_positions', (string) $dataLevelView["position_request"])
-    //             ->orderBy("id", "DESC")
-    //             ->first();
-
-    //              // 🔹 If not found, fallback to type
-    //             if (!$positionReview) {
-    //                 $positionReview = (clone $query)
-    //                     ->when($dataLevelView["type"], function ($q, $type) {
-    //                         $q->where('type', $type);
-    //                     })
-    //                     ->orderBy("id", "DESC")
-    //                     ->first();
-    //             }
-
-    //             return $positionReview;
-    //     }else{
-    //         $positionReview = (clone $query)
-    //             ->when($dataLevelView["type"], function ($q, $type) {
-    //                 $q->where('type', $type);
-    //             })
-    //             ->orderBy("id", "DESC")
-    //             ->first();
-    //         return $positionReview;
-    //     }
-    // }
-
-    //**  new condition review flow */
     function levelReview($dataLevelView)
     {
         $query = FnLevelReviewer::with(['departmentView', 'modelReview'])
@@ -396,12 +342,28 @@ class ExpenseRequestController extends Controller
             }
         }
 
-        return $query
-            ->when(!empty($dataLevelView['type']), function ($q) use ($dataLevelView) {
+        $review_by = $query->when(!empty($dataLevelView['type']), function ($q) use ($dataLevelView) {
                 $q->where('type', $dataLevelView['type']);
             })
             ->orderByDesc('id')
             ->first();
+
+        /**
+         * ✅ Special review position → review_by->id_positions
+         */
+        if ($review_by && optional(Auth::user()->branch)->abbreviations != "HQ") {
+            $special_review = FnSpecialReview::
+            where("review", $review_by->type)
+            ->where("branch_id", $dataLevelView["branch_id"])
+            ->whereDate('from_date', '<=', now())
+            ->whereDate('to_date', '>=', now())
+            ->first();
+            if ($special_review) {
+                $review_by->id_positions      = array_map('strval', $special_review->position_id ?? []);
+                $review_by->department_review = $special_review->department_id;
+            }
+        }
+        return $review_by;
     }
 
     function amountApprove($request){

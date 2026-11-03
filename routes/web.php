@@ -67,6 +67,7 @@ use App\Http\Controllers\Admins\GenerateAnnaulBonusController;
 use App\Http\Controllers\Admins\PerformanceAppraisalController;
 use App\Http\Controllers\Admins\AnnualSalaryIncreasementController;
 use App\Http\Controllers\Admins\ConfigeAnnualBonuByBranchCongroller;
+use App\Http\Controllers\Admins\FnSpecialReviewController;
 use App\Http\Controllers\Admins\NationalSocialSecurityFundController;
 use App\Http\Controllers\Admins\GenerateAnnualSalaryIncreasementController;
 
@@ -711,6 +712,14 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/fn/exchange-rate/edit', [FNExchangeRateController::class,'edit']);
     Route::post('/fn/exchange-rate/delete', [FNExchangeRateController::class,'destroy']);
     Route::post('/fn/exchange-rate/status', [FNExchangeRateController::class,'processing']);
+
+    // route fn review special
+    Route::get('/fn/special/review',        [FnSpecialReviewController::class, 'index']);
+    Route::get('/fn/special/employee',      [FnSpecialReviewController::class, 'employee']);
+    Route::post('/fn/special/store',        [FnSpecialReviewController::class, 'store']);
+    Route::get('/fn/special/show/{id}',     [FnSpecialReviewController::class, 'show']);
+    Route::post('/fn/special/update',       [FnSpecialReviewController::class, 'update']);
+    Route::delete('/fn/special/destroy/{id}', [FnSpecialReviewController::class, 'destroy']);
 
     // Block FN Exspense Request
     Route::get('/expense-request/list', [ExpenseRequestController::class,'index']);
